@@ -1397,102 +1397,68 @@
             const museum = EMBEDDED_DATA.museums.find(m => m.id === museumId);
             if (!museum) return;
 
-            const modal = document.getElementById('museum-modal');
-            const nameEl = document.getElementById('modal-museum-name');
-            const levelEl = document.getElementById('modal-museum-level');
-            const bodyEl = document.getElementById('modal-museum-body');
+            let bodyHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                    <div>
+                        <h2 style="font-size:18px;color:var(--accent-gold);margin-bottom:4px;">${museum.name}</h2>
+                        <div style="font-size:12px;color:var(--accent-amber);">${museum.level || ''} | ${museum.location || ''}</div>
+                    </div>
+                    <button onclick="backToDynasty()" style="background:none;border:1px solid var(--border);color:var(--text-secondary);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:12px;white-space:nowrap;">← 返回</button>
+                </div>
+            `;
 
-            nameEl.textContent = museum.name;
-            levelEl.textContent = `${museum.level || ''} | ${museum.location || ''}`;
-
-            let bodyHTML = '';
-
-            // 核心时期
             if (museum.corePeriod) {
-                bodyHTML += `
-                    <div class="modal-section">
-                        <div class="modal-section-title">⏰ 核心时期</div>
-                        <div class="modal-section-content">${museum.corePeriod}</div>
-                    </div>
-                `;
+                bodyHTML += `<div class="modal-section"><div class="modal-section-title">⏰ 核心时期</div><div class="modal-section-content">${museum.corePeriod}</div></div>`;
             }
-
-            // 特色
             if (museum.specialty) {
-                bodyHTML += `
-                    <div class="modal-section">
-                        <div class="modal-section-title">✨ 馆藏特色</div>
-                        <div class="modal-section-content">${museum.specialty}</div>
-                    </div>
-                `;
+                bodyHTML += `<div class="modal-section"><div class="modal-section-title">✨ 馆藏特色</div><div class="modal-section-content">${museum.specialty}</div></div>`;
             }
-
-            // 必看展厅
             if (museum.halls && museum.halls.length > 0) {
-                bodyHTML += `
-                    <div class="modal-section">
-                        <div class="modal-section-title">🚪 必看展厅</div>
-                        ${museum.halls.map(hall => `
-                            <div class="hall-item">
-                                <div class="hall-name">${hall}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
+                bodyHTML += `<div class="modal-section"><div class="modal-section-title">🚪 必看展厅</div>${museum.halls.map(h => `<div class="hall-item"><div class="hall-name">${h}</div></div>`).join('')}</div>`;
             }
-
-            // 朝代关联详情
             if (museum.dynastyConnections && museum.dynastyConnections.length > 0) {
-                bodyHTML += `
-                    <div class="modal-section">
-                        <div class="modal-section-title">📜 朝代关联</div>
-                        ${museum.dynastyConnections.map(conn => `
-                            <div class="connection-item">
-                                <div class="artifact-name">${conn.dynasty}</div>
-                                <div style="font-size: 12px; color: #adb5bd; margin-top: 4px;">${conn.description}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
+                bodyHTML += `<div class="modal-section"><div class="modal-section-title">📜 朝代关联</div>${museum.dynastyConnections.map(c => `<div class="connection-item"><div class="artifact-name">${c.dynasty}</div><div style="font-size:12px;color:#adb5bd;margin-top:4px;">${c.description}</div></div>`).join('')}</div>`;
             }
-
-            // 关键文物
             if (museum.artifacts && museum.artifacts.length > 0) {
-                bodyHTML += `
-                    <div class="modal-section">
-                        <div class="modal-section-title">💎 关键文物</div>
-                        ${museum.artifacts.slice(0, 6).map(art => `
-                            <div class="artifact-item">
-                                <div class="artifact-name">${art.name}</div>
-                                <div style="font-size: 12px; color: #adb5bd; margin-top: 4px;">${art.description || ''}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
+                bodyHTML += `<div class="modal-section"><div class="modal-section-title">💎 关键文物</div>${museum.artifacts.slice(0, 6).map(a => `<div class="artifact-item"><div class="artifact-name">${a.name}</div><div style="font-size:12px;color:#adb5bd;margin-top:4px;">${a.description || ''}</div></div>`).join('')}</div>`;
             }
-
-            // 信源
             if (museum.sources && museum.sources.length > 0) {
-                bodyHTML += `
-                    <div class="sources-toggle" onclick="toggleSources(this)">
-                        <div class="sources-toggle-header">
-                            📚 信源 <span style="font-size: 12px; color: #6c757d;">(点击展开)</span>
-                        </div>
-                        <div class="sources-content">
-                            ${museum.sources.map(src => `
-                                <div style="margin-bottom: 4px;">• <a href="${src}" target="_blank">${src}</a></div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
+                bodyHTML += `<div class="modal-section"><div class="modal-section-title">📚 信源</div>${museum.sources.map(src => {
+                    const urlMatch = src.match(/(https?:\/\/[^\s]+)/);
+                    if (urlMatch) {
+                        const label = src.replace(urlMatch[1], '').replace(/[:|：]\s*$/, '').trim() || urlMatch[1];
+                        return '<div style="margin-bottom:6px;">• <a href="' + urlMatch[1] + '" target="_blank" rel="noopener" style="color:var(--accent-gold);text-decoration:underline;">' + label + '</a></div>';
+                    }
+                    return '<div style="margin-bottom:6px;color:var(--text-secondary);">• ' + src + '</div>';
+                }).join('')}</div>`;
             }
 
-            bodyEl.innerHTML = bodyHTML;
-            modal.classList.add('show');
+            // 移动端：在 drawer 内显示
+            if (window.innerWidth <= 768) {
+                const contentArea = document.getElementById('content-area');
+                const dynastyContent = document.getElementById('dynasty-content');
+                dynastyContent.innerHTML = bodyHTML;
+                contentArea.scrollTop = 0;
+                snapTo('expanded');
+            } else {
+                // 桌面端：用弹窗
+                const modal = document.getElementById('museum-modal');
+                document.getElementById('modal-museum-name').textContent = museum.name;
+                document.getElementById('modal-museum-level').textContent = `${museum.level || ''} | ${museum.location || ''}`;
+                document.getElementById('modal-museum-body').innerHTML = bodyHTML;
+                modal.classList.add('show');
+            }
 
-            // 飞到博物馆
             if (museum.lat && museum.lng) {
                 map.flyTo(toMapCoord(museum.lat, museum.lng), 10, { duration: 1.5 });
+            }
+        }
+
+        // 返回朝代内容
+        function backToDynasty() {
+            if (currentDynasty) {
+                renderDynastyContent(currentDynasty);
+                updateMap(currentDynasty);
             }
         }
 
@@ -1514,147 +1480,121 @@
         }
 
         // ============ 移动端抽屉拖拽 ============
-        let drawerState = 'collapsed'; // collapsed, half, expanded
-        let drawerStartY = 0;
-        let drawerStartTranslate = 0;
+        let drawerState = 'collapsed';
         let isDrawerDragging = false;
+        let currentTranslateY = 0; // 跟踪当前 translateY 值
 
         function initDrawer() {
             const sidebar = document.getElementById('sidebar');
-            if (window.innerWidth > 768) return; // 仅移动端
+            if (window.innerWidth > 768) return;
 
-            // 初始状态：收起
+            const vh = window.innerHeight;
+            currentTranslateY = vh - 120; // 初始收起
             sidebar.classList.add('drawer-collapsed');
 
-            // Touch events
+            let startY = 0;
+            let startTranslateY = 0;
+            let lastY = 0;
+            let lastTime = 0;
+            let velocity = 0;
+
             sidebar.addEventListener('touchstart', (e) => {
-                // 只在header区域响应拖拽（前120px）
                 const rect = sidebar.getBoundingClientRect();
                 const touchY = e.touches[0].clientY;
-                if (touchY > rect.top + 120) return;
+                // 只在 drag-handle + header + 时间轴区域响应拖拽
+                if (touchY > rect.top + 140) return;
 
                 isDrawerDragging = true;
-                drawerStartY = e.touches[0].clientY;
+                startY = touchY;
+                startTranslateY = currentTranslateY;
+                lastY = touchY;
+                lastTime = Date.now();
+                velocity = 0;
                 sidebar.style.transition = 'none';
-                e.stopPropagation();
             }, { passive: true });
 
             sidebar.addEventListener('touchmove', (e) => {
                 if (!isDrawerDragging) return;
+                const touchY = e.touches[0].clientY;
+                const deltaY = touchY - startY;
+                const vh = window.innerHeight;
 
-                const deltaY = e.touches[0].clientY - drawerStartY;
-                const currentTranslate = getCurrentTranslate();
-                let newTranslate = currentTranslate + deltaY;
+                currentTranslateY = Math.max(0, Math.min(vh - 120, startTranslateY + deltaY));
+                sidebar.style.transform = `translateY(${currentTranslateY}px)`;
 
-                // 限制范围：0 ~ 100%-120px
-                const minTranslate = 0;
-                const maxTranslate = window.innerHeight - 120;
-                newTranslate = Math.max(minTranslate, Math.min(maxTranslate, newTranslate));
-
-                sidebar.style.transform = `translateY(${newTranslate}px)`;
-                drawerStartY = e.touches[0].clientY;
-            }, { passive: true });
-
-            let lastTouchY = 0;
-            let velocity = 0;
-            let lastTouchTime = 0;
-
-            sidebar.addEventListener('touchmove', function velocityTracker(e) {
-                if (!isDrawerDragging) return;
+                // 计算速度
                 const now = Date.now();
-                const dt = now - lastTouchTime;
-                if (dt > 0) {
-                    velocity = (e.touches[0].clientY - lastTouchY) / dt;
-                }
-                lastTouchY = e.touches[0].clientY;
-                lastTouchTime = now;
-            }, { passive: true });
-
-            sidebar.addEventListener('touchstart', (e) => {
-                lastTouchY = e.touches[0].clientY;
-                lastTouchTime = Date.now();
-                velocity = 0;
+                const dt = now - lastTime;
+                if (dt > 0) velocity = (touchY - lastY) / dt;
+                lastY = touchY;
+                lastTime = now;
             }, { passive: true });
 
             sidebar.addEventListener('touchend', () => {
                 if (!isDrawerDragging) return;
                 isDrawerDragging = false;
 
-                const currentTranslate = getCurrentTranslate();
                 const vh = window.innerHeight;
-
                 // snap points
-                const snapTop = 0;
-                const snapHalf = vh * 0.55;
-                const snapBottom = vh - 120;
+                const SNAP_TOP = 0;
+                const SNAP_HALF = vh * 0.55;
+                const SNAP_BOTTOM = vh - 120;
 
-                sidebar.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                let target;
 
-                // 速度优先：快速滑动直接吸到方向的极端位置
-                const VELOCITY_THRESHOLD = 0.5; // px/ms
-                if (Math.abs(velocity) > VELOCITY_THRESHOLD) {
-                    if (velocity < 0) {
-                        // 快速上滑 → 吸顶
-                        setDrawerState('expanded');
-                    } else {
-                        // 快速下滑 → 吸底
-                        setDrawerState('collapsed');
-                    }
-                    velocity = 0;
-                    return;
-                }
-
-                // 慢速拖拽：吸附到最近的档位
-                const distTop = Math.abs(currentTranslate - snapTop);
-                const distHalf = Math.abs(currentTranslate - snapHalf);
-                const distBottom = Math.abs(currentTranslate - snapBottom);
-                const minDist = Math.min(distTop, distHalf, distBottom);
-
-                if (minDist === distTop) {
-                    setDrawerState('expanded');
-                } else if (minDist === distHalf) {
-                    setDrawerState('half');
+                // 快速滑动：直接吸到方向极端
+                if (velocity < -0.4) {
+                    target = SNAP_TOP; // 快速上滑 → 吸顶
+                } else if (velocity > 0.4) {
+                    target = SNAP_BOTTOM; // 快速下滑 → 吸底
                 } else {
-                    setDrawerState('collapsed');
+                    // 慢速：吸附到最近的档位
+                    const dTop = Math.abs(currentTranslateY - SNAP_TOP);
+                    const dHalf = Math.abs(currentTranslateY - SNAP_HALF);
+                    const dBottom = Math.abs(currentTranslateY - SNAP_BOTTOM);
+                    const minD = Math.min(dTop, dHalf, dBottom);
+                    target = minD === dTop ? SNAP_TOP : minD === dHalf ? SNAP_HALF : SNAP_BOTTOM;
                 }
-                velocity = 0;
+
+                // 动画 snap 到目标位置
+                currentTranslateY = target;
+                sidebar.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                sidebar.style.transform = `translateY(${target}px)`;
+
+                sidebar.classList.remove('drawer-collapsed', 'drawer-half', 'drawer-expanded');
+                if (target === SNAP_TOP) {
+                    sidebar.classList.add('drawer-expanded');
+                    drawerState = 'expanded';
+                } else if (target === SNAP_HALF) {
+                    sidebar.classList.add('drawer-half');
+                    drawerState = 'half';
+                } else {
+                    sidebar.classList.add('drawer-collapsed');
+                    drawerState = 'collapsed';
+                }
             });
 
             // 点击header切换状态
-            const header = document.querySelector('#sidebar-header, #dynasty-selector');
             sidebar.addEventListener('click', (e) => {
-                // 只有在收起状态且点击顶部区域时才展开
                 if (drawerState === 'collapsed') {
                     const rect = sidebar.getBoundingClientRect();
-                    if (e.clientY < rect.top + 120) {
-                        setDrawerState('half');
+                    if (e.clientY < rect.top + 140) {
+                        snapTo('half');
                     }
                 }
             });
         }
 
-        function getCurrentTranslate() {
+        function snapTo(state) {
             const sidebar = document.getElementById('sidebar');
-            const transform = window.getComputedStyle(sidebar).transform;
-            if (transform === 'none') return 0;
-            const values = transform.split('(')[1].split(')')[0].split(',');
-            return parseFloat(values[values.length - 1]);
-        }
-
-        function setDrawerState(state) {
-            const sidebar = document.getElementById('sidebar');
+            const vh = window.innerHeight;
+            const targets = { expanded: 0, half: vh * 0.55, collapsed: vh - 120 };
+            currentTranslateY = targets[state];
+            sidebar.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            sidebar.style.transform = `translateY(${currentTranslateY}px)`;
             sidebar.classList.remove('drawer-collapsed', 'drawer-half', 'drawer-expanded');
-
-            if (state === 'expanded') {
-                sidebar.classList.add('drawer-expanded');
-                drawerState = 'expanded';
-            } else if (state === 'half') {
-                sidebar.classList.add('drawer-half');
-                drawerState = 'half';
-            } else {
-                sidebar.classList.add('drawer-collapsed');
-                drawerState = 'collapsed';
-            }
+            sidebar.classList.add('drawer-' + state);
+            drawerState = state;
         }
 
         // ============ 聊天机器人 ============
