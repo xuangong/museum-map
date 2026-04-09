@@ -62,46 +62,124 @@
             color: var(--text-secondary);
         }
 
-        /* 朝代选择器 */
-        #dynasty-tabs {
-            display: flex;
-            overflow-x: auto;
-            padding: 12px 15px;
-            gap: 8px;
+        /* 朝代时间轴选择器 */
+        #dynasty-selector {
             border-bottom: 1px solid var(--border);
             background: var(--bg-panel);
+            padding: 0;
+            position: relative;
+            user-select: none;
         }
 
-        #dynasty-tabs::-webkit-scrollbar {
-            height: 4px;
+        /* 时间轴轨道 */
+        #dynasty-timeline {
+            position: relative;
+            overflow: hidden;
+            cursor: grab;
+            padding: 14px 0 10px;
         }
+        #dynasty-timeline:active { cursor: grabbing; }
 
-        #dynasty-tabs::-webkit-scrollbar-thumb {
-            background: var(--accent-gold);
-            border-radius: 2px;
+        #dynasty-track {
+            display: flex;
+            transition: transform 0.3s ease;
+            padding: 0 15px;
         }
 
         .dynasty-tab {
-            padding: 8px 16px;
-            border: 1px solid var(--border);
-            border-radius: 20px;
+            flex-shrink: 0;
+            padding: 6px 10px;
             background: transparent;
+            border: none;
             color: var(--text-secondary);
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             white-space: nowrap;
-            transition: all 0.3s;
+            transition: all 0.25s;
+            position: relative;
+            text-align: center;
+            min-width: 52px;
+        }
+
+        .dynasty-tab .tab-label {
+            display: block;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 时间轴线和节点 */
+        .dynasty-tab::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0; right: 0;
+            height: 2px;
+            background: var(--border);
+        }
+        .dynasty-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: all 0.25s;
+            z-index: 2;
         }
 
         .dynasty-tab:hover {
-            background: var(--bg-card);
             color: var(--text-primary);
+        }
+        .dynasty-tab:hover::after {
+            background: var(--accent-gold);
+            transform: translateX(-50%) scale(1.3);
         }
 
         .dynasty-tab.active {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+        .dynasty-tab.active::after {
             background: var(--accent-gold);
-            color: var(--bg-dark);
-            border-color: var(--accent-gold);
+            box-shadow: 0 0 8px rgba(230,184,94,0.6);
+            width: 10px; height: 10px;
+            bottom: -6px;
+        }
+        .dynasty-tab.active .tab-label {
+            text-shadow: 0 0 12px rgba(230,184,94,0.3);
+        }
+
+        /* 左右箭头 */
+        .timeline-arrow {
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to right, var(--bg-panel) 60%, transparent);
+            border: none;
+            color: var(--text-secondary);
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 5;
+            transition: color 0.2s;
+        }
+        .timeline-arrow:hover { color: var(--accent-gold); }
+        .timeline-arrow.right {
+            right: 0;
+            background: linear-gradient(to left, var(--bg-panel) 60%, transparent);
+        }
+        .timeline-arrow.left { left: 0; }
+        .timeline-arrow.hidden { opacity: 0; pointer-events: none; }
+
+        /* 时间线底边 */
+        #dynasty-selector .timeline-base {
+            height: 2px;
+            background: var(--border);
+            margin: 0 15px;
         }
 
         /* 内容区域 */
@@ -633,7 +711,13 @@
                 <p>v2.0 - 朝代·事件·博物馆时空导览</p>
             </div>
 
-            <div id="dynasty-tabs"></div>
+            <div id="dynasty-selector">
+                <button class="timeline-arrow left hidden" id="arrow-left" onclick="scrollTimeline(-1)">◀</button>
+                <div id="dynasty-timeline">
+                    <div id="dynasty-track"></div>
+                </div>
+                <button class="timeline-arrow right" id="arrow-right" onclick="scrollTimeline(1)">▶</button>
+            </div>
 
             <div id="content-area">
                 <div id="dynasty-content"></div>
@@ -755,14 +839,109 @@
             eventMarkersLayer = L.layerGroup().addTo(map);
         }
 
+        // ============ 时间轴拖动逻辑 ============
+        let timelineOffset = 0;
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartOffset = 0;
+
+        function initTimelineDrag() {
+            const timeline = document.getElementById('dynasty-timeline');
+            const track = document.getElementById('dynasty-track');
+
+            // Mouse events
+            timeline.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                dragStartX = e.clientX;
+                dragStartOffset = timelineOffset;
+                track.style.transition = 'none';
+                e.preventDefault();
+            });
+            window.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                const dx = e.clientX - dragStartX;
+                timelineOffset = clampOffset(dragStartOffset + dx);
+                track.style.transform = `translateX(${timelineOffset}px)`;
+                updateArrows();
+            });
+            window.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    track.style.transition = 'transform 0.3s ease';
+                }
+            });
+
+            // Touch events
+            timeline.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                dragStartX = e.touches[0].clientX;
+                dragStartOffset = timelineOffset;
+                track.style.transition = 'none';
+            }, { passive: true });
+            timeline.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                const dx = e.touches[0].clientX - dragStartX;
+                timelineOffset = clampOffset(dragStartOffset + dx);
+                track.style.transform = `translateX(${timelineOffset}px)`;
+                updateArrows();
+            }, { passive: true });
+            timeline.addEventListener('touchend', () => {
+                isDragging = false;
+                track.style.transition = 'transform 0.3s ease';
+            });
+        }
+
+        function clampOffset(v) {
+            const track = document.getElementById('dynasty-track');
+            const timeline = document.getElementById('dynasty-timeline');
+            const maxScroll = Math.max(0, track.scrollWidth - timeline.clientWidth);
+            return Math.min(0, Math.max(-maxScroll, v));
+        }
+
+        function scrollTimeline(dir) {
+            const timeline = document.getElementById('dynasty-timeline');
+            const step = timeline.clientWidth * 0.6;
+            timelineOffset = clampOffset(timelineOffset - dir * step);
+            const track = document.getElementById('dynasty-track');
+            track.style.transition = 'transform 0.3s ease';
+            track.style.transform = `translateX(${timelineOffset}px)`;
+            updateArrows();
+        }
+
+        function updateArrows() {
+            const track = document.getElementById('dynasty-track');
+            const timeline = document.getElementById('dynasty-timeline');
+            const maxScroll = Math.max(0, track.scrollWidth - timeline.clientWidth);
+            document.getElementById('arrow-left').classList.toggle('hidden', timelineOffset >= 0);
+            document.getElementById('arrow-right').classList.toggle('hidden', -timelineOffset >= maxScroll - 2);
+        }
+
+        function scrollToActiveTab() {
+            const active = document.querySelector('.dynasty-tab.active');
+            if (!active) return;
+            const timeline = document.getElementById('dynasty-timeline');
+            const track = document.getElementById('dynasty-track');
+            const tabLeft = active.offsetLeft;
+            const tabWidth = active.offsetWidth;
+            const viewWidth = timeline.clientWidth;
+            // Center the active tab
+            const target = -(tabLeft - viewWidth/2 + tabWidth/2);
+            timelineOffset = clampOffset(target);
+            track.style.transition = 'transform 0.3s ease';
+            track.style.transform = `translateX(${timelineOffset}px)`;
+            updateArrows();
+        }
+
         // ============ 渲染朝代标签 ============
         function renderDynastyTabs() {
-            const tabsContainer = document.getElementById('dynasty-tabs');
-            tabsContainer.innerHTML = EMBEDDED_DATA.dynasties.map(d => `
-                <button class="dynasty-tab" data-id="${d.id}" onclick="selectDynasty('${d.id}')">
-                    ${d.name.split('：')[0] || d.name.split('（')[0]}
-                </button>
-            `).join('');
+            const track = document.getElementById('dynasty-track');
+            track.innerHTML = EMBEDDED_DATA.dynasties.map(d => {
+                const shortName = d.name.split('：')[0].split('（')[0].split('—')[0].trim();
+                return `<button class="dynasty-tab" data-id="${d.id}" onclick="selectDynasty('${d.id}')">
+                    <span class="tab-label">${shortName}</span>
+                </button>`;
+            }).join('');
+            initTimelineDrag();
         }
 
         // ============ 选择朝代 ============
@@ -774,6 +953,7 @@
             document.querySelectorAll('.dynasty-tab').forEach(tab => {
                 tab.classList.toggle('active', tab.dataset.id === dynastyId);
             });
+            scrollToActiveTab();
 
             // 渲染朝代内容
             renderDynastyContent(currentDynasty);
