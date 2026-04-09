@@ -642,12 +642,12 @@
             /* Sidebar 改为底部抽屉 */
             #sidebar {
                 position: fixed;
-                bottom: 0;
+                top: 0;
                 left: 0;
                 right: 0;
+                bottom: 0;
                 width: 100%;
-                height: auto;
-                max-height: 90vh;
+                height: 100vh;
                 z-index: 100;
                 border-right: none;
                 border-top-left-radius: 20px;
@@ -656,77 +656,65 @@
                 transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 display: flex;
                 flex-direction: column;
+                will-change: transform;
             }
 
-            /* 抽屉三个状态 */
+            /* 抽屉三个状态 - 用 calc 精确控制可见部分 */
             #sidebar.drawer-collapsed {
-                transform: translateY(calc(100% - 120px));
+                transform: translateY(calc(100vh - 120px));
             }
-
             #sidebar.drawer-half {
-                transform: translateY(60vh);
+                transform: translateY(55vh);
             }
-
             #sidebar.drawer-expanded {
-                transform: translateY(10vh);
+                transform: translateY(0px);
             }
 
             /* 拖拽把手 */
-            #sidebar::before {
+            #sidebar .drag-handle {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                padding: 10px 0 6px;
+                cursor: grab;
+                flex-shrink: 0;
+            }
+            #sidebar .drag-handle::after {
                 content: '';
-                position: absolute;
-                top: 8px;
-                left: 50%;
-                transform: translateX(-50%);
                 width: 40px;
                 height: 4px;
                 background: var(--text-secondary);
                 border-radius: 2px;
                 opacity: 0.5;
-                z-index: 1000;
             }
 
-            /* Header 固定在顶部（时间轴外层） */
+            /* Header 跟随抽屉 */
             #sidebar-header {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                z-index: 200;
-                background: rgba(22, 33, 62, 0.95);
-                backdrop-filter: blur(10px);
-                border-bottom: 1px solid var(--border);
-                border-radius: 0;
-                padding: 12px 16px;
+                border-radius: 20px 20px 0 0;
+                padding: 4px 16px 8px;
+                flex-shrink: 0;
             }
 
             #sidebar-header h1 {
                 font-size: 16px;
-                margin-bottom: 4px;
+                margin-bottom: 2px;
             }
-
             #sidebar-header p {
                 font-size: 11px;
             }
 
-            /* 时间轴固定在Header下方 */
+            /* 时间轴跟随抽屉 */
             #dynasty-selector {
-                position: fixed;
-                top: 70px;
-                left: 0;
-                right: 0;
-                z-index: 200;
-                background: rgba(22, 33, 62, 0.95);
-                backdrop-filter: blur(10px);
-                border-bottom: 1px solid var(--border);
+                flex-shrink: 0;
             }
 
-            /* 内容区需要给顶部留空间 */
+            /* 内容区可滚动，填满剩余空间 */
             #content-area {
                 padding: 16px;
-                padding-top: 20px;
+                padding-bottom: 80px;
                 overflow-y: auto;
                 flex: 1;
+                min-height: 0;
                 -webkit-overflow-scrolling: touch;
             }
 
@@ -977,6 +965,7 @@
     <div id="app">
         <!-- 左侧面板 -->
         <div id="sidebar">
+            <div class="drag-handle"></div>
             <div id="sidebar-header">
                 <h1>🏛️ 中国历史博物馆地图</h1>
                 <p>v2.0 - 朝代·事件·博物馆时空导览</p>
