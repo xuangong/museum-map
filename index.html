@@ -622,25 +622,296 @@
             text-decoration: underline;
         }
 
-        /* 响应式 */
+        /* ============ 移动端抽屉模式 ============ */
         @media (max-width: 768px) {
             #app {
                 flex-direction: column;
+                position: relative;
             }
 
+            /* 地图全屏 */
+            #map-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 1;
+            }
+
+            /* Sidebar 改为底部抽屉 */
             #sidebar {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
                 width: 100%;
-                height: 40vh;
+                height: auto;
+                max-height: 90vh;
+                z-index: 100;
+                border-right: none;
+                border-top-left-radius: 20px;
+                border-top-right-radius: 20px;
+                box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                display: flex;
+                flex-direction: column;
             }
 
+            /* 抽屉三个状态 */
+            #sidebar.drawer-collapsed {
+                transform: translateY(calc(100% - 120px));
+            }
+
+            #sidebar.drawer-half {
+                transform: translateY(60vh);
+            }
+
+            #sidebar.drawer-expanded {
+                transform: translateY(10vh);
+            }
+
+            /* 拖拽把手 */
+            #sidebar::before {
+                content: '';
+                position: absolute;
+                top: 8px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 40px;
+                height: 4px;
+                background: var(--text-secondary);
+                border-radius: 2px;
+                opacity: 0.5;
+                z-index: 1000;
+            }
+
+            /* Header 固定在顶部（时间轴外层） */
+            #sidebar-header {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 200;
+                background: rgba(22, 33, 62, 0.95);
+                backdrop-filter: blur(10px);
+                border-bottom: 1px solid var(--border);
+                border-radius: 0;
+                padding: 12px 16px;
+            }
+
+            #sidebar-header h1 {
+                font-size: 16px;
+                margin-bottom: 4px;
+            }
+
+            #sidebar-header p {
+                font-size: 11px;
+            }
+
+            /* 时间轴固定在Header下方 */
+            #dynasty-selector {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                right: 0;
+                z-index: 200;
+                background: rgba(22, 33, 62, 0.95);
+                backdrop-filter: blur(10px);
+                border-bottom: 1px solid var(--border);
+            }
+
+            /* 内容区需要给顶部留空间 */
+            #content-area {
+                padding: 16px;
+                padding-top: 20px;
+                overflow-y: auto;
+                flex: 1;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* 收起状态时内容区不可见 */
+            #sidebar.drawer-collapsed #content-area {
+                overflow: hidden;
+                pointer-events: none;
+            }
+
+            /* 朝代信息卡片缩小 */
+            .dynasty-overview {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+
+            .dynasty-overview h2 {
+                font-size: 16px;
+            }
+
+            .dynasty-overview .period,
+            .dynasty-overview .overview-text {
+                font-size: 12px;
+            }
+
+            /* 事件和博物馆卡片缩小 */
+            .event-card,
+            .museum-rec-card {
+                padding: 10px 12px;
+                margin-bottom: 8px;
+            }
+
+            .event-date,
+            .museum-rec-name {
+                font-size: 12px;
+            }
+
+            .event-desc,
+            .museum-rec-reason {
+                font-size: 11px;
+            }
+
+            .section-title {
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+
+            /* 聊天机器人改为悬浮按钮 */
             #chatbot {
-                width: calc(100% - 40px);
-                max-height: 300px;
+                position: fixed;
+                bottom: 80px;
+                right: 16px;
+                width: 56px;
+                height: 56px;
+                max-height: none;
+                border-radius: 50%;
+                background: var(--accent-gold);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+                z-index: 150;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.3s;
+                overflow: hidden;
+            }
+
+            #chatbot:not(.chat-expanded) #chatbot-header {
+                padding: 0;
+                border: none;
+                background: transparent;
+                border-radius: 50%;
+                width: 56px;
+                height: 56px;
+                justify-content: center;
+            }
+
+            #chatbot:not(.chat-expanded) #chatbot-header h3 {
+                display: none;
+            }
+
+            #chatbot:not(.chat-expanded) #toggle-chat {
+                font-size: 28px;
+                color: var(--bg-dark);
+            }
+
+            #chatbot:not(.chat-expanded) #chatbot-messages,
+            #chatbot:not(.chat-expanded) #quick-questions,
+            #chatbot:not(.chat-expanded) #chatbot-input-area {
+                display: none;
+            }
+
+            /* 聊天展开状态 */
+            #chatbot.chat-expanded {
+                width: calc(100% - 32px);
+                height: auto;
+                max-height: 70vh;
+                border-radius: 16px;
+                bottom: 80px;
+                right: 16px;
+                left: 16px;
+            }
+
+            #chatbot.chat-expanded #chatbot-header {
+                padding: 12px 16px;
+                background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-panel) 100%);
+                border-bottom: 1px solid var(--border);
+                width: auto;
+                height: auto;
+                border-radius: 16px 16px 0 0;
+            }
+
+            #chatbot.chat-expanded #chatbot-header h3 {
+                display: block;
+                font-size: 13px;
+            }
+
+            #chatbot.chat-expanded #toggle-chat {
+                font-size: 18px;
+                color: var(--text-secondary);
+            }
+
+            #chatbot.chat-expanded #chatbot-messages {
+                display: block;
+                max-height: 200px;
+                padding: 12px;
+            }
+
+            #chatbot.chat-expanded #quick-questions {
+                display: flex;
+                padding: 10px 12px;
+            }
+
+            #chatbot.chat-expanded #chatbot-input-area {
+                display: flex;
+                padding: 10px 12px;
+            }
+
+            /* 博物馆详情弹窗改为全屏底部抽屉 */
+            #museum-modal {
+                align-items: flex-end;
+                justify-content: center;
             }
 
             .modal-content {
-                margin: 20px;
-                max-width: calc(100% - 40px);
+                margin: 0;
+                max-width: 100%;
+                width: 100%;
+                max-height: 95vh;
+                border-radius: 20px 20px 0 0;
+                border: none;
+                border-top: 1px solid var(--border);
+            }
+
+            .modal-header {
+                padding: 20px 16px;
+                border-top-left-radius: 20px;
+                border-top-right-radius: 20px;
+            }
+
+            .modal-header h2 {
+                font-size: 18px;
+                padding-right: 40px;
+            }
+
+            .modal-body {
+                padding: 16px;
+            }
+
+            .modal-section-title {
+                font-size: 14px;
+            }
+
+            .modal-section-content {
+                font-size: 12px;
+            }
+
+            .hall-item,
+            .artifact-item,
+            .connection-item {
+                padding: 10px 12px;
+                margin-bottom: 6px;
+            }
+
+            .artifact-name,
+            .hall-name {
+                font-size: 13px;
             }
         }
 
@@ -780,6 +1051,21 @@
             initMap();
             renderDynastyTabs();
             selectDynasty(EMBEDDED_DATA.dynasties[0].id);
+            initDrawer(); // 初始化移动端抽屉
+
+            // 监听窗口大小变化
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    // 桌面端：清除抽屉样式
+                    const sidebar = document.getElementById('sidebar');
+                    sidebar.classList.remove('drawer-collapsed', 'drawer-half', 'drawer-expanded');
+                    sidebar.style.transform = '';
+                    sidebar.style.transition = '';
+                } else {
+                    // 移动端：重新初始化抽屉
+                    initDrawer();
+                }
+            });
         }
 
         // ============ WGS-84 → GCJ-02 坐标转换（高德/腾讯地图需要）============
@@ -1227,10 +1513,116 @@
             content.classList.toggle('show');
         }
 
+        // ============ 移动端抽屉拖拽 ============
+        let drawerState = 'collapsed'; // collapsed, half, expanded
+        let drawerStartY = 0;
+        let drawerStartTranslate = 0;
+        let isDrawerDragging = false;
+
+        function initDrawer() {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth > 768) return; // 仅移动端
+
+            // 初始状态：收起
+            sidebar.classList.add('drawer-collapsed');
+
+            // Touch events
+            sidebar.addEventListener('touchstart', (e) => {
+                // 只在header区域响应拖拽（前120px）
+                const rect = sidebar.getBoundingClientRect();
+                const touchY = e.touches[0].clientY;
+                if (touchY > rect.top + 120) return;
+
+                isDrawerDragging = true;
+                drawerStartY = e.touches[0].clientY;
+                sidebar.style.transition = 'none';
+                e.stopPropagation();
+            }, { passive: true });
+
+            sidebar.addEventListener('touchmove', (e) => {
+                if (!isDrawerDragging) return;
+
+                const deltaY = e.touches[0].clientY - drawerStartY;
+                const currentTranslate = getCurrentTranslate();
+                let newTranslate = currentTranslate + deltaY;
+
+                // 限制范围：10vh ~ 100%-120px
+                const minTranslate = window.innerHeight * 0.1;
+                const maxTranslate = window.innerHeight - 120;
+                newTranslate = Math.max(minTranslate, Math.min(maxTranslate, newTranslate));
+
+                sidebar.style.transform = `translateY(${newTranslate}px)`;
+                drawerStartY = e.touches[0].clientY;
+            }, { passive: true });
+
+            sidebar.addEventListener('touchend', () => {
+                if (!isDrawerDragging) return;
+                isDrawerDragging = false;
+
+                const currentTranslate = getCurrentTranslate();
+                const vh = window.innerHeight;
+
+                // 根据位置决定最终状态
+                sidebar.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+
+                if (currentTranslate < vh * 0.3) {
+                    setDrawerState('expanded');
+                } else if (currentTranslate < vh * 0.7) {
+                    setDrawerState('half');
+                } else {
+                    setDrawerState('collapsed');
+                }
+            });
+
+            // 点击header切换状态
+            const header = document.querySelector('#sidebar-header, #dynasty-selector');
+            sidebar.addEventListener('click', (e) => {
+                // 只有在收起状态且点击顶部区域时才展开
+                if (drawerState === 'collapsed') {
+                    const rect = sidebar.getBoundingClientRect();
+                    if (e.clientY < rect.top + 120) {
+                        setDrawerState('half');
+                    }
+                }
+            });
+        }
+
+        function getCurrentTranslate() {
+            const sidebar = document.getElementById('sidebar');
+            const transform = window.getComputedStyle(sidebar).transform;
+            if (transform === 'none') return 0;
+            const values = transform.split('(')[1].split(')')[0].split(',');
+            return parseFloat(values[values.length - 1]);
+        }
+
+        function setDrawerState(state) {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.remove('drawer-collapsed', 'drawer-half', 'drawer-expanded');
+
+            if (state === 'expanded') {
+                sidebar.classList.add('drawer-expanded');
+                drawerState = 'expanded';
+            } else if (state === 'half') {
+                sidebar.classList.add('drawer-half');
+                drawerState = 'half';
+            } else {
+                sidebar.classList.add('drawer-collapsed');
+                drawerState = 'collapsed';
+            }
+        }
+
         // ============ 聊天机器人 ============
         function toggleChat() {
             const chatbot = document.getElementById('chatbot');
             const toggleBtn = document.getElementById('toggle-chat');
+
+            // 移动端：切换展开/收起
+            if (window.innerWidth <= 768) {
+                chatbot.classList.toggle('chat-expanded');
+                return;
+            }
+
+            // 桌面端：原有逻辑
             chatbot.classList.toggle('minimized');
             toggleBtn.textContent = chatbot.classList.contains('minimized') ? '+' : '−';
         }
