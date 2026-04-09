@@ -764,7 +764,7 @@
             /* 聊天机器人改为悬浮按钮 */
             #chatbot {
                 position: fixed;
-                bottom: 80px;
+                bottom: 140px;
                 right: 16px;
                 width: 56px;
                 height: 56px;
@@ -795,8 +795,11 @@
             }
 
             #chatbot:not(.chat-expanded) #toggle-chat {
-                font-size: 28px;
+                font-size: 24px;
                 color: var(--bg-dark);
+            }
+            #chatbot:not(.chat-expanded) #toggle-chat::before {
+                content: '🤖';
             }
 
             #chatbot:not(.chat-expanded) #chatbot-messages,
@@ -811,9 +814,7 @@
                 height: auto;
                 max-height: 70vh;
                 border-radius: 16px;
-                bottom: 80px;
-                right: 16px;
-                left: 16px;
+                bottom: 140px;
             }
 
             #chatbot.chat-expanded #chatbot-header {
@@ -1041,6 +1042,12 @@
             renderDynastyTabs();
             selectDynasty(EMBEDDED_DATA.dynasties[0].id);
             initDrawer(); // 初始化移动端抽屉
+
+            // 移动端：把 chatbot 移到 #app 顶层，避免被 #map-container 的层叠上下文限制
+            if (window.innerWidth <= 768) {
+                const chatbot = document.getElementById('chatbot');
+                document.getElementById('app').appendChild(chatbot);
+            }
 
             // 监听窗口大小变化
             window.addEventListener('resize', () => {
@@ -1535,13 +1542,34 @@
                 const currentTranslate = getCurrentTranslate();
                 let newTranslate = currentTranslate + deltaY;
 
-                // 限制范围：10vh ~ 100%-120px
-                const minTranslate = window.innerHeight * 0.1;
+                // 限制范围：0 ~ 100%-120px
+                const minTranslate = 0;
                 const maxTranslate = window.innerHeight - 120;
                 newTranslate = Math.max(minTranslate, Math.min(maxTranslate, newTranslate));
 
                 sidebar.style.transform = `translateY(${newTranslate}px)`;
                 drawerStartY = e.touches[0].clientY;
+            }, { passive: true });
+
+            let lastTouchY = 0;
+            let velocity = 0;
+            let lastTouchTime = 0;
+
+            sidebar.addEventListener('touchmove', function velocityTracker(e) {
+                if (!isDrawerDragging) return;
+                const now = Date.now();
+                const dt = now - lastTouchTime;
+                if (dt > 0) {
+                    velocity = (e.touches[0].clientY - lastTouchY) / dt;
+                }
+                lastTouchY = e.touches[0].clientY;
+                lastTouchTime = now;
+            }, { passive: true });
+
+            sidebar.addEventListener('touchstart', (e) => {
+                lastTouchY = e.touches[0].clientY;
+                lastTouchTime = Date.now();
+                velocity = 0;
             }, { passive: true });
 
             sidebar.addEventListener('touchend', () => {
@@ -1551,16 +1579,41 @@
                 const currentTranslate = getCurrentTranslate();
                 const vh = window.innerHeight;
 
-                // 根据位置决定最终状态
-                sidebar.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                // snap points
+                const snapTop = 0;
+                const snapHalf = vh * 0.55;
+                const snapBottom = vh - 120;
 
-                if (currentTranslate < vh * 0.3) {
+                sidebar.style.transition = 'transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+
+                // 速度优先：快速滑动直接吸到方向的极端位置
+                const VELOCITY_THRESHOLD = 0.5; // px/ms
+                if (Math.abs(velocity) > VELOCITY_THRESHOLD) {
+                    if (velocity < 0) {
+                        // 快速上滑 → 吸顶
+                        setDrawerState('expanded');
+                    } else {
+                        // 快速下滑 → 吸底
+                        setDrawerState('collapsed');
+                    }
+                    velocity = 0;
+                    return;
+                }
+
+                // 慢速拖拽：吸附到最近的档位
+                const distTop = Math.abs(currentTranslate - snapTop);
+                const distHalf = Math.abs(currentTranslate - snapHalf);
+                const distBottom = Math.abs(currentTranslate - snapBottom);
+                const minDist = Math.min(distTop, distHalf, distBottom);
+
+                if (minDist === distTop) {
                     setDrawerState('expanded');
-                } else if (currentTranslate < vh * 0.7) {
+                } else if (minDist === distHalf) {
                     setDrawerState('half');
                 } else {
                     setDrawerState('collapsed');
                 }
+                velocity = 0;
             });
 
             // 点击header切换状态
@@ -1607,7 +1660,8 @@
 
             // 移动端：切换展开/收起
             if (window.innerWidth <= 768) {
-                chatbot.classList.toggle('chat-expanded');
+                const isExpanded = chatbot.classList.toggle('chat-expanded');
+                toggleBtn.textContent = isExpanded ? '×' : '';
                 return;
             }
 
