@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国博物馆年代地图 - 穿越千年历史</title>
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-card: #0f3460;
+            --accent-gold: #e94560;
+            --accent-amber: #f39c12;
+            --text-primary: #eaeaea;
+            --text-secondary: #a9a9a9;
+            --glow-color: rgba(233, 69, 96, 0.6);
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* 主容器布局 */
+        #app {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* 地图容器 */
+        #map {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 头部标题 */
+        .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(180deg, rgba(26, 26, 46, 0.95) 0%, rgba(26, 26, 46, 0.7) 100%);
+            padding: 20px 40px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(233, 69, 96, 0.3);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            background: linear-gradient(90deg, #e94560 0%, #f39c12 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        /* 当前朝代显示 */
+        .current-dynasty {
+            position: absolute;
+            top: 120px;
+            left: 40px;
+            background: rgba(15, 52, 96, 0.9);
+            padding: 20px 30px;
+            border-radius: 15px;
+            border: 2px solid rgba(233, 69, 96, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            min-width: 320px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .current-dynasty h2 {
+            font-size: 24px;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .current-dynasty .period {
+            color: var(--accent-amber);
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .current-dynasty .overview {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.6;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        /* 历史事件面板 */
+        .events-panel {
+            position: absolute;
+            right: 20px;
+            top: 120px;
+            bottom: 200px;
+            width: 380px;
+            background: rgba(15, 52, 96, 0.9);
+            border-radius: 15px;
+            border: 2px solid rgba(233, 69, 96, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .events-panel h3 {
+            padding: 20px;
+            font-size: 18px;
+            color: var(--accent-gold);
+            border-bottom: 1px solid rgba(233, 69, 96, 0.3);
+            background: rgba(26, 26, 46, 0.5);
+        }
+
+        .events-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .event-item {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            background: rgba(26, 26, 46, 0.6);
+            border-left: 3px solid var(--accent-amber);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .event-item:hover {
+            background: rgba(233, 69, 96, 0.2);
+            transform: translateX(5px);
+        }
+
+        .event-item .date {
+            color: var(--accent-amber);
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .event-item .description {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .recommended-museums {
+            padding: 15px;
+            border-top: 1px solid rgba(233, 69, 96, 0.3);
+            background: rgba(26, 26, 46, 0.5);
+        }
+
+        .recommended-museums h4 {
+            color: var(--accent-gold);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .museum-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            margin: 4px;
+            background: rgba(233, 69, 96, 0.3);
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .museum-tag:hover {
+            background: rgba(233, 69, 96, 0.6);
+            transform: scale(1.05);
+        }
+
+        /* 时间轴控制面板 */
+        .timeline-control {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(0deg, rgba(26, 26, 46, 0.95) 0%, rgba(26, 26, 46, 0.7) 100%);
+            padding: 20px 40px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-top: 2px solid rgba(233, 69, 96, 0.3);
+        }
+
+        .playback-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%);
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.5);
+        }
+
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.7);
+        }
+
+        .timeline-slider {
+            position: relative;
+            margin-bottom: 10px;
+        }
+
+        .timeline-track {
+            height: 8px;
+            background: rgba(169, 169, 169, 0.3);
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .timeline-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-gold) 0%, var(--accent-amber) 100%);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            position: relative;
+        }
+
+        .timeline-handle {
+            position: absolute;
+            top: 50%;
+            right: -12px;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            background: white;
+            border: 3px solid var(--accent-gold);
+            border-radius: 50%;
+            cursor: grab;
+            box-shadow: 0 2px 8px var(--glow-color);
+        }
+
+        .timeline-handle:active {
+            cursor: grabbing;
+        }
+
+        .timeline-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .timeline-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-label:hover {
+            color: var(--accent-gold);
+            background: rgba(233, 69, 96, 0.2);
+        }
+
+        .timeline-label.active {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        /* 聊天机器人 */
+        .chatbot-btn {
+            position: fixed;
+            bottom: 200px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%);
+            border: none;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 20px rgba(233, 69, 96, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(233, 69, 96, 0.8);
+        }
+
+        .chatbot-panel {
+            position: fixed;
+            bottom: 200px;
+            right: 30px;
+            width: 400px;
+            height: 500px;
+            background: rgba(15, 52, 96, 0.95);
+            border-radius: 15px;
+            border: 2px solid rgba(233, 69, 96, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 1001;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .chatbot-panel.active {
+            display: flex;
+        }
+
+        .chatbot-header {
+            padding: 15px 20px;
+            background: rgba(26, 26, 46, 0.8);
+            border-bottom: 1px solid rgba(233, 69, 96, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .chatbot-header h3 {
+            color: var(--accent-gold);
+            font-size: 16px;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .chatbot-close:hover {
+            color: var(--accent-gold);
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-message.user {
+            text-align: right;
+        }
+
+        .message-bubble {
+            display: inline-block;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .chat-message.bot .message-bubble {
+            background: rgba(26, 26, 46, 0.8);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            color: var(--text-primary);
+            text-align: left;
+        }
+
+        .chat-message.user .message-bubble {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%);
+            color: white;
+        }
+
+        .quick-questions {
+            padding: 10px 15px;
+            border-top: 1px solid rgba(233, 69, 96, 0.3);
+            background: rgba(26, 26, 46, 0.5);
+        }
+
+        .quick-question-btn {
+            display: block;
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            background: rgba(233, 69, 96, 0.2);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .quick-question-btn:hover {
+            background: rgba(233, 69, 96, 0.4);
+            transform: translateX(5px);
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid rgba(233, 69, 96, 0.3);
+            background: rgba(26, 26, 46, 0.8);
+            border-radius: 0 0 15px 15px;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px 15px;
+            background: rgba(15, 52, 96, 0.5);
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+        }
+
+        .chatbot-input input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .chatbot-input button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-amber) 100%);
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-input button:hover {
+            transform: scale(1.05);
+        }
+
+        /* 自定义 Leaflet 标记样式 */
+        .museum-marker {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-gold) 0%, rgba(233, 69, 96, 0.5) 70%, transparent 100%);
+            box-shadow: 0 0 15px var(--glow-color);
+            border: 2px solid white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        .museum-marker:hover {
+            transform: scale(1.5) !important;
+            box-shadow: 0 0 25px var(--glow-color);
+        }
+
+        /* Leaflet Popup 样式自定义 */
+        .leaflet-popup-content-wrapper {
+            background: rgba(15, 52, 96, 0.95);
+            color: var(--text-primary);
+            border-radius: 12px;
+            padding: 0;
+            border: 2px solid rgba(233, 69, 96, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .leaflet-popup-content {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .museum-popup {
+            padding: 15px;
+            min-width: 280px;
+        }
+
+        .museum-popup h3 {
+            color: var(--accent-gold);
+            font-size: 18px;
+            margin-bottom: 8px;
+            border-bottom: 2px solid rgba(233, 69, 96, 0.3);
+            padding-bottom: 8px;
+        }
+
+        .museum-popup .info-row {
+            margin: 8px 0;
+            font-size: 13px;
+        }
+
+        .museum-popup .label {
+            color: var(--accent-amber);
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .museum-popup .treasures {
+            margin-top: 12px;
+        }
+
+        .museum-popup .treasure-item {
+            padding: 6px 10px;
+            margin: 5px 0;
+            background: rgba(26, 26, 46, 0.6);
+            border-left: 3px solid var(--accent-amber);
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .leaflet-popup-tip {
+            background: rgba(15, 52, 96, 0.95);
+            border: 2px solid rgba(233, 69, 96, 0.5);
+            border-top: none;
+            border-right: none;
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(26, 26, 46, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(233, 69, 96, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(233, 69, 96, 0.7);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .current-dynasty {
+                top: 90px;
+                left: 20px;
+                right: 20px;
+                min-width: auto;
+            }
+
+            .events-panel {
+                display: none;
+            }
+
+            .chatbot-panel {
+                width: calc(100% - 40px);
+                right: 20px;
+                left: 20px;
+            }
+
+            .timeline-control {
+                padding: 15px 20px;
+            }
+
+            .timeline-labels {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>中国博物馆年代地图</h1>
+            <p>穿越千年历史，探索64座博物馆的文明之旅</p>
+        </div>
+
+        <!-- 地图 -->
+        <div id="map"></div>
+
+        <!-- 当前朝代信息 -->
+        <div class="current-dynasty">
+            <h2 id="dynasty-name">新石器时代</h2>
+            <div class="period" id="dynasty-period">约公元前10000年—前2070年</div>
+            <div class="overview" id="dynasty-overview">加载中...</div>
+        </div>
+
+        <!-- 历史事件面板 -->
+        <div class="events-panel">
+            <h3>历史大事记</h3>
+            <div class="events-content" id="events-content">
+                <!-- 事件列表 -->
+            </div>
+            <div class="recommended-museums">
+                <h4>推荐博物馆</h4>
+                <div id="recommended-museums-list">
+                    <!-- 推荐博物馆标签 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 时间轴控制 -->
+        <div class="timeline-control">
+            <div class="playback-controls">
+                <button class="play-btn" id="play-btn">▶</button>
+            </div>
+            <div class="timeline-slider">
+                <div class="timeline-track" id="timeline-track">
+                    <div class="timeline-progress" id="timeline-progress">
+                        <div class="timeline-handle" id="timeline-handle"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="timeline-labels" id="timeline-labels">
+                <!-- 朝代标签 -->
+            </div>
+        </div>
+
+        <!-- 聊天机器人按钮 -->
+        <button class="chatbot-btn" id="chatbot-btn">💬</button>
+
+        <!-- 聊天机器人面板 -->
+        <div class="chatbot-panel" id="chatbot-panel">
+            <div class="chatbot-header">
+                <h3>智能导览助手</h3>
+                <button class="chatbot-close" id="chatbot-close">×</button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="chat-message bot">
+                    <div class="message-bubble">
+                        您好！我是博物馆智能导览助手。您可以问我关于各个朝代、博物馆和文物的问题。
+                    </div>
+                </div>
+            </div>
+            <div class="quick-questions">
+                <button class="quick-question-btn" data-question="推荐看哪个博物馆？">📍 推荐看哪个博物馆？</button>
+                <button class="quick-question-btn" data-question="唐朝有哪些博物馆？">🏛️ 唐朝有哪些博物馆？</button>
+                <button class="quick-question-btn" data-question="故宫博物院有什么镇馆之宝？">💎 故宫博物院有什么镇馆之宝？</button>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chat-input" placeholder="输入您的问题...">
+                <button id="chat-send">发送</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // 全局数据
+        let museumsData = [];
+        let dynastiesData = [];
+        let currentDynastyIndex = 0;
+        let isPlaying = false;
+        let playInterval = null;
+        let map = null;
+        let markers = [];
+
+        // 初始化应用
+        async function initApp() {
+            try {
+                const response = await fetch('data.json');
+                const data = await response.json();
+                museumsData = data.museums;
+                dynastiesData = data.dynasties;
+
+                initMap();
+                initTimeline();
+                updateDynastyDisplay(0);
+                initChatbot();
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                alert('数据加载失败，请确保 data.json 文件存在');
+            }
+        }
+
+        // 初始化地图
+        function initMap() {
+            map = L.map('map', {
+                center: [35.0, 105.0],
+                zoom: 5,
+                zoomControl: true,
+                minZoom: 4,
+                maxZoom: 10
+            });
+
+            // 使用 OpenStreetMap 瓦片
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 18
+            }).addTo(map);
+
+            // 添加深色滤镜
+            const mapElement = document.getElementById('map');
+            mapElement.style.filter = 'brightness(0.7) contrast(1.2) saturate(0.8)';
+        }
+
+        // 初始化时间轴
+        function initTimeline() {
+            const labelsContainer = document.getElementById('timeline-labels');
+            dynastiesData.forEach((dynasty, index) => {
+                const label = document.createElement('div');
+                label.className = 'timeline-label';
+                label.textContent = dynasty.name.split('（')[0];
+                label.dataset.index = index;
+                label.addEventListener('click', () => {
+                    updateDynastyDisplay(index);
+                });
+                labelsContainer.appendChild(label);
+            });
+
+            // 时间轴拖动
+            const track = document.getElementById('timeline-track');
+            const handle = document.getElementById('timeline-handle');
+            let isDragging = false;
+
+            handle.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+
+                const rect = track.getBoundingClientRect();
+                let x = e.clientX - rect.left;
+                x = Math.max(0, Math.min(x, rect.width));
+
+                const percentage = x / rect.width;
+                const index = Math.floor(percentage * dynastiesData.length);
+                updateDynastyDisplay(Math.min(index, dynastiesData.length - 1));
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            track.addEventListener('click', (e) => {
+                const rect = track.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const percentage = x / rect.width;
+                const index = Math.floor(percentage * dynastiesData.length);
+                updateDynastyDisplay(Math.min(index, dynastiesData.length - 1));
+            });
+
+            // 播放按钮
+            const playBtn = document.getElementById('play-btn');
+            playBtn.addEventListener('click', togglePlayback);
+        }
+
+        // 更新朝代显示
+        function updateDynastyDisplay(index) {
+            currentDynastyIndex = index;
+            const dynasty = dynastiesData[index];
+
+            // 更新当前朝代信息
+            document.getElementById('dynasty-name').textContent = dynasty.name;
+            document.getElementById('dynasty-period').textContent = dynasty.period;
+            document.getElementById('dynasty-overview').textContent = dynasty.overview;
+
+            // 更新时间轴进度
+            const progress = ((index + 1) / dynastiesData.length) * 100;
+            document.getElementById('timeline-progress').style.width = progress + '%';
+
+            // 更新标签高亮
+            document.querySelectorAll('.timeline-label').forEach((label, i) => {
+                label.classList.toggle('active', i === index);
+            });
+
+            // 更新历史事件
+            updateEvents(dynasty);
+
+            // 更新推荐博物馆
+            updateRecommendedMuseums(dynasty);
+
+            // 更新地图标记
+            updateMapMarkers(dynasty);
+        }
+
+        // 更新历史事件
+        function updateEvents(dynasty) {
+            const eventsContent = document.getElementById('events-content');
+            eventsContent.innerHTML = '';
+
+            dynasty.events.forEach(event => {
+                const eventItem = document.createElement('div');
+                eventItem.className = 'event-item';
+                eventItem.innerHTML = `
+                    <div class="date">${event.date}</div>
+                    <div class="description">${event.event}</div>
+                `;
+                eventsContent.appendChild(eventItem);
+            });
+        }
+
+        // 更新推荐博物馆
+        function updateRecommendedMuseums(dynasty) {
+            const container = document.getElementById('recommended-museums-list');
+            container.innerHTML = '';
+
+            dynasty.recommendedMuseums.forEach(museumName => {
+                const tag = document.createElement('span');
+                tag.className = 'museum-tag';
+                tag.textContent = museumName;
+                tag.addEventListener('click', () => {
+                    const museum = museumsData.find(m => m.name === museumName);
+                    if (museum) {
+                        highlightMuseum(museum);
+                    }
+                });
+                container.appendChild(tag);
+            });
+        }
+
+        // 更新地图标记
+        function updateMapMarkers(dynasty) {
+            // 清除旧标记
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+
+            // 获取与当前朝代相关的博物馆
+            const relevantMuseums = getRelevantMuseums(dynasty);
+
+            relevantMuseums.forEach(({ museum, relevance }) => {
+                const markerSize = 10 + relevance * 15;
+                const opacity = 0.5 + relevance * 0.5;
+
+                const customIcon = L.divIcon({
+                    className: 'museum-marker',
+                    html: `<div style="width: ${markerSize}px; height: ${markerSize}px; opacity: ${opacity};"></div>`,
+                    iconSize: [markerSize, markerSize]
+                });
+
+                const marker = L.marker([museum.lat, museum.lng], { icon: customIcon })
+                    .addTo(map)
+                    .bindPopup(createPopupContent(museum));
+
+                markers.push(marker);
+            });
+        }
+
+        // 获取与朝代相关的博物馆
+        function getRelevantMuseums(dynasty) {
+            return museumsData.map(museum => {
+                let relevance = 0;
+
+                // 检查博物馆是否在推荐列表中
+                if (dynasty.recommendedMuseums.includes(museum.name)) {
+                    relevance += 0.5;
+                }
+
+                // 检查核心时期是否包含朝代名称
+                const dynastyKeywords = dynasty.name.split('（')[0];
+                if (museum.corePeriod && museum.corePeriod.includes(dynastyKeywords)) {
+                    relevance += 0.5;
+                }
+
+                // 检查朝代覆盖
+                if (museum.dynastyCoverage && museum.dynastyCoverage.includes(dynastyKeywords)) {
+                    relevance += 0.3;
+                }
+
+                return { museum, relevance: Math.min(relevance, 1) };
+            }).filter(item => item.relevance > 0);
+        }
+
+        // 创建弹窗内容
+        function createPopupContent(museum) {
+            const treasures = museum.treasures.slice(0, 3).map(t =>
+                `<div class="treasure-item">${t}</div>`
+            ).join('');
+
+            return `
+                <div class="museum-popup">
+                    <h3>${museum.name}</h3>
+                    <div class="info-row">
+                        <span class="label">📍 位置:</span>
+                        <span>${museum.location}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">⏰ 核心时期:</span>
+                        <span>${museum.corePeriod}</span>
+                    </div>
+                    <div class="treasures">
+                        <div class="label">💎 镇馆之宝:</div>
+                        ${treasures}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 高亮博物馆
+        function highlightMuseum(museum) {
+            map.setView([museum.lat, museum.lng], 8, { animate: true });
+
+            // 找到对应的标记并打开弹窗
+            const marker = markers.find(m => {
+                const latlng = m.getLatLng();
+                return latlng.lat === museum.lat && latlng.lng === museum.lng;
+            });
+
+            if (marker) {
+                marker.openPopup();
+            }
+        }
+
+        // 播放/暂停控制
+        function togglePlayback() {
+            const playBtn = document.getElementById('play-btn');
+
+            if (isPlaying) {
+                // 暂停
+                isPlaying = false;
+                playBtn.textContent = '▶';
+                if (playInterval) {
+                    clearInterval(playInterval);
+                    playInterval = null;
+                }
+            } else {
+                // 播放
+                isPlaying = true;
+                playBtn.textContent = '⏸';
+                playInterval = setInterval(() => {
+                    let nextIndex = currentDynastyIndex + 1;
+                    if (nextIndex >= dynastiesData.length) {
+                        nextIndex = 0;
+                    }
+                    updateDynastyDisplay(nextIndex);
+                }, 3000);
+            }
+        }
+
+        // 初始化聊天机器人
+        function initChatbot() {
+            const chatbotBtn = document.getElementById('chatbot-btn');
+            const chatbotPanel = document.getElementById('chatbot-panel');
+            const chatbotClose = document.getElementById('chatbot-close');
+            const chatInput = document.getElementById('chat-input');
+            const chatSend = document.getElementById('chat-send');
+
+            chatbotBtn.addEventListener('click', () => {
+                chatbotPanel.classList.toggle('active');
+            });
+
+            chatbotClose.addEventListener('click', () => {
+                chatbotPanel.classList.remove('active');
+            });
+
+            chatSend.addEventListener('click', () => {
+                const question = chatInput.value.trim();
+                if (question) {
+                    handleChatQuestion(question);
+                    chatInput.value = '';
+                }
+            });
+
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    chatSend.click();
+                }
+            });
+
+            // 快捷问题按钮
+            document.querySelectorAll('.quick-question-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const question = btn.dataset.question;
+                    handleChatQuestion(question);
+                });
+            });
+        }
+
+        // 处理聊天问题
+        function handleChatQuestion(question) {
+            const messagesContainer = document.getElementById('chatbot-messages');
+
+            // 添加用户消息
+            const userMessage = document.createElement('div');
+            userMessage.className = 'chat-message user';
+            userMessage.innerHTML = `<div class="message-bubble">${question}</div>`;
+            messagesContainer.appendChild(userMessage);
+
+            // 生成回答
+            const answer = generateAnswer(question);
+
+            // 添加机器人回答
+            setTimeout(() => {
+                const botMessage = document.createElement('div');
+                botMessage.className = 'chat-message bot';
+                botMessage.innerHTML = `<div class="message-bubble">${answer}</div>`;
+                messagesContainer.appendChild(botMessage);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 500);
+
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // 生成答案（本地知识问答）
+        function generateAnswer(question) {
+            question = question.toLowerCase();
+
+            // 朝代查询
+            for (let dynasty of dynastiesData) {
+                const dynastyName = dynasty.name.split('（')[0].toLowerCase();
+                if (question.includes(dynastyName)) {
+                    const museums = dynasty.recommendedMuseums.slice(0, 5).join('、');
+                    return `${dynasty.name}时期推荐参观的博物馆有：${museums}。这些博物馆收藏了该时期的重要文物，能帮您深入了解这段历史。`;
+                }
+            }
+
+            // 博物馆查询
+            for (let museum of museumsData) {
+                if (question.includes(museum.name)) {
+                    const treasures = museum.treasures.slice(0, 3).join('、');
+                    return `${museum.name}的镇馆之宝包括：${treasures}。该馆位于${museum.location}，核心展品涵盖${museum.corePeriod}。`;
+                }
+            }
+
+            // 推荐查询
+            if (question.includes('推荐') || question.includes('哪个') || question.includes('去哪')) {
+                const topMuseums = ['故宫博物院', '中国国家博物馆', '陕西历史博物馆', '上海博物馆', '河南博物院'];
+                return `我推荐您参观以下博物馆：${topMuseums.join('、')}。这些都是中国最重要的博物馆，藏品丰富，展览精彩！`;
+            }
+
+            // 文物查询
+            if (question.includes('文物') || question.includes('宝物') || question.includes('藏品')) {
+                return `中国各大博物馆收藏了丰富的文物，包括青铜器、玉器、陶瓷、书画等。您可以通过地图查看各博物馆的镇馆之宝，或者告诉我您对哪个博物馆或哪个朝代感兴趣。`;
+            }
+
+            // 时间查询
+            if (question.includes('多久') || question.includes('时间') || question.includes('开放')) {
+                return `大多数博物馆的开放时间为周二至周日 9:00-17:00（周一闭馆）。建议您参观前查询具体博物馆的官网或公众号，确认当天的开放时间和预约要求。`;
+            }
+
+            // 默认回答
+            return `很抱歉，我暂时无法回答这个问题。您可以尝试询问：\n• 某个朝代有哪些博物馆？\n• 某个博物馆有什么镇馆之宝？\n• 推荐参观哪个博物馆？`;
+        }
+
+        // 启动应用
+        window.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
