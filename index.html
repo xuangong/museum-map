@@ -698,19 +698,57 @@
             selectDynasty(EMBEDDED_DATA.dynasties[0].id);
         }
 
+        // ============ WGS-84 → GCJ-02 坐标转换（高德/腾讯地图需要）============
+        const PI = Math.PI;
+        const a = 6378245.0;
+        const ee = 0.00669342162296594323;
+        function outOfChina(lat, lng) {
+            return lng < 72.004 || lng > 137.8347 || lat < 0.8293 || lat > 55.8271;
+        }
+        function transformLat(x, y) {
+            let ret = -100.0 + 2.0*x + 3.0*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+            ret += (20.0*Math.sin(6.0*x*PI) + 20.0*Math.sin(2.0*x*PI)) * 2.0/3.0;
+            ret += (20.0*Math.sin(y*PI) + 40.0*Math.sin(y/3.0*PI)) * 2.0/3.0;
+            ret += (160.0*Math.sin(y/12.0*PI) + 320*Math.sin(y*PI/30.0)) * 2.0/3.0;
+            return ret;
+        }
+        function transformLng(x, y) {
+            let ret = 300.0 + x + 2.0*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+            ret += (20.0*Math.sin(6.0*x*PI) + 20.0*Math.sin(2.0*x*PI)) * 2.0/3.0;
+            ret += (20.0*Math.sin(x*PI) + 40.0*Math.sin(x/3.0*PI)) * 2.0/3.0;
+            ret += (150.0*Math.sin(x/12.0*PI) + 300.0*Math.sin(x/30.0*PI)) * 2.0/3.0;
+            return ret;
+        }
+        function wgs84ToGcj02(wgsLat, wgsLng) {
+            if (outOfChina(wgsLat, wgsLng)) return [wgsLat, wgsLng];
+            let dLat = transformLat(wgsLng - 105.0, wgsLat - 35.0);
+            let dLng = transformLng(wgsLng - 105.0, wgsLat - 35.0);
+            const radLat = wgsLat / 180.0 * PI;
+            let magic = Math.sin(radLat);
+            magic = 1 - ee * magic * magic;
+            const sqrtMagic = Math.sqrt(magic);
+            dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * PI);
+            dLng = (dLng * 180.0) / (a / sqrtMagic * Math.cos(radLat) * PI);
+            return [wgsLat + dLat, wgsLng + dLng];
+        }
+        // 统一坐标转换入口
+        function toMapCoord(lat, lng) {
+            return wgs84ToGcj02(lat, lng);
+        }
+
         // ============ 地图初始化 ============
         function initMap() {
             map = L.map('map', {
-                center: [35.0, 105.0],
+                center: toMapCoord(35.0, 105.0),
                 zoom: 5,
                 zoomControl: true,
                 attributionControl: true
             });
 
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/">CARTO</a>',
-                maxZoom: 19,
-                subdomains: 'abcd'
+            L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+                attribution: '© 高德地图',
+                maxZoom: 18,
+                subdomains: '1234'
             }).addTo(map);
 
             markersLayer = L.layerGroup().addTo(map);
@@ -745,7 +783,7 @@
 
             // 飞到朝代中心
             if (currentDynasty.center && currentDynasty.center.length === 2) {
-                map.flyTo(currentDynasty.center, 5, { duration: 1.5 });
+                map.flyTo(toMapCoord(currentDynasty.center[0], currentDynasty.center[1]), 5, { duration: 1.5 });
             }
         }
 
@@ -811,7 +849,7 @@
                 const museum = EMBEDDED_DATA.museums.find(m => m.id === museumId);
                 if (!museum || !museum.lat || !museum.lng) return;
 
-                const marker = L.circleMarker([museum.lat, museum.lng], {
+                const marker = L.circleMarker(toMapCoord(museum.lat, museum.lng), {
                     radius: 8,
                     fillColor: '#f4a261',
                     color: '#e76f51',
@@ -841,7 +879,7 @@
                 dynasty.events.forEach(evt => {
                     if (!evt.lat || !evt.lng) return;
 
-                    const eventMarker = L.marker([evt.lat, evt.lng], {
+                    const eventMarker = L.marker(toMapCoord(evt.lat, evt.lng), {
                         icon: L.divIcon({
                             className: 'event-marker',
                             html: '<div style="width: 12px; height: 12px; background: #e76f51; border: 2px solid #f4a261; border-radius: 50%; transform: rotate(45deg);"></div>',
@@ -884,7 +922,7 @@
         // ============ 飞到事件 ============
         function flyToEvent(lat, lng, eventName, date) {
             if (lat && lng) {
-                map.flyTo([lat, lng], 8, { duration: 1.5 });
+                map.flyTo(toMapCoord(lat, lng), 8, { duration: 1.5 });
             }
         }
 
@@ -988,7 +1026,7 @@
 
             // 飞到博物馆
             if (museum.lat && museum.lng) {
-                map.flyTo([museum.lat, museum.lng], 10, { duration: 1.5 });
+                map.flyTo(toMapCoord(museum.lat, museum.lng), 10, { duration: 1.5 });
             }
         }
 
