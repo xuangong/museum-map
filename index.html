@@ -761,7 +761,7 @@
                 margin-bottom: 10px;
             }
 
-            /* 聊天机器人改为悬浮按钮 */
+            /* 聊天 - 收起：悬浮按钮 */
             #chatbot {
                 position: fixed;
                 bottom: 140px;
@@ -771,89 +771,106 @@
                 max-height: none;
                 border-radius: 50%;
                 background: var(--accent-gold);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
                 z-index: 150;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: all 0.3s;
+                transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
                 overflow: hidden;
             }
-
             #chatbot:not(.chat-expanded) #chatbot-header {
-                padding: 0;
-                border: none;
-                background: transparent;
-                border-radius: 50%;
-                width: 56px;
-                height: 56px;
-                justify-content: center;
+                padding: 0; border: none; background: transparent;
+                border-radius: 50%; width: 56px; height: 56px; justify-content: center;
             }
-
-            #chatbot:not(.chat-expanded) #chatbot-header h3 {
-                display: none;
-            }
-
+            #chatbot:not(.chat-expanded) #chatbot-header h3 { display: none; }
             #chatbot:not(.chat-expanded) #toggle-chat {
-                font-size: 24px;
-                color: var(--bg-dark);
+                font-size: 24px; color: var(--bg-dark);
             }
-            #chatbot:not(.chat-expanded) #toggle-chat::before {
-                content: '🤖';
-            }
-
+            #chatbot:not(.chat-expanded) #toggle-chat::before { content: '🤖'; }
             #chatbot:not(.chat-expanded) #chatbot-messages,
             #chatbot:not(.chat-expanded) #quick-questions,
-            #chatbot:not(.chat-expanded) #chatbot-input-area {
-                display: none;
-            }
+            #chatbot:not(.chat-expanded) #chatbot-input-area { display: none; }
 
-            /* 聊天展开状态 */
+            /* 聊天遮罩层 */
+            .chat-overlay {
+                display: none;
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 400;
+                animation: fadeIn 0.3s ease;
+            }
+            .chat-overlay.show { display: block; }
+            @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+            /* 聊天 - 展开：全屏底部面板 */
             #chatbot.chat-expanded {
-                width: calc(100% - 32px);
-                height: auto;
-                max-height: 70vh;
-                border-radius: 16px;
-                bottom: 140px;
-                right: 16px;
-                left: 16px;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: auto;
+                width: 100%;
+                height: 75vh;
+                max-height: 75vh;
+                border-radius: 20px 20px 0 0;
                 background: var(--bg-panel);
-                border: 1px solid var(--border);
+                box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.6);
+                z-index: 500;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+                animation: slideUp 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            @keyframes slideUp {
+                from { transform: translateY(100%); }
+                to { transform: translateY(0); }
             }
 
             #chatbot.chat-expanded #chatbot-header {
-                padding: 12px 16px;
+                padding: 16px 20px;
                 background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-panel) 100%);
                 border-bottom: 1px solid var(--border);
-                width: auto;
-                height: auto;
-                border-radius: 16px 16px 0 0;
+                border-radius: 20px 20px 0 0;
+                width: 100%; height: auto;
+                position: relative;
+                flex-shrink: 0;
             }
-
+            #chatbot.chat-expanded #chatbot-header::before {
+                content: '';
+                position: absolute; top: 8px; left: 50%;
+                transform: translateX(-50%);
+                width: 36px; height: 4px;
+                background: var(--text-secondary);
+                border-radius: 2px; opacity: 0.4;
+            }
             #chatbot.chat-expanded #chatbot-header h3 {
-                display: block;
-                font-size: 13px;
+                display: block; font-size: 15px; margin-top: 6px;
             }
-
             #chatbot.chat-expanded #toggle-chat {
-                font-size: 18px;
-                color: var(--text-secondary);
+                position: absolute; top: 14px; right: 16px;
+                font-size: 20px; color: var(--text-secondary);
+                width: 32px; height: 32px;
+                display: flex; align-items: center; justify-content: center;
+                border-radius: 50%; background: var(--bg-card);
             }
+            #chatbot.chat-expanded #toggle-chat::before { content: none; }
 
             #chatbot.chat-expanded #chatbot-messages {
-                display: block;
-                max-height: 200px;
-                padding: 12px;
+                display: block; flex: 1; min-height: 0;
+                padding: 16px 20px;
+                overflow-y: auto; -webkit-overflow-scrolling: touch;
             }
-
             #chatbot.chat-expanded #quick-questions {
-                display: flex;
-                padding: 10px 12px;
+                display: flex; padding: 10px 20px;
+                flex-wrap: wrap; gap: 8px; flex-shrink: 0;
             }
-
             #chatbot.chat-expanded #chatbot-input-area {
-                display: flex;
-                padding: 10px 12px;
+                display: flex; padding: 12px 20px;
+                padding-bottom: max(12px, env(safe-area-inset-bottom));
+                border-top: 1px solid var(--border);
+                flex-shrink: 0;
             }
 
             /* 博物馆详情弹窗改为全屏底部抽屉 */
@@ -993,6 +1010,8 @@
         <div id="map-container">
             <div id="map"></div>
 
+            <!-- 聊天遮罩层 -->
+            <div class="chat-overlay" id="chat-overlay" onclick="toggleChat()"></div>
             <!-- 聊天机器人 -->
             <div id="chatbot">
                 <div id="chatbot-header" onclick="toggleChat()">
@@ -1050,7 +1069,10 @@
             // 移动端：把 chatbot 移到 #app 顶层，避免被 #map-container 的层叠上下文限制
             if (window.innerWidth <= 768) {
                 const chatbot = document.getElementById('chatbot');
-                document.getElementById('app').appendChild(chatbot);
+                const overlay = document.getElementById('chat-overlay');
+                const app = document.getElementById('app');
+                app.appendChild(overlay);
+                app.appendChild(chatbot);
             }
 
             // 监听窗口大小变化
@@ -1606,6 +1628,7 @@
             if (window.innerWidth <= 768) {
                 const isExpanded = chatbot.classList.toggle('chat-expanded');
                 toggleBtn.textContent = isExpanded ? '×' : '';
+                document.getElementById('chat-overlay').classList.toggle('show', isExpanded);
                 return;
             }
 
