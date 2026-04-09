@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中国历史博物馆地图 v2.0 - 朝代·事件·博物馆时空导览</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #1a1a2e;
+            --bg-panel: #16213e;
+            --bg-card: #0f3460;
+            --accent-gold: #f4a261;
+            --accent-amber: #e76f51;
+            --text-primary: #e9ecef;
+            --text-secondary: #adb5bd;
+            --border: rgba(244, 162, 97, 0.3);
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            overflow: hidden;
+        }
+
+        #app {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* 左侧面板 */
+        #sidebar {
+            width: 400px;
+            background: var(--bg-panel);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        #sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, var(--bg-panel) 0%, var(--bg-card) 100%);
+        }
+
+        #sidebar-header h1 {
+            font-size: 20px;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        #sidebar-header p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* 朝代选择器 */
+        #dynasty-tabs {
+            display: flex;
+            overflow-x: auto;
+            padding: 12px 15px;
+            gap: 8px;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg-panel);
+        }
+
+        #dynasty-tabs::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        #dynasty-tabs::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 2px;
+        }
+
+        .dynasty-tab {
+            padding: 8px 16px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 13px;
+            white-space: nowrap;
+            transition: all 0.3s;
+        }
+
+        .dynasty-tab:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .dynasty-tab.active {
+            background: var(--accent-gold);
+            color: var(--bg-dark);
+            border-color: var(--accent-gold);
+        }
+
+        /* 内容区域 */
+        #content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        #content-area::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #content-area::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 3px;
+        }
+
+        /* 朝代信息卡片 */
+        .dynasty-overview {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .dynasty-overview h2 {
+            font-size: 18px;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        .dynasty-overview .period {
+            font-size: 13px;
+            color: var(--accent-amber);
+            margin-bottom: 12px;
+        }
+
+        .dynasty-overview .overview-text {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        /* 事件列表 */
+        .events-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .event-card {
+            background: var(--bg-card);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--accent-amber);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .event-card:hover {
+            background: rgba(15, 52, 96, 0.8);
+            transform: translateX(4px);
+        }
+
+        .event-date {
+            font-size: 12px;
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        .event-desc {
+            font-size: 13px;
+            color: var(--text-primary);
+            margin-top: 4px;
+        }
+
+        /* 博物馆推荐 */
+        .museum-recommendations {
+            margin-top: 20px;
+        }
+
+        .museum-rec-card {
+            background: var(--bg-card);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .museum-rec-card:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+
+        .museum-rec-name {
+            font-size: 14px;
+            color: var(--accent-gold);
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .museum-rec-reason {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* 地图区域 */
+        #map-container {
+            flex: 1;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* 聊天机器人 */
+        #chatbot {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 360px;
+            max-height: 500px;
+            background: var(--bg-panel);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+        }
+
+        #chatbot.minimized {
+            max-height: 56px;
+        }
+
+        #chatbot-header {
+            padding: 16px;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-panel) 100%);
+            border-bottom: 1px solid var(--border);
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        #chatbot-header h3 {
+            font-size: 14px;
+            color: var(--accent-gold);
+        }
+
+        #toggle-chat {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        #chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            max-height: 300px;
+        }
+
+        #chatbot-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #chatbot-messages::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 2px;
+        }
+
+        .chat-message {
+            margin-bottom: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .chat-message.user {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            margin-left: 20px;
+        }
+
+        .chat-message.assistant {
+            background: rgba(244, 162, 97, 0.1);
+            color: var(--text-secondary);
+            margin-right: 20px;
+            border-left: 3px solid var(--accent-gold);
+        }
+
+        .chat-message.system {
+            background: transparent;
+            color: var(--text-secondary);
+            text-align: center;
+            font-size: 12px;
+        }
+
+        #quick-questions {
+            padding: 12px 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        .quick-btn {
+            padding: 6px 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quick-btn:hover {
+            background: var(--accent-gold);
+            color: var(--bg-dark);
+            border-color: var(--accent-gold);
+        }
+
+        #chatbot-input-area {
+            padding: 12px 16px;
+            background: var(--bg-card);
+            border-radius: 0 0 12px 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        #chat-input {
+            flex: 1;
+            padding: 10px 12px;
+            background: var(--bg-panel);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 13px;
+            outline: none;
+        }
+
+        #chat-input:focus {
+            border-color: var(--accent-gold);
+        }
+
+        #send-chat {
+            padding: 10px 20px;
+            background: var(--accent-gold);
+            border: none;
+            border-radius: 20px;
+            color: var(--bg-dark);
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #send-chat:hover {
+            background: var(--accent-amber);
+        }
+
+        #send-chat:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 博物馆详情弹窗 */
+        #museum-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #museum-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-panel);
+            border-radius: 16px;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+
+        .modal-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 3px;
+        }
+
+        .modal-header {
+            padding: 24px;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-panel) 100%);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+        }
+
+        .modal-header .museum-level {
+            font-size: 12px;
+            color: var(--accent-amber);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 24px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: var(--bg-card);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-section {
+            margin-bottom: 24px;
+        }
+
+        .modal-section-title {
+            font-size: 16px;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-section-content {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .hall-item, .artifact-item, .connection-item {
+            background: var(--bg-card);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 3px solid var(--accent-amber);
+        }
+
+        .artifact-name, .hall-name {
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .sources-toggle {
+            margin-top: 16px;
+            padding: 12px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid var(--border);
+        }
+
+        .sources-toggle-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--accent-gold);
+        }
+
+        .sources-content {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+        }
+
+        .sources-content.show {
+            display: block;
+        }
+
+        .sources-content a {
+            color: var(--accent-amber);
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .sources-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            #app {
+                flex-direction: column;
+            }
+
+            #sidebar {
+                width: 100%;
+                height: 40vh;
+            }
+
+            #chatbot {
+                width: calc(100% - 40px);
+                max-height: 300px;
+            }
+
+            .modal-content {
+                margin: 20px;
+                max-width: calc(100% - 40px);
+            }
+        }
+
+        /* Leaflet 自定义样式 */
+        .event-marker {
+            background: var(--accent-amber);
+            border: 2px solid var(--accent-gold);
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+        }
+
+        .leaflet-popup-content-wrapper {
+            background: var(--bg-panel);
+            color: var(--text-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .leaflet-popup-tip {
+            background: var(--bg-panel);
+        }
+
+        .popup-event-title {
+            color: var(--accent-gold);
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .popup-event-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .popup-museums {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--border);
+        }
+
+        .popup-museum-item {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+            padding: 4px;
+            background: var(--bg-card);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .popup-museum-item:hover {
+            color: var(--accent-gold);
+        }
+
+        .loading {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- 左侧面板 -->
+        <div id="sidebar">
+            <div id="sidebar-header">
+                <h1>🏛️ 中国历史博物馆地图</h1>
+                <p>v2.0 - 朝代·事件·博物馆时空导览</p>
+            </div>
+
+            <div id="dynasty-tabs"></div>
+
+            <div id="content-area">
+                <div id="dynasty-content"></div>
+            </div>
+        </div>
+
+        <!-- 地图区域 -->
+        <div id="map-container">
+            <div id="map"></div>
+
+            <!-- 聊天机器人 -->
+            <div id="chatbot">
+                <div id="chatbot-header" onclick="toggleChat()">
+                    <h3>🤖 AI 历史顾问</h3>
+                    <button id="toggle-chat">−</button>
+                </div>
+                <div id="chatbot-messages">
+                    <div class="chat-message system">
+                        👋 我是你的历史顾问！可以问我关于朝代、博物馆、文物的问题
+                    </div>
+                </div>
+                <div id="quick-questions">
+                    <button class="quick-btn" onclick="askQuestion('推荐看青铜器的博物馆')">青铜器博物馆</button>
+                    <button class="quick-btn" onclick="askQuestion('唐代有哪些重要事件？')">唐代事件</button>
+                    <button class="quick-btn" onclick="askQuestion('北京有哪些值得去的博物馆？')">北京博物馆</button>
+                </div>
+                <div id="chatbot-input-area">
+                    <input type="text" id="chat-input" placeholder="问我任何问题..." onkeypress="handleChatKeyPress(event)">
+                    <button id="send-chat" onclick="sendChat()">发送</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 博物馆详情弹窗 -->
+    <div id="museum-modal" onclick="closeModalOnBackdrop(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeMuseumModal()">×</button>
+                <h2 id="modal-museum-name"></h2>
+                <div class="museum-level" id="modal-museum-level"></div>
+            </div>
+            <div class="modal-body" id="modal-museum-body"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ============ 数据内嵌 ============
+        const EMBEDDED_DATA = EMBEDDED_DATA_PLACEHOLDER;
+
+        // ============ 全局状态 ============
+        let map = null;
+        let markersLayer = null;
+        let eventMarkersLayer = null;
+        let currentDynasty = null;
+        let chatHistory = [];
+
+        // ============ 初始化 ============
+        function init() {
+            initMap();
+            renderDynastyTabs();
+            selectDynasty(EMBEDDED_DATA.dynasties[0].id);
+        }
+
+        // ============ 地图初始化 ============
+        function initMap() {
+            map = L.map('map', {
+                center: [35.0, 105.0],
+                zoom: 5,
+                zoomControl: true,
+                attributionControl: true
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 18
+            }).addTo(map);
+
+            markersLayer = L.layerGroup().addTo(map);
+            eventMarkersLayer = L.layerGroup().addTo(map);
+        }
+
+        // ============ 渲染朝代标签 ============
+        function renderDynastyTabs() {
+            const tabsContainer = document.getElementById('dynasty-tabs');
+            tabsContainer.innerHTML = EMBEDDED_DATA.dynasties.map(d => `
+                <button class="dynasty-tab" data-id="${d.id}" onclick="selectDynasty('${d.id}')">
+                    ${d.name.split('：')[0] || d.name.split('（')[0]}
+                </button>
+            `).join('');
+        }
+
+        // ============ 选择朝代 ============
+        function selectDynasty(dynastyId) {
+            currentDynasty = EMBEDDED_DATA.dynasties.find(d => d.id === dynastyId);
+            if (!currentDynasty) return;
+
+            // 更新标签状态
+            document.querySelectorAll('.dynasty-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.id === dynastyId);
+            });
+
+            // 渲染朝代内容
+            renderDynastyContent(currentDynasty);
+
+            // 更新地图
+            updateMap(currentDynasty);
+
+            // 飞到朝代中心
+            if (currentDynasty.center && currentDynasty.center.length === 2) {
+                map.flyTo(currentDynasty.center, 5, { duration: 1.5 });
+            }
+        }
+
+        // ============ 渲染朝代内容 ============
+        function renderDynastyContent(dynasty) {
+            const contentEl = document.getElementById('dynasty-content');
+
+            let html = `
+                <div class="dynasty-overview">
+                    <h2>${dynasty.name}</h2>
+                    <div class="period">${dynasty.period || ''}</div>
+                    <div class="overview-text">${(dynasty.overview || '').substring(0, 300)}...</div>
+                </div>
+            `;
+
+            // 历史事件
+            if (dynasty.events && dynasty.events.length > 0) {
+                html += `
+                    <div class="events-section">
+                        <div class="section-title">📍 重要历史事件</div>
+                        ${dynasty.events.map(evt => `
+                            <div class="event-card" onclick="flyToEvent(${evt.lat}, ${evt.lng}, '${escapeHtml(evt.event)}', '${evt.date}')">
+                                <div class="event-date">${evt.date}</div>
+                                <div class="event-desc">${escapeHtml(evt.event)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // 推荐博物馆
+            if (dynasty.recommendedMuseums && dynasty.recommendedMuseums.length > 0) {
+                html += `
+                    <div class="museum-recommendations">
+                        <div class="section-title">🏛️ 推荐博物馆</div>
+                        ${dynasty.recommendedMuseums.map(rec => {
+                            const museum = EMBEDDED_DATA.museums.find(m => m.id === rec.museumId);
+                            return `
+                                <div class="museum-rec-card" onclick='${museum ? `showMuseumDetails("${museum.id}")` : ''}'>
+                                    <div class="museum-rec-name">${rec.name}</div>
+                                    <div class="museum-rec-reason">💡 ${escapeHtml(rec.reason)}</div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+
+            contentEl.innerHTML = html;
+        }
+
+        // ============ 更新地图标记 ============
+        function updateMap(dynasty) {
+            markersLayer.clearLayers();
+            eventMarkersLayer.clearLayers();
+
+            // 添加博物馆标记
+            const recommendedMuseumIds = (dynasty.recommendedMuseums || [])
+                .map(r => r.museumId)
+                .filter(id => id);
+
+            recommendedMuseumIds.forEach(museumId => {
+                const museum = EMBEDDED_DATA.museums.find(m => m.id === museumId);
+                if (!museum || !museum.lat || !museum.lng) return;
+
+                const marker = L.circleMarker([museum.lat, museum.lng], {
+                    radius: 8,
+                    fillColor: '#f4a261',
+                    color: '#e76f51',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.8
+                });
+
+                marker.bindPopup(`
+                    <div style="min-width: 200px;">
+                        <div style="font-weight: bold; color: #f4a261; margin-bottom: 4px;">${museum.name}</div>
+                        <div style="font-size: 12px; color: #adb5bd;">${museum.location || ''}</div>
+                        <div style="font-size: 11px; color: #6c757d; margin-top: 4px;">${museum.level || ''}</div>
+                        <button onclick="showMuseumDetails('${museum.id}')" style="margin-top: 8px; padding: 4px 12px; background: #f4a261; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">查看详情</button>
+                    </div>
+                `);
+
+                marker.on('click', () => {
+                    showMuseumDetails(museum.id);
+                });
+
+                markersLayer.addLayer(marker);
+            });
+
+            // 添加历史事件标记
+            if (dynasty.events && dynasty.events.length > 0) {
+                dynasty.events.forEach(evt => {
+                    if (!evt.lat || !evt.lng) return;
+
+                    const eventMarker = L.marker([evt.lat, evt.lng], {
+                        icon: L.divIcon({
+                            className: 'event-marker',
+                            html: '<div style="width: 12px; height: 12px; background: #e76f51; border: 2px solid #f4a261; border-radius: 50%; transform: rotate(45deg);"></div>',
+                            iconSize: [16, 16],
+                            iconAnchor: [8, 8]
+                        })
+                    });
+
+                    // 查找关联的推荐博物馆
+                    const relatedMuseums = (dynasty.recommendedMuseums || [])
+                        .filter(rec => rec.museumId)
+                        .slice(0, 3);
+
+                    let popupContent = `
+                        <div style="min-width: 220px;">
+                            <div class="popup-event-title">${evt.date}</div>
+                            <div class="popup-event-desc">${escapeHtml(evt.event)}</div>
+                    `;
+
+                    if (relatedMuseums.length > 0) {
+                        popupContent += `<div class="popup-museums"><strong>相关博物馆：</strong>`;
+                        relatedMuseums.forEach(rec => {
+                            popupContent += `
+                                <div class="popup-museum-item" onclick="showMuseumDetails('${rec.museumId}')">
+                                    📍 ${rec.name} - ${escapeHtml(rec.reason)}
+                                </div>
+                            `;
+                        });
+                        popupContent += `</div>`;
+                    }
+
+                    popupContent += `</div>`;
+                    eventMarker.bindPopup(popupContent);
+
+                    eventMarkersLayer.addLayer(eventMarker);
+                });
+            }
+        }
+
+        // ============ 飞到事件 ============
+        function flyToEvent(lat, lng, eventName, date) {
+            if (lat && lng) {
+                map.flyTo([lat, lng], 8, { duration: 1.5 });
+            }
+        }
+
+        // ============ 显示博物馆详情 ============
+        function showMuseumDetails(museumId) {
+            const museum = EMBEDDED_DATA.museums.find(m => m.id === museumId);
+            if (!museum) return;
+
+            const modal = document.getElementById('museum-modal');
+            const nameEl = document.getElementById('modal-museum-name');
+            const levelEl = document.getElementById('modal-museum-level');
+            const bodyEl = document.getElementById('modal-museum-body');
+
+            nameEl.textContent = museum.name;
+            levelEl.textContent = `${museum.level || ''} | ${museum.location || ''}`;
+
+            let bodyHTML = '';
+
+            // 核心时期
+            if (museum.corePeriod) {
+                bodyHTML += `
+                    <div class="modal-section">
+                        <div class="modal-section-title">⏰ 核心时期</div>
+                        <div class="modal-section-content">${museum.corePeriod}</div>
+                    </div>
+                `;
+            }
+
+            // 特色
+            if (museum.specialty) {
+                bodyHTML += `
+                    <div class="modal-section">
+                        <div class="modal-section-title">✨ 馆藏特色</div>
+                        <div class="modal-section-content">${museum.specialty}</div>
+                    </div>
+                `;
+            }
+
+            // 必看展厅
+            if (museum.halls && museum.halls.length > 0) {
+                bodyHTML += `
+                    <div class="modal-section">
+                        <div class="modal-section-title">🚪 必看展厅</div>
+                        ${museum.halls.map(hall => `
+                            <div class="hall-item">
+                                <div class="hall-name">${hall}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // 朝代关联详情
+            if (museum.dynastyConnections && museum.dynastyConnections.length > 0) {
+                bodyHTML += `
+                    <div class="modal-section">
+                        <div class="modal-section-title">📜 朝代关联</div>
+                        ${museum.dynastyConnections.map(conn => `
+                            <div class="connection-item">
+                                <div class="artifact-name">${conn.dynasty}</div>
+                                <div style="font-size: 12px; color: #adb5bd; margin-top: 4px;">${conn.description}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // 关键文物
+            if (museum.artifacts && museum.artifacts.length > 0) {
+                bodyHTML += `
+                    <div class="modal-section">
+                        <div class="modal-section-title">💎 关键文物</div>
+                        ${museum.artifacts.slice(0, 6).map(art => `
+                            <div class="artifact-item">
+                                <div class="artifact-name">${art.name}</div>
+                                <div style="font-size: 12px; color: #adb5bd; margin-top: 4px;">${art.description || ''}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // 信源
+            if (museum.sources && museum.sources.length > 0) {
+                bodyHTML += `
+                    <div class="sources-toggle" onclick="toggleSources(this)">
+                        <div class="sources-toggle-header">
+                            📚 信源 <span style="font-size: 12px; color: #6c757d;">(点击展开)</span>
+                        </div>
+                        <div class="sources-content">
+                            ${museum.sources.map(src => `
+                                <div style="margin-bottom: 4px;">• <a href="${src}" target="_blank">${src}</a></div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            bodyEl.innerHTML = bodyHTML;
+            modal.classList.add('show');
+
+            // 飞到博物馆
+            if (museum.lat && museum.lng) {
+                map.flyTo([museum.lat, museum.lng], 10, { duration: 1.5 });
+            }
+        }
+
+        // ============ 关闭博物馆弹窗 ============
+        function closeMuseumModal() {
+            document.getElementById('museum-modal').classList.remove('show');
+        }
+
+        function closeModalOnBackdrop(e) {
+            if (e.target.id === 'museum-modal') {
+                closeMuseumModal();
+            }
+        }
+
+        // ============ 切换信源展示 ============
+        function toggleSources(el) {
+            const content = el.querySelector('.sources-content');
+            content.classList.toggle('show');
+        }
+
+        // ============ 聊天机器人 ============
+        function toggleChat() {
+            const chatbot = document.getElementById('chatbot');
+            const toggleBtn = document.getElementById('toggle-chat');
+            chatbot.classList.toggle('minimized');
+            toggleBtn.textContent = chatbot.classList.contains('minimized') ? '+' : '−';
+        }
+
+        function handleChatKeyPress(e) {
+            if (e.key === 'Enter') {
+                sendChat();
+            }
+        }
+
+        function askQuestion(question) {
+            document.getElementById('chat-input').value = question;
+            sendChat();
+        }
+
+        async function sendChat() {
+            const input = document.getElementById('chat-input');
+            const question = input.value.trim();
+            if (!question) return;
+
+            const messagesEl = document.getElementById('chatbot-messages');
+            const sendBtn = document.getElementById('send-chat');
+
+            // 添加用户消息
+            addMessage('user', question);
+            input.value = '';
+            sendBtn.disabled = true;
+            sendBtn.textContent = '思考中...';
+
+            try {
+                // 构建 system prompt
+                const systemPrompt = buildSystemPrompt();
+
+                // 调用 API
+                const response = await fetch('https://token.xianliao.de5.net/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': '59b42259051e8b69dc50acbf9237a13bf04d5fe3fb0f9105bc96aafc3f6d1d09'
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-haiku-4.5',
+                        max_tokens: 1024,
+                        system: systemPrompt,
+                        messages: [
+                            ...chatHistory,
+                            { role: 'user', content: question }
+                        ]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const answer = data.content?.[0]?.text || '抱歉，我无法回答这个问题。';
+
+                // 添加助手消息
+                addMessage('assistant', answer);
+
+                // 更新历史
+                chatHistory.push(
+                    { role: 'user', content: question },
+                    { role: 'assistant', content: answer }
+                );
+
+                // 限制历史长度
+                if (chatHistory.length > 10) {
+                    chatHistory = chatHistory.slice(-10);
+                }
+
+            } catch (error) {
+                console.error('Chat error:', error);
+                addMessage('system', '❌ 网络错误，请稍后重试');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = '发送';
+            }
+        }
+
+        function addMessage(role, content) {
+            const messagesEl = document.getElementById('chatbot-messages');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `chat-message ${role}`;
+            msgDiv.textContent = content;
+            messagesEl.appendChild(msgDiv);
+            messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+
+        function buildSystemPrompt() {
+            // 构建数据摘要
+            const dynastiesSummary = EMBEDDED_DATA.dynasties.map(d =>
+                `${d.name}（${d.period}）`
+            ).join('、');
+
+            const museumsSummary = EMBEDDED_DATA.museums.slice(0, 20).map(m =>
+                `${m.name}（${m.corePeriod}）`
+            ).join('、');
+
+            return `你是一位专业的中国历史顾问，熟悉中国各朝代历史和博物馆馆藏。
+
+数据库包含：
+- 朝代：${dynastiesSummary}
+- 主要博物馆：${museumsSummary}等
+
+回答要求：
+1. 基于提供的数据回答问题
+2. 推荐博物馆时说明推荐理由
+3. 提及文物时说明其历史价值
+4. 回答简洁专业，200字以内
+5. 如果数据中没有相关信息，诚实告知用户
+
+注意：所有数据来自官方博物馆网站和历史文献。`;
+        }
+
+        // ============ 工具函数 ============
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ============ 启动 ============
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
