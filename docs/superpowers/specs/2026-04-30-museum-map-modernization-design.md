@@ -199,9 +199,19 @@ CREATE INDEX idx_dynasty_recommended_dynasty ON dynasty_recommended_museums(dyna
 | GET | `/api/museums` | JSON `[{id,name,lat,lng,level,corePeriod,dynastyCoverage}]` | 地图 marker / 侧栏列表（含子标题数据） |
 | GET | `/api/museums/:id` | JSON 完整对象（含子表 treasures、halls、artifacts[含 period]、dynastyConnections、sources） | 抽屉详情 |
 | GET | `/api/dynasties` | JSON 完整列表（含 events、recommendedMuseums、culture[来自 dynasty_culture 子表]） | 时间轴 + 朝代抽屉 |
-| GET | `/api/dynasties/:id` | JSON 单个 | 单朝代详情 |
+| GET | `/api/dynasties/:id` | JSON 单个，**与列表项形状完全一致**（含 events、recommendedMuseums、culture，便于深链场景复用） | 单朝代详情 |
 | POST | `/api/chat` | JSON | 服务端代理到云端 copilot-api-gateway 的 `/v1/messages`（Anthropic 风格，与 legacy 完全相同的契约），注入 `x-api-key`。**MVP 与 legacy 一致采用非流式**。受字段白名单 + 速率/配额限制保护，详见下文「chat 转发实现」与 §6 验收 |
 | GET | `/cdn/tailwind.js` 等 | JS/CSS | CDN 代理（复用 copilot-api-gateway 的 `lib/cdn.ts` 模式） |
+
+### 5.1 首屏 bootstrap 契约（评审 #3）
+
+legacy 是同步从 `EMBEDDED_DATA` 启动（`legacy/index.html:1095`）。新版保留同步启动体验，方案：
+
+- `routes/home.ts` 处理 `GET /` 时，**服务端**调用 `museumsRepo.list()` + `dynastiesRepo.listFull()`（含 events、recommendedMuseums、culture），把结果序列化为 JSON，inline 到 HTML 末尾的 `<script id="bootstrap-data" type="application/json">...</script>` 节点
+- `client/app.ts` 的 Alpine `init()` 第一行：`const data = JSON.parse(document.getElementById('bootstrap-data').textContent)`，**同步**初始化地图标记、时间轴、侧栏列表，**不发任何首屏 fetch**
+- 抽屉点开后才按需 `fetch('/api/museums/:id')` 获取单馆详情（避免首屏 payload 过大）。loading 态：抽屉先渲染 hero（已知字段：name、location、level，来自 list payload），下方区段显示骨架占位（一行 `--rule-soft` 细线 + "载入中…" 灰字）；error 态显示 "载入失败，[重试]"
+- `/api/dynasties` 列表已含 events/recommendedMuseums/culture，朝代抽屉**不**额外 fetch
+- 服务端 fetch 失败：home.ts 渲染极简错误页（"数据库尚未初始化，请运行 `bun run seed`"），不抛 500
 
 **chat 转发实现**：
 - legacy 实测调用：`POST https://token.xianliao.de5.net/v1/messages`，header `x-api-key`，body `{model, max_tokens, system, messages}`，**非流式** `response.json()` 取 `data.content[0].text`
@@ -214,12 +224,13 @@ CREATE INDEX idx_dynasty_recommended_dynasty ON dynasty_recommended_museums(dyna
   | **字段白名单** | 只透传 `system`、`messages`；`model` 在服务端固定为 `claude-haiku-4.5`（与 legacy 一致），`max_tokens` 服务端固定为 `1024`，`stream` 强制 false。前端传的其他字段一律丢弃 |
   | **payload 大小** | `messages` 总 JSON ≤ 32 KB；`system` ≤ 8 KB；超出 413 |
   | **消息条数** | `messages.length` ≤ 12（legacy 已自截 10），超出 400 |
-  | **每 IP 速率** | KV 计数器，每 IP 每分钟 ≤ 10 次、每天 ≤ 100 次（用 `cf.connectingIp`），超出 429。需新增 `[[kv_namespaces]] binding = "RATE"` |
-  | **每日全局配额** | KV 全局计数器，每天 ≤ 5000 次，超出 503，防止单日额度被刷爆 |
+  | **每 IP 速率** | KV 计数器（best-effort，非强一致），目标软阈值 ≈ **每 IP 每分钟 10 次、每天 100 次**（用 `getClientIp(ctx)`），超出 429。**接受 ±1~2 次的并发竞争误差**——本场景对精确性不敏感，配额是防爆不是计费 |
+  | **每日全局配额** | KV 全局计数器（best-effort），目标软阈值 ≈ **每天 5000 次**，超出 503，防止单日额度被刷爆。同样接受并发误差 |
   | **CORS** | 仅允许同源（生产域名）；本地 dev 放开 |
   | **错误隔离** | 上游错误吞掉 detail，对外仅返回 `{error: "upstream_error"}`，避免泄露 key 提示信息 |
 
 - 速率/配额配置以 `vars` 暴露（`RATE_PER_MIN`、`RATE_PER_DAY`、`GLOBAL_PER_DAY`），便于调整无需改代码
+- 限流实现使用 KV `get → +1 → put({expiration_ttl})` 模式（key 含分钟/天的时间桶），并发竞争下可能少计 1-2 次，**这是设计接受的折衷**。如未来需要强一致，再改用 Durable Object（不在本期范围）
 
 ---
 
@@ -267,6 +278,18 @@ CREATE INDEX idx_dynasty_recommended_dynasty ON dynasty_recommended_museums(dyna
 ```
 
 字体：`Source Serif 4`（Google Fonts）+ `Noto Serif SC`（Google Fonts）+ 系统 sans。
+
+**字体投递契约**（评审 #4）：
+- `layout.ts` 在 `<head>` 直接 inline Google Fonts CSS link：
+  ```html
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+  ```
+- **不通过 `/cdn/*` 代理**——字体属于内容交付，与 JS 库代理目的不同；Google Fonts 直连成熟，且 woff2 在 Workers 流量里属于不必要的过路费
+- `display=swap` 保证未加载时回退系统宋体（`Songti SC` / `STSong`），UI 不闪烁
+- `lib/cdn.ts` 仅代理 JS 库（tailwind、alpine、leaflet 的 js/css），**字体明确不在 cdn.ts 范围**——避免后续实现误将其纳入
+- 实现 checklist：layout.ts 包含上述 3 行 link；CSS variables `--font-display` 引用 `Source Serif 4`；`bun test` 在 `tests/routes.test.ts` 加一项：GET `/` 响应包含 `fonts.googleapis.com/css2?family=Source+Serif+4` 子串
 
 ### 6.3 关键组件视觉
 
@@ -346,9 +369,26 @@ GLOBAL_PER_DAY = "5000"
 # COPILOT_GATEWAY_KEY via secret
 ```
 
-Secrets：
+Secrets（生产 / `wrangler dev`）：
 - `COPILOT_GATEWAY_URL`（如 `https://token.xianliao.de5.net`）
 - `COPILOT_GATEWAY_KEY`（API key，从 legacy 硬编码迁出）
+
+### 8.1.1 `bun run local` 模式凭证契约（评审反馈）
+
+`bun --hot run src/local.ts` 完全脱离 wrangler，必须自行加载凭证。约定：
+
+- **加载方式**：`local.ts` 启动时用 `Bun.file(".env.local")` 读取，**不**用 dotenv 包；缺失变量时打印一行 `[local] missing env: <NAME>` 并 exit 1
+- **必填变量**（缺一不可启动）：
+  - `CLOUDFLARE_ACCOUNT_ID` — D1 / KV REST 调用账号
+  - `CLOUDFLARE_API_TOKEN` — 单一 token，需要 `D1:Edit` + `Workers KV Storage:Edit` 权限（统一 token 名，不分 D1_TOKEN/KV_TOKEN）
+  - `D1_DATABASE_ID` — 远程 museum-map-db 的 ID
+  - `KV_RATE_NAMESPACE_ID` — 远程 RATE KV namespace ID
+- **可选变量**：
+  - `COPILOT_GATEWAY_URL`、`COPILOT_GATEWAY_KEY` — 缺失时 `/api/chat` 返回 503 + 文案 "chat unavailable: gateway not configured"
+  - `DISABLE_CHAT=1` — 强制关闭 chat 路由（即便其他 chat 凭证齐全），用于纯 UI 迭代
+  - `PORT` — 默认 4242
+- **加载顺序**：`process.env` > `.env.local` > 默认值；任何一个 chat 必填项缺失时 chat 自动 503，但**读库 + 页面渲染仍可工作**（D1 凭证缺失才会 exit 1）
+- 提供 `.env.local.example` 列出所有变量占位与权限说明，加入 git；`.env.local` 加 `.gitignore`
 
 ### 8.2 本地开发模式（参照 copilot-api-gateway 双模式）
 
@@ -377,12 +417,13 @@ copilot-api-gateway 同时提供 `wrangler dev`（贴近生产）和 `bun --hot 
 `local.ts` 在启动时构造 D1 + KV 适配器，注入给 Elysia 的 ctx，使路由层代码与 wrangler 模式 100% 同源。
 
 `package.json` scripts（镜像 copilot-api-gateway）：
-- `dev`：wrangler dev
-- `local`：bun run src/local.ts
-- `deploy`：wrangler deploy
-- `seed`：bun run scripts/seed.ts
-- `test`：bun test
-- `typecheck`：bunx tsc --noEmit
+- `dev`：`wrangler dev`
+- `predev`：`wrangler d1 migrations apply museum-map-db --local`
+- `local`：`bun --hot run src/local.ts` （**带热重载**，评审 #3/#5 一致性）
+- `deploy`：`wrangler deploy`
+- `seed`：`bun run scripts/seed.ts`
+- `test`：`bun test`
+- `typecheck`：`bunx tsc --noEmit`
 
 ---
 
@@ -396,6 +437,7 @@ copilot-api-gateway 同时提供 `wrangler dev`（贴近生产）和 `bun --hot 
 | 博物馆详情抽屉（snap 吸顶吸底） | `ui/components/drawer.ts` + `client/app.ts` |
 | 朝代详情抽屉 | 同上 |
 | AI 聊天面板（全屏底部 + 遮罩 + 滑入） | `ui/components/chat-panel.ts` + `routes/chat.ts` |
+| AI 聊天快捷问题 chips（`legacy/index.html:1055`） | `ui/components/chat-panel.ts` 顶部，点击填充输入框（不直接发送，与 legacy 行为一致） |
 | 信源链接新开 tab | 模板 `target="_blank" rel="noopener"` |
 | 朝代联动（点朝代→地图飞到中心） | `client/app.ts` event bus |
 | `data.json` 内容 | D1 + `/api/*` |
@@ -431,12 +473,13 @@ copilot-api-gateway 同时提供 `wrangler dev`（贴近生产）和 `bun --hot 
 - `messages.length > 12` → 400
 - 上游 401/500 → 对外仅返回 `{error: "upstream_error"}`，断言响应 body 不包含 key 子串、不包含 upstream URL
 
-**`tests/rate-limit.test.ts`** — KV 限流（用 in-memory KV mock）
-- 同一 IP 1 分钟内第 11 次请求 → 429
-- 同一 IP 当天第 101 次 → 429
-- 全局当天第 5001 次 → 503
-- TTL 到期后计数器重置
+**`tests/rate-limit.test.ts`** — KV 限流（用 in-memory KV mock，**串行**调用避免并发）
+- 同一 IP 串行连发 12 次，至少有 1 次返回 429（接受 best-effort 误差）；前 9 次必须 200
+- 同一 IP 当天串行 110 次，最后 5 次中至少 1 次 429
+- 全局当天串行 5050 次，最后 20 次中至少 1 次 503
+- TTL key 名含分钟/天时间桶（断言 key 格式 `rate:ip:<ip>:min:<YYYYMMDDHHmm>` 等）；mock 时间向前 60s 后计数器重置
 - `getClientIp(ctx)` 在 Worker 模式优先 `cf.connectingIp`，Bun 模式回退 `x-forwarded-for`，都没有时返回 `"127.0.0.1"`
+- 并发竞争场景**不在测试范围**（设计接受 ±1~2 误差，见 §5 chat 转发实现）
 
 **`tests/seed.test.ts`** — seed 幂等 + 外键
 - 连跑两次 `seed.ts`，两次后 `SELECT count(*)` 各表数量一致
