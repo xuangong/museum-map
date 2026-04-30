@@ -23,7 +23,7 @@
 | Runtime | Cloudflare Workers（wrangler） + Bun（本地） |
 | Web 框架 | Elysia + @elysiajs/cors |
 | 数据库 | D1（SQLite） |
-| KV | 暂不需要（后续配置/缓存可加） |
+| KV | binding `RATE` —— chat 限流计数器（每 IP / 全局每日配额），属安全基础设施，不是可选 |
 | 前端 | 服务端渲染 HTML 字符串 + Tailwind CDN + Alpine.js + Leaflet |
 | 构建 | 零构建，wrangler dev / deploy |
 | 语言 | TypeScript（strict） |
@@ -74,9 +74,13 @@ museum-map/
 │           ├── map.ts
 │           ├── app.ts        # Alpine 主 store
 │           └── chat.ts
-├── tests/                    # bun test
-│   ├── repo.test.ts
-│   └── routes.test.ts
+├── tests/                    # bun test，详见 §10
+│   ├── coords.test.ts        # WGS-84 → GCJ-02（已知点对照 + outOfChina 跳过）
+│   ├── chat-guard.test.ts    # 字段白名单、payload/消息条数限制、错误脱敏
+│   ├── rate-limit.test.ts    # 每 IP 每分钟/每天 + 全局每天，KV mock
+│   ├── repo.test.ts          # repo 聚合：museums/dynasties 完整字段往返
+│   ├── seed.test.ts          # seed 幂等（连跑两次结果一致）+ FK 删除顺序
+│   └── routes.test.ts        # /api/museums、/api/dynasties 响应形状契约
 └── legacy/                   # 保留，仅作参考，不部署
 ```
 
@@ -193,8 +197,8 @@ CREATE INDEX idx_dynasty_recommended_dynasty ON dynasty_recommended_museums(dyna
 |---|---|---|---|
 | GET | `/` | HTML | 首页（地图 + 侧栏 + 朝代时间轴 + 抽屉 + 聊天面板挂载点） |
 | GET | `/api/museums` | JSON `[{id,name,lat,lng,level,corePeriod,dynastyCoverage}]` | 地图 marker / 侧栏列表（含子标题数据） |
-| GET | `/api/museums/:id` | JSON 完整对象（含所有子表聚合，含 artifacts.period、culture 数组） | 抽屉详情 |
-| GET | `/api/dynasties` | JSON 完整列表（含 events、recommendedMuseums、culture） | 时间轴 + 朝代抽屉 |
+| GET | `/api/museums/:id` | JSON 完整对象（含子表 treasures、halls、artifacts[含 period]、dynastyConnections、sources） | 抽屉详情 |
+| GET | `/api/dynasties` | JSON 完整列表（含 events、recommendedMuseums、culture[来自 dynasty_culture 子表]） | 时间轴 + 朝代抽屉 |
 | GET | `/api/dynasties/:id` | JSON 单个 | 单朝代详情 |
 | POST | `/api/chat` | JSON | 服务端代理到云端 copilot-api-gateway 的 `/v1/messages`（Anthropic 风格，与 legacy 完全相同的契约），注入 `x-api-key`。**MVP 与 legacy 一致采用非流式**。受字段白名单 + 速率/配额限制保护，详见下文「chat 转发实现」与 §6 验收 |
 | GET | `/cdn/tailwind.js` 等 | JS/CSS | CDN 代理（复用 copilot-api-gateway 的 `lib/cdn.ts` 模式） |
@@ -348,19 +352,29 @@ Secrets：
 
 ### 8.2 本地开发模式（参照 copilot-api-gateway 双模式）
 
-copilot-api-gateway 同时提供 `wrangler dev`（贴近生产）和 `bun run src/local.ts`（直跑、热重载、可连远程 D1）两种入口。本项目复刻：
+copilot-api-gateway 同时提供 `wrangler dev`（贴近生产）和 `bun --hot run src/local.ts`（直跑、热重载、可连远程 D1）两种入口。本项目复刻：
 
-| 模式 | 命令 | DB 来源 | seed 命令 |
-|---|---|---|---|
-| `wrangler dev`（**默认推荐**，本地闭环） | `bun run dev` | wrangler 管理的本地 SQLite（位于 `.wrangler/state/v3/d1/`），由 `wrangler d1 migrations apply museum-map-db --local` 初始化 | `bun run seed`（默认 `--target=local`） |
-| `bun run local`（连远程 D1，热重载） | `bun run local` | D1 HTTP API 连**远程** D1，需 `CLOUDFLARE_ACCOUNT_ID`、`CLOUDFLARE_D1_TOKEN`、`D1_DATABASE_ID` 环境变量 | `bun run seed --target=remote` |
+| 模式 | 命令 | DB 来源 | KV(RATE) | chat 可用？ | seed 命令 |
+|---|---|---|---|---|---|
+| `wrangler dev`（**默认推荐**，本地闭环，**chat 在此模式可用**） | `bun run dev` | wrangler 本地 SQLite（`.wrangler/state/v3/d1/`） | wrangler 本地 KV（自动） | ✅ 全功能 | `bun run seed`（默认 `--target=local`） |
+| `bun run local`（连远程 D1，热重载，仅用于读库 + UI 迭代） | `bun --hot run src/local.ts` | D1 HTTP API 连远程 | 远程 KV REST API（轻量适配） | ⚠️ 受限 | `bun run seed --target=remote` |
 
-**避免「seed 完看不到数据」的坑**（评审反馈）：
-- `bun run dev` 的默认入口会**自动执行** `wrangler d1 migrations apply --local`（通过 `package.json` 的 `predev` 钩子），并在首次空库时打印 `提示：本地 D1 为空，请先跑 \`bun run seed\`` 的红字
-- `bun run local` 启动时会调用一次 `SELECT count(*) FROM museums`，若为 0 也打印对应提示（提示用户使用 `bun run seed --target=remote`）
-- 两套 DB **完全分离**，文档明确不共享，`README.md` 顶部加一段 "本地 vs 远程" 速查表（与本节同源）
+**`bun run local` 模式下的 chat 策略**（评审 #1）：
+- `local.ts` 启动时显式注入两个抽象 `Bindings`：
+  - `DB`：D1 HTTP 适配器（实现 `prepare().bind().all/run/first`）
+  - `RATE`：KV REST API 适配器（实现 `get/put` 即够，TTL 用 `expiration_ttl`）
+- chat 限流的 `cf.connectingIp` 在 Bun 模式下不可用 → `local.ts` 用 `request.headers["x-forwarded-for"] ?? "127.0.0.1"` 兜底，由统一的 `getClientIp(ctx)` helper 决定来源（Worker 模式读 `cf.connectingIp`，Bun 模式读 header）。**路由层不直接访问 `cf.*` 或 `process.env`**，全部通过 `ctx.bindings` + `getClientIp` 抽象，保证 100% 同源
+- 默认本地开发 IP 取 `127.0.0.1`，限流仍生效（防止本地误调用打爆远程额度）
+- 若开发者只想跑读库 + UI 不想配 KV，可在 `.env.local` 设 `DISABLE_CHAT=1`，`/api/chat` 返回 503 + 明确文案"chat disabled in this mode, use \`bun run dev\` instead"
 
-`local.ts` 在启动时构造一个实现 `D1Database` 子集接口的 HTTP 适配器（仅覆盖 `prepare().bind().all/run/first` 三个方法，足以驱动本项目的 repo 层），注入给 Elysia 的 ctx，使路由层代码与 wrangler 模式 100% 同源。
+**热重载**（评审 #3）：`bun run local` 实际命令为 `bun --hot run src/local.ts`（不是 `bun run src/local.ts`），与 copilot-api-gateway `local:watch` 一致
+
+**避免「seed 完看不到数据」的坑**（前一轮反馈）：
+- `bun run dev` 的 `predev` 钩子自动执行 `wrangler d1 migrations apply --local`，并在首次空库时打印红字提示 `本地 D1 为空，请先跑 \`bun run seed\``
+- `bun run local` 启动时调用一次 `SELECT count(*) FROM museums`，若为 0 提示使用 `bun run seed --target=remote`
+- 两套 DB **完全分离**，`README.md` 顶部加速查表
+
+`local.ts` 在启动时构造 D1 + KV 适配器，注入给 Elysia 的 ctx，使路由层代码与 wrangler 模式 100% 同源。
 
 `package.json` scripts（镜像 copilot-api-gateway）：
 - `dev`：wrangler dev
@@ -396,7 +410,47 @@ copilot-api-gateway 同时提供 `wrangler dev`（贴近生产）和 `bun run sr
 - AI 聊天能完整往返一次问答（与 legacy 一致采用非流式，对话渲染整段消息；流式打字另立扩展 spec）
 - 视觉对照 legacy：用户能直观感受到"温润宣纸"vs"赛博深蓝"的差异
 - `wrangler dev` / `wrangler deploy` 都能跑
-- `bun test` 通过
+- `bun test` 通过 §10.1 列出的所有具体测试点
+
+### 10.1 必须存在的测试点（评审 #5）
+
+测试缺失会让本期高风险逻辑无声回归，下列**每一条都必须有对应 `it()`**：
+
+**`tests/coords.test.ts`** — WGS-84 → GCJ-02
+- 至少 3 组中国境内已知点（北京 / 西安 / 杭州）的转换结果，与 legacy `wgs84ToGcj02` 输出**逐位对齐**（防止公式抄错）
+- `outOfChina` 边界：lng=72.0 / 137.9、lat=0.8 / 55.9 各方向各 1 个点，断言**返回原坐标**不转换
+- `toMapCoord` 入口对中国境外点（如东京 35.68, 139.69）返回原值
+
+**`tests/chat-guard.test.ts`** — chat 字段白名单 + payload 限制 + 错误脱敏
+- 前端传 `model: "claude-opus-4"` → 服务端转发的 body 里 `model === "claude-haiku-4.5"`（被覆盖）
+- 前端传 `max_tokens: 99999` → 转发的 body 里 `max_tokens === 1024`
+- 前端传 `stream: true` → 转发的 body 里 `stream === false`
+- 前端传 `tools`、`metadata` 等额外字段 → 不出现在转发 body 中
+- `messages` JSON > 32KB → 413
+- `system` > 8KB → 413
+- `messages.length > 12` → 400
+- 上游 401/500 → 对外仅返回 `{error: "upstream_error"}`，断言响应 body 不包含 key 子串、不包含 upstream URL
+
+**`tests/rate-limit.test.ts`** — KV 限流（用 in-memory KV mock）
+- 同一 IP 1 分钟内第 11 次请求 → 429
+- 同一 IP 当天第 101 次 → 429
+- 全局当天第 5001 次 → 503
+- TTL 到期后计数器重置
+- `getClientIp(ctx)` 在 Worker 模式优先 `cf.connectingIp`，Bun 模式回退 `x-forwarded-for`，都没有时返回 `"127.0.0.1"`
+
+**`tests/seed.test.ts`** — seed 幂等 + 外键
+- 连跑两次 `seed.ts`，两次后 `SELECT count(*)` 各表数量一致
+- 删除一个 museum 时（启用 PRAGMA foreign_keys=ON），其所有子表行被级联删除；`dynasty_recommended_museums.museum_id` 被 SET NULL（不级联删除朝代推荐项）
+- seed 后 `museums` 表行数 = 64，`dynasties` 表行数 = 20，`museum_artifacts` 行数 = 441（含 340 行有 period）
+
+**`tests/repo.test.ts`** — 聚合往返
+- `museumsRepo.get("guobo")` 返回的对象与 legacy `data.json` 里 `guobo` 条目**字段对字段**等价（含 artifacts 顺序、period 字段、sources 顺序）
+- `dynastiesRepo.list()` 返回 20 项，`order_index` 严格递增；`culture` 是 `[{category,description}]` 数组而非字符串
+
+**`tests/routes.test.ts`** — 路由响应形状
+- `GET /api/museums` 列表项含 `corePeriod` 和 `dynastyCoverage` 字段（与侧栏 UI 契约一致）
+- `GET /api/museums/:id` 响应 schema 用 inline JSON snapshot 守住
+- `GET /api/dynasties` 响应中 `culture` 是数组结构
 
 ---
 
