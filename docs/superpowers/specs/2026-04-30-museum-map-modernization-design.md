@@ -54,7 +54,7 @@ museum-map/
 │   │   ├── museums.ts        # CRUD + 聚合
 │   │   └── dynasties.ts
 │   ├── services/
-│   │   └── chat.ts           # 转发到云端 copilot-api-gateway（流式 SSE 透传）
+│   │   └── chat.ts           # 代理到云端 copilot-api-gateway /v1/messages（非流式 JSON，含字段白名单 + KV 限流配额）
 │   ├── routes/
 │   │   ├── index.ts          # 挂载所有路由
 │   │   ├── home.ts           # GET /
@@ -83,6 +83,8 @@ museum-map/
 ---
 
 ## 4. D1 Schema（`migrations/0001_init.sql`）
+
+> 注：D1（SQLite）默认 `foreign_keys = OFF`。所有 `REFERENCES ... ON DELETE` 在 schema 中声明，运行时由 `services/*` 在 `db.prepare("PRAGMA foreign_keys = ON").run()` 后再操作；seed SQL 文件首行也加 `PRAGMA foreign_keys = ON;`。
 
 ```sql
 -- 博物馆
@@ -171,7 +173,7 @@ CREATE TABLE dynasty_events (
 CREATE TABLE dynasty_recommended_museums (
   dynasty_id TEXT NOT NULL REFERENCES dynasties(id) ON DELETE CASCADE,
   order_index INTEGER NOT NULL,
-  museum_id TEXT,
+  museum_id TEXT REFERENCES museums(id) ON DELETE SET NULL,  -- 可空但有 FK，防止跳转静默失效
   name TEXT NOT NULL,
   location TEXT,
   reason TEXT,
@@ -194,15 +196,26 @@ CREATE INDEX idx_dynasty_recommended_dynasty ON dynasty_recommended_museums(dyna
 | GET | `/api/museums/:id` | JSON 完整对象（含所有子表聚合，含 artifacts.period、culture 数组） | 抽屉详情 |
 | GET | `/api/dynasties` | JSON 完整列表（含 events、recommendedMuseums、culture） | 时间轴 + 朝代抽屉 |
 | GET | `/api/dynasties/:id` | JSON 单个 | 单朝代详情 |
-| POST | `/api/chat` | JSON | 服务端代理到云端 copilot-api-gateway 的 `/v1/messages`（Anthropic 风格，与 legacy 完全相同的契约），透传请求体，注入 `x-api-key`。**MVP 与 legacy 一致采用非流式**，后续如需 SSE 另立扩展 |
+| POST | `/api/chat` | JSON | 服务端代理到云端 copilot-api-gateway 的 `/v1/messages`（Anthropic 风格，与 legacy 完全相同的契约），注入 `x-api-key`。**MVP 与 legacy 一致采用非流式**。受字段白名单 + 速率/配额限制保护，详见下文「chat 转发实现」与 §6 验收 |
 | GET | `/cdn/tailwind.js` 等 | JS/CSS | CDN 代理（复用 copilot-api-gateway 的 `lib/cdn.ts` 模式） |
 
 **chat 转发实现**：
 - legacy 实测调用：`POST https://token.xianliao.de5.net/v1/messages`，header `x-api-key`，body `{model, max_tokens, system, messages}`，**非流式** `response.json()` 取 `data.content[0].text`
 - 安全问题：legacy 把 API key 明文硬编码在前端（`legacy/index.html:1774`）。新版**必须**改成服务端代理：浏览器 `POST /api/chat`（无 key），Worker 注入 `x-api-key: ${COPILOT_GATEWAY_KEY}` 转发到上游
 - 上游 URL：`COPILOT_GATEWAY_URL`（默认 `https://token.xianliao.de5.net`）
-- 请求/响应**完全透传**（保持 Anthropic `/v1/messages` 契约不变），前端代码迁移成本最小
-- `model`、`max_tokens`、`system`、`messages` 全部由前端传入，服务端只加 key 和 URL，不重写 body
+- **不是盲转发**——`services/chat.ts` 必须实施以下保护，再转发到上游：
+
+  | 措施 | 规则 |
+  |---|---|
+  | **字段白名单** | 只透传 `system`、`messages`；`model` 在服务端固定为 `claude-haiku-4.5`（与 legacy 一致），`max_tokens` 服务端固定为 `1024`，`stream` 强制 false。前端传的其他字段一律丢弃 |
+  | **payload 大小** | `messages` 总 JSON ≤ 32 KB；`system` ≤ 8 KB；超出 413 |
+  | **消息条数** | `messages.length` ≤ 12（legacy 已自截 10），超出 400 |
+  | **每 IP 速率** | KV 计数器，每 IP 每分钟 ≤ 10 次、每天 ≤ 100 次（用 `cf.connectingIp`），超出 429。需新增 `[[kv_namespaces]] binding = "RATE"` |
+  | **每日全局配额** | KV 全局计数器，每天 ≤ 5000 次，超出 503，防止单日额度被刷爆 |
+  | **CORS** | 仅允许同源（生产域名）；本地 dev 放开 |
+  | **错误隔离** | 上游错误吞掉 detail，对外仅返回 `{error: "upstream_error"}`，避免泄露 key 提示信息 |
+
+- 速率/配额配置以 `vars` 暴露（`RATE_PER_MIN`、`RATE_PER_DAY`、`GLOBAL_PER_DAY`），便于调整无需改代码
 
 ---
 
@@ -255,7 +268,12 @@ CREATE INDEX idx_dynasty_recommended_dynasty ON dynasty_recommended_museums(dyna
 
 - **顶部朝代时间轴**：宣纸底，朝代名宋体，当前朝代下方一根赤土橙细线（不是色块），左右拖拽，无圆角无阴影
 - **左侧博物馆列表**：宋体名 + 极小 sans 副标（`corePeriod` 字段，由 `/api/museums` 的 list payload 提供），项目之间一根 0.5px `--rule` 细线，无卡片化
-- **地图**：自定义 Leaflet tile（米色底 + 灰墨等高线，关闭默认 OSM 蓝），marker 是手写朱印风（小圆 + 印章质感），选中态加赤土橙描边
+- **地图**：marker 是手写朱印风（小圆 + 印章质感），选中态加赤土橙描边。**底图与坐标系契约**：
+  - 数据存 D1 的 `(lat, lng)` **统一为 WGS-84**（与 legacy `data.json` 数值口径一致）
+  - 瓦片源延续 legacy 的高德 GCJ-02：`https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}`，`subdomains: '1234'`，`maxZoom: 18`
+  - **必须在前端做 WGS-84 → GCJ-02 转换后再投到 Leaflet**（直接搬 legacy `legacy/index.html:1122-1158` 那段 `wgs84ToGcj02` 实现到 `src/ui/client/coords.ts`，所有 `marker / center / event point` 走统一 `toMapCoord(lat,lng)` 入口）
+  - 不在中国境内的点（`outOfChina` 判定）跳过转换，与 legacy 一致
+  - 视觉调整通过 `tileLayer` 的 CSS filter（`filter: grayscale(0.4) sepia(0.15) brightness(1.05)`）做暖米色化，**不替换瓦片源**——避免引入新瓦片源后坐标系再次错配
 - **抽屉**：从右侧/底部滑入，背景 `--bg-elev`，头部一行宋体大字博物馆名 + 灰色 sans 地点，下方等距区段（年代覆盖 / 镇馆之宝 / 展厅 / 文物 / 朝代关联 / 信源），段间用 0.5px `--rule` 隔开，**无 emoji、无 icon、无圆角卡**
 - **AI 聊天面板**：底部全屏滑入，遮罩 `rgba(28,26,23,0.4)`，输入框是一根细线，无圆角胶囊；消息分两栏（用户右、AI 左），用一行小字标 "你 / 模型"
 - **签名细节**：朝代切换时，时间轴下的赤土细线有 0.4s ease 滑动；地图选中 marker 时印章有极轻 scale-in；这两处做到 120%
@@ -270,14 +288,26 @@ legacy 完全无图。新版按 huashu-design「真图诚实性测试」：
 
 ## 7. 数据迁移
 
-`scripts/seed.ts`：
+`scripts/seed.ts`（**统一走 `--file` 路径**，不拼命令字符串）：
 1. 读 `legacy/data.json`
 2. 按 schema 拆分为主表 + 子表行（含 artifacts.period、dynasty_culture）
-3. 输出一个事务化的 SQL 文件，通过 `wrangler d1 execute --file` 提交（target=local|remote 见 §8.2）
-4. 朝代 `order_index` 按数组顺序赋值，保留时间轴顺序
-5. 幂等：前置 `DELETE FROM` 各表
-
-执行：`bun run seed`（默认 local）/ `bun run seed --target=remote`
+3. 生成一个临时 SQL 文件 `.tmp/seed.sql`，内容形如：
+   ```sql
+   BEGIN;
+   DELETE FROM museum_sources; DELETE FROM museum_dynasty_connections;
+   DELETE FROM museum_artifacts; DELETE FROM museum_halls;
+   DELETE FROM museum_treasures; DELETE FROM museums;
+   DELETE FROM dynasty_recommended_museums; DELETE FROM dynasty_events;
+   DELETE FROM dynasty_culture; DELETE FROM dynasties;
+   INSERT INTO museums (...) VALUES (...);
+   ...
+   COMMIT;
+   ```
+4. 执行：
+   - `--target=local`（默认）：`wrangler d1 execute museum-map-db --local --file=.tmp/seed.sql`
+   - `--target=remote`：`wrangler d1 execute museum-map-db --remote --file=.tmp/seed.sql`
+5. 朝代 `order_index` 按数组顺序赋值，保留时间轴顺序
+6. 幂等：前置 `DELETE FROM` 各表（按外键依赖反向顺序）
 
 ---
 
@@ -299,7 +329,15 @@ database_name = "museum-map-db"
 database_id = "<by wrangler d1 create>"
 migrations_dir = "migrations"
 
+# 用于 chat 限流计数器（评审 #1 要求）
+[[kv_namespaces]]
+binding = "RATE"
+id = "<by wrangler kv namespace create RATE>"
+
 [vars]
+RATE_PER_MIN = "10"
+RATE_PER_DAY = "100"
+GLOBAL_PER_DAY = "5000"
 # COPILOT_GATEWAY_URL via secret
 # COPILOT_GATEWAY_KEY via secret
 ```
@@ -312,15 +350,17 @@ Secrets：
 
 copilot-api-gateway 同时提供 `wrangler dev`（贴近生产）和 `bun run src/local.ts`（直跑、热重载、可连远程 D1）两种入口。本项目复刻：
 
-| 模式 | 命令 | DB 来源 |
-|---|---|---|
-| `wrangler dev` | `bun run dev` | wrangler 管理的本地 SQLite（位于 `.wrangler/state/v3/d1/`），由 `wrangler d1 migrations apply museum-map-db --local` 初始化 |
-| `bun run local` | `bun run src/local.ts` | 通过 D1 HTTP API 连**远程** D1 数据库（与 copilot-api-gateway 的 `local.ts` 一致），需要 `CLOUDFLARE_ACCOUNT_ID`、`CLOUDFLARE_D1_TOKEN`、`D1_DATABASE_ID` 环境变量；`local.ts` 在启动时构造一个实现 `D1Database` 接口的 HTTP 适配器，注入给 Elysia |
+| 模式 | 命令 | DB 来源 | seed 命令 |
+|---|---|---|---|
+| `wrangler dev`（**默认推荐**，本地闭环） | `bun run dev` | wrangler 管理的本地 SQLite（位于 `.wrangler/state/v3/d1/`），由 `wrangler d1 migrations apply museum-map-db --local` 初始化 | `bun run seed`（默认 `--target=local`） |
+| `bun run local`（连远程 D1，热重载） | `bun run local` | D1 HTTP API 连**远程** D1，需 `CLOUDFLARE_ACCOUNT_ID`、`CLOUDFLARE_D1_TOKEN`、`D1_DATABASE_ID` 环境变量 | `bun run seed --target=remote` |
 
-`scripts/seed.ts` 接收 `--target=local|remote`：
-- `--target=local`（默认）：调用 `wrangler d1 execute museum-map-db --local --command="..."` 批量执行 INSERT
-- `--target=remote`：调用 `wrangler d1 execute museum-map-db --remote --command="..."`
-- 通过 transaction（`wrangler d1 execute --file`）单次提交，幂等（前置 `DELETE FROM`）
+**避免「seed 完看不到数据」的坑**（评审反馈）：
+- `bun run dev` 的默认入口会**自动执行** `wrangler d1 migrations apply --local`（通过 `package.json` 的 `predev` 钩子），并在首次空库时打印 `提示：本地 D1 为空，请先跑 \`bun run seed\`` 的红字
+- `bun run local` 启动时会调用一次 `SELECT count(*) FROM museums`，若为 0 也打印对应提示（提示用户使用 `bun run seed --target=remote`）
+- 两套 DB **完全分离**，文档明确不共享，`README.md` 顶部加一段 "本地 vs 远程" 速查表（与本节同源）
+
+`local.ts` 在启动时构造一个实现 `D1Database` 子集接口的 HTTP 适配器（仅覆盖 `prepare().bind().all/run/first` 三个方法，足以驱动本项目的 repo 层），注入给 Elysia 的 ctx，使路由层代码与 wrangler 模式 100% 同源。
 
 `package.json` scripts（镜像 copilot-api-gateway）：
 - `dev`：wrangler dev
@@ -353,7 +393,7 @@ copilot-api-gateway 同时提供 `wrangler dev`（贴近生产）和 `bun run sr
 - 64 个博物馆全部出现在地图和列表
 - 20 个朝代时间轴可拖拽，点击切换抽屉
 - 任意博物馆抽屉显示完整字段（含 artifacts、dynastyConnections、sources 等）
-- AI 聊天能流式打字
+- AI 聊天能完整往返一次问答（与 legacy 一致采用非流式，对话渲染整段消息；流式打字另立扩展 spec）
 - 视觉对照 legacy：用户能直观感受到"温润宣纸"vs"赛博深蓝"的差异
 - `wrangler dev` / `wrangler deploy` 都能跑
 - `bun test` 通过
