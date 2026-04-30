@@ -117,6 +117,7 @@ CREATE TABLE museum_artifacts (
   museum_id TEXT NOT NULL REFERENCES museums(id) ON DELETE CASCADE,
   order_index INTEGER NOT NULL,
   name TEXT NOT NULL,
+  period TEXT,           -- 实测：441 行中 340 行有此字段（legacy 后期补的），保留
   description TEXT,
   PRIMARY KEY(museum_id, order_index)
 );
@@ -144,8 +145,17 @@ CREATE TABLE dynasties (
   center_lat REAL,
   center_lng REAL,
   overview TEXT,
-  culture TEXT,
   order_index INTEGER NOT NULL
+);
+
+-- culture 在 legacy 是 [{category, description}] 数组（20 个朝代全部如此），
+-- 用单独子表保留结构，不压缩成 TEXT
+CREATE TABLE dynasty_culture (
+  dynasty_id TEXT NOT NULL REFERENCES dynasties(id) ON DELETE CASCADE,
+  order_index INTEGER NOT NULL,
+  category TEXT NOT NULL,
+  description TEXT,
+  PRIMARY KEY(dynasty_id, order_index)
 );
 
 CREATE TABLE dynasty_events (
@@ -180,17 +190,19 @@ CREATE INDEX idx_dynasty_recommended_dynasty ON dynasty_recommended_museums(dyna
 | 方法 | 路径 | 返回 | 说明 |
 |---|---|---|---|
 | GET | `/` | HTML | 首页（地图 + 侧栏 + 朝代时间轴 + 抽屉 + 聊天面板挂载点） |
-| GET | `/api/museums` | JSON `[{id,name,lat,lng,level}]` | 地图 marker / 侧栏列表 |
-| GET | `/api/museums/:id` | JSON 完整对象（含所有子表聚合） | 抽屉详情 |
-| GET | `/api/dynasties` | JSON 完整列表（含 events、recommendedMuseums） | 时间轴 + 朝代抽屉 |
+| GET | `/api/museums` | JSON `[{id,name,lat,lng,level,corePeriod,dynastyCoverage}]` | 地图 marker / 侧栏列表（含子标题数据） |
+| GET | `/api/museums/:id` | JSON 完整对象（含所有子表聚合，含 artifacts.period、culture 数组） | 抽屉详情 |
+| GET | `/api/dynasties` | JSON 完整列表（含 events、recommendedMuseums、culture） | 时间轴 + 朝代抽屉 |
 | GET | `/api/dynasties/:id` | JSON 单个 | 单朝代详情 |
-| POST | `/api/chat` | SSE 流 | 转发到云端 copilot-api-gateway 的 `/v1/chat/completions`（透传 stream） |
+| POST | `/api/chat` | JSON | 服务端代理到云端 copilot-api-gateway 的 `/v1/messages`（Anthropic 风格，与 legacy 完全相同的契约），透传请求体，注入 `x-api-key`。**MVP 与 legacy 一致采用非流式**，后续如需 SSE 另立扩展 |
 | GET | `/cdn/tailwind.js` 等 | JS/CSS | CDN 代理（复用 copilot-api-gateway 的 `lib/cdn.ts` 模式） |
 
 **chat 转发实现**：
-- 服务端注入 `Authorization: Bearer ${COPILOT_GATEWAY_KEY}`，前端不接触 key
-- 上游 URL：`COPILOT_GATEWAY_URL`（如 `https://token.xianliao.de5.net`）
-- 透传 `stream: true` 的 SSE 响应
+- legacy 实测调用：`POST https://token.xianliao.de5.net/v1/messages`，header `x-api-key`，body `{model, max_tokens, system, messages}`，**非流式** `response.json()` 取 `data.content[0].text`
+- 安全问题：legacy 把 API key 明文硬编码在前端（`legacy/index.html:1774`）。新版**必须**改成服务端代理：浏览器 `POST /api/chat`（无 key），Worker 注入 `x-api-key: ${COPILOT_GATEWAY_KEY}` 转发到上游
+- 上游 URL：`COPILOT_GATEWAY_URL`（默认 `https://token.xianliao.de5.net`）
+- 请求/响应**完全透传**（保持 Anthropic `/v1/messages` 契约不变），前端代码迁移成本最小
+- `model`、`max_tokens`、`system`、`messages` 全部由前端传入，服务端只加 key 和 URL，不重写 body
 
 ---
 
@@ -242,7 +254,7 @@ CREATE INDEX idx_dynasty_recommended_dynasty ON dynasty_recommended_museums(dyna
 ### 6.3 关键组件视觉
 
 - **顶部朝代时间轴**：宣纸底，朝代名宋体，当前朝代下方一根赤土橙细线（不是色块），左右拖拽，无圆角无阴影
-- **左侧博物馆列表**：宋体名 + 极小 sans 副标（馆藏年代），项目之间一根 0.5px `--rule` 细线，无卡片化
+- **左侧博物馆列表**：宋体名 + 极小 sans 副标（`corePeriod` 字段，由 `/api/museums` 的 list payload 提供），项目之间一根 0.5px `--rule` 细线，无卡片化
 - **地图**：自定义 Leaflet tile（米色底 + 灰墨等高线，关闭默认 OSM 蓝），marker 是手写朱印风（小圆 + 印章质感），选中态加赤土橙描边
 - **抽屉**：从右侧/底部滑入，背景 `--bg-elev`，头部一行宋体大字博物馆名 + 灰色 sans 地点，下方等距区段（年代覆盖 / 镇馆之宝 / 展厅 / 文物 / 朝代关联 / 信源），段间用 0.5px `--rule` 隔开，**无 emoji、无 icon、无圆角卡**
 - **AI 聊天面板**：底部全屏滑入，遮罩 `rgba(28,26,23,0.4)`，输入框是一根细线，无圆角胶囊；消息分两栏（用户右、AI 左），用一行小字标 "你 / 模型"
@@ -260,16 +272,18 @@ legacy 完全无图。新版按 huashu-design「真图诚实性测试」：
 
 `scripts/seed.ts`：
 1. 读 `legacy/data.json`
-2. 按 schema 拆分为主表 + 子表行
-3. 通过 `wrangler d1 execute` 或 D1 HTTP API 批量 insert（事务）
+2. 按 schema 拆分为主表 + 子表行（含 artifacts.period、dynasty_culture）
+3. 输出一个事务化的 SQL 文件，通过 `wrangler d1 execute --file` 提交（target=local|remote 见 §8.2）
 4. 朝代 `order_index` 按数组顺序赋值，保留时间轴顺序
-5. 幂等：先 `DELETE FROM` 再 insert（脚本接 `--reset` flag）
+5. 幂等：前置 `DELETE FROM` 各表
 
-执行：`bun run scripts/seed.ts --remote`（远程）/ 默认本地
+执行：`bun run seed`（默认 local）/ `bun run seed --target=remote`
 
 ---
 
 ## 8. 配置 / 部署
+
+### 8.1 wrangler / Workers（生产 + `wrangler dev`）
 
 `wrangler.toml`：
 ```toml
@@ -292,7 +306,21 @@ migrations_dir = "migrations"
 
 Secrets：
 - `COPILOT_GATEWAY_URL`（如 `https://token.xianliao.de5.net`）
-- `COPILOT_GATEWAY_KEY`（API key）
+- `COPILOT_GATEWAY_KEY`（API key，从 legacy 硬编码迁出）
+
+### 8.2 本地开发模式（参照 copilot-api-gateway 双模式）
+
+copilot-api-gateway 同时提供 `wrangler dev`（贴近生产）和 `bun run src/local.ts`（直跑、热重载、可连远程 D1）两种入口。本项目复刻：
+
+| 模式 | 命令 | DB 来源 |
+|---|---|---|
+| `wrangler dev` | `bun run dev` | wrangler 管理的本地 SQLite（位于 `.wrangler/state/v3/d1/`），由 `wrangler d1 migrations apply museum-map-db --local` 初始化 |
+| `bun run local` | `bun run src/local.ts` | 通过 D1 HTTP API 连**远程** D1 数据库（与 copilot-api-gateway 的 `local.ts` 一致），需要 `CLOUDFLARE_ACCOUNT_ID`、`CLOUDFLARE_D1_TOKEN`、`D1_DATABASE_ID` 环境变量；`local.ts` 在启动时构造一个实现 `D1Database` 接口的 HTTP 适配器，注入给 Elysia |
+
+`scripts/seed.ts` 接收 `--target=local|remote`：
+- `--target=local`（默认）：调用 `wrangler d1 execute museum-map-db --local --command="..."` 批量执行 INSERT
+- `--target=remote`：调用 `wrangler d1 execute museum-map-db --remote --command="..."`
+- 通过 transaction（`wrangler d1 execute --file`）单次提交，幂等（前置 `DELETE FROM`）
 
 `package.json` scripts（镜像 copilot-api-gateway）：
 - `dev`：wrangler dev
