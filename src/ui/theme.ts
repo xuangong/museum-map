@@ -634,6 +634,43 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--display-cn); font-size: 15px;
   line-height: 1.75; color: var(--ink-soft);
   white-space: pre-wrap;
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+.chat-msg .text.md { white-space: normal; }
+.chat-msg .text p { margin: 0 0 10px; }
+.chat-msg .text p:last-child { margin-bottom: 0; }
+.chat-msg .text strong { font-weight: 600; color: var(--ink); }
+.chat-msg .text em { font-style: italic; }
+.chat-msg .text code {
+  font-family: var(--mono); font-size: 0.92em;
+  background: var(--paper-warm); padding: 1px 5px;
+  border: 0.5px solid var(--rule-soft);
+}
+.chat-msg .text pre {
+  background: var(--paper-warm); border: 0.5px solid var(--rule-soft);
+  padding: 10px 12px; margin: 8px 0; overflow-x: auto;
+  font-family: var(--mono); font-size: 13px; line-height: 1.5;
+  white-space: pre;
+}
+.chat-msg .text pre code { background: none; border: none; padding: 0; }
+.chat-msg .text ul, .chat-msg .text ol { margin: 6px 0 10px; padding-left: 22px; }
+.chat-msg .text li { margin: 2px 0; }
+.chat-msg .text h1, .chat-msg .text h2, .chat-msg .text h3 {
+  font-family: var(--display-cn); font-weight: 600; line-height: 1.3;
+  margin: 12px 0 6px; color: var(--ink);
+}
+.chat-msg .text h1 { font-size: 1.25em; }
+.chat-msg .text h2 { font-size: 1.15em; }
+.chat-msg .text h3 { font-size: 1.05em; }
+.chat-msg .text a {
+  color: var(--vermilion);
+  border-bottom: 0.5px solid var(--vermilion-soft);
+}
+.chat-msg .text blockquote {
+  border-left: 2px solid var(--vermilion); padding-left: 12px;
+  color: var(--ink-mid); margin: 8px 0;
 }
 .chat-loading {
   font-family: var(--display); font-style: italic;
@@ -656,7 +693,7 @@ a { color: inherit; text-decoration: none; }
 .chat-input-row {
   padding: 16px var(--margin) 20px;
   border-top: 1px solid var(--ink);
-  display: grid; grid-template-columns: 1fr auto;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
   gap: 16px; align-items: end;
 }
 .chat-input {
@@ -665,6 +702,7 @@ a { color: inherit; text-decoration: none; }
   padding: 8px 0; outline: none;
   font-family: var(--display-cn); font-size: 16px;
   color: var(--ink);
+  min-width: 0; width: 100%;
 }
 .chat-input::placeholder { color: var(--ink-faint); font-style: italic; }
 .chat-send {
@@ -674,6 +712,7 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--sans); font-size: 12px;
   letter-spacing: 0.18em; text-transform: uppercase;
   transition: background 0.15s ease;
+  flex-shrink: 0; white-space: nowrap;
 }
 .chat-send:hover { background: var(--vermilion); }
 .chat-send:disabled { background: var(--ink-faint); cursor: not-allowed; }
