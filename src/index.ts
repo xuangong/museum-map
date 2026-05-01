@@ -1,15 +1,29 @@
 import { Elysia } from "elysia"
+import { cors } from "@elysiajs/cors"
+import { museumsRoute } from "~/routes/museums"
+import { dynastiesRoute } from "~/routes/dynasties"
 
 export interface Env {
   DB: D1Database
   RATE: KVNamespace
+  RATE_PER_MIN?: string
+  RATE_PER_DAY?: string
+  GLOBAL_PER_DAY?: string
+  COPILOT_GATEWAY_URL?: string
+  COPILOT_GATEWAY_KEY?: string
 }
 
-const app = new Elysia({ aot: false })
-  .get("/health", () => ({ status: "ok" }))
+export function createApp(env: Env) {
+  return new Elysia({ aot: false })
+    .use(cors())
+    .decorate("env", env)
+    .get("/health", () => ({ status: "ok" }))
+    .use(museumsRoute)
+    .use(dynastiesRoute)
+}
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
-    return app.handle(request)
+    return createApp(env).handle(request)
   },
 }
