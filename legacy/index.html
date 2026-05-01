@@ -980,6 +980,35 @@
             opacity: 0.5;
             pointer-events: none;
         }
+
+        /* ====== Tab导航 + 图片画廊 + Lightbox ====== */
+        .detail-tabs { display:flex; gap:4px; margin:12px 0; flex-wrap:wrap; }
+        .detail-tab { padding:6px 12px; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; color:var(--text-secondary); cursor:pointer; font-size:12px; transition:all .2s; }
+        .detail-tab.active { background:var(--accent-gold); color:#1a1a2e; border-color:var(--accent-gold); font-weight:600; }
+        .detail-tab:hover:not(.active) { border-color:var(--accent-gold); color:var(--accent-gold); }
+        .tab-pane { display:none; } .tab-pane.active { display:block; }
+        .img-gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px; margin-top:8px; }
+        .img-card { background:var(--bg-dark); border:1px solid var(--border); border-radius:8px; overflow:hidden; cursor:pointer; transition:transform .2s,border-color .2s; }
+        .img-card:hover { transform:translateY(-2px); border-color:var(--accent-gold); }
+        .img-card img { width:100%; height:100px; object-fit:cover; display:block; background:var(--bg-card); }
+        .img-card .caption { padding:6px 8px; font-size:11px; color:var(--text-primary); text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .vid-item { display:flex; align-items:center; gap:10px; padding:8px 10px; background:var(--bg-dark); border:1px solid var(--border); border-radius:6px; margin-bottom:6px; transition:border-color .2s; }
+        .vid-item:hover { border-color:var(--accent-gold); }
+        .vid-item a { color:var(--accent-gold); text-decoration:none; font-size:13px; }
+        .vid-item a:hover { text-decoration:underline; }
+        .vid-item .up { font-size:11px; color:var(--text-secondary); margin-top:2px; }
+        .prac-row { display:flex; gap:8px; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+        .prac-row .prac-label { color:var(--accent-gold); min-width:60px; flex-shrink:0; }
+        .prac-row .prac-val { color:var(--text-primary); }
+        .tip-item { padding:6px 0; font-size:13px; color:var(--text-secondary); border-bottom:1px solid rgba(255,255,255,.05); }
+        .popup-thumb { width:120px; height:80px; object-fit:cover; border-radius:4px; margin-top:6px; cursor:pointer; border:1px solid var(--border); }
+        .popup-thumb:hover { border-color:var(--accent-gold); }
+        /* Lightbox */
+        .lightbox-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.9); z-index:10000; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; opacity:0; transition:opacity .3s; }
+        .lightbox-overlay.show { opacity:1; }
+        .lightbox-overlay img { max-width:90vw; max-height:80vh; object-fit:contain; border-radius:8px; cursor:default; }
+        .lightbox-overlay .lb-caption { color:#fff; margin-top:12px; font-size:14px; text-align:center; }
+        .lightbox-overlay .lb-close { position:absolute; top:20px; right:24px; color:#fff; font-size:28px; cursor:pointer; background:none; border:none; }
     </style>
 <script src="data.js"></script>
 </head>
@@ -1351,6 +1380,7 @@
                         <div style="font-weight: bold; color: #f4a261; margin-bottom: 4px;">${museum.name}</div>
                         <div style="font-size: 12px; color: #adb5bd;">${museum.location || ''}</div>
                         <div style="font-size: 11px; color: #6c757d; margin-top: 4px;">${museum.level || ''}</div>
+                        ${museum.images && museum.images.length ? `<img class="popup-thumb" src="${museum.images[0].url}" alt="${museum.images[0].name}" loading="lazy" onclick="showMuseumDetails('${museum.id}')" onerror="this.style.display='none'">` : ''}
                         <button onclick="showMuseumDetails('${museum.id}')" style="margin-top: 8px; padding: 4px 12px; background: #f4a261; border: none; border-radius: 4px; cursor: pointer; font-size: 11px;">查看详情</button>
                     </div>
                 `);
@@ -1429,23 +1459,36 @@
                 </div>
             `;
 
+            // Build tab navigation
+            const tabs = [{id:'info', label:'📋 概览', always:true}];
+            if (museum.images && museum.images.length) tabs.push({id:'images', label:'📷 藏品图片'});
+            if (museum.videos && museum.videos.length) tabs.push({id:'videos', label:'🎬 推荐视频'});
+            if (museum.practical) tabs.push({id:'practical', label:'🎒 实用信息'});
+            if (museum.visitorTips && museum.visitorTips.length) tabs.push({id:'tips', label:'📝 游记'});
+
+            if (tabs.length > 1) {
+                bodyHTML += `<div class="detail-tabs">${tabs.map((t,i) => `<div class="detail-tab${i===0?' active':''}" onclick="switchTab(this,'${t.id}')">${t.label}</div>`).join('')}</div>`;
+            }
+
+            // Tab: 概览
+            let infoHTML = '';
             if (museum.corePeriod) {
-                bodyHTML += `<div class="modal-section"><div class="modal-section-title">⏰ 核心时期</div><div class="modal-section-content">${museum.corePeriod}</div></div>`;
+                infoHTML += `<div class="modal-section"><div class="modal-section-title">⏰ 核心时期</div><div class="modal-section-content">${museum.corePeriod}</div></div>`;
             }
             if (museum.specialty) {
-                bodyHTML += `<div class="modal-section"><div class="modal-section-title">✨ 馆藏特色</div><div class="modal-section-content">${museum.specialty}</div></div>`;
+                infoHTML += `<div class="modal-section"><div class="modal-section-title">✨ 馆藏特色</div><div class="modal-section-content">${museum.specialty}</div></div>`;
             }
             if (museum.halls && museum.halls.length > 0) {
-                bodyHTML += `<div class="modal-section"><div class="modal-section-title">🚪 必看展厅</div>${museum.halls.map(h => `<div class="hall-item"><div class="hall-name">${h}</div></div>`).join('')}</div>`;
+                infoHTML += `<div class="modal-section"><div class="modal-section-title">🚪 必看展厅</div>${museum.halls.map(h => `<div class="hall-item"><div class="hall-name">${h}</div></div>`).join('')}</div>`;
             }
             if (museum.dynastyConnections && museum.dynastyConnections.length > 0) {
-                bodyHTML += `<div class="modal-section"><div class="modal-section-title">📜 朝代关联</div>${museum.dynastyConnections.map(c => `<div class="connection-item"><div class="artifact-name">${c.dynasty}</div><div style="font-size:12px;color:#adb5bd;margin-top:4px;">${c.description}</div></div>`).join('')}</div>`;
+                infoHTML += `<div class="modal-section"><div class="modal-section-title">📜 朝代关联</div>${museum.dynastyConnections.map(c => `<div class="connection-item"><div class="artifact-name">${c.dynasty}</div><div style="font-size:12px;color:#adb5bd;margin-top:4px;">${c.description}</div></div>`).join('')}</div>`;
             }
             if (museum.artifacts && museum.artifacts.length > 0) {
-                bodyHTML += `<div class="modal-section"><div class="modal-section-title">💎 关键文物</div>${museum.artifacts.slice(0, 6).map(a => `<div class="artifact-item"><div class="artifact-name">${a.name}</div><div style="font-size:12px;color:#adb5bd;margin-top:4px;">${a.description || ''}</div></div>`).join('')}</div>`;
+                infoHTML += `<div class="modal-section"><div class="modal-section-title">💎 关键文物</div>${museum.artifacts.slice(0, 6).map(a => `<div class="artifact-item"><div class="artifact-name">${a.name}</div><div style="font-size:12px;color:#adb5bd;margin-top:4px;">${a.description || ''}</div></div>`).join('')}</div>`;
             }
             if (museum.sources && museum.sources.length > 0) {
-                bodyHTML += `<div class="modal-section"><div class="modal-section-title">📚 信源</div>${museum.sources.map(src => {
+                infoHTML += `<div class="modal-section"><div class="modal-section-title">📚 信源</div>${museum.sources.map(src => {
                     const urlMatch = src.match(/(https?:\/\/[^\s]+)/);
                     if (urlMatch) {
                         const label = src.replace(urlMatch[1], '').replace(/[:|：]\s*$/, '').trim() || urlMatch[1];
@@ -1454,8 +1497,35 @@
                     return '<div style="margin-bottom:6px;color:var(--text-secondary);">• ' + src + '</div>';
                 }).join('')}</div>`;
             }
+            bodyHTML += `<div class="tab-pane active" data-tab="info">${infoHTML}</div>`;
 
-            // 移动端：在 drawer 内显示
+            // Tab: 藏品图片
+            if (museum.images && museum.images.length) {
+                bodyHTML += `<div class="tab-pane" data-tab="images"><div class="img-gallery">${museum.images.map(img => `<div class="img-card" onclick="openLightbox('${escapeHtml(img.url)}','${escapeHtml(img.name)}','${escapeHtml(img.source || '')}')"><img src="${escapeHtml(img.url)}" alt="${escapeHtml(img.name)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div style="display:none;width:100%;height:100px;align-items:center;justify-content:center;background:var(--bg-card);color:var(--text-secondary);font-size:24px;">🖼️</div><div class="caption">${escapeHtml(img.name)}</div></div>`).join('')}</div></div>`;
+            }
+
+            // Tab: 推荐视频
+            if (museum.videos && museum.videos.length) {
+                bodyHTML += `<div class="tab-pane" data-tab="videos">${museum.videos.map(v => `<div class="vid-item"><span style="font-size:20px;">🎬</span><div><a href="${escapeHtml(v.url)}" target="_blank" rel="noopener">${escapeHtml(v.title)}</a><div class="up">UP主: ${escapeHtml(v.uploader)}</div></div></div>`).join('')}</div>`;
+            }
+
+            // Tab: 实用信息
+            if (museum.practical) {
+                const p = museum.practical;
+                let pracHTML = '';
+                if (p.hours) pracHTML += `<div class="prac-row"><span class="prac-label">🕐 开放</span><span class="prac-val">${escapeHtml(p.hours)}</span></div>`;
+                if (p.ticket) pracHTML += `<div class="prac-row"><span class="prac-label">🎫 门票</span><span class="prac-val">${escapeHtml(p.ticket)}</span></div>`;
+                if (p.address) pracHTML += `<div class="prac-row"><span class="prac-label">📍 地址</span><span class="prac-val">${escapeHtml(p.address)}</span></div>`;
+                if (p.transport) pracHTML += `<div class="prac-row"><span class="prac-label">🚇 交通</span><span class="prac-val">${escapeHtml(p.transport)}</span></div>`;
+                bodyHTML += `<div class="tab-pane" data-tab="practical">${pracHTML}</div>`;
+            }
+
+            // Tab: 游记
+            if (museum.visitorTips && museum.visitorTips.length) {
+                bodyHTML += `<div class="tab-pane" data-tab="tips">${museum.visitorTips.map(t => `<div class="tip-item">💡 ${escapeHtml(t)}</div>`).join('')}</div>`;
+            }
+
+            // Render
             if (window.innerWidth <= 768) {
                 const contentArea = document.getElementById('content-area');
                 const dynastyContent = document.getElementById('dynasty-content');
@@ -1463,7 +1533,6 @@
                 contentArea.scrollTop = 0;
                 snapTo('expanded');
             } else {
-                // 桌面端：用弹窗
                 const modal = document.getElementById('museum-modal');
                 document.getElementById('modal-museum-name').textContent = museum.name;
                 document.getElementById('modal-museum-level').textContent = `${museum.level || ''} | ${museum.location || ''}`;
@@ -1474,6 +1543,37 @@
             if (museum.lat && museum.lng) {
                 map.flyTo(toMapCoord(museum.lat, museum.lng), 10, { duration: 1.5 });
             }
+        }
+
+        function switchTab(el, tabId) {
+            const parent = el.closest('.detail-tabs') ? el.closest('.detail-tabs').parentElement : el.parentElement.parentElement;
+            parent.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+            parent.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+            const pane = parent.querySelector(`.tab-pane[data-tab="${tabId}"]`);
+            if (pane) pane.classList.add('active');
+        }
+
+        function openLightbox(url, name, source) {
+            let overlay = document.getElementById('lightbox-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.id = 'lightbox-overlay';
+                overlay.className = 'lightbox-overlay';
+                overlay.innerHTML = '<button class="lb-close">&times;</button><img src="" alt=""><div class="lb-caption"></div>';
+                overlay.addEventListener('click', (e) => { if (e.target === overlay || e.target.classList.contains('lb-close')) closeLightbox(); });
+                document.body.appendChild(overlay);
+                document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+            }
+            overlay.querySelector('img').src = url;
+            overlay.querySelector('img').alt = name;
+            overlay.querySelector('.lb-caption').textContent = name + (source ? ' — ' + source : '');
+            requestAnimationFrame(() => { overlay.style.display = 'flex'; requestAnimationFrame(() => overlay.classList.add('show')); });
+        }
+
+        function closeLightbox() {
+            const overlay = document.getElementById('lightbox-overlay');
+            if (overlay) { overlay.classList.remove('show'); setTimeout(() => overlay.style.display = 'none', 300); }
         }
 
         // 返回朝代内容
