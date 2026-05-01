@@ -1,6 +1,7 @@
 import { describe, it, expect } from "bun:test"
 import { Miniflare } from "miniflare"
 import { MuseumsRepo } from "~/repo/museums"
+import { DynastiesRepo } from "~/repo/dynasties"
 import legacyData from "../legacy/data.json"
 
 async function getDb() {
@@ -60,5 +61,55 @@ describe("MuseumsRepo.get", () => {
     const db = await getDb()
     const repo = new MuseumsRepo(db)
     expect(await repo.get("does-not-exist")).toBeNull()
+  })
+})
+
+describe("DynastiesRepo", () => {
+  it("listFull returns 20 dynasties in order_index order", async () => {
+    const db = await getDb()
+    const repo = new DynastiesRepo(db)
+    const list = await repo.listFull()
+    expect(list).toHaveLength(20)
+    const ids = list.map((d) => d.id)
+    const expected = (legacyData as any).dynasties.map((d: any) => d.id)
+    expect(ids).toEqual(expected)
+  })
+
+  it("listFull dynasty.culture is a [{category,description}] array, not a string", async () => {
+    const db = await getDb()
+    const repo = new DynastiesRepo(db)
+    const list = await repo.listFull()
+    for (const d of list) {
+      expect(Array.isArray(d.culture)).toBe(true)
+      expect(d.culture.length).toBeGreaterThan(0)
+      expect(typeof d.culture[0]!.category).toBe("string")
+    }
+  })
+
+  it("listFull each dynasty has events array (preserves order)", async () => {
+    const db = await getDb()
+    const repo = new DynastiesRepo(db)
+    const list = await repo.listFull()
+    const tang = list.find((d) => d.id === "tang")
+    expect(tang).toBeDefined()
+    const legacyTang = (legacyData as any).dynasties.find((d: any) => d.id === "tang")
+    expect(tang!.events.length).toBe(legacyTang.events.length)
+    expect(tang!.events[0]!.date).toBe(legacyTang.events[0].date)
+    expect(tang!.events[0]!.event).toBe(legacyTang.events[0].event)
+  })
+
+  it("get(id) returns same shape as a list item", async () => {
+    const db = await getDb()
+    const repo = new DynastiesRepo(db)
+    const single = await repo.get("tang")
+    const list = await repo.listFull()
+    const fromList = list.find((d) => d.id === "tang")
+    expect(single).toEqual(fromList!)
+  })
+
+  it("get(id) returns null for unknown id", async () => {
+    const db = await getDb()
+    const repo = new DynastiesRepo(db)
+    expect(await repo.get("nope")).toBeNull()
   })
 })
