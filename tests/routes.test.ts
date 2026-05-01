@@ -101,3 +101,34 @@ describe("GET /api/dynasties/:id", () => {
     expect(res.status).toBe(404)
   })
 })
+
+describe("POST /api/chat", () => {
+  it("returns 503 when COPILOT_GATEWAY_URL/KEY missing", async () => {
+    const env = await makeEnv()
+    const app = createApp(env)
+    const res = await app.handle(
+      new Request("http://localhost/api/chat", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ messages: [{ role: "user", content: "hi" }] }),
+      }),
+    )
+    expect(res.status).toBe(503)
+    const body = (await res.json()) as any
+    expect(body.error).toContain("not configured")
+  })
+
+  it("returns 400 for empty body", async () => {
+    const env = await makeEnv()
+    const envWithChat = { ...env, COPILOT_GATEWAY_URL: "https://up.example", COPILOT_GATEWAY_KEY: "k" }
+    const app = createApp(envWithChat)
+    const res = await app.handle(
+      new Request("http://localhost/api/chat", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: "{}",
+      }),
+    )
+    expect(res.status).toBe(400)
+  })
+})

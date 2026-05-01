@@ -2,6 +2,7 @@ import { Elysia } from "elysia"
 import { cors } from "@elysiajs/cors"
 import { museumsRoute } from "~/routes/museums"
 import { dynastiesRoute } from "~/routes/dynasties"
+import { chatRoute } from "~/routes/chat"
 
 export interface Env {
   DB: D1Database
@@ -20,6 +21,7 @@ export function createApp(env: Env) {
     .get("/health", () => ({ status: "ok" }))
     .use(museumsRoute)
     .use(dynastiesRoute)
+    .use(chatRoute)
 }
 
 export default {
