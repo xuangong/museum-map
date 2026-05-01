@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "wrangler dev --port 4242",
+    "local": "bun --hot run src/local.ts",
     "predev": "wrangler d1 migrations apply museum-map-db --local",
     "deploy": "wrangler deploy",
     "seed": "bun run scripts/seed.ts",

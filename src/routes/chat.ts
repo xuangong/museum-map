@@ -12,6 +12,10 @@ interface RouteContext {
 
 export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
   const { env, request, body, set } = ctx as unknown as RouteContext
+  if (env.DISABLE_CHAT === "1") {
+    set.status = 503
+    return { error: "chat disabled in this mode, use `bun run dev` instead" }
+  }
   if (env.COPILOT_GATEWAY_URL == null || env.COPILOT_GATEWAY_KEY == null) {
     set.status = 503
     return { error: "chat unavailable: gateway not configured" }

@@ -14,6 +14,7 @@ export interface Env {
   GLOBAL_PER_DAY?: string
   COPILOT_GATEWAY_URL?: string
   COPILOT_GATEWAY_KEY?: string
+  DISABLE_CHAT?: string
 }
 
 export function createApp(env: Env) {
