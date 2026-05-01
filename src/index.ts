@@ -3,6 +3,7 @@ import { cors } from "@elysiajs/cors"
 import { museumsRoute } from "~/routes/museums"
 import { dynastiesRoute } from "~/routes/dynasties"
 import { chatRoute } from "~/routes/chat"
+import { importRoute } from "~/routes/import"
 import { cdnRoute } from "~/lib/cdn"
 import { homeRoute } from "~/routes/home"
 
@@ -15,6 +16,7 @@ export interface Env {
   COPILOT_GATEWAY_URL?: string
   COPILOT_GATEWAY_KEY?: string
   DISABLE_CHAT?: string
+  ADMIN_TOKEN?: string
 }
 
 export function createApp(env: Env) {
@@ -27,6 +29,7 @@ export function createApp(env: Env) {
     .use(museumsRoute)
     .use(dynastiesRoute)
     .use(chatRoute)
+    .use(importRoute)
 }
 
 export default {

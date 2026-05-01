@@ -1,4 +1,5 @@
 import type { MuseumFull, MuseumListItem } from "./types"
+import type { MuseumPayload } from "~/services/import-schema"
 
 export class MuseumsRepo {
   constructor(private db: D1Database) {}
@@ -45,5 +46,44 @@ export class MuseumsRepo {
       dynastyConnections: conns.results,
       sources: sources.results.map((r) => r.source),
     }
+  }
+
+  /** Publish a payload to the live museums tables. Replaces existing rows for the same id. */
+  async upsert(id: string, p: MuseumPayload): Promise<void> {
+    const stmts: D1PreparedStatement[] = []
+    // Wipe child rows (if museum already exists) — FK CASCADE handles them via delete, but we
+    // need an upsert path that keeps the id stable. Easier: delete + insert.
+    stmts.push(this.db.prepare("DELETE FROM museums WHERE id = ?").bind(id))
+    stmts.push(
+      this.db
+        .prepare(
+          "INSERT INTO museums (id, name, lat, lng, location, level, core_period, specialty, dynasty_coverage, timeline) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        )
+        .bind(id, p.name, p.lat, p.lng, p.location ?? null, p.level ?? null, p.corePeriod ?? null, p.specialty ?? null, p.dynastyCoverage ?? null, p.timeline ?? null),
+    )
+    ;(p.treasures ?? []).forEach((name, i) => {
+      stmts.push(this.db.prepare("INSERT INTO museum_treasures (museum_id, order_index, name) VALUES (?, ?, ?)").bind(id, i, name))
+    })
+    ;(p.halls ?? []).forEach((name, i) => {
+      stmts.push(this.db.prepare("INSERT INTO museum_halls (museum_id, order_index, name) VALUES (?, ?, ?)").bind(id, i, name))
+    })
+    ;(p.artifacts ?? []).forEach((a, i) => {
+      stmts.push(
+        this.db
+          .prepare("INSERT INTO museum_artifacts (museum_id, order_index, name, period, description) VALUES (?, ?, ?, ?, ?)")
+          .bind(id, i, a.name, a.period ?? null, a.description ?? null),
+      )
+    })
+    ;(p.dynastyConnections ?? []).forEach((c, i) => {
+      stmts.push(
+        this.db
+          .prepare("INSERT INTO museum_dynasty_connections (museum_id, order_index, dynasty, description) VALUES (?, ?, ?, ?)")
+          .bind(id, i, c.dynasty, c.description ?? null),
+      )
+    })
+    ;(p.sources ?? []).forEach((src, i) => {
+      stmts.push(this.db.prepare("INSERT INTO museum_sources (museum_id, order_index, source) VALUES (?, ?, ?)").bind(id, i, src))
+    })
+    await this.db.batch(stmts)
   }
 }

@@ -691,6 +691,11 @@ a { color: inherit; text-decoration: none; }
   white-space: pre;
 }
 .chat-msg .text pre code { background: none; border: none; padding: 0; }
+.chat-msg .text code.cmd {
+  cursor: pointer; color: var(--vermilion); border-color: var(--vermilion);
+  user-select: none;
+}
+.chat-msg .text code.cmd:hover { background: var(--vermilion); color: var(--paper); }
 .chat-msg .text ul, .chat-msg .text ol { margin: 6px 0 10px; padding-left: 22px; }
 .chat-msg .text li { margin: 2px 0; }
 .chat-msg .text h1, .chat-msg .text h2, .chat-msg .text h3 {

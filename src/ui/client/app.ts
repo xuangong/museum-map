@@ -7,7 +7,7 @@ window.museumApp = function() {
     currentDynastyId: null,
     selectedMuseumId: null,
     drawer: { open: false, loading: false, error: false, title: '', subtitle: '', sections: [], _loadFn: null },
-    chat: { open: false, messages: [], input: '', loading: false },
+    chat: { open: false, messages: [], input: '', loading: false, palette: { open: false, query: '' } },
     tocOpen: false,
 
     init() {
@@ -20,6 +20,57 @@ window.museumApp = function() {
       window.MuseumMap.init(35.0, 105.0);
       var self = this;
       this.refreshMarkers();
+
+      // First-visit welcome message in chat
+      if (!window.localStorage.getItem('museumChatWelcomed')) {
+        this.chat.messages.push({
+          role: 'assistant',
+          content: '👋 你好！这里可以问中国历史与博物馆，也支持斜杠命令：\\n\\n- \`/import <博物馆名>\` 派 agent 抓数据并暂存\\n- \`/pending\` 查看暂存列表\\n- \`/review <id>\` AI 评分并预览\\n- \`/approve|reject|delete <id>\` 处理暂存\\n\\n💡 输入 \`/\` 唤出命令面板。',
+        });
+        window.localStorage.setItem('museumChatWelcomed', '1');
+      }
+    },
+
+    commands: [
+      { cmd: '/import ', label: '/import <博物馆名>', desc: '派 agent 抓取并暂存' },
+      { cmd: '/pending', label: '/pending', desc: '查看暂存列表' },
+      { cmd: '/review ', label: '/review <id>', desc: 'AI 评分 + 预览' },
+      { cmd: '/approve ', label: '/approve <id>', desc: '通过暂存并发布到正库' },
+      { cmd: '/reject ', label: '/reject <id>', desc: '拒绝暂存（不影响正库）' },
+      { cmd: '/delete ', label: '/delete <id>', desc: '删除暂存记录（不影响正库）' },
+      { cmd: '/unpublish ', label: '/unpublish <id>', desc: '从正库下架（不影响 pending）' },
+      { cmd: '/help', label: '/help', desc: '查看命令帮助' },
+    ],
+
+    onChatInput() {
+      var v = this.chat.input || '';
+      if (v.charAt(0) === '/' && v.indexOf(' ') < 0) {
+        this.chat.palette.open = true;
+        this.chat.palette.query = v;
+      } else {
+        this.chat.palette.open = false;
+      }
+    },
+
+    get filteredCommands() {
+      var q = (this.chat.palette.query || '').toLowerCase();
+      return this.commands.filter(function(c){ return c.cmd.indexOf(q) === 0 || c.label.toLowerCase().indexOf(q) >= 0; });
+    },
+
+    pickCommand(c) {
+      this.chat.input = c.cmd;
+      this.chat.palette.open = false;
+      var el = document.querySelector('[data-chat-input]');
+      if (el) el.focus();
+    },
+
+    onChatBodyClick(e) {
+      var t = e.target;
+      if (t && t.classList && t.classList.contains('cmd') && t.dataset && t.dataset.cmd) {
+        this.chat.input = t.dataset.cmd;
+        var el = document.querySelector('[data-chat-input]');
+        if (el) el.focus();
+      }
     },
 
     refreshMarkers() {
@@ -194,6 +245,16 @@ window.museumApp = function() {
 
     escape(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); },
 
+    async ensureAdminToken() {
+      var token = window.localStorage.getItem('museumAdminToken');
+      if (!token) {
+        token = window.prompt('管理员令牌 (Admin token)') || '';
+        if (!token) return null;
+        window.localStorage.setItem('museumAdminToken', token);
+      }
+      return token;
+    },
+
     async sendChat() {
       var text = (this.chat.input || '').trim();
       if (!text || this.chat.loading) return;
@@ -201,6 +262,102 @@ window.museumApp = function() {
       this.chat.input = '';
       this.chat.loading = true;
       try {
+        if (text === '/help') {
+          this.chat.messages.push({ role: 'assistant', content: '可用命令：\\n- /import <博物馆名称>：导入新博物馆\\n- /pending：查看暂存列表\\n- /review <id>：AI 评分某条暂存记录\\n- /approve <id>：通过暂存并**发布到正库**\\n- /reject <id>：拒绝暂存（不影响正库）\\n- /delete <id>：删除暂存记录（不影响正库）\\n- /unpublish <id>：从正库下架（不影响 pending）' });
+          return;
+        }
+        if (text.indexOf('/import ') === 0 || text === '/import') {
+          var query = text.replace(/^\\/import\\s*/, '').trim();
+          if (!query) {
+            this.chat.messages.push({ role: 'assistant', content: '用法：/import <博物馆名称>' });
+            return;
+          }
+          var token = await this.ensureAdminToken();
+          if (!token) {
+            this.chat.messages.push({ role: 'assistant', content: '已取消。' });
+            return;
+          }
+          var idx = this.chat.messages.length;
+          this.chat.messages.push({ role: 'assistant', content: '🤖 启动 agent…' });
+          var self = this;
+          try {
+            await window.MuseumChat.runImport(query, token, function(line) {
+              var prev = self.chat.messages[idx].content || '';
+              self.chat.messages[idx].content = prev + '\\n' + line;
+            });
+          } catch (e) {
+            if (e && e.status === 401) {
+              window.localStorage.removeItem('museumAdminToken');
+            }
+            self.chat.messages[idx].content += '\\n（出错：' + (e.message || 'unknown') + '）';
+          }
+          return;
+        }
+        if (text === '/pending' || text.indexOf('/pending ') === 0) {
+          var token2 = await this.ensureAdminToken();
+          if (!token2) { this.chat.messages.push({ role: 'assistant', content: '已取消。' }); return; }
+          try {
+            var list = await window.MuseumChat.listPending(token2);
+            if (!list.items.length) {
+              this.chat.messages.push({ role: 'assistant', content: '📋 暂无暂存记录。' });
+            } else {
+              var lines = ['### 📋 暂存列表 (' + list.items.length + ')', ''];
+              for (var i = 0; i < list.items.length; i++) {
+                var it = list.items[i];
+                var emoji = it.verdict === 'excellent' ? '🟢' : it.verdict === 'good' ? '🟢' : it.verdict === 'acceptable' ? '🟡' : it.verdict === 'reject' ? '🔴' : '🟠';
+                lines.push('- ' + emoji + ' **' + it.name + '** (' + it.overall + '/100, ' + it.verdict + ') · ' + (it.status || 'pending'));
+                lines.push('  - id: \`' + it.id + '\`  来源:' + it.sources + '  ' + (it.level || ''));
+                lines.push('  - 操作：\`/review ' + it.id + '\` · \`/approve ' + it.id + '\` · \`/reject ' + it.id + '\` · \`/delete ' + it.id + '\`');
+              }
+              lines.push('');
+              lines.push('提示：点击命令文本可手动复制，或输入 / 唤出命令面板。');
+              this.chat.messages.push({ role: 'assistant', content: lines.join('\\n') });
+            }
+          } catch (e) {
+            if (e && e.status === 401) window.localStorage.removeItem('museumAdminToken');
+            this.chat.messages.push({ role: 'assistant', content: '（出错：' + (e.message || 'unknown') + '）' });
+          }
+          return;
+        }
+        if (text.indexOf('/review ') === 0 || text === '/review') {
+          var id = text.replace(/^\\/review\\s*/, '').trim();
+          if (!id) {
+            this.chat.messages.push({ role: 'assistant', content: '用法：/review <id>（先用 /pending 查 id）' });
+            return;
+          }
+          var token3 = await this.ensureAdminToken();
+          if (!token3) { this.chat.messages.push({ role: 'assistant', content: '已取消。' }); return; }
+          this.chat.messages.push({ role: 'assistant', content: '🔎 评估中…' });
+          var lastIdx = this.chat.messages.length - 1;
+          try {
+            var detail = await window.MuseumChat.reviewPending(id, token3);
+            this.chat.messages[lastIdx].content = window.MuseumChat.formatReview(detail);
+          } catch (e) {
+            if (e && e.status === 401) window.localStorage.removeItem('museumAdminToken');
+            this.chat.messages[lastIdx].content = '（出错：' + (e.message || 'unknown') + '）';
+          }
+          return;
+        }
+        var actionMatch = text.match(/^\\/(approve|reject|delete|unpublish)\\s+(.+)$/);
+        if (actionMatch) {
+          var action = actionMatch[1];
+          var actId = actionMatch[2].trim();
+          var tokenA = await this.ensureAdminToken();
+          if (!tokenA) { this.chat.messages.push({ role: 'assistant', content: '已取消。' }); return; }
+          try {
+            var fn = action === 'approve' ? window.MuseumChat.approvePending
+                   : action === 'reject' ? window.MuseumChat.rejectPending
+                   : action === 'delete' ? window.MuseumChat.deletePending
+                   : window.MuseumChat.unpublishMuseum;
+            await fn(actId, tokenA);
+            var emojiA = action === 'approve' ? '✅' : action === 'reject' ? '🚫' : action === 'delete' ? '🗑️' : '📤';
+            this.chat.messages.push({ role: 'assistant', content: emojiA + ' ' + action + ' ' + actId });
+          } catch (e) {
+            if (e && e.status === 401) window.localStorage.removeItem('museumAdminToken');
+            this.chat.messages.push({ role: 'assistant', content: '（出错：' + (e.message || 'unknown') + '）' });
+          }
+          return;
+        }
         var reply = await window.MuseumChat.send(this.chat.messages.slice(-10));
         this.chat.messages.push({ role: 'assistant', content: reply });
       } catch (e) {

@@ -15,7 +15,7 @@ export function ChatPanel(): string {
     </div>
     <button @click="chat.open = false" style="border:none;background:transparent;font-family:var(--display);font-size:24px;line-height:1;cursor:pointer;color:var(--ink);">×</button>
   </div>
-  <div class="chat-body">
+  <div class="chat-body" @click="onChatBodyClick($event)">
     <div x-show="chat.messages.length === 0" style="font-family:var(--display);font-style:italic;color:var(--ink-mute);text-align:center;padding:40px 0;">
       Ask anything about Chinese history, dynasties, or museums.
     </div>
@@ -31,8 +31,17 @@ export function ChatPanel(): string {
   <div class="chat-chips">
     ${QUICK_QUESTIONS.map((q) => `<span class="chip" @click="chat.input='${q.replace(/'/g, "\\'")}'">${q}</span>`).join("")}
   </div>
-  <div class="chat-input-row">
-    <input class="chat-input" x-model="chat.input" @keydown.enter="sendChat()" placeholder="问我任何问题…" />
+  <div class="chat-input-row" style="position:relative;">
+    <div class="cmd-palette" x-show="chat.palette.open" @click.outside="chat.palette.open = false" style="position:absolute;left:12px;right:12px;bottom:calc(100% + 6px);background:var(--paper);border:1px solid var(--rule);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.08);max-height:240px;overflow-y:auto;z-index:10;">
+      <template x-for="(c, i) in filteredCommands" :key="i">
+        <div @click="pickCommand(c)" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--rule-soft);">
+          <div style="font-family:var(--mono);font-weight:600;color:var(--vermilion);" x-text="c.label"></div>
+          <div style="font-size:12px;color:var(--ink-mute);" x-text="c.desc"></div>
+        </div>
+      </template>
+      <div x-show="filteredCommands.length === 0" style="padding:10px 12px;color:var(--ink-mute);font-size:13px;">无匹配命令</div>
+    </div>
+    <input class="chat-input" data-chat-input x-model="chat.input" @input="onChatInput()" @keydown.enter="chat.palette.open = false; sendChat()" @keydown.escape="chat.palette.open = false" placeholder="问我任何问题，或输入 / 唤起命令…" />
     <button class="chat-send" @click="sendChat()" :disabled="chat.loading">Send</button>
   </div>
 </div>
