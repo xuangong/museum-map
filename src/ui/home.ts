@@ -25,7 +25,7 @@ export function HomePage(data: HomeData): string {
     title: "中国博物馆地图 — Atlas of Chinese Museums",
     children: `
 <style>[x-cloak] { display: none !important; }</style>
-<div class="app-shell">
+<div class="app-shell" x-data="museumApp()">
   <header class="masthead">
     <div class="left">
       <span class="eyebrow">Established · MMXXVI</span>
@@ -39,7 +39,7 @@ export function HomePage(data: HomeData): string {
     </div>
   </header>
   ${DynastyTimeline()}
-  <div class="stage" x-data="museumApp()" x-init="init()">
+  <div class="stage">
     <div class="toc-overlay" :class="tocOpen ? 'open' : ''" @click="tocOpen = false" x-cloak></div>
     <div class="toc-wrap" :class="tocOpen ? 'open' : ''">
       ${Sidebar()}
