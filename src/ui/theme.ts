@@ -31,9 +31,24 @@ h1, h2, h3, .museum-name { font-family: var(--font-cn); font-weight: 600; }
   background: var(--accent); border: 1.5px solid var(--bg);
   box-shadow: 0 0 0 1px var(--accent);
 }
+.museum-marker.recommended {
+  width: 16px; height: 16px;
+  background: var(--bg-elev);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 0 8px rgba(192,74,26,0.4);
+}
 .museum-marker.selected {
   transform: scale(1.3);
   transition: transform 0.18s ease-out;
+}
+
+/* Event marker — 印鉴 diamond */
+.event-marker {
+  width: 12px; height: 12px;
+  background: var(--accent);
+  border: 1.5px solid var(--bg);
+  transform: rotate(45deg);
+  box-shadow: 0 0 0 1px var(--ink-soft);
 }
 
 /* Drawer */
