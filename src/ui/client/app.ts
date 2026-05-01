@@ -101,21 +101,21 @@ window.museumApp = function() {
       var self = this;
       var sections = [];
       function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-      if (d.overview) sections.push({ title: '概述', html: '<div style="line-height:1.7;">' + escapeHtml(d.overview) + '</div>' });
+      if (d.overview) sections.push({ title: 'Overview · 概述', html: '<p>' + escapeHtml(d.overview) + '</p>' });
       if (d.culture && d.culture.length) {
-        sections.push({ title: '文化', html: d.culture.map(function(c){
-          return '<div style="margin-bottom:8px;"><b>' + escapeHtml(c.category) + '</b>：' + escapeHtml(c.description || '') + '</div>';
+        sections.push({ title: 'Culture · 文化', html: d.culture.map(function(c){
+          return '<div style="margin-bottom:14px;"><div style="font-family:var(--display-cn);font-weight:600;font-size:15px;margin-bottom:4px;">' + escapeHtml(c.category) + '</div><div style="font-size:14px;color:var(--ink-mid);">' + escapeHtml(c.description || '') + '</div></div>';
         }).join('') });
       }
       if (d.events && d.events.length) {
-        sections.push({ title: '历史事件', html: d.events.map(function(e){
-          return '<div style="margin-bottom:6px;"><span style="color:var(--accent);">' + escapeHtml(e.date || '') + '</span> · ' + escapeHtml(e.event || '') + '</div>';
+        sections.push({ title: 'Chronicle · 大事记', html: d.events.map(function(e){
+          return '<div class="event-row"><div class="date">' + escapeHtml(e.date || '') + '</div><div class="text">' + escapeHtml(e.event || '') + '</div></div>';
         }).join('') });
       }
       if (d.recommendedMuseums && d.recommendedMuseums.length) {
-        sections.push({ title: '推荐博物馆', html: d.recommendedMuseums.map(function(r){
-          var clickable = r.museumId ? ' data-museum-id="' + escapeHtml(r.museumId) + '" class="dynasty-rec" style="cursor:pointer;color:var(--accent);"' : ' style="color:var(--ink-soft);"';
-          return '<div style="margin-bottom:8px;"><div' + clickable + '>📍 ' + escapeHtml(r.name) + '</div><div style="font-size:12px;color:var(--ink-mute);margin-top:2px;">' + escapeHtml(r.location || '') + '</div><div style="font-size:13px;margin-top:2px;">' + escapeHtml(r.reason || '') + '</div></div>';
+        sections.push({ title: 'Featured Museums · 推荐博物馆', html: d.recommendedMuseums.map(function(r, i){
+          var attrs = r.museumId ? ' data-museum-id="' + escapeHtml(r.museumId) + '" class="rec-card dynasty-rec"' : ' class="rec-card" style="cursor:default;"';
+          return '<div' + attrs + '><span class="num">' + (i+1).toString().padStart(2,'0') + '</span><div><div class="name">' + escapeHtml(r.name) + '</div><div class="loc">' + escapeHtml(r.location || '') + '</div><div class="reason">' + escapeHtml(r.reason || '') + '</div></div></div>';
         }).join('') });
       }
       return sections;
@@ -162,29 +162,29 @@ window.museumApp = function() {
     buildMuseumSections(m) {
       var sections = [];
       function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-      if (m.specialty) sections.push({ title: '特色', html: escapeHtml(m.specialty) });
-      if (m.dynastyCoverage) sections.push({ title: '年代覆盖', html: escapeHtml(m.dynastyCoverage) });
+      if (m.specialty) sections.push({ title: 'Specialty · 特色', html: '<p>' + escapeHtml(m.specialty) + '</p>' });
+      if (m.dynastyCoverage) sections.push({ title: 'Coverage · 年代覆盖', html: '<p>' + escapeHtml(m.dynastyCoverage) + '</p>' });
       if (m.treasures && m.treasures.length) {
-        sections.push({ title: '镇馆之宝', html: '<ul style="margin:0;padding-left:20px;">' + m.treasures.map(function(t){ return '<li>' + escapeHtml(t) + '</li>'; }).join('') + '</ul>' });
+        sections.push({ title: 'Treasures · 镇馆之宝', html: '<ul>' + m.treasures.map(function(t){ return '<li>' + escapeHtml(t) + '</li>'; }).join('') + '</ul>' });
       }
       if (m.halls && m.halls.length) {
-        sections.push({ title: '展厅', html: m.halls.map(escapeHtml).join('、') });
+        sections.push({ title: 'Halls · 展厅', html: '<p>' + m.halls.map(escapeHtml).join('、') + '</p>' });
       }
       if (m.artifacts && m.artifacts.length) {
-        sections.push({ title: '文物', html: m.artifacts.map(function(a){
-          return '<div style="margin-bottom:10px;"><div class="museum-name" style="font-size:14px;">' + escapeHtml(a.name) + (a.period ? ' <span style="font-size:11px;color:var(--ink-mute);">' + escapeHtml(a.period) + '</span>' : '') + '</div><div style="font-size:13px;color:var(--ink-soft);">' + escapeHtml(a.description || '') + '</div></div>';
+        sections.push({ title: 'Artifacts · 文物', html: m.artifacts.map(function(a){
+          return '<div class="artifact"><div><span class="artifact-name">' + escapeHtml(a.name) + '</span>' + (a.period ? '<span class="artifact-period">' + escapeHtml(a.period) + '</span>' : '') + '</div><div class="artifact-desc">' + escapeHtml(a.description || '') + '</div></div>';
         }).join('') });
       }
       if (m.dynastyConnections && m.dynastyConnections.length) {
-        sections.push({ title: '朝代关联', html: m.dynastyConnections.map(function(c){
-          return '<div style="margin-bottom:6px;"><b>' + escapeHtml(c.dynasty) + '</b>：' + escapeHtml(c.description || '') + '</div>';
+        sections.push({ title: 'Dynastic Ties · 朝代关联', html: m.dynastyConnections.map(function(c){
+          return '<div style="margin-bottom:10px;"><span style="font-family:var(--display-cn);font-weight:600;color:var(--vermilion);">' + escapeHtml(c.dynasty) + '</span> · <span style="color:var(--ink-mid);">' + escapeHtml(c.description || '') + '</span></div>';
         }).join('') });
       }
       if (m.sources && m.sources.length) {
-        sections.push({ title: '信源', html: m.sources.map(function(s){
+        sections.push({ title: 'Sources · 信源', html: m.sources.map(function(s){
           var url = /^https?:\\/\\//.test(s) ? s : null;
-          return url ? '<a href="' + url + '" target="_blank" rel="noopener" style="color:var(--accent);">' + escapeHtml(url) + '</a>' : '<div>' + escapeHtml(s) + '</div>';
-        }).join('<br>') });
+          return url ? '<a href="' + url + '" target="_blank" rel="noopener" class="source-link">' + escapeHtml(url) + '</a>' : '<div class="source-link" style="cursor:default;color:var(--ink-mid);border-bottom-color:var(--rule-soft);">' + escapeHtml(s) + '</div>';
+        }).join('') });
       }
       return sections;
     },

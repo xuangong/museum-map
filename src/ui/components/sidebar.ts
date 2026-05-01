@@ -1,30 +1,77 @@
 export function Sidebar(): string {
-  return `<aside class="sidebar bg-elev" style="width:300px;border-right:0.5px solid var(--rule);overflow-y:auto;">
-  <div style="padding:16px 20px;border-bottom:1px solid var(--ink);">
-    <h2 class="display" style="margin:0;font-size:18px;">中国博物馆</h2>
-    <div x-show="currentDynastyId" style="margin-top:8px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--ink-soft);">
-      <span>
-        <span style="color:var(--ink-mute);">朝代：</span>
-        <span class="accent" x-text="(currentDynasty() || {}).name || ''"></span>
-        <span style="color:var(--ink-mute);" x-text="' · ' + filteredMuseums.length + ' 馆'"></span>
-      </span>
-      <button @click="clearDynastyFilter()" style="border:none;background:transparent;color:var(--accent);cursor:pointer;font-size:12px;">清除</button>
+  return `<aside class="toc">
+  <!-- Dynasty hero (only when filtered) -->
+  <div x-show="currentDynastyId" x-cloak>
+    <div class="toc-head">
+      <div class="vol">
+        Vol. <span class="num" x-text="(currentDynasty() ? (dynasties.findIndex(function(x){return x.id===currentDynasty().id})+1) : 0).toString().padStart(2,'0')"></span>
+        <span style="margin-left:8px;">·</span>
+        <span style="margin-left:8px;font-style:italic;">Dynasty Edition</span>
+      </div>
+      <h1 class="dynasty-name" x-text="(currentDynasty() || {}).name || ''"></h1>
+      <div class="dynasty-period" x-text="(currentDynasty() || {}).period || ''"></div>
+      <p class="dynasty-overview" x-text="(currentDynasty() || {}).overview || ''" x-show="(currentDynasty() || {}).overview"></p>
+      <div class="stats">
+        <div class="stat">
+          <div class="num" x-text="filteredMuseums.length.toString().padStart(2,'0')"></div>
+          <div class="label">Museums</div>
+        </div>
+        <div class="stat">
+          <div class="num" x-text="(((currentDynasty()||{}).events) || []).length.toString().padStart(2,'0')"></div>
+          <div class="label">Events</div>
+        </div>
+        <div class="stat">
+          <div class="num" x-text="(((currentDynasty()||{}).culture) || []).length.toString().padStart(2,'0')"></div>
+          <div class="label">Culture</div>
+        </div>
+      </div>
+      <button @click="clearDynastyFilter()"
+        style="margin-top:18px;border:none;background:transparent;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--vermilion);padding:0;cursor:pointer;border-bottom:0.5px solid var(--vermilion);padding-bottom:2px;">
+        ← Show all 64 museums
+      </button>
     </div>
-    <input x-model="search" placeholder="搜索博物馆…"
-      class="chat-input" style="margin-top:10px;font-size:13px;width:100%;border-bottom:0.5px solid var(--rule);" />
   </div>
-  <ul style="list-style:none;margin:0;padding:0;">
-    <template x-for="m in filteredMuseums" :key="m.id">
-      <li @click="openMuseum(m.id)"
-          class="rule"
-          style="padding:12px 20px;cursor:pointer;"
-          :style="selectedMuseumId === m.id ? 'background:var(--bg-soft);' : ''">
-        <div class="museum-name" style="font-size:15px;" x-text="m.name"></div>
-        <div style="font-size:11px;color:var(--ink-mute);margin-top:2px;" x-text="m.corePeriod || ''"></div>
+
+  <!-- All-museums hero (default) -->
+  <div x-show="!currentDynastyId" x-cloak>
+    <div class="toc-head">
+      <div class="vol">
+        Vol. <span class="num">00</span>
+        <span style="margin-left:8px;">·</span>
+        <span style="margin-left:8px;font-style:italic;">Complete Index</span>
+      </div>
+      <h1 class="dynasty-name">中国博物馆</h1>
+      <div class="dynasty-period"><span style="font-style:normal;font-variant-numeric:lining-nums;">64</span> institutions across <span style="font-style:normal;font-variant-numeric:lining-nums;">20</span> dynasties</div>
+      <p class="dynasty-overview" style="margin-top:18px;">从仰韶到清，由四面至八方。本卷收录全国 64 座国家级与省级博物馆，按朝代脉络重新编排，以呈现中华文明在地理与时间双轴上的连续展开。</p>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="toc-search">
+    <input x-model="search" placeholder="Search museums…" />
+  </div>
+
+  <!-- Section label -->
+  <div class="toc-section-label">
+    <span x-text="currentDynastyId ? 'Featured Museums' : 'Index'"></span>
+    <span class="count" x-text="filteredMuseums.length"></span>
+  </div>
+
+  <!-- List -->
+  <ul class="toc-list">
+    <template x-for="(m, i) in filteredMuseums" :key="m.id">
+      <li class="toc-item"
+          :class="selectedMuseumId === m.id ? 'selected' : ''"
+          @click="openMuseum(m.id)">
+        <span class="toc-item-num" x-text="(i+1).toString().padStart(2,'0')"></span>
+        <div>
+          <div class="toc-item-name" x-text="m.name"></div>
+          <div class="toc-item-meta" x-text="m.corePeriod || ''"></div>
+        </div>
       </li>
     </template>
-    <li x-show="filteredMuseums.length === 0" style="padding:20px;color:var(--ink-mute);text-align:center;font-size:13px;">
-      该朝代无推荐博物馆
+    <li x-show="filteredMuseums.length === 0" class="toc-empty">
+      No museums match this filter.
     </li>
   </ul>
 </aside>`

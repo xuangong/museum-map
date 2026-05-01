@@ -155,11 +155,11 @@ describe("GET /", () => {
     expect(html).toContain("fonts.googleapis.com/css2?family=Source+Serif+4")
   })
 
-  it("includes 宣纸 palette tokens (--bg: #F5F1E8)", async () => {
+  it("includes editorial palette tokens", async () => {
     const env = await makeEnv()
     const app = createApp(env)
     const html = await (await app.handle(new Request("http://localhost/"))).text()
-    expect(html).toContain("#F5F1E8")
-    expect(html).toContain("#C04A1A")
+    expect(html).toContain("#F4EFE3") // --paper
+    expect(html).toContain("#B73E18") // --vermilion
   })
 })
