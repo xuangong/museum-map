@@ -1,1 +1,7 @@
+node_modules/
+.tmp/
+.wrangler/
+.env.local
+*.log
+bun.lockb
 .DS_Store
