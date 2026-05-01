@@ -1,5 +1,5 @@
 export function Drawer(): string {
-  return `<aside class="drawer" :class="drawer.open ? 'open' : ''">
+  return `<aside class="drawer" :class="drawer.open ? 'open' : ''" @click="onDrawerClick($event)">
   <div style="padding:20px;border-bottom:1px solid var(--ink);display:flex;justify-content:space-between;align-items:flex-start;">
     <div>
       <h2 class="display" style="margin:0;font-size:24px;" x-text="drawer.title"></h2>
