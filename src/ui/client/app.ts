@@ -8,6 +8,7 @@ window.museumApp = function() {
     selectedMuseumId: null,
     drawer: { open: false, loading: false, error: false, title: '', subtitle: '', sections: [], _loadFn: null },
     chat: { open: false, messages: [], input: '', loading: false },
+    tocOpen: false,
 
     init() {
       var bs = document.getElementById('bootstrap-data');
@@ -72,6 +73,7 @@ window.museumApp = function() {
 
     selectDynasty(id) {
       this.currentDynastyId = id;
+      this.tocOpen = false;
       var d = this.currentDynasty();
       if (!d) return;
       this.refreshMarkers();
@@ -123,6 +125,7 @@ window.museumApp = function() {
 
     async openMuseum(id) {
       this.selectedMuseumId = id;
+      this.tocOpen = false;
       this.drawer = { open: true, loading: true, error: false, kind: 'museum', title: '', subtitle: '', sections: [], _loadFn: () => this.openMuseum(id) };
       var head = this.museums.find(function(x){ return x.id === id; });
       if (head) {

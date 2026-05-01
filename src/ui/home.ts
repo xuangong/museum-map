@@ -25,7 +25,7 @@ export function HomePage(data: HomeData): string {
     title: "中国博物馆地图 — Atlas of Chinese Museums",
     children: `
 <style>[x-cloak] { display: none !important; }</style>
-<div style="display:flex;flex-direction:column;height:100vh;">
+<div class="app-shell">
   <header class="masthead">
     <div class="left">
       <span class="eyebrow">Established · MMXXVI</span>
@@ -40,7 +40,10 @@ export function HomePage(data: HomeData): string {
   </header>
   ${DynastyTimeline()}
   <div class="stage" x-data="museumApp()" x-init="init()">
-    ${Sidebar()}
+    <div class="toc-overlay" :class="tocOpen ? 'open' : ''" @click="tocOpen = false" x-cloak></div>
+    <div class="toc-wrap" :class="tocOpen ? 'open' : ''">
+      ${Sidebar()}
+    </div>
     <div class="canvas">
       <div class="canvas-bg"></div>
       <div id="map"></div>
@@ -54,6 +57,10 @@ export function HomePage(data: HomeData): string {
         <div class="period" x-text="(currentDynasty() || {}).period || ''"></div>
       </div>
     </div>
+    <button class="toc-fab" @click="tocOpen = true" aria-label="Open index">
+      <span class="bars"><span></span><span></span><span></span></span>
+      <span class="lbl">目录</span>
+    </button>
     ${Drawer()}
     ${ChatPanel()}
   </div>
