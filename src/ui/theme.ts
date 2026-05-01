@@ -862,8 +862,8 @@ a { color: inherit; text-decoration: none; }
 
 /* Touch — disable hover-only effects */
 @media (hover: none) {
-  .timeline-item:hover { background: transparent; }
-  .toc-item:hover { background: transparent; }
+  .timeline-item:not(.active):hover { background: transparent; }
+  .toc-item:not(.selected):hover { background: transparent; }
   .rec-card:hover { padding-left: 0; }
   .rec-card:hover .name { border-bottom-color: transparent; color: var(--ink); }
   .chip:hover { border-color: var(--rule-soft); color: var(--ink-mid); background: transparent; }
