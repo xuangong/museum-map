@@ -4,6 +4,7 @@ import { museumsRoute } from "~/routes/museums"
 import { dynastiesRoute } from "~/routes/dynasties"
 import { chatRoute } from "~/routes/chat"
 import { cdnRoute } from "~/lib/cdn"
+import { homeRoute } from "~/routes/home"
 
 export interface Env {
   DB: D1Database
@@ -21,6 +22,7 @@ export function createApp(env: Env) {
     .decorate("env", env)
     .get("/health", () => ({ status: "ok" }))
     .use(cdnRoute)
+    .use(homeRoute)
     .use(museumsRoute)
     .use(dynastiesRoute)
     .use(chatRoute)

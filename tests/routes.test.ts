@@ -132,3 +132,34 @@ describe("POST /api/chat", () => {
     expect(res.status).toBe(400)
   })
 })
+
+describe("GET /", () => {
+  it("returns 200 with bootstrap-data containing 64 museums and 20 dynasties", async () => {
+    const env = await makeEnv()
+    const app = createApp(env)
+    const res = await app.handle(new Request("http://localhost/"))
+    expect(res.status).toBe(200)
+    const html = await res.text()
+    expect(html).toContain('id="bootstrap-data"')
+    const m = html.match(/<script id="bootstrap-data" type="application\/json">([\s\S]+?)<\/script>/)
+    expect(m).not.toBeNull()
+    const data = JSON.parse(m![1]!.replace(/\\u003c/g, "<").replace(/\\u003e/g, ">"))
+    expect(data.museums).toHaveLength(64)
+    expect(data.dynasties).toHaveLength(20)
+  })
+
+  it("includes Google Fonts link for Source Serif 4", async () => {
+    const env = await makeEnv()
+    const app = createApp(env)
+    const html = await (await app.handle(new Request("http://localhost/"))).text()
+    expect(html).toContain("fonts.googleapis.com/css2?family=Source+Serif+4")
+  })
+
+  it("includes 宣纸 palette tokens (--bg: #F5F1E8)", async () => {
+    const env = await makeEnv()
+    const app = createApp(env)
+    const html = await (await app.handle(new Request("http://localhost/"))).text()
+    expect(html).toContain("#F5F1E8")
+    expect(html).toContain("#C04A1A")
+  })
+})
