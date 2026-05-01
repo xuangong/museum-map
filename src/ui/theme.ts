@@ -175,6 +175,8 @@ a { color: inherit; text-decoration: none; }
   border-right: 0.5px solid var(--rule);
   overflow-y: auto;
   scrollbar-width: thin;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 .toc-head {
   padding: 28px var(--margin) 20px;
@@ -426,6 +428,7 @@ a { color: inherit; text-decoration: none; }
   scrollbar-width: thin;
 }
 .drawer.open { transform: translateX(0); }
+.drawer { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 
 .drawer-folio {
   padding: 16px var(--margin) 12px;
@@ -614,6 +617,8 @@ a { color: inherit; text-decoration: none; }
 }
 .chat-body {
   flex: 1; overflow-y: auto; padding: 24px var(--margin);
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 .chat-msg {
   display: grid; grid-template-columns: 80px 1fr;
