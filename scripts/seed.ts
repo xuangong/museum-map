@@ -114,7 +114,7 @@ async function main() {
   console.log(`[seed] loaded ${data.museums.length} museums, ${data.dynasties.length} dynasties`)
 
   await mkdir(".tmp", { recursive: true })
-  const sql = buildSql(data, TARGET === "remote")
+  const sql = buildSql(data, false)
   await Bun.write(SQL_OUT, sql)
   console.log(`[seed] wrote ${SQL_OUT} (${sql.length} bytes)`)
 
