@@ -621,15 +621,49 @@ a { color: inherit; text-decoration: none; }
   -webkit-overflow-scrolling: touch;
 }
 .chat-msg {
-  display: grid; grid-template-columns: 80px 1fr;
-  gap: 24px; margin-bottom: 22px;
+  display: block;
+  margin-bottom: 18px;
+  position: relative;
 }
-.chat-msg .who {
+/* Assistant — letter from a consultant, full width, paper-elev card */
+.chat-msg.assistant {
+  background: var(--paper);
+  border: 0.5px solid var(--rule-soft);
+  border-left: 2px solid var(--vermilion);
+  padding: 14px 18px 14px 20px;
+  margin-right: 36px;
+}
+.chat-msg.assistant .who {
   font-family: var(--sans); font-size: 10px;
   letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--ink-mute); padding-top: 4px; text-align: right;
+  color: var(--vermilion);
+  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
 }
-.chat-msg.user .who { color: var(--vermilion); }
+.chat-msg.assistant .who::before {
+  content: ''; width: 14px; height: 1px; background: var(--vermilion);
+}
+/* User — right-aligned, ink-on-warm card with hand-stamped feel */
+.chat-msg.user {
+  margin-left: 36px;
+  background: var(--paper-warm);
+  border: 0.5px solid var(--ink);
+  padding: 12px 16px;
+  position: relative;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.chat-msg.user .who {
+  font-family: var(--sans); font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 4px;
+  text-align: right;
+}
+/* Stronger gap between turns (user → assistant) */
+.chat-msg.user + .chat-msg.assistant,
+.chat-msg.assistant + .chat-msg.user {
+  margin-top: 24px;
+}
 .chat-msg .text {
   font-family: var(--display-cn); font-size: 15px;
   line-height: 1.75; color: var(--ink-soft);
@@ -638,6 +672,8 @@ a { color: inherit; text-decoration: none; }
   word-break: break-word;
   overflow-wrap: anywhere;
 }
+.chat-msg.user .text { color: var(--ink); font-size: 14.5px; line-height: 1.6; }
+.chat-msg.assistant .text { color: var(--ink-soft); }
 .chat-msg .text.md { white-space: normal; }
 .chat-msg .text p { margin: 0 0 10px; }
 .chat-msg .text p:last-child { margin-bottom: 0; }
@@ -675,7 +711,10 @@ a { color: inherit; text-decoration: none; }
 .chat-loading {
   font-family: var(--display); font-style: italic;
   color: var(--ink-mute); font-size: 13px;
-  padding-left: 104px;
+  padding: 12px 18px;
+  background: var(--paper);
+  border-left: 2px solid var(--vermilion);
+  margin-right: 36px;
 }
 .chat-chips {
   padding: 12px var(--margin); border-top: 0.5px solid var(--rule-soft);
@@ -875,10 +914,14 @@ a { color: inherit; text-decoration: none; }
   .chat-head .title { font-size: 18px; }
   .chat-head .subtitle { display: none; }
   .chat-body { padding: 18px var(--margin); }
-  .chat-msg { grid-template-columns: 48px 1fr; gap: 12px; margin-bottom: 16px; }
+  .chat-msg { margin-bottom: 14px; }
+  .chat-msg.assistant { margin-right: 20px; padding: 12px 14px 12px 16px; }
+  .chat-msg.user { margin-left: 20px; padding: 10px 14px; }
+  .chat-msg.user + .chat-msg.assistant,
+  .chat-msg.assistant + .chat-msg.user { margin-top: 18px; }
   .chat-msg .who { font-size: 9px; letter-spacing: 0.18em; }
   .chat-msg .text { font-size: 14.5px; }
-  .chat-loading { padding-left: 60px; }
+  .chat-loading { padding: 10px 14px; margin-right: 20px; }
   .chat-chips { padding: 10px var(--margin); gap: 6px; overflow-x: auto; flex-wrap: nowrap; }
   .chip { white-space: nowrap; flex-shrink: 0; }
   .chat-input-row { padding: 12px var(--margin) 14px; gap: 10px; }

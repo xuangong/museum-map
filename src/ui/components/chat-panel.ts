@@ -21,7 +21,7 @@ export function ChatPanel(): string {
     </div>
     <template x-for="(msg, i) in chat.messages" :key="i">
       <div class="chat-msg" :class="msg.role">
-        <div class="who" x-text="msg.role === 'user' ? '你' : '顾问'"></div>
+        <div class="who" x-text="msg.role === 'user' ? 'You · 你' : 'Consultant · 顾问'"></div>
         <div class="text" x-show="msg.role === 'user'" x-text="msg.content"></div>
         <div class="text md" x-show="msg.role !== 'user'" x-html="window.MuseumChat.renderMarkdown(msg.content)"></div>
       </div>
