@@ -164,7 +164,7 @@ a { color: inherit; text-decoration: none; }
 .stage {
   display: grid;
   grid-template-columns: minmax(320px, 360px) 1fr;
-  height: 100%;
+  flex: 1; min-height: 0;
   overflow: hidden;
 }
 
@@ -692,11 +692,178 @@ a { color: inherit; text-decoration: none; }
 }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
+/* App shell — fills viewport, accounts for iOS safe areas */
+.app-shell {
+  display: flex; flex-direction: column;
+  height: 100vh; height: 100dvh;
+  padding-top: env(safe-area-inset-top);
+}
+.toc-wrap { display: contents; }
+.toc-overlay { display: none; }
+.toc-fab { display: none; }
+
 /* Responsive — narrow */
 @media (max-width: 920px) {
-  :root { --margin: 24px; }
-  .stage { grid-template-columns: 1fr; }
-  .toc { display: none; }
-  .toc-head .dynasty-name { font-size: 40px; }
+  :root { --margin: 20px; --gutter: 16px; }
+
+  /* Masthead — compact, stacked */
+  .masthead {
+    grid-template-columns: 1fr;
+    gap: 4px;
+    padding: 10px var(--margin) 8px;
+    text-align: center;
+  }
+  .masthead .left, .masthead .right { display: none; }
+  .masthead .center { text-align: center; }
+  .masthead .title { font-size: 20px; letter-spacing: 0.06em; }
+  .masthead .subtitle { font-size: 11px; margin-top: 2px; }
+
+  /* Timeline — slimmer rows, momentum scroll */
+  .timeline { padding: 0 var(--margin); -webkit-overflow-scrolling: touch; }
+  .timeline-item { padding: 10px 14px 9px; }
+  .timeline-item .name { font-size: 15px; }
+  .timeline-item .period { font-size: 10px; }
+  .timeline-item.all .name { font-size: 11px; }
+
+  /* Stage = single column (map full-width); TOC becomes a slide-in sheet */
+  .stage { grid-template-columns: 1fr; position: relative; }
+  .toc-wrap {
+    display: block;
+    position: fixed; left: 0; top: 0; bottom: 0;
+    width: min(360px, 88vw);
+    z-index: 1700;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+    box-shadow: 8px 0 24px -8px rgba(20,17,14,0.25);
+  }
+  .toc-wrap.open { transform: translateX(0); }
+  .toc-wrap .toc {
+    display: block;
+    height: 100%;
+    border-right: 1.5px solid var(--ink);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .toc-overlay {
+    display: block; position: fixed; inset: 0;
+    background: rgba(20,17,14,0.45);
+    backdrop-filter: blur(2px);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease; z-index: 1650;
+  }
+  .toc-overlay.open { opacity: 1; pointer-events: auto; }
+
+  .toc-head { padding: 22px var(--margin) 16px; }
+  .toc-head .dynasty-name { font-size: 36px; }
+  .toc-head .dynasty-overview { font-size: 13.5px; }
+  .toc-head .dynasty-overview::first-letter { font-size: 34px; }
+  .toc-head .stats { gap: 18px; margin-top: 16px; padding-top: 12px; }
+  .toc-head .stat .num { font-size: 22px; }
+
+  /* TOC FAB — bottom-left */
+  .toc-fab {
+    display: inline-flex; align-items: center; gap: 8px;
+    position: fixed; left: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    background: var(--paper-elev); color: var(--ink);
+    border: 1.5px solid var(--ink);
+    box-shadow: 3px 3px 0 var(--ink);
+    padding: 10px 14px;
+    font-family: var(--display-cn); font-weight: 600; font-size: 13px;
+    cursor: pointer; z-index: 1400;
+  }
+  .toc-fab .bars { display: inline-flex; flex-direction: column; gap: 3px; }
+  .toc-fab .bars span { width: 14px; height: 1.5px; background: var(--ink); display: block; }
+  .toc-fab .lbl { letter-spacing: 0.08em; }
+
+  /* Map overlays — compact, repositioned */
+  .map-legend { top: 12px; right: 12px; padding: 8px 10px; font-size: 10px; }
+  .map-legend .row { padding: 2px 0; }
+  .map-caption {
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    left: 50%; transform: translate(-50%, 8px);
+    max-width: calc(100vw - 32px);
+    padding: 12px 18px;
+  }
+  .map-caption.show { transform: translate(-50%, 0); }
+  .map-caption .name { font-size: 20px; }
+
+  /* Drawer — full width with handle, slides up */
+  .drawer {
+    width: 100vw;
+    top: auto; left: 0; right: 0; bottom: 0;
+    height: 88dvh;
+    border-left: none;
+    border-top: 1.5px solid var(--ink);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    transform: translateY(100%);
+    box-shadow: 0 -8px 24px -8px rgba(20,17,14,0.25);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .drawer.open { transform: translateY(0); }
+  .drawer::before {
+    content: ''; display: block;
+    width: 36px; height: 4px;
+    background: var(--ink-faint); border-radius: 2px;
+    margin: 8px auto 0;
+  }
+  .drawer-folio { padding: 12px var(--margin) 10px; }
+  .drawer-hero { padding: 22px var(--margin) 18px; }
+  .drawer-hero .title { font-size: 30px; }
+  .drawer-hero .subtitle { font-size: 14px; }
+  .drawer-section { padding: 18px var(--margin); }
+  .drawer-section .body { font-size: 14.5px; }
+
+  .event-row { grid-template-columns: 70px 1fr; gap: 12px; }
+  .event-row .date { font-size: 12px; }
+  .rec-card { grid-template-columns: 22px 1fr; gap: 10px; padding: 14px 0; }
+  .rec-card:hover { padding-left: 0; } /* disable hover-indent on touch */
+
+  /* Chat — full width, taller */
+  .chat-panel {
+    height: min(85dvh, 720px);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .chat-head { padding: 14px var(--margin) 12px; }
+  .chat-head .title { font-size: 18px; }
+  .chat-head .subtitle { display: none; }
+  .chat-body { padding: 18px var(--margin); }
+  .chat-msg { grid-template-columns: 48px 1fr; gap: 12px; margin-bottom: 16px; }
+  .chat-msg .who { font-size: 9px; letter-spacing: 0.18em; }
+  .chat-msg .text { font-size: 14.5px; }
+  .chat-loading { padding-left: 60px; }
+  .chat-chips { padding: 10px var(--margin); gap: 6px; overflow-x: auto; flex-wrap: nowrap; }
+  .chip { white-space: nowrap; flex-shrink: 0; }
+  .chat-input-row { padding: 12px var(--margin) 14px; gap: 10px; }
+  .chat-input { font-size: 16px; } /* prevent iOS zoom */
+  .chat-send { padding: 10px 16px; font-size: 11px; letter-spacing: 0.14em; }
+
+  /* FAB — bottom-right with safe-area */
+  .chat-fab {
+    bottom: calc(20px + env(safe-area-inset-bottom));
+    right: 16px;
+    padding: 12px 18px; font-size: 11px;
+  }
+
+  /* Search input — prevent iOS zoom */
+  .toc-search input { font-size: 16px; }
+}
+
+/* Very narrow phones */
+@media (max-width: 380px) {
+  :root { --margin: 14px; }
+  .masthead .title { font-size: 18px; }
+  .toc-head .dynasty-name { font-size: 30px; }
+  .drawer-hero .title { font-size: 26px; }
+}
+
+/* Touch — disable hover-only effects */
+@media (hover: none) {
+  .timeline-item:hover { background: transparent; }
+  .toc-item:hover { background: transparent; }
+  .rec-card:hover { padding-left: 0; }
+  .rec-card:hover .name { border-bottom-color: transparent; color: var(--ink); }
+  .chip:hover { border-color: var(--rule-soft); color: var(--ink-mid); background: transparent; }
 }
 `
