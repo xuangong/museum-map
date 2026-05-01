@@ -1,0 +1,24 @@
+name = "museum-map"
+main = "src/index.ts"
+compatibility_date = "2025-06-01"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "museum-map-db"
+database_id = "764ebd41-0f3b-442b-934f-a537f63b9fc6"
+migrations_dir = "migrations"
+
+[[kv_namespaces]]
+binding = "RATE"
+id = "b7144b616ae44e09bb0d376df7db0a4e"
+
+[vars]
+RATE_PER_MIN = "10"
+RATE_PER_DAY = "100"
+GLOBAL_PER_DAY = "5000"
+
+[dev]
+port = 4242
+local_protocol = "http"
