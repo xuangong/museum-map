@@ -166,6 +166,7 @@ a { color: inherit; text-decoration: none; }
   grid-template-columns: minmax(320px, 360px) 1fr;
   flex: 1; min-height: 0;
   overflow: hidden;
+  position: relative;
 }
 
 /* ─── Sidebar = TOC ─── */
@@ -413,8 +414,8 @@ a { color: inherit; text-decoration: none; }
 
 /* ─── Drawer = magazine spread ─── */
 .drawer {
-  position: fixed; right: 0; top: 0; bottom: 0;
-  width: min(560px, 92vw);
+  position: absolute; right: 0; top: 0; bottom: 0;
+  width: min(560px, 92%);
   background: var(--paper-elev);
   border-left: 1.5px solid var(--ink);
   box-shadow: -8px 0 24px -8px rgba(20,17,14,0.18);
@@ -790,6 +791,7 @@ a { color: inherit; text-decoration: none; }
 
   /* Drawer — full width with handle, slides up */
   .drawer {
+    position: fixed;
     width: 100vw;
     top: auto; left: 0; right: 0; bottom: 0;
     height: 88dvh;
