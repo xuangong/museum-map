@@ -7,6 +7,31 @@ export interface MuseumArtifact {
   imageAttribution?: string
 }
 
+/**
+ * Coerce a possibly-non-array field into an array.
+ * The import LLM occasionally emits list fields as JSON-encoded strings.
+ */
+function asArr<T = any>(v: unknown): T[] {
+  if (Array.isArray(v)) return v as T[]
+  if (typeof v === "string") {
+    const tryParse = (s: string): T[] | null => {
+      try {
+        const p = JSON.parse(s)
+        return Array.isArray(p) ? (p as T[]) : null
+      } catch {
+        return null
+      }
+    }
+    const direct = tryParse(v)
+    if (direct) return direct
+    const repaired = v.replace(/(?<=[\u4e00-\u9fff])"(?=[\u4e00-\u9fff])/g, "\u201d")
+    const r = tryParse(repaired)
+    if (r) return r
+    return []
+  }
+  return []
+}
+
 export interface MuseumDynastyConnection {
   dynasty: string
   description?: string
@@ -237,19 +262,19 @@ export function flattenProvenance(
     push(String(k), url)
   }
 
-  ;(payload.treasures ?? []).forEach((_, i) => {
+  ;(asArr(payload.treasures)).forEach((_, i) => {
     push(`treasures[${i}]`, prov.treasures?.[i])
   })
-  ;(payload.halls ?? []).forEach((_, i) => {
+  ;(asArr(payload.halls)).forEach((_, i) => {
     push(`halls[${i}]`, prov.halls?.[i])
   })
-  ;(payload.artifacts ?? []).forEach((a, i) => {
+  ;(asArr(payload.artifacts)).forEach((a, i) => {
     const url = prov.artifacts?.[i]
     push(`artifacts[${i}].name`, url)
     if (a.period) push(`artifacts[${i}].period`, url)
     if (a.description) push(`artifacts[${i}].description`, url)
   })
-  ;(payload.dynastyConnections ?? []).forEach((c, i) => {
+  ;(asArr(payload.dynastyConnections)).forEach((c, i) => {
     const url = prov.dynastyConnections?.[i]
     push(`dynastyConnections[${i}].dynasty`, url)
     if (c.description) push(`dynastyConnections[${i}].description`, url)

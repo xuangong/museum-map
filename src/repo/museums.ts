@@ -1,6 +1,35 @@
 import type { MuseumFull, MuseumListItem } from "./types"
 import type { MuseumPayload } from "~/services/import-schema"
 
+/**
+ * Coerce a possibly-non-array field into an array.
+ * The import LLM occasionally emits list fields as JSON-encoded strings
+ * instead of arrays; this normalises them safely.
+ */
+function asArr<T = any>(v: unknown): T[] {
+  if (Array.isArray(v)) return v as T[]
+  if (typeof v === "string") {
+    const tryParse = (s: string): T[] | null => {
+      try {
+        const p = JSON.parse(s)
+        return Array.isArray(p) ? (p as T[]) : null
+      } catch {
+        return null
+      }
+    }
+    const direct = tryParse(v)
+    if (direct) return direct
+    // Repair: LLM sometimes emits JSON-encoded array with unescaped " around
+    // Chinese inner quotes (e.g. "..."青铜史书"之称"...). Convert any " flanked
+    // by CJK chars into the curly variant " so JSON.parse succeeds.
+    const repaired = v.replace(/(?<=[\u4e00-\u9fff])"(?=[\u4e00-\u9fff])/g, "\u201d")
+    const r = tryParse(repaired)
+    if (r) return r
+    return []
+  }
+  return []
+}
+
 export class MuseumsRepo {
   constructor(private db: D1Database) {}
 
@@ -71,13 +100,13 @@ export class MuseumsRepo {
         )
         .bind(id, p.name, p.lat, p.lng, p.location ?? null, p.level ?? null, p.corePeriod ?? null, p.specialty ?? null, p.dynastyCoverage ?? null, p.timeline ?? null),
     )
-    ;(p.treasures ?? []).forEach((name, i) => {
+    ;(asArr(p.treasures)).forEach((name, i) => {
       stmts.push(this.db.prepare("INSERT INTO museum_treasures (museum_id, order_index, name) VALUES (?, ?, ?)").bind(id, i, name))
     })
-    ;(p.halls ?? []).forEach((name, i) => {
+    ;(asArr(p.halls)).forEach((name, i) => {
       stmts.push(this.db.prepare("INSERT INTO museum_halls (museum_id, order_index, name) VALUES (?, ?, ?)").bind(id, i, name))
     })
-    ;(p.artifacts ?? []).forEach((a, i) => {
+    ;(asArr(p.artifacts)).forEach((a, i) => {
       stmts.push(
         this.db
           .prepare(
@@ -95,14 +124,14 @@ export class MuseumsRepo {
           ),
       )
     })
-    ;(p.dynastyConnections ?? []).forEach((c, i) => {
+    ;(asArr(p.dynastyConnections)).forEach((c, i) => {
       stmts.push(
         this.db
           .prepare("INSERT INTO museum_dynasty_connections (museum_id, order_index, dynasty, description) VALUES (?, ?, ?, ?)")
           .bind(id, i, c.dynasty, c.description ?? null),
       )
     })
-    ;(p.sources ?? []).forEach((src, i) => {
+    ;(asArr(p.sources)).forEach((src, i) => {
       stmts.push(this.db.prepare("INSERT INTO museum_sources (museum_id, order_index, source) VALUES (?, ?, ?)").bind(id, i, src))
     })
     return stmts
