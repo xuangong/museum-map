@@ -3,8 +3,9 @@ import type { Env } from "~/index"
 import { runImportAgent, type ImportEvent } from "~/services/import"
 import { MuseumsPendingRepo } from "~/repo/museums-pending"
 import { MuseumsRepo } from "~/repo/museums"
-import { scorePayload, generateAiComment } from "~/services/review"
-import type { MuseumPayload, Provenance } from "~/services/import-schema"
+import { FieldProvenanceRepo } from "~/repo/field-provenance"
+import { scorePayload, generateAiComment, classifySource } from "~/services/review"
+import { flattenProvenance, type MuseumPayload, type Provenance } from "~/services/import-schema"
 
 interface RouteContext {
   env: Env
@@ -153,7 +154,23 @@ export const importRoute = new Elysia()
     }
     const payload = JSON.parse(row.payload) as MuseumPayload
     const museums = new MuseumsRepo(env.DB)
-    await museums.upsert(params.id, payload)
+    const provRepo = new FieldProvenanceRepo(env.DB)
+
+    let provenance: Provenance | null = null
+    if (row.provenance) {
+      try {
+        provenance = JSON.parse(row.provenance) as Provenance
+      } catch {
+        provenance = null
+      }
+    }
+
+    const stmts = museums.buildUpsertStatements(params.id, payload)
+    if (provenance) {
+      const flat = flattenProvenance(payload, provenance, classifySource)
+      stmts.push(...provRepo.buildReplaceStatements(params.id, flat))
+    }
+    await env.DB.batch(stmts)
     await repo.updateStatus(params.id, "approved", typeof body?.notes === "string" ? body.notes : undefined)
     return { ok: true, id: params.id, status: "approved", published: true }
   })

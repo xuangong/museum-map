@@ -185,6 +185,73 @@ export function mergeFragmentWithProvenance(
   return { payload: out, provenance: prov }
 }
 
+export interface FlatProvenanceRow {
+  field_path: string
+  source_url: string | null
+  authority: string | null
+  recorded_at: number
+}
+
+/** Walk a payload + Provenance map and emit one flat row per scalar leaf.
+ * Sources array is intentionally skipped (recording provenance for source URLs is meta-circular).
+ * `now` and `classify` are injected to keep this module pure / testable. */
+export function flattenProvenance(
+  payload: Partial<MuseumPayload>,
+  prov: Provenance,
+  classify: (url: string) => string,
+  now: () => number = Date.now,
+): FlatProvenanceRow[] {
+  const out: FlatProvenanceRow[] = []
+  const ts = now()
+  const push = (path: string, url?: string | null) => {
+    const u = url && url.trim() ? url : null
+    out.push({
+      field_path: path,
+      source_url: u,
+      authority: u ? classify(u) : null,
+      recorded_at: ts,
+    })
+  }
+
+  const scalarKeys: (keyof Provenance)[] = [
+    "name",
+    "lat",
+    "lng",
+    "location",
+    "level",
+    "corePeriod",
+    "specialty",
+    "dynastyCoverage",
+    "timeline",
+  ]
+  for (const k of scalarKeys) {
+    const v = (payload as any)[k]
+    if (v === undefined || v === null || v === "") continue
+    const url = (prov as any)[k] as string | undefined
+    push(String(k), url)
+  }
+
+  ;(payload.treasures ?? []).forEach((_, i) => {
+    push(`treasures[${i}]`, prov.treasures?.[i])
+  })
+  ;(payload.halls ?? []).forEach((_, i) => {
+    push(`halls[${i}]`, prov.halls?.[i])
+  })
+  ;(payload.artifacts ?? []).forEach((a, i) => {
+    const url = prov.artifacts?.[i]
+    push(`artifacts[${i}].name`, url)
+    if (a.period) push(`artifacts[${i}].period`, url)
+    if (a.description) push(`artifacts[${i}].description`, url)
+  })
+  ;(payload.dynastyConnections ?? []).forEach((c, i) => {
+    const url = prov.dynastyConnections?.[i]
+    push(`dynastyConnections[${i}].dynasty`, url)
+    if (c.description) push(`dynastyConnections[${i}].description`, url)
+  })
+
+  return out
+}
+
 function mergeArrayWithProv<T>(
   accVals: T[],
   accUrls: string[],

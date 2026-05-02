@@ -48,8 +48,9 @@ export class MuseumsRepo {
     }
   }
 
-  /** Publish a payload to the live museums tables. Replaces existing rows for the same id. */
-  async upsert(id: string, p: MuseumPayload): Promise<void> {
+  /** Build the prepared statements that wipe + re-insert a museum and its child rows.
+   * Exposed so callers can include them in a wider db.batch (e.g. atomic with provenance). */
+  buildUpsertStatements(id: string, p: MuseumPayload): D1PreparedStatement[] {
     const stmts: D1PreparedStatement[] = []
     // Wipe child rows (if museum already exists) — FK CASCADE handles them via delete, but we
     // need an upsert path that keeps the id stable. Easier: delete + insert.
@@ -84,6 +85,11 @@ export class MuseumsRepo {
     ;(p.sources ?? []).forEach((src, i) => {
       stmts.push(this.db.prepare("INSERT INTO museum_sources (museum_id, order_index, source) VALUES (?, ?, ?)").bind(id, i, src))
     })
-    await this.db.batch(stmts)
+    return stmts
+  }
+
+  /** Publish a payload to the live museums tables. Replaces existing rows for the same id. */
+  async upsert(id: string, p: MuseumPayload): Promise<void> {
+    await this.db.batch(this.buildUpsertStatements(id, p))
   }
 }

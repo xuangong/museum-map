@@ -150,6 +150,50 @@ window.MuseumChat = {
       lines.push('');
       lines.push('⚠️ **弱信源字段**：' + r.weakSourcedFields.join('、') + '（建议人工复核）');
     }
+    // Field-by-field provenance breakdown (weak/other authorities first).
+    var provEntries = [];
+    function classify(u){
+      if (!u) return null;
+      var v = String(u).toLowerCase();
+      if (v.indexOf('.gov.') >= 0) return 'government';
+      if (v.indexOf('museumschina.cn') >= 0 || v.indexOf('ncha.gov.cn') >= 0) return 'association';
+      if (v.indexOf('baike.baidu.com') >= 0 || v.indexOf('wikipedia.org') >= 0 || v.indexOf('wikimedia.') >= 0) return 'encyclopedia';
+      if (/\\.org(\\.cn)?\\b/.test(v) || v.indexOf('museum') >= 0) return 'official';
+      return 'other';
+    }
+    function pushProv(path, url){ provEntries.push({ path: path, url: url || null, auth: classify(url) }); }
+    ['name','lat','lng','location','level','corePeriod','specialty','dynastyCoverage','timeline'].forEach(function(k){
+      if (p[k] != null && p[k] !== '') pushProv(k, prov[k]);
+    });
+    (p.treasures || []).forEach(function(_, i){ pushProv('treasures[' + i + ']', (prov.treasures || [])[i]); });
+    (p.halls || []).forEach(function(_, i){ pushProv('halls[' + i + ']', (prov.halls || [])[i]); });
+    (p.artifacts || []).forEach(function(a, i){
+      var u = (prov.artifacts || [])[i];
+      pushProv('artifacts[' + i + '].name', u);
+      if (a.period) pushProv('artifacts[' + i + '].period', u);
+      if (a.description) pushProv('artifacts[' + i + '].description', u);
+    });
+    (p.dynastyConnections || []).forEach(function(c, i){
+      var u = (prov.dynastyConnections || [])[i];
+      pushProv('dynastyConnections[' + i + '].dynasty', u);
+      if (c.description) pushProv('dynastyConnections[' + i + '].description', u);
+    });
+    if (provEntries.length) {
+      var rank = { other: 0, encyclopedia: 1, association: 2, official: 3, government: 4 };
+      provEntries.sort(function(a, b){
+        var ra = a.auth == null ? 5 : (rank[a.auth] != null ? rank[a.auth] : 5);
+        var rb = b.auth == null ? 5 : (rank[b.auth] != null ? rank[b.auth] : 5);
+        if (ra !== rb) return ra - rb;
+        return a.path < b.path ? -1 : a.path > b.path ? 1 : 0;
+      });
+      lines.push('');
+      lines.push('**详细信源 / Field-by-field provenance (' + provEntries.length + ')**');
+      provEntries.forEach(function(e){
+        var tag = e.auth ? '\`' + e.auth + '\`' : '\`—\`';
+        var src = e.url ? '[' + host(e.url) + '](' + e.url + ')' : '_no source_';
+        lines.push('- ' + tag + ' ' + e.path + ' · ' + src);
+      });
+    }
     lines.push('');
     lines.push('---');
     lines.push('**操作**：\`/approve ' + d.id + '\` · \`/reject ' + d.id + '\` · \`/delete ' + d.id + '\`');
