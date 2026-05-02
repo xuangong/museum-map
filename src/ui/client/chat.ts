@@ -4,7 +4,7 @@ window.MuseumChat = {
     var res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ messages: messages, system: '你是中国历史顾问，回答简短、引用具体朝代或博物馆。' }),
+      body: JSON.stringify({ messages: messages, system: '你是中国历史顾问，回答简短、引用具体朝代或博物馆。**禁止使用 Markdown 表格**（| --- |），统一用项目列表 (- ) 呈现，避免分享时渲染异常。' }),
     });
     if (!res.ok) {
       var err = await res.json().catch(function(){return {};});
@@ -15,6 +15,96 @@ window.MuseumChat = {
       return data.content[0].text;
     }
     return JSON.stringify(data);
+  },
+
+  sendStream: async function(messages, onDelta) {
+    var res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ messages: messages, system: '你是中国历史顾问，回答简短、引用具体朝代或博物馆。**禁止使用 Markdown 表格**（| --- |），统一用项目列表 (- ) 呈现，避免分享时渲染异常。', stream: true }),
+    });
+    if (!res.ok) {
+      var err = await res.json().catch(function(){return {};});
+      var e = new Error(err.error || ('http ' + res.status));
+      e.status = res.status;
+      throw e;
+    }
+    var ct = res.headers.get('content-type') || '';
+    if (ct.indexOf('text/event-stream') < 0) {
+      // Fallback: server didn't honor stream — read JSON
+      var data = await res.json();
+      var text = (data && data.content && data.content[0] && data.content[0].text) || '';
+      if (text) onDelta(text);
+      return text;
+    }
+    var reader = res.body.getReader();
+    var decoder = new TextDecoder();
+    var buf = '';
+    var full = '';
+    var done = false;
+    while (!done) {
+      var chunk;
+      try {
+        chunk = await reader.read();
+      } catch (readErr) {
+        throw new Error('stream read error: ' + (readErr && readErr.message || readErr));
+      }
+      if (chunk.done) break;
+      buf += decoder.decode(chunk.value, { stream: true });
+      // Normalize CRLF → LF so frame split is consistent (some intermediaries inject \\r).
+      buf = buf.replace(/\\r\\n/g, '\\n');
+      var idx;
+      while ((idx = buf.indexOf('\\n\\n')) >= 0) {
+        var frame = buf.slice(0, idx);
+        buf = buf.slice(idx + 2);
+        if (!frame) continue;
+        var dataLines = [];
+        var eventName = '';
+        var lines = frame.split('\\n');
+        for (var i = 0; i < lines.length; i++) {
+          var ln = lines[i];
+          if (ln.indexOf(':') === 0) continue; // SSE comment line (heartbeat)
+          if (ln.indexOf('event:') === 0) {
+            eventName = ln.slice(6).trim();
+          } else if (ln.indexOf('data:') === 0) {
+            dataLines.push(ln.slice(5).replace(/^ /, ''));
+          }
+        }
+        var dataLine = dataLines.join('\\n');
+        if (!dataLine) continue;
+        if (dataLine === '[DONE]') { done = true; break; }
+        var ev;
+        try { ev = JSON.parse(dataLine); } catch(_) { continue; }
+        var t = ev.type || eventName;
+        if (t === 'content_block_delta' && ev.delta && typeof ev.delta.text === 'string') {
+          full += ev.delta.text;
+          onDelta(ev.delta.text);
+        } else if (t === 'message_stop') {
+          done = true; break;
+        } else if (t === 'error') {
+          var emsg = (ev.error && ev.error.message) || 'upstream stream error';
+          throw new Error(emsg);
+        }
+      }
+    }
+    // Flush any final buffered frame
+    if (buf.trim()) {
+      var tail = buf.split('\\n');
+      for (var k = 0; k < tail.length; k++) {
+        var l = tail[k];
+        if (l.indexOf('data:') !== 0) continue;
+        var d = l.slice(5).replace(/^ /, '');
+        if (!d || d === '[DONE]') continue;
+        try {
+          var ev2 = JSON.parse(d);
+          if (ev2.type === 'content_block_delta' && ev2.delta && typeof ev2.delta.text === 'string') {
+            full += ev2.delta.text;
+            onDelta(ev2.delta.text);
+          }
+        } catch(_) {}
+      }
+    }
+    return full;
   },
 
   runImport: async function(query, token, onLine) {
@@ -224,6 +314,8 @@ window.MuseumChat = {
     s = s.replace(/^###\\s+(.+)$/gm, '<h3>$1</h3>');
     s = s.replace(/^##\\s+(.+)$/gm, '<h2>$1</h2>');
     s = s.replace(/^#\\s+(.+)$/gm, '<h1>$1</h1>');
+    // Horizontal rule
+    s = s.replace(/^\\s*---+\\s*$/gm, '<hr>');
     // Blockquote
     s = s.replace(/^&gt;\\s?(.+)$/gm, '<blockquote>$1</blockquote>');
     // Bold + italic
@@ -237,6 +329,22 @@ window.MuseumChat = {
     var i = 0;
     while (i < lines.length) {
       var line = lines[i];
+      // GFM-style table: header | cells, separator |---|, then rows.
+      if (/^\\s*\\|.+\\|\\s*$/.test(line)
+          && i + 1 < lines.length
+          && /^\\s*\\|?\\s*:?-{2,}:?\\s*(\\|\\s*:?-{2,}:?\\s*)+\\|?\\s*$/.test(lines[i+1])) {
+        var headerCells = line.replace(/^\\s*\\|/, '').replace(/\\|\\s*$/, '').split('|').map(function(c){ return c.trim(); });
+        i += 2;
+        var rows = [];
+        while (i < lines.length && /^\\s*\\|.+\\|\\s*$/.test(lines[i])) {
+          rows.push(lines[i].replace(/^\\s*\\|/, '').replace(/\\|\\s*$/, '').split('|').map(function(c){ return c.trim(); }));
+          i++;
+        }
+        var th = '<thead><tr>' + headerCells.map(function(c){ return '<th>' + c + '</th>'; }).join('') + '</tr></thead>';
+        var tb = '<tbody>' + rows.map(function(r){ return '<tr>' + r.map(function(c){ return '<td>' + c + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody>';
+        out.push('<table>' + th + tb + '</table>');
+        continue;
+      }
       if (/^\\s*(?:[-*])\\s+/.test(line)) {
         var ul = ['<ul>'];
         while (i < lines.length && /^\\s*(?:[-*])\\s+/.test(lines[i])) {
@@ -264,7 +372,7 @@ window.MuseumChat = {
     s = blocks.map(function(b) {
       var t = b.trim();
       if (!t) return '';
-      if (/^<(?:h[1-6]|ul|ol|pre|blockquote)/.test(t)) return t;
+      if (/^<(?:h[1-6]|ul|ol|pre|blockquote|hr)/.test(t)) return t;
       return '<p>' + t.replace(/\\n/g, '<br>') + '</p>';
     }).join('');
     return s;

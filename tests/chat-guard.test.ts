@@ -7,14 +7,19 @@ describe("sanitizeChatRequest", () => {
     expect(out.model).toBe("claude-haiku-4.5")
   })
 
-  it("forces max_tokens to 1024", () => {
+  it("forces max_tokens to 2048", () => {
     const out = sanitizeChatRequest({ max_tokens: 99999, messages: [{ role: "user", content: "hi" }] })
-    expect(out.max_tokens).toBe(1024)
+    expect(out.max_tokens).toBe(2048)
   })
 
-  it("forces stream to false", () => {
-    const out = sanitizeChatRequest({ stream: true, messages: [{ role: "user", content: "hi" }] })
+  it("defaults stream to false when not provided", () => {
+    const out = sanitizeChatRequest({ messages: [{ role: "user", content: "hi" }] })
     expect(out.stream).toBe(false)
+  })
+
+  it("honors stream:true when explicitly requested", () => {
+    const out = sanitizeChatRequest({ stream: true, messages: [{ role: "user", content: "hi" }] })
+    expect(out.stream).toBe(true)
   })
 
   it("strips non-whitelisted fields (tools, metadata, top_p, etc.)", () => {

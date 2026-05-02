@@ -5,6 +5,7 @@ const CDN_MAP: Record<string, string> = {
   "alpine.js": "https://unpkg.com/alpinejs@3/dist/cdn.min.js",
   "leaflet.js": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
   "leaflet.css": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
+  "html2canvas.js": "https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js",
 }
 
 export const cdnRoute = new Elysia().get("/cdn/:file", async ({ params }) => {

@@ -36,6 +36,11 @@ export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
       gatewayUrl: env.COPILOT_GATEWAY_URL,
       gatewayKey: env.COPILOT_GATEWAY_KEY,
     })
+    // Stream responses (SSE) must be returned as Response so Elysia doesn't buffer/JSON-parse.
+    const ct = upstream.headers.get("content-type") || ""
+    if (ct.startsWith("text/event-stream")) {
+      return upstream
+    }
     set.status = upstream.status
     return await upstream.json()
   } catch (e) {

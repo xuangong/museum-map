@@ -4,6 +4,7 @@ import { museumsRoute } from "~/routes/museums"
 import { dynastiesRoute } from "~/routes/dynasties"
 import { chatRoute } from "~/routes/chat"
 import { importRoute } from "~/routes/import"
+import { visitsRoute } from "~/routes/visits"
 import { cdnRoute } from "~/lib/cdn"
 import { homeRoute } from "~/routes/home"
 
@@ -30,6 +31,7 @@ export function createApp(env: Env) {
     .use(dynastiesRoute)
     .use(chatRoute)
     .use(importRoute)
+    .use(visitsRoute)
 }
 
 export default {

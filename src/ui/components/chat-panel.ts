@@ -7,13 +7,23 @@ export const QUICK_QUESTIONS = [
 
 export function ChatPanel(): string {
   return `<div class="chat-overlay" :class="chat.open ? 'open' : ''" @click="chat.open = false"></div>
-<div class="chat-panel" :class="chat.open ? 'open' : ''">
+<div class="chat-panel" :class="(chat.open ? 'open ' : '') + (chat.fullscreen ? 'fullscreen' : '')">
   <div class="chat-head">
     <div>
       <span class="title">历史顾问</span>
       <span class="subtitle">A historian, on call.</span>
     </div>
-    <button @click="chat.open = false" style="border:none;background:transparent;font-family:var(--display);font-size:24px;line-height:1;cursor:pointer;color:var(--ink);">×</button>
+    <div style="display:flex;gap:6px;align-items:center;">
+      <button @click="chat.fullscreen = !chat.fullscreen" :title="chat.fullscreen ? '退出全屏' : '全屏阅读'" style="border:none;background:transparent;line-height:1;cursor:pointer;color:var(--ink);padding:4px 8px;display:inline-flex;align-items:center;justify-content:center;">
+        <svg x-show="!chat.fullscreen" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/>
+        </svg>
+        <svg x-show="chat.fullscreen" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2v4H2M10 2v4h4M6 14v-4H2M10 14v-4h4"/>
+        </svg>
+      </button>
+      <button @click="chat.open = false" style="border:none;background:transparent;font-family:var(--display);font-size:24px;line-height:1;cursor:pointer;color:var(--ink);">×</button>
+    </div>
   </div>
   <div class="chat-body" @click="onChatBodyClick($event)">
     <div x-show="chat.messages.length === 0" style="font-family:var(--display);font-style:italic;color:var(--ink-mute);text-align:center;padding:40px 0;">
@@ -45,6 +55,14 @@ export function ChatPanel(): string {
     <button class="chat-send" @click="sendChat()" :disabled="chat.loading">Send</button>
   </div>
 </div>
+<button class="chat-fab shake-fab" @click="shakeForMuseum()" :disabled="visits.shaking" title="摇一摇，随机推荐一座没去过的博物馆">
+  <span class="icon shake-icon" :class="visits.shaking ? 'spinning' : ''">🎲</span>
+  <span x-show="!visits.shaking">摇一摇</span>
+  <span x-show="visits.shaking">…</span>
+  <span class="shake-mute" @click.stop="toggleShakeMute()" :title="visits.muted ? '点击开启音效' : '点击静音'">
+    <span x-text="visits.muted ? '🔇' : '🔊'"></span>
+  </span>
+</button>
 <button class="chat-fab" @click="chat.open = true">
   <span class="icon"></span>问 AI
 </button>`

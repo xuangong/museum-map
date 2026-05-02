@@ -35,7 +35,11 @@ export function HomePage(data: HomeData): string {
       <div class="subtitle">An Atlas of Chinese Museums &amp; Their Dynasties</div>
     </div>
     <div class="right">
-      <span class="eyebrow" style="font-variant-numeric:lining-nums;">${today()}</span>
+      <button class="footprint-pill" :class="visits.footprintMode ? 'active' : ''" @click="toggleFootprint()" :title="visits.footprintMode ? '退出足迹模式' : '查看我的足迹'">
+        <span x-show="!visits.footprintMode">✦ 足迹 <span style="font-variant-numeric:lining-nums;" x-text="visits.ids.length"></span></span>
+        <span x-show="visits.footprintMode">✕ 退出足迹</span>
+      </button>
+      <span class="eyebrow" style="font-variant-numeric:lining-nums;margin-left:14px;">${today()}</span>
     </div>
   </header>
   ${DynastyTimeline()}
@@ -48,7 +52,18 @@ export function HomePage(data: HomeData): string {
       <div class="canvas-bg"></div>
       <div id="map"></div>
       <div class="map-legend">
-        <div class="row"><span class="dot r"></span><span>推荐博物馆</span></div>
+        <template x-if="visits.footprintMode">
+          <div class="row"><span class="dot r"></span><span>足迹（含推荐路径）</span></div>
+        </template>
+        <template x-if="!visits.footprintMode && currentDynastyId">
+          <div class="row"><span class="dot r"></span><span>朝代推荐博物馆</span></div>
+        </template>
+        <template x-if="!visits.footprintMode && !currentDynastyId">
+          <div class="row"><span class="dot r"></span><span>已打卡</span></div>
+        </template>
+        <template x-if="!visits.footprintMode && !currentDynastyId">
+          <div class="row"><span class="dot k"></span><span>未打卡</span></div>
+        </template>
         <div class="row" x-show="currentDynastyId" x-cloak><span class="dot e"></span><span>历史事件</span></div>
       </div>
       <div class="map-caption" :class="currentDynastyId ? 'show' : ''" x-cloak>
@@ -65,7 +80,10 @@ export function HomePage(data: HomeData): string {
     ${ChatPanel()}
   </div>
 </div>
+<!-- Hidden poster (off-screen) used for footprint long-screenshot export -->
+<div id="footprint-poster" aria-hidden="true" style="position:absolute;left:-99999px;top:0;width:760px;background:#fefcf6;color:#2a2520;font-family:'Source Serif 4','Noto Serif SC',serif;padding:56px 48px;box-sizing:border-box;contain:strict;visibility:hidden;"></div>
 <script id="bootstrap-data" type="application/json">${bootstrap}</script>
+<script src="/cdn/html2canvas.js"></script>
 <script>${COORDS_SCRIPT}</script>
 <script>${MAP_SCRIPT}</script>
 <script>${CHAT_SCRIPT}</script>

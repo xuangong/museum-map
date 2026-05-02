@@ -7,8 +7,9 @@ window.museumApp = function() {
     currentDynastyId: null,
     selectedMuseumId: null,
     drawer: { open: false, loading: false, error: false, title: '', subtitle: '', sections: [], _loadFn: null },
-    chat: { open: false, messages: [], input: '', loading: false, palette: { open: false, query: '' } },
+    chat: { open: false, messages: [], input: '', loading: false, fullscreen: false, palette: { open: false, query: '' } },
     tocOpen: false,
+    visits: { ids: [], byId: {}, footprintMode: false, review: '', reviewLoading: false, exporting: false, chatDirty: false, chatStartIdx: -1, reviewStale: false, reviewGeneratedAt: 0, shaking: false, muted: true },
 
     init() {
       var bs = document.getElementById('bootstrap-data');
@@ -19,7 +20,7 @@ window.museumApp = function() {
 
       window.MuseumMap.init(35.0, 105.0);
       var self = this;
-      this.refreshMarkers();
+      this.loadVisits().then(function(){ self.refreshMarkers(); self.loadCachedReview(); });
 
       // First-visit welcome message in chat
       if (!window.localStorage.getItem('museumChatWelcomed')) {
@@ -29,6 +30,42 @@ window.museumApp = function() {
         });
         window.localStorage.setItem('museumChatWelcomed', '1');
       }
+
+      // Track virtual keyboard via visualViewport so chat panel resizes above the keyboard.
+      if (window.visualViewport) {
+        var root = document.documentElement;
+        var update = function() {
+          var vv = window.visualViewport;
+          // The viewport's top offset (when keyboard pushes content) and visible height.
+          root.style.setProperty('--vv-top', vv.offsetTop + 'px');
+          root.style.setProperty('--vv-h', vv.height + 'px');
+          var bottomInset = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+          root.style.setProperty('--kb-inset', bottomInset + 'px');
+        };
+        window.visualViewport.addEventListener('resize', update);
+        window.visualViewport.addEventListener('scroll', update);
+        update();
+      }
+
+      // Lock body scroll while chat panel is open (prevents iOS from scrolling the page
+      // away when the soft keyboard appears).
+      var self2 = this;
+      this.$watch && this.$watch('chat.open', function(open){
+        document.body.classList.toggle('chat-locked', !!open);
+        if (open) {
+          // jump panel to bottom of content
+          setTimeout(function(){
+            var b = document.querySelector('.chat-body');
+            if (b) b.scrollTop = b.scrollHeight;
+          }, 50);
+        }
+      });
+
+      this.initShakeDetector();
+      try {
+        var savedMute = window.localStorage.getItem('shakeMuted');
+        if (savedMute !== null) this.visits.muted = savedMute === '1';
+      } catch(_) {}
     },
 
     commands: [
@@ -76,7 +113,11 @@ window.museumApp = function() {
     refreshMarkers() {
       var self = this;
       var d = this.currentDynasty();
-      if (d) {
+      if (this.visits.footprintMode) {
+        var visited = this.visitedMuseums();
+        window.MuseumMap.setMarkers(visited, function(id){ self.openMuseum(id); }, { recommended: true });
+        window.MuseumMap.clearEvents();
+      } else if (d) {
         // Filter mode: only recommended museums + event markers
         var museums = this.recommendedMuseums(d);
         window.MuseumMap.setMarkers(museums, function(id){ self.openMuseum(id); }, { recommended: true });
@@ -85,9 +126,62 @@ window.museumApp = function() {
         });
       } else {
         // All mode
-        window.MuseumMap.setMarkers(this.museums, function(id){ self.openMuseum(id); });
+        window.MuseumMap.setMarkers(this.museums, function(id){ self.openMuseum(id); }, { isVisited: function(id){ return self.isVisited(id); } });
         window.MuseumMap.clearEvents();
       }
+    },
+
+    visitedMuseums() {
+      var byId = {};
+      this.museums.forEach(function(m){ byId[m.id] = m; });
+      var out = [];
+      this.visits.ids.forEach(function(id){ if (byId[id]) out.push(byId[id]); });
+      return out;
+    },
+
+    dynastyShortName(d) {
+      var n = (d && d.name) || '';
+      var i = n.search(/[（(]/);
+      return i >= 0 ? n.slice(0, i).trim() : n.trim();
+    },
+
+    dynastyShortPeriod(d) {
+      var p = (d && d.period) || '';
+      return p.replace(/约公元/g, '').replace(/公元/g, '').replace(/年/g, '').replace(/—/g, '–');
+    },
+
+    /** Dynasties connected to any visited museum (matched via name substring in corePeriod or dynastyCoverage). */
+    visitedDynasties() {
+      var key = this.visits.ids.join(',') + '|' + this.museums.length + '|' + this.dynasties.length;
+      if (this._vdCache && this._vdCacheKey === key) return this._vdCache;
+      var visited = this.visitedMuseums();
+      var hits = [];
+      var hitIds = {};
+      if (visited.length) {
+        var self = this;
+        this.dynasties.forEach(function(d){
+          var sn = self.dynastyShortName(d);
+          if (!sn) return;
+          var sn2 = sn.replace(/(朝|国)$/, '');
+          for (var i = 0; i < visited.length; i++) {
+            var hay = (visited[i].corePeriod || '') + ' ' + (visited[i].dynastyCoverage || '') + ' ' + (visited[i].name || '');
+            if (hay.indexOf(sn) >= 0 || (sn2 && hay.indexOf(sn2) >= 0)) {
+              hits.push(d);
+              hitIds[d.id] = true;
+              break;
+            }
+          }
+        });
+      }
+      this._vdCacheKey = key;
+      this._vdCache = hits;
+      this._vdCacheIds = hitIds;
+      return hits;
+    },
+
+    isDynastyVisited(d) {
+      this.visitedDynasties();
+      return !!(this._vdCacheIds && this._vdCacheIds[d.id]);
     },
 
     currentDynasty() {
@@ -108,11 +202,15 @@ window.museumApp = function() {
 
     get filteredMuseums() {
       var base;
-      var d = this.currentDynasty();
-      if (d) {
-        base = this.recommendedMuseums(d);
+      if (this.visits.footprintMode) {
+        base = this.visitedMuseums();
       } else {
-        base = this.museums;
+        var d = this.currentDynasty();
+        if (d) {
+          base = this.recommendedMuseums(d);
+        } else {
+          base = this.museums;
+        }
       }
       var q = (this.search || '').trim().toLowerCase();
       if (!q) return base;
@@ -206,7 +304,353 @@ window.museumApp = function() {
       this.selectedMuseumId = null;
     },
 
+    async loadVisits() {
+      try {
+        var res = await fetch('/api/visits');
+        if (!res.ok) return;
+        var j = await res.json();
+        var ids = (j.items || []).map(function(x){ return x.museumId; });
+        var byId = {};
+        (j.items || []).forEach(function(x){ byId[x.museumId] = x; });
+        this.visits.ids = ids;
+        this.visits.byId = byId;
+      } catch(_) {}
+    },
+
+    isVisited(id) {
+      return !!this.visits.byId[id];
+    },
+
+    async toggleVisit(id) {
+      var visited = this.isVisited(id);
+      try {
+        if (visited) {
+          await fetch('/api/visits/' + encodeURIComponent(id), { method: 'DELETE' });
+        } else {
+          await fetch('/api/visits/' + encodeURIComponent(id), { method: 'POST', headers: {'content-type':'application/json'}, body: '{}' });
+        }
+        await this.loadVisits();
+        this.refreshMarkers();
+        if (this.visits.review) this.visits.reviewStale = true;
+        // Refresh drawer so the toggle button label updates
+        if (this.drawer.open && this.drawer.kind === 'museum' && this.selectedMuseumId === id) {
+          this.openMuseum(id);
+        }
+      } catch(_) {}
+    },
+
+    toggleFootprint() {
+      this.visits.footprintMode = !this.visits.footprintMode;
+      if (this.visits.footprintMode) {
+        this.currentDynastyId = null;
+      }
+      this.refreshMarkers();
+    },
+
+    toggleShakeMute() {
+      this.visits.muted = !this.visits.muted;
+      try { window.localStorage.setItem('shakeMuted', this.visits.muted ? '1' : '0'); } catch(_) {}
+      // Brief preview when un-muting so user knows it works
+      if (!this.visits.muted) this.playRevealSound();
+    },
+
+    shakeForMuseum(opts) {
+      if (this.visits.shaking) return;
+      // First tap on iOS unlocks devicemotion (needs user gesture)
+      if (this._motionNeedsPermission && this._enableMotion) {
+        this._enableMotion();
+        this._motionNeedsPermission = false;
+      }
+      var unvisited = this.museums.filter(function(m){ return m && m.lat && m.lng; })
+        .filter(function(m){ return !this.visits.byId[m.id]; }.bind(this));
+      if (unvisited.length === 0) {
+        alert('🎉 你已经打卡了所有博物馆！');
+        return;
+      }
+      this.visits.shaking = true;
+      var pick = unvisited[Math.floor(Math.random() * unvisited.length)];
+      var self = this;
+      var fast = !!(opts && opts.fast);
+      var dur = fast ? 100 : 600;
+      if (!this.visits.muted) this.playShakeSound(dur);
+      setTimeout(function(){
+        self.visits.shaking = false;
+        if (!self.visits.muted) self.playRevealSound();
+        if (window.MuseumMap && window.MuseumMap.flyTo) {
+          window.MuseumMap.flyTo(pick.lat, pick.lng, 7);
+        }
+        self.openMuseum(pick.id);
+        if (navigator.vibrate) { try { navigator.vibrate([30, 40, 30]); } catch(_) {} }
+      }, dur);
+    },
+
+    _audioCtx() {
+      if (this._ac) return this._ac;
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      try { this._ac = new AC(); } catch(_) { return null; }
+      return this._ac;
+    },
+
+    _ensureAudio(then) {
+      var ac = this._audioCtx(); if (!ac) return;
+      if (ac.state === 'suspended' && ac.resume) {
+        var p = ac.resume();
+        if (p && p.then) { p.then(then).catch(then); return; }
+      }
+      then();
+    },
+
+    playShakeSound(durationMs) {
+      var self = this;
+      this._ensureAudio(function(){
+        var ac = self._ac; if (!ac) return;
+        var dur = Math.max(0.08, durationMs / 1000);
+        var bufSize = Math.floor(ac.sampleRate * dur);
+        var buf = ac.createBuffer(1, bufSize, ac.sampleRate);
+        var data = buf.getChannelData(0);
+        for (var i = 0; i < bufSize; i++) {
+          var t = i / bufSize;
+          var grain = (Math.sin(t * 60) > 0.4) ? (Math.random() * 2 - 1) : (Math.random() * 0.4 - 0.2);
+          data[i] = grain * (1 - t * 0.6);
+        }
+        var src = ac.createBufferSource(); src.buffer = buf;
+        var bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 3200; bp.Q.value = 1.4;
+        var g = ac.createGain(); g.gain.value = 0.22;
+        src.connect(bp); bp.connect(g); g.connect(ac.destination);
+        src.start();
+        src.stop(ac.currentTime + dur);
+      });
+    },
+
+    playRevealSound() {
+      var self = this;
+      this._ensureAudio(function(){
+        var ac = self._ac; if (!ac) return;
+        var t0 = ac.currentTime;
+        [
+          { f: 1046.5, when: 0,    dur: 0.35 },
+          { f: 1567.98, when: 0.09, dur: 0.45 },
+        ].forEach(function(n){
+          var osc = ac.createOscillator(); osc.type = 'sine'; osc.frequency.value = n.f;
+          var g = ac.createGain();
+          g.gain.setValueAtTime(0.0001, t0 + n.when);
+          g.gain.exponentialRampToValueAtTime(0.28, t0 + n.when + 0.015);
+          g.gain.exponentialRampToValueAtTime(0.0001, t0 + n.when + n.dur);
+          osc.connect(g); g.connect(ac.destination);
+          osc.start(t0 + n.when);
+          osc.stop(t0 + n.when + n.dur + 0.02);
+        });
+      });
+    },
+
+    initShakeDetector() {
+      if (typeof window === 'undefined' || !window.DeviceMotionEvent) return;
+      var self = this;
+      var lastShake = 0;
+      var lastX = null, lastY = null, lastZ = null;
+      var THRESHOLD = 18; // m/s^2 delta
+      function onMotion(e) {
+        var a = e.accelerationIncludingGravity || e.acceleration;
+        if (!a || a.x == null) return;
+        if (lastX != null) {
+          var dx = Math.abs(a.x - lastX);
+          var dy = Math.abs(a.y - lastY);
+          var dz = Math.abs(a.z - lastZ);
+          if (dx + dy + dz > THRESHOLD) {
+            var now = Date.now();
+            if (now - lastShake > 1500 && !self.visits.shaking && !self.drawer.open) {
+              lastShake = now;
+              self.shakeForMuseum({ fast: true });
+            }
+          }
+        }
+        lastX = a.x; lastY = a.y; lastZ = a.z;
+      }
+      // iOS 13+ requires permission gesture
+      var DM = window.DeviceMotionEvent;
+      if (typeof DM.requestPermission === 'function') {
+        // Defer permission request until first user interaction (FAB tap will explicitly request).
+        this._motionNeedsPermission = true;
+        this._enableMotion = function() {
+          DM.requestPermission().then(function(state){
+            if (state === 'granted') window.addEventListener('devicemotion', onMotion);
+          }).catch(function(){});
+        };
+      } else {
+        window.addEventListener('devicemotion', onMotion);
+      }
+    },
+
+    async loadCachedReview() {
+      try {
+        var res = await fetch('/api/visits/review');
+        if (!res.ok) return;
+        var j = await res.json();
+        if (j && j.summary) {
+          this.visits.review = j.summary;
+          this.visits.reviewStale = !!j.stale;
+          this.visits.reviewGeneratedAt = j.generatedAt || 0;
+        }
+      } catch(_) {}
+    },
+
+    async loadFootprintReview() {
+      if (this.visits.reviewLoading) return;
+      this.visits.reviewLoading = true;
+      var chatHistory = [];
+      if (this.visits.chatStartIdx >= 0 && this.chat.messages.length > this.visits.chatStartIdx) {
+        chatHistory = this.chat.messages.slice(this.visits.chatStartIdx).map(function(m){
+          return { role: m.role, content: m.content };
+        });
+      }
+      try {
+        var res = await fetch('/api/visits/review', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ chatHistory: chatHistory }),
+        });
+        if (!res.ok) {
+          var err = await res.json().catch(function(){return {};});
+          this.visits.review = '（生成失败：' + (err.error || ('http ' + res.status)) + '）';
+        } else {
+          var j = await res.json();
+          this.visits.review = j.summary || '（暂无足迹）';
+          this.visits.chatDirty = false;
+          this.visits.reviewStale = false;
+          this.visits.reviewGeneratedAt = Date.now();
+        }
+      } catch (e) {
+        this.visits.review = '（出错：' + (e.message || 'unknown') + '）';
+      } finally {
+        this.visits.reviewLoading = false;
+      }
+    },
+
+    buildFootprintPoster() {
+      var self = this;
+      function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+      var visited = this.visitedMuseums();
+      var dyns = this.visitedDynasties();
+      var now = new Date();
+      var dateStr = now.getFullYear() + '.' + String(now.getMonth()+1).padStart(2,'0') + '.' + String(now.getDate()).padStart(2,'0');
+      var reviewHtml = (window.MuseumChat && window.MuseumChat.renderMarkdown)
+        ? window.MuseumChat.renderMarkdown(this.visits.review || '')
+        : esc(this.visits.review || '');
+
+      var dynChips = dyns.map(function(d){
+        return '<span style="display:inline-block;font-family:\\'Noto Serif SC\\',serif;font-size:13px;color:#B73E18;border:0.5px solid #B73E18;padding:3px 10px;margin:0 6px 6px 0;border-radius:1px;">' + esc(self.dynastyShortName(d)) + '</span>';
+      }).join('');
+
+      var cards = visited.map(function(m, i){
+        var idx = String(i+1).padStart(2,'0');
+        var visit = self.visits.byId[m.id] || {};
+        var when = visit.visitedAt ? new Date(visit.visitedAt).toLocaleDateString('zh-CN') : '';
+        var connections = (m.dynastyConnections || []).slice(0, 3).map(function(c){
+          return '<span style="color:#B73E18;font-weight:600;margin-right:6px;">' + esc(c.dynasty) + '</span>';
+        }).join('');
+        var treasures = (m.treasures || []).slice(0, 2);
+        return '<div style="display:flex;gap:18px;padding:18px 0;border-bottom:0.5px solid #d8cfbb;">'
+          + '<div style="font-family:\\'JetBrains Mono\\',monospace;font-size:11px;color:#B73E18;letter-spacing:0.1em;min-width:32px;padding-top:4px;">' + idx + '</div>'
+          + '<div style="flex:1;min-width:0;">'
+          +   '<div style="font-family:\\'Noto Serif SC\\',serif;font-size:18px;font-weight:600;color:#2a2520;margin-bottom:4px;">' + esc(m.name) + '</div>'
+          +   '<div style="font-size:12px;color:#7a7268;margin-bottom:8px;">' + esc(m.location || '') + (m.level ? ' · ' + esc(m.level) : '') + (when ? ' · 打卡 ' + when : '') + '</div>'
+          +   (m.corePeriod ? '<div style="font-size:13px;color:#5a544c;font-style:italic;margin-bottom:6px;">' + esc(m.corePeriod) + '</div>' : '')
+          +   (connections ? '<div style="font-size:12px;margin-bottom:6px;">' + connections + '</div>' : '')
+          +   (treasures.length ? '<div style="font-size:12px;color:#5a544c;">镇馆：' + treasures.map(esc).join(' · ') + '</div>' : '')
+          + '</div>'
+        + '</div>';
+      }).join('');
+
+      return ''
+        + '<div style="border-bottom:1px solid #2a2520;padding-bottom:24px;margin-bottom:24px;">'
+        +   '<div style="font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#B73E18;margin-bottom:12px;">Vol. FP · My Footprints · ' + dateStr + '</div>'
+        +   '<div style="font-family:\\'Noto Serif SC\\',serif;font-size:42px;font-weight:700;color:#2a2520;line-height:1.1;margin-bottom:8px;">我的博物馆足迹</div>'
+        +   '<div style="font-family:\\'Source Serif 4\\',serif;font-style:italic;color:#7a7268;font-size:15px;">An atlas of personal pilgrimage · ' + visited.length + ' institutions across ' + dyns.length + ' dynasties</div>'
+        + '</div>'
+        + (dynChips ? '<div style="margin-bottom:24px;">' + dynChips + '</div>' : '')
+        + (this.visits.review ? '<div style="background:#f0e9d8;border-left:3px solid #B73E18;padding:20px 24px;margin-bottom:32px;font-family:\\'Source Serif 4\\',\\'Noto Serif SC\\',serif;font-size:14px;line-height:1.7;color:#2a2520;">'
+            + '<div style="font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#B73E18;margin-bottom:10px;">AI Review · 品味画像</div>'
+            + '<div class="md-export">' + reviewHtml + '</div>'
+            + '</div>' : '')
+        + '<div style="font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#7a7268;margin-bottom:8px;">Index · 已访博物馆</div>'
+        + '<div>' + cards + '</div>'
+        + '<div style="margin-top:32px;padding-top:18px;border-top:0.5px solid #d8cfbb;font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.2em;color:#7a7268;text-align:center;">中國博物館地圖 · museummap.xianliao.de5.net</div>';
+    },
+
+    continueChatFromFootprint() {
+      var visited = this.visitedMuseums();
+      var names = visited.map(function(m){ return '**' + m.name + '**'; }).join('、');
+      var dyns = this.visitedDynasties().map(function(d){ return d.name; }).join('、');
+      var header = '### 💬 接续聊天 · 你的足迹\\n\\n共 **' + visited.length + '** 座' + (dyns ? '，覆盖朝代：' + dyns : '') + '。' + (names ? '\\n\\n已打卡：' + names : '');
+      var review = (this.visits.review || '').trim();
+      var prompt = '\\n\\n---\\n\\n你想深入哪个方向？例如：\\n- 想看更多 **某朝代/某文物类别** 的博物馆\\n- 安排一条**跨城路线**（说出你所在城市）\\n- 针对某座推荐馆，告诉你**必看展厅与镇馆之宝**\\n- 再补 **3 座小众但有特色** 的备选';
+      var combined = header + (review ? '\\n\\n' + review : '') + prompt;
+      this.chat.messages.push({ role: 'assistant', content: combined });
+      this.visits.chatStartIdx = this.chat.messages.length; // turns AFTER this seed are the new context
+      this.visits.chatDirty = false;
+      // Close other overlays so the chat panel isn't covered
+      this.tocOpen = false;
+      this.drawer.open = false;
+      this.chat.open = true;
+      this.chat.input = '';
+      var self = this;
+      setTimeout(function(){
+        var el = document.querySelector('[data-chat-input]');
+        if (el) el.focus();
+        var body = document.querySelector('.chat-body');
+        if (body) body.scrollTop = body.scrollHeight;
+      }, 120);
+    },
+
+    async exportFootprint() {
+      if (this.visits.exporting) return;
+      if (typeof window.html2canvas !== 'function') {
+        alert('html2canvas 未加载');
+        return;
+      }
+      this.visits.exporting = true;
+      try {
+        var poster = document.getElementById('footprint-poster');
+        if (!poster) { alert('poster 容器缺失'); return; }
+        poster.innerHTML = this.buildFootprintPoster();
+        // Style markdown inside the export bubble
+        var style = document.createElement('style');
+        style.textContent = '#footprint-poster .md-export h1,#footprint-poster .md-export h2,#footprint-poster .md-export h3{font-family:"Noto Serif SC",serif;font-weight:700;color:#2a2520;margin:14px 0 6px;}#footprint-poster .md-export h2{font-size:18px;}#footprint-poster .md-export h3{font-size:15px;}#footprint-poster .md-export p{margin:6px 0;}#footprint-poster .md-export strong{color:#B73E18;}#footprint-poster .md-export ul,#footprint-poster .md-export ol{padding-left:22px;margin:6px 0;}#footprint-poster .md-export li{margin:3px 0;}#footprint-poster .md-export em{font-style:italic;color:#5a544c;}';
+        poster.appendChild(style);
+        // Wait a tick for layout
+        await new Promise(function(r){ setTimeout(r, 60); });
+        var canvas = await window.html2canvas(poster, {
+          scale: 2,
+          backgroundColor: '#fefcf6',
+          useCORS: true,
+          logging: false,
+          windowWidth: 760,
+        });
+        var blob = await new Promise(function(r){ canvas.toBlob(r, 'image/png'); });
+        if (!blob) { alert('导出失败'); return; }
+        var now = new Date();
+        var fname = 'footprint-' + now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + '.png';
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url; a.download = fname;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+        poster.innerHTML = '';
+      } catch (e) {
+        alert('导出出错：' + (e && e.message || 'unknown'));
+      } finally {
+        this.visits.exporting = false;
+      }
+    },
+
     onDrawerClick(e) {
+      var visitBtn = e.target.closest && e.target.closest('.visit-toggle');
+      if (visitBtn) {
+        var vid = visitBtn.getAttribute('data-museum-id');
+        if (vid) this.toggleVisit(vid);
+        return;
+      }
       var el = e.target.closest && e.target.closest('.dynasty-rec');
       if (!el) return;
       var id = el.getAttribute('data-museum-id');
@@ -216,6 +660,13 @@ window.museumApp = function() {
     buildMuseumSections(m) {
       var sections = [];
       function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+      var visited = !!this.visits.byId[m.id];
+      var when = visited && this.visits.byId[m.id].visitedAt ? new Date(this.visits.byId[m.id].visitedAt).toLocaleDateString() : '';
+      var label = visited ? '✓ 已打卡 · ' + when + '（点击撤销）' : '＋ 打卡 · 我去过';
+      sections.push({
+        title: 'Visit · 足迹',
+        html: '<button class="visit-toggle" data-museum-id="' + escapeHtml(m.id) + '" style="font-family:var(--sans);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;padding:10px 16px;border:0.5px solid ' + (visited ? 'var(--ink)' : 'var(--vermilion)') + ';background:' + (visited ? 'var(--ink)' : 'transparent') + ';color:' + (visited ? 'var(--paper)' : 'var(--vermilion)') + ';cursor:pointer;">' + label + '</button>',
+      });
       if (m.specialty) sections.push({ title: 'Specialty · 特色', html: '<p>' + escapeHtml(m.specialty) + '</p>' });
       if (m.dynastyCoverage) sections.push({ title: 'Coverage · 年代覆盖', html: '<p>' + escapeHtml(m.dynastyCoverage) + '</p>' });
       if (m.treasures && m.treasures.length) {
@@ -259,6 +710,7 @@ window.museumApp = function() {
       var text = (this.chat.input || '').trim();
       if (!text || this.chat.loading) return;
       this.chat.messages.push({ role: 'user', content: text });
+      if (this.visits.chatStartIdx >= 0) this.visits.chatDirty = true;
       this.chat.input = '';
       this.chat.loading = true;
       try {
@@ -358,8 +810,19 @@ window.museumApp = function() {
           }
           return;
         }
-        var reply = await window.MuseumChat.send(this.chat.messages.slice(-10));
-        this.chat.messages.push({ role: 'assistant', content: reply });
+        var streamIdx = this.chat.messages.length;
+        this.chat.messages.push({ role: 'assistant', content: '' });
+        var self2 = this;
+        try {
+          await window.MuseumChat.sendStream(this.chat.messages.slice(0, streamIdx).slice(-10), function(delta){
+            self2.chat.messages[streamIdx].content += delta;
+            // keep scrolled to bottom while streaming
+            var body = document.querySelector('.chat-body');
+            if (body) body.scrollTop = body.scrollHeight;
+          });
+        } catch (e) {
+          self2.chat.messages[streamIdx].content = (self2.chat.messages[streamIdx].content || '') + '\\n（出错：' + (e.message || 'unknown') + '）';
+        }
       } catch (e) {
         this.chat.messages.push({ role: 'assistant', content: '（出错：' + (e.message || 'unknown') + '）' });
       } finally {

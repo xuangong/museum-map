@@ -1,7 +1,7 @@
 import { bucketKey, checkAndIncrement, type KVLike } from "~/lib/rateLimit"
 
 export const MODEL = "claude-haiku-4.5"
-export const MAX_TOKENS = 1024
+export const MAX_TOKENS = 2048
 export const MAX_MESSAGES_BYTES = 32 * 1024
 export const MAX_SYSTEM_BYTES = 8 * 1024
 export const MAX_MESSAGES_LEN = 12
@@ -19,7 +19,7 @@ export interface ChatRequestIn {
 export interface ChatRequestOut {
   model: string
   max_tokens: number
-  stream: false
+  stream: boolean
   system?: string
   messages: ChatMessage[]
 }
@@ -52,10 +52,11 @@ export function sanitizeChatRequest(input: any): ChatRequestOut {
   if (system && byteLen(system) > MAX_SYSTEM_BYTES) {
     throw new ChatGuardError("system too large", 413)
   }
+  const stream = input.stream === true
   const out: ChatRequestOut = {
     model: MODEL,
     max_tokens: MAX_TOKENS,
-    stream: false,
+    stream,
     messages,
   }
   if (system !== undefined) out.system = system
@@ -99,6 +100,8 @@ export async function forwardChat(input: any, opts: ForwardOpts): Promise<Respon
         "content-type": "application/json",
         "x-api-key": opts.gatewayKey,
         "anthropic-version": "2023-06-01",
+        // Avoid intermediate gzip on SSE — keeps deltas flowing immediately.
+        ...(sanitized.stream ? { "accept": "text/event-stream", "accept-encoding": "identity" } : {}),
       },
       body: JSON.stringify(sanitized),
     })
@@ -112,6 +115,18 @@ export async function forwardChat(input: any, opts: ForwardOpts): Promise<Respon
     return new Response(JSON.stringify({ error: "upstream_error" }), {
       status: 502,
       headers: { "content-type": "application/json" },
+    })
+  }
+  if (sanitized.stream) {
+    // Pass through SSE stream verbatim so the client can parse Anthropic events.
+    return new Response(upstream.body, {
+      status: 200,
+      headers: {
+        "content-type": "text/event-stream; charset=utf-8",
+        "cache-control": "no-cache, no-transform",
+        "x-accel-buffering": "no",
+        "content-encoding": "identity",
+      },
     })
   }
   const body = await upstream.text()

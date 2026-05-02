@@ -18,10 +18,15 @@ window.MuseumMap = {
   setMarkers: function(museums, onClick, opts) {
     this.markersLayer.clearLayers();
     var self = this;
-    var cls = (opts && opts.recommended) ? 'museum-marker recommended' : 'museum-marker';
+    var baseRecommended = !!(opts && opts.recommended);
+    var isVisited = (opts && typeof opts.isVisited === 'function') ? opts.isVisited : null;
     museums.forEach(function(m){
       if (!m.lat || !m.lng) return;
       var coord = window.toMapCoord(m.lat, m.lng);
+      var visited = isVisited ? isVisited(m.id) : false;
+      var cls = 'museum-marker';
+      if (baseRecommended) cls += ' recommended';
+      else if (visited) cls += ' visited';
       var icon = L.divIcon({ className: '', html: '<div class="' + cls + '"></div>', iconSize: [14,14] });
       var marker = L.marker(coord, { icon: icon }).addTo(self.markersLayer);
       marker.on('click', function(){ onClick(m.id); });
