@@ -198,6 +198,37 @@ window.MuseumChat = {
     return await res.json();
   },
 
+  runEnrichImages: async function(id, token, onLine) {
+    var res = await fetch('/api/museums/' + encodeURIComponent(id) + '/enrich-images', {
+      method: 'POST', headers: { 'x-admin-token': token, 'content-type': 'application/json' }, body: '{}',
+    });
+    if (!res.ok) {
+      var err = await res.json().catch(function(){return {};});
+      var e = new Error(err.error || ('http ' + res.status));
+      e.status = res.status;
+      throw e;
+    }
+    var reader = res.body.getReader();
+    var decoder = new TextDecoder();
+    var buf = '';
+    while (true) {
+      var chunk = await reader.read();
+      if (chunk.done) break;
+      buf += decoder.decode(chunk.value, { stream: true });
+      var lines = buf.split('\\n');
+      buf = lines.pop() || '';
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
+        if (!line) continue;
+        try { var ev = JSON.parse(line); onLine(ev.message || JSON.stringify(ev)); }
+        catch (_) { onLine(line); }
+      }
+    }
+    if (buf.trim()) {
+      try { onLine(JSON.parse(buf).message || buf); } catch (_) { onLine(buf); }
+    }
+  },
+
   formatReview: function(d) {
     var p = d.payload || {};
     var r = d.review || {};

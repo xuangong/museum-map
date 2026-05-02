@@ -28,9 +28,18 @@ export class MuseumsRepo {
       this.db.prepare("SELECT name FROM museum_treasures WHERE museum_id = ? ORDER BY order_index").bind(id).all<{ name: string }>(),
       this.db.prepare("SELECT name FROM museum_halls WHERE museum_id = ? ORDER BY order_index").bind(id).all<{ name: string }>(),
       this.db
-        .prepare("SELECT name, period, description FROM museum_artifacts WHERE museum_id = ? ORDER BY order_index")
+        .prepare(
+          "SELECT name, period, description, image_url AS image, image_license AS imageLicense, image_attribution AS imageAttribution FROM museum_artifacts WHERE museum_id = ? ORDER BY order_index",
+        )
         .bind(id)
-        .all<{ name: string; period: string | null; description: string | null }>(),
+        .all<{
+          name: string
+          period: string | null
+          description: string | null
+          image: string | null
+          imageLicense: string | null
+          imageAttribution: string | null
+        }>(),
       this.db
         .prepare("SELECT dynasty, description FROM museum_dynasty_connections WHERE museum_id = ? ORDER BY order_index")
         .bind(id)
@@ -71,8 +80,19 @@ export class MuseumsRepo {
     ;(p.artifacts ?? []).forEach((a, i) => {
       stmts.push(
         this.db
-          .prepare("INSERT INTO museum_artifacts (museum_id, order_index, name, period, description) VALUES (?, ?, ?, ?, ?)")
-          .bind(id, i, a.name, a.period ?? null, a.description ?? null),
+          .prepare(
+            "INSERT INTO museum_artifacts (museum_id, order_index, name, period, description, image_url, image_license, image_attribution) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+          )
+          .bind(
+            id,
+            i,
+            a.name,
+            a.period ?? null,
+            a.description ?? null,
+            a.image ?? null,
+            a.imageLicense ?? null,
+            a.imageAttribution ?? null,
+          ),
       )
     })
     ;(p.dynastyConnections ?? []).forEach((c, i) => {

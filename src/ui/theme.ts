@@ -574,6 +574,15 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--display-cn); font-size: 13.5px;
   color: var(--ink-mid); line-height: 1.65; margin-top: 4px;
 }
+.artifact-image { margin-bottom: 8px; }
+.artifact-image img {
+  max-width: 100%; max-height: 220px; border-radius: 2px;
+  border: 0.5px solid var(--rule-soft); display: block;
+}
+.artifact-image-caption {
+  font-size: 11px; color: var(--ink-mute);
+  margin-top: 4px; font-family: var(--mono);
+}
 
 /* Event row */
 .event-row {

@@ -25,7 +25,7 @@ async function freshDb(): Promise<D1Database> {
       "CREATE TABLE museum_halls (museum_id TEXT NOT NULL REFERENCES museums(id) ON DELETE CASCADE, order_index INTEGER NOT NULL, name TEXT NOT NULL, PRIMARY KEY(museum_id, order_index))",
     ),
     db.prepare(
-      "CREATE TABLE museum_artifacts (museum_id TEXT NOT NULL REFERENCES museums(id) ON DELETE CASCADE, order_index INTEGER NOT NULL, name TEXT NOT NULL, period TEXT, description TEXT, PRIMARY KEY(museum_id, order_index))",
+      "CREATE TABLE museum_artifacts (museum_id TEXT NOT NULL REFERENCES museums(id) ON DELETE CASCADE, order_index INTEGER NOT NULL, name TEXT NOT NULL, period TEXT, description TEXT, image_url TEXT, image_license TEXT, image_attribution TEXT, PRIMARY KEY(museum_id, order_index))",
     ),
     db.prepare(
       "CREATE TABLE museum_dynasty_connections (museum_id TEXT NOT NULL REFERENCES museums(id) ON DELETE CASCADE, order_index INTEGER NOT NULL, dynasty TEXT NOT NULL, description TEXT, PRIMARY KEY(museum_id, order_index))",

@@ -2,6 +2,9 @@ export interface MuseumArtifact {
   name: string
   period?: string
   description?: string
+  image?: string
+  imageLicense?: string
+  imageAttribution?: string
 }
 
 export interface MuseumDynastyConnection {
@@ -50,6 +53,9 @@ export const MUSEUM_PAYLOAD_SCHEMA = {
           name: { type: "string" },
           period: { type: "string" },
           description: { type: "string" },
+          image: { type: "string" },
+          imageLicense: { type: "string" },
+          imageAttribution: { type: "string" },
         },
       },
     },

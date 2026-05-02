@@ -12,6 +12,9 @@ export interface MuseumArtifact {
   name: string
   period: string | null
   description: string | null
+  image: string | null
+  imageLicense: string | null
+  imageAttribution: string | null
 }
 
 export interface MuseumDynastyConnection {

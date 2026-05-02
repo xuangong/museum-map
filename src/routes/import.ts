@@ -1,6 +1,7 @@
 import { Elysia } from "elysia"
 import type { Env } from "~/index"
 import { runImportAgent, type ImportEvent } from "~/services/import"
+import { runImageEnricher, type EnrichEvent } from "~/services/image-enricher"
 import { MuseumsPendingRepo } from "~/repo/museums-pending"
 import { MuseumsRepo } from "~/repo/museums"
 import { FieldProvenanceRepo } from "~/repo/field-provenance"
@@ -218,5 +219,45 @@ export const importRoute = new Elysia()
       return { error: "not found in museums" }
     }
     return { ok: true, id: params.id, unpublished: true }
+  })
+  .post("/api/museums/:id/enrich-images", async (ctx) => {
+    const { env, request, params, set } = ctx as unknown as RouteContext
+    const auth = checkAuth(env, request)
+    if (!auth.ok) {
+      set.status = auth.status
+      return auth.body
+    }
+    if (env.COPILOT_GATEWAY_URL == null || env.COPILOT_GATEWAY_KEY == null) {
+      set.status = 503
+      return { error: "enrichment unavailable: gateway not configured" }
+    }
+    const encoder = new TextEncoder()
+    const stream = new ReadableStream({
+      async start(controller) {
+        const send = (e: EnrichEvent) => {
+          controller.enqueue(encoder.encode(JSON.stringify(e) + "\n"))
+        }
+        try {
+          await runImageEnricher({
+            db: env.DB,
+            museumId: params.id,
+            gatewayUrl: env.COPILOT_GATEWAY_URL!,
+            gatewayKey: env.COPILOT_GATEWAY_KEY!,
+            onEvent: send,
+          })
+        } catch (e: any) {
+          send({ type: "error", message: e?.message || "internal_error" })
+        } finally {
+          controller.close()
+        }
+      },
+    })
+    return new Response(stream, {
+      status: 200,
+      headers: {
+        "content-type": "application/x-ndjson; charset=utf-8",
+        "cache-control": "no-store",
+      },
+    })
   })
 

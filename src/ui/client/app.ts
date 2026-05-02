@@ -76,6 +76,7 @@ window.museumApp = function() {
       { cmd: '/reject ', label: '/reject <id>', desc: '拒绝暂存（不影响正库）' },
       { cmd: '/delete ', label: '/delete <id>', desc: '删除暂存记录（不影响正库）' },
       { cmd: '/unpublish ', label: '/unpublish <id>', desc: '从正库下架（不影响 pending）' },
+      { cmd: '/enrich-images ', label: '/enrich-images <id>', desc: '为文物补图（Wikidata/Wikimedia）' },
       { cmd: '/help', label: '/help', desc: '查看命令帮助' },
     ],
 
@@ -677,7 +678,14 @@ window.museumApp = function() {
       }
       if (m.artifacts && m.artifacts.length) {
         sections.push({ title: 'Artifacts · 文物', html: m.artifacts.map(function(a){
-          return '<div class="artifact"><div><span class="artifact-name">' + escapeHtml(a.name) + '</span>' + (a.period ? '<span class="artifact-period">' + escapeHtml(a.period) + '</span>' : '') + '</div><div class="artifact-desc">' + escapeHtml(a.description || '') + '</div></div>';
+          var imgBlock = '';
+          if (a.image) {
+            var att = a.imageAttribution ? escapeHtml(a.imageAttribution) : '';
+            var lic = a.imageLicense ? escapeHtml(a.imageLicense) : '';
+            var caption = [att, lic].filter(Boolean).join(' · ');
+            imgBlock = '<div class="artifact-image"><img src="' + escapeHtml(a.image) + '" alt="' + escapeHtml(a.name) + '" loading="lazy">' + (caption ? '<div class="artifact-image-caption">' + caption + '</div>' : '') + '</div>';
+          }
+          return '<div class="artifact">' + imgBlock + '<div><span class="artifact-name">' + escapeHtml(a.name) + '</span>' + (a.period ? '<span class="artifact-period">' + escapeHtml(a.period) + '</span>' : '') + '</div><div class="artifact-desc">' + escapeHtml(a.description || '') + '</div></div>';
         }).join('') });
       }
       if (m.dynastyConnections && m.dynastyConnections.length) {
@@ -715,7 +723,7 @@ window.museumApp = function() {
       this.chat.loading = true;
       try {
         if (text === '/help') {
-          this.chat.messages.push({ role: 'assistant', content: '可用命令：\\n- /import <博物馆名称>：导入新博物馆\\n- /pending：查看暂存列表\\n- /review <id>：AI 评分某条暂存记录\\n- /approve <id>：通过暂存并**发布到正库**\\n- /reject <id>：拒绝暂存（不影响正库）\\n- /delete <id>：删除暂存记录（不影响正库）\\n- /unpublish <id>：从正库下架（不影响 pending）' });
+          this.chat.messages.push({ role: 'assistant', content: '可用命令：\\n- /import <博物馆名称>：导入新博物馆\\n- /pending：查看暂存列表\\n- /review <id>：AI 评分某条暂存记录\\n- /approve <id>：通过暂存并**发布到正库**\\n- /reject <id>：拒绝暂存（不影响正库）\\n- /delete <id>：删除暂存记录（不影响正库）\\n- /unpublish <id>：从正库下架（不影响 pending）\\n- /enrich-images <id>：为正库博物馆的文物补图（Wikidata + Wikimedia）' });
           return;
         }
         if (text.indexOf('/import ') === 0 || text === '/import') {
@@ -791,6 +799,28 @@ window.museumApp = function() {
           return;
         }
         var actionMatch = text.match(/^\\/(approve|reject|delete|unpublish)\\s+(.+)$/);
+        if (text.indexOf('/enrich-images ') === 0 || text === '/enrich-images') {
+          var enrichId = text.replace(/^\\/enrich-images\\s*/, '').trim();
+          if (!enrichId) {
+            this.chat.messages.push({ role: 'assistant', content: '用法：/enrich-images <museum-id>' });
+            return;
+          }
+          var tokenE = await this.ensureAdminToken();
+          if (!tokenE) { this.chat.messages.push({ role: 'assistant', content: '已取消。' }); return; }
+          var idxE = this.chat.messages.length;
+          this.chat.messages.push({ role: 'assistant', content: '🖼️ 启动图片采编…' });
+          var selfE = this;
+          try {
+            await window.MuseumChat.runEnrichImages(enrichId, tokenE, function(line) {
+              var prev = selfE.chat.messages[idxE].content || '';
+              selfE.chat.messages[idxE].content = prev + '\\n' + line;
+            });
+          } catch (e) {
+            if (e && e.status === 401) window.localStorage.removeItem('museumAdminToken');
+            selfE.chat.messages[idxE].content += '\\n（出错：' + (e.message || 'unknown') + '）';
+          }
+          return;
+        }
         if (actionMatch) {
           var action = actionMatch[1];
           var actId = actionMatch[2].trim();
