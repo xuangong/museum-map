@@ -118,6 +118,8 @@ export async function searchCommonsFile(opts: {
     // Skip text-document scans (古籍 / 文献) — they're not artifact photos.
     if (/\.(djvu|pdf|tif|tiff|svg|webm|ogv)$/i.test(title)) continue
     if (!/\.(jpe?g|png|gif)$/i.test(title)) continue
+    // Skip replicas / copies — museum gift-shop photos look real but mislead.
+    if (/(复制品|複製品|复刻|仿制|仿製|replica|reproduction|\bcopy\b)/i.test(title)) continue
     const infoUrl =
       "https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=url%7Csize%7Cextmetadata&titles=" +
       encodeURIComponent(title)

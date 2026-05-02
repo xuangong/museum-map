@@ -156,6 +156,38 @@ describe("searchCommonsFile", () => {
     expect(hit).toBeNull()
   })
 
+  it("skips replica/copy/复制品 titles and falls through", async () => {
+    const fetcher = makeFetcher({
+      "list=search": {
+        query: {
+          search: [
+            { title: "File:金杖（复制品）.jpg", snippet: "x", ns: 6 },
+            { title: "File:Bronze sword replica.jpg", snippet: "y", ns: 6 },
+            { title: "File:Real artifact.jpg", snippet: "z", ns: 6 },
+          ],
+        },
+      },
+      "titles=File%3AReal%20artifact.jpg": {
+        query: {
+          pages: {
+            "1": {
+              title: "File:Real artifact.jpg",
+              imageinfo: [
+                {
+                  url: "https://upload.wikimedia.org/wikipedia/commons/r/Real_artifact.jpg",
+                  width: 800,
+                  extmetadata: { LicenseShortName: { value: "CC BY 4.0" }, Artist: { value: "X" } },
+                },
+              ],
+            },
+          },
+        },
+      },
+    })
+    const hit = await searchCommonsFile({ query: "x", fetcher })
+    expect(hit?.title).toBe("File:Real artifact.jpg")
+  })
+
   it("skips images smaller than 200px wide and falls through to next candidate", async () => {
     const fetcher = makeFetcher({
       "list=search": {
