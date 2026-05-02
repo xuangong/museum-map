@@ -133,6 +133,7 @@ function makeExecuteTool(
   wmFetcher: typeof fetch,
   getSubmitted: () => Record<string, ArtifactMatch> | null,
   setSubmitted: (s: Record<string, ArtifactMatch>) => void,
+  recordCandidate: (query: string, hit: { url: string; license: string | null; attribution: string | null; source: string }) => void,
 ) {
   return async (call: { id: string; name: string; input: any }) => {
     if (call.name === "commons_search") {
@@ -145,6 +146,14 @@ function makeExecuteTool(
           type: "tool_result",
           message: hit ? `✅ ${hit.title}` : `— 无结果`,
         })
+        if (hit) {
+          recordCandidate(q, {
+            url: hit.url,
+            license: hit.license,
+            attribution: hit.attribution,
+            source: `https://commons.wikimedia.org/wiki/${encodeURIComponent(hit.title)}`,
+          })
+        }
         return { tool_use_id: call.id, content: JSON.stringify(hit ?? { hit: null }) }
       } catch (e: any) {
         return { tool_use_id: call.id, content: `error: ${e?.message}`, is_error: true }
@@ -175,6 +184,14 @@ function makeExecuteTool(
           type: "tool_result",
           message: img ? `✅ ${img.license || ""} ${img.attribution || ""}`.trim() : `— 无图片`,
         })
+        if (img) {
+          recordCandidate(qid, {
+            url: img.url,
+            license: img.license,
+            attribution: img.attribution,
+            source: `https://www.wikidata.org/wiki/${qid}`,
+          })
+        }
         return { tool_use_id: call.id, content: JSON.stringify(img ?? { image: null }) }
       } catch (e: any) {
         return { tool_use_id: call.id, content: `error: ${e?.message}`, is_error: true }
@@ -220,6 +237,14 @@ export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> 
   let submitted: Record<string, ArtifactMatch> | null = null
   let nudged = false
 
+  /** Server-side candidate tracker: every successful tool hit, keyed by query string.
+   *  Used as a safety-net fallback when the agent submits an empty {} despite having
+   *  successful tool_results — a known Haiku failure mode. */
+  const candidates: { query: string; hit: { url: string; license: string | null; attribution: string | null; source: string } }[] = []
+  const recordCandidate = (query: string, hit: { url: string; license: string | null; attribution: string | null; source: string }) => {
+    candidates.push({ query, hit })
+  }
+
   let result = await runToolLoop({
     gatewayUrl: opts.gatewayUrl,
     gatewayKey: opts.gatewayKey,
@@ -236,7 +261,7 @@ export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> 
       await opts.onEvent({ type: "thinking", message: t })
     },
     shouldStop: () => submitted !== null,
-    executeTool: makeExecuteTool(opts, wmFetcher, () => submitted, (s) => { submitted = s }),
+    executeTool: makeExecuteTool(opts, wmFetcher, () => submitted, (s) => { submitted = s }, recordCandidate),
   })
 
   // If the model stopped without calling submit_results, push one explicit nudge.
@@ -263,8 +288,38 @@ export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> 
         await opts.onEvent({ type: "thinking", message: t })
       },
       shouldStop: () => submitted !== null,
-      executeTool: makeExecuteTool(opts, wmFetcher, () => submitted, (s) => { submitted = s }),
+      executeTool: makeExecuteTool(opts, wmFetcher, () => submitted, (s) => { submitted = s }, recordCandidate),
     })
+  }
+
+  // Safety net: agent submitted empty {} despite having successful tool hits.
+  // Reconcile by matching artifact names against query strings (substring, case-insensitive).
+  if (submitted && Object.keys(submitted).length === 0 && candidates.length > 0) {
+    const recovered: Record<string, ArtifactMatch> = {}
+    for (const a of m.artifacts) {
+      const aname = a.name.trim()
+      const akey = aname.toLowerCase()
+      // Find first candidate whose query contains the artifact name (or vice versa).
+      const c = candidates.find((c) => {
+        const q = c.query.toLowerCase()
+        return q.indexOf(akey) >= 0 || akey.indexOf(q) >= 0
+      })
+      if (c) {
+        recovered[aname] = {
+          url: c.hit.url,
+          license: c.hit.license ?? null,
+          attribution: c.hit.attribution ?? null,
+          source: c.hit.source,
+        }
+      }
+    }
+    if (Object.keys(recovered).length > 0) {
+      await opts.onEvent({
+        type: "thinking",
+        message: `(server fallback: agent submitted empty, recovered ${Object.keys(recovered).length} match(es) from tool history)`,
+      })
+      submitted = recovered
+    }
   }
 
   if (!submitted) {

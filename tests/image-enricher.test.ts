@@ -206,6 +206,70 @@ describe("runImageEnricher", () => {
     expect(prov.find((r) => r.field_path.endsWith(".image"))).toBeUndefined()
   })
 
+  it("recovers matches via server-side candidate tracking when agent submits empty {} despite tool hits", async () => {
+    const db = await freshDb()
+    const museums = new MuseumsRepo(db)
+    await museums.upsert("m3", {
+      name: "测试馆",
+      lat: 0,
+      lng: 0,
+      artifacts: [{ name: "玉璧" }, { name: "未找到的文物" }],
+    })
+
+    // Agent: searches for 玉璧, gets a hit, then bug: submits empty {}.
+    const gatewayTurns: any[][] = [
+      [{ type: "tool_use", id: "u1", name: "commons_search", input: { query: "玉璧 测试馆" } }],
+      [{ type: "tool_use", id: "u2", name: "submit_results", input: { matches: {} } }],
+    ]
+    const gatewayFetcher = fakeGateway(gatewayTurns)
+
+    const wmFetcher = (async (input: any) => {
+      const u = typeof input === "string" ? input : input.url
+      if (u.indexOf("list=search") >= 0) {
+        return new Response(JSON.stringify({ query: { search: [{ title: "File:Yu_bi.jpg", ns: 6 }] } }), { status: 200 })
+      }
+      if (u.indexOf("prop=imageinfo") >= 0) {
+        return new Response(
+          JSON.stringify({
+            query: {
+              pages: {
+                "1": {
+                  title: "File:Yu_bi.jpg",
+                  imageinfo: [
+                    {
+                      url: "https://upload.wikimedia.org/wikipedia/commons/y/Yu_bi.jpg",
+                      width: 800,
+                      extmetadata: { LicenseShortName: { value: "CC BY 4.0" }, Artist: { value: "X" } },
+                    },
+                  ],
+                },
+              },
+            },
+          }),
+          { status: 200 },
+        )
+      }
+      return new Response("not found", { status: 404 })
+    }) as unknown as typeof fetch
+
+    const result = await runImageEnricher({
+      db,
+      museumId: "m3",
+      gatewayUrl: "http://gw",
+      gatewayKey: "k",
+      gatewayFetcher,
+      wmFetcher,
+      onEvent: () => {},
+    })
+    expect(result.matched).toBe(1)
+    const updated = await museums.get("m3")
+    const yu = updated!.artifacts.find((a) => a.name === "玉璧")!
+    expect(yu.image).toBe("https://upload.wikimedia.org/wikipedia/commons/y/Yu_bi.jpg")
+    expect(yu.imageLicense).toBe("CC-BY-4.0")
+    const wm = updated!.artifacts.find((a) => a.name === "未找到的文物")!
+    expect(wm.image).toBeNull()
+  })
+
   it("returns error when museum does not exist", async () => {
     const db = await freshDb()
     const result = await runImageEnricher({
