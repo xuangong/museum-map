@@ -1,13 +1,13 @@
 import { runToolLoop } from "./agent-loop"
-import { searchWikidataEntity, fetchWikidataImage } from "./wikimedia"
+import { searchWikidataEntity, fetchWikidataImage, searchCommonsFile } from "./wikimedia"
 import { MuseumsRepo } from "~/repo/museums"
 import { FieldProvenanceRepo } from "~/repo/field-provenance"
 import type { MuseumPayload } from "./import-schema"
 
 export const ENRICHER_MODEL = "claude-haiku-4-5"
 export const ENRICHER_MAX_TOKENS = 2048
-export const ENRICHER_MAX_ITERS = 12
-export const ENRICHER_WALL_MS = 60_000
+export const ENRICHER_MAX_ITERS = 40
+export const ENRICHER_WALL_MS = 180_000
 
 export interface EnrichEvent {
   type: "thinking" | "tool" | "tool_result" | "done" | "error"
@@ -35,29 +35,52 @@ export interface EnrichResult {
 }
 
 export interface ArtifactMatch {
-  qid?: string
   url?: string
   license?: string | null
   attribution?: string | null
+  /** Provenance source URL (Commons file page or Wikidata entity page). */
+  source?: string
+  /** Legacy/alternate: if agent returns a QID, we'll synthesize the source URL. */
+  qid?: string
 }
 
-const SYSTEM = `你是一名艺术品图片采编员。给定一个博物馆的代表文物列表，你要为每件文物从 Wikidata + Wikimedia Commons 找一张可用的图片。
+const SYSTEM = `你是一名艺术品图片采编员。给定一个博物馆的代表文物列表，你要为每件文物从 Wikimedia 找一张可用的图片。
 
 工作流程：
-1. 对每件文物，先用 wikidata_search 在中文 Wikidata 搜索；从候选中挑出最匹配该文物（注意区分文物本身 vs 同名博物馆/电影/人物等）。
-2. 选定一个 QID 后，调用 wikidata_image 获取图片 URL + 许可证 + 作者。
-3. 如果搜索没有合理候选，或目标实体没有 P18 图片，**跳过该文物**，绝不编造。
-4. 全部处理完后，调用一次 submit_results 提交结果。
+1. **优先 commons_search**：用文物名（可加馆名/年代/材质等关键词）直接在 Wikimedia Commons 搜索文件。绝大多数中国文物在 Commons 有图但在 Wikidata 没有单独条目。
+2. 如果 commons_search 没有合理结果，可尝试 wikidata_search → wikidata_image。
+3. 如果两条路都没有命中，**跳过该文物**，绝不编造。
+4. **每件文物最多尝试 2 次搜索**——找不到就跳过，节约迭代。
+5. 全部处理完后**必须**调用一次 submit_results 提交结果。**绝不能因为没找到任何图片就不调用 submit_results**——空 matches 也要提交（matches: {}）。
+6. **不要做"汇总思考"**——直接调用 submit_results。已经在内部消息里梳理过的结果，提交时直接照抄。
 
-submit_results.matches 是一个对象：键是文物名（与输入完全一致），值是 { qid, url, license, attribution }。只列入找到图片的文物，未找到的不要列出。
+**质量底线**（违反任意一条 → 跳过该文物，不要列入 matches）：
+- 不接受 \`.djvu / .pdf / 古籍 / 詩集 / 文獻 / 縣誌\` 这类古籍数字化文件——这些是文献扫描，不是文物照片。
+- **必须馆藏对应**：Commons 文件标题必须明确指向**当前博物馆**（馆名/所在地/同一遗址），或者文物名本身就是举世闻名的孤品（例如「四羊方尊」「越王勾践剑」）。**仅靠"同一时代/同一类型"不算匹配**——比如定州博物馆的"北朝佛造像"，匹配到正定龙兴寺的造像就是错的，必须跳过。
+- 当文物名包含具体的纹饰/形制描述（如"乳钉纹青铜爵""错金银铜车伞铤"），Commons 标题必须包含该关键字眼，否则是泛化匹配，跳过。
+- 宁可少匹配，也不要错匹配。1/7 正确 ≫ 5/7 部分错。
 
-最多 12 轮工具调用。`
+submit_results.matches 是一个对象：键是文物名（与输入完全一致），值是 { url, license, attribution, source }，其中 source 是用于 provenance 的来源 URL：
+- 来自 commons_search：填 \`https://commons.wikimedia.org/wiki/<title>\`（title 即返回的文件标题）
+- 来自 wikidata_image：填 \`https://www.wikidata.org/wiki/<QID>\`
+
+只列入找到图片的文物，未找到的不要列出。最多 24 轮工具调用。`
 
 function buildTools(): any[] {
   return [
     {
+      name: "commons_search",
+      description:
+        "在 Wikimedia Commons 直接搜索图片文件。返回第一张宽度≥200px 的候选 { title, url, license, attribution }。最适合具体文物。",
+      input_schema: {
+        type: "object",
+        required: ["query"],
+        properties: { query: { type: "string" } },
+      },
+    },
+    {
       name: "wikidata_search",
-      description: "在 Wikidata 用中文搜索实体。返回最匹配的 QID + 标签 + 描述。",
+      description: "在 Wikidata 用中文搜索实体。返回最匹配的 QID + 标签 + 描述。仅在 commons_search 无结果时使用。",
       input_schema: {
         type: "object",
         required: ["query"],
@@ -84,11 +107,12 @@ function buildTools(): any[] {
             type: "object",
             additionalProperties: {
               type: "object",
+              required: ["url", "source"],
               properties: {
-                qid: { type: "string" },
                 url: { type: "string" },
                 license: { type: "string" },
                 attribution: { type: "string" },
+                source: { type: "string" },
               },
             },
           },
@@ -96,6 +120,71 @@ function buildTools(): any[] {
       },
     },
   ]
+}
+
+function makeExecuteTool(
+  opts: EnrichOpts,
+  wmFetcher: typeof fetch,
+  getSubmitted: () => Record<string, ArtifactMatch> | null,
+  setSubmitted: (s: Record<string, ArtifactMatch>) => void,
+) {
+  return async (call: { id: string; name: string; input: any }) => {
+    if (call.name === "commons_search") {
+      const q = String(call.input?.query || "").trim()
+      if (!q) return { tool_use_id: call.id, content: "query required", is_error: true }
+      await opts.onEvent({ type: "tool", message: `🖼️ Commons: ${q}` })
+      try {
+        const hit = await searchCommonsFile({ query: q, fetcher: wmFetcher })
+        await opts.onEvent({
+          type: "tool_result",
+          message: hit ? `✅ ${hit.title}` : `— 无结果`,
+        })
+        return { tool_use_id: call.id, content: JSON.stringify(hit ?? { hit: null }) }
+      } catch (e: any) {
+        return { tool_use_id: call.id, content: `error: ${e?.message}`, is_error: true }
+      }
+    }
+    if (call.name === "wikidata_search") {
+      const q = String(call.input?.query || "").trim()
+      if (!q) return { tool_use_id: call.id, content: "query required", is_error: true }
+      await opts.onEvent({ type: "tool", message: `🔍 Wikidata: ${q}` })
+      try {
+        const hit = await searchWikidataEntity({ query: q, fetcher: wmFetcher })
+        await opts.onEvent({
+          type: "tool_result",
+          message: hit ? `✅ ${hit.qid} ${hit.label}` : `— 无结果`,
+        })
+        return { tool_use_id: call.id, content: JSON.stringify(hit ?? { hit: null }) }
+      } catch (e: any) {
+        return { tool_use_id: call.id, content: `error: ${e?.message}`, is_error: true }
+      }
+    }
+    if (call.name === "wikidata_image") {
+      const qid = String(call.input?.qid || "").trim()
+      if (!/^Q\d+$/.test(qid)) return { tool_use_id: call.id, content: "qid required (Q123)", is_error: true }
+      await opts.onEvent({ type: "tool", message: `🖼️ ${qid}` })
+      try {
+        const img = await fetchWikidataImage({ qid, fetcher: wmFetcher })
+        await opts.onEvent({
+          type: "tool_result",
+          message: img ? `✅ ${img.license || ""} ${img.attribution || ""}`.trim() : `— 无图片`,
+        })
+        return { tool_use_id: call.id, content: JSON.stringify(img ?? { image: null }) }
+      } catch (e: any) {
+        return { tool_use_id: call.id, content: `error: ${e?.message}`, is_error: true }
+      }
+    }
+    if (call.name === "submit_results") {
+      if (getSubmitted()) return { tool_use_id: call.id, content: "already submitted", is_error: true }
+      const matches = call.input?.matches
+      if (!matches || typeof matches !== "object") {
+        return { tool_use_id: call.id, content: "matches must be an object", is_error: true }
+      }
+      setSubmitted(matches as Record<string, ArtifactMatch>)
+      return { tool_use_id: call.id, content: JSON.stringify({ ok: true, count: Object.keys(matches).length }) }
+    }
+    return { tool_use_id: call.id, content: `unknown tool: ${call.name}`, is_error: true }
+  }
 }
 
 export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> {
@@ -116,15 +205,16 @@ export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> 
   }
 
   const userMsg =
-    `博物馆：${m.name}\n请为以下文物逐一查找 Wikimedia Commons 图片：\n` +
+    `当前博物馆：**${m.name}**\n请为以下馆藏文物逐一查找 Wikimedia Commons 图片。**只有当 Commons 文件能确定就是本馆藏品（标题/描述提到「${m.name}」或同一所在地/同一遗址），或文物本身是举世闻名的孤品（如四羊方尊、越王勾践剑），才算匹配。仅类型相似不算。**\n\n文物列表：\n` +
     m.artifacts
       .map((a, i) => `${i + 1}. ${a.name}${a.period ? ` (${a.period})` : ""}`)
       .join("\n")
   const messages: any[] = [{ role: "user", content: userMsg }]
 
   let submitted: Record<string, ArtifactMatch> | null = null
+  let nudged = false
 
-  const result = await runToolLoop({
+  let result = await runToolLoop({
     gatewayUrl: opts.gatewayUrl,
     gatewayKey: opts.gatewayKey,
     model: ENRICHER_MODEL,
@@ -140,56 +230,43 @@ export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> 
       await opts.onEvent({ type: "thinking", message: t })
     },
     shouldStop: () => submitted !== null,
-    executeTool: async (call) => {
-      if (call.name === "wikidata_search") {
-        const q = String(call.input?.query || "").trim()
-        if (!q) return { tool_use_id: call.id, content: "query required", is_error: true }
-        await opts.onEvent({ type: "tool", message: `🔍 Wikidata: ${q}` })
-        try {
-          const hit = await searchWikidataEntity({ query: q, fetcher: wmFetcher })
-          await opts.onEvent({
-            type: "tool_result",
-            message: hit ? `✅ ${hit.qid} ${hit.label}` : `— 无结果`,
-          })
-          return { tool_use_id: call.id, content: JSON.stringify(hit ?? { hit: null }) }
-        } catch (e: any) {
-          return { tool_use_id: call.id, content: `error: ${e?.message}`, is_error: true }
-        }
-      }
-      if (call.name === "wikidata_image") {
-        const qid = String(call.input?.qid || "").trim()
-        if (!/^Q\d+$/.test(qid)) return { tool_use_id: call.id, content: "qid required (Q123)", is_error: true }
-        await opts.onEvent({ type: "tool", message: `🖼️ ${qid}` })
-        try {
-          const img = await fetchWikidataImage({ qid, fetcher: wmFetcher })
-          await opts.onEvent({
-            type: "tool_result",
-            message: img ? `✅ ${img.license || ""} ${img.attribution || ""}`.trim() : `— 无图片`,
-          })
-          return { tool_use_id: call.id, content: JSON.stringify(img ?? { image: null }) }
-        } catch (e: any) {
-          return { tool_use_id: call.id, content: `error: ${e?.message}`, is_error: true }
-        }
-      }
-      if (call.name === "submit_results") {
-        if (submitted) return { tool_use_id: call.id, content: "already submitted", is_error: true }
-        const matches = call.input?.matches
-        if (!matches || typeof matches !== "object") {
-          return { tool_use_id: call.id, content: "matches must be an object", is_error: true }
-        }
-        submitted = matches as Record<string, ArtifactMatch>
-        return { tool_use_id: call.id, content: JSON.stringify({ ok: true, count: Object.keys(submitted).length }) }
-      }
-      return { tool_use_id: call.id, content: `unknown tool: ${call.name}`, is_error: true }
-    },
+    executeTool: makeExecuteTool(opts, wmFetcher, () => submitted, (s) => { submitted = s }),
   })
+
+  // If the model stopped without calling submit_results, push one explicit nudge.
+  if (!submitted && (result.stopReason === "end_turn" || result.stopReason === "no_tool") && !nudged) {
+    nudged = true
+    messages.push({
+      role: "user",
+      content:
+        "你还没有调用 submit_results。现在必须立即调用 submit_results，把已经找到的文物图片整理成 matches 对象提交。即使 matches 为空 ({}) 也要提交。",
+    })
+    result = await runToolLoop({
+      gatewayUrl: opts.gatewayUrl,
+      gatewayKey: opts.gatewayKey,
+      model: ENRICHER_MODEL,
+      maxTokens: ENRICHER_MAX_TOKENS,
+      system: SYSTEM,
+      tools: buildTools(),
+      messages,
+      maxIters: 4,
+      wallMs: 30_000,
+      fetcher: opts.gatewayFetcher,
+      now,
+      onText: async (t) => {
+        await opts.onEvent({ type: "thinking", message: t })
+      },
+      shouldStop: () => submitted !== null,
+      executeTool: makeExecuteTool(opts, wmFetcher, () => submitted, (s) => { submitted = s }),
+    })
+  }
 
   if (!submitted) {
     if (result.stopReason === "gateway_error") {
       await opts.onEvent({ type: "error", message: result.lastError || "gateway error" })
       return { matched: 0, total, error: result.lastError || "gateway error" }
     }
-    await opts.onEvent({ type: "done", message: "agent finished with no matches" })
+    await opts.onEvent({ type: "done", message: `agent finished without submit_results (stop=${result.stopReason}, iters=${result.iterations})` })
     return { matched: 0, total }
   }
 
@@ -252,7 +329,14 @@ export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> 
   newArtifacts.forEach((a, i) => {
     if (!a.image) return
     const hit = matchByKey.get(a.name.trim().toLowerCase())!
-    const sourceUrl = hit.qid ? `https://www.wikidata.org/wiki/${hit.qid}` : a.image
+    let sourceUrl: string
+    if (hit.source && /^https?:\/\//.test(hit.source)) {
+      sourceUrl = hit.source
+    } else if (hit.qid) {
+      sourceUrl = `https://www.wikidata.org/wiki/${hit.qid}`
+    } else {
+      sourceUrl = a.image
+    }
     merged.push({
       museum_id: opts.museumId,
       field_path: `artifacts[${i}].image`,

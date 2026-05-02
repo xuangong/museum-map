@@ -1,5 +1,5 @@
 import { describe, it, expect } from "bun:test"
-import { searchWikidataEntity, fetchWikidataImage } from "~/services/wikimedia"
+import { searchWikidataEntity, fetchWikidataImage, searchCommonsFile } from "~/services/wikimedia"
 
 function makeFetcher(routes: Record<string, any>): typeof fetch {
   return (async (input: any) => {
@@ -108,5 +108,99 @@ describe("fetchWikidataImage", () => {
     const img = await fetchWikidataImage({ qid: "Q200", fetcher })
     expect(img?.license).toBe("PD")
     expect(img?.attribution).toBe("unknown")
+  })
+})
+
+describe("searchCommonsFile", () => {
+  it("returns first image hit with url + license + attribution", async () => {
+    const fetcher = makeFetcher({
+      "list=search": {
+        query: {
+          search: [
+            { title: "File:Dingyao bowl.jpg", snippet: "Ding ware bowl", ns: 6 },
+            { title: "File:Other.jpg", snippet: "x", ns: 6 },
+          ],
+        },
+      },
+      "prop=imageinfo": {
+        query: {
+          pages: {
+            "1": {
+              title: "File:Dingyao bowl.jpg",
+              imageinfo: [
+                {
+                  url: "https://upload.wikimedia.org/wikipedia/commons/a/b/Dingyao_bowl.jpg",
+                  width: 800,
+                  extmetadata: {
+                    LicenseShortName: { value: "CC BY-SA 3.0" },
+                    Artist: { value: "Daderot" },
+                    ImageDescription: { value: "Ding ware bowl" },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    })
+    const hit = await searchCommonsFile({ query: "定窑", fetcher })
+    expect(hit?.url).toBe("https://upload.wikimedia.org/wikipedia/commons/a/b/Dingyao_bowl.jpg")
+    expect(hit?.license).toBe("CC-BY-SA-3.0")
+    expect(hit?.attribution).toBe("Daderot")
+    expect(hit?.title).toBe("File:Dingyao bowl.jpg")
+  })
+
+  it("returns null when search returns no files", async () => {
+    const fetcher = makeFetcher({ "list=search": { query: { search: [] } } })
+    const hit = await searchCommonsFile({ query: "nope", fetcher })
+    expect(hit).toBeNull()
+  })
+
+  it("skips images smaller than 200px wide and falls through to next candidate", async () => {
+    const fetcher = makeFetcher({
+      "list=search": {
+        query: {
+          search: [
+            { title: "File:Tiny.png", snippet: "x", ns: 6 },
+            { title: "File:Big.jpg", snippet: "y", ns: 6 },
+          ],
+        },
+      },
+      "titles=File%3ATiny.png": {
+        query: {
+          pages: {
+            "1": {
+              title: "File:Tiny.png",
+              imageinfo: [
+                {
+                  url: "https://upload.wikimedia.org/wikipedia/commons/x/Tiny.png",
+                  width: 50,
+                  extmetadata: { LicenseShortName: { value: "PD" } },
+                },
+              ],
+            },
+          },
+        },
+      },
+      "titles=File%3ABig.jpg": {
+        query: {
+          pages: {
+            "1": {
+              title: "File:Big.jpg",
+              imageinfo: [
+                {
+                  url: "https://upload.wikimedia.org/wikipedia/commons/y/Big.jpg",
+                  width: 1024,
+                  extmetadata: { LicenseShortName: { value: "CC BY 4.0" }, Artist: { value: "X" } },
+                },
+              ],
+            },
+          },
+        },
+      },
+    })
+    const hit = await searchCommonsFile({ query: "x", fetcher })
+    expect(hit?.title).toBe("File:Big.jpg")
+    expect(hit?.license).toBe("CC-BY-4.0")
   })
 })
