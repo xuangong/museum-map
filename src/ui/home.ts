@@ -72,7 +72,7 @@ export function HomePage(data: HomeData): string {
         <div class="period" x-text="(currentDynasty() || {}).period || ''"></div>
       </div>
     </div>
-    <button class="toc-fab" @click="tocOpen = true" aria-label="Open index">
+    <button class="toc-fab" x-show="!drawer.open" @click="tocOpen = true" aria-label="Open index">
       <span class="bars"><span></span><span></span><span></span></span>
       <span class="lbl">目录</span>
     </button>
