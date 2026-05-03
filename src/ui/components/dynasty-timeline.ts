@@ -8,7 +8,7 @@ export function DynastyTimeline(): string {
   </div>
   <template x-for="d in (visits.footprintMode ? visitedDynasties() : dynasties)" :key="d.id">
     <div class="timeline-item"
-         :class="(currentDynastyId === d.id ? 'active ' : '') + (visits.footprintMode ? 'footprint' : (isDynastyVisited(d) ? 'has-visit' : ''))"
+         :class="(currentDynastyId === d.id ? 'active ' : '') + (visits.footprintMode ? 'footprint' : (isDynastyVisited(d) ? ('has-visit depth-' + dynastyDepth(d)) : ''))"
          @click="selectDynasty(d.id)">
       <div class="name" x-text="dynastyShortName(d)"></div>
       <div class="period" x-text="dynastyShortPeriod(d)"></div>

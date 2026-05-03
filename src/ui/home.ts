@@ -56,7 +56,10 @@ export function HomePage(data: HomeData): string {
           <div class="row"><span class="dot r"></span><span>足迹（含推荐路径）</span></div>
         </template>
         <template x-if="!visits.footprintMode && currentDynastyId">
-          <div class="row"><span class="dot r"></span><span>朝代推荐博物馆</span></div>
+          <div class="row"><span class="dot k"></span><span>朝代相关博物馆</span></div>
+        </template>
+        <template x-if="!visits.footprintMode && currentDynastyId">
+          <div class="row"><span class="dot r"></span><span>已打卡</span></div>
         </template>
         <template x-if="!visits.footprintMode && !currentDynastyId">
           <div class="row"><span class="dot r"></span><span>已打卡</span></div>
@@ -81,9 +84,11 @@ export function HomePage(data: HomeData): string {
   </div>
 </div>
 <!-- Hidden poster (off-screen) used for footprint long-screenshot export -->
-<div id="footprint-poster" aria-hidden="true" style="position:absolute;left:-99999px;top:0;width:760px;background:#fefcf6;color:#2a2520;font-family:'Source Serif 4','Noto Serif SC',serif;padding:56px 48px;box-sizing:border-box;contain:strict;visibility:hidden;"></div>
+<div id="footprint-poster" aria-hidden="true" style="position:absolute;left:-99999px;top:0;width:760px;background:#fefcf6;color:#2a2520;font-family:'Source Serif 4','Noto Serif SC',serif;padding:56px 48px;box-sizing:border-box;"></div>
+<div id="dynasty-poster" aria-hidden="true" style="position:absolute;left:-99999px;top:0;width:760px;background:#fefcf6;color:#2a2520;font-family:'Source Serif 4','Noto Serif SC',serif;padding:56px 48px;box-sizing:border-box;"></div>
 <script id="bootstrap-data" type="application/json">${bootstrap}</script>
 <script src="/cdn/html2canvas.js"></script>
+<script src="/cdn/leaflet-image.js"></script>
 <script>${COORDS_SCRIPT}</script>
 <script>${MAP_SCRIPT}</script>
 <script>${CHAT_SCRIPT}</script>

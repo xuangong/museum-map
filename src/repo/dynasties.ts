@@ -1,4 +1,4 @@
-import type { DynastyCulture, DynastyEvent, DynastyFull, DynastyRecommendedMuseum } from "./types"
+import type { DynastyCulture, DynastyEvent, DynastyFull, DynastyRecommendedMuseum, DynastyRelatedMuseum } from "./types"
 
 interface DynastyHeadRow {
   id: string
@@ -21,7 +21,7 @@ export class DynastiesRepo {
       )
       .all<DynastyHeadRow>()
 
-    const [culture, events, recos] = await Promise.all([
+    const [culture, events, recos, related] = await Promise.all([
       this.db
         .prepare("SELECT dynasty_id AS dynastyId, category, description FROM dynasty_culture ORDER BY dynasty_id, order_index")
         .all<{ dynastyId: string } & DynastyCulture>(),
@@ -33,22 +33,44 @@ export class DynastiesRepo {
           "SELECT dynasty_id AS dynastyId, museum_id AS museumId, name, location, reason FROM dynasty_recommended_museums ORDER BY dynasty_id, order_index",
         )
         .all<{ dynastyId: string } & DynastyRecommendedMuseum>(),
+      this.db
+        .prepare(
+          `SELECT r.dynasty_id AS dynastyId, r.museum_id AS museumId, m.name AS name, m.location AS location, r.reason AS reason
+           FROM dynasty_museum_reasons r
+           JOIN museums m ON m.id = r.museum_id
+           ORDER BY r.dynasty_id, m.name`,
+        )
+        .all<{ dynastyId: string } & DynastyRelatedMuseum>(),
     ])
 
     const cultureBy = groupBy(culture.results, "dynastyId")
     const eventsBy = groupBy(events.results, "dynastyId")
     const recosBy = groupBy(recos.results, "dynastyId")
+    const relatedBy = groupBy(related.results, "dynastyId")
 
-    return heads.results.map((h) => ({
-      id: h.id,
-      name: h.name,
-      period: h.period,
-      center: { lat: h.centerLat, lng: h.centerLng },
-      overview: h.overview,
-      culture: (cultureBy.get(h.id) ?? []).map(({ dynastyId, ...rest }) => rest),
-      events: (eventsBy.get(h.id) ?? []).map(({ dynastyId, ...rest }) => rest),
-      recommendedMuseums: (recosBy.get(h.id) ?? []).map(({ dynastyId, ...rest }) => rest),
-    }))
+    return heads.results.map((h) => {
+      const recos = (recosBy.get(h.id) ?? []).map(({ dynastyId, ...rest }) => rest)
+      const curatedIds = new Set<string>()
+      const curatedNames = new Set<string>()
+      for (const r of recos) {
+        if (r.museumId) curatedIds.add(r.museumId)
+        if (r.name) curatedNames.add(normalizeName(r.name))
+      }
+      const rel = (relatedBy.get(h.id) ?? [])
+        .filter((r) => !curatedIds.has(r.museumId) && !curatedNames.has(normalizeName(r.name)))
+        .map(({ dynastyId, ...rest }) => rest)
+      return {
+        id: h.id,
+        name: h.name,
+        period: h.period,
+        center: { lat: h.centerLat, lng: h.centerLng },
+        overview: h.overview,
+        culture: (cultureBy.get(h.id) ?? []).map(({ dynastyId, ...rest }) => rest),
+        events: (eventsBy.get(h.id) ?? []).map(({ dynastyId, ...rest }) => rest),
+        recommendedMuseums: recos,
+        relatedMuseums: rel,
+      }
+    })
   }
 
   async get(id: string): Promise<DynastyFull | null> {
@@ -66,4 +88,12 @@ function groupBy<T extends Record<K, string>, K extends string>(rows: T[], key: 
     else m.set(k, [row])
   }
   return m
+}
+
+/** Normalize museum name for fuzzy dedup: strip parens content + whitespace. */
+function normalizeName(name: string): string {
+  return (name || "")
+    .replace(/[（(][^）)]*[）)]/g, "")
+    .replace(/\s+/g, "")
+    .trim()
 }

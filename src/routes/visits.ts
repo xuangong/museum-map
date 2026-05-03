@@ -3,6 +3,7 @@ import type { Env } from "~/index"
 import { VisitsRepo } from "~/repo/visits"
 import { MuseumsRepo } from "~/repo/museums"
 import { ReviewCacheRepo } from "~/repo/review-cache"
+import { normalizeLevel, LEVEL_TIERS } from "~/services/level-tiers"
 
 interface RouteContext {
   env: Env
@@ -92,9 +93,16 @@ export const visitsRoute = new Elysia()
     const visitedCount = items.length
     const pct = totalMuseums > 0 ? Math.round((visitedCount / totalMuseums) * 100) : 0
     const levelCounts: Record<string, number> = {}
+    const tierLabel: Record<string, string> = {}
+    LEVEL_TIERS.forEach((t) => {
+      if (t.id !== "all") tierLabel[t.id] = t.label
+    })
     items.forEach(({ m }) => {
-      const lv = m.level || "其他"
-      levelCounts[lv] = (levelCounts[lv] || 0) + 1
+      const tiers = normalizeLevel(m.level)
+      tiers.forEach((tid) => {
+        const key = tierLabel[tid] || tid
+        levelCounts[key] = (levelCounts[key] || 0) + 1
+      })
     })
     const dynastySet = new Set<string>()
     items.forEach(({ m }) => (m.dynastyConnections || []).forEach((c) => c.dynasty && dynastySet.add(c.dynasty)))
@@ -174,9 +182,9 @@ ${chatHistory.length ? "- 如果对话中暴露了城市/朝代/类别约束，�
         .trim()
       if (text) {
         const cache = new ReviewCacheRepo(env.DB)
-        await cache.save(text, items.length, chatHistory.length > 0)
+        await cache.save(text, rows.length, chatHistory.length > 0)
       }
-      return { summary: text, count: items.length, withChatContext: chatHistory.length > 0, achievements }
+      return { summary: text, count: rows.length, withChatContext: chatHistory.length > 0, achievements }
     } catch (e: any) {
       set.status = 502
       return { error: e?.message || "ai call failed" }

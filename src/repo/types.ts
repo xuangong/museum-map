@@ -53,6 +53,13 @@ export interface DynastyRecommendedMuseum {
   reason: string | null
 }
 
+export interface DynastyRelatedMuseum {
+  museumId: string
+  name: string
+  location: string | null
+  reason: string
+}
+
 export interface DynastyFull {
   id: string
   name: string
@@ -62,4 +69,5 @@ export interface DynastyFull {
   events: DynastyEvent[]
   culture: DynastyCulture[]
   recommendedMuseums: DynastyRecommendedMuseum[]
+  relatedMuseums: DynastyRelatedMuseum[]
 }

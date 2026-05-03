@@ -9,8 +9,9 @@ window.MuseumMap = {
       zoom: 5,
       zoomControl: true,
     });
-    L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
-      attribution: '© 高德地图', maxZoom: 18, subdomains: '1234'
+    L.tileLayer('/tile/{s}/{z}/{x}/{y}', {
+      attribution: '© 高德地图', maxZoom: 18, subdomains: '1234',
+      crossOrigin: 'anonymous'
     }).addTo(this.map);
     this.markersLayer = L.layerGroup().addTo(this.map);
     this.eventMarkersLayer = L.layerGroup().addTo(this.map);
@@ -20,14 +21,21 @@ window.MuseumMap = {
     var self = this;
     var baseRecommended = !!(opts && opts.recommended);
     var isVisited = (opts && typeof opts.isVisited === 'function') ? opts.isVisited : null;
+    var weightById = (opts && opts.weightById) || null;
     museums.forEach(function(m){
       if (!m.lat || !m.lng) return;
       var coord = window.toMapCoord(m.lat, m.lng);
       var visited = isVisited ? isVisited(m.id) : false;
       var cls = 'museum-marker';
       if (baseRecommended) cls += ' recommended';
-      else if (visited) cls += ' visited';
-      var icon = L.divIcon({ className: '', html: '<div class="' + cls + '"></div>', iconSize: [14,14] });
+      if (visited) cls += ' visited';
+      var size = 14;
+      if (weightById && weightById[m.id]) {
+        var w = weightById[m.id];
+        cls += w >= 5 ? ' w-curated' : (w >= 2 ? ' w-tier1' : ' w-other');
+        size = w >= 5 ? 18 : (w >= 2 ? 14 : 10);
+      }
+      var icon = L.divIcon({ className: '', html: '<div class="' + cls + '"></div>', iconSize: [size, size] });
       var marker = L.marker(coord, { icon: icon }).addTo(self.markersLayer);
       marker.on('click', function(){ onClick(m.id); });
     });

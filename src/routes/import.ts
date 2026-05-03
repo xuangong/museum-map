@@ -7,6 +7,8 @@ import { MuseumsRepo } from "~/repo/museums"
 import { FieldProvenanceRepo } from "~/repo/field-provenance"
 import { scorePayload, generateAiComment, classifySource } from "~/services/review"
 import { flattenProvenance, type MuseumPayload, type Provenance } from "~/services/import-schema"
+import { buildEvidence } from "~/services/dynasty-museum-match"
+import { generateReason } from "~/services/dynasty-reason"
 
 interface RouteContext {
   env: Env
@@ -260,4 +262,109 @@ export const importRoute = new Elysia()
       },
     })
   })
+  .post("/api/admin/dynasty-reasons/generate", async (ctx) => {
+    const { env, request, set } = ctx as unknown as RouteContext
+    const auth = checkAuth(env, request)
+    if (!auth.ok) {
+      set.status = auth.status
+      return auth.body
+    }
+    if (env.COPILOT_GATEWAY_URL == null || env.COPILOT_GATEWAY_KEY == null) {
+      set.status = 503
+      return { error: "gateway not configured" }
+    }
+    const url = new URL(request.url)
+    const onlyDynasty = url.searchParams.get("dynasty")
+    const onlyMuseum = url.searchParams.get("museum")
+    const skipExisting = url.searchParams.get("skipExisting") !== "0"
 
+    const encoder = new TextEncoder()
+    const stream = new ReadableStream({
+      async start(controller) {
+        const send = (e: any) => controller.enqueue(encoder.encode(JSON.stringify(e) + "\n"))
+        try {
+          const dynasties = await env.DB.prepare(
+            "SELECT id, name FROM dynasties ORDER BY order_index",
+          ).all<{ id: string; name: string }>()
+          const museums = await env.DB.prepare(
+            "SELECT id, name, core_period AS corePeriod, dynasty_coverage AS dynastyCoverage FROM museums",
+          ).all<{ id: string; name: string; corePeriod: string | null; dynastyCoverage: string | null }>()
+          const artifacts = await env.DB.prepare(
+            "SELECT museum_id, name, period FROM museum_artifacts",
+          ).all<{ museum_id: string; name: string; period: string | null }>()
+          const existing = await env.DB.prepare(
+            "SELECT dynasty_id, museum_id FROM dynasty_museum_reasons",
+          ).all<{ dynasty_id: string; museum_id: string }>()
+          const have = new Set<string>()
+          for (const r of existing.results) have.add(r.dynasty_id + "|" + r.museum_id)
+
+          const curated = await env.DB.prepare(
+            "SELECT dynasty_id, museum_id FROM dynasty_recommended_museums WHERE museum_id IS NOT NULL",
+          ).all<{ dynasty_id: string; museum_id: string }>()
+          const isCurated = new Set<string>()
+          for (const r of curated.results) isCurated.add(r.dynasty_id + "|" + r.museum_id)
+
+          let done = 0
+          let failed = 0
+          let skipped = 0
+
+          const dyns = dynasties.results.filter((d) => !onlyDynasty || d.id === onlyDynasty)
+          const ms = museums.results.filter((m) => !onlyMuseum || m.id === onlyMuseum)
+
+          const tasks: { d: { id: string; name: string }; m: typeof ms[0]; ev: ReturnType<typeof buildEvidence>[number] }[] = []
+          for (const d of dyns) {
+            const evs = buildEvidence({ id: d.id, name: d.name }, ms, artifacts.results)
+            for (const ev of evs) {
+              const key = d.id + "|" + ev.museumId
+              if (isCurated.has(key)) {
+                skipped++
+                continue
+              }
+              if (skipExisting && have.has(key)) {
+                skipped++
+                continue
+              }
+              const m = ms.find((x) => x.id === ev.museumId)!
+              tasks.push({ d, m, ev })
+            }
+          }
+          const total = tasks.length
+          send({ type: "start", total, skipped })
+
+          for (const t of tasks) {
+            try {
+              const reason = await generateReason({
+                dynastyName: t.d.name,
+                museumName: t.m.name,
+                evidence: t.ev,
+                gatewayUrl: env.COPILOT_GATEWAY_URL!,
+                gatewayKey: env.COPILOT_GATEWAY_KEY!,
+              })
+              await env.DB.prepare(
+                "INSERT OR REPLACE INTO dynasty_museum_reasons (dynasty_id, museum_id, reason, evidence_json, generated_at) VALUES (?, ?, ?, ?, ?)",
+              )
+                .bind(t.d.id, t.m.id, reason, JSON.stringify(t.ev), Date.now())
+                .run()
+              done++
+              send({ type: "ok", dynasty: t.d.name, museum: t.m.name, reason, done, total })
+            } catch (e: any) {
+              failed++
+              send({ type: "fail", dynasty: t.d.name, museum: t.m.name, error: e?.message || "error", failed })
+            }
+          }
+          send({ type: "done", total, done, failed, skipped })
+        } catch (e: any) {
+          send({ type: "error", message: e?.message || "internal_error" })
+        } finally {
+          controller.close()
+        }
+      },
+    })
+    return new Response(stream, {
+      status: 200,
+      headers: {
+        "content-type": "application/x-ndjson; charset=utf-8",
+        "cache-control": "no-store",
+      },
+    })
+  })

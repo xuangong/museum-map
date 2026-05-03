@@ -201,8 +201,19 @@ a { color: inherit; text-decoration: none; }
 .timeline-item.active .period { color: var(--paper-warm); opacity: 0.7; }
 .timeline-item.has-visit::after {
   content: ''; position: absolute; top: 6px; right: 6px;
-  width: 6px; height: 6px; border-radius: 50%; background: var(--vermilion);
+  width: 4px; height: 4px; border-radius: 50%; background: var(--vermilion);
+  opacity: 0.35;
 }
+.timeline-item.has-visit.depth-1::after  { width: 4px;  height: 4px;  opacity: 0.35; }
+.timeline-item.has-visit.depth-2::after  { width: 4px;  height: 4px;  opacity: 0.45; }
+.timeline-item.has-visit.depth-3::after  { width: 5px;  height: 5px;  opacity: 0.55; }
+.timeline-item.has-visit.depth-4::after  { width: 6px;  height: 6px;  opacity: 0.65; }
+.timeline-item.has-visit.depth-5::after  { width: 7px;  height: 7px;  opacity: 0.75; }
+.timeline-item.has-visit.depth-6::after  { width: 8px;  height: 8px;  opacity: 0.85; }
+.timeline-item.has-visit.depth-7::after  { width: 9px;  height: 9px;  opacity: 0.95; }
+.timeline-item.has-visit.depth-8::after  { width: 10px; height: 10px; opacity: 1; }
+.timeline-item.has-visit.depth-9::after  { width: 11px; height: 11px; opacity: 1; box-shadow: 0 0 0 1px var(--paper-elev); }
+.timeline-item.has-visit.depth-10::after { width: 11px; height: 11px; opacity: 1; box-shadow: 0 0 0 1.5px var(--paper-elev), 0 0 0 2.5px var(--vermilion); }
 .timeline-item.footprint .name { color: var(--vermilion); }
 .timeline-item.footprint.active { background: var(--vermilion); }
 .timeline-item.footprint.active .name { color: var(--paper); }
@@ -425,10 +436,31 @@ a { color: inherit; text-decoration: none; }
 }
 .museum-marker.recommended {
   width: 18px; height: 18px;
-  background: var(--vermilion);
+  background: var(--ink);
   border: 2.5px solid var(--paper-elev);
-  box-shadow: 0 0 0 1px var(--vermilion-deep), 0 0 12px rgba(183,62,24,0.35);
+  box-shadow: 0 0 0 1px var(--ink), 0 1px 4px rgba(0,0,0,0.25);
 }
+.museum-marker.recommended.visited {
+  background: var(--vermilion);
+  box-shadow: 0 0 0 1px var(--vermilion-deep), 0 0 12px rgba(183,62,24,0.4);
+}
+.museum-marker.recommended.w-curated {
+  width: 18px; height: 18px;
+}
+.museum-marker.recommended.w-curated.visited {
+  box-shadow: 0 0 0 1.5px var(--vermilion-deep), 0 0 14px rgba(183,62,24,0.5);
+}
+.museum-marker.recommended.w-tier1 {
+  width: 14px; height: 14px;
+  border-width: 2px;
+}
+.museum-marker.recommended.w-other {
+  width: 10px; height: 10px;
+  border-width: 1.5px;
+  opacity: 0.85;
+}
+.museum-marker.w-tier1 { width: 14px; height: 14px; }
+.museum-marker.w-other { width: 10px; height: 10px; border-width: 1.5px; opacity: 0.85; }
 .museum-marker.visited {
   background: var(--vermilion);
   box-shadow: 0 0 0 0.5px var(--vermilion-deep), 0 0 8px rgba(183,62,24,0.4);
@@ -634,6 +666,7 @@ a { color: inherit; text-decoration: none; }
   cursor: pointer; transition: padding 0.18s ease;
 }
 .rec-card:last-child { border-bottom: none; }
+.rec-visited { display:inline-block; margin-left: 6px; color: var(--vermilion); font-weight: 700; font-size: 12px; vertical-align: middle; }
 .rec-card:hover { padding-left: 8px; }
 .rec-card .num {
   font-family: var(--display);

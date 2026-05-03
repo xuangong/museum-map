@@ -20,6 +20,7 @@ window.museumApp = function() {
     captionShown: false,
     _captionTimer: null,
     visits: { ids: [], byId: {}, footprintMode: false, review: '', reviewLoading: false, exporting: false, chatDirty: false, chatStartIdx: -1, reviewStale: false, reviewGeneratedAt: 0, shaking: false, muted: true },
+    dynastyReviews: {},
 
     init() {
       var bs = document.getElementById('bootstrap-data');
@@ -131,13 +132,19 @@ window.museumApp = function() {
       } else if (d) {
         // Filter mode: only recommended museums + event markers
         var museums = this.recommendedMuseums(d);
-        window.MuseumMap.setMarkers(museums, function(id){ self.openMuseum(id); }, { recommended: true });
+        var weightById = this.dynastyMuseumWeights(d);
+        window.MuseumMap.setMarkers(museums, function(id){ self.openMuseum(id); }, { recommended: true, weightById: weightById, isVisited: function(id){ return self.isVisited(id); } });
         window.MuseumMap.setEventMarkers(d.events || [], function(id){ self.openMuseum(id); }, function(){
           return (d.recommendedMuseums || []).filter(function(r){ return r.museumId; }).slice(0, 3);
         });
       } else {
         // All mode
-        window.MuseumMap.setMarkers(this.museums, function(id){ self.openMuseum(id); }, { isVisited: function(id){ return self.isVisited(id); } });
+        var weightAll = {};
+        this.museums.forEach(function(m){
+          var tiers = m.tiers || [];
+          weightAll[m.id] = (tiers.indexOf('tier1') >= 0 || tiers.indexOf('heritage-site') >= 0) ? 2 : 1;
+        });
+        window.MuseumMap.setMarkers(this.museums, function(id){ self.openMuseum(id); }, { isVisited: function(id){ return self.isVisited(id); }, weightById: weightAll });
         window.MuseumMap.clearEvents();
       }
     },
@@ -161,33 +168,60 @@ window.museumApp = function() {
       return p.replace(/约公元/g, '').replace(/公元/g, '').replace(/年/g, '').replace(/—/g, '–');
     },
 
-    /** Dynasties connected to any visited museum (matched via name substring in corePeriod or dynastyCoverage). */
+    /** Dynasties whose recommendedMuseums or relatedMuseums include any museum the user has visited.
+     * Also computes a quality-weighted depth score per dynasty: 已访权重 / 总权重.
+     * Weights: curated=5, related&tier1=2, related&heritage-site=2, related other=1.
+     * 10 tiers by ratio: tier = ceil(ratio * 10), clamped 1..10. */
     visitedDynasties() {
       var key = this.visits.ids.join(',') + '|' + this.museums.length + '|' + this.dynasties.length;
       if (this._vdCache && this._vdCacheKey === key) return this._vdCache;
-      var visited = this.visitedMuseums();
+      var visitedIds = {};
+      this.visits.ids.forEach(function(id){ visitedIds[id] = true; });
+      var museumsById = {};
+      this.museums.forEach(function(m){ museumsById[m.id] = m; });
+      function relatedWeight(mid){
+        var m = museumsById[mid];
+        var tiers = (m && m.tiers) || [];
+        if (tiers.indexOf('tier1') >= 0 || tiers.indexOf('heritage-site') >= 0) return 2;
+        return 1;
+      }
       var hits = [];
       var hitIds = {};
-      if (visited.length) {
-        var self = this;
-        this.dynasties.forEach(function(d){
-          var sn = self.dynastyShortName(d);
-          if (!sn) return;
-          var sn2 = sn.replace(/(朝|国)$/, '');
-          for (var i = 0; i < visited.length; i++) {
-            var hay = (visited[i].corePeriod || '') + ' ' + (visited[i].dynastyCoverage || '') + ' ' + (visited[i].name || '');
-            if (hay.indexOf(sn) >= 0 || (sn2 && hay.indexOf(sn2) >= 0)) {
-              hits.push(d);
-              hitIds[d.id] = true;
-              break;
-            }
-          }
+      var depthById = {};
+      this.dynasties.forEach(function(d){
+        var totalW = 0, hitW = 0, anyHit = false;
+        (d.recommendedMuseums || []).forEach(function(r){
+          if (!r.museumId) return;
+          totalW += 5;
+          if (visitedIds[r.museumId]) { hitW += 5; anyHit = true; }
         });
-      }
+        (d.relatedMuseums || []).forEach(function(r){
+          if (!r.museumId) return;
+          var w = relatedWeight(r.museumId);
+          totalW += w;
+          if (visitedIds[r.museumId]) { hitW += w; anyHit = true; }
+        });
+        if (anyHit) {
+          hits.push(d);
+          hitIds[d.id] = true;
+          var ratio = totalW > 0 ? hitW / totalW : 0;
+          // 10 tiers: 1=just hit (>0), 10=>=90%
+          var tier = Math.min(10, Math.max(1, Math.ceil(ratio * 10)));
+          depthById[d.id] = { ratio: ratio, tier: tier, hitW: hitW, totalW: totalW };
+        }
+      });
       this._vdCacheKey = key;
       this._vdCache = hits;
       this._vdCacheIds = hitIds;
+      this._vdDepth = depthById;
       return hits;
+    },
+
+    /** 0 (none) | 1..10 (deeper) */
+    dynastyDepth(d) {
+      this.visitedDynasties();
+      var info = this._vdDepth && this._vdDepth[d.id];
+      return info ? info.tier : 0;
     },
 
     isDynastyVisited(d) {
@@ -204,11 +238,31 @@ window.museumApp = function() {
       var ids = (dynasty.recommendedMuseums || [])
         .map(function(r){ return r.museumId; })
         .filter(function(id){ return id; });
+      (dynasty.relatedMuseums || []).forEach(function(r){
+        if (r.museumId && ids.indexOf(r.museumId) < 0) ids.push(r.museumId);
+      });
       var byId = {};
       this.museums.forEach(function(m){ byId[m.id] = m; });
       var out = [];
       ids.forEach(function(id){ if (byId[id]) out.push(byId[id]); });
       return out;
+    },
+
+    /** Per-museum weight for a given dynasty: curated=5, tier1/heritage=2, else=1. */
+    dynastyMuseumWeights(dynasty) {
+      var museumsById = {};
+      this.museums.forEach(function(m){ museumsById[m.id] = m; });
+      var w = {};
+      (dynasty.recommendedMuseums || []).forEach(function(r){
+        if (r.museumId) w[r.museumId] = 5;
+      });
+      (dynasty.relatedMuseums || []).forEach(function(r){
+        if (!r.museumId || w[r.museumId]) return;
+        var m = museumsById[r.museumId];
+        var tiers = (m && m.tiers) || [];
+        w[r.museumId] = (tiers.indexOf('tier1') >= 0 || tiers.indexOf('heritage-site') >= 0) ? 2 : 1;
+      });
+      return w;
     },
 
     get filteredMuseums() {
@@ -285,9 +339,12 @@ window.museumApp = function() {
         open: true, loading: false, error: false, kind: 'dynasty',
         title: d.name,
         subtitle: d.period || '',
+        dynastyId: d.id,
         sections: this.buildDynastySections(d),
         _loadFn: () => this.openDynastyDrawer(d),
       };
+      // Auto-fetch cached dynasty review (no LLM call)
+      this.fetchDynastyReview(d.id);
     },
 
     buildDynastySections(d) {
@@ -306,9 +363,18 @@ window.museumApp = function() {
         }).join('') });
       }
       if (d.recommendedMuseums && d.recommendedMuseums.length) {
+        var visitedMap = this.visits.byId || {};
         sections.push({ title: 'Featured Museums · 推荐博物馆', html: d.recommendedMuseums.map(function(r, i){
           var attrs = r.museumId ? ' data-museum-id="' + escapeHtml(r.museumId) + '" class="rec-card dynasty-rec"' : ' class="rec-card" style="cursor:default;"';
-          return '<div' + attrs + '><span class="num">' + (i+1).toString().padStart(2,'0') + '</span><div><div class="name">' + escapeHtml(r.name) + '</div><div class="loc">' + escapeHtml(r.location || '') + '</div><div class="reason">' + escapeHtml(r.reason || '') + '</div></div></div>';
+          var check = (r.museumId && visitedMap[r.museumId]) ? '<span class="rec-visited" title="已打卡">✓</span>' : '';
+          return '<div' + attrs + '><span class="num">' + (i+1).toString().padStart(2,'0') + '</span><div><div class="name">' + escapeHtml(r.name) + check + '</div><div class="loc">' + escapeHtml(r.location || '') + '</div><div class="reason">' + escapeHtml(r.reason || '') + '</div></div></div>';
+        }).join('') });
+      }
+      if (d.relatedMuseums && d.relatedMuseums.length) {
+        var visitedMap2 = this.visits.byId || {};
+        sections.push({ title: 'Also Relevant · 也有相关展品', html: d.relatedMuseums.map(function(r, i){
+          var check = visitedMap2[r.museumId] ? '<span class="rec-visited" title="已打卡">✓</span>' : '';
+          return '<div data-museum-id="' + escapeHtml(r.museumId) + '" class="rec-card dynasty-rec"><span class="num">' + (i+1).toString().padStart(2,'0') + '</span><div><div class="name">' + escapeHtml(r.name) + check + '</div><div class="loc">' + escapeHtml(r.location || '') + '</div><div class="reason">' + escapeHtml(r.reason || '') + '</div></div></div>';
         }).join('') });
       }
       return sections;
@@ -374,6 +440,15 @@ window.museumApp = function() {
         await this.loadVisits();
         this.refreshMarkers();
         if (this.visits.review) this.visits.reviewStale = true;
+        // Mark all cached dynasty reviews as stale (their counts may have changed)
+        var self = this;
+        Object.keys(this.dynastyReviews).forEach(function(did){
+          if (self.dynastyReviews[did].summary) self.dynastyReviews[did].stale = true;
+        });
+        // If the dynasty drawer is open, refetch its current count so display updates
+        if (this.drawer.open && this.drawer.kind === 'dynasty' && this.drawer.dynastyId) {
+          this.fetchDynastyReview(this.drawer.dynastyId);
+        }
         // Refresh drawer so the toggle button label updates
         if (this.drawer.open && this.drawer.kind === 'museum' && this.selectedMuseumId === id) {
           this.openMuseum(id);
@@ -537,6 +612,57 @@ window.museumApp = function() {
       } catch(_) {}
     },
 
+    /** Reactive accessor used in drawer template. Returns the per-dynasty review state. */
+    dynastyReviewState(id) {
+      if (!id) return { summary: '', loading: false, exporting: false, stale: false, relevantVisitCount: 0, totalRelevant: 0 };
+      if (!this.dynastyReviews[id]) {
+        this.dynastyReviews[id] = { summary: '', loading: false, exporting: false, stale: false, relevantVisitCount: 0, totalRelevant: 0, generatedAt: 0 };
+      }
+      return this.dynastyReviews[id];
+    },
+
+    async fetchDynastyReview(id) {
+      var s = this.dynastyReviewState(id);
+      try {
+        var res = await fetch('/api/dynasties/' + encodeURIComponent(id) + '/review');
+        if (!res.ok) return;
+        var j = await res.json();
+        s.summary = j.summary || '';
+        s.relevantVisitCount = (j.currentCount != null) ? j.currentCount : (j.count || 0);
+        s.totalRelevant = j.totalRelevant || 0;
+        s.stale = !!j.stale;
+        s.generatedAt = j.generatedAt || 0;
+      } catch(_) {}
+    },
+
+    async loadDynastyReview(id) {
+      var s = this.dynastyReviewState(id);
+      if (s.loading || s.relevantVisitCount === 0) return;
+      s.loading = true;
+      try {
+        var res = await fetch('/api/dynasties/' + encodeURIComponent(id) + '/review', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({}),
+        });
+        if (!res.ok) {
+          var err = await res.json().catch(function(){return {};});
+          s.summary = '（生成失败：' + (err.error || ('http ' + res.status)) + '）';
+        } else {
+          var j = await res.json();
+          s.summary = j.summary || '（暂无足迹）';
+          s.stale = false;
+          s.generatedAt = Date.now();
+          if (j.totalRelevant != null) s.totalRelevant = j.totalRelevant;
+          if (j.count != null) s.relevantVisitCount = j.count;
+        }
+      } catch(e) {
+        s.summary = '（出错：' + (e.message || 'unknown') + '）';
+      } finally {
+        s.loading = false;
+      }
+    },
+
     async loadFootprintReview() {
       if (this.visits.reviewLoading) return;
       this.visits.reviewLoading = true;
@@ -643,6 +769,182 @@ window.museumApp = function() {
         var body = document.querySelector('.chat-body');
         if (body) body.scrollTop = body.scrollHeight;
       }, 120);
+    },
+
+    async captureMapImage(dynasty) {
+      // Capture leaflet map container, fit to dynasty's relevant museum points
+      // so they fill ~90% of the visible area (5% padding each side).
+      if (typeof window.html2canvas !== 'function') return null;
+      var el = document.getElementById('map');
+      if (!el || !window.MuseumMap || !window.MuseumMap.map) return null;
+      var map = window.MuseumMap.map;
+      var prevView = { center: map.getCenter(), zoom: map.getZoom() };
+      var prevSnap = map.options.zoomSnap;
+      try {
+        // Force size recalc — drawer may have just closed and CSS transition may not be done.
+        map.invalidateSize(false);
+        await new Promise(function(r){ setTimeout(r, 250); });
+        map.invalidateSize(false);
+        await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
+        if (dynasty) {
+          var pts = [];
+          var museumById = {};
+          this.museums.forEach(function(m){ museumById[m.id] = m; });
+          var seen = {};
+          (dynasty.recommendedMuseums || []).concat(dynasty.relatedMuseums || []).forEach(function(r){
+            if (!r.museumId || seen[r.museumId]) return;
+            seen[r.museumId] = true;
+            var m = museumById[r.museumId];
+            if (m && m.lat && m.lng) pts.push(window.toMapCoord(m.lat, m.lng));
+          });
+          if (pts.length > 0) {
+            map.options.zoomSnap = 0;
+            var size = map.getSize();
+            if (pts.length === 1) {
+              map.setView(pts[0], 8, { animate: false });
+            } else {
+              var llBounds = L.latLngBounds(pts.map(function(p){ return L.latLng(p[0], p[1]); }));
+              var padX = Math.max(20, Math.round(size.x * 0.05));
+              var padY = Math.max(20, Math.round(size.y * 0.05));
+              map.fitBounds(llBounds, {
+                paddingTopLeft: [padX, padY],
+                paddingBottomRight: [padX, padY],
+                animate: false,
+                maxZoom: 13,
+              });
+            }
+            // Let pane transforms settle.
+            await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
+          }
+        }
+        // Wait for tiles to load, then a bit more for paint.
+        await new Promise(function(resolve){
+          var done = false;
+          var finish = function(){ if (done) return; done = true; resolve(); };
+          var timer = setTimeout(finish, 5000);
+          map.once('load', function(){ clearTimeout(timer); setTimeout(finish, 800); });
+        });
+        // Final invalidateSize right before capture in case anything shifted.
+        map.invalidateSize(false);
+        await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
+        var canvas = await window.html2canvas(el, {
+          useCORS: true, allowTaint: false, backgroundColor: '#fefcf6', logging: false, scale: 1.5,
+        });
+        return canvas.toDataURL('image/png');
+      } catch(e) {
+        console.warn('map capture failed', e);
+        return null;
+      } finally {
+        try { map.options.zoomSnap = prevSnap; } catch(_) {}
+        try { map.setView(prevView.center, prevView.zoom, { animate: false }); } catch(_) {}
+      }
+    },
+
+    buildDynastyPoster(dynasty, mapDataUrl) {
+      var self = this;
+      function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+      var rev = this.dynastyReviewState(dynasty.id);
+      var reviewHtml = (window.MuseumChat && window.MuseumChat.renderMarkdown)
+        ? window.MuseumChat.renderMarkdown(rev.summary || '')
+        : esc(rev.summary || '');
+      var now = new Date();
+      var dateStr = now.getFullYear() + '.' + String(now.getMonth()+1).padStart(2,'0') + '.' + String(now.getDate()).padStart(2,'0');
+
+      // Visited museums of this dynasty (for index list)
+      var visitedIds = this.visits.byId || {};
+      var museumById = {};
+      this.museums.forEach(function(m){ museumById[m.id] = m; });
+      var allRel = (dynasty.recommendedMuseums || []).concat(dynasty.relatedMuseums || []);
+      var seen = {};
+      var visitedItems = [];
+      allRel.forEach(function(r){
+        if (!r.museumId || seen[r.museumId] || !visitedIds[r.museumId]) return;
+        seen[r.museumId] = true;
+        var m = museumById[r.museumId];
+        if (m) visitedItems.push({ m: m, reason: r.reason || '' });
+      });
+
+      var cards = visitedItems.map(function(v, i){
+        var m = v.m;
+        var idx = String(i+1).padStart(2,'0');
+        var visit = self.visits.byId[m.id] || {};
+        var when = visit.visitedAt ? new Date(visit.visitedAt).toLocaleDateString('zh-CN') : '';
+        return '<div style="display:flex;gap:18px;padding:16px 0;border-bottom:0.5px solid #d8cfbb;">'
+          + '<div style="font-family:\\'JetBrains Mono\\',monospace;font-size:11px;color:#B73E18;letter-spacing:0.1em;min-width:32px;padding-top:4px;">' + idx + '</div>'
+          + '<div style="flex:1;min-width:0;">'
+          +   '<div style="font-family:\\'Noto Serif SC\\',serif;font-size:17px;font-weight:600;color:#2a2520;margin-bottom:3px;">' + esc(m.name) + '</div>'
+          +   '<div style="font-size:12px;color:#7a7268;margin-bottom:4px;">' + esc(m.location || '') + (m.level ? ' · ' + esc(m.level) : '') + (when ? ' · 打卡 ' + when : '') + '</div>'
+          +   (v.reason ? '<div style="font-size:13px;color:#5a544c;line-height:1.55;">' + esc(v.reason) + '</div>' : '')
+          + '</div>'
+        + '</div>';
+      }).join('');
+
+      var mapBlock = mapDataUrl
+        ? '<div style="margin:24px 0 28px;border:0.5px solid #d8cfbb;background:#fff;"><img src="' + mapDataUrl + '" style="display:block;width:100%;height:auto;"/></div>'
+        : '';
+
+      return ''
+        + '<div style="border-bottom:1px solid #2a2520;padding-bottom:24px;margin-bottom:24px;">'
+        +   '<div style="font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#B73E18;margin-bottom:12px;">Vol. D · Dynasty Review · ' + dateStr + '</div>'
+        +   '<div style="font-family:\\'Noto Serif SC\\',serif;font-size:38px;font-weight:700;color:#2a2520;line-height:1.15;margin-bottom:8px;">' + esc(dynasty.name) + '</div>'
+        +   (dynasty.period ? '<div style="font-family:\\'Source Serif 4\\',serif;font-style:italic;color:#7a7268;font-size:14px;">' + esc(dynasty.period) + '</div>' : '')
+        +   '<div style="font-family:\\'Source Serif 4\\',serif;color:#5a544c;font-size:14px;margin-top:10px;">已踏访 <strong style="color:#B73E18;">' + rev.relevantVisitCount + '</strong> / ' + rev.totalRelevant + ' 座该朝代相关馆</div>'
+        + '</div>'
+        + mapBlock
+        + (rev.summary ? '<div style="background:#f0e9d8;border-left:3px solid #B73E18;padding:20px 24px;margin-bottom:32px;font-family:\\'Source Serif 4\\',\\'Noto Serif SC\\',serif;font-size:14px;line-height:1.7;color:#2a2520;">'
+            + '<div style="font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#B73E18;margin-bottom:10px;">AI Review · 朝代评价</div>'
+            + '<div class="md-export">' + reviewHtml + '</div>'
+            + '</div>' : '')
+        + (cards ? '<div style="font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#7a7268;margin-bottom:8px;">Index · 我已踏访</div><div>' + cards + '</div>' : '')
+        + '<div style="margin-top:32px;padding-top:18px;border-top:0.5px solid #d8cfbb;font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.2em;color:#7a7268;text-align:center;">中國博物館地圖 · museummap.xianliao.de5.net</div>';
+    },
+
+    async exportDynastyPoster(id) {
+      var rev = this.dynastyReviewState(id);
+      if (rev.exporting) return;
+      if (typeof window.html2canvas !== 'function') { alert('html2canvas 未加载'); return; }
+      var dynasty = this.dynasties.find(function(x){ return x.id === id; });
+      if (!dynasty) { alert('朝代不存在'); return; }
+      rev.exporting = true;
+      var prevDrawerOpen = this.drawer.open;
+      try {
+        // Close drawer so map gets full width for fitBounds + screenshot.
+        if (prevDrawerOpen) {
+          this.drawer.open = false;
+          await new Promise(function(r){ setTimeout(r, 600); }); // CSS transition + leaflet resize
+          if (window.MuseumMap && window.MuseumMap.map) window.MuseumMap.map.invalidateSize(false);
+          await new Promise(function(r){ setTimeout(r, 200); });
+        }
+        var mapDataUrl = await this.captureMapImage(dynasty);
+        var poster = document.getElementById('dynasty-poster');
+        if (!poster) { alert('poster 容器缺失'); return; }
+        poster.innerHTML = this.buildDynastyPoster(dynasty, mapDataUrl);
+        var style = document.createElement('style');
+        style.textContent = '#dynasty-poster .md-export h1,#dynasty-poster .md-export h2,#dynasty-poster .md-export h3{font-family:"Noto Serif SC",serif;font-weight:700;color:#2a2520;margin:14px 0 6px;}#dynasty-poster .md-export h2{font-size:18px;}#dynasty-poster .md-export h3{font-size:15px;}#dynasty-poster .md-export p{margin:6px 0;}#dynasty-poster .md-export strong{color:#B73E18;}#dynasty-poster .md-export ul,#dynasty-poster .md-export ol{padding-left:22px;margin:6px 0;}#dynasty-poster .md-export li{margin:3px 0;}#dynasty-poster .md-export em{font-style:italic;color:#5a544c;}';
+        poster.appendChild(style);
+        await new Promise(function(r){ setTimeout(r, 60); });
+        var canvas = await window.html2canvas(poster, { scale: 2, backgroundColor: '#fefcf6', useCORS: true, logging: false, windowWidth: 760 });
+        var blob = await new Promise(function(r){ canvas.toBlob(r, 'image/png'); });
+        if (!blob) { alert('导出失败'); return; }
+        var now = new Date();
+        var fname = 'dynasty-' + id + '-' + now.getFullYear() + String(now.getMonth()+1).padStart(2,'0') + String(now.getDate()).padStart(2,'0') + '.png';
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url; a.download = fname;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+        poster.innerHTML = '';
+      } catch (e) {
+        alert('导出出错：' + (e.message || 'unknown'));
+      } finally {
+        rev.exporting = false;
+        if (prevDrawerOpen) {
+          this.drawer.open = true;
+          if (window.MuseumMap && window.MuseumMap.map) {
+            setTimeout(function(){ window.MuseumMap.map.invalidateSize(); }, 350);
+          }
+        }
+      }
     },
 
     async exportFootprint() {
