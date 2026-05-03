@@ -55,7 +55,7 @@ export function ChatPanel(): string {
     <button class="chat-send" @click="sendChat()" :disabled="chat.loading">Send</button>
   </div>
 </div>
-<div class="shake-orb" :class="shakeOpen ? 'open' : ''" @click.outside="shakeOpen = false">
+<div class="shake-orb" :class="shakeOpen ? 'open' : ''" x-show="!drawer.open" @click.outside="shakeOpen = false">
   <button class="shake-orb-toggle" @click="shakeOpen = !shakeOpen" :title="shakeOpen ? '收起' : '摇一摇 / 静音'">
     <span class="shake-icon" :class="visits.shaking ? 'spinning' : ''">🎲</span>
   </button>
@@ -69,7 +69,7 @@ export function ChatPanel(): string {
     </button>
   </div>
 </div>
-<button class="chat-fab" @click="chat.open = true">
+<button class="chat-fab" x-show="!drawer.open" @click="chat.open = true">
   <span class="icon"></span>问 AI
 </button>`
 }
