@@ -863,6 +863,36 @@ body.chat-locked .chat-body { touch-action: pan-y; }
   font-size: 12px; line-height: 1; cursor: pointer; opacity: 0.7;
 }
 .chat-fab .shake-mute:hover { opacity: 1; }
+
+/* Shake orb — round button that expands to show 摇一摇 + 静音 */
+.shake-orb {
+  position: fixed; bottom: 86px; right: 24px;
+  z-index: 1400;
+  display: flex; flex-direction: column-reverse; align-items: flex-end; gap: 8px;
+}
+.shake-orb-toggle {
+  width: 48px; height: 48px; border-radius: 50%;
+  border: 0.5px solid var(--ink);
+  background: var(--paper); color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 20px; line-height: 1;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.shake-orb-toggle:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
+.shake-orb.open .shake-orb-toggle { background: var(--ink); color: var(--paper); }
+.shake-orb-actions {
+  display: flex; flex-direction: column-reverse; gap: 6px; align-items: flex-end;
+}
+.shake-orb-action {
+  border: 0.5px solid var(--ink); background: var(--paper); color: var(--ink);
+  padding: 8px 14px; font-family: var(--sans); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  box-shadow: 2px 2px 0 var(--ink); cursor: pointer; white-space: nowrap;
+}
+.shake-orb-action:hover { background: var(--ink); color: var(--paper); }
+.shake-orb-action:disabled { opacity: 0.5; cursor: not-allowed; }
 @keyframes shakeSpin {
   0%, 100% { transform: rotate(0deg); }
   25% { transform: rotate(-20deg); }
@@ -1050,6 +1080,10 @@ body.chat-locked .chat-body { touch-action: pan-y; }
     left: auto; right: 16px;
     bottom: calc(76px + env(safe-area-inset-bottom));
     padding: 10px 14px;
+  }
+  .shake-orb {
+    right: 16px;
+    bottom: calc(76px + env(safe-area-inset-bottom));
   }
 
   /* Search input — prevent iOS zoom */

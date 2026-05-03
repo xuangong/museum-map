@@ -55,14 +55,20 @@ export function ChatPanel(): string {
     <button class="chat-send" @click="sendChat()" :disabled="chat.loading">Send</button>
   </div>
 </div>
-<button class="chat-fab shake-fab" @click="shakeForMuseum()" :disabled="visits.shaking" title="摇一摇，随机推荐一座没去过的博物馆">
-  <span class="icon shake-icon" :class="visits.shaking ? 'spinning' : ''">🎲</span>
-  <span x-show="!visits.shaking">摇一摇</span>
-  <span x-show="visits.shaking">…</span>
-  <span class="shake-mute" @click.stop="toggleShakeMute()" :title="visits.muted ? '点击开启音效' : '点击静音'">
-    <span x-text="visits.muted ? '🔇' : '🔊'"></span>
-  </span>
-</button>
+<div class="shake-orb" :class="shakeOpen ? 'open' : ''" @click.outside="shakeOpen = false">
+  <button class="shake-orb-toggle" @click="shakeOpen = !shakeOpen" :title="shakeOpen ? '收起' : '摇一摇 / 静音'">
+    <span class="shake-icon" :class="visits.shaking ? 'spinning' : ''">🎲</span>
+  </button>
+  <div class="shake-orb-actions" x-show="shakeOpen" x-transition x-cloak>
+    <button class="shake-orb-action" @click="shakeForMuseum(); shakeOpen = false" :disabled="visits.shaking">
+      <span x-show="!visits.shaking">摇一摇</span>
+      <span x-show="visits.shaking">…</span>
+    </button>
+    <button class="shake-orb-action" @click="toggleShakeMute()" :title="visits.muted ? '点击开启音效' : '点击静音'">
+      <span x-text="visits.muted ? '🔇 静音' : '🔊 有声'"></span>
+    </button>
+  </div>
+</div>
 <button class="chat-fab" @click="chat.open = true">
   <span class="icon"></span>问 AI
 </button>`
