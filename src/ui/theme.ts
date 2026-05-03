@@ -289,6 +289,30 @@ a { color: inherit; text-decoration: none; }
   background: var(--paper-elev);
   position: sticky; top: 0; z-index: 5;
 }
+
+.toc-tier-chips {
+  padding: 12px var(--margin) 6px;
+  display: flex; flex-wrap: wrap; gap: 6px;
+  background: var(--paper-elev);
+}
+.tier-chip {
+  display: inline-flex; align-items: baseline; gap: 5px;
+  padding: 5px 10px;
+  border: 0.5px solid var(--rule-soft);
+  background: transparent;
+  font-family: var(--sans); font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--ink-mid);
+  cursor: pointer;
+  transition: border-color 0.12s ease, color 0.12s ease, background 0.12s ease;
+}
+.tier-chip:hover { border-color: var(--ink); color: var(--ink); }
+.tier-chip.active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.tier-chip-count {
+  font-family: var(--display); font-variant-numeric: lining-nums;
+  font-size: 10px; opacity: 0.7;
+}
+.tier-chip.active .tier-chip-count { opacity: 0.85; }
 .toc-search input {
   width: 100%; border: none; background: transparent;
   border-bottom: 1px solid var(--rule-soft);

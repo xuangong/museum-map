@@ -4,6 +4,15 @@ window.museumApp = function() {
     museums: [],
     dynasties: [],
     search: '',
+    levelFilter: 'all',
+    levelTiers: [
+      { id: 'all', label: '全部' },
+      { id: 'tier1', label: '一级' },
+      { id: 'tier2', label: '二级' },
+      { id: 'world-heritage', label: '世遗' },
+      { id: 'protected', label: '重点单位' },
+      { id: 'other', label: '其他' },
+    ],
     currentDynastyId: null,
     selectedMuseumId: null,
     drawer: { open: false, loading: false, error: false, title: '', subtitle: '', sections: [], _loadFn: null },
@@ -216,12 +225,29 @@ window.museumApp = function() {
           base = this.museums;
         }
       }
+      var lf = this.levelFilter;
+      if (lf && lf !== 'all') {
+        base = base.filter(function(m){ return (m.tiers || []).indexOf(lf) >= 0; });
+      }
       var q = (this.search || '').trim().toLowerCase();
       if (!q) return base;
       return base.filter(function(m){
         return (m.name || '').toLowerCase().indexOf(q) >= 0
             || (m.corePeriod || '').toLowerCase().indexOf(q) >= 0;
       });
+    },
+
+    tierCount(tierId) {
+      var pool;
+      var d = this.currentDynasty();
+      if (d) pool = this.recommendedMuseums(d);
+      else pool = this.museums;
+      if (tierId === 'all') return pool.length;
+      var n = 0;
+      for (var i = 0; i < pool.length; i++) {
+        if ((pool[i].tiers || []).indexOf(tierId) >= 0) n++;
+      }
+      return n;
     },
 
     selectDynasty(id) {

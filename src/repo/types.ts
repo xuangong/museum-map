@@ -4,6 +4,7 @@ export interface MuseumListItem {
   lat: number
   lng: number
   level: string | null
+  tiers: string[]
   corePeriod: string | null
   dynastyCoverage: string | null
 }

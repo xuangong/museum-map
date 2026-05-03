@@ -1,5 +1,6 @@
 import type { MuseumFull, MuseumListItem } from "./types"
 import type { MuseumPayload } from "~/services/import-schema"
+import { normalizeLevel } from "~/services/level-tiers"
 
 /**
  * Coerce a possibly-non-array field into an array.
@@ -39,8 +40,8 @@ export class MuseumsRepo {
       .prepare(
         "SELECT id, name, lat, lng, level, core_period AS corePeriod, dynasty_coverage AS dynastyCoverage FROM museums ORDER BY id",
       )
-      .all<MuseumListItem>()
-    return results
+      .all<Omit<MuseumListItem, "tiers">>()
+    return results.map((r) => ({ ...r, tiers: normalizeLevel(r.level) }))
   }
 
   async get(id: string): Promise<MuseumFull | null> {
@@ -50,7 +51,7 @@ export class MuseumsRepo {
         "SELECT id, name, lat, lng, location, level, core_period AS corePeriod, specialty, dynasty_coverage AS dynastyCoverage, timeline FROM museums WHERE id = ?",
       )
       .bind(id)
-      .first<Omit<MuseumFull, "treasures" | "halls" | "artifacts" | "dynastyConnections" | "sources">>()
+      .first<Omit<MuseumFull, "tiers" | "treasures" | "halls" | "artifacts" | "dynastyConnections" | "sources">>()
     if (!head) return null
 
     const [treasures, halls, artifacts, conns, sources] = await Promise.all([
@@ -78,6 +79,7 @@ export class MuseumsRepo {
 
     return {
       ...head,
+      tiers: normalizeLevel(head.level),
       treasures: treasures.results.map((r) => r.name),
       halls: halls.results.map((r) => r.name),
       artifacts: artifacts.results,

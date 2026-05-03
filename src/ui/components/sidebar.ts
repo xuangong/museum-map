@@ -95,6 +95,18 @@ export function Sidebar(): string {
     </div>
   </div>
 
+  <!-- Level filter chips -->
+  <div class="toc-tier-chips" x-show="!visits.footprintMode" x-cloak>
+    <template x-for="t in levelTiers" :key="t.id">
+      <button class="tier-chip"
+              :class="levelFilter === t.id ? 'active' : ''"
+              @click="levelFilter = t.id">
+        <span x-text="t.label"></span>
+        <span class="tier-chip-count" x-text="tierCount(t.id)"></span>
+      </button>
+    </template>
+  </div>
+
   <!-- Search -->
   <div class="toc-search">
     <input x-model="search" placeholder="Search museums…" />
