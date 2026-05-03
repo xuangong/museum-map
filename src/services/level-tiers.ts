@@ -17,5 +17,4 @@ export const LEVEL_TIERS: { id: string; label: string }[] = [
   { id: "tier1", label: "一级馆" },
   { id: "tier2", label: "二级馆" },
   { id: "heritage-site", label: "世遗/国保" },
-  { id: "other", label: "其他" },
 ]
