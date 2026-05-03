@@ -66,7 +66,7 @@ export function HomePage(data: HomeData): string {
         </template>
         <div class="row" x-show="currentDynastyId" x-cloak><span class="dot e"></span><span>历史事件</span></div>
       </div>
-      <div class="map-caption" :class="currentDynastyId ? 'show' : ''" x-cloak>
+      <div class="map-caption" :class="captionShown ? 'show' : ''" x-cloak>
         <div class="label">Now Reading</div>
         <div class="name" x-text="(currentDynasty() || {}).name || ''"></div>
         <div class="period" x-text="(currentDynasty() || {}).period || ''"></div>

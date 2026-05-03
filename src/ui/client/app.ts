@@ -9,6 +9,8 @@ window.museumApp = function() {
     drawer: { open: false, loading: false, error: false, title: '', subtitle: '', sections: [], _loadFn: null },
     chat: { open: false, messages: [], input: '', loading: false, fullscreen: false, palette: { open: false, query: '' } },
     tocOpen: false,
+    captionShown: false,
+    _captionTimer: null,
     visits: { ids: [], byId: {}, footprintMode: false, review: '', reviewLoading: false, exporting: false, chatDirty: false, chatStartIdx: -1, reviewStale: false, reviewGeneratedAt: 0, shaking: false, muted: true },
 
     init() {
@@ -231,10 +233,20 @@ window.museumApp = function() {
         window.MuseumMap.flyTo(d.center.lat, d.center.lng, 5);
       }
       this.openDynastyDrawer(d);
+      this.flashCaption();
+    },
+
+    flashCaption() {
+      this.captionShown = true;
+      if (this._captionTimer) { clearTimeout(this._captionTimer); }
+      var self = this;
+      this._captionTimer = setTimeout(function(){ self.captionShown = false; }, 3000);
     },
 
     clearDynastyFilter() {
       this.currentDynastyId = null;
+      this.captionShown = false;
+      if (this._captionTimer) { clearTimeout(this._captionTimer); this._captionTimer = null; }
       this.refreshMarkers();
       if (this.drawer.open && this.drawer.kind === 'dynasty') this.closeDrawer();
     },
