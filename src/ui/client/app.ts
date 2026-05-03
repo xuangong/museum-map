@@ -7,10 +7,9 @@ window.museumApp = function() {
     levelFilter: 'all',
     levelTiers: [
       { id: 'all', label: '全部' },
-      { id: 'tier1', label: '一级' },
-      { id: 'tier2', label: '二级' },
-      { id: 'world-heritage', label: '世遗' },
-      { id: 'protected', label: '重点单位' },
+      { id: 'tier1', label: '一级馆' },
+      { id: 'tier2', label: '二级馆' },
+      { id: 'heritage-site', label: '世遗/国保' },
       { id: 'other', label: '其他' },
     ],
     currentDynastyId: null,
