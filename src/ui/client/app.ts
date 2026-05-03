@@ -239,9 +239,13 @@ window.museumApp = function() {
 
     tierCount(tierId) {
       var pool;
-      var d = this.currentDynasty();
-      if (d) pool = this.recommendedMuseums(d);
-      else pool = this.museums;
+      if (this.visits.footprintMode) {
+        pool = this.visitedMuseums();
+      } else {
+        var d = this.currentDynasty();
+        if (d) pool = this.recommendedMuseums(d);
+        else pool = this.museums;
+      }
       if (tierId === 'all') return pool.length;
       var n = 0;
       for (var i = 0; i < pool.length; i++) {

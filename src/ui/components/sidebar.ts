@@ -96,7 +96,7 @@ export function Sidebar(): string {
   </div>
 
   <!-- Level filter chips -->
-  <div class="toc-tier-chips" x-show="!visits.footprintMode" x-cloak>
+  <div class="toc-tier-chips">
     <template x-for="t in levelTiers" :key="t.id">
       <button class="tier-chip"
               :class="levelFilter === t.id ? 'active' : ''"
