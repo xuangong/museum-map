@@ -21,6 +21,9 @@ window.museumApp = function() {
     _captionTimer: null,
     visits: { ids: [], byId: {}, footprintMode: false, review: '', reviewLoading: false, exporting: false, chatDirty: false, chatStartIdx: -1, reviewStale: false, reviewGeneratedAt: 0, shaking: false, muted: true },
     dynastyReviews: {},
+    toast: '',
+    _toastTimer: null,
+    _suppressHashChange: false,
 
     init() {
       var bs = document.getElementById('bootstrap-data');
@@ -31,7 +34,13 @@ window.museumApp = function() {
 
       window.MuseumMap.init(35.0, 105.0);
       var self = this;
-      this.loadVisits().then(function(){ self.refreshMarkers(); self.loadCachedReview(); });
+      this.loadVisits().then(function(){
+        self.refreshMarkers();
+        self.loadCachedReview();
+        self.applyHashRoute();
+      });
+
+      window.addEventListener('hashchange', function(){ self.applyHashRoute(); });
 
       // First-visit welcome message in chat
       if (!window.localStorage.getItem('museumChatWelcomed')) {
@@ -343,6 +352,7 @@ window.museumApp = function() {
         sections: this.buildDynastySections(d),
         _loadFn: () => this.openDynastyDrawer(d),
       };
+      this.setHashRoute({ kind: 'dynasty', id: d.id });
       // Auto-fetch cached dynasty review (no LLM call)
       this.fetchDynastyReview(d.id);
     },
@@ -384,6 +394,7 @@ window.museumApp = function() {
       this.selectedMuseumId = id;
       this.tocOpen = false;
       this.drawer = { open: true, loading: true, error: false, kind: 'museum', title: '', subtitle: '', sections: [], _loadFn: () => this.openMuseum(id) };
+      this.setHashRoute({ kind: 'museum', id: id });
       var head = this.museums.find(function(x){ return x.id === id; });
       if (head) {
         this.drawer.title = head.name;
@@ -410,6 +421,80 @@ window.museumApp = function() {
     closeDrawer() {
       this.drawer.open = false;
       this.selectedMuseumId = null;
+      this.setHashRoute(null);
+    },
+
+    // ─── URL hash routing for shareable deep links ───
+    setHashRoute(route) {
+      // route: null | { kind: 'museum'|'dynasty', id: string }
+      var target = '';
+      if (route && route.id) {
+        var prefix = route.kind === 'dynasty' ? 'd' : 'm';
+        target = '#/' + prefix + '/' + encodeURIComponent(route.id);
+      }
+      this._suppressHashChange = true;
+      try {
+        if (target) {
+          if (location.hash !== target) history.replaceState(null, '', target);
+        } else if (location.hash) {
+          history.replaceState(null, '', location.pathname + location.search);
+        }
+      } catch(_) {}
+      var self = this;
+      setTimeout(function(){ self._suppressHashChange = false; }, 0);
+    },
+
+    applyHashRoute() {
+      if (this._suppressHashChange) return;
+      var h = location.hash || '';
+      var m = h.match(/^#\\/(d|m)\\/(.+)$/);
+      if (!m) {
+        if (this.drawer.open) this.closeDrawer();
+        return;
+      }
+      var kind = m[1], id = decodeURIComponent(m[2]);
+      if (kind === 'd') {
+        var dyn = this.dynasties.find(function(x){ return x.id === id; });
+        if (dyn) this.selectDynasty(id);
+      } else if (kind === 'm') {
+        this.openMuseum(id);
+      }
+    },
+
+    async shareCurrent() {
+      if (!this.drawer.open) return;
+      var route, title, desc;
+      if (this.drawer.kind === 'dynasty' && this.drawer.dynastyId) {
+        route = { kind: 'dynasty', id: this.drawer.dynastyId };
+        title = '中國博物館地圖 · ' + this.drawer.title;
+        desc = '看看 ' + this.drawer.title + ' 朝代的相关博物馆';
+      } else if (this.drawer.kind === 'museum' && this.selectedMuseumId) {
+        route = { kind: 'museum', id: this.selectedMuseumId };
+        title = '中國博物館地圖 · ' + this.drawer.title;
+        desc = this.drawer.title + (this.drawer.subtitle ? ' · ' + this.drawer.subtitle : '');
+      } else {
+        return;
+      }
+      var url = location.origin + location.pathname + '#/' + (route.kind === 'dynasty' ? 'd' : 'm') + '/' + encodeURIComponent(route.id);
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: title, text: desc, url: url });
+          return;
+        }
+      } catch(_) {}
+      try {
+        await navigator.clipboard.writeText(url);
+        this.flashToast('链接已复制');
+      } catch(_) {
+        prompt('复制下面的链接分享：', url);
+      }
+    },
+
+    flashToast(msg) {
+      this.toast = msg;
+      if (this._toastTimer) clearTimeout(this._toastTimer);
+      var self = this;
+      this._toastTimer = setTimeout(function(){ self.toast = ''; }, 1800);
     },
 
     async loadVisits() {

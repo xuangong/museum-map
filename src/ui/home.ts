@@ -82,6 +82,7 @@ export function HomePage(data: HomeData): string {
     ${Drawer()}
     ${ChatPanel()}
   </div>
+  <div class="toast" x-show="toast" x-text="toast" x-transition.opacity x-cloak></div>
 </div>
 <!-- Hidden poster (off-screen) used for footprint long-screenshot export -->
 <div id="footprint-poster" aria-hidden="true" style="position:absolute;left:-99999px;top:0;width:760px;background:#fefcf6;color:#2a2520;font-family:'Source Serif 4','Noto Serif SC',serif;padding:56px 48px;box-sizing:border-box;"></div>

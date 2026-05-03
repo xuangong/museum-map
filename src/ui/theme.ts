@@ -556,6 +556,25 @@ a { color: inherit; text-decoration: none; }
   color: var(--ink); padding: 0 0 0 16px; line-height: 1;
 }
 .drawer-folio .close:hover { color: var(--vermilion); }
+.share-btn {
+  border: 0.5px solid var(--ink); background: transparent;
+  font-family: var(--sans); font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink); padding: 6px 12px; cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.share-btn:hover { background: var(--ink); color: var(--paper); }
+.share-btn:active { background: var(--vermilion); color: var(--paper); border-color: var(--vermilion); }
+
+.toast {
+  position: fixed; left: 50%; bottom: calc(40px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  background: var(--ink); color: var(--paper);
+  font-family: var(--sans); font-size: 12px; letter-spacing: 0.12em;
+  padding: 12px 22px; border-radius: 2px;
+  box-shadow: 0 8px 24px -8px rgba(20,17,14,0.3);
+  z-index: 5000; pointer-events: none;
+}
 
 .drawer-hero {
   padding: 36px var(--margin) 28px;

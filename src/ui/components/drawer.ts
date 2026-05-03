@@ -2,7 +2,10 @@ export function Drawer(): string {
   return `<aside class="drawer" :class="drawer.open ? 'open' : ''" @click="onDrawerClick($event)">
   <div class="drawer-folio">
     <div class="label" x-text="drawer.kind === 'dynasty' ? 'Dynasty Profile' : 'Museum File'"></div>
-    <button class="close" @click="closeDrawer()">×</button>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button class="share-btn" @click="shareCurrent()" title="分享链接" aria-label="Share">↗ 分享</button>
+      <button class="close" @click="closeDrawer()">×</button>
+    </div>
   </div>
 
   <div x-show="drawer.loading" class="drawer-loading">Opening dossier…</div>
