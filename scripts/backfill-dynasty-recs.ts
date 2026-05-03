@@ -75,6 +75,12 @@ interface Resolution {
 const MANUAL: Record<string, string> = {
   "中国大运河博物馆": "yangzhou",        // yangzhou's full name = "扬州博物馆 / 中国大运河博物馆"
   "敦煌研究院/莫高窟": "mogao",
+  "杭州博物馆/南宋官窑博物馆": "1f59db8a-b242-494f-aba4-7f02ed14f48c",
+  "汉阳陵博物馆": "8d05e910-ec8f-4d99-8cba-140f10bd9ef2",
+  "颐和园": "40b9932c-a873-4aa4-85fe-392abe12ef50",
+  "圆明园遗址公园": "bfd76fa2-1343-4649-91f0-a8bcc3b0b690",
+  "白马寺": "6d90c01d-efe7-45e5-a39a-e28a10298fa2",
+  "南京明孝陵/明城墙": "ebd9f374-6925-48ef-a456-13e0fd61fcd4",
 }
 
 function resolve(name: string): { id: string | null; match: Resolution["match"] } {
