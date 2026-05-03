@@ -59,6 +59,9 @@ export function ChatPanel(): string {
   <span class="icon shake-icon" :class="visits.shaking ? 'spinning' : ''">🎲</span>
   <span x-show="!visits.shaking">摇一摇</span>
   <span x-show="visits.shaking">…</span>
+  <span class="shake-mute" @click.stop="toggleShakeMute()" :title="visits.muted ? '点击开启音效' : '点击静音'">
+    <span x-text="visits.muted ? '🔇' : '🔊'"></span>
+  </span>
 </button>
 <button class="chat-fab" @click="chat.open = true">
   <span class="icon"></span>问 AI
