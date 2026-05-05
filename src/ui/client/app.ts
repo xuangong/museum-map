@@ -27,6 +27,7 @@ window.museumApp = function() {
     dynastyReviews: {},
     me: null,
     authForm: { email: '', password: '', loading: false, error: '' },
+    inviteCode: '',
     nameForm: { editing: false, value: '', loading: false, error: '' },
     toast: '',
     _toastTimer: null,
@@ -50,6 +51,17 @@ window.museumApp = function() {
 
       window.MuseumMap.init(35.0, 105.0);
       var self = this;
+
+      // Capture invite code from URL (?invite=xxx) and strip from address bar
+      try {
+        var u0 = new URL(window.location.href);
+        var inv = u0.searchParams.get('invite');
+        if (inv) {
+          this.inviteCode = inv;
+          u0.searchParams.delete('invite');
+          window.history.replaceState({}, '', u0.toString());
+        }
+      } catch(_) {}
 
       // OAuth callback cleanup
       if (window.location.search.indexOf('logged_in=1') >= 0) {
@@ -713,9 +725,10 @@ window.museumApp = function() {
       if (this.authForm.loading) return;
       this.authForm.loading = true; this.authForm.error = '';
       try {
-        await window.MuseumAuth.register(this.authForm.email, this.authForm.password);
+        await window.MuseumAuth.register(this.authForm.email, this.authForm.password, this.inviteCode);
         this.me = window.MuseumAuth.user;
         this.authForm.email = ''; this.authForm.password = '';
+        this.inviteCode = '';
         await this.loadVisits(); this.refreshMarkers();
         this.flashToast('已注册并登录');
       } catch(e) {
@@ -723,8 +736,30 @@ window.museumApp = function() {
         if (msg === 'email_taken') msg = '邮箱已注册';
         if (msg === 'weak_password') msg = '密码至少 8 位';
         if (msg === 'invalid_email') msg = '邮箱格式不对';
+        if (msg === 'invite_required') msg = '需要邀请码';
+        if (msg === 'invite_invalid') msg = '邀请码无效';
+        if (msg === 'invite_used') msg = '邀请码已被使用';
+        if (msg === 'invite_expired') msg = '邀请码已过期';
         this.authForm.error = msg;
       } finally { this.authForm.loading = false; }
+    },
+
+    async createInvite() {
+      if (!this.me || !this.me.isAdmin) return;
+      try {
+        var res = await fetch('/auth/invites', {
+          method: 'POST', credentials: 'same-origin',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ expiresInDays: 30 }),
+        });
+        var j = await res.json();
+        if (!res.ok) throw new Error(j.error || 'create_failed');
+        var url = window.location.origin + '/?invite=' + encodeURIComponent(j.invite.code);
+        try { await navigator.clipboard.writeText(url); this.flashToast('邀请链接已复制'); }
+        catch(_) { window.prompt('复制邀请链接：', url); }
+      } catch(e) {
+        this.flashToast('生成失败：' + ((e && e.message) || ''));
+      }
     },
 
     async doLogout() {

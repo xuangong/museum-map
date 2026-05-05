@@ -37,11 +37,11 @@ export const AUTH_SCRIPT = `
       return window.MuseumAuth.user;
     } catch(_) { window.MuseumAuth.user = null; return null; }
   }
-  async function register(email, password){
+  async function register(email, password, inviteCode){
     var res = await fetch('/auth/register', {
       method: 'POST', credentials: 'same-origin',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ email: email, password: password }),
+      body: JSON.stringify({ email: email, password: password, inviteCode: inviteCode || '' }),
     });
     var j = await res.json();
     if (!res.ok) throw new Error(j.error || 'register_failed');

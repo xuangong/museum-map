@@ -1,6 +1,7 @@
 // src/services/auth.ts
 import { UsersRepo, type UserRow } from "~/repo/users"
 import { SessionsRepo, type SessionRow } from "~/repo/sessions"
+import { InvitesRepo } from "~/repo/invites"
 import { hashPassword, verifyPassword } from "~/lib/crypto"
 import { normalizeEmail } from "~/lib/email-norm"
 
@@ -15,15 +16,18 @@ export interface AuthResult {
 export class AuthService {
   private users: UsersRepo
   private sessions: SessionsRepo
+  private invites: InvitesRepo
   constructor(private db: D1Database) {
     this.users = new UsersRepo(db)
     this.sessions = new SessionsRepo(db)
+    this.invites = new InvitesRepo(db)
   }
 
   async register(opts: {
     email: string
     password: string
     displayName?: string
+    inviteCode?: string
     userAgent?: string
     ip?: string
   }): Promise<AuthResult> {
@@ -34,6 +38,15 @@ export class AuthService {
     const existing = await this.users.findByEmail(email)
     if (existing) throw new Error("email_taken")
     const isFirst = (await this.users.countAll()) === 0
+    let invite = null as Awaited<ReturnType<InvitesRepo["findByCode"]>>
+    if (!isFirst) {
+      const code = (opts.inviteCode || "").trim()
+      if (!code) throw new Error("invite_required")
+      invite = await this.invites.findByCode(code)
+      if (!invite) throw new Error("invite_invalid")
+      if (invite.used_at) throw new Error("invite_used")
+      if (invite.expires_at && invite.expires_at < Date.now()) throw new Error("invite_expired")
+    }
     const user = await this.users.create({
       email,
       emailNormalized: norm,
@@ -41,6 +54,10 @@ export class AuthService {
       displayName: opts.displayName ?? null,
       isAdmin: isFirst,
     })
+    if (invite) {
+      const consumed = await this.invites.markUsed(invite.code, user.id)
+      if (!consumed) throw new Error("invite_used")
+    }
     await this.users.touchLogin(user.id)
     const session = await this.sessions.create({
       userId: user.id,

@@ -4,11 +4,12 @@ import { AuthService } from "~/services/auth"
 import { buildAuthUrl, exchangeCode } from "~/services/google-oauth"
 import { generateToken } from "~/lib/crypto"
 import { parseCookies, serializeCookie } from "~/lib/cookies"
-import { sessionMiddleware, requireUser } from "~/middleware/session"
+import { sessionMiddleware, requireUser, requireAdmin } from "~/middleware/session"
 import { getClientIp } from "~/lib/getClientIp"
 import { checkAndIncrement, bucketKey } from "~/lib/rateLimit"
 import type { UserRow } from "~/repo/users"
 import { UsersRepo } from "~/repo/users"
+import { InvitesRepo } from "~/repo/invites"
 import type { SessionRow } from "~/repo/sessions"
 
 interface Ctx {
@@ -83,6 +84,7 @@ export const authRoute = new Elysia()
         email: String(c.body?.email ?? ""),
         password: String(c.body?.password ?? ""),
         displayName: typeof c.body?.displayName === "string" ? c.body.displayName.slice(0, 80) : undefined,
+        inviteCode: typeof c.body?.inviteCode === "string" ? c.body.inviteCode : undefined,
         userAgent: c.request.headers.get("user-agent") || undefined,
         ip: getClientIp(c.request) || undefined,
       })
@@ -93,6 +95,9 @@ export const authRoute = new Elysia()
       if (msg === "email_taken") { c.set.status = 409; return { error: "email_taken" } }
       if (msg === "weak_password" || msg === "invalid_email") {
         c.set.status = 400; return { error: msg }
+      }
+      if (msg === "invite_required" || msg === "invite_invalid" || msg === "invite_used" || msg === "invite_expired") {
+        c.set.status = 403; return { error: msg }
       }
       c.set.status = 500; return { error: "server_error" }
     }
@@ -203,4 +208,34 @@ export const authRoute = new Elysia()
     const svc = new AuthService(c.env.DB)
     const merged = await svc.mergeAnonymous(u.id, visits)
     return { merged }
+  })
+  .post("/auth/invites", async (ctx) => {
+    const c = ctx as unknown as Ctx
+    if (!originOk(c.request)) { c.set.status = 403; return { error: "csrf" } }
+    const u = requireAdmin(c)
+    if (!u) return { error: "forbidden" }
+    const note = typeof c.body?.note === "string" ? c.body.note.slice(0, 200) : null
+    const expiresIn = typeof c.body?.expiresInDays === "number" ? c.body.expiresInDays : 30
+    const expiresAt = expiresIn > 0 ? Date.now() + expiresIn * 86400 * 1000 : null
+    const invites = new InvitesRepo(c.env.DB)
+    const inv = await invites.create({ createdBy: u.id, expiresAt, note })
+    return { invite: inv }
+  })
+  .get("/auth/invites", async (ctx) => {
+    const c = ctx as unknown as Ctx
+    const u = requireAdmin(c)
+    if (!u) return { error: "forbidden" }
+    const invites = new InvitesRepo(c.env.DB)
+    const list = await invites.listRecent(100)
+    return { invites: list }
+  })
+  .delete("/auth/invites/:code", async (ctx) => {
+    const c = ctx as unknown as Ctx & { params: { code: string } }
+    if (!originOk(c.request)) { c.set.status = 403; return { error: "csrf" } }
+    const u = requireAdmin(c)
+    if (!u) return { error: "forbidden" }
+    const invites = new InvitesRepo(c.env.DB)
+    const ok = await invites.revoke(c.params.code)
+    if (!ok) { c.set.status = 404; return { error: "not_found_or_used" } }
+    return { ok: true }
   })

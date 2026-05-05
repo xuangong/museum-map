@@ -16,9 +16,13 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
         <button @click="submitLogin()" :disabled="authForm.loading"
           style="border:none;background:var(--vermilion);color:var(--paper);padding:8px 14px;font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;">登录</button>
-        <button @click="submitRegister()" :disabled="authForm.loading"
+        <button x-show="inviteCode" @click="submitRegister()" :disabled="authForm.loading"
           style="border:0.5px solid var(--vermilion);background:transparent;color:var(--vermilion);padding:8px 14px;font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;">注册</button>
+        <span x-show="!inviteCode" style="font-size:11px;color:var(--ink-mid);font-style:italic;">注册需邀请码</span>
         <span x-show="authForm.loading" style="font-size:11px;color:var(--ink-mid);">…</span>
+      </div>
+      <div x-show="inviteCode" x-cloak style="margin-top:6px;font-size:11px;color:var(--ink-mid);">
+        已识别邀请码 <span x-text="inviteCode.slice(0,8)+'…'" style="font-family:var(--mono);"></span>
       </div>
       ${googleBlock}
       <div x-show="authForm.error" x-text="authForm.error"
@@ -34,6 +38,10 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
           style="border:none;background:transparent;font-family:var(--sans);font-size:11px;color:var(--vermilion);cursor:pointer;padding:0;flex:0 0 auto;">✎</button>
         <a href="#" @click.prevent="doLogout()"
           style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;">退出</a>
+      </div>
+      <div x-show="!nameForm.editing && me && me.isAdmin" x-cloak style="margin-top:6px;">
+        <a href="#" @click.prevent="createInvite()"
+          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;">+ 生成邀请链接</a>
       </div>
       <div x-show="nameForm.editing" x-cloak>
         <input x-model="nameForm.value" type="text" maxlength="80" placeholder="昵称（留空则显示邮箱）"
