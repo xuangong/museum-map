@@ -4,6 +4,9 @@ import { VisitsRepo } from "~/repo/visits"
 import { MuseumsRepo } from "~/repo/museums"
 import { ReviewCacheRepo } from "~/repo/review-cache"
 import { normalizeLevel, LEVEL_TIERS } from "~/services/level-tiers"
+import { sessionMiddleware, requireUser } from "~/middleware/session"
+import type { UserRow } from "~/repo/users"
+import type { SessionRow } from "~/repo/sessions"
 
 interface RouteContext {
   env: Env
@@ -11,49 +14,60 @@ interface RouteContext {
   body: any
   params: any
   set: any
+  user: UserRow | null
+  session: SessionRow | null
 }
 
 export const visitsRoute = new Elysia()
+  .use(sessionMiddleware)
   .get("/api/visits", async (ctx) => {
-    const { env } = ctx as unknown as RouteContext
-    const repo = new VisitsRepo(env.DB)
-    const rows = await repo.list()
+    const c = ctx as unknown as RouteContext
+    const u = requireUser(c)
+    if (!u) return { error: "unauthorized" }
+    const repo = new VisitsRepo(c.env.DB)
+    const rows = await repo.list(u.id)
     return {
       items: rows.map((r) => ({ museumId: r.museum_id, visitedAt: r.visited_at, note: r.note })),
     }
   })
   .post("/api/visits/:id", async (ctx) => {
-    const { env, params, body, set } = ctx as unknown as RouteContext
-    const museums = new MuseumsRepo(env.DB)
-    const m = await museums.get(params.id)
+    const c = ctx as unknown as RouteContext
+    const u = requireUser(c)
+    if (!u) return { error: "unauthorized" }
+    const museums = new MuseumsRepo(c.env.DB)
+    const m = await museums.get(c.params.id)
     if (!m) {
-      set.status = 404
+      c.set.status = 404
       return { error: "museum not found" }
     }
-    const repo = new VisitsRepo(env.DB)
-    const note = typeof body?.note === "string" ? body.note.slice(0, 500) : undefined
-    await repo.checkIn(params.id, "me", note)
-    return { ok: true, museumId: params.id }
+    const repo = new VisitsRepo(c.env.DB)
+    const note = typeof c.body?.note === "string" ? c.body.note.slice(0, 500) : undefined
+    await repo.checkIn(c.params.id, u.id, note)
+    return { ok: true, museumId: c.params.id }
   })
   .delete("/api/visits/:id", async (ctx) => {
-    const { env, params, set } = ctx as unknown as RouteContext
-    const repo = new VisitsRepo(env.DB)
-    const ok = await repo.remove(params.id)
+    const c = ctx as unknown as RouteContext
+    const u = requireUser(c)
+    if (!u) return { error: "unauthorized" }
+    const repo = new VisitsRepo(c.env.DB)
+    const ok = await repo.remove(c.params.id, u.id)
     if (!ok) {
-      set.status = 404
+      c.set.status = 404
       return { error: "not found" }
     }
     return { ok: true }
   })
   .post("/api/visits/review", async (ctx) => {
-    const { env, body, set } = ctx as unknown as RouteContext
-    if (!env.COPILOT_GATEWAY_URL || !env.COPILOT_GATEWAY_KEY) {
-      set.status = 503
+    const c = ctx as unknown as RouteContext
+    const u = requireUser(c)
+    if (!u) return { error: "unauthorized" }
+    if (!c.env.COPILOT_GATEWAY_URL || !c.env.COPILOT_GATEWAY_KEY) {
+      c.set.status = 503
       return { error: "gateway not configured" }
     }
-    const visits = new VisitsRepo(env.DB)
-    const museums = new MuseumsRepo(env.DB)
-    const rows = await visits.list()
+    const visits = new VisitsRepo(c.env.DB)
+    const museums = new MuseumsRepo(c.env.DB)
+    const rows = await visits.list(u.id)
     if (rows.length === 0) return { summary: "", count: 0 }
 
     const fulls = await Promise.all(rows.map((r) => museums.get(r.museum_id)))
@@ -82,7 +96,7 @@ export const visitsRoute = new Elysia()
     // Optional chat history (last N turns) carried back from the chat panel so the
     // re-generated review reflects what the user said they want next.
     type ChatTurn = { role: "user" | "assistant"; content: string }
-    const rawHistory = Array.isArray(body?.chatHistory) ? (body.chatHistory as any[]) : []
+    const rawHistory = Array.isArray(c.body?.chatHistory) ? (c.body.chatHistory as any[]) : []
     const chatHistory: ChatTurn[] = rawHistory
       .filter((t) => t && (t.role === "user" || t.role === "assistant") && typeof t.content === "string")
       .slice(-12)
@@ -150,11 +164,11 @@ ${chatHistory.length ? "- 如果对话中暴露了城市/朝代/类别约束，�
       : ""
 
     try {
-      const res = await fetch(env.COPILOT_GATEWAY_URL.replace(/\/$/, "") + "/v1/messages", {
+      const res = await fetch(c.env.COPILOT_GATEWAY_URL.replace(/\/$/, "") + "/v1/messages", {
         method: "POST",
         headers: {
           "content-type": "application/json",
-          "x-api-key": env.COPILOT_GATEWAY_KEY,
+          "x-api-key": c.env.COPILOT_GATEWAY_KEY,
           "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
@@ -171,7 +185,7 @@ ${chatHistory.length ? "- 如果对话中暴露了城市/朝代/类别约束，�
         }),
       })
       if (!res.ok) {
-        set.status = 502
+        c.set.status = 502
         return { error: "ai gateway error", status: res.status }
       }
       const j: any = await res.json()
@@ -181,22 +195,24 @@ ${chatHistory.length ? "- 如果对话中暴露了城市/朝代/类别约束，�
         .join("\n")
         .trim()
       if (text) {
-        const cache = new ReviewCacheRepo(env.DB)
-        await cache.save(text, rows.length, chatHistory.length > 0)
+        const cache = new ReviewCacheRepo(c.env.DB)
+        await cache.save(u.id, text, rows.length, chatHistory.length > 0)
       }
       return { summary: text, count: rows.length, withChatContext: chatHistory.length > 0, achievements }
     } catch (e: any) {
-      set.status = 502
+      c.set.status = 502
       return { error: e?.message || "ai call failed" }
     }
   })
   .get("/api/visits/review", async (ctx) => {
     // Returns the cached review (saved by POST). Does NOT regenerate — clients
     // call POST explicitly when they want a fresh one.
-    const { env } = ctx as unknown as RouteContext
-    const cache = new ReviewCacheRepo(env.DB)
-    const visits = new VisitsRepo(env.DB)
-    const [cached, rows] = await Promise.all([cache.get(), visits.list()])
+    const c = ctx as unknown as RouteContext
+    const u = requireUser(c)
+    if (!u) return { error: "unauthorized" }
+    const cache = new ReviewCacheRepo(c.env.DB)
+    const visits = new VisitsRepo(c.env.DB)
+    const [cached, rows] = await Promise.all([cache.get(u.id), visits.list(u.id)])
     const currentCount = rows.length
     if (!cached) return { summary: "", count: currentCount, cached: false, stale: false }
     return {

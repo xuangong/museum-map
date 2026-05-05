@@ -7,6 +7,9 @@ import { buildEvidence, type ArtifactSignal, type MuseumSignal } from "~/service
 import { generateReason } from "~/services/dynasty-reason"
 import { normalizeLevel } from "~/services/level-tiers"
 import type { Env } from "~/index"
+import { sessionMiddleware, requireUser } from "~/middleware/session"
+import type { UserRow } from "~/repo/users"
+import type { SessionRow } from "~/repo/sessions"
 
 interface RouteContext {
   env: Env
@@ -14,6 +17,8 @@ interface RouteContext {
   set: any
   body: any
   params: any
+  user: UserRow | null
+  session: SessionRow | null
 }
 
 function checkAdmin(env: Env, request: Request) {
@@ -24,6 +29,7 @@ function checkAdmin(env: Env, request: Request) {
 }
 
 export const dynastiesRoute = new Elysia()
+  .use(sessionMiddleware)
   .get("/api/dynasties", async (ctx) => {
     const { env } = ctx as unknown as RouteContext
     const repo = new DynastiesRepo(env.DB)
@@ -116,12 +122,14 @@ export const dynastiesRoute = new Elysia()
     return { generated, skipped, failed, limit, log }
   })
   .get("/api/dynasties/:id/review", async (ctx) => {
-    const { env, params } = ctx as unknown as RouteContext
-    const cache = new DynastyReviewCacheRepo(env.DB)
-    const dynastyId = params.id
-    const cached = await cache.get(dynastyId)
+    const c = ctx as unknown as RouteContext
+    const u = requireUser(c)
+    if (!u) return { error: "unauthorized" }
+    const cache = new DynastyReviewCacheRepo(c.env.DB)
+    const dynastyId = c.params.id
+    const cached = await cache.get(dynastyId, u.id)
     // Compute current visit count for this dynasty so client knows if cache is stale.
-    const stats = await computeDynastyVisitStats(env, dynastyId)
+    const stats = await computeDynastyVisitStats(c.env, dynastyId, u.id)
     if (!cached) {
       return { summary: "", count: stats.relevantVisitCount, totalRelevant: stats.totalRelevant, cached: false, stale: false }
     }
@@ -136,19 +144,21 @@ export const dynastiesRoute = new Elysia()
     }
   })
   .post("/api/dynasties/:id/review", async (ctx) => {
-    const { env, set, params } = ctx as unknown as RouteContext
-    if (!env.COPILOT_GATEWAY_URL || !env.COPILOT_GATEWAY_KEY) {
-      set.status = 503
+    const c = ctx as unknown as RouteContext
+    const u = requireUser(c)
+    if (!u) return { error: "unauthorized" }
+    if (!c.env.COPILOT_GATEWAY_URL || !c.env.COPILOT_GATEWAY_KEY) {
+      c.set.status = 503
       return { error: "gateway not configured" }
     }
-    const dynastyId = params.id
-    const repo = new DynastiesRepo(env.DB)
+    const dynastyId = c.params.id
+    const repo = new DynastiesRepo(c.env.DB)
     const dynasty = await repo.get(dynastyId)
     if (!dynasty) {
-      set.status = 404
+      c.set.status = 404
       return { error: "dynasty not found" }
     }
-    const stats = await computeDynastyVisitStats(env, dynastyId)
+    const stats = await computeDynastyVisitStats(c.env, dynastyId, u.id)
     if (stats.relevantVisitCount === 0) {
       return { summary: "", count: 0, totalRelevant: stats.totalRelevant }
     }
@@ -195,11 +205,11 @@ export const dynastiesRoute = new Elysia()
 直接给评，不要客套铺垫。**禁止 Markdown 表格**。`
 
     try {
-      const res = await fetch(env.COPILOT_GATEWAY_URL.replace(/\/$/, "") + "/v1/messages", {
+      const res = await fetch(c.env.COPILOT_GATEWAY_URL.replace(/\/$/, "") + "/v1/messages", {
         method: "POST",
         headers: {
           "content-type": "application/json",
-          "x-api-key": env.COPILOT_GATEWAY_KEY,
+          "x-api-key": c.env.COPILOT_GATEWAY_KEY,
           "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
@@ -216,7 +226,7 @@ export const dynastiesRoute = new Elysia()
         }),
       })
       if (!res.ok) {
-        set.status = 502
+        c.set.status = 502
         return { error: "ai gateway error", status: res.status }
       }
       const j: any = await res.json()
@@ -226,12 +236,12 @@ export const dynastiesRoute = new Elysia()
         .join("\n")
         .trim()
       if (text) {
-        const cache = new DynastyReviewCacheRepo(env.DB)
-        await cache.save(dynastyId, text, stats.relevantVisitCount)
+        const cache = new DynastyReviewCacheRepo(c.env.DB)
+        await cache.save(dynastyId, u.id, text, stats.relevantVisitCount)
       }
       return { summary: text, count: stats.relevantVisitCount, totalRelevant: stats.totalRelevant }
     } catch (e: any) {
-      set.status = 502
+      c.set.status = 502
       return { error: e?.message || "ai call failed" }
     }
   })
@@ -256,13 +266,13 @@ interface DynastyVisitStats {
   }>
 }
 
-async function computeDynastyVisitStats(env: Env, dynastyId: string): Promise<DynastyVisitStats> {
+async function computeDynastyVisitStats(env: Env, dynastyId: string, userId: string): Promise<DynastyVisitStats> {
   const repo = new DynastiesRepo(env.DB)
   const visits = new VisitsRepo(env.DB)
   const museums = new MuseumsRepo(env.DB)
   const dynasty = await repo.get(dynastyId)
   if (!dynasty) return { relevantVisitCount: 0, totalRelevant: 0, visitedItems: [], unvisitedRelevant: [] }
-  const visitRows = await visits.list()
+  const visitRows = await visits.list(userId)
   const visitedIds = new Set(visitRows.map((v) => v.museum_id))
   const noteByMuseum: Record<string, string> = {}
   visitRows.forEach((v) => { if (v.note) noteByMuseum[v.museum_id] = v.note })
