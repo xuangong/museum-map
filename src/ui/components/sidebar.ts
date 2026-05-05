@@ -16,7 +16,7 @@ export function Sidebar(): string {
       </div>
       <div style="margin-top:10px;">
         <button @click="doGoogleLogin()"
-          style="width:100%;border:0.5px solid var(--ink);background:var(--paper);color:var(--ink);padding:8px 12px;font-family:var(--sans);font-size:12px;cursor:pointer;">G&nbsp;&nbsp;Google 登录</button>
+          style="width:100%;border:0.5px solid var(--ink);background:var(--paper);color:var(--ink);padding:8px 12px;font-family:var(--sans);font-size:12px;cursor:pointer;">使用 Google 登录</button>
       </div>
       <div x-show="authForm.error" x-text="authForm.error"
         style="margin-top:8px;font-size:12px;color:var(--vermilion);"></div>
