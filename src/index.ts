@@ -18,11 +18,15 @@ export interface Env {
   COPILOT_GATEWAY_KEY?: string
   DISABLE_CHAT?: string
   ADMIN_TOKEN?: string
+  GOOGLE_CLIENT_ID?: string
+  GOOGLE_CLIENT_SECRET?: string
+  OAUTH_REDIRECT_URI?: string
 }
 
 export function createApp(env: Env) {
+  ;(globalThis as any).__env = env
   return new Elysia({ aot: false })
-    .use(cors())
+    .use(cors({ origin: true, credentials: true }))
     .decorate("env", env)
     .get("/health", () => ({ status: "ok" }))
     .use(cdnRoute)
