@@ -42,7 +42,7 @@ export function HomePage(data: HomeData): string {
       <span class="eyebrow" style="font-variant-numeric:lining-nums;margin-left:14px;">${today()}</span>
     </div>
   </header>
-  ${DynastyTimeline()}
+  ${DynastyTimeline(data.dynasties)}
   <div class="stage">
     <div class="toc-overlay" :class="tocOpen ? 'open' : ''" @click="tocOpen = false" x-cloak></div>
     <div class="toc-wrap" :class="tocOpen ? 'open' : ''">
@@ -90,6 +90,7 @@ export function HomePage(data: HomeData): string {
 <script id="bootstrap-data" type="application/json">${bootstrap}</script>
 <script src="/cdn/html2canvas.js"></script>
 <script src="/cdn/leaflet-image.js"></script>
+<script src="/cdn/qrcode.js"></script>
 <script>${COORDS_SCRIPT}</script>
 <script>${MAP_SCRIPT}</script>
 <script>${CHAT_SCRIPT}</script>

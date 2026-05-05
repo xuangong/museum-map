@@ -54,7 +54,7 @@ export function Sidebar(): string {
       </div>
       <h1 class="dynasty-name" x-text="(currentDynasty() || {}).name || ''"></h1>
       <div class="dynasty-period" x-text="(currentDynasty() || {}).period || ''"></div>
-      <p class="dynasty-overview" x-text="(currentDynasty() || {}).overview || ''" x-show="(currentDynasty() || {}).overview"></p>
+      <div class="dynasty-overview md" x-html="window.MuseumChat.renderMarkdown((currentDynasty() || {}).overview || '')" x-show="(currentDynasty() || {}).overview"></div>
       <div class="stats">
         <div class="stat">
           <div class="num" x-text="filteredMuseums.length.toString().padStart(2,'0')"></div>

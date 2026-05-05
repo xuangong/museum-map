@@ -1,6 +1,7 @@
 export const MAP_SCRIPT = `
 window.MuseumMap = {
   map: null,
+  tileLayer: null,
   markersLayer: null,
   eventMarkersLayer: null,
   init: function(centerLat, centerLng) {
@@ -9,7 +10,7 @@ window.MuseumMap = {
       zoom: 5,
       zoomControl: true,
     });
-    L.tileLayer('/tile/{s}/{z}/{x}/{y}', {
+    this.tileLayer = L.tileLayer('/tile/{s}/{z}/{x}/{y}', {
       attribution: '© 高德地图', maxZoom: 18, subdomains: '1234',
       crossOrigin: 'anonymous'
     }).addTo(this.map);

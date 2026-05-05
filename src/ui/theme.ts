@@ -171,8 +171,6 @@ a { color: inherit; text-decoration: none; }
   border-bottom: 0.5px solid var(--rule);
   scrollbar-width: thin;
   scrollbar-color: var(--ink-faint) transparent;
-  -webkit-mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 32px), transparent 100%);
-          mask-image: linear-gradient(to right, transparent 0, black 16px, black calc(100% - 32px), transparent 100%);
 }
 .timeline::-webkit-scrollbar { height: 4px; }
 .timeline::-webkit-scrollbar-thumb { background: var(--ink-faint); }
@@ -218,6 +216,7 @@ a { color: inherit; text-decoration: none; }
 .timeline-item.footprint.active { background: var(--vermilion); }
 .timeline-item.footprint.active .name { color: var(--paper); }
 .timeline-item.all .name { font-family: var(--sans); font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; font-size: 12px; }
+.timeline-item.hidden { display: none; }
 
 /* ─── Main grid ─── */
 .stage {
@@ -556,22 +555,35 @@ a { color: inherit; text-decoration: none; }
   color: var(--ink); padding: 0 0 0 16px; line-height: 1;
 }
 .drawer-folio .close:hover { color: var(--vermilion); }
-.share-btn {
-  border: 0.5px solid var(--ink); background: transparent;
-  font-family: var(--sans); font-size: 10px;
-  letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--ink); padding: 6px 12px; cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
+.folio-actions {
+  display: flex; align-items: baseline; gap: 14px;
 }
-.share-btn:hover { background: var(--ink); color: var(--paper); }
-.share-btn:active { background: var(--vermilion); color: var(--paper); border-color: var(--vermilion); }
+.folio-divider {
+  display: inline-block; width: 1px; align-self: stretch;
+  background: var(--rule-soft); margin: 4px 0;
+}
+.folio-share {
+  border: none; background: transparent;
+  font-family: var(--sans); font-size: 10px;
+  letter-spacing: 0.32em; text-transform: uppercase;
+  color: var(--ink-mute); padding: 0; cursor: pointer;
+  display: inline-flex; align-items: baseline; gap: 6px;
+  transition: color 0.18s ease;
+}
+.folio-share .arr {
+  font-family: var(--display); font-size: 14px; line-height: 1;
+  color: var(--vermilion); transition: transform 0.18s ease;
+}
+.folio-share:hover { color: var(--ink); }
+.folio-share:hover .arr { transform: translate(2px, -2px); }
+.folio-share:active .arr { color: var(--ink); }
 
 .toast {
   position: fixed; left: 50%; bottom: calc(40px + env(safe-area-inset-bottom));
   transform: translateX(-50%);
   background: var(--ink); color: var(--paper);
-  font-family: var(--sans); font-size: 12px; letter-spacing: 0.12em;
-  padding: 12px 22px; border-radius: 2px;
+  font-family: var(--sans); font-size: 11px; letter-spacing: 0.22em;
+  text-transform: uppercase; padding: 12px 22px;
   box-shadow: 0 8px 24px -8px rgba(20,17,14,0.3);
   z-index: 5000; pointer-events: none;
 }

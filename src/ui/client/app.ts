@@ -1,4 +1,8 @@
 export const APP_SCRIPT = `
+// Module-scope cache for visitedDynasties — outside Alpine reactive proxy.
+// Putting these on \`this\` makes Alpine track every read inside x-for/:class,
+// and writing them inside the same effect blanks the timeline ("自循环失效").
+var __vdCache = null, __vdCacheKey = '', __vdCacheIds = {}, __vdDepth = {};
 window.museumApp = function() {
   return {
     museums: [],
@@ -24,6 +28,7 @@ window.museumApp = function() {
     toast: '',
     _toastTimer: null,
     _suppressHashChange: false,
+    _scrollByHash: {},
 
     init() {
       var bs = document.getElementById('bootstrap-data');
@@ -31,6 +36,14 @@ window.museumApp = function() {
       var data = JSON.parse(bs.textContent);
       this.museums = data.museums;
       this.dynasties = data.dynasties;
+
+      // Surface any uncaught error very visibly — helps debug the timeline-blank issue.
+      window.addEventListener('error', function(e){
+        console.error('[museum-map] window error:', e.message, e.error);
+      });
+      window.addEventListener('unhandledrejection', function(e){
+        console.error('[museum-map] unhandled rejection:', e.reason);
+      });
 
       window.MuseumMap.init(35.0, 105.0);
       var self = this;
@@ -86,6 +99,50 @@ window.museumApp = function() {
         var savedMute = window.localStorage.getItem('shakeMuted');
         if (savedMute !== null) this.visits.muted = savedMute === '1';
       } catch(_) {}
+
+      // Imperative timeline binding — bypass Alpine reactive :class/x-text on
+      // dynasty items so the labels can never disappear if Alpine throws.
+      var self3 = this;
+      var nav = document.querySelector('[data-timeline]');
+      if (nav) {
+        nav.addEventListener('click', function(ev){
+          var el = ev.target;
+          while (el && el !== nav && !(el.dataset && el.dataset.mmClick)) el = el.parentNode;
+          if (!el || el === nav) return;
+          var v = el.dataset.mmClick || '';
+          if (v === 'dyn:__all__') self3.clearDynastyFilter();
+          else if (v.indexOf('dyn:') === 0) self3.selectDynasty(v.slice(4));
+        });
+      }
+      var syncTimeline = function() {
+        try {
+          if (!nav) return;
+          var items = nav.querySelectorAll('.timeline-item[data-dyn-id]');
+          for (var i = 0; i < items.length; i++) {
+            var it = items[i];
+            var id = it.getAttribute('data-dyn-id');
+            it.className = 'timeline-item ' + self3.timelineItemClass(id);
+          }
+          var allEl = nav.querySelector('.timeline-item.all');
+          if (allEl) allEl.className = 'timeline-item all' + (self3.currentDynastyId ? '' : ' active');
+          var aName = nav.querySelector('[data-tl-all-name]');
+          if (aName) aName.textContent = self3.visits.footprintMode ? '足迹朝代' : 'All / 全';
+          var aPeriod = nav.querySelector('[data-tl-all-period]');
+          if (aPeriod) {
+            aPeriod.textContent = self3.visits.footprintMode
+              ? (self3.visitedDynasties().length + ' dynasties')
+              : (self3.museums.length + ' museums');
+          }
+        } catch(e) { console.warn('[museum-map] syncTimeline', e); }
+      };
+      this._syncTimeline = syncTimeline;
+      syncTimeline();
+      this.$watch && this.$watch('currentDynastyId', syncTimeline);
+      this.$watch && this.$watch('visits.ids', syncTimeline);
+      this.$watch && this.$watch('visits.footprintMode', syncTimeline);
+      this.$watch && this.$watch('museums', syncTimeline);
+      // Belt-and-braces: re-sync after any drawer close or hash route change.
+      window.addEventListener('hashchange', function(){ setTimeout(syncTimeline, 0); });
     },
 
     commands: [
@@ -167,14 +224,32 @@ window.museumApp = function() {
     },
 
     dynastyShortName(d) {
-      var n = (d && d.name) || '';
-      var i = n.search(/[（(]/);
-      return i >= 0 ? n.slice(0, i).trim() : n.trim();
+      try {
+        var n = (d && d.name) || '';
+        var i = n.search(/[（(]/);
+        return i >= 0 ? n.slice(0, i).trim() : n.trim();
+      } catch(e) { console.warn('[museum-map] dynastyShortName', e); return ''; }
     },
 
     dynastyShortPeriod(d) {
-      var p = (d && d.period) || '';
-      return p.replace(/约公元/g, '').replace(/公元/g, '').replace(/年/g, '').replace(/—/g, '–');
+      try {
+        var p = (d && d.period) || '';
+        return p.replace(/约公元/g, '').replace(/公元/g, '').replace(/年/g, '').replace(/—/g, '–');
+      } catch(e) { console.warn('[museum-map] dynastyShortPeriod', e); return ''; }
+    },
+
+    /** Compose timeline-item :class safely. Accepts dynasty id (server-rendered timeline). */
+    timelineItemClass(id) {
+      try {
+        var d = this.dynasties.find(function(x){ return x.id === id; });
+        if (!d) return '';
+        var active = (this.currentDynastyId === d.id) ? 'active ' : '';
+        if (this.visits && this.visits.footprintMode) {
+          return active + (this.isDynastyVisited(d) ? 'footprint' : 'footprint hidden');
+        }
+        if (this.isDynastyVisited(d)) return active + 'has-visit depth-' + this.dynastyDepth(d);
+        return active.trim();
+      } catch(e) { console.warn('[museum-map] timelineItemClass', e); return ''; }
     },
 
     /** Dynasties whose recommendedMuseums or relatedMuseums include any museum the user has visited.
@@ -183,7 +258,7 @@ window.museumApp = function() {
      * 10 tiers by ratio: tier = ceil(ratio * 10), clamped 1..10. */
     visitedDynasties() {
       var key = this.visits.ids.join(',') + '|' + this.museums.length + '|' + this.dynasties.length;
-      if (this._vdCache && this._vdCacheKey === key) return this._vdCache;
+      if (__vdCache && __vdCacheKey === key) return __vdCache;
       var visitedIds = {};
       this.visits.ids.forEach(function(id){ visitedIds[id] = true; });
       var museumsById = {};
@@ -219,23 +294,23 @@ window.museumApp = function() {
           depthById[d.id] = { ratio: ratio, tier: tier, hitW: hitW, totalW: totalW };
         }
       });
-      this._vdCacheKey = key;
-      this._vdCache = hits;
-      this._vdCacheIds = hitIds;
-      this._vdDepth = depthById;
+      __vdCacheKey = key;
+      __vdCache = hits;
+      __vdCacheIds = hitIds;
+      __vdDepth = depthById;
       return hits;
     },
 
     /** 0 (none) | 1..10 (deeper) */
     dynastyDepth(d) {
       this.visitedDynasties();
-      var info = this._vdDepth && this._vdDepth[d.id];
+      var info = __vdDepth && __vdDepth[d.id];
       return info ? info.tier : 0;
     },
 
     isDynastyVisited(d) {
       this.visitedDynasties();
-      return !!(this._vdCacheIds && this._vdCacheIds[d.id]);
+      return !!(__vdCacheIds && __vdCacheIds[d.id]);
     },
 
     currentDynasty() {
@@ -361,15 +436,16 @@ window.museumApp = function() {
       var self = this;
       var sections = [];
       function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-      if (d.overview) sections.push({ title: 'Overview · 概述', html: '<p>' + escapeHtml(d.overview) + '</p>' });
+      function md(s){ try { return window.MuseumChat.renderMarkdown(String(s||'')); } catch(e){ return '<p>' + escapeHtml(s) + '</p>'; } }
+      if (d.overview) sections.push({ title: 'Overview · 概述', html: '<div class="md">' + md(d.overview) + '</div>' });
       if (d.culture && d.culture.length) {
         sections.push({ title: 'Culture · 文化', html: d.culture.map(function(c){
-          return '<div style="margin-bottom:14px;"><div style="font-family:var(--display-cn);font-weight:600;font-size:15px;margin-bottom:4px;">' + escapeHtml(c.category) + '</div><div style="font-size:14px;color:var(--ink-mid);">' + escapeHtml(c.description || '') + '</div></div>';
+          return '<div style="margin-bottom:14px;"><div style="font-family:var(--display-cn);font-weight:600;font-size:15px;margin-bottom:4px;">' + escapeHtml(c.category) + '</div><div class="md" style="font-size:14px;color:var(--ink-mid);">' + md(c.description || '') + '</div></div>';
         }).join('') });
       }
       if (d.events && d.events.length) {
         sections.push({ title: 'Chronicle · 大事记', html: d.events.map(function(e){
-          return '<div class="event-row"><div class="date">' + escapeHtml(e.date || '') + '</div><div class="text">' + escapeHtml(e.event || '') + '</div></div>';
+          return '<div class="event-row"><div class="date">' + escapeHtml(e.date || '') + '</div><div class="text md">' + md(e.event || '') + '</div></div>';
         }).join('') });
       }
       if (d.recommendedMuseums && d.recommendedMuseums.length) {
@@ -377,14 +453,14 @@ window.museumApp = function() {
         sections.push({ title: 'Featured Museums · 推荐博物馆', html: d.recommendedMuseums.map(function(r, i){
           var attrs = r.museumId ? ' data-museum-id="' + escapeHtml(r.museumId) + '" class="rec-card dynasty-rec"' : ' class="rec-card" style="cursor:default;"';
           var check = (r.museumId && visitedMap[r.museumId]) ? '<span class="rec-visited" title="已打卡">✓</span>' : '';
-          return '<div' + attrs + '><span class="num">' + (i+1).toString().padStart(2,'0') + '</span><div><div class="name">' + escapeHtml(r.name) + check + '</div><div class="loc">' + escapeHtml(r.location || '') + '</div><div class="reason">' + escapeHtml(r.reason || '') + '</div></div></div>';
+          return '<div' + attrs + '><span class="num">' + (i+1).toString().padStart(2,'0') + '</span><div><div class="name">' + escapeHtml(r.name) + check + '</div><div class="loc">' + escapeHtml(r.location || '') + '</div><div class="reason md">' + md(r.reason || '') + '</div></div></div>';
         }).join('') });
       }
       if (d.relatedMuseums && d.relatedMuseums.length) {
         var visitedMap2 = this.visits.byId || {};
         sections.push({ title: 'Also Relevant · 也有相关展品', html: d.relatedMuseums.map(function(r, i){
           var check = visitedMap2[r.museumId] ? '<span class="rec-visited" title="已打卡">✓</span>' : '';
-          return '<div data-museum-id="' + escapeHtml(r.museumId) + '" class="rec-card dynasty-rec"><span class="num">' + (i+1).toString().padStart(2,'0') + '</span><div><div class="name">' + escapeHtml(r.name) + check + '</div><div class="loc">' + escapeHtml(r.location || '') + '</div><div class="reason">' + escapeHtml(r.reason || '') + '</div></div></div>';
+          return '<div data-museum-id="' + escapeHtml(r.museumId) + '" class="rec-card dynasty-rec"><span class="num">' + (i+1).toString().padStart(2,'0') + '</span><div><div class="name">' + escapeHtml(r.name) + check + '</div><div class="loc">' + escapeHtml(r.location || '') + '</div><div class="reason md">' + md(r.reason || '') + '</div></div></div>';
         }).join('') });
       }
       return sections;
@@ -419,9 +495,15 @@ window.museumApp = function() {
     },
 
     closeDrawer() {
+      // Just clear drawer + hash. Avoid history.back() because it triggers
+      // a cascade (hashchange → applyHashRoute → selectDynasty/clearDynastyFilter)
+      // that can leave the timeline in a weird state on certain machines.
       this.drawer.open = false;
       this.selectedMuseumId = null;
       this.setHashRoute(null);
+      // Defensive re-sync of timeline DOM after drawer close.
+      var nav = document.querySelector('[data-timeline]');
+      if (nav && this._syncTimeline) setTimeout(this._syncTimeline, 0);
     },
 
     // ─── URL hash routing for shareable deep links ───
@@ -432,16 +514,51 @@ window.museumApp = function() {
         var prefix = route.kind === 'dynasty' ? 'd' : 'm';
         target = '#/' + prefix + '/' + encodeURIComponent(route.id);
       }
+      if (location.hash === target) return; // no-op, also avoids feedback loops from applyHashRoute
+      // Snapshot current drawer scroll BEFORE navigating away so we can restore on back.
+      this._snapshotScroll(location.hash || '');
       this._suppressHashChange = true;
       try {
         if (target) {
-          if (location.hash !== target) history.replaceState(null, '', target);
+          // Push a history entry tagged so closeDrawer can detect "this is ours".
+          // Using replaceState first to anchor the pre-route state with no marker,
+          // then pushState the new route. But to keep behavior simple and avoid
+          // breaking initial hash-deep-link, only push when there is no existing route.
+          var hadOurRoute = !!(history.state && history.state.kind === 'mm-route');
+          if (hadOurRoute) {
+            // Replace so we don't keep stacking entries when navigating dynasty→dynasty.
+            history.replaceState({ kind: 'mm-route' }, '', target);
+          } else {
+            history.pushState({ kind: 'mm-route' }, '', target);
+          }
         } else if (location.hash) {
-          history.replaceState(null, '', location.pathname + location.search);
+          history.pushState(null, '', location.pathname + location.search);
         }
       } catch(_) {}
       var self = this;
       setTimeout(function(){ self._suppressHashChange = false; }, 0);
+    },
+
+    _snapshotScroll(hash) {
+      if (!hash) return;
+      var el = document.querySelector('.drawer');
+      if (el) this._scrollByHash[hash] = el.scrollTop;
+    },
+
+    _restoreScroll(hash) {
+      var top = this._scrollByHash[hash];
+      // Run after Alpine renders the new sections.
+      var attempts = 0;
+      var self = this;
+      function tryRestore() {
+        var el = document.querySelector('.drawer');
+        if (el) {
+          el.scrollTop = (typeof top === 'number') ? top : 0;
+          return;
+        }
+        if (++attempts < 10) requestAnimationFrame(tryRestore);
+      }
+      requestAnimationFrame(tryRestore);
     },
 
     applyHashRoute() {
@@ -449,15 +566,22 @@ window.museumApp = function() {
       var h = location.hash || '';
       var m = h.match(/^#\\/(d|m)\\/(.+)$/);
       if (!m) {
-        if (this.drawer.open) this.closeDrawer();
+        if (this.drawer.open) {
+          this.drawer.open = false;
+          this.selectedMuseumId = null;
+        }
         return;
       }
       var kind = m[1], id = decodeURIComponent(m[2]);
+      var self = this;
       if (kind === 'd') {
         var dyn = this.dynasties.find(function(x){ return x.id === id; });
-        if (dyn) this.selectDynasty(id);
+        if (dyn) {
+          this.selectDynasty(id);
+          this._restoreScroll(h);
+        }
       } else if (kind === 'm') {
-        this.openMuseum(id);
+        this.openMuseum(id).then(function(){ self._restoreScroll(h); });
       }
     },
 
@@ -828,7 +952,18 @@ window.museumApp = function() {
             + '</div>' : '')
         + '<div style="font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#7a7268;margin-bottom:8px;">Index · 已访博物馆</div>'
         + '<div>' + cards + '</div>'
-        + '<div style="margin-top:32px;padding-top:18px;border-top:0.5px solid #d8cfbb;font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.2em;color:#7a7268;text-align:center;">中國博物館地圖 · museummap.xianliao.de5.net</div>';
+        + (function(){
+            var shareUrl = location.origin + location.pathname;
+            var qrDataUrl = self.makeQrDataUrl(shareUrl);
+            return '<div style="margin-top:32px;padding-top:18px;border-top:0.5px solid #d8cfbb;display:flex;align-items:center;gap:18px;">'
+              + (qrDataUrl ? '<img src="' + qrDataUrl + '" alt="QR" style="width:88px;height:88px;display:block;flex-shrink:0;image-rendering:pixelated;"/>' : '')
+              + '<div style="flex:1;font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.2em;color:#7a7268;">'
+              +   '<div style="text-transform:uppercase;">Scan · 扫码访问</div>'
+              +   '<div style="margin-top:6px;font-size:11px;letter-spacing:0;color:#5a544c;text-transform:none;font-family:\\'Source Serif 4\\',serif;font-style:italic;">中國博物館地圖</div>'
+              +   '<div style="margin-top:4px;font-size:9px;letter-spacing:0.05em;color:#9a9285;text-transform:none;word-break:break-all;">' + esc(shareUrl) + '</div>'
+              + '</div>'
+              + '</div>';
+          })();
     },
 
     continueChatFromFootprint() {
@@ -902,12 +1037,29 @@ window.museumApp = function() {
             await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
           }
         }
-        // Wait for tiles to load, then a bit more for paint.
+        // Wait for tiles to actually finish loading. Leaflet map "load" event is
+        // for map init, not tiles — we need the tileLayer load event which fires
+        // when there are no more pending tile requests.
         await new Promise(function(resolve){
           var done = false;
           var finish = function(){ if (done) return; done = true; resolve(); };
-          var timer = setTimeout(finish, 5000);
-          map.once('load', function(){ clearTimeout(timer); setTimeout(finish, 800); });
+          var tileLayer = window.MuseumMap && window.MuseumMap.tileLayer;
+          var timer = setTimeout(finish, 4000); // hard ceiling
+          if (tileLayer && typeof tileLayer.isLoading === 'function' && !tileLayer.isLoading()) {
+            // No pending tiles — give one rAF for paint, done.
+            clearTimeout(timer);
+            requestAnimationFrame(function(){ requestAnimationFrame(finish); });
+            return;
+          }
+          if (tileLayer && tileLayer.once) {
+            tileLayer.once('load', function(){
+              clearTimeout(timer);
+              // Two rAFs after tile load to ensure all tile <img> elements have painted.
+              requestAnimationFrame(function(){ requestAnimationFrame(function(){ setTimeout(finish, 100); }); });
+            });
+          } else {
+            // Fallback: just wait the full ceiling.
+          }
         });
         // Final invalidateSize right before capture in case anything shifted.
         map.invalidateSize(false);
@@ -968,6 +1120,9 @@ window.museumApp = function() {
         ? '<div style="margin:24px 0 28px;border:0.5px solid #d8cfbb;background:#fff;"><img src="' + mapDataUrl + '" style="display:block;width:100%;height:auto;"/></div>'
         : '';
 
+      var shareUrl = location.origin + location.pathname + '#/d/' + encodeURIComponent(dynasty.id);
+      var qrDataUrl = this.makeQrDataUrl(shareUrl);
+
       return ''
         + '<div style="border-bottom:1px solid #2a2520;padding-bottom:24px;margin-bottom:24px;">'
         +   '<div style="font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#B73E18;margin-bottom:12px;">Vol. D · Dynasty Review · ' + dateStr + '</div>'
@@ -981,7 +1136,27 @@ window.museumApp = function() {
             + '<div class="md-export">' + reviewHtml + '</div>'
             + '</div>' : '')
         + (cards ? '<div style="font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#7a7268;margin-bottom:8px;">Index · 我已踏访</div><div>' + cards + '</div>' : '')
-        + '<div style="margin-top:32px;padding-top:18px;border-top:0.5px solid #d8cfbb;font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.2em;color:#7a7268;text-align:center;">中國博物館地圖 · museummap.xianliao.de5.net</div>';
+        + '<div style="margin-top:32px;padding-top:18px;border-top:0.5px solid #d8cfbb;display:flex;align-items:center;gap:18px;">'
+        +   (qrDataUrl ? '<img src="' + qrDataUrl + '" alt="QR" style="width:88px;height:88px;display:block;flex-shrink:0;image-rendering:pixelated;"/>' : '')
+        +   '<div style="flex:1;font-family:\\'JetBrains Mono\\',monospace;font-size:10px;letter-spacing:0.2em;color:#7a7268;">'
+        +     '<div style="text-transform:uppercase;">Scan · 扫码访问</div>'
+        +     '<div style="margin-top:6px;font-size:11px;letter-spacing:0;color:#5a544c;text-transform:none;font-family:\\'Source Serif 4\\',serif;font-style:italic;">中國博物館地圖</div>'
+        +     '<div style="margin-top:4px;font-size:9px;letter-spacing:0.05em;color:#9a9285;text-transform:none;word-break:break-all;">' + esc(shareUrl) + '</div>'
+        +   '</div>'
+        + '</div>';
+    },
+
+    /** Generate a QR data URL using qrcode-generator. Returns '' on failure. */
+    makeQrDataUrl(text) {
+      try {
+        if (typeof window.qrcode !== 'function') return '';
+        // typeNumber=0 lets the library auto-pick the smallest version that fits.
+        var qr = window.qrcode(0, 'M');
+        qr.addData(text);
+        qr.make();
+        // 4-pixel module, 2-module quiet zone for crisp scanning.
+        return qr.createDataURL(4, 2);
+      } catch (_) { return ''; }
     },
 
     async exportDynastyPoster(id) {
