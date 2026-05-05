@@ -7,6 +7,7 @@ import { ChatPanel } from "./components/chat-panel"
 import { COORDS_SCRIPT } from "./client/coords"
 import { MAP_SCRIPT } from "./client/map"
 import { CHAT_SCRIPT } from "./client/chat"
+import { AUTH_SCRIPT } from "./client/auth"
 import { APP_SCRIPT } from "./client/app"
 
 export interface HomeData {
@@ -94,6 +95,7 @@ export function HomePage(data: HomeData): string {
 <script>${COORDS_SCRIPT}</script>
 <script>${MAP_SCRIPT}</script>
 <script>${CHAT_SCRIPT}</script>
+<script>${AUTH_SCRIPT}</script>
 <script>${APP_SCRIPT}</script>
 `,
   })
