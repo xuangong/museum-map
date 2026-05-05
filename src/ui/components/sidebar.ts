@@ -1,8 +1,40 @@
 export function Sidebar(): string {
+  const authBar = `<div style="margin-bottom:14px;border-bottom:0.5px solid var(--rule);padding-bottom:14px;">
+  <template x-if="!me">
+    <div>
+      <div style="font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-mid);margin-bottom:8px;">登录后保存到云端</div>
+      <input x-model="authForm.email" type="email" placeholder="Email" autocomplete="email"
+        style="width:100%;padding:8px 10px;font-size:16px;border:0.5px solid var(--rule);background:var(--paper);font-family:var(--sans);margin-bottom:6px;box-sizing:border-box;" />
+      <input x-model="authForm.password" type="password" placeholder="密码（≥8 位）" autocomplete="current-password"
+        style="width:100%;padding:8px 10px;font-size:16px;border:0.5px solid var(--rule);background:var(--paper);font-family:var(--sans);margin-bottom:8px;box-sizing:border-box;" />
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <button @click="submitLogin()" :disabled="authForm.loading"
+          style="border:none;background:var(--vermilion);color:var(--paper);padding:8px 14px;font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;">登录</button>
+        <button @click="submitRegister()" :disabled="authForm.loading"
+          style="border:0.5px solid var(--vermilion);background:transparent;color:var(--vermilion);padding:8px 14px;font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;">注册</button>
+        <span x-show="authForm.loading" style="font-size:11px;color:var(--ink-mid);">…</span>
+      </div>
+      <div style="margin-top:10px;">
+        <button @click="doGoogleLogin()"
+          style="width:100%;border:0.5px solid var(--ink);background:var(--paper);color:var(--ink);padding:8px 12px;font-family:var(--sans);font-size:12px;cursor:pointer;">G&nbsp;&nbsp;Google 登录</button>
+      </div>
+      <div x-show="authForm.error" x-text="authForm.error"
+        style="margin-top:8px;font-size:12px;color:var(--vermilion);"></div>
+    </div>
+  </template>
+  <template x-if="me">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+      <div style="font-family:var(--sans);font-size:12px;color:var(--ink-mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" x-text="me.email"></div>
+      <button @click="doLogout()"
+        style="border:none;background:transparent;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-mid);cursor:pointer;border-bottom:0.5px solid var(--ink-mid);">退出</button>
+    </div>
+  </template>
+</div>`
   return `<aside class="toc">
   <!-- Footprint hero -->
   <div x-show="visits.footprintMode" x-cloak>
     <div class="toc-head">
+      ${authBar}
       <div class="vol">
         Vol. <span class="num">FP</span>
         <span style="margin-left:8px;">·</span>
@@ -47,6 +79,7 @@ export function Sidebar(): string {
   <!-- Dynasty hero (only when filtered) -->
   <div x-show="!visits.footprintMode && currentDynastyId" x-cloak>
     <div class="toc-head">
+      ${authBar}
       <div class="vol">
         Vol. <span class="num" x-text="(currentDynasty() ? (dynasties.findIndex(function(x){return x.id===currentDynasty().id})+1) : 0).toString().padStart(2,'0')"></span>
         <span style="margin-left:8px;">·</span>
@@ -79,6 +112,7 @@ export function Sidebar(): string {
   <!-- All-museums hero (default) -->
   <div x-show="!visits.footprintMode && !currentDynastyId" x-cloak>
     <div class="toc-head">
+      ${authBar}
       <div class="vol">
         Vol. <span class="num">00</span>
         <span style="margin-left:8px;">·</span>
