@@ -31,9 +31,36 @@ bun run local                                # http://localhost:4242
 ## 部署
 
 ```bash
-bun run seed -- --target=remote              # 仅首次/数据更新时
+bun run seed -- --target=remote              # 仅首次（裸库灌 legacy/data.json）
 bunx wrangler deploy
 ```
+
+## 数据备份（git 中的 `data/` 是真正的核心资产）
+
+D1 ↔ git 双向同步，YAML 序列化、确定性输出（多次运行 byte-identical），
+覆盖 museums / dynasties / dynasty_museum_reasons / field_provenance
+（排除 visits / *_review_cache / museums_pending 等用户态/可再生数据）。
+
+```bash
+bun run snapshot                             # 远程 D1 → data/*.yaml
+bun run snapshot -- --target=local           # 本地 D1 → data/*.yaml
+bun run restore                              # data/ → SQL，dry-run（不加 --confirm 不执行）
+bun run restore -- --target=local --confirm  # 恢复到本地 D1
+bun run restore -- --confirm                 # 恢复到远程 D1（DESTRUCTIVE：DELETE-then-INSERT）
+```
+
+文件布局：
+
+```
+data/
+├── museums/<id>.yaml            一馆一文件（含 treasures/halls/artifacts/connections/sources）
+├── dynasties/<id>.yaml          一朝一文件（含 culture/events/recommended_museums）
+├── dynasty-museum-reasons.yaml  按 dynasty_id 分组
+└── field-provenance.yaml        按 museum_id 分组
+```
+
+Round-trip 验证：`远程 → snapshot → restore 本地 → snapshot 本地` 完全一致。
+适合作为日常工作流：远程改完 → `bun run snapshot` → git diff 审阅 → commit。
 
 ## 测试
 
