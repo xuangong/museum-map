@@ -1,0 +1,106 @@
+id: eastern-han
+name: 东汉（公元25年—220年）
+period: 公元25年—220年
+order_index: 7
+overview: |-
+  东汉由光武帝刘秀建立，定都洛阳（因在西汉都城长安之东，故称"东汉"）。刘秀以布衣起兵，历经昆阳之战等关键战役，推翻王莽新朝，恢复汉室，史称"光武中兴"。东汉在政治制度上基本沿袭西汉，但皇权与豪族的关系更加复杂。
+
+  东汉的前半段（25—88年）政治相对稳定，经济恢复，学术繁荣。明帝、章帝时期班固撰成《汉书》，佛教正式传入中国（白马寺建于永平年间）。但从和帝以后，外戚和宦官交替专权成为东汉政治的主题——外戚梁冀、窦宪等权倾一时，宦官势力则在"党锢之祸"中与士大夫激烈对抗。
+
+  184年黄巾起义爆发，虽被镇压但东汉中央政权名存实亡。各地军阀割据，最终形成曹操、刘备、孙权三足鼎立的局面。220年曹丕代汉，东汉灭亡。
+culture:
+  - category: 造纸术
+    description: 蔡伦改良造纸，中国四大发明之一
+  - category: 史学
+    description: 班固《汉书》开创断代史体例
+  - category: 科学
+    description: 张衡地动仪、浑天仪；《九章算术》成书
+  - category: 医学
+    description: 张仲景《伤寒杂病论》、华佗外科手术
+  - category: 佛教传入
+    description: 白马寺（洛阳）为中国第一座佛寺
+  - category: 画像砖/画像石
+    description: 四川、山东、河南大量出土，是汉代社会生活的图像百科
+  - category: 汉赋→五言诗
+    description: 文学从赋体转向五言诗，《古诗十九首》标志五言诗成熟
+events:
+  - date: 25年
+    event: 刘秀称帝，定都洛阳，东汉建立
+    lat: 34.62
+    lng: 112.45
+  - date: 67年
+    event: 白马驮经，佛教正式传入中国，白马寺建立
+    lat: 34.6
+    lng: 112.5
+  - date: 73—102年
+    event: 班超经营西域
+    lat: 41
+    lng: 85
+  - date: 105年
+    event: 蔡伦改良造纸术
+    lat: 34.6
+    lng: 112.5
+  - date: 132年
+    event: 张衡发明地动仪
+    lat: 34.6
+    lng: 112.5
+  - date: 166年
+    event: 大秦（罗马帝国）使者到达洛阳（《后汉书》记载）
+    lat: 34.62
+    lng: 112.45
+  - date: 166—169年
+    event: 党锢之祸，士大夫与宦官激烈冲突
+    lat: 34.6
+    lng: 112.5
+  - date: 184年
+    event: 黄巾起义爆发
+    lat: 34.6
+    lng: 112.5
+  - date: 189年
+    event: 董卓入洛阳，东汉中央政权崩溃
+    lat: 34.62
+    lng: 112.45
+  - date: 196年
+    event: 曹操迎汉献帝至许昌，"挟天子以令诸侯"
+    lat: 34.6
+    lng: 112.5
+  - date: 200年
+    event: 官渡之战，曹操击败袁绍
+    lat: 34.72
+    lng: 113.72
+  - date: 208年
+    event: 赤壁之战，三足鼎立格局初现
+    lat: 29.72
+    lng: 113.88
+  - date: 220年
+    event: 曹丕代汉，东汉灭亡
+    lat: 34.6
+    lng: 112.5
+recommended_museums:
+  - museum_id: guobo
+    name: 中国国家博物馆
+    location: 北京
+    reason: 击鼓说唱俑（东汉），汉代通史展
+  - museum_id: gansu
+    name: 甘肃省博物馆
+    location: 兰州
+    reason: 铜奔马（马踏飞燕），武威雷台汉墓出土
+  - museum_id: luoyang
+    name: 洛阳博物馆
+    reason: 东汉都城文物，石辟邪
+  - museum_id: nanjing
+    name: 南京博物院
+    reason: 错银铜牛灯（东汉环保灯具设计）
+  - museum_id: 9bfb09d6-e2da-4572-8384-56d34d1f59fe
+    name: 洛阳古墓博物馆
+    reason: 汉代壁画墓原址展示
+  - museum_id: sichuan
+    name: 四川博物院
+    reason: 大量东汉画像砖，反映蜀地社会生活
+  - museum_id: shandong
+    name: 山东博物馆
+    reason: 东平汉墓壁画
+  - museum_id: 6d90c01d-efe7-45e5-a39a-e28a10298fa2
+    name: 白马寺
+    location: 洛阳
+    reason: 中国第一座佛寺

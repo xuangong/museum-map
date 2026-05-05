@@ -1,0 +1,59 @@
+id: bfd76fa2-1343-4649-91f0-a8bcc3b0b690
+name: 圆明园博物馆（圆明园遗址公园）
+lat: 39.998
+lng: 116.295
+location: 北京市海淀区清华西路28号
+level: 全国重点文物保护单位 / 世界文化遗产 / 国家考古遗址公园
+core_period: 清代（1707—1860年）
+specialty: 万园之园——融中西园林艺术为一体，以圆明园文物展览及文物保护成果展示为核心
+dynasty_coverage: 康熙、雍正、乾隆、嘉庆、道光、咸丰
+timeline: 1707年（康熙四十六年）始建，历康雍乾嘉道咸六朝150余年持续扩建经营；1860年（咸丰十年）遭英法联军劫掠焚毁
+treasures:
+  - name: 马首铜像（十二生肖兽首之一，已回归）
+  - name: 铜鎏金象首
+  - name: 青玉老人山子
+  - name: 铜胎珐琅香筒
+  - name: 道光帝御笔瀛海仙山诗石刻
+  - name: 汉白玉石柱（7根）
+halls:
+  - name: 圆明园（主园）
+  - name: 长春园
+  - name: 绮春园（万春园）
+  - name: 圆明园博物馆展区（山门、钟鼓楼、天王殿、东西五佛殿、三圣殿、文殊亭、东六大金刚殿、最上楼）
+artifacts:
+  - name: 马首铜像
+    period: 清代乾隆年间
+    description: 圆明园海晏堂十二生肖兽首铜像之一，2020年正式回归并入藏圆明园博物馆
+  - name: 铜鎏金象首
+    period: 清代
+    description: 圆明园遗存铜鎏金象首文物
+  - name: 青玉老人山子
+    period: 清代
+    description: 圆明园旧藏青玉山子摆件
+  - name: 铜胎珐琅香筒
+    period: 清代
+    description: 圆明园旧藏铜胎掐丝珐琅工艺香筒
+  - name: 道光帝御笔瀛海仙山诗石刻
+    period: 清代道光
+    description: 道光皇帝亲笔题写的诗文石刻，现存遗址公园内
+  - name: 汉白玉石柱
+    period: 清代
+    description: 圆明园西洋楼遗址现存汉白玉石柱共7根，为重要建筑遗迹
+dynasty_connections:
+  - dynasty: 清代康熙
+    description: 始建于康熙四十六年（1707年），赐予皇四子胤禛
+  - dynasty: 清代雍正
+    description: 大规模扩建，正式成为皇家离宫御苑
+  - dynasty: 清代乾隆
+    description: 持续扩建150余年，鼎盛时期规模最大，号称'万园之园'
+  - dynasty: 清代嘉庆
+    description: 继续经营，添建绮春园等部分
+  - dynasty: 清代道光
+    description: 道光帝御笔'瀛海仙山'诗石刻留存至今
+  - dynasty: 清代咸丰
+    description: 咸丰十年（1860年）遭英法联军劫掠焚毁，大量文物流散海外
+sources:
+  - source: https://www.yuanmingyuanpark.cn/gygk/
+  - source: https://www.yuanmingyuanpark.cn/pw/mmp/202312/t20231228_4634632.html
+  - source: https://www.yuanmingyuanpark.cn/lswwhgw/lswwgs/
+  - source: https://www.bjhd.gov.cn/ztzx/2025/wbq/bwgfb/202503/t20250303_4759510.shtml

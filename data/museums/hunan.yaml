@@ -1,0 +1,56 @@
+id: hunan
+name: 湖南省博物馆（湖南博物院）
+lat: 28.2126
+lng: 112.9834
+location: 湖南省长沙市开福区东风路50号
+level: 国家一级博物馆
+core_period: 西汉（马王堆）、商周青铜
+specialty: 马王堆汉墓出土文物是世界级的考古发现——保存完好的2000年女尸、精美绝伦的T形帛画、最早的帛书。2017年重新开馆后展陈设计一流。
+dynasty_coverage: 西汉（马王堆）为核心，商周青铜器（皿方罍等），近现代湖湘文化
+timeline: 马王堆汉墓是了解西汉初年贵族生活的最完整窗口——墓主辛追是长沙国丞相利苍之妻。出土文物覆盖了饮食、服饰、医学、哲学、天文等方方面面。
+treasures:
+  - name: 1. 辛追夫人遗体（西汉）— 保存2100多年的湿尸
+  - name: 世界考古奇迹
+halls:
+  - name: 长沙马王堆汉墓陈列"（核心展）
+  - name: 湖南人——三湘历史文化陈列
+artifacts:
+  - name: 辛追夫人遗体
+    period: 西汉，约前163年下葬
+    description: 皮肤仍有弹性，关节可活动，是世界上保存最好的古代湿尸
+    image_url: https://upload.wikimedia.org/wikipedia/commons/6/6d/Xin_Zhui.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Flazaza
+  - name: T形帛画
+    period: 西汉
+    description: 覆盖在棺上的招魂帛画，分天界（日月升龙）、人间（辛追宴饮）、地下（巨人托举大地）三层
+  - name: 素纱襌衣
+    period: 西汉
+    description: 长128cm，仅重49g，代表汉代丝织技术巅峰
+    image_url: https://upload.wikimedia.org/wikipedia/commons/d/dd/%E7%9B%B4%E8%A3%BE%E7%B4%A0%E7%BA%B1%E8%A5%8C%E8%A1%A3%2C_2018-09-28.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Siyuwj
+  - name: 马王堆帛书
+    period: 西汉
+    description: 12万字，包含《老子》乙本（目前最早版本）、《五星占》（最早天文著作之一）
+    image_url: https://upload.wikimedia.org/wikipedia/commons/3/3f/Mawangdui_Silk_Texts_2.JPG
+    image_license: PD
+    image_attribution: Huangdan2060
+  - name: 皿方罍
+    period: 商晚期
+    description: 器盖1919年出土后与器身分离近百年，2014年从纽约拍卖市场回归
+    image_url: https://upload.wikimedia.org/wikipedia/commons/8/87/Min_Er_Quan_Bronze_Square_Lei%2C_Shang_dynasty%2C_Hunan_Museum%2C_6_July_2018.jpg
+    image_license: CC-BY-3.0
+    image_attribution: Huangdan2060
+  - name: 漆棺
+    period: 西汉
+    description: 四层套棺，漆画精美，外黑内朱
+  - name: 导引图
+    period: 西汉
+    description: 最早的健身运动图谱
+    image_url: https://upload.wikimedia.org/wikipedia/commons/c/c5/%E5%AF%BC%E5%BC%95%E5%8D%87%E4%BB%99%E5%9B%BE0163.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Cangminzho
+sources:
+  - source: 马王堆汉墓考古发掘报告
+  - source: "湖南博物院官网: https://www.hnmuseum.com/"

@@ -1,0 +1,62 @@
+id: 817569a4-234c-46ce-9bcd-89ef8f271011
+name: 乾陵博物馆
+lat: 34.5783
+lng: 108.2464
+location: 陕西省咸阳市乾县城关镇永泰公主墓院内
+level: 国家一级博物馆（2024年5月认定）、国家AAAAA级旅游景区、第四批国家考古遗址公园
+core_period: 唐代（618—907年）
+specialty: 唐代帝王陵墓遗址博物馆，依托乾陵陪葬墓——永泰公主墓建立，以收藏、保护、研究和展示乾陵陵园及其陪葬墓出土文物为主，素有"唐陵之冠"之称
+dynasty_coverage: 主体为唐代，兼及隋及周边时期
+timeline: 1960年8月：陕西省文物管理委员会发掘永泰公主墓；1961年：成立乾陵文物保护管理所；1963年9月1日：永泰公主墓地宫正式对外开放；1978年8月29日：更名为乾陵博物馆；1995年：批准为陕西省爱国主义教育基地；1999年：划归陕西省文物局直管；2009年：下划咸阳市乾县管理，成立乾陵管理处；2022年12月：获批第四批国家考古遗址公园；2024年5月：升级为国家一级博物馆
+treasures:
+  - name: 唐三彩（三彩载物骆驼、三彩天王俑等）
+  - name: 唐墓壁画（阙楼仪仗图、打马毬图、宫女图、狩猎出行图、客使图等，逾1200平方米）
+  - name: 石椁线刻画（约1500平方米）
+  - name: 无字碑（通高8.03米，重98.84吨）
+  - name: 述圣纪碑
+  - name: 六十一蕃臣像
+  - name: 玉质哀册
+  - name: 鉴若止水铜镜（重4.25千克，铸麒麟龙凤纹）
+halls:
+  - name: 乾陵文物精品展（东陈列室）
+  - name: 武则天时代展
+  - name: 丝路唐梦——唐代胡俑精品文物展（临时）
+  - name: 乾陵临摹壁画精品展（临时）
+  - name: 永泰公主墓地宫墓道
+  - name: 章怀太子墓地宫墓道
+  - name: 懿德太子墓地宫墓道
+artifacts:
+  - name: 三彩载物骆驼
+    period: 唐代
+    description: 乾陵陪葬墓出土，釉色斑斓，造型精美，为唐代三彩代表作之一
+    image_url: https://upload.wikimedia.org/wikipedia/commons/c/c5/%E5%94%90%E4%B8%89%E5%BD%A9%E9%87%89%E9%99%B6%E8%BD%BD%E7%89%A9%E9%AA%86%E9%A9%BC.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎
+  - name: 唐三彩天王俑
+    period: 唐代
+    description: 出土于乾陵陪葬墓，面目威严，彩釉鲜丽，反映唐代高超制陶工艺
+    image_url: https://upload.wikimedia.org/wikipedia/commons/8/84/Tang_sancai_deva_statue.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: Deadkid dk
+  - name: 打马毬图壁画
+    period: 唐代（706年前后）
+    description: 出土于章怀太子墓墓道，描绘唐代贵族马球运动，线条流畅，色彩鲜明，为盛唐绘画珍品
+  - name: 宫女图壁画
+    period: 唐代
+    description: 出土于永泰公主墓，仕女形象秀丽，服饰华美，是研究唐代宫廷生活的重要图像史料
+  - name: 鉴若止水铜镜
+    period: 唐代
+    description: 重4.25千克，铸有麒麟、龙凤图案及铭文，为馆藏一级文物
+  - name: 玉质哀册
+    period: 唐代
+    description: 随葬于陪葬墓，记载墓主生平，雕刻精细，为研究唐代礼制的重要文物
+dynasty_connections:
+  - dynasty: 唐朝
+    description: 乾陵为唐高宗李治（628—683）与女皇武则天（624—705）合葬陵，是唐代18座帝王陵中保存最完整者，素称'唐陵之冠'；博物馆依托5座乾陵陪葬墓（永泰公主、章怀太子、懿德太子、薛元超、李谨行）遗址建立，馆藏文物逾4000件，集中呈现盛唐帝陵文化
+sources:
+  - source: https://wwj.shaanxi.gov.cn/ztzl/ndzt/2016n/zgcyksxtbggbxk/kbwgjshmfkf/201110/t20111010_2144131.html
+  - source: https://wwj.shaanxi.gov.cn/ztzl/ndzt/2016n/zgcyksxtbggbxk/kbwgjshmfkf/200606/t20060621_2142805.html
+  - source: http://nb.ncha.gov.cn/museumdetail.html?msg=ca8e280488b34a648b9fcf29abde1ae2&nianfen=2021
+  - source: https://snqianxian.gov.cn/xwzx/zwzt/ql5ajjqcj/202403/t20240318_1743892.html
+  - source: https://www.shanxiqianling.com/
+  - source: https://zh.wikipedia.org/zh-hans/%E4%B9%BE%E9%99%B5%E5%8D%9A%E7%89%A9%E9%A6%86

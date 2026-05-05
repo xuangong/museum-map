@@ -1,0 +1,41 @@
+id: nanjing
+name: 南京博物院
+lat: 32.0569
+lng: 118.8228
+location: 江苏省南京市玄武区中山东路321号
+level: 国家一级博物馆（中国三大博物馆之一）
+core_period: 六朝、明代、民国
+specialty: 中国最早的公立博物馆之一，"一院六馆"模式（历史馆、艺术馆、特展馆、数字馆、民国馆、非遗馆）。民国馆沉浸式还原1930年代南京街景。
+dynasty_coverage: 六朝（东吴、东晋、宋齐梁陈）、明、民国为特色，兼顾通史
+timeline: 南京是六朝古都和明初都城。南博以六朝文物见长，竹林七贤砖画是六朝文化的标志。民国馆则补上了中国近现代史的重要一环。
+treasures:
+  - name: 1. 金缕玉衣（西汉）— 徐州楚王墓出土
+halls:
+  - name: 历史馆（通史主线）
+  - name: 民国馆（沉浸体验）
+  - name: 艺术馆（书画瓷器）
+artifacts:
+  - name: 竹林七贤与荣启期砖画
+    period: 南朝
+    description: 用数百块砖拼合而成的大型壁画，表现魏晋名士风度
+  - name: 金缕玉衣
+    period: 西汉
+    description: 用金丝穿缀玉片制成的殓服，体现汉代丧葬制度和玉文化
+  - name: 明洪武釉里红岁寒三友纹梅瓶
+    period: 明初
+    description: 釉里红工艺难度极高，此件品相完美
+  - name: 错银铜牛灯
+    period: 东汉
+    description: 灯烟通过牛体导入水中过滤，古代"环保"设计
+  - name: 银缕玉衣
+    period: 东汉
+    description: 玉衣等级制度的实物证据
+  - name: 透雕人鸟兽玉饰件
+    period: 西周
+    description: 玉器工艺精品
+  - name: 青瓷釉下彩羽人纹盘口壶
+    period: 三国·吴
+    description: 最早的釉下彩瓷
+sources:
+  - source: "南京博物院官网: https://www.njmuseum.com/"
+  - source: 核心文物数据已多源交叉核实

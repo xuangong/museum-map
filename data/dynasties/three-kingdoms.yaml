@@ -1,0 +1,83 @@
+id: three-kingdoms
+name: 三国（公元220年—280年）
+period: 公元220年—280年
+order_index: 8
+overview: |-
+  三国是中国历史上最富戏剧性的时期之一。东汉末年群雄割据，最终形成魏（曹操/曹丕）、蜀汉（刘备）、吴（孙权）三足鼎立的格局。虽然三国存续仅六十年，但《三国演义》使其成为中国人最熟悉的历史时期。
+
+  **曹魏**（220—265年）：曹操统一北方后，其子曹丕代汉称帝，定都洛阳。曹魏控制了北方核心区域，经济和人口占优，推行九品中正制（取代汉代察举制），对后世选官制度影响深远。
+
+  **蜀汉**（221—263年）：刘备以汉室宗亲身份在成都称帝，以"兴复汉室"为旗帜。诸葛亮五次北伐未能成功，263年魏灭蜀。蜀汉虽小，但诸葛亮的治蜀方略和"鞠躬尽瘁"的精神成为千古传诵的典范。
+
+  **孙吴**（222—280年）：孙权据江东，依托长江天险和江南经济，偏安东南。吴国对江南地区的开发为后来东晋南朝的繁荣奠定了基础。280年西晋灭吴，三国归于统一。
+culture:
+  - category: 建安文学
+    description: 曹操、曹丕、曹植父子三人引领"建安风骨"，慷慨悲凉
+  - category: 九品中正制
+    description: 曹魏创立的选官制度，按家世和才能品评人才，后演变为门阀制度
+  - category: 青瓷
+    description: 三国吴地越窑开始大规模烧造青瓷，是中国成熟瓷器的开端
+  - category: 数学
+    description: 刘徽注《九章算术》，提出割圆术计算圆周率
+events:
+  - date: 208年
+    event: 赤壁之战，三分天下格局初定
+    lat: 29.72
+    lng: 113.88
+  - date: 220年
+    event: 曹丕代汉建魏
+    lat: 32
+    lng: 112
+  - date: 221年
+    event: 刘备称帝建蜀汉
+    lat: 32
+    lng: 112
+  - date: 222年
+    event: 孙权称王（229年称帝）；夷陵之战，刘备败于陆逊
+    lat: 30.77
+    lng: 111.28
+  - date: 223年
+    event: 刘备白帝城托孤于诸葛亮
+    lat: 32
+    lng: 112
+  - date: 228—234年
+    event: 诸葛亮五次北伐
+    lat: 32
+    lng: 112
+  - date: 234年
+    event: 诸葛亮病逝五丈原
+    lat: 34.17
+    lng: 107.68
+  - date: 249年
+    event: 高平陵之变，司马懿夺权
+    lat: 32
+    lng: 112
+  - date: 263年
+    event: 魏灭蜀
+    lat: 32
+    lng: 112
+  - date: 265年
+    event: 司马炎代魏建晋
+    lat: 32
+    lng: 112
+  - date: 280年
+    event: 西晋灭吴，三国结束
+    lat: 32
+    lng: 112
+recommended_museums:
+  - museum_id: luoyang
+    name: 洛阳博物馆
+    reason: 曹魏白玉杯，曹魏都城洛阳出土文物
+  - museum_id: 232d4da5-550c-49eb-89e0-042c913657c8
+    name: 成都武侯祠博物馆
+    reason: 诸葛亮和蜀汉历史专题
+  - museum_id: nanjing
+    name: 南京博物院
+    reason: 六朝文物（含东吴）
+  - museum_id: jiangsu
+    name: 六朝博物馆
+    location: 南京
+    reason: 东吴至南朝专题
+  - museum_id: guobo
+    name: 中国国家博物馆
+    reason: 通史视角

@@ -1,0 +1,1414 @@
+eastern-han:
+  - museum_id: 232d4da5-550c-49eb-89e0-042c913657c8
+    reason: 这家馆能看到东汉精妙的青铜工艺，四耳蹲蛙造型的铜鼓展现了古人的想象力
+    evidence_json: '{"museumId":"232d4da5-550c-49eb-89e0-042c913657c8","museumName":"成都武侯祠博物馆","signals":[{"type":"dynasty_coverage","text":"东汉末年至蜀汉（约184年—263年）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"东汉四耳蹲蛙青铜鼓","period":"东汉"}]}'
+  - museum_id: 6d90c01d-efe7-45e5-a39a-e28a10298fa2
+    reason: 寺由汉明帝永平十一年敕建，齐云塔与摄摩腾、竺法兰墓是中国佛教第一现场
+  - museum_id: 9bfb09d6-e2da-4572-8384-56d34d1f59fe
+    reason: 复原打鬼图壁画墓与朱村墓宴饮图，是东汉冥间想象最直观的现场
+  - museum_id: beilin
+    reason: 可以看到东汉时期书法艺术的精美典范，曹全碑是现存最完整的汉代隶书碑刻
+    evidence_json: '{"museumId":"beilin","museumName":"西安碑林博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"《曹全碑》","period":"东汉，185年"}]}'
+  - museum_id: chengdu
+    reason: 与国博击鼓说唱俑同源的东汉说唱俑，蜀地汉代陶塑的代表
+  - museum_id: chongqing
+    reason: 观看汉代画像石棺、画像砖和朐忍令景云神道碑，了解东汉时期的丧葬文化与地方官制
+    evidence_json: '{"museumId":"chongqing","museumName":"重庆中国三峡博物馆（重庆博物馆）","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"汉代画像石棺和画像砖","period":"东汉"},{"name":"朐忍令景云神道碑","period":"东汉"}]}'
+  - museum_id: dingzhou
+    reason: 这家馆能看到东汉精美的龙螭衔环谷纹青玉壁，展现汉代玉器工艺的高超水平
+    evidence_json: '{"museumId":"dingzhou","museumName":"定州博物馆","signals":[{"type":"dynasty_coverage","text":"西汉（中山国）、东汉、北朝、隋唐、北宋（定窑）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"东汉龙螭衔环谷纹青玉壁","period":"东汉"}]}'
+  - museum_id: famensi
+    reason: 法门寺始建于东汉桓灵年间，出土汉代瓦当砖刻为证，被誉为「关中塔庙始祖」
+    evidence_json: '{"museumId":"famensi","museumName":"法门寺博物馆（法门寺珍宝馆）","signals":[{"type":"dynasty_coverage","text":"唐代（核心），东汉末年始建寺院"}],"artifactHits":[]}'
+  - museum_id: gansu
+    reason: 甘肃省博物馆藏有东汉铜奔马和铜车马仪仗队，展现了当时的交通运输和礼仪制度
+    evidence_json: '{"museumId":"gansu","museumName":"甘肃省博物馆","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"铜奔马","period":"东汉，武威雷台汉墓出土"},{"name":"铜车马仪仗队","period":"东汉，武威雷台汉墓"}]}'
+  - museum_id: guangxi
+    reason: 合浦汉墓群延续到东汉，海丝玻璃器与铜器东汉段同样厚重
+  - museum_id: guizhou
+    reason: 馆内收藏的东汉铜车马展现了两千年前精湛的青铜铸造工艺和贵族出行场景
+    evidence_json: '{"museumId":"guizhou","museumName":"贵州省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"东汉铜车马","period":"东汉"}]}'
+  - museum_id: guobo
+    reason: 这家馆能看到东汉时期的陶制击鼓说唱俑，展现了当时民间娱乐和手工艺水平
+    evidence_json: '{"museumId":"guobo","museumName":"中国国家博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"击鼓说唱俑","period":"东汉"}]}'
+  - museum_id: henan
+    reason: 永城芒砀山梁王金缕玉衣+四神云气图壁画都是河南汉墓代表，东汉绕不开
+  - museum_id: luoyang
+    reason: 东汉时期洛阳作为都城的陶俑、玻璃器等生活用品和建筑遗迹
+    evidence_json: '{"museumId":"luoyang","museumName":"洛阳博物馆","signals":[{"type":"core_period","text":"夏商周（二里头-东周王城）、东汉、魏晋北朝、隋唐（东都洛阳）"},{"type":"dynasty_coverage","text":"夏代（二里头）→ 商代 → 西周（成周）→ 东周（王城）→ 东汉 → 曹魏西晋 → 北魏 → 隋唐（东都）→ 五代"}],"artifactHits":[]}'
+  - museum_id: nanjing
+    reason: 可以看到东汉精湛的金属工艺和丧葬文化，如错银铜牛灯和银缕玉衣等珍贵文物
+    evidence_json: '{"museumId":"nanjing","museumName":"南京博物院","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"错银铜牛灯","period":"东汉"},{"name":"银缕玉衣","period":"东汉"}]}'
+  - museum_id: nanyue
+    reason: 在南越王博物院看东汉时期岭南地区的陶器、铜器等文物，了解汉代南方经济开发的面貌
+    evidence_json: '{"museumId":"nanyue","museumName":"南越王博物院","signals":[{"type":"dynasty_coverage","text":"秦代（赵佗南征）→ 西汉（南越国五代王）→ 东汉至六朝（岭南开发）"}],"artifactHits":[]}'
+  - museum_id: qingzhou
+    reason: 镇馆"宜子孙"出廓玉璧出自马家冢子东汉墓，是禁止出境的汉玉孤品
+  - museum_id: shandong
+    reason: 山东博物馆的东平汉墓壁画展现了东汉时期的建筑、生活场景和艺术风格
+    evidence_json: '{"museumId":"shandong","museumName":"山东博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"东平汉墓壁画","period":"东汉"}]}'
+  - museum_id: sichuan
+    reason: 四川博物院的汉代画像砖生动再现了东汉社会生活场景、建筑风格和民俗信仰
+    evidence_json: '{"museumId":"sichuan","museumName":"四川博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"汉代画像砖","period":"东汉"}]}'
+  - museum_id: taipei-gugong
+    reason: 院藏汉代铜镜、画像砖与博山炉，照见东汉神仙世界与日常烟火
+  - museum_id: xinjiang
+    reason: 镇馆"五星出东方利中国"锦护臂出土于尼雅，一句星占铭文锁定汉对西域的有效管辖
+  - museum_id: xuzhou
+    reason: 看东汉汉画像石，了解当时的建筑、生活、信仰和社会风俗的真实写照
+    evidence_json: '{"museumId":"xuzhou","museumName":"徐州博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"汉画像石","period":"东汉"}]}'
+  - museum_id: yunnan
+    reason: 这家馆能看到东汉时期的古滇国铜鼓、铜器等青铜文物和当时云南地区的生活遗迹
+    evidence_json: '{"museumId":"yunnan","museumName":"云南省博物馆","signals":[{"type":"dynasty_coverage","text":"旧石器（元谋人，距今约170万年）→ 新石器 → 青铜时代（古滇国，战国至西汉）→ 东汉至隋 → 南诏（唐）→ 大理（宋）→ 元明清（改土归流）→ 近现代（滇越铁路/西南联大/抗战）"}],"artifactHits":[]}'
+eastern-zhou:
+  - museum_id: 054543c3-1850-471d-be28-e611f77ba9c4
+    reason: 看秦公镈这件春秋时期的重器，了解秦国早期的铸造工艺和贵族生活
+    evidence_json: '{"museumId":"054543c3-1850-471d-be28-e611f77ba9c4","museumName":"宝鸡青铜器博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"秦公镈","period":"春秋早期"}]}'
+  - museum_id: 1f59db8a-b242-494f-aba4-7f02ed14f48c
+    reason: 可以看到战国时期原始瓷兽头鼎的器型工艺和装饰特征
+    evidence_json: '{"museumId":"1f59db8a-b242-494f-aba4-7f02ed14f48c","museumName":"杭州南宋官窑博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"战国原始瓷兽头鼎","period":"战国"}]}'
+  - museum_id: 2e7ff077-be9c-488e-bbaf-2a5796c9cc2f
+    reason: 看战国赵国精美的青铜马，感受贵族的车马文明与冶铸工艺
+    evidence_json: '{"museumId":"2e7ff077-be9c-488e-bbaf-2a5796c9cc2f","museumName":"邯郸市博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"赵王陵出土青铜马","period":"赵国（战国）"}]}'
+  - museum_id: 31f1ad8e-c4de-4a5e-aafa-c51656c8a1a7
+    reason: 鲁国故城出土战国黄玉马+镶金银猿形带钩，鲁国都城考古的镇馆级别
+  - museum_id: 52857eb0-ccb7-46af-a887-79501e299e42
+    reason: 擂鼓墩二号墓编钟36件(曾侯乙姊妹钟)+曾侯丙编钟，战国早期曾国青铜礼乐重器
+  - museum_id: 88f42955-6058-485d-95e4-c7711d85d326
+    reason: 这座馆能看到战国时期精美的错金银铜鼎工艺
+    evidence_json: '{"museumId":"88f42955-6058-485d-95e4-c7711d85d326","museumName":"咸阳博物院","signals":[{"type":"dynasty_coverage","text":"战国至明清（核心为秦汉，兼及北魏、北周、隋唐）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"战国错金银鼎","period":"战国"}]}'
+  - museum_id: 92a0de78-943a-412a-b064-45327f3c3573
+    reason: 这家馆能看到东周时期楚国青铜礼器、漆器工艺品和墓葬陪葬文物，展现楚文化的工艺水平和贵族生活
+    evidence_json: '{"museumId":"92a0de78-943a-412a-b064-45327f3c3573","museumName":"荆州博物馆","signals":[{"type":"core_period","text":"新石器时代至明清，重点为春秋战国至秦汉（楚文化鼎盛期）"}],"artifactHits":[]}'
+  - museum_id: anhui
+    reason: 安徽博物院收藏了大量春秋战国时期楚国的青铜器、漆器和陶器，能看到东周楚文化的辉煌成就
+    evidence_json: '{"museumId":"anhui","museumName":"安徽博物院","signals":[{"type":"core_period","text":"新石器时代（凌家滩文化）、春秋战国（楚文化）、明清（徽文化）"},{"type":"dynasty_coverage","text":"新石器时代（凌家滩）→ 商周（皖南铜矿）→ 春秋战国（楚、吴越）→ 三国（曹魏、东吴争夺）→ 宋元 → 明清（徽文化鼎盛）"}],"artifactHits":[]}'
+  - museum_id: chengdu
+    reason: 商业街船棺葬出土战国船棺(古蜀开明王朝)，体量全国之最的镇馆级
+  - museum_id: gansu
+    reason: 礼县大堡子山秦公大墓金饰片(法国吉美追索回归)+春秋秦公铜鼎，秦人发祥地的灵魂展品
+  - museum_id: guangxi
+    reason: 平乐银山岭战国墓出土的铁足铜鼎是国内现存最大铁足铜鼎，搭配越式铜剑见证西瓯文化
+    evidence_json: '{"museumId":"guangxi","museumName":"广西壮族自治区博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"翔鹭纹铜鼓","period":"战国至西汉"}]}'
+  - museum_id: guobo
+    reason: 国博藏战国虎钮錞于、郑王陵青铜器组，春秋战国线索完整不该缺
+  - museum_id: hainan
+    reason: 战国"越王亓北古"错金复合剑全球仅3柄、海博开馆爆款，战国不能漏
+  - museum_id: hebei
+    reason: 河北博物院收藏战国中山国的错金银四龙四凤铜方案座、铁足铜鼎、十五连盏铜灯等精美青铜器
+    evidence_json: '{"museumId":"hebei","museumName":"河北博物院","signals":[{"type":"core_period","text":"西汉（满城汉墓）、战国（中山国）"},{"type":"dynasty_coverage","text":"战国、西汉、北朝、唐、宋、元"},{"type":"artifact_period","text":"3 件文物"}],"artifactHits":[{"name":"错金银四龙四凤铜方案座","period":"战国"},{"name":"中山王铁足铜鼎","period":"战国"},{"name":"十五连盏铜灯","period":"战国"}]}'
+  - museum_id: henan
+    reason: 看春秋时期青铜器工艺的精妙，莲鹤方壶上莲花与仙鹤的造型设计令人叹为观止
+    evidence_json: '{"museumId":"henan","museumName":"河南博物院","signals":[{"type":"dynasty_coverage","text":"新石器(裴李岗、仰韶)、夏、商、西周、春秋为核心,唐宋亦有亮点"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"莲鹤方壶","period":"春秋,约前6世纪"}]}'
+  - museum_id: hubei
+    reason: 看越王勾践剑、曾侯乙编钟等春秋战国楚曾文物，感受先秦诸侯国的礼乐文明与铜器工艺
+    evidence_json: '{"museumId":"hubei","museumName":"湖北省博物馆","signals":[{"type":"core_period","text":"先秦（楚文化）、春秋战国"},{"type":"dynasty_coverage","text":"春秋战国（楚国、曾国）为核心，秦（云梦秦简）、元明亦有精品"},{"type":"artifact_period","text":"3 件文物"}],"artifactHits":[{"name":"越王勾践剑","period":"春秋，约前5世纪"},{"name":"曾侯乙外棺","period":"战国"},{"name":"虎座鸟架鼓","period":"战国·楚"}]}'
+  - museum_id: hunan
+    reason: 湘博藏长沙子弹库帛书、楚墓漆器群与人物御龙帛画，战国楚文化重镇
+  - museum_id: jinsha
+    reason: 金沙遗址出土的陶器、青铜器和象牙制品，展现了春秋早期古蜀文明的手工业发展水平和贵族生活风貌
+    evidence_json: '{"museumId":"jinsha","museumName":"金沙遗址博物馆","signals":[{"type":"core_period","text":"古蜀文明后期（商代晚期至春秋早期，约前1200-前650年）"},{"type":"dynasty_coverage","text":"商代晚期 → 西周 → 春秋早期"}],"artifactHits":[]}'
+  - museum_id: kaifeng
+    reason: 开封博物馆藏大梁司寇鼎与大梁布币，是魏惠王迁都大梁136年的少数实物见证
+    evidence_json: '{"museumId":"kaifeng","museumName":"开封博物馆","signals":[{"type":"dynasty_coverage","text":"战国（魏国大梁）→ 唐代（汴州）→ 五代（后梁、后晋、后汉、后周都城）→ 北宋（东京）→ 金代（南京） → 明清"}],"artifactHits":[]}'
+  - museum_id: liaoning
+    reason: 战国燕王职戈胡部铸有「郾王职乍御司马」铭文，是燕昭王御用兵器中最名贵的一件
+    evidence_json: '{"museumId":"liaoning","museumName":"辽宁省博物馆","signals":[{"type":"dynasty_coverage","text":"红山文化、战国燕、汉、三燕（前燕/后燕/北燕）、辽、金、元、明、清"}],"artifactHits":[]}'
+  - museum_id: luoyang
+    reason: 这家馆能看到东周时期洛阳作为周王城的宫殿遗址和列国争霸时期的青铜器、玉器等珍贵文物
+    evidence_json: '{"museumId":"luoyang","museumName":"洛阳博物馆","signals":[{"type":"core_period","text":"夏商周（二里头-东周王城）、东汉、魏晋北朝、隋唐（东都洛阳）"},{"type":"dynasty_coverage","text":"夏代（二里头）→ 商代 → 西周（成周）→ 东周（王城）→ 东汉 → 曹魏西晋 → 北魏 → 隋唐（东都）→ 五代"}],"artifactHits":[]}'
+  - museum_id: neimenggu
+    reason: 在内蒙古博物院能看到战国匈奴精美的鹰顶金冠饰和春秋战国时期鄂尔多斯式青铜器
+    evidence_json: '{"museumId":"neimenggu","museumName":"内蒙古博物院","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"匈奴鹰顶金冠饰","period":"战国晚期，约前4-前3世纪"},{"name":"鄂尔多斯式青铜器群","period":"春秋至汉代"}]}'
+  - museum_id: ningxia
+    reason: 看到戎族透雕青铜牌饰，感受春秋战国游牧民族的精湛青铜工艺和独特审美
+    evidence_json: '{"museumId":"ningxia","museumName":"宁夏回族自治区博物馆","signals":[{"type":"dynasty_coverage","text":"旧石器时代（水洞沟）→ 新石器（菜园文化/马家窑/齐家）→ 春秋战国（戎族青铜器）→ 秦汉 → 北朝隋唐（丝路重镇固原、灵州）→ 西夏 → 元明清"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"透雕青铜牌饰","period":"战国至汉"}]}'
+  - museum_id: shaanxi
+    reason: 陕西历史博物馆展出的战国秦代杜虎符，是了解东周时期军事管理制度的重要见证
+    evidence_json: '{"museumId":"shaanxi","museumName":"陕西历史博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"杜虎符","period":"战国·秦"}]}'
+  - museum_id: shandong
+    reason: 看到战国齐鲁文化的精美玉璧，见证古代手工艺水平和诸侯国的财富积累
+    evidence_json: '{"museumId":"shandong","museumName":"山东博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（大汶口、龙山文化）、商、西周、春秋战国（齐鲁）、汉、北朝、明"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"鲁国大玉璧","period":"战国"}]}'
+  - museum_id: shanghai
+    reason: 看商鞅方升了解战国度量衡制度，看青铜牺尊领略春秋礼乐文明
+    evidence_json: '{"museumId":"shanghai","museumName":"上海博物馆","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"商鞅方升","period":"战国·秦孝公十八年"},{"name":"牺尊","period":"春秋"}]}'
+  - museum_id: shanxi
+    reason: 太原金胜村春秋晚期赵卿墓出土的鸟尊、镬鼎、铜牺立人擎盘，加侯马盟书五千余件朱书玉石片，三晋之源的青铜与文字双重档案
+  - museum_id: sichuan
+    reason: 四川博物院收藏的巴蜀青铜器和战国铜器展现了东周时期巴蜀地区的青铜工艺水平和文化特色
+    evidence_json: '{"museumId":"sichuan","museumName":"四川博物院","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"巴蜀青铜器","period":"商周至战国"},{"name":"新都马家乡大墓出土铜器","period":"战国"}]}'
+  - museum_id: silk
+    reason: 馆藏战国对龙对风纹锦展示了春秋战国时期高超的丝绸织造工艺和精美的纹样设计
+    evidence_json: '{"museumId":"silk","museumName":"中国丝绸博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"战国对龙对风纹锦","period":"战国"}]}'
+  - museum_id: suzhou
+    reason: 馆藏春秋吴国青铜器、陶器和古城遗址文物，展现吴国时期的政治、军事、生活风貌
+    evidence_json: '{"museumId":"suzhou","museumName":"苏州博物馆","signals":[{"type":"core_period","text":"春秋（吴国）、五代宋元（丝织、书画）、明清（文人文化）"},{"type":"dynasty_coverage","text":"新石器时代（草鞋山）→ 春秋（吴国）→ 六朝 → 唐宋 → 明清（苏州为经济文化中心）"}],"artifactHits":[]}'
+  - museum_id: tianjin
+    reason: 战国楚王熊悍鼎60字铭文、寿县楚幽王墓孑遗，战国必须现身
+  - museum_id: wenzi
+    reason: 馆藏温县盟书+战国「降亭」陶釜+十六年郑令戈，先秦文字载体专题陈列绕不开
+  - museum_id: yangzhou
+    reason: 这里能看到春秋吴王夫差开凿邗沟的古代运河遗迹和水利工程遗产
+    evidence_json: '{"museumId":"yangzhou","museumName":"扬州博物馆 / 中国大运河博物馆","signals":[{"type":"dynasty_coverage","text":"春秋（吴王夫差开邗沟）→ 隋代（开凿大运河）→ 唐代（扬州为国际都会）→ 宋元 → 明清（盐商文化、扬州学派）"}],"artifactHits":[]}'
+  - museum_id: yunnan
+    reason: 可以看到战国古滇国的牛虎铜案等青铜礼器和生活用具，展现独特的滇文化特征
+    evidence_json: '{"museumId":"yunnan","museumName":"云南省博物馆","signals":[{"type":"core_period","text":"古滇国（战国至西汉）、南诏/大理（唐宋）"},{"type":"dynasty_coverage","text":"旧石器（元谋人，距今约170万年）→ 新石器 → 青铜时代（古滇国，战国至西汉）→ 东汉至隋 → 南诏（唐）→ 大理（宋）→ 元明清（改土归流）→ 近现代（滇越铁路/西南联大/抗战）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"牛虎铜案","period":"战国·古滇国，晋宁石寨山出土"}]}'
+  - museum_id: zhejiang
+    reason: 展厅陈列越国青铜器、兵器和日用陶器，复原展示春秋战国时期越国的政治军事生活
+    evidence_json: '{"museumId":"zhejiang","museumName":"浙江省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（河姆渡、良渚）→ 春秋战国（越国）→ 三国两晋（越窑）→ 五代（吴越国）→ 宋代 → 元明清"}],"artifactHits":[]}'
+  - museum_id: zhongshanguo
+    reason: 看战国中山国王室用器：错金银龙凤方案座、铁足铜鼎、虎噬鹿屏风座、十五连盏铜灯和兆域图铜版
+    evidence_json: '{"museumId":"zhongshanguo","museumName":"中山古城遗址·中山国王陵陈列馆","signals":[{"type":"core_period","text":"战国中山国（前414年-前296年）"},{"type":"dynasty_coverage","text":"战国"},{"type":"artifact_period","text":"5 件文物"}],"artifactHits":[{"name":"错金银四龙四凤铜方案座","period":"战国中期，前4世纪"},{"name":"中山王铁足铜鼎","period":"战国中期"},{"name":"错金银虎噬鹿铜屏风座","period":"战国中期"},{"name":"十五连盏铜灯","period":"战国中期"},{"name":"中山王\"兆域图\"铜版","period":"战国中期"}]}'
+jin:
+  - museum_id: beilin
+    reason: 西安碑林博物馆收藏了两晋时期的碑刻文献和书法艺术作品
+    evidence_json: '{"museumId":"beilin","museumName":"西安碑林博物馆","signals":[{"type":"dynasty_coverage","text":"秦、汉、魏晋、北朝、隋、唐、宋、元、明、清"}],"artifactHits":[]}'
+  - museum_id: gansu
+    reason: 观看嘉峪关墓出土的魏晋壁画砖，了解两晋时期的墓葬文化和艺术风格
+    evidence_json: '{"museumId":"gansu","museumName":"甘肃省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（大地湾/仰韶/马家窑/齐家）→ 先秦 → 秦汉（丝路/简牍）→ 魏晋（壁画砖）→ 十六国至隋唐（佛教艺术）→ 宋元明清"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"魏晋壁画砖","period":"魏晋，嘉峪关墓出土"}]}'
+  - museum_id: jiangsu
+    reason: 馆藏东晋瓷器、玉器、铜镜和墓葬壁画，展现两晋士族生活与工艺水平
+    evidence_json: '{"museumId":"jiangsu","museumName":"南京六朝博物馆","signals":[{"type":"core_period","text":"六朝（222-589年：东吴、东晋、宋、齐、梁、陈）"},{"type":"dynasty_coverage","text":"东吴（222-280）→ 东晋（317-420）→ 南朝宋（420-479）→ 南朝齐（479-502）→ 南朝梁（502-557）→ 南朝陈（557-589）"}],"artifactHits":[]}'
+  - museum_id: jiangxi
+    reason: 江西省博物馆藏有洪州窑两晋南朝青瓷，是陆羽《茶经》列名的六大名窑之一
+    evidence_json: '{"museumId":"jiangxi","museumName":"江西省博物馆","signals":[{"type":"dynasty_coverage","text":"商代（新干大洋洲）→ 西汉（海昏侯）→ 东晋南朝 → 唐宋（洪州窑、景德镇）→ 元明清（景德镇御窑）"}],"artifactHits":[]}'
+  - museum_id: luoyang
+    reason: 看两晋时期的陶俑、瓷器、墓葬壁画和生活用器，了解贵族日常与丧葬习俗
+    evidence_json: '{"museumId":"luoyang","museumName":"洛阳博物馆","signals":[{"type":"core_period","text":"夏商周（二里头-东周王城）、东汉、魏晋北朝、隋唐（东都洛阳）"},{"type":"dynasty_coverage","text":"夏代（二里头）→ 商代 → 西周（成周）→ 东周（王城）→ 东汉 → 曹魏西晋 → 北魏 → 隋唐（东都）→ 五代"}],"artifactHits":[]}'
+  - museum_id: nanjing
+    reason: 这家馆可以看到两晋时期的青瓷器、玉器、石刻和墓葬出土文物，领略当时士族文化与手工业成就
+    evidence_json: '{"museumId":"nanjing","museumName":"南京博物院","signals":[{"type":"dynasty_coverage","text":"六朝（东吴、东晋、宋齐梁陈）、明、民国为特色，兼顾通史"}],"artifactHits":[]}'
+  - museum_id: qinghai
+    reason: 这家馆能看到两晋玄武砛滴精美砚滴，展现当时工艺美术的高超水平
+    evidence_json: '{"museumId":"qinghai","museumName":"青海省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"玄武砚滴","period":"魏晋，互助高寨汉墓出土"}]}'
+  - museum_id: silk
+    reason: 馆内魏晋南北朝时期的绞缬丝绸工艺品展示两晋时代的染缬技术发展
+    evidence_json: '{"museumId":"silk","museumName":"中国丝绸博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（浙江出土距今5000余年丝线）→ 商周（丝织起步）→ 秦汉（丝路开通）→ 魏晋南北朝（绞缬工艺）→ 隋唐（丝路繁荣高峰）→ 宋元（织锦技术革新）→ 明清（官营织造/缂丝/刺绣高峰）"}],"artifactHits":[]}'
+  - museum_id: taipei-gugong
+    reason: 看东晋书圣王羲之的传世法帖唐摹本《快雪时晴帖》，体验魏晋风度的书法艺术巅峰
+    evidence_json: '{"museumId":"taipei-gugong","museumName":"台北故宫博物院","signals":[{"type":"dynasty_coverage","text":"商周（甲骨/青铜器）→ 秦汉 → 魏晋南北朝 → 唐 → 宋（书画/瓷器高峰）→ 元明清（宫廷收藏鼎盛）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"王羲之《快雪时晴帖》","period":"东晋/唐摹本"}]}'
+  - museum_id: wenzi
+    reason: 馆内展示楷书体系的形成发展，可看到两晋时期书法从隶书向楷书演变的重要文物和书写样本
+    evidence_json: '{"museumId":"wenzi","museumName":"中国文字博物馆","signals":[{"type":"dynasty_coverage","text":"商（甲骨文）→ 西周（金文）→ 秦（小篆/统一文字）→ 汉（隶书）→ 魏晋（楷书）→ 唐宋元明清（印刷术）→ 当代"}],"artifactHits":[]}'
+  - museum_id: xinjiang
+    reason: 看尉犁县营盘遗址出土的干尸，观察两晋时期西域人的服饰、发型和木器陪葬品
+    evidence_json: '{"museumId":"xinjiang","museumName":"新疆维吾尔自治区博物馆","signals":[{"type":"dynasty_coverage","text":"青铜时代（小河/楼兰）→ 汉（西域都护府，前60年）→ 魏晋南北朝（高昌/龟兹）→ 唐（安西都护府）→ 宋元（回鹘/西辽）→ 清（新疆建省）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"营盘男尸","period":"汉晋，1995年尉犁县营盘遗址15号墓出土"}]}'
+  - museum_id: yunnan
+    reason: 云南省博物馆两晋时期馆藏的牛虎铜案展现了古滇国精湛的青铜工艺和独特的动物纹样装饰艺术
+    evidence_json: '{"museumId":"yunnan","museumName":"云南省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"牛虎铜案","period":"战国·古滇国，晋宁石寨山出土"}]}'
+  - museum_id: zhejiang
+    reason: 两晋越窑青瓷和当时的日常生活用器在馆内展示
+    evidence_json: '{"museumId":"zhejiang","museumName":"浙江省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（河姆渡、良渚）→ 春秋战国（越国）→ 三国两晋（越窑）→ 五代（吴越国）→ 宋代 → 元明清"}],"artifactHits":[]}'
+jin-jurchen:
+  - museum_id: 2e7ff077-be9c-488e-bbaf-2a5796c9cc2f
+    reason: 这家馆能看到金朝时期磁州窑烧制的白地黑花瓷器，展现了当时北方陶瓷工艺的高超水平
+    evidence_json: '{"museumId":"2e7ff077-be9c-488e-bbaf-2a5796c9cc2f","museumName":"邯郸市博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"磁州窑白地黑花瓷器","period":"宋金时期"}]}'
+  - museum_id: 9b3cf4df-a9f9-42b7-9418-adc2560c13c5
+    reason: 金代琉璃鸱吻展现了当时屋顶装饰工艺的精妙
+    evidence_json: '{"museumId":"9b3cf4df-a9f9-42b7-9418-adc2560c13c5","museumName":"大同华严寺","signals":[{"type":"core_period","text":"辽金时期（1038—1140年）"},{"type":"dynasty_coverage","text":"辽、金、清（916年—近代）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"琉璃鸱吻","period":"金代（北吻）/ 清代（南吻）"}]}'
+  - museum_id: 9bfb09d6-e2da-4572-8384-56d34d1f59fe
+    reason: 看到精美的宋金时期雕砖艺术，展现北方民居砖雕装饰的高超工艺
+    evidence_json: '{"museumId":"9bfb09d6-e2da-4572-8384-56d34d1f59fe","museumName":"洛阳古代艺术博物馆（洛阳古墓博物馆）","signals":[{"type":"core_period","text":"西汉至金代"},{"type":"dynasty_coverage","text":"西汉、北魏、唐、宋、金"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"宋金雕砖","period":"宋—金"}]}'
+  - museum_id: heilongjiang
+    reason: 这家馆能看到金朝精美的铜铸工艺品，包括铜坐龙、铜印、铜人像等珍贵文物
+    evidence_json: '{"museumId":"heilongjiang","museumName":"黑龙江省博物馆","signals":[{"type":"core_period","text":"渤海国（698-926年）、金代（1115-1234年）、自然历史"},{"type":"dynasty_coverage","text":"新石器时代、渤海国、辽、金、元、清（黑龙江流域开发）"},{"type":"artifact_period","text":"3 件文物"}],"artifactHits":[{"name":"金代铜坐龙","period":"金代，12世纪"},{"name":"金代\"上京路\"铜印","period":"金代"},{"name":"金代铜人","period":"金代"}]}'
+  - museum_id: jilin
+    reason: 看金代高级贵族的铜镜、瓷器和金银饰品，了解女真民族的精美工艺文化
+    evidence_json: '{"museumId":"jilin","museumName":"吉林省博物院","signals":[{"type":"dynasty_coverage","text":"新石器时代、高句丽、渤海国、辽、金、清（东北边疆）"}],"artifactHits":[]}'
+  - museum_id: kaifeng
+    reason: 馆内金代南京城遗址展示和金瓷器、金代生活器物展现了金朝在开封的都城风貌与文明成就
+    evidence_json: '{"museumId":"kaifeng","museumName":"开封博物馆","signals":[{"type":"dynasty_coverage","text":"战国（魏国大梁）→ 唐代（汴州）→ 五代（后梁、后晋、后汉、后周都城）→ 北宋（东京）→ 金代（南京） → 明清"}],"artifactHits":[]}'
+  - museum_id: liaoning
+    reason: 馆藏金代铜坐龙展现了金朝精湛的青铜工艺和皇家审美
+    evidence_json: '{"museumId":"liaoning","museumName":"辽宁省博物馆","signals":[{"type":"core_period","text":"古代书画（唐宋元明清全序列）、辽金时期"},{"type":"dynasty_coverage","text":"红山文化、战国燕、汉、三燕（前燕/后燕/北燕）、辽、金、元、明、清"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"金代铜坐龙","period":"金代"}]}'
+  - museum_id: shanxi-datong
+    reason: 馆内陈列金代瓷器、金属器和石刻等文物，展现金代的物质文化与工艺水平
+    evidence_json: '{"museumId":"shanxi-datong","museumName":"大同市博物馆","signals":[{"type":"dynasty_coverage","text":"北魏、东魏、北齐、辽、金"}],"artifactHits":[]}'
+  - museum_id: wenzi
+    reason: 中国文字博物馆少数民族文字展区设女真文专区，展示金代完颜希尹创制的女真大小字
+    evidence_json: '{"museumId":"wenzi","museumName":"中国文字博物馆","signals":[{"type":"dynasty_coverage","text":"商（甲骨文）→ 西周（金文）→ 秦（小篆/统一文字）→ 汉（隶书）→ 魏晋（楷书）→ 唐宋元明清（印刷术）→ 当代"}],"artifactHits":[]}'
+liao:
+  - museum_id: 9b3cf4df-a9f9-42b7-9418-adc2560c13c5
+    reason: 这家馆能看到辽朝精美的合掌露齿菩萨泥塑像和华严寺辽代建筑群
+    evidence_json: '{"museumId":"9b3cf4df-a9f9-42b7-9418-adc2560c13c5","museumName":"大同华严寺","signals":[{"type":"core_period","text":"辽金时期（1038—1140年）"},{"type":"dynasty_coverage","text":"辽、金、清（916年—近代）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"合掌露齿菩萨","period":"辽代"}]}'
+  - museum_id: ef6658c6-03b4-4edb-98ca-e19523bdaaa7
+    reason: 这座八角九层木塔建于辽代，保存着辽朝精湛的木构建筑工艺和佛教文明遗存
+    evidence_json: '{"museumId":"ef6658c6-03b4-4edb-98ca-e19523bdaaa7","museumName":"应县木塔（佛宫寺释迦塔）","signals":[{"type":"core_period","text":"辽代（辽清宁二年，公元1056年）"},{"type":"dynasty_coverage","text":"辽代至今，跨越近千年"}],"artifactHits":[]}'
+  - museum_id: heilongjiang
+    reason: 能看到辽代在黑龙江流域的陶器、生活用具和渤海国至辽的历史演进
+    evidence_json: '{"museumId":"heilongjiang","museumName":"黑龙江省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代、渤海国、辽、金、元、清（黑龙江流域开发）"}],"artifactHits":[]}'
+  - museum_id: jilin
+    reason: 这家馆能看到辽代精美的鎏金铜观音像，展现当时的佛教工艺水平
+    evidence_json: '{"museumId":"jilin","museumName":"吉林省博物院","signals":[{"type":"dynasty_coverage","text":"新石器时代、高句丽、渤海国、辽、金、清（东北边疆）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"辽代鎏金铜观音像","period":"辽代"}]}'
+  - museum_id: liaoning
+    reason: 馆藏《契丹文铜镜》展示辽代独特的契丹文字和铜镜工艺
+    evidence_json: '{"museumId":"liaoning","museumName":"辽宁省博物馆","signals":[{"type":"core_period","text":"古代书画（唐宋元明清全序列）、辽金时期"},{"type":"dynasty_coverage","text":"红山文化、战国燕、汉、三燕（前燕/后燕/北燕）、辽、金、元、明、清"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"契丹文铜镜","period":"辽代"}]}'
+  - museum_id: neimenggu
+    reason: 观看契丹贵族墓葬出土的华丽服饰、首饰和契丹女尸的完整遗骸，了解辽代贵族的生活与葬制
+    evidence_json: '{"museumId":"neimenggu","museumName":"内蒙古博物院","signals":[{"type":"dynasty_coverage","text":"新石器时代（红山文化）、匈奴、鲜卑、突厥、回鹘、契丹（辽）、蒙古（元）、清"},{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"契丹贵族墓葬出土文物","period":"辽代，10-12世纪"},{"name":"辽代契丹女尸","period":"辽代"}]}'
+  - museum_id: shanxi-datong
+    reason: 大同市博物馆的辽代壁画墓壁画展现了10-11世纪辽人的生活场景和艺术风格
+    evidence_json: '{"museumId":"shanxi-datong","museumName":"大同市博物馆","signals":[{"type":"dynasty_coverage","text":"北魏、东魏、北齐、辽、金"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"辽代壁画墓壁画","period":"辽代，10-11世纪"}]}'
+  - museum_id: xinjiang
+    reason: 馆藏西辽时期的陶瓷、丝绸和钱币，见证了辽代新疆地区的商业繁荣和文化融合
+    evidence_json: '{"museumId":"xinjiang","museumName":"新疆维吾尔自治区博物馆","signals":[{"type":"dynasty_coverage","text":"青铜时代（小河/楼兰）→ 汉（西域都护府，前60年）→ 魏晋南北朝（高昌/龟兹）→ 唐（安西都护府）→ 宋元（回鹘/西辽）→ 清（新疆建省）"}],"artifactHits":[]}'
+  - museum_id: yungang
+    reason: 云冈第3窟唐代补刻的西方三圣大像，与辽金补砌石墙、窟檐遗迹叠压共存
+    evidence_json: '{"museumId":"yungang","museumName":"云冈石窟","signals":[{"type":"dynasty_coverage","text":"北魏(为主体)、唐、辽"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"第3窟(灵岩寺洞)","period":"北魏至唐辽"}]}'
+ming:
+  - museum_id: 1f59db8a-b242-494f-aba4-7f02ed14f48c
+    reason: 这家馆能看到明朝时期运用南宋官窑技艺烧制的青瓷器物和相关工艺传承
+    evidence_json: '{"museumId":"1f59db8a-b242-494f-aba4-7f02ed14f48c","museumName":"杭州南宋官窑博物馆","signals":[{"type":"dynasty_coverage","text":"良渚文化至明代"}],"artifactHits":[]}'
+  - museum_id: 232d4da5-550c-49eb-89e0-042c913657c8
+    reason: 馆中明代豆青釉诸葛碗展现了当时精细的瓷器烧制工艺与诸葛亮的文化地位
+    evidence_json: '{"museumId":"232d4da5-550c-49eb-89e0-042c913657c8","museumName":"成都武侯祠博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"明豆青釉诸葛碗","period":"明代"}]}'
+  - museum_id: 2e7ff077-be9c-488e-bbaf-2a5796c9cc2f
+    reason: 这家馆能看到明朝的瓷器、官窑产品、生活用具及当时的文化遗物展示
+    evidence_json: '{"museumId":"2e7ff077-be9c-488e-bbaf-2a5796c9cc2f","museumName":"邯郸市博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代至近现代，涵盖磁山文化、夏代、商代、西周、东周（赵）、两汉、北朝、宋、明清各时期"}],"artifactHits":[]}'
+  - museum_id: 31f1ad8e-c4de-4a5e-aafa-c51656c8a1a7
+    reason: 明朝时期孔府的私家文书档案，记录了孔子后裔的生活与经营管理
+    evidence_json: '{"museumId":"31f1ad8e-c4de-4a5e-aafa-c51656c8a1a7","museumName":"曲阜孔子博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"孔府私家文书档案","period":"明代至民国"}]}'
+  - museum_id: 6d90c01d-efe7-45e5-a39a-e28a10298fa2
+    reason: 现存大部分殿宇为明嘉靖三十四年重修格局，奠定今日寺院骨架
+  - museum_id: 88f42955-6058-485d-95e4-c7711d85d326
+    reason: 院藏明代成国公朱希忠墓出土金银器与造像群，明代板块该挂上
+  - museum_id: anhui
+    reason: 可看安徽博物院收藏的明清徽文化文物，包括徽州古建筑构件、明清官窑瓷器、传统工艺品等
+    evidence_json: '{"museumId":"anhui","museumName":"安徽博物院","signals":[{"type":"core_period","text":"新石器时代（凌家滩文化）、春秋战国（楚文化）、明清（徽文化）"},{"type":"dynasty_coverage","text":"新石器时代（凌家滩）→ 商周（皖南铜矿）→ 春秋战国（楚、吴越）→ 三国（曹魏、东吴争夺）→ 宋元 → 明清（徽文化鼎盛）"}],"artifactHits":[]}'
+  - museum_id: beilin
+    reason: 馆藏明代《石台孝经》护刻、明清碑石及孔庙建筑群本体，明代不能空
+  - museum_id: c9b31e6a-c677-468d-913e-ce8f400f459a
+    reason: 这家馆能看到明朝皇帝和皇后的金丝翼善冠、龙凤冠等珍贵冠饰，以及地宫内的汉白玉石门等建筑遗存
+    evidence_json: '{"museumId":"c9b31e6a-c677-468d-913e-ce8f400f459a","museumName":"明十三陵定陵博物馆","signals":[{"type":"core_period","text":"明朝万历年间（1584—1590年）"},{"type":"dynasty_coverage","text":"明朝（1368—1644年）"},{"type":"artifact_period","text":"5 件文物"}],"artifactHits":[{"name":"金丝翼善冠","period":"明朝万历年间"},{"name":"十二龙九凤冠","period":"明朝万历年间"},{"name":"皇后龙凤冠","period":"明朝万历年间"},{"name":"地宫","period":"明朝万历年间"},{"name":"汉白玉石门","period":"明朝万历年间"}]}'
+  - museum_id: chengdu
+    reason: 这家馆展示了从古蜀到明清各时期的蜀地文明，能看到明朝时期的陶瓷器皿、生活用品和蜀地繁荣的物质文化遗存
+    evidence_json: '{"museumId":"chengdu","museumName":"成都博物馆","signals":[{"type":"dynasty_coverage","text":"古蜀（宝墩文化/三星堆/金沙）→ 秦汉（蜀郡/老官山）→ 三国（蜀汉）→ 唐宋（繁荣期）→ 明清 → 近现代"}],"artifactHits":[]}'
+  - museum_id: chongqing
+    reason: 明玉珍大夏国的金银器皿、瓷器和官印等馆藏文物，以及大夏国都城遗迹的相关展示
+    evidence_json: '{"museumId":"chongqing","museumName":"重庆中国三峡博物馆（重庆博物馆）","signals":[{"type":"dynasty_coverage","text":"旧石器时代 → 先秦巴国 → 秦汉 → 六朝 → 唐宋 → 元明清（明玉珍大夏国）→ 近现代（抗战首都）"}],"artifactHits":[]}'
+  - museum_id: f72fc18f-cdc2-4ae8-8e68-28d3521eb4ea
+    reason: 馆内明代灵应牌坊展现了当时的木雕工艺和宗教信仰建筑风格
+    evidence_json: '{"museumId":"f72fc18f-cdc2-4ae8-8e68-28d3521eb4ea","museumName":"佛山市祖庙博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"灵应牌坊","period":"明代"}]}'
+  - museum_id: fujian
+    reason: 能看到明朝海外贸易的陶瓷器物和德化窑精品瓷器
+    evidence_json: '{"museumId":"fujian","museumName":"福建博物院","signals":[{"type":"core_period","text":"秦汉（闽越国）、宋元明（海上丝绸之路）、近代（船政文化）"},{"type":"dynasty_coverage","text":"新石器时代（昙石山文化）→ 秦汉（闽越国）→ 唐宋（海上丝绸之路兴盛）→ 宋代（建窑）→ 元明清（德化窑、海外贸易）→ 近代（福建船政）"}],"artifactHits":[]}'
+  - museum_id: gansu
+    reason: 馆藏明代瓷器、丝绸等文物，展现明朝商业贸易繁荣与手工艺成就
+    evidence_json: '{"museumId":"gansu","museumName":"甘肃省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（大地湾/仰韶/马家窑/齐家）→ 先秦 → 秦汉（丝路/简牍）→ 魏晋（壁画砖）→ 十六国至隋唐（佛教艺术）→ 宋元明清"}],"artifactHits":[]}'
+  - museum_id: guangdong
+    reason: 看到明朝时期的外销瓷器和海上贸易相关的文物遗存
+    evidence_json: '{"museumId":"guangdong","museumName":"广东省博物馆","signals":[{"type":"core_period","text":"宋元明清（海上丝绸之路与对外贸易）"},{"type":"dynasty_coverage","text":"先秦百越、秦汉南越、唐宋海贸、明清外销"}],"artifactHits":[]}'
+  - museum_id: guangxi
+    reason: 这家馆能看到明朝的瓷器、铜鼓、陶俑等官窑产品和民间器物，反映当时广西的手工业发展水平
+    evidence_json: '{"museumId":"guangxi","museumName":"广西壮族自治区博物馆","signals":[{"type":"dynasty_coverage","text":"先秦百越、秦汉、东汉、唐宋、明清"}],"artifactHits":[]}'
+  - museum_id: gugong
+    reason: 可观赏明朝皇帝的金銮殿、龙袍、玉玺及宫廷生活用品等原物遗存
+    evidence_json: '{"museumId":"gugong","museumName":"故宫博物院","signals":[{"type":"core_period","text":"明清（1368-1912）"}],"artifactHits":[]}'
+  - museum_id: guizhou
+    reason: 贵州省博物馆藏有明代出土的金手镯，展现了明朝精湛的金工工艺和贵族审美
+    evidence_json: '{"museumId":"guizhou","museumName":"贵州省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"明刻花龙头金手镯","period":"明代，1954年遵义高坪明墓出土"}]}'
+  - museum_id: guobo
+    reason: 国博藏明孝端皇后凤冠、郑和下西洋相关文物，明代国宝级藏品扎实
+  - museum_id: hainan
+    reason: 这家馆能看到明朝黎族织造的龙被等文物，体现当时海南黎族的精湛纺织工艺
+    evidence_json: '{"museumId":"hainan","museumName":"海南省博物馆","signals":[{"type":"core_period","text":"宋元明（南海水下考古）"},{"type":"dynasty_coverage","text":"先秦（越王剑）→ 汉（珠崖郡）→ 唐宋（海上丝路/华光礁沉船）→ 明清（黎族文化）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"黎族龙被","period":"明清"}]}'
+  - museum_id: henan
+    reason: 三层11展厅常设《明清河南》，青花、三彩枕、金簪成系列
+  - museum_id: hubei
+    reason: 看得到明朝的瓷器、书画、金银器等宫廷工艺精品
+    evidence_json: '{"museumId":"hubei","museumName":"湖北省博物馆","signals":[{"type":"dynasty_coverage","text":"春秋战国（楚国、曾国）为核心，秦（云梦秦简）、元明亦有精品"}],"artifactHits":[]}'
+  - museum_id: jiangxi
+    reason: 景德镇御窑瓷器和瓷业遗迹展示了明朝制瓷工艺与官窑生产体系
+    evidence_json: '{"museumId":"jiangxi","museumName":"江西省博物馆","signals":[{"type":"core_period","text":"西汉（海昏侯墓）、宋元明（景德镇瓷器）、商代（新干大洋洲）"},{"type":"dynasty_coverage","text":"商代（新干大洋洲）→ 西汉（海昏侯）→ 东晋南朝 → 唐宋（洪州窑、景德镇）→ 元明清（景德镇御窑）"}],"artifactHits":[]}'
+  - museum_id: jingdezhen
+    reason: 明代御窑厂遗址出土的青花瓷、五彩瓷和斗彩瓷等皇家瓷器精品
+    evidence_json: '{"museumId":"jingdezhen","museumName":"景德镇中国陶瓷博物馆","signals":[{"type":"dynasty_coverage","text":"五代（南方白瓷兴起）→ 宋代（影青瓷/青白瓷）→ 元代（青花瓷诞生）→ 明代（御窑厂建立、五彩斗彩）→ 清代（粉彩珐琅彩、瓷器巅峰）"}],"artifactHits":[]}'
+  - museum_id: kaifeng
+    reason: 看到明朝时期开封城墙遗迹、瓷器、生活用具和城市布局复原
+    evidence_json: '{"museumId":"kaifeng","museumName":"开封博物馆","signals":[{"type":"dynasty_coverage","text":"战国（魏国大梁）→ 唐代（汴州）→ 五代（后梁、后晋、后汉、后周都城）→ 北宋（东京）→ 金代（南京） → 明清"}],"artifactHits":[]}'
+  - museum_id: liaoning
+    reason: 看到明朝文人书画真迹和瓷器工艺的精妙之作
+    evidence_json: '{"museumId":"liaoning","museumName":"辽宁省博物馆","signals":[{"type":"core_period","text":"古代书画（唐宋元明清全序列）、辽金时期"}],"artifactHits":[]}'
+  - museum_id: nanjing
+    reason: 明代官窑瓷器、丝绸工艺品和城市建筑遗迹完整展示了当时的审美与技术水平
+    evidence_json: '{"museumId":"nanjing","museumName":"南京博物院","signals":[{"type":"core_period","text":"六朝、明代、民国"}],"artifactHits":[]}'
+  - museum_id: ningxia
+    reason: 看到明朝官府在丝绸之路要塞固原的统治遗迹与当时回族聚居区的生活用器
+    evidence_json: '{"museumId":"ningxia","museumName":"宁夏回族自治区博物馆","signals":[{"type":"dynasty_coverage","text":"旧石器时代（水洞沟）→ 新石器（菜园文化/马家窑/齐家）→ 春秋战国（戎族青铜器）→ 秦汉 → 北朝隋唐（丝路重镇固原、灵州）→ 西夏 → 元明清"}],"artifactHits":[]}'
+  - museum_id: qinghai
+    reason: 明永乐铜鎏金观音像展现了明朝精湛的铜铸工艺和佛教文化艺术成就
+    evidence_json: '{"museumId":"qinghai","museumName":"青海省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"明永乐铜鎏金观音像","period":"明代"}]}'
+  - museum_id: qingzhou
+    reason: 可以看到明代精美的铜鎏金碧霞元君坐像，展现当时高超的铜铸工艺和信仰文化
+    evidence_json: '{"museumId":"qingzhou","museumName":"青州博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"铜鎏金碧霞元君坐像","period":"明代"}]}'
+  - museum_id: quanzhou
+    reason: 郑和下西洋碑及明代外销瓷、伊斯兰教石刻是海交馆灵魂段落，明代必须在场
+  - museum_id: shaanxi
+    reason: 这家馆收藏有明朝瓷器、官窑器物和明代壁画墓室出土的精美陶瓷及生活用品
+    evidence_json: '{"museumId":"shaanxi","museumName":"陕西历史博物馆","signals":[{"type":"dynasty_coverage","text":"西周、秦、西汉、唐为核心，上溯蓝田人，下至明清"}],"artifactHits":[]}'
+  - museum_id: shandong
+    reason: 这家馆能看到明朝衡王府精致的九旒冕，展现皇族礼仪规制和精湛工艺
+    evidence_json: '{"museumId":"shandong","museumName":"山东博物馆","signals":[{"type":"core_period","text":"新石器时代（大汶口-龙山文化）、先秦（齐鲁文化）、明代（鲁王府/衡王府）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"明衡王府九旒冕","period":"明代"}]}'
+  - museum_id: shanghai
+    reason: 这家馆能看到明朝书画名家真迹、青花瓷器和官窑瓷器等馆藏精品
+    evidence_json: '{"museumId":"shanghai","museumName":"上海博物馆","signals":[{"type":"core_period","text":"青铜器（商周）、书画（唐宋元明清）、陶瓷（全时期）"},{"type":"dynasty_coverage","text":"商周（青铜）、唐宋元明清（书画）、全时期（陶瓷）"}],"artifactHits":[]}'
+  - museum_id: shanxi-datong
+    reason: 代王府琉璃题额+明清重镇展厅，明大同九边重镇地位关键
+  - museum_id: shenyang-gugong
+    reason: 努尔哈赤御用龙虎将军剑(明万历廿三年实物)+明档信牌+永乐甜白瓷
+  - museum_id: sichuan
+    reason: 这家馆能看到明朝的瓷器、书画、官服、家具等生活用品和工艺品展示
+    evidence_json: '{"museumId":"sichuan","museumName":"四川博物院","signals":[{"type":"dynasty_coverage","text":"新石器 → 古蜀（三星堆/金沙）→ 秦汉（画像砖/陶俑）→ 南朝至唐（万佛寺石刻/佛教造像）→ 宋元明清 → 近现代（抗战/红军长征）"}],"artifactHits":[]}'
+  - museum_id: silk
+    reason: 看明朝官营织造的精美丝绸、缂丝珍品和宫廷刺绣工艺巅峰之作
+    evidence_json: '{"museumId":"silk","museumName":"中国丝绸博物馆","signals":[{"type":"core_period","text":"新石器时代至明清（中国丝绸五千年通史）"},{"type":"dynasty_coverage","text":"新石器时代（浙江出土距今5000余年丝线）→ 商周（丝织起步）→ 秦汉（丝路开通）→ 魏晋南北朝（绞缬工艺）→ 隋唐（丝路繁荣高峰）→ 宋元（织锦技术革新）→ 明清（官营织造/缂丝/刺绣高峰）"}],"artifactHits":[]}'
+  - museum_id: suzhou
+    reason: 在苏州博物馆可以看到明朝时期苏州作为经济文化中心的文人文化遗存和精美书画艺术作品
+    evidence_json: '{"museumId":"suzhou","museumName":"苏州博物馆","signals":[{"type":"core_period","text":"春秋（吴国）、五代宋元（丝织、书画）、明清（文人文化）"},{"type":"dynasty_coverage","text":"新石器时代（草鞋山）→ 春秋（吴国）→ 六朝 → 唐宋 → 明清（苏州为经济文化中心）"}],"artifactHits":[]}'
+  - museum_id: taipei-gugong
+    reason: 这家馆能看到明朝皇帝收藏的宫廷书画、瓷器和玉器精品，以及明代官窑瓷器和文人书画佳作
+    evidence_json: '{"museumId":"taipei-gugong","museumName":"台北故宫博物院","signals":[{"type":"core_period","text":"宋元明清（中国古代书画/瓷器/青铜器/玉器精品）"},{"type":"dynasty_coverage","text":"商周（甲骨/青铜器）→ 秦汉 → 魏晋南北朝 → 唐 → 宋（书画/瓷器高峰）→ 元明清（宫廷收藏鼎盛）"}],"artifactHits":[]}'
+  - museum_id: wenzi
+    reason: 馆内展示的明朝印刷术成就、雕版印刷精品和活字印刷发展历程
+    evidence_json: '{"museumId":"wenzi","museumName":"中国文字博物馆","signals":[{"type":"dynasty_coverage","text":"商（甲骨文）→ 西周（金文）→ 秦（小篆/统一文字）→ 汉（隶书）→ 魏晋（楷书）→ 唐宋元明清（印刷术）→ 当代"}],"artifactHits":[]}'
+  - museum_id: xizang
+    reason: 观看明朝时期的藏传佛教唐卡、瓷器和宗教法器，了解明廷与西藏地方的政治和宗教联系
+    evidence_json: '{"museumId":"xizang","museumName":"西藏博物馆","signals":[{"type":"core_period","text":"吐蕃王朝（7-9世纪）、藏传佛教艺术（元明清至今）"}],"artifactHits":[]}'
+  - museum_id: xuzhou
+    reason: 徐州明代鲁王府金银器与明楚王墓系列藏品，明代分量不该缺
+  - museum_id: yangzhou
+    reason: 明朝盐商的精美瓷器、书画文物和扬州学派的学术成就在馆内有专题展示
+    evidence_json: '{"museumId":"yangzhou","museumName":"扬州博物馆 / 中国大运河博物馆","signals":[{"type":"dynasty_coverage","text":"春秋（吴王夫差开邗沟）→ 隋代（开凿大运河）→ 唐代（扬州为国际都会）→ 宋元 → 明清（盐商文化、扬州学派）"}],"artifactHits":[]}'
+  - museum_id: yunnan
+    reason: 沐氏家族墓出土的金镶红蓝宝石冠累叠四层莲瓣镶嵌50多粒宝石，是明代金器巅峰也是镇馆之宝
+    evidence_json: '{"museumId":"yunnan","museumName":"云南省博物馆","signals":[{"type":"dynasty_coverage","text":"旧石器（元谋人，距今约170万年）→ 新石器 → 青铜时代（古滇国，战国至西汉）→ 东汉至隋 → 南诏（唐）→ 大理（宋）→ 元明清（改土归流）→ 近现代（滇越铁路/西南联大/抗战）"}],"artifactHits":[]}'
+  - museum_id: zhejiang
+    reason: 这家馆能看到明朝的瓷器、书画、工艺品和生活器物遗存
+    evidence_json: '{"museumId":"zhejiang","museumName":"浙江省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（河姆渡、良渚）→ 春秋战国（越国）→ 三国两晋（越窑）→ 五代（吴越国）→ 宋代 → 元明清"}],"artifactHits":[]}'
+nanbeichao:
+  - museum_id: 2e7ff077-be9c-488e-bbaf-2a5796c9cc2f
+    reason: 这家馆能看到北朝精美的石刻佛像，展现当时佛教艺术的高超水平
+    evidence_json: '{"museumId":"2e7ff077-be9c-488e-bbaf-2a5796c9cc2f","museumName":"邯郸市博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代至近现代，涵盖磁山文化、夏代、商代、西周、东周（赵）、两汉、北朝、宋、明清各时期"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"北朝石刻佛像","period":"北朝"}]}'
+  - museum_id: 311c5f1f-d67d-4e79-a891-253baced913b
+    reason: 这家馆能看到北齐精美的墓室壁画和金银器物，展现贵族生活场景和工艺水平
+    evidence_json: '{"museumId":"311c5f1f-d67d-4e79-a891-253baced913b","museumName":"太原北齐壁画博物馆","signals":[{"type":"core_period","text":"北齐（550—577年）"},{"type":"dynasty_coverage","text":"北朝晚期（北魏、东魏、北齐）"},{"type":"artifact_period","text":"5 件文物"}],"artifactHits":[{"name":"徐显秀墓壁画","period":"北齐（550—577年）"},{"name":"太原娄叡墓壁画","period":"北齐"},{"name":"忻州九原岗墓壁画","period":"北朝晚期"},{"name":"朔州水泉梁墓壁画","period":"北齐"},{"name":"金镶嵌蓝宝石戒指及银指环","period":"北齐"}]}'
+  - museum_id: 6312bdbd-cc07-456a-a5d0-472e502a5154
+    reason: 可以看到北齐时期精美的摩崖石刻经文、宏伟的大佛造像和千佛洞窟群
+    evidence_json: '{"museumId":"6312bdbd-cc07-456a-a5d0-472e502a5154","museumName":"响堂山石窟","signals":[{"type":"core_period","text":"北齐（550—577年）"},{"type":"dynasty_coverage","text":"东魏、北齐、隋、唐、宋、元、明"},{"type":"artifact_period","text":"4 件文物"}],"artifactHits":[{"name":"北齐摩崖石刻《维摩诘经》","period":"北齐"},{"name":"大佛洞主尊造像","period":"北齐"},{"name":"千佛洞造像群","period":"北齐至隋唐"},{"name":"塔形龛","period":"北齐"}]}'
+  - museum_id: 88f42955-6058-485d-95e4-c7711d85d326
+    reason: 咸阳博物院藏南北朝彩绘男立俑与北周贺兰祥夫妇墓志，记录关中胡汉融合
+    evidence_json: '{"museumId":"88f42955-6058-485d-95e4-c7711d85d326","museumName":"咸阳博物院","signals":[{"type":"dynasty_coverage","text":"战国至明清（核心为秦汉，兼及北魏、北周、隋唐）"}],"artifactHits":[]}'
+  - museum_id: 9bfb09d6-e2da-4572-8384-56d34d1f59fe
+    reason: 可以看到北魏皇帝陵墓遗迹和陪葬文物，感受帝陵的宏大规模与工艺水平
+    evidence_json: '{"museumId":"9bfb09d6-e2da-4572-8384-56d34d1f59fe","museumName":"洛阳古代艺术博物馆（洛阳古墓博物馆）","signals":[{"type":"dynasty_coverage","text":"西汉、北魏、唐、宋、金"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"北魏宣武帝景陵","period":"北魏"}]}'
+  - museum_id: beilin
+    reason: 馆内北魏、东魏、西魏、北齐、北周等北朝碑刻，展现南北朝书法艺术与石刻工艺水平
+    evidence_json: '{"museumId":"beilin","museumName":"西安碑林博物馆","signals":[{"type":"dynasty_coverage","text":"秦、汉、魏晋、北朝、隋、唐、宋、元、明、清"}],"artifactHits":[]}'
+  - museum_id: d5a151c4-b6ba-4b0b-a3c0-a74ee9843eee
+    reason: 难老泉亭、善利泉亭始建于北齐天保年间，是晋祠现存最早的建筑营建层
+  - museum_id: dingzhou
+    reason: 北朝佛教造像展现了5至6世纪精美的宗教艺术风采
+    evidence_json: '{"museumId":"dingzhou","museumName":"定州博物馆","signals":[{"type":"dynasty_coverage","text":"西汉（中山国）、东汉、北朝、隋唐、北宋（定窑）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"北朝佛教造像","period":"北朝，5-6世纪"}]}'
+  - museum_id: hebei
+    reason: 看北齐高洋墓的精美壁画，了解南北朝贵族的生活场景和艺术风格
+    evidence_json: '{"museumId":"hebei","museumName":"河北博物院","signals":[{"type":"dynasty_coverage","text":"战国、西汉、北朝、唐、宋、元"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"北齐高洋墓壁画","period":"北齐，约550-559年"}]}'
+  - museum_id: henan
+    reason: 洛阳永宁寺北魏泥塑佛面残件惊艳，北朝石窟造像群体量极大
+  - museum_id: jiangsu
+    reason: 在地下遗址中看到南朝宋齐梁陈四代的城市建筑遗迹和精美的青瓷、陶俑文物
+    evidence_json: '{"museumId":"jiangsu","museumName":"南京六朝博物馆","signals":[{"type":"dynasty_coverage","text":"东吴（222-280）→ 东晋（317-420）→ 南朝宋（420-479）→ 南朝齐（479-502）→ 南朝梁（502-557）→ 南朝陈（557-589）"}],"artifactHits":[]}'
+  - museum_id: jiangxi
+    reason: 这家馆能看到南北朝时期的东晋南朝青瓷器和陶瓷工艺发展
+    evidence_json: '{"museumId":"jiangxi","museumName":"江西省博物馆","signals":[{"type":"dynasty_coverage","text":"商代（新干大洋洲）→ 西汉（海昏侯）→ 东晋南朝 → 唐宋（洪州窑、景德镇）→ 元明清（景德镇御窑）"}],"artifactHits":[]}'
+  - museum_id: kaifeng
+    reason: 北朝孔惠超石造像列入镇馆名录，见证开封早期佛教石刻传统
+  - museum_id: longmen
+    reason: 看北魏皇帝礼佛的石窟造像和佛教信仰在南北朝的兴盛
+    evidence_json: '{"museumId":"longmen","museumName":"龙门石窟","signals":[{"type":"core_period","text":"北魏(5-6世纪)、唐代(7-8世纪)"},{"type":"dynasty_coverage","text":"北魏 → 东西魏 → 北齐 → 隋代 → 唐代 → 五代 → 北宋"}],"artifactHits":[]}'
+  - museum_id: luoyang
+    reason: 看北魏时期洛阳作为北方政治中心的城市布局遗迹和佛教造像文物
+    evidence_json: '{"museumId":"luoyang","museumName":"洛阳博物馆","signals":[{"type":"core_period","text":"夏商周（二里头-东周王城）、东汉、魏晋北朝、隋唐（东都洛阳）"},{"type":"dynasty_coverage","text":"夏代（二里头）→ 商代 → 西周（成周）→ 东周（王城）→ 东汉 → 曹魏西晋 → 北魏 → 隋唐（东都）→ 五代"}],"artifactHits":[]}'
+  - museum_id: mogao
+    reason: 这家馆能看到北魏壁画《九色鹿本生》讲述佛经故事中鹿王救溺水人的感人情节
+    evidence_json: '{"museumId":"mogao","museumName":"敦煌莫高窟","signals":[{"type":"dynasty_coverage","text":"十六国、北魏、西魏、北周、隋、唐、五代、宋、西夏、元"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"第257窟九色鹿本生","period":"北魏"}]}'
+  - museum_id: nanjing
+    reason: 南京博物院收藏的南朝《竹林七贤与荣启期砖画》展现了当时的文人雅趣与艺术风格
+    evidence_json: '{"museumId":"nanjing","museumName":"南京博物院","signals":[{"type":"dynasty_coverage","text":"六朝（东吴、东晋、宋齐梁陈）、明、民国为特色，兼顾通史"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"竹林七贤与荣启期砖画","period":"南朝"}]}'
+  - museum_id: ningxia
+    reason: 宁夏博物馆里看北朝时期丝路重镇固原、灵州的历史遗迹和出土文物
+    evidence_json: '{"museumId":"ningxia","museumName":"宁夏回族自治区博物馆","signals":[{"type":"dynasty_coverage","text":"旧石器时代（水洞沟）→ 新石器（菜园文化/马家窑/齐家）→ 春秋战国（戎族青铜器）→ 秦汉 → 北朝隋唐（丝路重镇固原、灵州）→ 西夏 → 元明清"}],"artifactHits":[]}'
+  - museum_id: qingzhou
+    reason: 这家馆能看到南北朝时期龙兴寺出土的精美佛教造像和石刻
+    evidence_json: '{"museumId":"qingzhou","museumName":"青州博物馆","signals":[{"type":"core_period","text":"南北朝（龙兴寺佛教造像）、汉代（香山汉墓）"},{"type":"dynasty_coverage","text":"史前 → 先秦 → 两汉（香山汉墓）→ 南北朝（龙兴寺/佛教高峰）→ 唐宋 → 明（衡王府/赵秉忠状元卷）→ 清"}],"artifactHits":[]}'
+  - museum_id: shandong
+    reason: 北朝时期的陶俑、石刻、佛教造像和生活用器展现了这一时代的社会风貌
+    evidence_json: '{"museumId":"shandong","museumName":"山东博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（大汶口、龙山文化）、商、西周、春秋战国（齐鲁）、汉、北朝、明"}],"artifactHits":[]}'
+  - museum_id: shanghai
+    reason: 上博书法馆常陈王羲之《上虞帖》摹本、王献之《鸭头丸帖》，南北朝书法绕不开它
+  - museum_id: shanxi
+    reason: 北齐娄睿墓壁画（中国美术史教科书必收）、徐显秀墓壁画、虞弘墓汉白玉石椁（粟特祆教葬具孤品），北朝晋阳的胡汉融合艺术高峰
+  - museum_id: shanxi-datong
+    reason: 大同市博物馆展陈了北魏平城时代的漆画屏风、石雕柱础、墓志等珍贵文物，生动呈现了南北朝北魏社会生活与艺术风尚
+    evidence_json: '{"museumId":"shanxi-datong","museumName":"大同市博物馆","signals":[{"type":"core_period","text":"北魏平城时代（398-494年）"},{"type":"dynasty_coverage","text":"北魏、东魏、北齐、辽、金"},{"type":"artifact_period","text":"5 件文物"}],"artifactHits":[{"name":"司马金龙墓漆画屏风","period":"北魏，484年"},{"name":"北魏石雕柱础","period":"北魏，5世纪"},{"name":"封和突墓出土品","period":"北魏，504年"},{"name":"宋绍祖墓石椁","period":"北魏，477年"},{"name":"琅琊王司马金龙墓志","period":"北魏"}]}'
+  - museum_id: sichuan
+    reason: 可以看到南北朝时期万佛寺石刻造像，见证佛教文化在古蜀的传播与繁荣
+    evidence_json: '{"museumId":"sichuan","museumName":"四川博物院","signals":[{"type":"dynasty_coverage","text":"新石器 → 古蜀（三星堆/金沙）→ 秦汉（画像砖/陶俑）→ 南朝至唐（万佛寺石刻/佛教造像）→ 宋元明清 → 近现代（抗战/红军长征）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"万佛寺石刻造像","period":"南朝梁至唐代，约200余件"}]}'
+  - museum_id: silk
+    reason: 馆藏南北朝绞缬染织工艺品，展示该时期丝绸印花技术创新与丝路贸易中的重要地位
+    evidence_json: '{"museumId":"silk","museumName":"中国丝绸博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（浙江出土距今5000余年丝线）→ 商周（丝织起步）→ 秦汉（丝路开通）→ 魏晋南北朝（绞缬工艺）→ 隋唐（丝路繁荣高峰）→ 宋元（织锦技术革新）→ 明清（官营织造/缂丝/刺绣高峰）"}],"artifactHits":[]}'
+  - museum_id: taipei-gugong
+    reason: 台北故宫藏南北朝响铜长颈瓶等高锡青铜器，是中西文化交流催生的新工艺
+    evidence_json: '{"museumId":"taipei-gugong","museumName":"台北故宫博物院","signals":[{"type":"dynasty_coverage","text":"商周（甲骨/青铜器）→ 秦汉 → 魏晋南北朝 → 唐 → 宋（书画/瓷器高峰）→ 元明清（宫廷收藏鼎盛）"}],"artifactHits":[]}'
+  - museum_id: xinjiang
+    reason: 馆藏南北朝时期高昌、龟兹等西域古国的陶器、文献和建筑遗迹
+    evidence_json: '{"museumId":"xinjiang","museumName":"新疆维吾尔自治区博物馆","signals":[{"type":"dynasty_coverage","text":"青铜时代（小河/楼兰）→ 汉（西域都护府，前60年）→ 魏晋南北朝（高昌/龟兹）→ 唐（安西都护府）→ 宋元（回鹘/西辽）→ 清（新疆建省）"}],"artifactHits":[]}'
+  - museum_id: yungang
+    reason: 看北魏皇帝开凿的昙曜五窟露天大佛和释迦佛传浮雕，感受佛教造像艺术高峰
+    evidence_json: '{"museumId":"yungang","museumName":"云冈石窟","signals":[{"type":"core_period","text":"北魏(460-524年)"},{"type":"dynasty_coverage","text":"北魏(为主体)、唐、辽"},{"type":"artifact_period","text":"5 件文物"}],"artifactHits":[{"name":"第20窟露天大佛","period":"北魏,约460-465年"},{"name":"第16-20窟(昙曜五窟)","period":"北魏,460-470年"},{"name":"第6窟释迦佛传浮雕","period":"北魏,约471-494年"},{"name":"第5窟大佛","period":"北魏"},{"name":"第12窟\"音乐窟\"","period":"北魏,约471-494年"}]}'
+neolithic:
+  - museum_id: 2e7ff077-be9c-488e-bbaf-2a5796c9cc2f
+    reason: 馆内磁山文化陶器和粟类遗存展示了新石器时代先民的生活和农业文明初期的成就
+    evidence_json: '{"museumId":"2e7ff077-be9c-488e-bbaf-2a5796c9cc2f","museumName":"邯郸市博物馆","signals":[{"type":"core_period","text":"新石器时代（磁山文化）至近现代"},{"type":"dynasty_coverage","text":"新石器时代至近现代，涵盖先秦、赵国、两汉、北朝、宋、明清各时期"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"磁山文化陶器及粟类遗存","period":"新石器时代（约公元前5400年）"}]}'
+  - museum_id: 92a0de78-943a-412a-b064-45327f3c3573
+    reason: 这家馆能看到新石器时代的陶器、石器和骨器等生活用具，以及当时人类的定居遗址展示
+    evidence_json: '{"museumId":"92a0de78-943a-412a-b064-45327f3c3573","museumName":"荆州博物馆","signals":[{"type":"core_period","text":"新石器时代至明清，重点为春秋战国至秦汉（楚文化鼎盛期）"},{"type":"dynasty_coverage","text":"新石器时代—清代"}],"artifactHits":[]}'
+  - museum_id: anhui
+    reason: 凌家滩遗址出土的玉器、陶器和骨器展现了新石器时代先民的生活与工艺水平
+    evidence_json: '{"museumId":"anhui","museumName":"安徽博物院","signals":[{"type":"core_period","text":"新石器时代（凌家滩文化）、春秋战国（楚文化）、明清（徽文化）"},{"type":"dynasty_coverage","text":"新石器时代（凌家滩）→ 商周（皖南铜矿）→ 春秋战国（楚、吴越）→ 三国（曹魏、东吴争夺）→ 宋元 → 明清（徽文化鼎盛）"}],"artifactHits":[]}'
+  - museum_id: banpo
+    reason: 这家馆能看到新石器时代仰韶文化半坡先民的聚落遗址、陶器工艺和原始农业生活场景
+    evidence_json: '{"museumId":"banpo","museumName":"西安半坡博物馆","signals":[{"type":"core_period","text":"新石器时代仰韶文化半坡类型（约前4800-前4300年）"},{"type":"dynasty_coverage","text":"新石器时代仰韶文化半坡类型（约前4800-前4300年）"}],"artifactHits":[]}'
+  - museum_id: fujian
+    reason: 看到昙石山文化的陶器和骨器，了解新石器时代闽地先民的生活
+    evidence_json: '{"museumId":"fujian","museumName":"福建博物院","signals":[{"type":"dynasty_coverage","text":"新石器时代（昙石山文化）→ 秦汉（闽越国）→ 唐宋（海上丝绸之路兴盛）→ 宋代（建窑）→ 元明清（德化窑、海外贸易）→ 近代（福建船政）"}],"artifactHits":[]}'
+  - museum_id: gansu
+    reason: 甘肃省博物馆展有大地湾、仰韶、马家窑、齐家等遗址出土的陶器和石器，可看新石器时代的生活工具与艺术
+    evidence_json: '{"museumId":"gansu","museumName":"甘肃省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（大地湾/仰韶/马家窑/齐家）→ 先秦 → 秦汉（丝路/简牍）→ 魏晋（壁画砖）→ 十六国至隋唐（佛教艺术）→ 宋元明清"}],"artifactHits":[]}'
+  - museum_id: guobo
+    reason: 在这家馆能看到远古与新石器时代的陶器、石器工具和古人生活遗迹
+    evidence_json: '{"museumId":"guobo","museumName":"中国国家博物馆","signals":[{"type":"core_period","text":"通史（远古至近现代）"},{"type":"dynasty_coverage","text":"全覆盖，从远古到现代"}],"artifactHits":[]}'
+  - museum_id: hainan
+    reason: 馆藏落笔洞遗址出土器物为海南旧石器末—新石器开端的孤证，必须有
+  - museum_id: hebei
+    reason: 磁山文化粟黍标本与陶盂支架，把华北农业起源往前推到八千年前
+  - museum_id: heilongjiang
+    reason: 看黑龙江流域新石器遗址出土的陶器、石器工具和生活用品，了解远古人类狩猎采集的生存方式
+    evidence_json: '{"museumId":"heilongjiang","museumName":"黑龙江省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代、渤海国、辽、金、元、清（黑龙江流域开发）"}],"artifactHits":[]}'
+  - museum_id: hunan
+    reason: 湖南道县玉蟾岩万年稻作与陶片、澧县城头山是湘博史前压舱石
+  - museum_id: jiangxi
+    reason: 江西万年仙人洞-吊桶环出土早期陶片(世界最早陶器之一)，江西史前不能缺
+  - museum_id: jilin
+    reason: 这家馆能看到新石器时代的陶器、骨器和石器工具，以及东北地区古代文明发展的完整历程
+    evidence_json: '{"museumId":"jilin","museumName":"吉林省博物院","signals":[{"type":"dynasty_coverage","text":"新石器时代、高句丽、渤海国、辽、金、清（东北边疆）"}],"artifactHits":[]}'
+  - museum_id: jinsha
+    reason: 金沙遗址博物馆能看到新石器时代良渚文化风格的十节玉琮等精美玉器工艺
+    evidence_json: '{"museumId":"jinsha","museumName":"金沙遗址博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"十节玉琮","period":"新石器时代良渚文化风格，出土于金沙商周地层"}]}'
+  - museum_id: liangzhu
+    reason: 良渚博物院能看到新石器时代晚期的玉器、陶器、城墙遗址和古代聚落生活场景
+    evidence_json: '{"museumId":"liangzhu","museumName":"良渚博物院","signals":[{"type":"core_period","text":"新石器时代晚期(约前3300-前2300年)"},{"type":"dynasty_coverage","text":"新石器时代(良渚文化,前3300-前2300年)"}],"artifactHits":[]}'
+  - museum_id: liaoning
+    reason: 欣赏新石器时代红山文化的玉猪龙，感受先民的玉石雕刻艺术与神秘的图腾信仰
+    evidence_json: '{"museumId":"liaoning","museumName":"辽宁省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"红山文化玉猪龙","period":"新石器时代，约前3500年"}]}'
+  - museum_id: neimenggu
+    reason: 在内蒙古博物院可以看到红山文化的玉器、陶器和新石器时代的生活遗物
+    evidence_json: '{"museumId":"neimenggu","museumName":"内蒙古博物院","signals":[{"type":"dynasty_coverage","text":"新石器时代（红山文化）、匈奴、鲜卑、突厥、回鹘、契丹（辽）、蒙古（元）、清"}],"artifactHits":[]}'
+  - museum_id: qinghai
+    reason: 青海省博物馆能看到新石器时代宗日文化的舞蹈纹彩陶盆，展现了远古先民的艺术想象和审美
+    evidence_json: '{"museumId":"qinghai","museumName":"青海省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"舞蹈纹彩陶盆","period":"新石器时代·宗日文化，青海同德宗日遗址出土"}]}'
+  - museum_id: quanzhou
+    reason: 馆藏新石器昙石山系陶器及闽南早期航海文化序列，作为海交馆开篇该补
+  - museum_id: shaanxi
+    reason: 陕历博藏半坡人面鱼纹盆、姜寨彩陶等仰韶顶级国宝，史前缺位最扎眼
+  - museum_id: shandong
+    reason: 馆内陈列的大汶口和龙山文化陶器、石器展现了新石器时代的生产生活场景
+    evidence_json: '{"museumId":"shandong","museumName":"山东博物馆","signals":[{"type":"core_period","text":"新石器时代（大汶口-龙山文化）、先秦（齐鲁文化）、明代（鲁王府/衡王府）"},{"type":"dynasty_coverage","text":"新石器时代（大汶口、龙山文化）、商、西周、春秋战国（齐鲁）、汉、北朝、明"}],"artifactHits":[]}'
+  - museum_id: shanghai
+    reason: 上博「实证中国」常设有良渚琮王、福泉山象牙权杖等长江下游文明重器，新石器板块缺失说不过去
+  - museum_id: shanxi
+    reason: 襄汾陶寺遗址出土的彩绘龙盘、朱书扁壶与鼍鼓土鼓，是「最早的中国」与尧都的实物候选；夏县西阴村仰韶半个蚕茧则是中国最早的丝织证据
+  - museum_id: silk
+    reason: 看距今五千年浙江出土的丝线实物，了解中国最早的蚕丝文明源头
+    evidence_json: '{"museumId":"silk","museumName":"中国丝绸博物馆","signals":[{"type":"core_period","text":"新石器时代至明清（中国丝绸五千年通史）"},{"type":"dynasty_coverage","text":"新石器时代（浙江出土距今5000余年丝线）→ 商周（丝织起步）→ 秦汉（丝路开通）→ 魏晋南北朝（绞缬工艺）→ 隋唐（丝路繁荣高峰）→ 宋元（织锦技术革新）→ 明清（官营织造/缂丝/刺绣高峰）"}],"artifactHits":[]}'
+  - museum_id: suzhou
+    reason: 苏州博物馆展示了新石器时代草鞋山遗址的陶器、石器和古人生活遗迹
+    evidence_json: '{"museumId":"suzhou","museumName":"苏州博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（草鞋山）→ 春秋（吴国）→ 六朝 → 唐宋 → 明清（苏州为经济文化中心）"}],"artifactHits":[]}'
+  - museum_id: xinjiang
+    reason: 楼兰美女干尸距今约3800年，是新疆出土最早的高加索面孔，丝路前史的肉身证物
+  - museum_id: xizang
+    reason: 西藏博物馆展出的新石器时代卡若文化双体陶罐，见证了早期藏族先民的陶器工艺成就
+    evidence_json: '{"museumId":"xizang","museumName":"西藏博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（卡若文化/曲贡文化）→ 吐蕃王朝（7-9世纪）→ 分裂割据 → 萨迦/帕竹/甘丹颇章 → 清代（金瓶掣签制度）→ 近现代"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"双体陶罐","period":"新石器时代·卡若文化，昌都卡若遗址出土"}]}'
+  - museum_id: xuzhou
+    reason: 徐州新沂花厅遗址玉器(大汶口-良渚交融)是徐博史前明星组
+  - museum_id: yunnan
+    reason: 云南元谋大墩子、宾川白羊村出土新石器陶器是云博史前序列基底
+  - museum_id: zhejiang
+    reason: 这家馆能看到远古与新石器时代的河姆渡干栏式建筑遗迹和良渚玉器文明
+    evidence_json: '{"museumId":"zhejiang","museumName":"浙江省博物馆","signals":[{"type":"core_period","text":"新石器时代（良渚文化）、五代十国（吴越国）、宋代"},{"type":"dynasty_coverage","text":"新石器时代（河姆渡、良渚）→ 春秋战国（越国）→ 三国两晋（越窑）→ 五代（吴越国）→ 宋代 → 元明清"}],"artifactHits":[]}'
+qin:
+  - museum_id: 054543c3-1850-471d-be28-e611f77ba9c4
+    reason: 这家馆能看到秦朝秦公大墓出土的青铜礼器和兵马俑陶片，了解秦代的工艺水平与军事制度
+    evidence_json: '{"museumId":"054543c3-1850-471d-be28-e611f77ba9c4","museumName":"宝鸡青铜器博物院","signals":[{"type":"core_period","text":"西周至秦"},{"type":"dynasty_coverage","text":"周秦两大王朝"}],"artifactHits":[]}'
+  - museum_id: 88f42955-6058-485d-95e4-c7711d85d326
+    reason: 秦朝的陶俑、兵器、生活用具和建筑遗迹，展现秦代的军事制度、工艺水平和日常生活
+    evidence_json: '{"museumId":"88f42955-6058-485d-95e4-c7711d85d326","museumName":"咸阳博物院","signals":[{"type":"core_period","text":"秦汉"},{"type":"dynasty_coverage","text":"战国至明清（核心为秦汉，兼及北魏、北周、隋唐）"}],"artifactHits":[]}'
+  - museum_id: 92a0de78-943a-412a-b064-45327f3c3573
+    reason: 看到秦朝统一中国前后、楚地出土的兵马俑、秦简竹简、铜器等珍贵文物和工艺遗存
+    evidence_json: '{"museumId":"92a0de78-943a-412a-b064-45327f3c3573","museumName":"荆州博物馆","signals":[{"type":"core_period","text":"新石器时代至明清，重点为春秋战国至秦汉（楚文化鼎盛期）"}],"artifactHits":[]}'
+  - museum_id: beilin
+    reason: 这家馆收藏了秦朝的石刻文物和书法碑刻，展现了秦代的文化艺术遗存
+    evidence_json: '{"museumId":"beilin","museumName":"西安碑林博物馆","signals":[{"type":"dynasty_coverage","text":"秦、汉、魏晋、北朝、隋、唐、宋、元、明、清"}],"artifactHits":[]}'
+  - museum_id: bingmayong
+    reason: 一号坑千人军阵、铜车马、将军俑、跪射俑和青铜剑展现了秦帝国的军事力量和工艺水平
+    evidence_json: '{"museumId":"bingmayong","museumName":"秦始皇兵马俑博物馆（秦始皇帝陵博物院）","signals":[{"type":"core_period","text":"秦（前221-前207）"},{"type":"dynasty_coverage","text":"秦"},{"type":"artifact_period","text":"5 件文物"}],"artifactHits":[{"name":"一号坑军阵","period":"秦"},{"name":"铜车马","period":"秦"},{"name":"将军俑","period":"秦"},{"name":"跪射俑","period":"秦"},{"name":"青铜剑","period":"秦"}]}'
+  - museum_id: chengdu
+    reason: 观看秦汉时期镇水神兽石犀，了解古蜀郡的水利文明
+    evidence_json: '{"museumId":"chengdu","museumName":"成都博物馆","signals":[{"type":"dynasty_coverage","text":"古蜀（宝墩文化/三星堆/金沙）→ 秦汉（蜀郡/老官山）→ 三国（蜀汉）→ 唐宋（繁荣期）→ 明清 → 近现代"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"石犀","period":"秦汉"}]}'
+  - museum_id: chongqing
+    reason: 看巴蜀青铜器，领略秦前古巴国的精妙冶铸工艺与神秘符号文化
+    evidence_json: '{"museumId":"chongqing","museumName":"重庆中国三峡博物馆（重庆博物馆）","signals":[{"type":"core_period","text":"先秦巴文化、三峡文明、抗战时期"},{"type":"dynasty_coverage","text":"旧石器时代 → 先秦巴国 → 秦汉 → 六朝 → 唐宋 → 元明清（明玉珍大夏国）→ 近现代（抗战首都）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"巴蜀青铜器","period":"先秦"}]}'
+  - museum_id: gansu
+    reason: 馆内秦代简牍和丝路商贸文物展现了秦朝的行政体系与对外贸易
+    evidence_json: '{"museumId":"gansu","museumName":"甘肃省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（大地湾/仰韶/马家窑/齐家）→ 先秦 → 秦汉（丝路/简牍）→ 魏晋（壁画砖）→ 十六国至隋唐（佛教艺术）→ 宋元明清"}],"artifactHits":[]}'
+  - museum_id: guangxi
+    reason: 这家馆能看到秦朝时期的百越古国青铜器与铜鼓文物
+    evidence_json: '{"museumId":"guangxi","museumName":"广西壮族自治区博物馆","signals":[{"type":"core_period","text":"先秦至汉代（百越文化与铜鼓文明）"},{"type":"dynasty_coverage","text":"先秦百越、秦汉、东汉、唐宋、明清"}],"artifactHits":[]}'
+  - museum_id: hubei
+    reason: 这家馆能看到秦朝前期楚地的青铜器、漆器和兵器，反映秦统一前南方的文化特征
+    evidence_json: '{"museumId":"hubei","museumName":"湖北省博物馆","signals":[{"type":"core_period","text":"先秦（楚文化）、春秋战国"}],"artifactHits":[]}'
+  - museum_id: nanyue
+    reason: 在南越王墓出土的陶器、铜器和玉器中，看到秦朝统一后赵佗南征建立南越国的早期文物和治国遗迹
+    evidence_json: '{"museumId":"nanyue","museumName":"南越王博物院","signals":[{"type":"dynasty_coverage","text":"秦代（赵佗南征）→ 西汉（南越国五代王）→ 东汉至六朝（岭南开发）"}],"artifactHits":[]}'
+  - museum_id: ningxia
+    reason: 这家馆的秦朝展区展示了秦汉时期宁夏作为丝绸之路重要节点的历史地位和出土文物
+    evidence_json: '{"museumId":"ningxia","museumName":"宁夏回族自治区博物馆","signals":[{"type":"dynasty_coverage","text":"旧石器时代（水洞沟）→ 新石器（菜园文化/马家窑/齐家）→ 春秋战国（戎族青铜器）→ 秦汉 → 北朝隋唐（丝路重镇固原、灵州）→ 西夏 → 元明清"}],"artifactHits":[]}'
+  - museum_id: shaanxi
+    reason: 看秦代虎符、兵马俑陶片和刻纹陶器，了解秦朝的军事管理制度和日常生活
+    evidence_json: '{"museumId":"shaanxi","museumName":"陕西历史博物馆","signals":[{"type":"core_period","text":"周、秦、汉、唐"},{"type":"dynasty_coverage","text":"西周、秦、西汉、唐为核心，上溯蓝田人，下至明清"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"杜虎符","period":"战国·秦"}]}'
+  - museum_id: shanghai
+    reason: 秦朝统一前的商鞅方升见证了秦国变法时期的度量衡制度
+    evidence_json: '{"museumId":"shanghai","museumName":"上海博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"商鞅方升","period":"战国·秦孝公十八年"}]}'
+  - museum_id: sichuan
+    reason: 看秦汉时期的陶俑、画像砖等文物，了解那个朝代的生活场景和工艺水平
+    evidence_json: '{"museumId":"sichuan","museumName":"四川博物院","signals":[{"type":"core_period","text":"古蜀文明（先秦）、汉代、藏传佛教"},{"type":"dynasty_coverage","text":"新石器 → 古蜀（三星堆/金沙）→ 秦汉（画像砖/陶俑）→ 南朝至唐（万佛寺石刻/佛教造像）→ 宋元明清 → 近现代（抗战/红军长征）"}],"artifactHits":[]}'
+  - museum_id: silk
+    reason: 秦朝丝绸已是高超织造品，馆藏秦代丝织物展现当时纺织工艺水平和早期丝路贸易的初步痕迹
+    evidence_json: '{"museumId":"silk","museumName":"中国丝绸博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（浙江出土距今5000余年丝线）→ 商周（丝织起步）→ 秦汉（丝路开通）→ 魏晋南北朝（绞缬工艺）→ 隋唐（丝路繁荣高峰）→ 宋元（织锦技术革新）→ 明清（官营织造/缂丝/刺绣高峰）"}],"artifactHits":[]}'
+  - museum_id: taipei-gugong
+    reason: 能看到秦朝陶俑、兵马、生活用器等出土文物，以及秦篆刻石等书法艺术珍品
+    evidence_json: '{"museumId":"taipei-gugong","museumName":"台北故宫博物院","signals":[{"type":"dynasty_coverage","text":"商周（甲骨/青铜器）→ 秦汉 → 魏晋南北朝 → 唐 → 宋（书画/瓷器高峰）→ 元明清（宫廷收藏鼎盛）"}],"artifactHits":[]}'
+  - museum_id: wenzi
+    reason: 秦代统一文字小篆的诏版原物和书写演变过程
+    evidence_json: '{"museumId":"wenzi","museumName":"中国文字博物馆","signals":[{"type":"dynasty_coverage","text":"商（甲骨文）→ 西周（金文）→ 秦（小篆/统一文字）→ 汉（隶书）→ 魏晋（楷书）→ 唐宋元明清（印刷术）→ 当代"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"秦代诏版","period":"秦，前221年后"}]}'
+  - museum_id: xuzhou
+    reason: 看秦末楚汉战争时期的兵器、陶俑和古城遗迹
+    evidence_json: '{"museumId":"xuzhou","museumName":"徐州博物馆","signals":[{"type":"dynasty_coverage","text":"新石器（大墩子遗址）→ 先秦（宋国/楚国）→ 西汉（楚国，核心）→ 三国（徐州争夺战）→ 唐宋"}],"artifactHits":[]}'
+qing:
+  - museum_id: 232d4da5-550c-49eb-89e0-042c913657c8
+    reason: 可以看到清代文人撰写的《攻心联》匾，体现了当时对诸葛亮智慧的推崇和文化传承
+    evidence_json: '{"museumId":"232d4da5-550c-49eb-89e0-042c913657c8","museumName":"成都武侯祠博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"清赵藩撰《攻心联》匾","period":"清代"}]}'
+  - museum_id: 2e7ff077-be9c-488e-bbaf-2a5796c9cc2f
+    reason: 磁州窑清代釉下彩瓷器系列，见证北方民窑七百年烧造从未中断
+    evidence_json: '{"museumId":"2e7ff077-be9c-488e-bbaf-2a5796c9cc2f","museumName":"邯郸市博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代至近现代，涵盖磁山文化、夏代、商代、西周、东周（赵）、两汉、北朝、宋、明清各时期"}],"artifactHits":[]}'
+  - museum_id: 31f1ad8e-c4de-4a5e-aafa-c51656c8a1a7
+    reason: 这里收藏着明清时期孔府贵族的衣冠服饰，能看到清朝孔家后人的真实穿着打扮
+    evidence_json: '{"museumId":"31f1ad8e-c4de-4a5e-aafa-c51656c8a1a7","museumName":"曲阜孔子博物馆","signals":[{"type":"core_period","text":"明清时期及孔府档案"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"明清衣冠服饰","period":"明清"}]}'
+  - museum_id: 799daa55-94c0-4ef7-bdf8-21cff39e6c6b
+    reason: 这家馆能看到清朝皇帝的避暑行宫、宫廷珐琅器、瓷器、钟表和鎏金脊兽等宫廷工艺精品
+    evidence_json: '{"museumId":"799daa55-94c0-4ef7-bdf8-21cff39e6c6b","museumName":"承德避暑山庄博物院","signals":[{"type":"core_period","text":"清代"},{"type":"dynasty_coverage","text":"清代为主"},{"type":"artifact_period","text":"4 件文物"}],"artifactHits":[{"name":"铜鎏金凤凰脊兽","period":"清代"},{"name":"清代宫廷瓷器","period":"清代"},{"name":"清代宫廷珐琅器","period":"清代"},{"name":"清代宫廷钟表","period":"清代"}]}'
+  - museum_id: 88f42955-6058-485d-95e4-c7711d85d326
+    reason: 咸阳博物院藏清雍正霁蓝釉琵琶尊与道光重修咸阳县记碑，配文庙明清拴马桩民俗石刻
+    evidence_json: '{"museumId":"88f42955-6058-485d-95e4-c7711d85d326","museumName":"咸阳博物院","signals":[{"type":"dynasty_coverage","text":"战国至明清（核心为秦汉，兼及北魏、北周、隋唐）"}],"artifactHits":[]}'
+  - museum_id: 92a0de78-943a-412a-b064-45327f3c3573
+    reason: 荆州博物馆藏鲁家山清代女尸与丝绸罩衣，配荆州府学祭孔铜礼器，记下清代荆州城八旗驻防
+    evidence_json: '{"museumId":"92a0de78-943a-412a-b064-45327f3c3573","museumName":"荆州博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代—清代"}],"artifactHits":[]}'
+  - museum_id: 9b3cf4df-a9f9-42b7-9418-adc2560c13c5
+    reason: 看清代修缮的大雄宝殿壁画和琉璃鸱吻装饰艺术
+    evidence_json: '{"museumId":"9b3cf4df-a9f9-42b7-9418-adc2560c13c5","museumName":"大同华严寺","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"琉璃鸱吻","period":"金代（北吻）/ 清代（南吻）"},{"name":"大雄宝殿壁画","period":"清代"}]}'
+  - museum_id: anhui
+    reason: 安徽博物院珍藏清代徽州木雕、青花瓷、文房四宝等徽文化精品，展现明清徽商文化的繁荣与艺术成就
+    evidence_json: '{"museumId":"anhui","museumName":"安徽博物院","signals":[{"type":"core_period","text":"新石器时代（凌家滩文化）、春秋战国（楚文化）、明清（徽文化）"},{"type":"dynasty_coverage","text":"新石器时代（凌家滩）→ 商周（皖南铜矿）→ 春秋战国（楚、吴越）→ 三国（曹魏、东吴争夺）→ 宋元 → 明清（徽文化鼎盛）"}],"artifactHits":[]}'
+  - museum_id: beilin
+    reason: 这家馆能看到清朝文人墨客的书法艺术和金石文化在碑刻上的集大成之作
+    evidence_json: '{"museumId":"beilin","museumName":"西安碑林博物馆","signals":[{"type":"core_period","text":"汉代至清代（历代碑刻书法）"}],"artifactHits":[]}'
+  - museum_id: chengdu
+    reason: 看馆藏清朝瓷器、书画、生活用品和民俗文物，了解清代四川商业文化与城市风貌
+    evidence_json: '{"museumId":"chengdu","museumName":"成都博物馆","signals":[{"type":"dynasty_coverage","text":"古蜀（宝墩文化/三星堆/金沙）→ 秦汉（蜀郡/老官山）→ 三国（蜀汉）→ 唐宋（繁荣期）→ 明清 → 近现代"}],"artifactHits":[]}'
+  - museum_id: chongqing
+    reason: 看到清朝官员服饰、瓷器工艺品和重庆作为抗战陪都时期的历史文物遗迹
+    evidence_json: '{"museumId":"chongqing","museumName":"重庆中国三峡博物馆（重庆博物馆）","signals":[{"type":"dynasty_coverage","text":"旧石器时代 → 先秦巴国 → 秦汉 → 六朝 → 唐宋 → 元明清（明玉珍大夏国）→ 近现代（抗战首都）"}],"artifactHits":[]}'
+  - museum_id: e275d5c3-b7d6-429e-8825-52f25dbca7c8
+    reason: 在陈家祠看清代光绪年间的砖雕、木雕、石雕等民间工艺杰作和建筑装饰艺术
+    evidence_json: '{"museumId":"e275d5c3-b7d6-429e-8825-52f25dbca7c8","museumName":"陈家祠（陈氏书院）广东民间工艺博物馆","signals":[{"type":"core_period","text":"清代（光绪十四年1888年筹建，光绪十九年1893年落成）"},{"type":"artifact_period","text":"5 件文物"}],"artifactHits":[{"name":"梁山聚义砖雕","period":"清代（光绪年间）"},{"name":"梧桐杏柳凤凰群砖雕","period":"清代（光绪年间）"},{"name":"木雕","period":"清代"},{"name":"石雕","period":"清代"},{"name":"陶塑脊饰","period":"清代"}]}'
+  - museum_id: f72fc18f-cdc2-4ae8-8e68-28d3521eb4ea
+    reason: 祖庙的万福台和庆真楼等古建筑见证了清代岭南地方信仰和建筑工艺的发展
+    evidence_json: '{"museumId":"f72fc18f-cdc2-4ae8-8e68-28d3521eb4ea","museumName":"佛山市祖庙博物馆","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"万福台","period":"清代"},{"name":"庆真楼","period":"清代"}]}'
+  - museum_id: fujian
+    reason: 德化窑瓷器、海外贸易瓷器、福建船政遗物展现清朝福建的陶瓷工艺与海外商业繁荣
+    evidence_json: '{"museumId":"fujian","museumName":"福建博物院","signals":[{"type":"dynasty_coverage","text":"新石器时代（昙石山文化）→ 秦汉（闽越国）→ 唐宋（海上丝绸之路兴盛）→ 宋代（建窑）→ 元明清（德化窑、海外贸易）→ 近代（福建船政）"}],"artifactHits":[]}'
+  - museum_id: gansu
+    reason: 清朝瓷器、书画、官服等文物展示了清代社会生活和工艺水平
+    evidence_json: '{"museumId":"gansu","museumName":"甘肃省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（大地湾/仰韶/马家窑/齐家）→ 先秦 → 秦汉（丝路/简牍）→ 魏晋（壁画砖）→ 十六国至隋唐（佛教艺术）→ 宋元明清"}],"artifactHits":[]}'
+  - museum_id: guangdong
+    reason: 广东省博物馆能看到清朝时期的外销瓷器、丝绸等海上贸易商品和港口贸易的繁荣景象
+    evidence_json: '{"museumId":"guangdong","museumName":"广东省博物馆","signals":[{"type":"core_period","text":"宋元明清（海上丝绸之路与对外贸易）"},{"type":"dynasty_coverage","text":"先秦百越、秦汉南越、唐宋海贸、明清外销"}],"artifactHits":[]}'
+  - museum_id: guangxi
+    reason: 这家馆能看到清朝时期广西地区的陶瓷、书画、铜器等文物，以及清代的历史文化遗存
+    evidence_json: '{"museumId":"guangxi","museumName":"广西壮族自治区博物馆","signals":[{"type":"dynasty_coverage","text":"先秦百越、秦汉、东汉、唐宋、明清"}],"artifactHits":[]}'
+  - museum_id: gugong
+    reason: 故宫博物院珍藏着清朝皇帝的生活用品、书画、瓷器等文物，还能看到紫禁城的真实建筑与空间布局
+    evidence_json: '{"museumId":"gugong","museumName":"故宫博物院","signals":[{"type":"core_period","text":"明清（1368-1912）"}],"artifactHits":[]}'
+  - museum_id: guizhou
+    reason: 贵州省博物馆展出清朝改土归流时期的官制文物和建省初期的地方行政文献
+    evidence_json: '{"museumId":"guizhou","museumName":"贵州省博物馆","signals":[{"type":"dynasty_coverage","text":"旧石器（观音洞，距今约24万年）→ 先秦夜郎 → 秦汉（夜郎国归附）→ 唐宋（土司制度）→ 明清（改土归流/建省）→ 近现代（红军长征过贵州）"}],"artifactHits":[]}'
+  - museum_id: guobo
+    reason: 国博藏《乾隆南巡图》《康熙南巡图》卷及大量清宫旧藏，清代体量巨大
+  - museum_id: hainan
+    reason: 可以看到黎族龙被等黎族服饰和生活用品，展现清朝海南黎族的民族文化特色
+    evidence_json: '{"museumId":"hainan","museumName":"海南省博物馆","signals":[{"type":"dynasty_coverage","text":"先秦（越王剑）→ 汉（珠崖郡）→ 唐宋（海上丝路/华光礁沉船）→ 明清（黎族文化）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"黎族龙被","period":"明清"}]}'
+  - museum_id: hebei
+    reason: 承德避暑山庄旧藏与清代宫廷瓷玉，留住了塞外离宫的礼乐余温
+  - museum_id: heilongjiang
+    reason: 这家馆能看到清朝皇帝册封的龙兴之地碑刻，见证了东北地区的政治地位演变
+    evidence_json: '{"museumId":"heilongjiang","museumName":"黑龙江省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"清代\"龙兴之地\"碑刻","period":"清代"}]}'
+  - museum_id: henan
+    reason: 同上《明清河南》专题，含同治粉青八卦琮式瓶等清宫风格器
+  - museum_id: jiangxi
+    reason: 景德镇御窑瓷器见证了清朝精湛的瓷业工艺成就
+    evidence_json: '{"museumId":"jiangxi","museumName":"江西省博物馆","signals":[{"type":"dynasty_coverage","text":"商代（新干大洋洲）→ 西汉（海昏侯）→ 东晋南朝 → 唐宋（洪州窑、景德镇）→ 元明清（景德镇御窑）"}],"artifactHits":[]}'
+  - museum_id: jingdezhen
+    reason: 这家馆能看到清朝景德镇御窑烧制的粉彩珐琅彩瓷器，以及瓷器工艺的历代演变过程
+    evidence_json: '{"museumId":"jingdezhen","museumName":"景德镇中国陶瓷博物馆","signals":[{"type":"dynasty_coverage","text":"五代（南方白瓷兴起）→ 宋代（影青瓷/青白瓷）→ 元代（青花瓷诞生）→ 明代（御窑厂建立、五彩斗彩）→ 清代（粉彩珐琅彩、瓷器巅峰）"}],"artifactHits":[]}'
+  - museum_id: kaifeng
+    reason: 清朝官员服饰、瓷器、书画等文物，以及古城墙遗迹展示了这一时期开封作为重要城市的文化面貌
+    evidence_json: '{"museumId":"kaifeng","museumName":"开封博物馆","signals":[{"type":"dynasty_coverage","text":"战国（魏国大梁）→ 唐代（汴州）→ 五代（后梁、后晋、后汉、后周都城）→ 北宋（东京）→ 金代（南京） → 明清"}],"artifactHits":[]}'
+  - museum_id: liaoning
+    reason: 这家馆能看到清朝宫廷书画原件和辽金时期的精美瓷器与佛教文物遗存
+    evidence_json: '{"museumId":"liaoning","museumName":"辽宁省博物馆","signals":[{"type":"core_period","text":"古代书画（唐宋元明清全序列）、辽金时期"}],"artifactHits":[]}'
+  - museum_id: nanjing
+    reason: 乾隆"行围图"转旋瓶号称海内孤品、清宫造办处巅峰，清代板块不能空着
+  - museum_id: neimenggu
+    reason: 馆藏蒙古族服饰、藏传佛教法器与清廷敕封文物，承载清代对蒙治理与草原信仰
+  - museum_id: ningxia
+    reason: 这家馆能看到清朝时期宁夏作为丝绸之路重镇的瓷器、丝绸贸易遗存和回族文化特色工艺品
+    evidence_json: '{"museumId":"ningxia","museumName":"宁夏回族自治区博物馆","signals":[{"type":"dynasty_coverage","text":"旧石器时代（水洞沟）→ 新石器（菜园文化/马家窑/齐家）→ 春秋战国（戎族青铜器）→ 秦汉 → 北朝隋唐（丝路重镇固原、灵州）→ 西夏 → 元明清"}],"artifactHits":[]}'
+  - museum_id: qinghai
+    reason: 清朝时期青海地区的藏传佛教寺院建筑、宗教文物和艺术品在馆内有完整展示
+    evidence_json: '{"museumId":"qinghai","museumName":"青海省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器（马家窑/齐家/宗日文化）→ 青铜时代（卡约/辛店/诺木洪文化）→ 秦汉（河湟设郡）→ 南北朝隋唐（吐谷浑/唐蕃古道）→ 宋元明清（藏传佛教）"}],"artifactHits":[]}'
+  - museum_id: quanzhou
+    reason: 清代闽南侨批、外销瓷与海上丝路尾声叙事，清代该续上
+  - museum_id: shaanxi
+    reason: 陕西历史博物馆藏有清朝官窑瓷器、皇帝印章、丝绸服饰等精品文物，展现末代王朝的工艺水平和统治风貌
+    evidence_json: '{"museumId":"shaanxi","museumName":"陕西历史博物馆","signals":[{"type":"dynasty_coverage","text":"西周、秦、西汉、唐为核心，上溯蓝田人，下至明清"}],"artifactHits":[]}'
+  - museum_id: shanghai
+    reason: 清朝瓷器和书画精品，展现宫廷工艺与文人艺术的巅峰之作
+    evidence_json: '{"museumId":"shanghai","museumName":"上海博物馆","signals":[{"type":"core_period","text":"青铜器（商周）、书画（唐宋元明清）、陶瓷（全时期）"},{"type":"dynasty_coverage","text":"商周（青铜）、唐宋元明清（书画）、全时期（陶瓷）"}],"artifactHits":[]}'
+  - museum_id: shanxi-datong
+    reason: 明清重镇展厅常设，清代瓷器与边镇文书成体系
+  - museum_id: shenyang-gugong
+    reason: 这里有后金努尔哈赤、皇太极时期的宫殿遗迹和清入关前的皇家文物，展现了清朝最初的统治中心
+    evidence_json: '{"museumId":"shenyang-gugong","museumName":"沈阳故宫博物院","signals":[{"type":"core_period","text":"清代前期（后金/清入关前，1625-1644年）"}],"artifactHits":[]}'
+  - museum_id: sichuan
+    reason: 这家馆能看到清朝的瓷器、书画、家具等传统工艺品和生活器物的完整演变
+    evidence_json: '{"museumId":"sichuan","museumName":"四川博物院","signals":[{"type":"dynasty_coverage","text":"新石器 → 古蜀（三星堆/金沙）→ 秦汉（画像砖/陶俑）→ 南朝至唐（万佛寺石刻/佛教造像）→ 宋元明清 → 近现代（抗战/红军长征）"}],"artifactHits":[]}'
+  - museum_id: silk
+    reason: 看清朝官营织造出品的缂丝、刺绣工艺品，及御用丝绸文物
+    evidence_json: '{"museumId":"silk","museumName":"中国丝绸博物馆","signals":[{"type":"core_period","text":"新石器时代至明清（中国丝绸五千年通史）"},{"type":"dynasty_coverage","text":"新石器时代（浙江出土距今5000余年丝线）→ 商周（丝织起步）→ 秦汉（丝路开通）→ 魏晋南北朝（绞缬工艺）→ 隋唐（丝路繁荣高峰）→ 宋元（织锦技术革新）→ 明清（官营织造/缂丝/刺绣高峰）"}],"artifactHits":[]}'
+  - museum_id: suzhou
+    reason: 这家馆能看到清朝苏州作为江南经济文化中心的文人雅集、丝织刺绣和书画艺术的繁盛面貌
+    evidence_json: '{"museumId":"suzhou","museumName":"苏州博物馆","signals":[{"type":"core_period","text":"春秋（吴国）、五代宋元（丝织、书画）、明清（文人文化）"},{"type":"dynasty_coverage","text":"新石器时代（草鞋山）→ 春秋（吴国）→ 六朝 → 唐宋 → 明清（苏州为经济文化中心）"}],"artifactHits":[]}'
+  - museum_id: taipei-gugong
+    reason: 馆内珍藏的翠玉白菜雕刻精妙，展现清代玉石雕刻工艺的高超水平
+    evidence_json: '{"museumId":"taipei-gugong","museumName":"台北故宫博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"翠玉白菜","period":"清代"}]}'
+  - museum_id: tianjin
+    reason: 天津博物馆能看到清代精美翡翠雕刻和历代山水书画的珍贵收藏
+    evidence_json: '{"museumId":"tianjin","museumName":"天津博物馆","signals":[{"type":"core_period","text":"清代至近代（书画、瓷器、文房收藏）"},{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"翡翠蝈蝈白菜","period":"清代"},{"name":"北宋范宽款山水","period":"清代"}]}'
+  - museum_id: wenzi
+    reason: 中国文字博物馆藏清嘉庆藤花榭本《说文解字》与王铎草书卷轴，是清代字学与书法巅峰
+    evidence_json: '{"museumId":"wenzi","museumName":"中国文字博物馆","signals":[{"type":"dynasty_coverage","text":"商（甲骨文）→ 西周（金文）→ 秦（小篆/统一文字）→ 汉（隶书）→ 魏晋（楷书）→ 唐宋元明清（印刷术）→ 当代"}],"artifactHits":[]}'
+  - museum_id: xizang
+    reason: 清代金册金印见证了中央政府对西藏的管理制度，展现了金瓶掣签的历史地位
+    evidence_json: '{"museumId":"xizang","museumName":"西藏博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（卡若文化/曲贡文化）→ 吐蕃王朝（7-9世纪）→ 分裂割据 → 萨迦/帕竹/甘丹颇章 → 清代（金瓶掣签制度）→ 近现代"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"历代达赖喇嘛金印金册","period":"清代"}]}'
+  - museum_id: xuzhou
+    reason: 徐州博物馆藏乾隆南巡相关碑刻与清代玉器专题，清代序列完整
+  - museum_id: yangzhou
+    reason: 这家馆能看到清朝繁华的盐商府邸、精美的瓷器漆器和运河沿岸的商业文明遗物
+    evidence_json: '{"museumId":"yangzhou","museumName":"扬州博物馆 / 中国大运河博物馆","signals":[{"type":"core_period","text":"隋唐（大运河开凿、唐代扬州极盛）、清代（盐商文化）"}],"artifactHits":[]}'
+  - museum_id: yunnan
+    reason: 雍正朝鄂尔泰改土归流相关土司印信文献，揭开明清沐氏世镇云南后的中央直辖时代
+    evidence_json: '{"museumId":"yunnan","museumName":"云南省博物馆","signals":[{"type":"dynasty_coverage","text":"旧石器（元谋人，距今约170万年）→ 新石器 → 青铜时代（古滇国，战国至西汉）→ 东汉至隋 → 南诏（唐）→ 大理（宋）→ 元明清（改土归流）→ 近现代（滇越铁路/西南联大/抗战）"}],"artifactHits":[]}'
+  - museum_id: zhejiang
+    reason: 能看到清朝官窑瓷器、丝绸织品和古籍善本等皇家文化遗产
+    evidence_json: '{"museumId":"zhejiang","museumName":"浙江省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（河姆渡、良渚）→ 春秋战国（越国）→ 三国两晋（越窑）→ 五代（吴越国）→ 宋代 → 元明清"}],"artifactHits":[]}'
+shang:
+  - museum_id: 054543c3-1850-471d-be28-e611f77ba9c4
+    reason: 院藏商代青铜礼器（如户方彝伴出器及周原商末遗存），与西周序列前后呼应该补
+  - museum_id: 2e7ff077-be9c-488e-bbaf-2a5796c9cc2f
+    reason: 看陶鬲从夏商周的演变过程，感受三代陶器工艺的进步
+    evidence_json: '{"museumId":"2e7ff077-be9c-488e-bbaf-2a5796c9cc2f","museumName":"邯郸市博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代至近现代，涵盖磁山文化、夏代、商代、西周、东周（赵）、两汉、北朝、宋、明清各时期"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"夏商周陶鬲组","period":"夏代、商代、西周"}]}'
+  - museum_id: 31f1ad8e-c4de-4a5e-aafa-c51656c8a1a7
+    reason: 「商周十供」乾隆御赐礼器含商·册父乙卣、商·亚尊，孔府旧藏的硬通货
+  - museum_id: 52857eb0-ccb7-46af-a887-79501e299e42
+    reason: 这家馆能看到商朝的铜器工艺和祭祀文明
+    evidence_json: '{"museumId":"52857eb0-ccb7-46af-a887-79501e299e42","museumName":"随州博物馆","signals":[{"type":"dynasty_coverage","text":"商周至汉唐"}],"artifactHits":[]}'
+  - museum_id: anhui
+    reason: 皖南铜矿遗址展示了商周时期的采矿冶炼技术和铜器工艺
+    evidence_json: '{"museumId":"anhui","museumName":"安徽博物院","signals":[{"type":"dynasty_coverage","text":"新石器时代（凌家滩）→ 商周（皖南铜矿）→ 春秋战国（楚、吴越）→ 三国（曹魏、东吴争夺）→ 宋元 → 明清（徽文化鼎盛）"}],"artifactHits":[]}'
+  - museum_id: guangxi
+    reason: 武鸣勉岭出土兽面纹提梁铜卣，岭南罕见的中原商代青铜器
+  - museum_id: guobo
+    reason: 国博藏后母戊鼎(原司母戊鼎)，商代青铜重器之王，260公斤的分量足以镇住整个商代展厅
+  - museum_id: hebei
+    reason: 藁城台西商代遗址出土铁刃铜钺与最早酿酒酵母，是早商先民的硬核物证
+  - museum_id: henan
+    reason: 看商朝甲骨文、青铜器和殷墟遗物，见证中原文明的璀璨源头
+    evidence_json: '{"museumId":"henan","museumName":"河南博物院","signals":[{"type":"core_period","text":"夏商周(中原文明核心区)"}],"artifactHits":[]}'
+  - museum_id: hubei
+    reason: 盘龙城李家嘴出土的商代大玉戈，国家禁出境文物，长江青铜文明实证
+  - museum_id: hunan
+    reason: 馆藏商周青铜器皿方罍等文物，展现商朝的冶铜工艺、礼仪制度和审美特征
+    evidence_json: '{"museumId":"hunan","museumName":"湖南省博物馆（湖南博物院）","signals":[{"type":"core_period","text":"西汉（马王堆）、商周青铜"},{"type":"dynasty_coverage","text":"西汉（马王堆）为核心，商周青铜器（皿方罍等），近现代湖湘文化"}],"artifactHits":[]}'
+  - museum_id: jiangxi
+    reason: 能看到新干大洋洲出土的商代青铜器和陶器，展现商朝的冶铜技术与生活面貌
+    evidence_json: '{"museumId":"jiangxi","museumName":"江西省博物馆","signals":[{"type":"core_period","text":"西汉（海昏侯墓）、宋元明（景德镇瓷器）、商代（新干大洋洲）"},{"type":"dynasty_coverage","text":"商代（新干大洋洲）→ 西汉（海昏侯）→ 东晋南朝 → 唐宋（洪州窑、景德镇）→ 元明清（景德镇御窑）"}],"artifactHits":[]}'
+  - museum_id: jinsha
+    reason: 金沙遗址博物馆能看到商朝晚期古蜀的陶器、玉器和象牙制品，以及反映当时祭祀活动的遗迹
+    evidence_json: '{"museumId":"jinsha","museumName":"金沙遗址博物馆","signals":[{"type":"core_period","text":"古蜀文明后期（商代晚期至春秋早期，约前1200-前650年）"},{"type":"dynasty_coverage","text":"商代晚期 → 西周 → 春秋早期"}],"artifactHits":[]}'
+  - museum_id: luoyang
+    reason: 商代青铜器和陶器文物，展现商朝的手工业技术和日常生活风貌
+    evidence_json: '{"museumId":"luoyang","museumName":"洛阳博物馆","signals":[{"type":"dynasty_coverage","text":"夏代（二里头）→ 商代 → 西周（成周）→ 东周（王城）→ 东汉 → 曹魏西晋 → 北魏 → 隋唐（东都）→ 五代"}],"artifactHits":[]}'
+  - museum_id: neimenggu
+    reason: 朱开沟遗址、鄂尔多斯式青铜短剑/兽首刀，是商代北方草原文化的源头实证
+  - museum_id: sanxingdui
+    reason: 能看到与中原商文明平行发展的古蜀文明的青铜器、陶器和神秘面具
+    evidence_json: '{"museumId":"sanxingdui","museumName":"三星堆博物馆","signals":[{"type":"core_period","text":"古蜀文明(约前1600-前1100年,相当于商代)"},{"type":"dynasty_coverage","text":"古蜀文明(商代同时期),与中原商文明平行"}],"artifactHits":[]}'
+  - museum_id: shaanxi
+    reason: 陕历博藏老牛坡、城固洋县商代青铜器，商代关中线索清晰
+  - museum_id: shandong
+    reason: 山东博物馆的商代展厅里能看到铜钺和甲骨文，展现了商朝的青铜工艺和早期文字
+    evidence_json: '{"museumId":"shandong","museumName":"山东博物馆","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"亚丑钺","period":"商代晚期"},{"name":"甲骨文","period":"商代"}]}'
+  - museum_id: shanghai
+    reason: 馆藏商代青铜器和陶瓷展现了商朝的工艺水平与生活面貌
+    evidence_json: '{"museumId":"shanghai","museumName":"上海博物馆","signals":[{"type":"core_period","text":"青铜器（商周）、书画（唐宋元明清）、陶瓷（全时期）"},{"type":"dynasty_coverage","text":"商周（青铜）、唐宋元明清（书画）、全时期（陶瓷）"}],"artifactHits":[]}'
+  - museum_id: shanxi
+    reason: 灵石旌介商墓青铜器群、石楼桃花者出土的「龙形觥」（船形商代酒器孤品）、保德林遮峪青铜兵器，山西是商王朝北土边疆的青铜重镇
+  - museum_id: sichuan
+    reason: 看到商周时期巴蜀地区独特的青铜器铸造工艺和地方特色的器物纹样
+    evidence_json: '{"museumId":"sichuan","museumName":"四川博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"巴蜀青铜器","period":"商周至战国"}]}'
+  - museum_id: silk
+    reason: 看到商周时期丝织业的起步阶段实物和工艺发展脉络
+    evidence_json: '{"museumId":"silk","museumName":"中国丝绸博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（浙江出土距今5000余年丝线）→ 商周（丝织起步）→ 秦汉（丝路开通）→ 魏晋南北朝（绞缬工艺）→ 隋唐（丝路繁荣高峰）→ 宋元（织锦技术革新）→ 明清（官营织造/缂丝/刺绣高峰）"}],"artifactHits":[]}'
+  - museum_id: taipei-gugong
+    reason: 馆中甲骨文、青铜器等商周文物清晰展现了商朝的文字、铸造工艺与礼仪制度
+    evidence_json: '{"museumId":"taipei-gugong","museumName":"台北故宫博物院","signals":[{"type":"dynasty_coverage","text":"商周（甲骨/青铜器）→ 秦汉 → 魏晋南北朝 → 唐 → 宋（书画/瓷器高峰）→ 元明清（宫廷收藏鼎盛）"}],"artifactHits":[]}'
+  - museum_id: tianjin
+    reason: 商朝青铜器和甲骨文书法展示了当时的手工业技艺与文字发展水平
+    evidence_json: '{"museumId":"tianjin","museumName":"天津博物馆","signals":[{"type":"dynasty_coverage","text":"商周、宋、元、明、清、近代"}],"artifactHits":[]}'
+  - museum_id: wenzi
+    reason: 这家馆能看到商朝刻在龟甲兽骨上的甲骨文实物，见证中国最古老的成体系文字
+    evidence_json: '{"museumId":"wenzi","museumName":"中国文字博物馆","signals":[{"type":"core_period","text":"商代（甲骨文）至当代（汉字发展全史）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"甲骨文实物","period":"商代晚期，约前1300-前1046年"}]}'
+  - museum_id: yinxu
+    reason: 能看到盘庚迁殷至纣王时期的殷墟遗迹、甲骨文、青铜器和建筑遗址
+    evidence_json: '{"museumId":"yinxu","museumName":"殷墟博物馆","signals":[{"type":"core_period","text":"商代晚期（约前1300-前1046年）"},{"type":"dynasty_coverage","text":"商代晚期（盘庚迁殷至纣王灭国，约270年）"}],"artifactHits":[]}'
+song:
+  - museum_id: 1f59db8a-b242-494f-aba4-7f02ed14f48c
+    reason: 这家馆能看到南宋时期官窑烧制的青瓷器皿，包括簋式炉、花口壶、鸭形器等精美陶瓷制品
+    evidence_json: '{"museumId":"1f59db8a-b242-494f-aba4-7f02ed14f48c","museumName":"杭州南宋官窑博物馆","signals":[{"type":"core_period","text":"南宋（1127—1279年）"},{"type":"artifact_period","text":"4 件文物"}],"artifactHits":[{"name":"南宋官窑青瓷簋式炉","period":"南宋"},{"name":"南宋官窑青瓷花口壶","period":"南宋"},{"name":"南宋官窑青瓷鸭形器","period":"南宋"},{"name":"南宋官窑青瓷樽式炉","period":"南宋"}]}'
+  - museum_id: 2e7ff077-be9c-488e-bbaf-2a5796c9cc2f
+    reason: 磁州窑白地黑花、剔花瓷器系列藏品，是北宋北方民窑美学的标本库
+  - museum_id: 31f1ad8e-c4de-4a5e-aafa-c51656c8a1a7
+    reason: 宋朝在曲阜孔子博物馆可以看到宋代及其以后的珍贵善本古书
+    evidence_json: '{"museumId":"31f1ad8e-c4de-4a5e-aafa-c51656c8a1a7","museumName":"曲阜孔子博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"善本古书","period":"宋代以来"}]}'
+  - museum_id: 9bfb09d6-e2da-4572-8384-56d34d1f59fe
+    reason: 宋四郎墓砖雕与"妇人启门图"，是北宋市井审美与生死观的微缩剧场
+  - museum_id: anhui
+    reason: 能看到宋朝瓷器、书画、文献等宋代文化遗存
+    evidence_json: '{"museumId":"anhui","museumName":"安徽博物院","signals":[{"type":"dynasty_coverage","text":"新石器时代（凌家滩）→ 商周（皖南铜矿）→ 春秋战国（楚、吴越）→ 三国（曹魏、东吴争夺）→ 宋元 → 明清（徽文化鼎盛）"}],"artifactHits":[]}'
+  - museum_id: beilin
+    reason: 西安碑林始建于北宋元祐二年（1087），《开成石经》宋拓与众多宋代名家碑刻在此千年传承，碑林本身就是宋人留给后世的活态文献库
+  - museum_id: chengdu
+    reason: 在馆藏陶瓷、书画、生活用器中可看到宋代经济繁荣和文化发展的具体形态
+    evidence_json: '{"museumId":"chengdu","museumName":"成都博物馆","signals":[{"type":"dynasty_coverage","text":"古蜀（宝墩文化/三星堆/金沙）→ 秦汉（蜀郡/老官山）→ 三国（蜀汉）→ 唐宋（繁荣期）→ 明清 → 近现代"}],"artifactHits":[]}'
+  - museum_id: chongqing
+    reason: 馆内展示宋代瓷器、书画、生活用具等文物，复原了宋代巴渝地区的经济文化风貌
+    evidence_json: '{"museumId":"chongqing","museumName":"重庆中国三峡博物馆（重庆博物馆）","signals":[{"type":"dynasty_coverage","text":"旧石器时代 → 先秦巴国 → 秦汉 → 六朝 → 唐宋 → 元明清（明玉珍大夏国）→ 近现代（抗战首都）"}],"artifactHits":[]}'
+  - museum_id: d07ca61f-47b5-4b8f-b061-ab0b67017ae9
+    reason: 正定隆兴寺北宋摩尼殿、转轮藏阁与开宝四年铸21米铜千手观音，是宋代木构与铸造极致
+    evidence_json: '{"museumId":"d07ca61f-47b5-4b8f-b061-ab0b67017ae9","museumName":"正定隆兴寺","signals":[{"type":"artifact_period","text":"4 件文物"}],"artifactHits":[{"name":"摩尼殿壁画","period":"宋代"},{"name":"五彩悬塑倒坐观音","period":"宋代"},{"name":"转轮藏阁内宋代转轮藏","period":"宋代"},{"name":"毗卢殿内铜铸毗卢佛","period":"宋代"}]}'
+  - museum_id: d5a151c4-b6ba-4b0b-a3c0-a74ee9843eee
+    reason: 圣母殿是现存最早的北宋木构殿堂，殿内43尊宋代彩塑侍女像衣纹神情各异，鱼沼飞梁十字桥独此一例，宋代建筑与雕塑的双重巅峰
+  - museum_id: dingzhou
+    reason: 宋朝在定州博物馆能看到定窑白瓷的精妙工艺，包括刻花龙首净瓶、绿釉划花净瓶等北宋时期的代表作品
+    evidence_json: '{"museumId":"dingzhou","museumName":"定州博物馆","signals":[{"type":"core_period","text":"西汉中山国、北宋（定窑白瓷、静志寺/净众院塔基地宫）"},{"type":"dynasty_coverage","text":"西汉（中山国）、东汉、北朝、隋唐、北宋（定窑）"},{"type":"artifact_period","text":"4 件文物"}],"artifactHits":[{"name":"北宋白釉刻花龙首净瓶","period":"北宋"},{"name":"定窑白瓷群","period":"北宋，10-11世纪"},{"name":"北宋定窑绿釉划花净瓶","period":"北宋"},{"name":"透影白瓷杯","period":"北宋"}]}'
+  - museum_id: f72fc18f-cdc2-4ae8-8e68-28d3521eb4ea
+    reason: 能看到北宋时期祖庙的始建格局和宋代木雕工艺遗存
+    evidence_json: '{"museumId":"f72fc18f-cdc2-4ae8-8e68-28d3521eb4ea","museumName":"佛山市祖庙博物馆","signals":[{"type":"core_period","text":"北宋元丰年间（1078—1085年）至清末民初"},{"type":"dynasty_coverage","text":"北宋、明、清、清末民初"}],"artifactHits":[]}'
+  - museum_id: fujian
+    reason: 看宋代建窑烧制的黑釉瓷器和海上丝绸之路时期的贸易瓷器遗物
+    evidence_json: '{"museumId":"fujian","museumName":"福建博物院","signals":[{"type":"dynasty_coverage","text":"新石器时代（昙石山文化）→ 秦汉（闽越国）→ 唐宋（海上丝绸之路兴盛）→ 宋代（建窑）→ 元明清（德化窑、海外贸易）→ 近代（福建船政）"}],"artifactHits":[]}'
+  - museum_id: gansu
+    reason: 馆内宋朝瓷器、书法、佛教造像等文物展现了宋代文化艺术成就
+    evidence_json: '{"museumId":"gansu","museumName":"甘肃省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（大地湾/仰韶/马家窑/齐家）→ 先秦 → 秦汉（丝路/简牍）→ 魏晋（壁画砖）→ 十六国至隋唐（佛教艺术）→ 宋元明清"}],"artifactHits":[]}'
+  - museum_id: guangdong
+    reason: 这家馆能看到宋朝的墨龙图卷轴和木雕罗汉像，还有海上丝绸之路贸易繁荣的印证
+    evidence_json: '{"museumId":"guangdong","museumName":"广东省博物馆","signals":[{"type":"core_period","text":"宋元明清（海上丝绸之路与对外贸易）"},{"type":"dynasty_coverage","text":"先秦百越、秦汉南越、唐宋海贸、明清外销"},{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"南宋陈容《墨龙图》","period":"南宋，约1235-1262年"},{"name":"北宋木雕罗汉像","period":"北宋"}]}'
+  - museum_id: guangxi
+    reason: 这家馆能看到宋朝的陶瓷器皿、生活用具和宗教文物，展现当时广西地区的经济文化面貌
+    evidence_json: '{"museumId":"guangxi","museumName":"广西壮族自治区博物馆","signals":[{"type":"dynasty_coverage","text":"先秦百越、秦汉、东汉、唐宋、明清"}],"artifactHits":[]}'
+  - museum_id: gugong
+    reason: 故宫珍藏北宋《清明上河图》和《千里江山图》，再现宋代繁华城市生活和壮美山水风貌
+    evidence_json: '{"museumId":"gugong","museumName":"故宫博物院","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"《清明上河图》","period":"北宋"},{"name":"《千里江山图》","period":"北宋"}]}'
+  - museum_id: guizhou
+    reason: 贵州省博物馆藏南宋杨粲墓出土的两面铜鼓，其中一面是「遵义型铜鼓」的命名标准器
+    evidence_json: '{"museumId":"guizhou","museumName":"贵州省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"石寨山铜鼓","period":"宋代，1987年平坝棺材洞出土"}]}'
+  - museum_id: guobo
+    reason: 国博藏《中兴四将图》《卤簿玉辇图》及大量宋代官窑瓷，宋代书画瓷器线索完整
+  - museum_id: hainan
+    reason: 海南省博物馆藏华光礁I号南宋沉船511块船板与万件外销瓷，从西沙打捞的海丝实证
+    evidence_json: '{"museumId":"hainan","museumName":"海南省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"南海出水铜钱串","period":"宋代"}]}'
+  - museum_id: henan
+    reason: 馆内北宋汝窑天青釉瓷器展现了宋代瓷器工艺的精妙绝伦
+    evidence_json: '{"museumId":"henan","museumName":"河南博物院","signals":[{"type":"dynasty_coverage","text":"新石器(裴李岗、仰韶)、夏、商、西周、春秋为核心,唐宋亦有亮点"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"汝窑天青釉瓷器","period":"北宋"}]}'
+  - museum_id: hunan
+    reason: 湘博藏宋代衡州窑与湖南宋墓出土瓷器、书画，宋代序列完整
+  - museum_id: jiangxi
+    reason: 看景德镇瓷器和洪州窑瓷片，感受宋代瓷业繁荣的精美器物工艺
+    evidence_json: '{"museumId":"jiangxi","museumName":"江西省博物馆","signals":[{"type":"core_period","text":"西汉（海昏侯墓）、宋元明（景德镇瓷器）、商代（新干大洋洲）"},{"type":"dynasty_coverage","text":"商代（新干大洋洲）→ 西汉（海昏侯）→ 东晋南朝 → 唐宋（洪州窑、景德镇）→ 元明清（景德镇御窑）"}],"artifactHits":[]}'
+  - museum_id: jilin
+    reason: 看宋代文豪苏轼亲笔书写的《洞庭春色赋·中山松醪赋》手稿，感受北宋文人的笔墨风采
+    evidence_json: '{"museumId":"jilin","museumName":"吉林省博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"苏轼《洞庭春色赋·中山松醪赋》","period":"北宋，1091年"}]}'
+  - museum_id: jingdezhen
+    reason: 这家馆能看到宋朝影青瓷和青白瓷的精美器物及其烧制工艺
+    evidence_json: '{"museumId":"jingdezhen","museumName":"景德镇中国陶瓷博物馆","signals":[{"type":"dynasty_coverage","text":"五代（南方白瓷兴起）→ 宋代（影青瓷/青白瓷）→ 元代（青花瓷诞生）→ 明代（御窑厂建立、五彩斗彩）→ 清代（粉彩珐琅彩、瓷器巅峰）"}],"artifactHits":[]}'
+  - museum_id: kaifeng
+    reason: 开封博物馆能看到北宋东京的城市遗迹、官窑瓷器、书画文献和市井生活场景
+    evidence_json: '{"museumId":"kaifeng","museumName":"开封博物馆","signals":[{"type":"core_period","text":"北宋（960-1127年，东京汴梁）"},{"type":"dynasty_coverage","text":"战国（魏国大梁）→ 唐代（汴州）→ 五代（后梁、后晋、后汉、后周都城）→ 北宋（东京）→ 金代（南京） → 明清"}],"artifactHits":[]}'
+  - museum_id: liaoning
+    reason: 这家馆能看到宋朝皇帝赵佶亲笔绘制的《瑞鹤图》，笔墨清雅意境高远
+    evidence_json: '{"museumId":"liaoning","museumName":"辽宁省博物馆","signals":[{"type":"core_period","text":"古代书画（唐宋元明清全序列）、辽金时期"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"《瑞鹤图》","period":"北宋，赵佶/宋徽宗"}]}'
+  - museum_id: longmen
+    reason: 龙门石窟北宋时期的造像与题记，展现了宋代继承唐风的佛教艺术风格
+    evidence_json: '{"museumId":"longmen","museumName":"龙门石窟","signals":[{"type":"dynasty_coverage","text":"北魏 → 东西魏 → 北齐 → 隋代 → 唐代 → 五代 → 北宋"}],"artifactHits":[]}'
+  - museum_id: luoyang
+    reason: 珍宝馆「宋代瓷峰」单元，北宋西京遗存定汝官窑藏品成体系
+  - museum_id: nanhai
+    reason: 看南宋外销瓷器十六万件套和原船沉船遗迹，体验海上贸易繁荣
+    evidence_json: '{"museumId":"nanhai","museumName":"广东海上丝绸之路博物馆（南海一号）","signals":[{"type":"core_period","text":"南宋（约1183年）"},{"type":"dynasty_coverage","text":"南宋（约1183年，淳熙年间）"},{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"南海一号沉船船体","period":"南宋，约1183年"},{"name":"外销瓷器（约16万件套）","period":"南宋孝宗1174-1189年"}]}'
+  - museum_id: nanjing
+    reason: 大报恩寺塔地宫七宝阿育王塔为镇院级宋代国宝，宋代必须有一席之地
+  - museum_id: qinghai
+    reason: 唃厮啰青唐政权（11世纪河湟）即宋代，馆内有"青唐风云"专题
+  - museum_id: qingzhou
+    reason: 龙兴寺佛教造像和衡王府瓷器展现了宋朝的佛教艺术与皇族生活
+    evidence_json: '{"museumId":"qingzhou","museumName":"青州博物馆","signals":[{"type":"dynasty_coverage","text":"史前 → 先秦 → 两汉（香山汉墓）→ 南北朝（龙兴寺/佛教高峰）→ 唐宋 → 明（衡王府/赵秉忠状元卷）→ 清"}],"artifactHits":[]}'
+  - museum_id: quanzhou
+    reason: 这家馆能看到宋朝作为东方第一大港的海船、外销瓷器和多教派石刻，展现刺桐城的国际贸易繁荣
+    evidence_json: '{"museumId":"quanzhou","museumName":"泉州海外交通史博物馆","signals":[{"type":"core_period","text":"宋元（泉州为\"东方第一大港\"）"},{"type":"dynasty_coverage","text":"唐（泉州港兴起）→ 宋元（东方第一大港、刺桐城）→ 明（郑和下西洋）→ 清"},{"type":"artifact_period","text":"5 件文物"}],"artifactHits":[{"name":"宋代海船","period":"南宋，1974年后渚港出土"},{"name":"印度教石刻","period":"宋元"},{"name":"伊斯兰教碑刻","period":"宋元"},{"name":"外销瓷器","period":"宋元"},{"name":"摩尼教石刻","period":"宋元"}]}'
+  - museum_id: shaanxi
+    reason: 陕历博藏耀州窑刻花青瓷与吕氏家族墓出土宋代器物，宋代窑址重器
+  - museum_id: shanghai
+    reason: 上海博物馆有北宋《淳化阁帖》最善本，可看到宋代书法艺术的最高成就与皇家审美
+    evidence_json: '{"museumId":"shanghai","museumName":"上海博物馆","signals":[{"type":"core_period","text":"青铜器（商周）、书画（唐宋元明清）、陶瓷（全时期）"},{"type":"dynasty_coverage","text":"商周（青铜）、唐宋元明清（书画）、全时期（陶瓷）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"《淳化阁帖》最善本","period":"北宋"}]}'
+  - museum_id: shanxi
+    reason: 山西博物院藏稷山马村段氏、侯马董氏宋金砖雕墓的戏台与杂剧砖雕，是中国戏曲考古最早的实物，再加宋金木构建筑构件，看尽宋金山西的市井烟火
+  - museum_id: sichuan
+    reason: 四川博物院馆藏有宋朝陶瓷、书画、佛教造像等文物，展现宋代四川地区的文化艺术发展
+    evidence_json: '{"museumId":"sichuan","museumName":"四川博物院","signals":[{"type":"dynasty_coverage","text":"新石器 → 古蜀（三星堆/金沙）→ 秦汉（画像砖/陶俑）→ 南朝至唐（万佛寺石刻/佛教造像）→ 宋元明清 → 近现代（抗战/红军长征）"}],"artifactHits":[]}'
+  - museum_id: silk
+    reason: 看宋代丝绸工艺在花罗裙裤上的精美纹样和精湛织造技术
+    evidence_json: '{"museumId":"silk","museumName":"中国丝绸博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"宋代花罗裙裤","period":"宋代"}]}'
+  - museum_id: suzhou
+    reason: 这家馆能看到宋朝的丝织品、书画以及苏州作为经济文化中心的繁荣印记
+    evidence_json: '{"museumId":"suzhou","museumName":"苏州博物馆","signals":[{"type":"core_period","text":"春秋（吴国）、五代宋元（丝织、书画）、明清（文人文化）"},{"type":"dynasty_coverage","text":"新石器时代（草鞋山）→ 春秋（吴国）→ 六朝 → 唐宋 → 明清（苏州为经济文化中心）"}],"artifactHits":[]}'
+  - museum_id: taipei-gugong
+    reason: 这家馆能看到宋朝汝窑瓷器和苏轼书法真迹
+    evidence_json: '{"museumId":"taipei-gugong","museumName":"台北故宫博物院","signals":[{"type":"core_period","text":"宋元明清（中国古代书画/瓷器/青铜器/玉器精品）"},{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"汝窑瓷器","period":"北宋"},{"name":"苏轼《寒食帖》","period":"北宋"}]}'
+  - museum_id: tianjin
+    reason: 这家馆能看到北宋山水画大师范宽的传世名作《雪景寒林图》，体验古人笔墨意境
+    evidence_json: '{"museumId":"tianjin","museumName":"天津博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"范宽《雪景寒林图》","period":"北宋，约11世纪初"}]}'
+  - museum_id: wenzi
+    reason: 可以看到宋朝印刷术发展下的活字印刷文献和雕版印刷精品
+    evidence_json: '{"museumId":"wenzi","museumName":"中国文字博物馆","signals":[{"type":"dynasty_coverage","text":"商（甲骨文）→ 西周（金文）→ 秦（小篆/统一文字）→ 汉（隶书）→ 魏晋（楷书）→ 唐宋元明清（印刷术）→ 当代"}],"artifactHits":[]}'
+  - museum_id: xinjiang
+    reason: 可以观看宋朝时期西域回鹘和西辽的陶器、文献等文物及其历史遗存
+    evidence_json: '{"museumId":"xinjiang","museumName":"新疆维吾尔自治区博物馆","signals":[{"type":"dynasty_coverage","text":"青铜时代（小河/楼兰）→ 汉（西域都护府，前60年）→ 魏晋南北朝（高昌/龟兹）→ 唐（安西都护府）→ 宋元（回鹘/西辽）→ 清（新疆建省）"}],"artifactHits":[]}'
+  - museum_id: xuzhou
+    reason: 这家馆能看到宋朝徐州作为南北交通枢纽的城市繁荣与商业贸易痕迹
+    evidence_json: '{"museumId":"xuzhou","museumName":"徐州博物馆","signals":[{"type":"dynasty_coverage","text":"新石器（大墩子遗址）→ 先秦（宋国/楚国）→ 西汉（楚国，核心）→ 三国（徐州争夺战）→ 唐宋"}],"artifactHits":[]}'
+  - museum_id: yangzhou
+    reason: 扬州博物馆和中国大运河博物馆展示了宋朝大运河繁荣期的船队遗物、陶瓷贸易品和运河沿岸城市风貌复原场景
+    evidence_json: '{"museumId":"yangzhou","museumName":"扬州博物馆 / 中国大运河博物馆","signals":[{"type":"dynasty_coverage","text":"春秋（吴王夫差开邗沟）→ 隋代（开凿大运河）→ 唐代（扬州为国际都会）→ 宋元 → 明清（盐商文化、扬州学派）"}],"artifactHits":[]}'
+  - museum_id: yunnan
+    reason: 这家馆能看到宋朝南诏大理时期的青铜器、陶瓷器和佛教文物
+    evidence_json: '{"museumId":"yunnan","museumName":"云南省博物馆","signals":[{"type":"core_period","text":"古滇国（战国至西汉）、南诏/大理（唐宋）"}],"artifactHits":[]}'
+  - museum_id: zhejiang
+    reason: 可以看到宋代越窑青瓷、吴越国遗物和宋代书画、瓷器等文化遗产
+    evidence_json: '{"museumId":"zhejiang","museumName":"浙江省博物馆","signals":[{"type":"core_period","text":"新石器时代（良渚文化）、五代十国（吴越国）、宋代"},{"type":"dynasty_coverage","text":"新石器时代（河姆渡、良渚）→ 春秋战国（越国）→ 三国两晋（越窑）→ 五代（吴越国）→ 宋代 → 元明清"}],"artifactHits":[]}'
+sui:
+  - museum_id: 6312bdbd-cc07-456a-a5d0-472e502a5154
+    reason: 响堂山北响堂隋大业洞、二佛洞及南响堂《滏山石窟之碑》，记下北周灭法后的隋代复兴
+    evidence_json: '{"museumId":"6312bdbd-cc07-456a-a5d0-472e502a5154","museumName":"响堂山石窟","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"千佛洞造像群","period":"北齐至隋唐"}]}'
+  - museum_id: 88f42955-6058-485d-95e4-c7711d85d326
+    reason: 看到隋朝陶俑、石刻等墓葬出土文物以及隋代建筑遗迹
+    evidence_json: '{"museumId":"88f42955-6058-485d-95e4-c7711d85d326","museumName":"咸阳博物院","signals":[{"type":"dynasty_coverage","text":"战国至明清（核心为秦汉，兼及北魏、北周、隋唐）"}],"artifactHits":[]}'
+  - museum_id: dingzhou
+    reason: 定州博物馆馆藏有隋朝时期的陶瓷器和生活用具，展现了隋代的日常生活风貌
+    evidence_json: '{"museumId":"dingzhou","museumName":"定州博物馆","signals":[{"type":"dynasty_coverage","text":"西汉（中山国）、东汉、北朝、隋唐、北宋（定窑）"}],"artifactHits":[]}'
+  - museum_id: gansu
+    reason: 馆内隋代佛教石造像、陶瓷器皿和丝路贸易遗物展现了隋朝的宗教信仰与商业繁荣
+    evidence_json: '{"museumId":"gansu","museumName":"甘肃省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（大地湾/仰韶/马家窑/齐家）→ 先秦 → 秦汉（丝路/简牍）→ 魏晋（壁画砖）→ 十六国至隋唐（佛教艺术）→ 宋元明清"}],"artifactHits":[]}'
+  - museum_id: longmen
+    reason: 龙门石窟宾阳南洞存隋大业十二年（616）小龛，是北朝向唐风过渡的稀见隋造像
+    evidence_json: '{"museumId":"longmen","museumName":"龙门石窟","signals":[{"type":"dynasty_coverage","text":"北魏 → 东西魏 → 北齐 → 隋代 → 唐代 → 五代 → 北宋"}],"artifactHits":[]}'
+  - museum_id: luoyang
+    reason: 隋朝建立的东都洛阳遗迹、隋代陶瓷器物和城市规划遗存
+    evidence_json: '{"museumId":"luoyang","museumName":"洛阳博物馆","signals":[{"type":"core_period","text":"夏商周（二里头-东周王城）、东汉、魏晋北朝、隋唐（东都洛阳）"},{"type":"dynasty_coverage","text":"夏代（二里头）→ 商代 → 西周（成周）→ 东周（王城）→ 东汉 → 曹魏西晋 → 北魏 → 隋唐（东都）→ 五代"}],"artifactHits":[]}'
+  - museum_id: qinghai
+    reason: 可看到隋朝时期吐谷浑与唐蕃古道相关的文物遗存和河湟地区的历史演变
+    evidence_json: '{"museumId":"qinghai","museumName":"青海省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器（马家窑/齐家/宗日文化）→ 青铜时代（卡约/辛店/诺木洪文化）→ 秦汉（河湟设郡）→ 南北朝隋唐（吐谷浑/唐蕃古道）→ 宋元明清（藏传佛教）"}],"artifactHits":[]}'
+  - museum_id: silk
+    reason: 隋朝丝绸纺织技术和丝路贸易的繁荣发展脉络，以及隋唐时期丝织工艺达到的高峰水平
+    evidence_json: '{"museumId":"silk","museumName":"中国丝绸博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（浙江出土距今5000余年丝线）→ 商周（丝织起步）→ 秦汉（丝路开通）→ 魏晋南北朝（绞缬工艺）→ 隋唐（丝路繁荣高峰）→ 宋元（织锦技术革新）→ 明清（官营织造/缂丝/刺绣高峰）"}],"artifactHits":[]}'
+  - museum_id: yangzhou
+    reason: 看隋代开凿大运河的历史遗迹和运河沿线的陶瓷、工具等出土文物
+    evidence_json: '{"museumId":"yangzhou","museumName":"扬州博物馆 / 中国大运河博物馆","signals":[{"type":"dynasty_coverage","text":"春秋（吴王夫差开邗沟）→ 隋代（开凿大运河）→ 唐代（扬州为国际都会）→ 宋元 → 明清（盐商文化、扬州学派）"}],"artifactHits":[]}'
+tang:
+  - museum_id: 232d4da5-550c-49eb-89e0-042c913657c8
+    reason: 可观赏唐代书法家裴度撰写的诸葛武侯祠堂碑，领略唐代端庄雄浑的碑刻书法艺术
+    evidence_json: '{"museumId":"232d4da5-550c-49eb-89e0-042c913657c8","museumName":"成都武侯祠博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"唐裴度撰《蜀丞相诸葛武侯祠堂碑》","period":"唐代"}]}'
+  - museum_id: 6312bdbd-cc07-456a-a5d0-472e502a5154
+    reason: 响堂山常乐寺出土130件唐代红砂石造像，含被誉「邯郸微笑」的罗汉头像
+    evidence_json: '{"museumId":"6312bdbd-cc07-456a-a5d0-472e502a5154","museumName":"响堂山石窟","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"千佛洞造像群","period":"北齐至隋唐"}]}'
+  - museum_id: 817569a4-234c-46ce-9bcd-89ef8f271011
+    reason: 乾陵博物馆能看到唐代三彩陶俑、壁画中的打马球运动和宫女形象，还有精美的铜镜工艺
+    evidence_json: '{"museumId":"817569a4-234c-46ce-9bcd-89ef8f271011","museumName":"乾陵博物馆","signals":[{"type":"core_period","text":"唐代（618—907年）"},{"type":"dynasty_coverage","text":"主体为唐代，兼及隋及周边时期"},{"type":"artifact_period","text":"5 件文物"}],"artifactHits":[{"name":"三彩载物骆驼","period":"唐代"},{"name":"唐三彩天王俑","period":"唐代"},{"name":"打马毬图壁画","period":"唐代（706年前后）"},{"name":"宫女图壁画","period":"唐代"},{"name":"鉴若止水铜镜","period":"唐代"}]}'
+  - museum_id: 88f42955-6058-485d-95e4-c7711d85d326
+    reason: 看唐朝的陶俑、瓷器和石刻文物展示当时的生活风貌和手工艺水平
+    evidence_json: '{"museumId":"88f42955-6058-485d-95e4-c7711d85d326","museumName":"咸阳博物院","signals":[{"type":"dynasty_coverage","text":"战国至明清（核心为秦汉，兼及北魏、北周、隋唐）"}],"artifactHits":[]}'
+  - museum_id: 9bfb09d6-e2da-4572-8384-56d34d1f59fe
+    reason: 镇馆安菩夫妇墓胡人牵驼壁画+东罗马金币，把丝路东端起点焊在洛阳
+  - museum_id: beilin
+    reason: 这家馆能看到唐朝书法大家颜真卿、怀素的真迹碑刻，还有记录景教传入的历史碑石和儒学经典的石经
+    evidence_json: '{"museumId":"beilin","museumName":"西安碑林博物馆","signals":[{"type":"artifact_period","text":"5 件文物"}],"artifactHits":[{"name":"《开成石经》","period":"唐代，837年"},{"name":"《大秦景教流行中国碑》","period":"唐代，781年"},{"name":"颜真卿《多宝塔碑》","period":"唐代，752年"},{"name":"颜真卿《颜家庙碑》","period":"唐代，780年"},{"name":"怀素《千字文》碑","period":"唐代"}]}'
+  - museum_id: chengdu
+    reason: 馆内唐代陶俑、瓷器和生活用品完整展现了唐朝成都的繁荣市井生活与手工业发展
+    evidence_json: '{"museumId":"chengdu","museumName":"成都博物馆","signals":[{"type":"dynasty_coverage","text":"古蜀（宝墩文化/三星堆/金沙）→ 秦汉（蜀郡/老官山）→ 三国（蜀汉）→ 唐宋（繁荣期）→ 明清 → 近现代"}],"artifactHits":[]}'
+  - museum_id: chongqing
+    reason: 馆藏唐代陶瓷、石刻、书法等文物，展现三峡地区唐朝的经济文化
+    evidence_json: '{"museumId":"chongqing","museumName":"重庆中国三峡博物馆（重庆博物馆）","signals":[{"type":"dynasty_coverage","text":"旧石器时代 → 先秦巴国 → 秦汉 → 六朝 → 唐宋 → 元明清（明玉珍大夏国）→ 近现代（抗战首都）"}],"artifactHits":[]}'
+  - museum_id: d5a151c4-b6ba-4b0b-a3c0-a74ee9843eee
+    reason: 唐太宗亲撰行书《晋祠之铭并序》碑，与《温泉铭》并称初唐行书双璧
+  - museum_id: dingzhou
+    reason: 这家馆能看到唐朝的定州古城遗址和陶瓷器物
+    evidence_json: '{"museumId":"dingzhou","museumName":"定州博物馆","signals":[{"type":"dynasty_coverage","text":"西汉（中山国）、东汉、北朝、隋唐、北宋（定窑）"}],"artifactHits":[]}'
+  - museum_id: famensi
+    reason: 唐代皇家供奉的佛指舍利、金银器皿和丝绸制品
+    evidence_json: '{"museumId":"famensi","museumName":"法门寺博物馆（法门寺珍宝馆）","signals":[{"type":"core_period","text":"唐代（皇家佛教供奉）"},{"type":"dynasty_coverage","text":"唐代（核心），东汉末年始建寺院"}],"artifactHits":[]}'
+  - museum_id: fujian
+    reason: 这家馆能看到唐朝海上丝绸之路兴盛时期的商业贸易遗物和陶瓷器物
+    evidence_json: '{"museumId":"fujian","museumName":"福建博物院","signals":[{"type":"dynasty_coverage","text":"新石器时代（昙石山文化）→ 秦汉（闽越国）→ 唐宋（海上丝绸之路兴盛）→ 宋代（建窑）→ 元明清（德化窑、海外贸易）→ 近代（福建船政）"}],"artifactHits":[]}'
+  - museum_id: gansu
+    reason: 甘肃省博物馆馆藏唐朝佛教艺术品、壁画砖和丝路文物，展现了唐代佛教信仰与商业文明的繁荣景象
+    evidence_json: '{"museumId":"gansu","museumName":"甘肃省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（大地湾/仰韶/马家窑/齐家）→ 先秦 → 秦汉（丝路/简牍）→ 魏晋（壁画砖）→ 十六国至隋唐（佛教艺术）→ 宋元明清"}],"artifactHits":[]}'
+  - museum_id: guangdong
+    reason: 梅县水车窑、广州西村窑唐青瓷与南越国宫署遗址出土唐牙雕人像，记录广州市舶使设立后蕃商云集
+    evidence_json: '{"museumId":"guangdong","museumName":"广东省博物馆","signals":[{"type":"dynasty_coverage","text":"先秦百越、秦汉南越、唐宋海贸、明清外销"}],"artifactHits":[]}'
+  - museum_id: guangxi
+    reason: 馆中藏有唐朝陶器、瓷器、铜镜等生活器物，展现古代岭南地区的繁荣面貌
+    evidence_json: '{"museumId":"guangxi","museumName":"广西壮族自治区博物馆","signals":[{"type":"dynasty_coverage","text":"先秦百越、秦汉、东汉、唐宋、明清"}],"artifactHits":[]}'
+  - museum_id: gugong
+    reason: 故宫藏《五牛图》(韩滉)、《步辇图》(阎立本摹本)级别唐代书画是顶级国宝
+  - museum_id: guobo
+    reason: 国博藏唐三彩骆驼载乐俑、鎏金舞马衔杯纹银壶级别的盛唐物证齐备
+  - museum_id: hainan
+    reason: 观赏精美的唐三彩陶马，感受大唐工匠的精湛陶艺技艺
+    evidence_json: '{"museumId":"hainan","museumName":"海南省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"唐三彩陶马","period":"唐代"}]}'
+  - museum_id: heilongjiang
+    reason: 渤海国天门军之印为国内仅存唯一渤海官印，唐代东北边疆的孤证
+  - museum_id: henan
+    reason: 可以看到唐朝陶瓷、金银器、书法墨迹等珍贵馆藏，体现盛唐文化特色
+    evidence_json: '{"museumId":"henan","museumName":"河南博物院","signals":[{"type":"dynasty_coverage","text":"新石器(裴李岗、仰韶)、夏、商、西周、春秋为核心,唐宋亦有亮点"}],"artifactHits":[]}'
+  - museum_id: hunan
+    reason: 湘博藏长沙窑唐代外销瓷大宗藏品，唐代陶瓷是镇馆专题
+  - museum_id: jiangxi
+    reason: 唐朝洪州窑瓷器和陶制文物展示了该时期的制瓷工艺与日常生活用品
+    evidence_json: '{"museumId":"jiangxi","museumName":"江西省博物馆","signals":[{"type":"dynasty_coverage","text":"商代（新干大洋洲）→ 西汉（海昏侯）→ 东晋南朝 → 唐宋（洪州窑、景德镇）→ 元明清（景德镇御窑）"}],"artifactHits":[]}'
+  - museum_id: kaifeng
+    reason: 能看到唐代汴州时期的陶瓷器皿、建筑构件和城市遗迹相关文物展示
+    evidence_json: '{"museumId":"kaifeng","museumName":"开封博物馆","signals":[{"type":"dynasty_coverage","text":"战国（魏国大梁）→ 唐代（汴州）→ 五代（后梁、后晋、后汉、后周都城）→ 北宋（东京）→ 金代（南京） → 明清"}],"artifactHits":[]}'
+  - museum_id: liaoning
+    reason: 看唐代仕女画卷和古代书法墨迹，领略盛唐贵族生活与艺术风采
+    evidence_json: '{"museumId":"liaoning","museumName":"辽宁省博物馆","signals":[{"type":"artifact_period","text":"3 件文物"}],"artifactHits":[{"name":"《簪花仕女图》","period":"唐代，传周昉"},{"name":"《虢国夫人游春图》","period":"唐代，传张萱，宋摹本"},{"name":"《万岁通天帖》","period":"唐代，697年摹本"}]}'
+  - museum_id: longmen
+    reason: 唐代雕刻精美的卢舍那大佛和千手观音石像，展现了唐代石窟造像的高超工艺与宗教信仰
+    evidence_json: '{"museumId":"longmen","museumName":"龙门石窟","signals":[{"type":"core_period","text":"北魏(5-6世纪)、唐代(7-8世纪)"},{"type":"dynasty_coverage","text":"北魏 → 东西魏 → 北齐 → 隋代 → 唐代 → 五代 → 北宋"}],"artifactHits":[]}'
+  - museum_id: luoyang
+    reason: 东都洛阳的宫城遗址、隋唐时期的陶瓷器皿与金银器物
+    evidence_json: '{"museumId":"luoyang","museumName":"洛阳博物馆","signals":[{"type":"core_period","text":"夏商周（二里头-东周王城）、东汉、魏晋北朝、隋唐（东都洛阳）"},{"type":"dynasty_coverage","text":"夏代（二里头）→ 商代 → 西周（成周）→ 东周（王城）→ 东汉 → 曹魏西晋 → 北魏 → 隋唐（东都）→ 五代"}],"artifactHits":[]}'
+  - museum_id: mogao
+    reason: 这家馆能看到唐朝精美的洞窟彩塑与壁画，包括盛唐弥勒大佛、涅槃像和初唐壁画等珍贵遗迹
+    evidence_json: '{"museumId":"mogao","museumName":"敦煌莫高窟","signals":[{"type":"artifact_period","text":"4 件文物"}],"artifactHits":[{"name":"第45窟彩塑","period":"盛唐"},{"name":"第220窟壁画","period":"初唐，642年"},{"name":"第158窟涅槃像","period":"中唐"},{"name":"第130窟弥勒大佛","period":"盛唐"}]}'
+  - museum_id: nanjing
+    reason: 院藏唐代鎏金人物花鸟纹银锅等长干寺、栖霞寺系窖藏遗珍，唐代板块该补
+  - museum_id: neimenggu
+    reason: 唐朝时期丝路贸易繁荣的胡人形象和金银工艺水平，在金银器"胡人牵驼"摆件上一览无余
+    evidence_json: '{"museumId":"neimenggu","museumName":"内蒙古博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"金银器\"胡人牵驼\"摆件","period":"唐代"}]}'
+  - museum_id: ningxia
+    reason: 见证唐朝胡旋舞文化的石刻墓门，展现中外文化交融的舞蹈艺术
+    evidence_json: '{"museumId":"ningxia","museumName":"宁夏回族自治区博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"胡旋舞石刻墓门","period":"唐代，盐池县出土"}]}'
+  - museum_id: qinghai
+    reason: 唐黄地联珠团窠对马锦展现了唐代高超的丝绸纺织工艺，手书羯摩经见证了唐代佛教文化的传播
+    evidence_json: '{"museumId":"qinghai","museumName":"青海省博物馆","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"唐黄地联珠团窠对马锦","period":"唐代"},{"name":"唐手书\"羯摩经\"","period":"唐代"}]}'
+  - museum_id: qingzhou
+    reason: 龙兴寺出土的唐代佛教造像和遗迹，展现唐朝佛教文化的繁荣与艺术成就
+    evidence_json: '{"museumId":"qingzhou","museumName":"青州博物馆","signals":[{"type":"dynasty_coverage","text":"史前 → 先秦 → 两汉（香山汉墓）→ 南北朝（龙兴寺/佛教高峰）→ 唐宋 → 明（衡王府/赵秉忠状元卷）→ 清"}],"artifactHits":[]}'
+  - museum_id: quanzhou
+    reason: 唐代海贸瓷器（长沙窑、越窑）与刺桐港兴起同步，唐代是泉州海交起点不能少
+  - museum_id: shaanxi
+    reason: 陕历博藏何家村窖藏(鎏金舞马衔杯壶/葡萄花鸟纹香囊)与懿德/章怀墓壁画，唐代是绝对核心
+  - museum_id: shandong
+    reason: 蝉冠菩萨像虽属北朝，但馆藏龙兴寺、四门塔系唐代造像是齐鲁佛造像高峰
+  - museum_id: shanghai
+    reason: 唐朝精美陶瓷、书画真迹和生活用器在馆内完整展示
+    evidence_json: '{"museumId":"shanghai","museumName":"上海博物馆","signals":[{"type":"core_period","text":"青铜器（商周）、书画（唐宋元明清）、陶瓷（全时期）"},{"type":"dynasty_coverage","text":"商周（青铜）、唐宋元明清（书画）、全时期（陶瓷）"}],"artifactHits":[]}'
+  - museum_id: shanxi-datong
+    reason: 唐代云州是大同前身，"天下大同"展专列唐云州过渡段
+  - museum_id: sichuan
+    reason: 这家馆能看到唐朝石刻造像的精美手法，馆藏《万佛寺石刻造像》200余件展现唐代佛教艺术的高超水平
+    evidence_json: '{"museumId":"sichuan","museumName":"四川博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"万佛寺石刻造像","period":"南朝梁至唐代，约200余件"}]}'
+  - museum_id: silk
+    reason: 中国丝绸博物馆能看到唐朝精美的蜡缬绢和立狮宝花纹锦，展现当时高超的丝绸染织工艺
+    evidence_json: '{"museumId":"silk","museumName":"中国丝绸博物馆","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"唐朵花纹蓝地蜡缬绢","period":"唐代"},{"name":"唐立狮宝花纹锦","period":"唐代"}]}'
+  - museum_id: suzhou
+    reason: 苏州博物馆可以看到唐朝时期的陶瓷器皿、宗教造像以及城市生活遗迹
+    evidence_json: '{"museumId":"suzhou","museumName":"苏州博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（草鞋山）→ 春秋（吴国）→ 六朝 → 唐宋 → 明清（苏州为经济文化中心）"}],"artifactHits":[]}'
+  - museum_id: taipei-gugong
+    reason: 可欣赏到唐代书法家怀素狂草自叙帖的笔势飞动与笔法意趣
+    evidence_json: '{"museumId":"taipei-gugong","museumName":"台北故宫博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"怀素《自叙帖》","period":"唐代"}]}'
+  - museum_id: wenzi
+    reason: 可欣赏唐朝楷书书法真迹和雕版印刷术发展成果
+    evidence_json: '{"museumId":"wenzi","museumName":"中国文字博物馆","signals":[{"type":"dynasty_coverage","text":"商（甲骨文）→ 西周（金文）→ 秦（小篆/统一文字）→ 汉（隶书）→ 魏晋（楷书）→ 唐宋元明清（印刷术）→ 当代"}],"artifactHits":[]}'
+  - museum_id: xinjiang
+    reason: 看唐朝丝绸之路西域段的陶器、玻璃器皿、钱币和驼队商人俑，了解当时繁荣的商业贸易网络
+    evidence_json: '{"museumId":"xinjiang","museumName":"新疆维吾尔自治区博物馆","signals":[{"type":"core_period","text":"青铜时代至唐代（丝绸之路西域段）"}],"artifactHits":[]}'
+  - museum_id: xizang
+    reason: 吐蕃桦树皮经书与梵文贝叶经为同期孤本，唐蕃文化交融的镇馆级见证
+  - museum_id: xuzhou
+    reason: 花马庄唐墓出土的人面鸟身俑「千秋万岁」取自葛洪《抱朴子》「千岁之鸟，万岁之禽」，造型奇绝
+    evidence_json: '{"museumId":"xuzhou","museumName":"徐州博物馆","signals":[{"type":"dynasty_coverage","text":"新石器（大墩子遗址）→ 先秦（宋国/楚国）→ 西汉（楚国，核心）→ 三国（徐州争夺战）→ 唐宋"}],"artifactHits":[]}'
+  - museum_id: yangzhou
+    reason: 唐代扬州作为国际贸易都会的繁荣景象，通过大运河遗存、陶瓷器皿和商业遗迹在馆内得到完整展示
+    evidence_json: '{"museumId":"yangzhou","museumName":"扬州博物馆 / 中国大运河博物馆","signals":[{"type":"core_period","text":"隋唐（大运河开凿、唐代扬州极盛）、清代（盐商文化）"},{"type":"dynasty_coverage","text":"春秋（吴王夫差开邗沟）→ 隋代（开凿大运河）→ 唐代（扬州为国际都会）→ 宋元 → 明清（盐商文化、扬州学派）"}],"artifactHits":[]}'
+  - museum_id: yunnan
+    reason: 在南诏时期的陶俑、铜器、瓷器等遗物上，能看到唐朝云南地区多民族融合的文明特征
+    evidence_json: '{"museumId":"yunnan","museumName":"云南省博物馆","signals":[{"type":"core_period","text":"古滇国（战国至西汉）、南诏/大理（唐宋）"}],"artifactHits":[]}'
+  - museum_id: zhejiang
+    reason: 落霞式"彩凤鸣岐"七弦琴是十六大镇馆之宝，唐代雅乐顶流
+three-kingdoms:
+  - museum_id: 232d4da5-550c-49eb-89e0-042c913657c8
+    reason: 成都武侯祠博物馆能看到蜀汉铭文青铜弩机等三国时期的精良武器工艺
+    evidence_json: '{"museumId":"232d4da5-550c-49eb-89e0-042c913657c8","museumName":"成都武侯祠博物馆","signals":[{"type":"core_period","text":"汉末三国（公元2世纪末—3世纪中）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"蜀汉铭文青铜弩机","period":"蜀汉（三国）"}]}'
+  - museum_id: anhui
+    reason: 马鞍山朱然墓出土的犀皮漆耳杯、季札挂剑图漆盘等东吴漆器，是国家禁止出境文物
+    evidence_json: '{"museumId":"anhui","museumName":"安徽博物院","signals":[{"type":"dynasty_coverage","text":"新石器时代（凌家滩）→ 商周（皖南铜矿）→ 春秋战国（楚、吴越）→ 三国（曹魏、东吴争夺）→ 宋元 → 明清（徽文化鼎盛）"}],"artifactHits":[]}'
+  - museum_id: chengdu
+    reason: 馆内蜀汉时期文物和遗迹展示了三国时期成都作为蜀汉政治中心的历史面貌
+    evidence_json: '{"museumId":"chengdu","museumName":"成都博物馆","signals":[{"type":"dynasty_coverage","text":"古蜀（宝墩文化/三星堆/金沙）→ 秦汉（蜀郡/老官山）→ 三国（蜀汉）→ 唐宋（繁荣期）→ 明清 → 近现代"}],"artifactHits":[]}'
+  - museum_id: jiangsu
+    reason: 可以看到东吴时期的青瓷器、砖瓦、陶俑等生活用品和建筑遗物
+    evidence_json: '{"museumId":"jiangsu","museumName":"南京六朝博物馆","signals":[{"type":"core_period","text":"六朝（222-589年：东吴、东晋、宋、齐、梁、陈）"},{"type":"dynasty_coverage","text":"东吴（222-280）→ 东晋（317-420）→ 南朝宋（420-479）→ 南朝齐（479-502）→ 南朝梁（502-557）→ 南朝陈（557-589）"}],"artifactHits":[]}'
+  - museum_id: luoyang
+    reason: 看曹魏西晋时期的青瓷器、陶俑、铜镜等生活用品和墓葬遗物
+    evidence_json: '{"museumId":"luoyang","museumName":"洛阳博物馆","signals":[{"type":"dynasty_coverage","text":"夏代（二里头）→ 商代 → 西周（成周）→ 东周（王城）→ 东汉 → 曹魏西晋 → 北魏 → 隋唐（东都）→ 五代"}],"artifactHits":[]}'
+  - museum_id: nanjing
+    reason: 南京博物院收藏有三国吴代的青瓷釉下彩羽人纹盘口壶，展示了当时高超的瓷器烧制工艺和神话人物纹饰
+    evidence_json: '{"museumId":"nanjing","museumName":"南京博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"青瓷釉下彩羽人纹盘口壶","period":"三国·吴"}]}'
+  - museum_id: xuzhou
+    reason: 看三国时期徐州争夺的兵器甲胄、陶俑兵阵和古城遗迹复原
+    evidence_json: '{"museumId":"xuzhou","museumName":"徐州博物馆","signals":[{"type":"dynasty_coverage","text":"新石器（大墩子遗址）→ 先秦（宋国/楚国）→ 西汉（楚国，核心）→ 三国（徐州争夺战）→ 唐宋"}],"artifactHits":[]}'
+  - museum_id: zhejiang
+    reason: 这家馆能看到三国时期的越窑青瓷器皿和烧制工艺遗存
+    evidence_json: '{"museumId":"zhejiang","museumName":"浙江省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（河姆渡、良渚）→ 春秋战国（越国）→ 三国两晋（越窑）→ 五代（吴越国）→ 宋代 → 元明清"}],"artifactHits":[]}'
+western-han:
+  - museum_id: 88f42955-6058-485d-95e4-c7711d85d326
+    reason: 西汉玉器工艺、彩绘陶俑和铜虎符等文物展现了当时的工艺水平、军事制度和统治体系
+    evidence_json: '{"museumId":"88f42955-6058-485d-95e4-c7711d85d326","museumName":"咸阳博物院","signals":[{"type":"artifact_period","text":"3 件文物"}],"artifactHits":[{"name":"汉代玉仙人奔马","period":"西汉"},{"name":"西汉彩绘指挥俑","period":"西汉"},{"name":"鎏金”鲁王”铜虎符","period":"西汉"}]}'
+  - museum_id: 8d05e910-ec8f-4d99-8cba-140f10bd9ef2
+    reason: 陶制武士俑、仕女俑、动物俑和官印展现了西汉时期的官僚体制、生活场景和陶俑工艺
+    evidence_json: '{"museumId":"8d05e910-ec8f-4d99-8cba-140f10bd9ef2","museumName":"汉景帝阳陵博物院","signals":[{"type":"core_period","text":"西汉（公元前153年—公元前126年）"},{"type":"dynasty_coverage","text":"西汉"},{"type":"artifact_period","text":"4 件文物"}],"artifactHits":[{"name":"武士俑","period":"西汉"},{"name":"仕女俑（侍女俑）","period":"西汉"},{"name":"动物俑","period":"西汉"},{"name":"宗正之印龟钮银印","period":"西汉"}]}'
+  - museum_id: 92a0de78-943a-412a-b064-45327f3c3573
+    reason: 镇馆凤凰山168号汉墓"遂"先生湿尸与告地书简牍，是早于马王堆的西汉肉身档案
+  - museum_id: 9bfb09d6-e2da-4572-8384-56d34d1f59fe
+    reason: 这家馆能看到西汉时期的升仙图和打鬼图壁画，展现汉代人的神话信仰世界
+    evidence_json: '{"museumId":"9bfb09d6-e2da-4572-8384-56d34d1f59fe","museumName":"洛阳古代艺术博物馆（洛阳古墓博物馆）","signals":[{"type":"core_period","text":"西汉至金代"},{"type":"dynasty_coverage","text":"西汉、北魏、唐、宋、金"},{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"卜千秋升仙图壁画","period":"西汉"},{"name":"打鬼图壁画","period":"西汉"}]}'
+  - museum_id: b27bc4cc-0ca1-4cf9-a934-9370b40c0732
+    reason: 在汉武帝陵园遗址上看西汉精美文物，欣赏《马踏匈奴》雕像和鎏金银竹节薰炉等珍品
+    evidence_json: '{"museumId":"b27bc4cc-0ca1-4cf9-a934-9370b40c0732","museumName":"茂陵博物馆","signals":[{"type":"core_period","text":"汉武帝时期（西汉）"},{"type":"dynasty_coverage","text":"西汉"},{"type":"artifact_period","text":"5 件文物"}],"artifactHits":[{"name":"一级文物","period":"西汉"},{"name":"二级文物","period":"西汉"},{"name":"三级文物","period":"西汉"},{"name":"马踏匈奴","period":"西汉"},{"name":"鎏金银竹节薰炉","period":"西汉"}]}'
+  - museum_id: beilin
+    reason: 碑林藏汉《仓颉庙碑》《合阳令曹全碑》系列汉碑，西汉段该立起来
+  - museum_id: chengdu
+    reason: 这家馆能看到西汉时期的织机模型、经穴漆人和医学竹简，展现当时的纺织、医学和人体穴位知识
+    evidence_json: '{"museumId":"chengdu","museumName":"成都博物馆","signals":[{"type":"artifact_period","text":"3 件文物"}],"artifactHits":[{"name":"老官山汉墓织机模型","period":"西汉，约前1世纪"},{"name":"经穴漆人","period":"西汉"},{"name":"医简","period":"西汉"}]}'
+  - museum_id: chongqing
+    reason: 偏将军金印两汉仅存十余枚，西汉段镇馆级别不可缺
+  - museum_id: dingzhou
+    reason: 看西汉中山国的错金银铜车伞铤和诸侯国遗迹
+    evidence_json: '{"museumId":"dingzhou","museumName":"定州博物馆","signals":[{"type":"core_period","text":"西汉中山国、北宋（定窑白瓷、静志寺/净众院塔基地宫）"},{"type":"dynasty_coverage","text":"西汉（中山国）、东汉、北朝、隋唐、北宋（定窑）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"西汉错金银铜车伞铤","period":"西汉"}]}'
+  - museum_id: gansu
+    reason: 甘肃省博物馆能看到西汉彩绘木博戏俑和绢底平绣人像，了解当时的娱乐和纺织工艺
+    evidence_json: '{"museumId":"gansu","museumName":"甘肃省博物馆","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"彩绘木博戏俑","period":"西汉，武威磨嘴子汉墓出土"},{"name":"绢底平绣人像","period":"西汉，武威磨嘴子汉墓"}]}'
+  - museum_id: guangdong
+    reason: 可在馆内看到西汉时期的铜提筒等生活用器，了解当时的日常器物文化
+    evidence_json: '{"museumId":"guangdong","museumName":"广东省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"西汉铜提筒","period":"西汉"}]}'
+  - museum_id: guangxi
+    reason: 可见西汉铜鼓、铜凤灯、铜牛等精美青铜器工艺
+    evidence_json: '{"museumId":"guangxi","museumName":"广西壮族自治区博物馆","signals":[{"type":"artifact_period","text":"3 件文物"}],"artifactHits":[{"name":"翔鹭纹铜鼓","period":"战国至西汉"},{"name":"西汉羽纹铜凤灯","period":"西汉"},{"name":"西汉铜牛","period":"西汉"}]}'
+  - museum_id: guobo
+    reason: 国博藏击鼓说唱俑(东汉)同序列还有西汉金缕玉衣残片与错金银云纹犀尊，西汉重器不该缺
+  - museum_id: haihunhou
+    reason: 这家馆能看到西汉侯国的完整遗址和出土的金器、玉器、漆器等贵族墓葬文物
+    evidence_json: '{"museumId":"haihunhou","museumName":"南昌汉代海昏侯国遗址博物馆","signals":[{"type":"core_period","text":"西汉（公元前1世纪）"},{"type":"dynasty_coverage","text":"西汉（核心）"}],"artifactHits":[]}'
+  - museum_id: hainan
+    reason: 汉代弦纹双耳铜釜（十大镇馆之宝）见证伏波将军开琼，西汉是海南纳入版图节点
+  - museum_id: hebei
+    reason: 看西汉贵族的金缕玉衣、长信宫灯等精美葬品，感受汉代工艺与审美
+    evidence_json: '{"museumId":"hebei","museumName":"河北博物院","signals":[{"type":"core_period","text":"西汉（满城汉墓）、战国（中山国）"},{"type":"dynasty_coverage","text":"战国、西汉、北朝、唐、宋、元"},{"type":"artifact_period","text":"4 件文物"}],"artifactHits":[{"name":"西汉金缕玉衣","period":"西汉，约前113年"},{"name":"长信宫灯","period":"西汉，约前172年前后"},{"name":"错金博山炉","period":"西汉"},{"name":"透雕双龙高钮谷纹白玉壁","period":"西汉"}]}'
+  - museum_id: henan
+    reason: 可以看到西汉时期精美的四神云气图漆画艺术
+    evidence_json: '{"museumId":"henan","museumName":"河南博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"四神云气图","period":"西汉"}]}'
+  - museum_id: hubei
+    reason: 江陵凤凰山汉墓简牍与漆器是西汉楚地遗珍，馆藏体系绕不开的一环
+  - museum_id: hunan
+    reason: 馆藏马王堆文物展示西汉贵族的精美漆器、丝绸衣物、帛书文献和完整遗体
+    evidence_json: '{"museumId":"hunan","museumName":"湖南省博物馆（湖南博物院）","signals":[{"type":"core_period","text":"西汉（马王堆）、商周青铜"},{"type":"dynasty_coverage","text":"西汉（马王堆）为核心，商周青铜器（皿方罍等），近现代湖湘文化"},{"type":"artifact_period","text":"5 件文物"}],"artifactHits":[{"name":"辛追夫人遗体","period":"西汉，约前163年下葬"},{"name":"T形帛画","period":"西汉"},{"name":"素纱襌衣","period":"西汉"},{"name":"马王堆帛书","period":"西汉"},{"name":"漆棺","period":"西汉"}]}'
+  - museum_id: jiangxi
+    reason: 馆内陈列海昏侯墓出土的金器、玉器、漆器等珍贵文物，复原展示西汉列侯的生活场景和埋藏制度
+    evidence_json: '{"museumId":"jiangxi","museumName":"江西省博物馆","signals":[{"type":"core_period","text":"西汉（海昏侯墓）、宋元明（景德镇瓷器）、商代（新干大洋洲）"},{"type":"dynasty_coverage","text":"商代（新干大洋洲）→ 西汉（海昏侯）→ 东晋南朝 → 唐宋（洪州窑、景德镇）→ 元明清（景德镇御窑）"}],"artifactHits":[]}'
+  - museum_id: luoyang
+    reason: 烧沟汉墓群+珍宝馆西汉玉璧、彩绘陶器，洛阳两汉墓葬的核心成果
+  - museum_id: nanjing
+    reason: 看西汉最精美的埋藏工艺品，这件金缕玉衣用细金线串联千枚玉片，是贵族身份的象征
+    evidence_json: '{"museumId":"nanjing","museumName":"南京博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"金缕玉衣","period":"西汉"}]}'
+  - museum_id: nanyue
+    reason: 南越王博物院有西汉南越国五代王的墓葬遗址及金器、陶器等丰富馆藏，展现了岭南地区西汉时期的政治中心和物质文化
+    evidence_json: '{"museumId":"nanyue","museumName":"南越王博物院","signals":[{"type":"dynasty_coverage","text":"秦代（赵佗南征）→ 西汉（南越国五代王）→ 东汉至六朝（岭南开发）"}],"artifactHits":[]}'
+  - museum_id: qingzhou
+    reason: 在西汉遗址出土的"宜子孙"玉璧见证了当时人们对美好生活的祝愿
+    evidence_json: '{"museumId":"qingzhou","museumName":"青州博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"东汉\"宜子孙\"玉璧","period":"西汉，2006年发掘"}]}'
+  - museum_id: shaanxi
+    reason: 陕西历史博物馆里能看到西汉皇后之玺等精美玉石印章和贵族用器
+    evidence_json: '{"museumId":"shaanxi","museumName":"陕西历史博物馆","signals":[{"type":"dynasty_coverage","text":"西周、秦、西汉、唐为核心，上溯蓝田人，下至明清"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"皇后之玺","period":"西汉"}]}'
+  - museum_id: shandong
+    reason: 临沂银雀山汉简出土《孙膑兵法》，澄清孙武孙膑千年悬案的镇馆国宝
+  - museum_id: sichuan
+    reason: 川博藏成都凤凰山、新都马家山西汉画像砖与摇钱树座，西汉物证不薄
+  - museum_id: silk
+    reason: 馆藏新疆楼兰出土"延年益寿长葆子孙"汉锦，是讲述丝路源头的镇馆级实物
+  - museum_id: taipei-gugong
+    reason: 玉舞人、玉角形杯等汉玉与金缕玉衣残片，把汉代厚葬美学说尽
+  - museum_id: xinjiang
+    reason: 张骞通西域以来的丝路织物、汉简与漆木器，把西域都护府讲得鲜活
+  - museum_id: xuzhou
+    reason: 看西汉诸侯王陵墓出土的金缕玉衣、玉龙佩、铜牛灯等精美文物，感受彭城王室的奢华生活
+    evidence_json: '{"museumId":"xuzhou","museumName":"徐州博物馆","signals":[{"type":"core_period","text":"西汉（楚国/彭城，诸侯王陵墓群）"},{"type":"dynasty_coverage","text":"新石器（大墩子遗址）→ 先秦（宋国/楚国）→ 西汉（楚国，核心）→ 三国（徐州争夺战）→ 唐宋"},{"type":"artifact_period","text":"5 件文物"}],"artifactHits":[{"name":"金缕玉衣","period":"西汉，约前154年"},{"name":"S形玉龙佩","period":"西汉"},{"name":"银缕玉衣","period":"西汉"},{"name":"铜牛灯","period":"西汉"},{"name":"彩绘兵马俑","period":"西汉"}]}'
+  - museum_id: yangzhou
+    reason: 高邮天山广陵王刘胥"黄肠题凑"是西汉诸侯王陵代表
+  - museum_id: yunnan
+    reason: 西汉古滇国的青铜贮贝器和金制印章，展现了这一南方古国独特的青铜文明和等级制度
+    evidence_json: '{"museumId":"yunnan","museumName":"云南省博物馆","signals":[{"type":"core_period","text":"古滇国（战国至西汉）、南诏/大理（唐宋）"},{"type":"dynasty_coverage","text":"旧石器（元谋人，距今约170万年）→ 新石器 → 青铜时代（古滇国，战国至西汉）→ 东汉至隋 → 南诏（唐）→ 大理（宋）→ 元明清（改土归流）→ 近现代（滇越铁路/西南联大/抗战）"},{"type":"artifact_period","text":"3 件文物"}],"artifactHits":[{"name":"四牛鎏金骑士贮贝器","period":"西汉·古滇，石寨山出土"},{"name":"战争场面叠鼓形贮贝器","period":"西汉·古滇"},{"name":"滇王金印","period":"西汉，复制品/相关文物"}]}'
+western-zhou:
+  - museum_id: 054543c3-1850-471d-be28-e611f77ba9c4
+    reason: 可以看到西周青铜器的演变，从《何尊》的早期风格到《卫鼎》《逨盘》的中晚期工艺，展现了西周青铜铸造技术的发展
+    evidence_json: '{"museumId":"054543c3-1850-471d-be28-e611f77ba9c4","museumName":"宝鸡青铜器博物院","signals":[{"type":"core_period","text":"西周至秦"},{"type":"artifact_period","text":"3 件文物"}],"artifactHits":[{"name":"何尊","period":"西周早期"},{"name":"逨盘","period":"西周晚期"},{"name":"卫鼎","period":"西周中期"}]}'
+  - museum_id: 2e7ff077-be9c-488e-bbaf-2a5796c9cc2f
+    reason: 邯郸市博物馆藏有龟台遗址出土的西周陶盆、陶罐，是赵地早期农耕生活的实物
+    evidence_json: '{"museumId":"2e7ff077-be9c-488e-bbaf-2a5796c9cc2f","museumName":"邯郸市博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代至近现代，涵盖磁山文化、夏代、商代、西周、东周（赵）、两汉、北朝、宋、明清各时期"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"夏商周陶鬲组","period":"夏代、商代、西周"}]}'
+  - museum_id: 31f1ad8e-c4de-4a5e-aafa-c51656c8a1a7
+    reason: 馆藏西周青铜器和陶器展示了那个时代的礼乐文化和手工艺水平
+    evidence_json: '{"museumId":"31f1ad8e-c4de-4a5e-aafa-c51656c8a1a7","museumName":"曲阜孔子博物馆","signals":[{"type":"dynasty_coverage","text":"西周至民国"}],"artifactHits":[]}'
+  - museum_id: 4dc89822-84e4-4b0a-91dd-798aa762981b
+    reason: 这家馆能看到西周精美的青铜器，包括折觥、史墙盘、三年疢壶等铭文重器
+    evidence_json: '{"museumId":"4dc89822-84e4-4b0a-91dd-798aa762981b","museumName":"宝鸡周原博物院","signals":[{"type":"core_period","text":"西周"},{"type":"dynasty_coverage","text":"西周及以前"},{"type":"artifact_period","text":"3 件文物"}],"artifactHits":[{"name":"折觥","period":"西周"},{"name":"史墙盘","period":"西周"},{"name":"三年疢壶","period":"西周"}]}'
+  - museum_id: 52857eb0-ccb7-46af-a887-79501e299e42
+    reason: 馆藏西周青铜器和编钟乐器，展现西周礼乐文明和手工业技艺
+    evidence_json: '{"museumId":"52857eb0-ccb7-46af-a887-79501e299e42","museumName":"随州博物馆","signals":[{"type":"core_period","text":"西周、两周（约公元前11世纪—公元前221年）"}],"artifactHits":[]}'
+  - museum_id: guangdong
+    reason: 镇馆兽面纹青铜盉，是岭南融入华夏礼制最早的青铜见证
+  - museum_id: guobo
+    reason: 可以看到西周康王的青铜重器大盂鼎和虢季子白盘等精美铜器
+    evidence_json: '{"museumId":"guobo","museumName":"中国国家博物馆","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"大盂鼎","period":"西周康王"},{"name":"虢季子白盘","period":"西周"}]}'
+  - museum_id: henan
+    reason: 能看到西周时期的青铜礼器、陶器生活用具和列国分封的诸侯国文物遗存
+    evidence_json: '{"museumId":"henan","museumName":"河南博物院","signals":[{"type":"dynasty_coverage","text":"新石器(裴李岗、仰韶)、夏、商、西周、春秋为核心,唐宋亦有亮点"}],"artifactHits":[]}'
+  - museum_id: jinsha
+    reason: 金沙遗址博物馆能看到西周时期的陶器、青铜器和建筑遗迹，了解古蜀文明的政治社会风貌
+    evidence_json: '{"museumId":"jinsha","museumName":"金沙遗址博物馆","signals":[{"type":"dynasty_coverage","text":"商代晚期 → 西周 → 春秋早期"}],"artifactHits":[]}'
+  - museum_id: luoyang
+    reason: 在出土的青铜器和陶器中看到建立周朝的礼乐制度和生活场景
+    evidence_json: '{"museumId":"luoyang","museumName":"洛阳博物馆","signals":[{"type":"dynasty_coverage","text":"夏代（二里头）→ 商代 → 西周（成周）→ 东周（王城）→ 东汉 → 曹魏西晋 → 北魏 → 隋唐（东都）→ 五代"}],"artifactHits":[]}'
+  - museum_id: nanjing
+    reason: 透过工艺精细的玉饰件，欣赏西周贵族的审美与雕刻技艺水平
+    evidence_json: '{"museumId":"nanjing","museumName":"南京博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"透雕人鸟兽玉饰件","period":"西周"}]}'
+  - museum_id: neimenggu
+    reason: 西周许季姜青铜簋展示了当时的青铜铸造工艺与贵族身份象征
+    evidence_json: '{"museumId":"neimenggu","museumName":"内蒙古博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"许季姜青铜簋","period":"西周中期"}]}'
+  - museum_id: shaanxi
+    reason: 可以看到西周贵族祭祀礼仪的五祀卫鼎和相关的青铜器文物
+    evidence_json: '{"museumId":"shaanxi","museumName":"陕西历史博物馆","signals":[{"type":"dynasty_coverage","text":"西周、秦、西汉、唐为核心，上溯蓝田人，下至明清"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"五祀卫鼎","period":"西周共王"}]}'
+  - museum_id: shandong
+    reason: 馆藏西周青铜器颂簋铭文记录了古代礼仪制度和贵族身份
+    evidence_json: '{"museumId":"shandong","museumName":"山东博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（大汶口、龙山文化）、商、西周、春秋战国（齐鲁）、汉、北朝、明"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"颂簋","period":"西周晚期"}]}'
+  - museum_id: shanghai
+    reason: 看西周青铜器工艺的高超，馆藏大克鼎、晋侯稣钟等重器展现礼乐文明
+    evidence_json: '{"museumId":"shanghai","museumName":"上海博物馆","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"大克鼎","period":"西周孝王"},{"name":"晋侯稣钟","period":"西周厉王"}]}'
+  - museum_id: shanxi
+    reason: 曲沃晋侯墓地九组十九座晋国早期国君与夫人墓的青铜重器尽藏于此，镇馆之宝晋侯鸟尊（晋国宗庙礼器）+ 晋侯酥钟 + 兔形尊，看尽周王朝东方诸侯的辉煌
+  - museum_id: taipei-gugong
+    reason: 可观赏西周晚期铜器铭文艺术，《毛公鼎》与《散氏盘》展现周代金文书法与制作工艺
+    evidence_json: '{"museumId":"taipei-gugong","museumName":"台北故宫博物院","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"毛公鼎","period":"西周晚期"},{"name":"散氏盘","period":"西周晚期"}]}'
+  - museum_id: tianjin
+    reason: 天津博物馆能看到西周太保鼎，这件青铜器展现了西周贵族的身份标志和铸造工艺水平
+    evidence_json: '{"museumId":"tianjin","museumName":"天津博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"西周太保鼎","period":"西周早期"}]}'
+  - museum_id: wenzi
+    reason: 在这家馆能看到西周时期铸刻在青铜器上的金文铭文
+    evidence_json: '{"museumId":"wenzi","museumName":"中国文字博物馆","signals":[{"type":"dynasty_coverage","text":"商（甲骨文）→ 西周（金文）→ 秦（小篆/统一文字）→ 汉（隶书）→ 魏晋（楷书）→ 唐宋元明清（印刷术）→ 当代"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"青铜器铭文","period":"西周"}]}'
+wudai:
+  - museum_id: jingdezhen
+    reason: 这家馆能看到五代南方白瓷的起源和早期瓷业发展的珍贵遗物标本
+    evidence_json: '{"museumId":"jingdezhen","museumName":"景德镇中国陶瓷博物馆","signals":[{"type":"dynasty_coverage","text":"五代（南方白瓷兴起）→ 宋代（影青瓷/青白瓷）→ 元代（青花瓷诞生）→ 明代（御窑厂建立、五彩斗彩）→ 清代（粉彩珐琅彩、瓷器巅峰）"}],"artifactHits":[]}'
+  - museum_id: kaifeng
+    reason: 五代十国时期，开封作为后梁、后晋、后汉、后周四朝都城，这里展出了反映五代皇都繁荣的陶瓷、建筑遗迹和生活用品文物
+    evidence_json: '{"museumId":"kaifeng","museumName":"开封博物馆","signals":[{"type":"dynasty_coverage","text":"战国（魏国大梁）→ 唐代（汴州）→ 五代（后梁、后晋、后汉、后周都城）→ 北宋（东京）→ 金代（南京） → 明清"}],"artifactHits":[]}'
+  - museum_id: longmen
+    reason: 龙门石窟保存了五代时期的石刻造像和佛教艺术遗迹
+    evidence_json: '{"museumId":"longmen","museumName":"龙门石窟","signals":[{"type":"dynasty_coverage","text":"北魏 → 东西魏 → 北齐 → 隋代 → 唐代 → 五代 → 北宋"}],"artifactHits":[]}'
+  - museum_id: luoyang
+    reason: 洛阳博物馆展示了五代时期的陶瓷器皿、生活用具和宗教文物，让游客了解这个朝代的工艺水平和日常生活
+    evidence_json: '{"museumId":"luoyang","museumName":"洛阳博物馆","signals":[{"type":"dynasty_coverage","text":"夏代（二里头）→ 商代 → 西周（成周）→ 东周（王城）→ 东汉 → 曹魏西晋 → 北魏 → 隋唐（东都）→ 五代"}],"artifactHits":[]}'
+  - museum_id: mogao
+    reason: 五代时期开凿的洞窟里能看到精美的壁画和彩塑佛像
+    evidence_json: '{"museumId":"mogao","museumName":"敦煌莫高窟","signals":[{"type":"dynasty_coverage","text":"十六国、北魏、西魏、北周、隋、唐、五代、宋、西夏、元"}],"artifactHits":[]}'
+  - museum_id: shanghai
+    reason: 五代越窑青瓷莲花碗展现了当时瓷器烧造的高超工艺和审美水平
+    evidence_json: '{"museumId":"shanghai","museumName":"上海博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"越窑青瓷莲花碗","period":"五代"}]}'
+  - museum_id: suzhou
+    reason: 苏州博物馆藏虎丘塔出土的五代秘色瓷莲花碗，是吴越国秘色瓷标准器
+    evidence_json: '{"museumId":"suzhou","museumName":"苏州博物馆","signals":[{"type":"core_period","text":"春秋（吴国）、五代宋元（丝织、书画）、明清（文人文化）"}],"artifactHits":[]}'
+  - museum_id: taipei-gugong
+    reason: 院藏赵幹《江行初雪图》《丹枫呦鹿图》等南唐画迹，是五代山水的传世绝唱
+  - museum_id: zhejiang
+    reason: 馆藏吴越国铜镜、瓷器等文物，展现五代十国时期吴越国的政治经济风貌
+    evidence_json: '{"museumId":"zhejiang","museumName":"浙江省博物馆","signals":[{"type":"core_period","text":"新石器时代（良渚文化）、五代十国（吴越国）、宋代"}],"artifactHits":[]}'
+xia:
+  - museum_id: 2e7ff077-be9c-488e-bbaf-2a5796c9cc2f
+    reason: 馆内陶鬲组展示了夏代烹饪器皿的演变，可观看远古先民的生活用具
+    evidence_json: '{"museumId":"2e7ff077-be9c-488e-bbaf-2a5796c9cc2f","museumName":"邯郸市博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代至近现代，涵盖磁山文化、夏代、商代、西周、东周（赵）、两汉、北朝、宋、明清各时期"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"夏商周陶鬲组","period":"夏代、商代、西周"}]}'
+  - museum_id: erlitou
+    reason: 这家馆展示了夏朝中晚期的宫殿基址、青铜器和陶器等遗物，能看到早期文明的政治和生活面貌
+    evidence_json: '{"museumId":"erlitou","museumName":"二里头夏都遗址博物馆","signals":[{"type":"core_period","text":"夏代中晚期（二里头文化，约前1750-前1530年）"},{"type":"dynasty_coverage","text":"夏代中晚期（二里头文化一至四期，约前1750-前1530年）"}],"artifactHits":[]}'
+  - museum_id: henan
+    reason: 河南博物院馆藏夏商周文物展示了中原文明起源，可见夏朝陶器、玉器等早期文明遗存
+    evidence_json: '{"museumId":"henan","museumName":"河南博物院","signals":[{"type":"core_period","text":"夏商周(中原文明核心区)"}],"artifactHits":[]}'
+  - museum_id: luoyang
+    reason: 这家馆能看到夏朝二里头遗址的青铜器、陶器和宫殿遗迹
+    evidence_json: '{"museumId":"luoyang","museumName":"洛阳博物馆","signals":[{"type":"dynasty_coverage","text":"夏代（二里头）→ 商代 → 西周（成周）→ 东周（王城）→ 东汉 → 曹魏西晋 → 北魏 → 隋唐（东都）→ 五代"}],"artifactHits":[]}'
+  - museum_id: shanxi
+    reason: 夏县东下冯遗址出土的二里头文化器物群——陶器、石器、铜镞、卜骨，与陶寺晚期遗存共同勾勒出夏代晋南的真实图景
+yuan:
+  - museum_id: 6d90c01d-efe7-45e5-a39a-e28a10298fa2
+    reason: 大雄殿元代夹纻干漆十八罗汉是国内孤品，失传宋后的轻盈造像奇迹
+  - museum_id: anhui
+    reason: 安徽博物院藏合肥孔庙元代窖藏的章仲英造金杯与范文虎墓缠枝纹金发冠
+    evidence_json: '{"museumId":"anhui","museumName":"安徽博物院","signals":[{"type":"dynasty_coverage","text":"新石器时代（凌家滩）→ 商周（皖南铜矿）→ 春秋战国（楚、吴越）→ 三国（曹魏、东吴争夺）→ 宋元 → 明清（徽文化鼎盛）"}],"artifactHits":[]}'
+  - museum_id: chongqing
+    reason: 馆藏展品涵盖元朝时期的陶瓷器物和生活用具，展现了元代巴蜀地区的物质文化与社会风貌
+    evidence_json: '{"museumId":"chongqing","museumName":"重庆中国三峡博物馆（重庆博物馆）","signals":[{"type":"dynasty_coverage","text":"旧石器时代 → 先秦巴国 → 秦汉 → 六朝 → 唐宋 → 元明清（明玉珍大夏国）→ 近现代（抗战首都）"}],"artifactHits":[]}'
+  - museum_id: f72fc18f-cdc2-4ae8-8e68-28d3521eb4ea
+    reason: 在祖庙原址的地层中能看到元朝时期的陶瓷片和生活遗物
+    evidence_json: '{"museumId":"f72fc18f-cdc2-4ae8-8e68-28d3521eb4ea","museumName":"佛山市祖庙博物馆","signals":[{"type":"core_period","text":"北宋元丰年间（1078—1085年）至清末民初"}],"artifactHits":[]}'
+  - museum_id: fujian
+    reason: 能看到元朝海上丝绸之路繁荣时期的瓷器贸易遗物与海外贸易相关文物
+    evidence_json: '{"museumId":"fujian","museumName":"福建博物院","signals":[{"type":"core_period","text":"秦汉（闽越国）、宋元明（海上丝绸之路）、近代（船政文化）"},{"type":"dynasty_coverage","text":"新石器时代（昙石山文化）→ 秦汉（闽越国）→ 唐宋（海上丝绸之路兴盛）→ 宋代（建窑）→ 元明清（德化窑、海外贸易）→ 近代（福建船政）"}],"artifactHits":[]}'
+  - museum_id: gansu
+    reason: 甘肃省博物馆藏漳县汪世显家族墓出土的元代莲花形玻璃托盏，蓝色玻璃配莲花造型
+    evidence_json: '{"museumId":"gansu","museumName":"甘肃省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"莲花形玻璃托盏","period":"元代，漳县汪世显家族墓出土"}]}'
+  - museum_id: guangdong
+    reason: 看元代广州港遗留的铜钟，感受当年海上丝绸之路的繁荣贸易
+    evidence_json: '{"museumId":"guangdong","museumName":"广东省博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"元代广州港铜钟","period":"元代"}]}'
+  - museum_id: hainan
+    reason: 海南省博物馆藏西沙石屿出水元青花，印证汪大渊《岛夷志略》记录的元代南海贸易
+    evidence_json: '{"museumId":"hainan","museumName":"海南省博物馆","signals":[{"type":"core_period","text":"宋元明（南海水下考古）"}],"artifactHits":[]}'
+  - museum_id: hebei
+    reason: 镇馆青花釉里红开光贴花盖罐为元青花传世孤品，红蓝交辉是元代窑火的巅峰
+  - museum_id: henan
+    reason: 河南院建筑原型即登封元代观星台，9-10展厅常设宋金元
+  - museum_id: hubei
+    reason: 这家馆收藏有元朝时期的陶瓷、青花瓷器和官府文献等精品文物，展现了元代的经济贸易和手工业成就
+    evidence_json: '{"museumId":"hubei","museumName":"湖北省博物馆","signals":[{"type":"dynasty_coverage","text":"春秋战国（楚国、曾国）为核心，秦（云梦秦简）、元明亦有精品"}],"artifactHits":[]}'
+  - museum_id: jiangxi
+    reason: 江西省博物馆展示元朝景德镇御窑瓷器和元代瓷业遗迹
+    evidence_json: '{"museumId":"jiangxi","museumName":"江西省博物馆","signals":[{"type":"core_period","text":"西汉（海昏侯墓）、宋元明（景德镇瓷器）、商代（新干大洋洲）"},{"type":"dynasty_coverage","text":"商代（新干大洋洲）→ 西汉（海昏侯）→ 东晋南朝 → 唐宋（洪州窑、景德镇）→ 元明清（景德镇御窑）"}],"artifactHits":[]}'
+  - museum_id: jilin
+    reason: 可以看到元代瓷器工艺的杰出成就，馆藏的青花云龙纹高足碗展现了元代瓷器的精湛烧制技术
+    evidence_json: '{"museumId":"jilin","museumName":"吉林省博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"青花云龙纹高足碗","period":"元代"}]}'
+  - museum_id: jingdezhen
+    reason: 可以看到元代青花瓷的诞生和发展，以及当时景德镇窑场的烧造技艺
+    evidence_json: '{"museumId":"jingdezhen","museumName":"景德镇中国陶瓷博物馆","signals":[{"type":"dynasty_coverage","text":"五代（南方白瓷兴起）→ 宋代（影青瓷/青白瓷）→ 元代（青花瓷诞生）→ 明代（御窑厂建立、五彩斗彩）→ 清代（粉彩珐琅彩、瓷器巅峰）"}],"artifactHits":[]}'
+  - museum_id: liaoning
+    reason: 看馆藏元代书画名迹，领略文人墨客的笔墨风韵与艺术境界
+    evidence_json: '{"museumId":"liaoning","museumName":"辽宁省博物馆","signals":[{"type":"core_period","text":"古代书画（唐宋元明清全序列）、辽金时期"}],"artifactHits":[]}'
+  - museum_id: mogao
+    reason: 莫高窟465窟藏密曼荼罗+149/463窟，元代藏汉密教合流的孤本现场
+  - museum_id: nanjing
+    reason: 元青花萧何月下追韩信梅瓶是公认院藏头牌，元代缺位等于自废武功
+  - museum_id: neimenggu
+    reason: 内蒙古博物院有元代铜权等衡量工具，体现当时的商业贸易体系和度量制度
+    evidence_json: '{"museumId":"neimenggu","museumName":"内蒙古博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"元代铜权","period":"元代"}]}'
+  - museum_id: ningxia
+    reason: 馆内陈列元朝丝绸之路时期宁夏作为重要驿站的陶瓷器和商业遗存
+    evidence_json: '{"museumId":"ningxia","museumName":"宁夏回族自治区博物馆","signals":[{"type":"dynasty_coverage","text":"旧石器时代（水洞沟）→ 新石器（菜园文化/马家窑/齐家）→ 春秋战国（戎族青铜器）→ 秦汉 → 北朝隋唐（丝路重镇固原、灵州）→ 西夏 → 元明清"}],"artifactHits":[]}'
+  - museum_id: qinghai
+    reason: 可以通过此馆的藏传佛教文物和唐蕃古道遗存，了解元朝时期青海地区的宗教文化特征与丝绸之路商业交往
+    evidence_json: '{"museumId":"qinghai","museumName":"青海省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器（马家窑/齐家/宗日文化）→ 青铜时代（卡约/辛店/诺木洪文化）→ 秦汉（河湟设郡）→ 南北朝隋唐（吐谷浑/唐蕃古道）→ 宋元明清（藏传佛教）"}],"artifactHits":[]}'
+  - museum_id: quanzhou
+    reason: 元朝泉州港的基督教传播见证，馆中珍藏景教石刻诠释中西文化交融的历史
+    evidence_json: '{"museumId":"quanzhou","museumName":"泉州海外交通史博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"基督教（景教）石刻","period":"元代"}]}'
+  - museum_id: shaanxi
+    reason: 陕历博藏元代青花与西安元墓出土文物，元代专题完整
+  - museum_id: shanghai
+    reason: 上海博物馆陈列着元朝的瓷器精品和书画佳作，展现了当时的审美与工艺水平
+    evidence_json: '{"museumId":"shanghai","museumName":"上海博物馆","signals":[{"type":"core_period","text":"青铜器（商周）、书画（唐宋元明清）、陶瓷（全时期）"},{"type":"dynasty_coverage","text":"商周（青铜）、唐宋元明清（书画）、全时期（陶瓷）"}],"artifactHits":[]}'
+  - museum_id: shanxi
+    reason: 元代山西寺观壁画粉本与平阳金石学传统器物，加金代墓葬的延续脉络，是看元代北方民间艺术与多民族信仰最完整的省级馆
+  - museum_id: shanxi-datong
+    reason: 元代大同路文物+元铜仕女像，元代是西京延续节点
+  - museum_id: sichuan
+    reason: 可以看到元朝官府印章、瓷器、佛教造像等丰富文物，展现元代四川地区的政治、经济和宗教文化
+    evidence_json: '{"museumId":"sichuan","museumName":"四川博物院","signals":[{"type":"dynasty_coverage","text":"新石器 → 古蜀（三星堆/金沙）→ 秦汉（画像砖/陶俑）→ 南朝至唐（万佛寺石刻/佛教造像）→ 宋元明清 → 近现代（抗战/红军长征）"}],"artifactHits":[]}'
+  - museum_id: silk
+    reason: 馆内展陈的元代菱地飞鸟纹绫海青衣，展现了当时高超的丝绸织造工艺和贵族服饰风貌
+    evidence_json: '{"museumId":"silk","museumName":"中国丝绸博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"元代菱地飞鸟纹绫海青衣","period":"元代"}]}'
+  - museum_id: suzhou
+    reason: 苏州博物馆展出元朝丝织品和书画，可以看到当时的丝绸工艺和文人艺术创作
+    evidence_json: '{"museumId":"suzhou","museumName":"苏州博物馆","signals":[{"type":"core_period","text":"春秋（吴国）、五代宋元（丝织、书画）、明清（文人文化）"}],"artifactHits":[]}'
+  - museum_id: taipei-gugong
+    reason: 可以看到元代大师黄公望创作的《富春山居图》真迹，领略千年山水画的笔墨意蕴
+    evidence_json: '{"museumId":"taipei-gugong","museumName":"台北故宫博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"黄公望《富春山居图》（无用师卷）","period":"元代"}]}'
+  - museum_id: tianjin
+    reason: 欣赏元青花釉里红开光贴花盖罐的精妙工艺和装饰技法
+    evidence_json: '{"museumId":"tianjin","museumName":"天津博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"元青花釉里红开光贴花盖罐","period":"元代，14世纪"}]}'
+  - museum_id: wenzi
+    reason: 看到元朝刻版印刷术的发展和楷书书法的成熟应用
+    evidence_json: '{"museumId":"wenzi","museumName":"中国文字博物馆","signals":[{"type":"dynasty_coverage","text":"商（甲骨文）→ 西周（金文）→ 秦（小篆/统一文字）→ 汉（隶书）→ 魏晋（楷书）→ 唐宋元明清（印刷术）→ 当代"}],"artifactHits":[]}'
+  - museum_id: xinjiang
+    reason: 元朝时期新疆地区的回鹘文献、瓷器和丝路贸易品
+    evidence_json: '{"museumId":"xinjiang","museumName":"新疆维吾尔自治区博物馆","signals":[{"type":"dynasty_coverage","text":"青铜时代（小河/楼兰）→ 汉（西域都护府，前60年）→ 魏晋南北朝（高昌/龟兹）→ 唐（安西都护府）→ 宋元（回鹘/西辽）→ 清（新疆建省）"}],"artifactHits":[]}'
+  - museum_id: xizang
+    reason: 可以看到元朝统治下藏传佛教艺术的精美佛像、唐卡和宗教法器等文物珍品
+    evidence_json: '{"museumId":"xizang","museumName":"西藏博物馆","signals":[{"type":"core_period","text":"吐蕃王朝（7-9世纪）、藏传佛教艺术（元明清至今）"}],"artifactHits":[]}'
+  - museum_id: yangzhou
+    reason: 可以看到元朝时期大运河沿线的商业繁荣、瓷器贸易和海外交往的历史遗迹
+    evidence_json: '{"museumId":"yangzhou","museumName":"扬州博物馆 / 中国大运河博物馆","signals":[{"type":"dynasty_coverage","text":"春秋（吴王夫差开邗沟）→ 隋代（开凿大运河）→ 唐代（扬州为国际都会）→ 宋元 → 明清（盐商文化、扬州学派）"}],"artifactHits":[]}'
+  - museum_id: zhejiang
+    reason: 元朝瓷器、书画、漆器等馆藏文物展示了当时的工艺水平与审美风格
+    evidence_json: '{"museumId":"zhejiang","museumName":"浙江省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（河姆渡、良渚）→ 春秋战国（越国）→ 三国两晋（越窑）→ 五代（吴越国）→ 宋代 → 元明清"}],"artifactHits":[]}'

@@ -1,0 +1,53 @@
+id: 40b9932c-a873-4aa4-85fe-392abe12ef50
+name: 颐和园博物馆
+lat: 40.0081
+lng: 116.266
+location: 北京市海淀区新建宫门路19号（颐和园内文昌阁东侧）
+level: 国家一级博物馆 / 世界文化遗产 / 全国重点文物保护单位
+core_period: 商周至近代
+specialty: 中国古典园林中规模最大、品级最高的皇家园林文物陈列馆，以清代宫廷生活艺术及工艺品为核心
+dynasty_coverage: 上自商周，下迄晚清及近代
+timeline: 上自商周、下迄晚清，藏品时间跨度逾三千年
+treasures:
+  - name: 青铜器
+  - name: 玉器
+  - name: 瓷器
+  - name: 金银器
+  - name: 书画
+  - name: 古籍
+  - name: 丝织品
+  - name: 珐琅
+  - name: 竹木牙角器
+  - name: 漆器
+  - name: 宫廷家具
+  - name: 钟表
+  - name: 工艺盆景
+  - name: 外国文物
+halls:
+  - name: 宝树琪花（工艺盆景专题）
+  - name: 慈晖懿祉（慈禧太后相关文物专题）
+  - name: 御苑璆琳（玉器专题）
+  - name: 舶来珍奇（外国文物专题）
+artifacts:
+  - name: 乾隆款玉器
+    period: 清代乾隆
+    description: 御苑璆琳展厅核心展品，代表清代皇家玉雕工艺巅峰
+  - name: 清代宫廷瓷器
+    period: 清代
+    description: 颐和园旧藏清代官窑瓷器，品类涵盖青花、粉彩、珐琅彩等
+  - name: 清代宫廷工艺盆景
+    period: 清代
+    description: 宝树琪花展厅主题藏品，以珍贵材料制成的皇家陈设艺术品
+  - name: 舶来珍奇外国文物
+    period: 晚清
+    description: 舶来珍奇展厅展示的西洋钟表、珐琅及其他外国进贡珍品
+dynasty_connections:
+  - dynasty: 清代
+    description: 博物馆主体藏品来源于清代皇家园林颐和园，集中反映清代宫廷生活与皇家审美
+  - dynasty: 商周
+    description: 藏品上溯商周，涵盖早期青铜礼器等文物
+sources:
+  - source: https://www.summerpalace.net.cn/court_life/detail/348.html
+  - source: https://www.summerpalace.net.cn/permanent_list.html
+  - source: https://www.beijing.gov.cn/renwen/rwzyd/bwg/jhybwg/202301/t20230117_2902097.html
+  - source: https://zyk.bjhd.gov.cn/kjhd/whhd/bwg/202603/t20260326_4809803.shtml

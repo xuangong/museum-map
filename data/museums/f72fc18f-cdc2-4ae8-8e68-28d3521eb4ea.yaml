@@ -1,0 +1,63 @@
+id: f72fc18f-cdc2-4ae8-8e68-28d3521eb4ea
+name: 佛山市祖庙博物馆
+lat: 23.0028
+lng: 113.1219
+location: 广东省佛山市禅城区祖庙路21号
+level: 国家一级博物馆
+core_period: 北宋元丰年间（1078—1085年）至清末民初
+specialty: 集明清古建筑艺术和佛山传统文化于一体的专题类博物馆，以祭祀北方真武玄天上帝（北帝）的宗教建筑群为核心，兼具岭南民俗、武术文化展陈功能
+dynasty_coverage: 北宋、明、清、清末民初
+timeline: 始建于北宋元丰年间（1078—1085年）；明洪武五年（1372年）重建；清代历经多次扩建与修缮；1962年公布为全国重点文物保护单位；1993年辟为佛山市祖庙博物馆对外开放；2008年被评定为国家一级博物馆
+treasures:
+  - name: 万福台（华南地区保存最完整的古代戏台）
+  - name: 灵应牌坊（明代石雕牌坊）
+  - name: 陶塑瓦脊装饰（石湾窑代表作）
+  - name: 大型铸铁香炉与铁器陈列
+  - name: 木雕与石雕建筑构件
+halls:
+  - name: 祖庙古建筑群（全国重点文物保护单位核心区）
+  - name: 孔庙
+  - name: 黄飞鸿纪念馆
+  - name: 叶问堂
+artifacts:
+  - name: 万福台
+    period: 清代
+    description: 华南地区保存最为完整的古代戏台，建于清初，木构歇山顶，三面开敞，为祭祀演戏之所
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/98/%E4%B8%87%E7%A6%8F%E5%8F%B0.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 钉钉
+  - name: 灵应牌坊
+    period: 明代
+    description: 明代石雕牌坊，位于祖庙入口，雕刻精细，为岭南明代石雕艺术代表
+  - name: 锦香池
+    period: 明清
+    description: 位于前殿与正殿之间的石砌水池，池中有龟蛇石雕，象征真武神灵
+  - name: 钟鼓楼
+    period: 明清
+    description: 祖庙仪式建筑组成部分，用于祭祀时击鼓鸣钟
+  - name: 前殿
+    period: 明清
+    description: 祖庙主轴线上的过渡性礼仪空间，建筑梁架精细
+  - name: 正殿（灵应祠）
+    period: 明清
+    description: 供奉北方真武玄天上帝主神像的核心殿堂，殿内有明代铸造铜铁神像及大量祭祀文物
+  - name: 庆真楼
+    period: 清代
+    description: 祖庙建筑群后部楼阁，用于储藏神器及举行宗教活动
+    image_url: https://upload.wikimedia.org/wikipedia/commons/4/49/%E5%BA%86%E7%9C%9F%E6%A5%BC.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 钉钉
+dynasty_connections:
+  - dynasty: 北宋
+    description: 祖庙古建筑群始建于北宋元丰年间（1078—1085年），最初为供奉北方真武玄天上帝的庙宇
+  - dynasty: 明
+    description: 明洪武五年（1372年）重建，奠定现存建筑群的基本格局；灵应牌坊、前殿等核心构筑物均为明代遗存
+  - dynasty: 清
+    description: 清代持续扩建，现存万福台、正殿、庆真楼、钟鼓楼、锦香池等均经清代重修或新建，形成完整建筑群
+  - dynasty: 清末民初
+    description: 孔庙建于清宣统三年（1911年），为建筑群最后一处重要增建
+sources:
+  - source: https://www.fszumiao.cn/gw/index.html
+  - source: https://www.fszumiao.cn/gj/index.html
+  - source: http://foshan.gov.cn/gzjg/fswenhua/fw/js/whss_sj/content/post_1718871.html
+  - source: https://baike.baidu.com/item/%E4%BD%9B%E5%B1%B1%E5%B8%82%E7%A5%96%E5%BA%99%E5%8D%9A%E7%89%A9%E9%A6%86/16853955

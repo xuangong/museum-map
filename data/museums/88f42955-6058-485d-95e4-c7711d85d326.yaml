@@ -1,0 +1,59 @@
+id: 88f42955-6058-485d-95e4-c7711d85d326
+name: 咸阳博物院
+lat: 34.33583
+lng: 108.72
+location: 陕西省咸阳市渭城区中山街53号
+level: 国家一级博物馆
+core_period: 秦汉
+specialty: 以收藏、研究、展示秦汉历史文物为主的综合性历史博物馆，馆址为明洪武四年（1371年）所建咸阳文庙，属第六批全国重点文物保护单位，国家AAA级旅游景区
+dynasty_coverage: 战国至明清（核心为秦汉，兼及北魏、北周、隋唐）
+timeline: 1961年5月1日机构设立，1962年2月1日正式开馆；1984年更名咸阳博物馆；2015年2月更名为咸阳博物院并升格为正处级，下辖咸阳文庙博物馆和咸阳古渡遗址博物馆；2024年获评国家一级博物馆；2025年5月29日新馆正式开工
+treasures:
+  - name: 汉代玉仙人奔马（镇馆之宝，一级文物）
+  - name: 西汉三千彩绘兵马俑（杨家湾汉墓出土）
+  - name: 彩绘指挥俑
+  - name: 鎏金”鲁王”铜虎符
+  - name: 战国错金银鼎
+  - name: 唐代錾花金执壶
+  - name: 唐三彩单峰驼
+  - name: 圆雕玉辟邪
+  - name: 圆雕玉俑头
+  - name: 陈爰金币
+halls:
+  - name: 咸阳文庙博物馆（8个展厅）
+  - name: 咸阳古渡遗址博物馆
+artifacts:
+  - name: 汉代玉仙人奔马
+    period: 西汉
+    description: 咸阳博物院镇馆之宝，国家一级文物，1966—1976年间出土于咸阳市周陵镇新庄村汉元帝渭陵北汉代建筑遗址，圆雕玉马背负仙人造型，工艺精湛
+    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e1/Jade_Immortal_and_Horse.JPG
+    image_license: CC-BY-SA-3.0
+    image_attribution: 幽灵巴尼
+  - name: 西汉彩绘指挥俑
+    period: 西汉
+    description: 出土于杨家湾汉墓遗址，与三千件彩绘兵马俑同批出土，彩绘保存完好，为西汉军阵研究的重要实物
+  - name: 鎏金”鲁王”铜虎符
+    period: 西汉
+    description: 鎏金铜质虎符，铭文含”鲁王”字样，是研究汉代诸侯封国及军事制度的珍贵文物
+  - name: 战国错金银鼎
+    period: 战国
+    description: 战国时期错金银工艺鼎，纹饰繁复精美，体现秦国贵族用器水平
+    image_url: https://upload.wikimedia.org/wikipedia/commons/c/ca/%E9%94%99%E9%87%91%E9%93%B6%E4%BA%91%E7%BA%B9%E9%9D%92%E9%93%9C%E9%BC%8ENMC.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Cangminzho
+  - name: 唐代錾花金执壶
+    period: 唐
+    description: 咸阳古渡遗址博物馆藏，唐代金质执壶，满饰錾花纹样，为唐代金银器的代表性精品
+dynasty_connections:
+  - dynasty: 秦
+    description: 重点展示秦孝公迁都咸阳至秦始皇统一六国的历史，藏有商鞅铜权、秦诏铭文铁权、秦咸阳宫建筑构件、驷马拉车壁画等
+  - dynasty: 西汉
+    description: 藏有杨家湾汉墓出土的三千件彩绘兵马俑及玉仙人奔马、玉辟邪、鲁王铜虎符等汉代珍贵文物
+  - dynasty: 唐
+    description: 藏有顺陵残碑（唐睿宗李旦书丹）、錾花金执壶、豹斑玉狮钮香薰等唐代文物
+sources:
+  - source: https://www.xybwg.cn/bgjj/
+  - source: http://www.ncha.gov.cn/art/2025/6/6/art_723_196308.html
+  - source: https://zh.wikipedia.org/zh-hans/%E5%92%B8%E9%98%B3%E5%8D%9A%E7%89%A9%E9%99%A2
+  - source: https://baike.baidu.com/item/%E5%92%B8%E9%98%B3%E5%8D%9A%E7%89%A9%E9%99%A2/7672619
+  - source: https://www.sxggwhy.com/venue/detail?id=663dc0d5ac142d36cb9983a9

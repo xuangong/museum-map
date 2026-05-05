@@ -1,0 +1,47 @@
+id: tianjin
+name: 天津博物馆
+lat: 39.0836
+lng: 117.2258
+location: 天津市河西区平江道62号（天津文化中心内）
+level: 国家一级博物馆
+core_period: 清代至近代（书画、瓷器、文房收藏）
+specialty: 以清代书画和瓷器收藏见长，得益于天津近代作为北方商贸中心和文化重镇的地位，大量清宫旧藏和民间珍品汇聚于此。天津开埠后中西文化交融的近代史也是重要展示内容。
+dynasty_coverage: 商周、宋、元、明、清、近代
+timeline: 西周燕国 → 金代直沽寨 → 明永乐筑城设卫（1404年）→ 清代漕运重镇 → 1860年开埠 → 近代"百年中国看天津"
+treasures:
+  - name: 范宽《雪景寒林图》
+  - name: 青花釉里红开光贴花大罐（元）
+  - name: 西周太保鼎
+  - name: 清乾隆珐琅彩芍药雉鸡纹玉壶春瓶
+halls:
+  - name: 耀世奇珍——馆藏文物精品陈列
+  - name: 中华百年看天津
+artifacts:
+  - name: 范宽《雪景寒林图》
+    period: 北宋，约11世纪初
+    description: —三联幅绢本水墨，描绘北方冬日的雄浑山水。范宽是北宋山水画三大家之一，此画气势磅礴，是宋代山水画的巅峰之作。此画传世仅此一件，极为珍贵。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/f/fc/Xuejinghanlintu.jpg
+    image_license: PD
+  - name: 元青花釉里红开光贴花盖罐
+    period: 元代，14世纪
+    description: —罐身以青花和釉里红两种釉下彩装饰，开光内贴塑花卉。元代青花釉里红器物存世极少，此罐工艺复杂、保存完好，是元代瓷器的绝世珍品。
+  - name: 西周太保鼎
+    period: 西周早期
+    description: —"太保"即召公奭，为西周开国重臣。鼎形制庄重，四足呈柱形，腹部及足部有扉棱装饰。是西周早期青铜礼器的重要代表，也是研究周初政治的实物材料。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e6/Taibao_Ding.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Baomi
+  - name: 清乾隆珐琅彩芍药雉鸡纹玉壶春瓶
+    period: 清乾隆
+    description: —珐琅彩瓷器中的精品，画工细腻，色彩绚丽。珐琅彩瓷是清代宫廷瓷器中最珍贵的品种，存世数量极少。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9d/%E6%B8%85%E4%BB%A3_%E4%B9%BE%E9%9A%86%E6%AC%BE%E7%8F%90%E7%90%85%E5%BD%A9%E8%8A%8D%E8%8D%AF%E9%9B%8F%E9%B8%A1%E5%9B%BE%E7%8E%89%E5%A3%B6%E6%98%A5%E7%93%B6.png
+    image_license: CC-BY-SA-4.0
+    image_attribution: HaziiDozen
+  - name: 翡翠蝈蝈白菜
+    period: 清代
+    description: —利用翡翠天然色彩巧雕而成，白菜叶片上蝈蝈栩栩如生。与台北故宫翠玉白菜齐名，是清代玉雕工艺的杰出代表。
+  - name: 北宋范宽款山水
+    period: 清代
+    description: —天津博物馆收藏有多件清宫旧藏的欧洲和中国制造钟表，反映了清代宫廷对西方机械工艺的浓厚兴趣。
+sources:
+  - source: "天津博物馆官网: https://www.tjbwg.com/"

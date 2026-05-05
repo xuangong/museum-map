@@ -1,0 +1,53 @@
+id: jiangxi
+name: 江西省博物馆
+lat: 28.682
+lng: 115.8935
+location: 江西省南昌市赣江新区/东湖区
+level: 国家一级博物馆
+core_period: 西汉（海昏侯墓）、宋元明（景德镇瓷器）、商代（新干大洋洲）
+specialty: 以海昏侯墓出土文物和江西陶瓷为两大核心，同时拥有新干大洋洲商代青铜器群。2020年新馆开放，展陈全面升级，是理解赣鄱文明和中国瓷器发展的重要窗口。
+dynasty_coverage: 商代（新干大洋洲）→ 西汉（海昏侯）→ 东晋南朝 → 唐宋（洪州窑、景德镇）→ 元明清（景德镇御窑）
+timeline: 新干大洋洲（约前13世纪）揭示了南方商代青铜文明独立于中原的发展路径；海昏侯墓（前59年下葬）是西汉列侯墓中保存最完整的；景德镇自宋代起成为"瓷都"，元明清时期为官窑所在
+treasures:
+  - name: 商代伏鸟双尾青铜虎
+  - name: 海昏侯刘贺玉印
+  - name: 景德镇元青花瓷器
+  - name: 商代双面神人青铜头像
+  - name: 西汉马蹄金
+halls:
+  - name: 惊世大发现——南昌汉代海昏侯国考古成果展
+  - name: 赣鄱文明"通史展
+  - name: 陶瓷文化展
+artifacts:
+  - name: 商代伏鸟双尾青铜虎
+    description: 商代晚期（约前13世纪）。新干大洋洲出土，造型独特，虎背伏鸟，双尾上翘，是南方青铜文明区别于中原风格的标志性器物。
+  - name: 商代双面神人青铜头像
+    description: 商代晚期。新干大洋洲出土，一器两面，表情各异，反映了赣江流域独特的宗教信仰，常与三星堆青铜面具比较。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/c/c9/%E5%8F%8C%E9%9D%A2%E7%A5%9E%E4%BA%BA%E9%9D%92%E9%93%9C%E5%A4%B4%E5%83%8F.jpg
+    image_license: CC-BY-4.0
+    image_attribution: RoundNoName
+  - name: 海昏侯刘贺玉印"刘贺"
+    description: 西汉（前1世纪）。直接确认墓主身份的关键证据，也是研究西汉印章制度的重要实物。
+  - name: 西汉马蹄金、麟趾金
+    description: 西汉（前1世纪）。海昏侯墓出土大量金器，马蹄金和麟趾金是武帝时期为庆祝祥瑞而铸的纪念金，数量之多为考古之最。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/ba/%E9%A9%AC%E8%B9%84%E9%87%91_%E6%B5%B7%E6%98%8F%E4%BE%AF%E5%9B%BD%E9%81%97%E5%9D%80.JPG
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎
+  - name: 海昏侯墓竹简、木牍
+    description: 西汉。出土约五千枚竹简，包含《论语》《易经》等儒家经典，对研究西汉经学和思想史具有重大价值。
+  - name: 元青花釉里红楼阁式谷仓
+    description: 元代（14世纪）。将青花与釉里红两种技法结合，造型复杂，是元代景德镇瓷器的巅峰之作。
+  - name: 商代青铜大铙
+    description: 商代晚期。新干出土的大型打击乐器，体量在同期器物中罕见，反映了南方商代礼乐文化。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9c/Shang_Bronze_Nao_Bell_01.jpg
+    image_license: CC0
+    image_attribution: Gary Lee Todd, Ph.D.
+dynasty_connections:
+  - dynasty: 商代
+    description: 1989年新干大洋洲发现的商代大墓出土青铜器、玉器近2000件，揭示了赣江流域存在一个与中原殷商并行的高度发达的青铜文明，改写了"商代文明仅限中原"的认知。
+  - dynasty: 西汉
+    description: 海昏侯刘贺是汉武帝之孙，当过27天皇帝即被废黜，后封海昏侯。其墓2011年发现，出土金器、竹简、车马器等一万余件，是21世纪中国最重要的考古发现之一。
+  - dynasty: 宋元明清（瓷器）
+    description: 江西是中国瓷器的核心产区。洪州窑（南朝-唐）、吉州窑（宋）为早期名窑；景德镇自宋真宗景德年间（1004-1007年）得名，元代创烧青花瓷，明清时期为御窑所在地，是世界制瓷业的中心。
+sources:
+  - source: "江西省博物馆官网: https://www.jxmuseum.cn/"

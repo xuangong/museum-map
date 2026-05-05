@@ -1,0 +1,58 @@
+id: mogao
+name: 敦煌莫高窟
+lat: 40.0359
+lng: 94.8097
+location: 甘肃省敦煌市东南25公里鸣沙山东麓
+level: 世界文化遗产 / 国家一级博物馆（敦煌研究院）
+core_period: 十六国至元（366-1368年），跨越千年
+specialty: 世界上现存规模最大、内容最丰富的佛教艺术宝库。735个洞窟、4.5万平方米壁画、2415尊彩塑。是丝绸之路文化交汇的缩影，融合了中原、印度、中亚、西域多种艺术风格。
+dynasty_coverage: 十六国、北魏、西魏、北周、隋、唐、五代、宋、西夏、元
+timeline: 莫高窟的开凿跨越十个朝代千余年，壁画风格的演变本身就是一部中国美术通史——从北朝的印度-犍陀罗风格到唐代的完全中国化，再到宋元的程式化。
+treasures:
+  - name: 1. 第45窟彩塑群（盛唐）— 唐代佛教雕塑的巅峰
+halls:
+  - name: 藏经洞（第17窟）
+  - name: 第45窟
+  - name: 第96窟九层楼（标志性建筑
+  - name: 内有35米大佛）
+  - name: 第148窟涅槃像
+artifacts:
+  - name: 藏经洞文书
+    period: 4-11世纪
+    description: 1900年道士王圆箓发现。含佛经、道经、儒家经典、社会经济文书、多种文字（汉、藏、梵、回鹘、粟特等），是研究中古时期的第一手资料
+  - name: 第45窟彩塑
+    period: 盛唐
+    description: 一佛二弟子二菩萨二天王，每尊神态各异，被誉为"东方雕塑的极致"
+  - name: 第220窟壁画
+    period: 初唐，642年
+    description: 药师经变、维摩诘经变，色彩鲜艳，人物生动
+  - name: 第257窟九色鹿本生
+    period: 北魏
+    description: 连环画式叙事，从右向左展开故事
+    image_url: https://upload.wikimedia.org/wikipedia/commons/0/07/2021.12.24-12.26_800pcs_%E7%92%80%E7%92%A8%E6%95%A6%E7%85%8C%E7%B3%BB%E5%88%97%EF%BC%9A%E7%AC%AC257%E7%AA%9F-%E9%B9%BF%E7%8E%8B%E6%9C%AC%E7%94%9F%E5%B1%80%E9%83%A8%E5%9C%96_Mogao_Grottoes_Cave_257_Main_Chamber_West_Wall_%281%29_%2851776320643%29.jpg
+    image_license: CC-BY-2.0
+    image_attribution: Grace Hwu from Taiwan
+  - name: 第158窟涅槃像
+    period: 中唐
+    description: 卧佛长15.8米，表情安详
+  - name: 第130窟弥勒大佛
+    period: 盛唐
+    description: 高26米，依崖而凿
+  - name: 飞天形象
+    period: 历代
+    description: 莫高窟共有4500余身飞天，风格随朝代演变
+dynasty_connections:
+  - dynasty: |-
+      北朝**（十六国、北魏、西魏、北周）：早期洞窟，印度和中亚风格明显，人物面相丰圆，有犍陀罗痕迹
+      - **隋
+    description: 过渡期，开始中国化，构图趋于对称
+  - dynasty: |-
+      唐**（初唐-中唐-晚唐）：巅峰期，壁画和彩塑达到最高水平。经变画展现了想象中的佛国世界，实则反映了唐代社会的繁华
+      - **五代/宋
+    description: 归义军时期，敦煌成为半独立政权，壁画趋于程式化但仍有精品
+  - dynasty: 西夏/元
+    description: 藏传佛教影响显现  莫高窟是理解佛教在中国本土化过程的最佳实物教材。同时，藏经洞文书揭示了丝路贸易、多民族交往、中古社会生活的方方面面。
+sources:
+  - source: "敦煌研究院官网: https://www.dha.ac.cn/"
+  - source: UNESCO世界文化遗产名录（1987年）
+  - source: 735个洞窟、4.5万平方米壁画、2415尊彩塑（多源核实）

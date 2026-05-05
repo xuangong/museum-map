@@ -1,0 +1,77 @@
+id: wudai
+name: 五代十国（公元907年—960年）
+period: 公元907年—960年
+order_index: 13
+overview: |-
+  五代十国是唐朝灭亡到宋朝建立之间的分裂时期，历时仅53年但政权更迭极为频繁。
+
+  **五代**指中原地区先后建立的五个短命王朝：后梁（907—923）→ 后唐（923—936）→ 后晋（936—947）→ 后汉（947—951）→ 后周（951—960）。这些政权大多由唐末藩镇演变而来，其中后唐、后晋、后汉的建立者都是沙陀突厥人，反映了唐末以来北方民族融合的深化。
+
+  **十国**指同期南方和北方的割据政权，包括吴、南唐、吴越、闽、楚、南汉、南平、前蜀、后蜀、北汉。南方十国虽然政治分裂，但经济文化反而繁荣——南唐李后主的词、吴越钱氏的佛教文化、各地的瓷器工艺都达到很高水平。
+
+  960年后周禁军将领赵匡胤"陈桥兵变"建立宋朝，此后逐步统一各国（北汉979年最后被灭）。
+culture:
+  - category: 词的发展
+    description: 温庭筠、韦庄开"花间派"先河；李煜将词从花间小令提升为文学重器
+  - category: 瓷器
+    description: 越窑秘色瓷、耀州窑、定窑等在五代取得重要进步，为宋代瓷器繁荣奠基
+  - category: 佛教
+    description: 吴越钱氏大兴佛教，雷峰塔、保俶塔、灵隐寺重建
+  - category: 雕版印刷
+    description: 后蜀刊印《九经》（932年起），推动了知识的大规模传播
+events:
+  - date: 907年
+    event: 朱温篡唐建梁，五代开始
+    lat: 34.8
+    lng: 114.3
+  - date: 936年
+    event: 石敬瑭割让幽云十六州给契丹
+    lat: 34.8
+    lng: 114.3
+  - date: 938年
+    event: 契丹改国号辽
+    lat: 34.8
+    lng: 114.3
+  - date: 951年
+    event: 郭威建后周
+    lat: 34.8
+    lng: 114.3
+  - date: 954—959年
+    event: 柴荣改革，后周国力大增
+    lat: 34.8
+    lng: 114.3
+  - date: 960年
+    event: 赵匡胤陈桥兵变，建宋
+    lat: 34.8
+    lng: 114.3
+  - date: 975年
+    event: 宋灭南唐，李煜被俘
+    lat: 34.8
+    lng: 114.3
+  - date: 978年
+    event: 吴越钱俶纳土归宋
+    lat: 34.8
+    lng: 114.3
+  - date: 979年
+    event: 宋灭北汉，基本统一
+    lat: 34.8
+    lng: 114.3
+recommended_museums:
+  - museum_id: zhejiang
+    name: 浙江省博物馆
+    reason: 吴越鎏金银阿育王塔（雷峰塔地宫出土）、越窑青瓷
+  - museum_id: suzhou
+    name: 苏州博物馆
+    reason: 秘色瓷莲花碗（虎丘塔出土）
+  - museum_id: kaifeng
+    name: 开封博物馆
+    reason: 五代-北宋东京文物
+  - museum_id: nanjing
+    name: 南京博物院
+    reason: 南唐文物
+  - museum_id: gugong
+    name: 故宫博物院/台北故宫
+    reason: 五代书画
+  - museum_id: guobo
+    name: 中国国家博物馆
+    reason: 通史视角

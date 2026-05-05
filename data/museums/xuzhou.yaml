@@ -1,0 +1,48 @@
+id: xuzhou
+name: 徐州博物馆
+lat: 34.2554
+lng: 117.1847
+location: 江苏省徐州市云龙区和平路118号（云龙山北麓）
+level: 国家一级博物馆
+core_period: 西汉（楚国/彭城，诸侯王陵墓群）
+specialty: 徐州是西汉楚国都城，出土了大量汉代诸侯王墓葬文物。狮子山楚王陵是中国规模最大的西汉诸侯王崖洞墓之一，出土金缕玉衣等珍贵文物。汉画像石收藏也是一大特色。
+dynasty_coverage: 新石器（大墩子遗址）→ 先秦（宋国/楚国）→ 西汉（楚国，核心）→ 三国（徐州争夺战）→ 唐宋
+timeline: 西汉分封楚国于徐州（彭城），传12代楚王。狮子山楚王陵（约第3代楚王刘戊）是理解西汉"郡国并行"制度和诸侯王奢华生活的重要窗口
+treasures:
+  - name: 金缕玉衣（狮子山楚王陵出土）
+  - name: S形玉龙佩（西汉）
+  - name: 银缕玉衣
+  - name: 汉画像石
+  - name: 铜牛灯
+halls:
+  - name: 汉室遗珍——徐州汉代文物陈列"（核心）
+  - name: 天工汉玉"（汉代玉器专题）
+  - name: 俑偶华彩"（汉俑）
+artifacts:
+  - name: 金缕玉衣
+    period: 西汉，约前154年
+    description: 狮子山楚王陵出土，由4248片玉片以金丝编缀，是目前出土年代较早、玉片数量较多的金缕玉衣之一。与河北满城汉墓的金缕玉衣互为参照
+  - name: S形玉龙佩
+    period: 西汉
+    description: 以整块玉料雕成S形飞龙，线条流畅，动感十足，是汉代玉雕艺术的杰作
+    image_url: https://upload.wikimedia.org/wikipedia/commons/6/62/S%E5%BD%A2%E7%8E%89%E9%BE%99%E4%BD%A9.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 白色瑰宝
+  - name: 银缕玉衣
+    period: 西汉
+    description: 玉衣等级低于金缕，用银丝编缀，反映汉代严格的丧葬等级制度
+  - name: 汉画像石
+    period: 东汉
+    description: 徐州地区出土大量画像石，题材涵盖车马出行、宴饮乐舞、神话故事、历史故事等，是汉代社会生活的图像百科
+  - name: 铜牛灯
+    period: 西汉
+    description: 牛形铜灯，烟气通过牛角导入牛体内水中过滤，与南京博物院的错银铜牛灯异曲同工
+  - name: 彩绘兵马俑
+    period: 西汉
+    description: 狮子山楚王陵附近出土数千件汉代兵马俑，虽小于秦俑但数量可观
+  - name: 玉棺
+    period: 西汉
+    description: 狮子山楚王陵出土，以玉片镶嵌的棺椁
+sources:
+  - source: 核心信息基于AI知识库
+  - source: 狮子山楚王陵考古报告

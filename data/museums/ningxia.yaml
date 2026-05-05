@@ -1,0 +1,54 @@
+id: ningxia
+name: 宁夏回族自治区博物馆
+lat: 38.468
+lng: 106.2584
+location: 宁夏回族自治区银川市金凤区人民广场东路
+level: 国家一级博物馆（2012年获批）
+core_period: 西夏（1038-1227）、北方游牧民族
+specialty: 中国唯一系统展示西夏文明的省级博物馆。新馆总建筑面积30258平方米，建筑平面呈"回"字型，呼应回族自治区特色。馆藏近5万件，三级以上珍贵文物4000余件，国家一级文物159件。鎏金铜牛、胡旋舞石刻墓门、力士志文支座为三件国宝级文物。贺兰山岩画实物收藏也是一大特色。
+dynasty_coverage: 旧石器时代（水洞沟）→ 新石器（菜园文化/马家窑/齐家）→ 春秋战国（戎族青铜器）→ 秦汉 → 北朝隋唐（丝路重镇固原、灵州）→ 西夏 → 元明清
+timeline: 宁夏地处丝绸之路北线和农牧交界地带。北朝至隋唐时期，固原是丝路孔道上的重镇，大量中西文化交流遗物在此出土。西夏党项政权（1038-1227年）定都兴庆府（银川），创制西夏文字，留下了丰富的独立文明遗存。
+treasures:
+  - name: 1. 鎏金铜牛（西夏）— 西夏王陵出土
+  - name: 国宝级
+halls:
+  - name: 朔色长天——宁夏通史陈列"（五篇：文明曙光→农牧家园→丝路重镇→大夏寻踪→塞北江南）
+  - name: 大夏寻踪"（西夏专题
+  - name: 300余件文物精品）
+  - name: 石刻史书"（贺兰山岩画
+  - name: 实物约150块
+  - name: 拓片约300幅）
+  - name: 回乡漫步"（回族民俗）
+artifacts:
+  - name: 鎏金铜牛
+    period: 西夏，西夏王陵出土
+    description: 国宝级文物，铜牛通体鎏金，体态健壮，铸造工艺精湛，是西夏金属工艺的最高水平代表
+    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e9/%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5%E9%8E%8F%E9%87%91%E9%93%9C%E7%89%9B.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Yanxutong1215
+  - name: 胡旋舞石刻墓门
+    period: 唐代，盐池县出土
+    description: 国宝级文物，两扇石门上浮雕胡旋舞男子形象，舞姿优美，是研究唐代中亚胡旋舞东传的珍贵实物
+  - name: 力士志文支座
+    period: 西夏，西夏王陵出土
+    description: 国宝级文物，男性力士形象的石刻建筑构件，身刻西夏文字，是西夏陵寝建筑制度的重要证据
+  - name: 贺兰山岩画
+    period: 旧石器至青铜时代
+    description: 贺兰山东麓发现大量岩画，以人面像和动物形象为主，时间跨度数千年，是北方游牧民族精神生活的直接记录
+    image_url: https://upload.wikimedia.org/wikipedia/commons/c/c0/%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%B2%A9%E7%94%BB%E5%A4%AA%E9%98%B3%E7%A5%9E.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 霧島聖
+  - name: 透雕青铜牌饰
+    period: 战国至汉
+    description: 北方草原风格的鄂尔多斯式青铜器，反映宁夏地区戎族与中原的文化交流
+  - name: 西夏文陶范
+    period: 西夏
+    description: 用于铸造西夏文字钱币的模具，是西夏货币制度和铸造工艺的直接证据
+  - name: 彩绘泥塑罗汉像
+    period: 西夏
+    description: 体态丰满，神态怡然，纹饰上贴金箔，是西夏佛教艺术的精品
+  - name: 竹雕
+    period: 西夏
+    description: 细浅阴刻中原人物生活场景，说明西夏与中原文化的交流互鉴
+sources:
+  - source: 百度百科·宁夏回族自治区博物馆（详细词条，含建筑数据、展厅描述、馆藏信息）

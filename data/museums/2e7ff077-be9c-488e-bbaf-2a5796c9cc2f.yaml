@@ -1,0 +1,68 @@
+id: 2e7ff077-be9c-488e-bbaf-2a5796c9cc2f
+name: 邯郸市博物馆
+lat: 36.6056
+lng: 114.5397
+location: 河北省邯郸市丛台区人民东路399号邯郸文化艺术中心西侧
+level: 国家一级博物馆
+core_period: 新石器时代（磁山文化）至近现代
+specialty: 综合类博物馆，以赵文化、磁州窑瓷器、古代石刻艺术为核心特色
+dynasty_coverage: 新石器时代至近现代，涵盖磁山文化、夏代、商代、西周、东周（赵）、两汉、北朝、宋、明清各时期
+timeline: 1968年前身"毛泽东思想胜利万岁邯郸展览馆"建成；1984年正式成立邯郸市博物馆；1987年9月27日举行开馆典礼；2001年列为河北省文物保护单位；2005年获"全国文化系统先进集体"称号；2009年评为国家二级博物馆并免费开放；2017年晋级国家一级博物馆；2008年新馆动工，2020年11月13日正式开馆
+treasures:
+  - name: 赵王陵出土青铜马（中央大厅青铜马群雕原型）
+  - name: 磁山文化遗址文物（距今约8000年）
+  - name: 先商时期文物
+  - name: 北朝至宋代佛教石刻造像
+  - name: 磁州窑历代精品瓷器
+  - name: 中国历代钱币珍品
+  - name: 锻铜壁画（磁山之光·胡服骑射·建安风骨，共210平方米）
+halls:
+  - name: 三层·甘丹风华——邯郸历史文化陈列展厅
+  - name: 四层·磁州窑瓷器陈列展厅
+  - name: 四层·邯郸古代石刻艺术陈列展厅
+  - name: 四层·方圆世界——中国历代钱币陈列展厅
+  - name: 二层·临时展厅
+  - name: 一层·青少年体验中心
+artifacts:
+  - name: 赵王陵出土青铜马
+    period: 赵国（战国）
+    description: 赵王陵出土，为馆内中央大厅青铜马群雕原型，是赵文化的标志性文物
+  - name: 磁山文化陶器及粟类遗存
+    period: 新石器时代（约公元前5400年）
+    description: 出土自磁山文化遗址，反映华北地区早期农业文明
+    image_url: https://upload.wikimedia.org/wikipedia/commons/6/64/Cishan_Cultural_7.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 我乃野云鹤
+  - name: 磁州窑白地黑花瓷器
+    period: 宋金时期
+    description: 磁州窑巅峰之作，白与黑的强烈对比为其最大艺术特征
+  - name: 北朝石刻佛像
+    period: 北朝
+    description: 邯郸境内出土，集中展现北朝至宋代石刻造像艺术风格
+    image_url: https://upload.wikimedia.org/wikipedia/commons/e/ea/North_Dynasties_Statues_of_the_Buddha_carvings_in_Handan_08.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 我乃野云鹤
+  - name: 夏商周陶鬲组
+    period: 夏代、商代、西周
+    description: 「甘丹风华」陈列第二单元「夏商周时期·邯郸的兴起」展出多件不同时期陶鬲，可对比观察陶鬲腿部由长到短的演变过程
+dynasty_connections:
+  - dynasty: 新石器时代
+    description: 磁山文化遗址文物，距今约8000年，是中国最早农业文明遗存之一
+  - dynasty: 商代
+    description: 先商文化遗址文物，邯郸地区是商文明重要发源地之一
+  - dynasty: 赵国（战国）
+    description: 赵国都城邯郸故地，赵王陵出土青铜马等珍贵文物系统展示赵文化
+  - dynasty: 汉代
+    description: 两汉时期文物丰富，反映赵地在汉代的繁荣
+  - dynasty: 北朝
+    description: 北朝佛教石刻艺术陈列，呈现邯郸地区佛教文化鼎盛时期
+  - dynasty: 宋金
+    description: 磁州窑进入历史巅峰，白地黑花瓷器享誉全国
+  - dynasty: 明清
+    description: 磁州窑青花五彩瓷兴起，持续传承北方瓷器传统
+sources:
+  - source: https://baike.baidu.com/item/邯郸市博物馆/10454680
+  - source: https://wenwu.hebei.gov.cn/system/2023/09/27/030253869.shtml
+  - source: https://www.hdmuseum.org/Home/about_us
+  - source: https://m.hd.bendibao.com/tour/14496.shtm
+  - source: https://www.museumschina.cn/museums/details?id=202208221749541889

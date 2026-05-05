@@ -1,0 +1,86 @@
+id: 2622e024-00eb-4a11-8b65-036b820f89d1
+name: 南京鸡鸣寺
+lat: 32.0558
+lng: 118.7838
+location: 南京市玄武区鸡鸣寺路1号
+level: 南京市级文物保护单位
+core_period: 西晋永康元年（300年）至今
+specialty: 南朝佛教中心，素食肇始地，尼众道场；以倒坐观音、药师佛塔闻名，历史跨越东吴至今逾1700年
+dynasty_coverage: 东吴、西晋、东晋、南朝（宋、齐、梁、陈）、南唐、宋、元、明、清、民国、中华人民共和国
+timeline: 西晋永康元年（300年）始创道场 → 南朝梁普通八年（527年）梁武帝建同泰寺 → 南唐改称净居寺/圆寂寺 → 宋置法宝寺 → 明洪武二十年（1387年）朱元璋御题重建"鸡鸣寺" → 清康熙两度大修、康熙题匾 → 咸丰年间毁于兵火、同治年间重修 → 1958年改为尼众道场 → 1979年政府决定重建 → 1983年起按明清规制复建 → 1985年重新对外开放
+treasures:
+  - name: 药师佛塔（1990年重建，七层八面，高约44米，赵朴初题匾）
+  - name: 倒坐观音菩萨像（观音楼，同治六年，面北而坐）
+  - name: 32尊观音应身像
+  - name: 泰国赠送的释迦牟尼佛及观世音菩萨镀金铜坐像
+  - name: 康熙御题'古鸡鸣寺'大字匾额
+  - name: 胭脂井（民国三年立碑'古胭脂井'）
+  - name: 甘露井
+  - name: 释迦牟尼佛舍利及顶骨
+  - name: 朱元璋赐《金字华严经》
+  - name: 朱元璋赐沉香观音像
+  - name: 明代金丝楠木雕佛龛
+  - name: 清《龙藏》
+halls:
+  - name: 山门
+  - name: 施食台（志公台）
+  - name: 弥勒殿
+  - name: 天王殿
+  - name: 大雄宝殿
+  - name: 韦驮殿
+  - name: 观音楼
+  - name: 凭虚阁
+  - name: 塔院（药师佛塔）
+  - name: 毗卢宝殿
+  - name: 豁蒙楼
+  - name: 景阳楼
+  - name: 念佛堂
+  - name: 藏经楼
+  - name: 达摩祖师殿
+  - name: 般若廊
+  - name: 钟楼
+  - name: 鼓楼
+artifacts:
+  - name: 药师佛塔
+    period: 1990年重建
+    description: 七层八面仿古佛塔，外观假九面实为七级，高约44米，斗拱重檐，铜刹筒瓦；塔内供奉药师佛铜像；赵朴初题'药师佛塔'四字，为鸡鸣寺历史上第五座大佛塔
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/ac/%E8%8D%AF%E5%B8%88%E4%BD%9B_%28192598081%29.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC0
+    image_attribution: 6paramitas
+  - name: 倒坐观音菩萨像
+    period: 同治六年（1867年）后
+    description: 供奉于观音楼内，面朝北而望；佛龛楹联：'问菩萨为何倒坐，叹众生不肯回头'，为鸡鸣寺最具特色的佛像
+    image_url: https://upload.wikimedia.org/wikipedia/commons/5/5c/Shanghai_Museum_2006_17-49_%28cropped%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: G41rn8
+  - name: 豁蒙楼
+    period: 光绪二十年（1894年）起建，光绪三十年（1904年）建成
+    description: 由两江总督张之洞兴建，光绪二十八年（1902年）命名，用以纪念戊戌六君子之一杨锐
+  - name: 胭脂井
+    period: 古迹，民国三年（1914年）立碑
+    description: 相传为南朝陈后主与张丽华、孔贵嫔藏身之处，民国三年立'古胭脂井'碑
+  - name: 康熙御题匾额
+    period: 清康熙年间
+    description: 康熙皇帝南巡登临鸡鸣寺时亲题'古鸡鸣寺'大字匾额，现为寺中重要文物
+dynasty_connections:
+  - dynasty: 东吴
+    description: 寺址三国时属吴国后苑之地，历史渊源可追溯至东吴
+  - dynasty: 西晋
+    description: 西晋永康元年（300年）在此倚山造室，始创道场
+  - dynasty: 东晋
+    description: 东晋以后，此处一度被辟为廷尉署
+  - dynasty: 南朝梁
+    description: 梁普通八年（527年）梁武帝在鸡鸣埭兴建同泰寺，成为'南朝四百八十寺'首刹；高僧达摩曾居于此；梁武帝曾四次舍身为僧，并颁布《断酒肉文》
+  - dynasty: 南唐
+    description: 南唐时易名净居寺，后又改称圆寂寺
+  - dynasty: 宋
+    description: 宋代分其半地置法宝寺
+  - dynasty: 明
+    description: 洪武二十年（1387年）明太祖朱元璋命崇山侯李新督工在同泰寺故址重建，御题额'鸡鸣寺'；经宣德、成化扩建及弘治大修，寺院规模达百余亩
+  - dynasty: 清
+    description: 康熙年间两次大修并改建山门，康熙南巡亲题'古鸡鸣寺'匾额；乾隆十五年（1751年）重建凭虚阁；咸丰年间毁于兵火，同治六年（1867年）重修并建观音楼；光绪二十年（1894年）起建豁蒙楼
+sources:
+  - source: http://www.njjimingsi.com/
+  - source: https://mzzjj.nanjing.gov.cn/mzzj/njzjgk/njfj/201809/t20180927_1198623.html
+  - source: https://baike.baidu.com/item/%E9%B8%A1%E9%B8%A3%E5%AF%BA/2150
+  - source: http://www.njlyw.cn/websitenew/web/ScenicDetail?m=173&c=XW&i=1058

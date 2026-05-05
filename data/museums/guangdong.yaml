@@ -1,0 +1,48 @@
+id: guangdong
+name: 广东省博物馆
+lat: 23.1175
+lng: 113.3253
+location: 广东省广州市天河区珠江东路2号（珠江新城）
+level: 国家一级博物馆
+core_period: 宋元明清（海上丝绸之路与对外贸易）
+specialty: 以海上丝绸之路为主线，系统展示广东作为中国对外贸易门户的千年历史。外销瓷、外销画、广绣和潮州木雕是特色收藏，完整呈现了岭南文化从百越时代到近代开埠的演变脉络。
+dynasty_coverage: 先秦百越、秦汉南越、唐宋海贸、明清外销
+timeline: 先秦百越文化 → 秦汉南越国（前203-前111年）→ 唐宋广州港崛起 → 明清一口通商（1757-1842年）→ 近代开埠
+treasures:
+  - name: 南宋陈容《墨龙图》
+  - name: 清乾隆广彩瓷大碗
+  - name: 潮州金漆木雕蟹篓
+  - name: 北宋木雕罗汉像
+  - name: 西汉铜提筒
+halls:
+  - name: 广东历史文化陈列
+  - name: 海洋出水文物展
+  - name: 潮州木雕艺术展
+  - name: 广珐琅特展
+artifacts:
+  - name: 南宋陈容《墨龙图》
+    period: 南宋，约1235-1262年
+    description: —陈容是南宋画龙名家，开创"所翁龙"画法，此图以水墨渲染龙腾云雾的气势，笔法苍劲奔放，是中国龙画的巅峰之作，对日本水墨画影响深远。
+  - name: 清乾隆广彩人物纹大碗
+    period: 清，约1750年
+    description: —广州织金彩瓷的代表，色彩浓艳，满工装饰，是专为欧洲市场定制的外销瓷精品，反映了十八世纪中西贸易的繁荣景象。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/c/cd/%E6%B8%85%E4%B9%BE%E9%9A%86%E5%B9%BF%E5%BD%A9%E4%BA%BA%E7%89%A9%E7%BA%B9%E5%A4%A7%E7%A2%97.JPG
+    image_license: CC-BY-SA-4.0
+    image_attribution: Siyuwj
+  - name: 潮州金漆木雕蟹篓
+    period: 清末民初
+    description: —整块樟木镂空雕成，螃蟹、篓筐层层透雕，玲珑剔透至极。是潮州木雕多层镂空技艺的巅峰之作，被誉为"木雕之王"。
+  - name: 西汉铜提筒
+    period: 西汉
+    description: —广州出土，筒身刻有羽人划船纹饰，风格与越南东山文化铜鼓相近。是南越国时期海上文化交流的实物证据，体现了环南海文化圈的联系。
+  - name: 北宋木雕罗汉像
+    period: 北宋
+    description: —南华寺旧藏，造型写实、神态各异，保存状况极佳。是中国现存最早的大型木雕罗汉组像之一，对研究宋代佛教雕塑具有重要价值。
+  - name: 明万历端砚
+    period: 明，1573-1620年
+    description: —取材肇庆端溪老坑，石质细腻如婴儿肌肤，有青花、鱼脑冻等珍贵石品。是文房四宝中端砚的顶级藏品。
+  - name: 元代广州港铜钟
+    period: 元代
+    description: —铸有多语文铭文，反映了元代广州作为国际港口的多元文化面貌。
+sources:
+  - source: "广东省博物馆官网: https://www.gdmuseum.com/"

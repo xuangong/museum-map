@@ -1,0 +1,53 @@
+id: zhejiang
+name: 浙江省博物馆
+lat: 30.2518
+lng: 120.144
+location: 浙江省杭州市西湖区（孤山馆区）/ 拱墅区（之江馆区）
+level: 国家一级博物馆
+core_period: 新石器时代（良渚文化）、五代十国（吴越国）、宋代
+specialty: 以良渚文化玉器、越窑青瓷和宋代文物为三大支柱，是理解长江下游文明起源和江南文化高峰的核心场馆。之江新馆2023年开放，展陈面积大幅扩展。
+dynasty_coverage: 新石器时代（河姆渡、良渚）→ 春秋战国（越国）→ 三国两晋（越窑）→ 五代（吴越国）→ 宋代 → 元明清
+timeline: 良渚文化（约前3300-前2000年）是中华五千年文明的实证，2019年列入世界遗产；越国和越窑代表了浙江先秦至中古的工艺传统；南宋定都临安（杭州），使浙江成为中国文化经济重心
+treasures:
+  - name: 良渚文化玉琮王
+  - name: 战国越王者旨於睗剑
+  - name: 五代吴越鎏金银阿育王塔
+  - name: 元代黄公望《富春山居图》（剩山图卷）
+  - name: 宁波万工轿
+halls:
+  - name: 越地长歌"通史陈列
+  - name: 良渚文化专题展
+  - name: 青瓷展厅
+  - name: 宋韵文化展区
+artifacts:
+  - name: 良渚文化玉琮王
+    description: 新石器时代（约前3000年）。体量最大、纹饰最精的良渚玉琮，刻有神人兽面纹，是良渚信仰体系的核心象征，证明了五千年前的复杂社会组织。
+  - name: 战国越王者旨於睗剑
+    description: 战国（约前5世纪）。越王勾践之子所用青铜剑，铸造精良，铭文保存完好，是越国青铜兵器工艺的代表。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/a4/Yuyue_People-_Warring_States_Bronze_Sword_of_Zhu_Ji_Yu_Shi%2C_King_of_the_Yue_-_%E8%B6%8A%E7%8E%8B%E8%80%85%E6%97%A8%E6%96%BC%E7%9D%97%E5%89%91_%E6%B5%99%E6%B1%9F%E5%8D%9A%E7%89%A9%E9%A6%86_%E5%89%91%E8%8C%8E%E7%BB%95%E4%B8%9D%E8%B4%A8%E7%BC%A0%E7%BC%912.jpg
+    image_license: CC0
+    image_attribution: Gary Todd
+  - name: 五代吴越鎏金银阿育王塔
+    description: 五代（10世纪）。雷峰塔地宫出土，纯银鎏金，工艺极精，是吴越国佛教文化的顶级遗物。
+  - name: 元·黄公望《富春山居图》（剩山图卷）
+    description: 元代（约1350年）。中国山水画史上的巅峰之作，现存前半卷"剩山图"藏于浙博，后半卷在台北故宫。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/af/%E5%AF%8C%E6%98%A5%E5%B1%B1%E5%B1%85%E5%9C%96%28%E5%89%A9%E5%B1%B1%E5%9C%96%29.jpg
+    image_license: PD
+    image_attribution: Huang Gongwang
+  - name: 宁波万工轿（花轿）
+    description: 清末民初。耗时万工制作的朱金木雕花轿，代表浙东民间工艺的极致，是民俗文物的经典。
+  - name: 越窑青瓷莲花碗
+    description: 五代（10世纪）。釉色如玉，造型典雅，是"秘色瓷"审美的代表作。
+  - name: 河姆渡文化双鸟朝阳纹象牙蝶形器
+    description: 新石器时代（约前5000年）。河姆渡遗址出土，雕刻精细，是长江流域早期艺术的杰作。
+dynasty_connections:
+  - dynasty: 新石器时代（良渚文化）
+    description: 浙博是全球了解良渚文明的最佳窗口。良渚的玉器、城址、水利系统证明了中国五千年文明史，2019年良渚古城遗址列入UNESCO世界遗产。馆藏良渚玉器数量和质量首屈一指。
+  - dynasty: 春秋战国（越国）
+    description: 越国以会稽（绍兴）为中心，越王勾践卧薪尝胆的故事家喻户晓。浙博藏有多柄越王剑，是理解越国军事和青铜工艺的关键。
+  - dynasty: 五代十国（吴越国）
+    description: 钱氏吴越国偏安杭州，大兴佛教，雷峰塔等遗存丰富。鎏金银阿育王塔等佛教文物反映了这一时期江南的信仰与工艺。
+  - dynasty: 宋代（南宋）
+    description: 南宋定都临安，杭州成为世界最大城市之一。浙博的宋代文物涵盖官窑瓷器、书画、文房等，展现了宋代文化的精致与雅趣。
+sources:
+  - source: "浙江省博物馆官网: https://www.zhejiangmuseum.com/"

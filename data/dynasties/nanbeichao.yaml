@@ -1,0 +1,103 @@
+id: nanbeichao
+name: 南北朝（公元420年—589年）
+period: 公元420年—589年
+order_index: 10
+overview: |-
+  南北朝是中国历史上民族融合和文化变革最剧烈的时期之一。南方和北方各自经历了多次朝代更替，但总的趋势是：南方汉族政权保存了华夏文化传统，北方鲜卑等民族政权则在汉化中完成了深度融合。
+
+  **南朝**（420—589年）：宋（420—479）→ 齐（479—502）→ 梁（502—557）→ 陈（557—589），均定都建康（南京）。南朝文化艺术繁荣——骈文、山水诗、佛教造像、书法绘画都在这一时期达到高峰。但政治上频繁的禅代和内乱削弱了南方的实力。
+
+  **北朝**（386—581年）：北魏（386—534）→ 东魏/西魏 → 北齐/北周 → 隋。北魏是最重要的北朝政权，由鲜卑拓跋氏建立。孝文帝改革（490年代）是中国历史上最彻底的民族文化融合运动——迁都洛阳、改汉姓、穿汉服、说汉语、与汉族通婚，使鲜卑贵族全面汉化。
+
+  最终，脱胎于北周的隋朝统一了南北，结束了近四百年的分裂。
+culture:
+  - category: 佛教艺术巅峰
+    description: 云冈石窟、龙门石窟、敦煌莫高窟（早期洞窟）、天龙山石窟、响堂山石窟
+  - category: 文学
+    description: 谢灵运山水诗、庾信骈文、《文心雕龙》（刘勰，文学批评巅峰）、《世说新语》
+  - category: 数学
+    description: 祖冲之圆周率、《大明历》
+  - category: 地理
+    description: 郦道元《水经注》
+  - category: 农学
+    description: 贾思勰《齐民要术》（现存最完整的古代农书）
+  - category: 书法
+    description: 魏碑（龙门二十品等），方劲雄强，与帖学并为中国书法两大传统
+  - category: 民族融合
+    description: 鲜卑汉化是中国历史上最成功的民族文化融合案例之一
+events:
+  - date: 420年
+    event: 刘裕代晋建宋，南朝开始
+    lat: 34
+    lng: 112
+  - date: 439年
+    event: 北魏统一北方
+    lat: 34
+    lng: 112
+  - date: 460年
+    event: 昙曜开凿云冈石窟
+    lat: 34
+    lng: 112
+  - date: 493—495年
+    event: 北魏孝文帝迁都洛阳，推行汉化
+    lat: 34.62
+    lng: 112.45
+  - date: 494年起
+    event: 龙门石窟开始营造
+    lat: 34
+    lng: 112
+  - date: 523—528年
+    event: 北魏六镇起义，北魏走向分裂
+    lat: 34
+    lng: 112
+  - date: 534年
+    event: 北魏分裂为东魏和西魏
+    lat: 34
+    lng: 112
+  - date: 548—552年
+    event: 侯景之乱，南朝梁遭受毁灭性打击
+    lat: 34
+    lng: 112
+  - date: 577年
+    event: 北周灭北齐，北方再次统一
+    lat: 34
+    lng: 112
+  - date: 581年
+    event: 杨坚代北周建隋
+    lat: 34
+    lng: 112
+  - date: 589年
+    event: 隋灭陈，统一天下，南北朝结束
+    lat: 34
+    lng: 112
+recommended_museums:
+  - museum_id: yungang
+    name: 云冈石窟
+    location: 大同
+    reason: 北魏皇家石窟，昙曜五窟
+  - museum_id: longmen
+    name: 龙门石窟
+    location: 洛阳
+    reason: 北魏至唐代连续营造
+  - museum_id: nanjing
+    name: 南京博物院
+    reason: 竹林七贤砖画等六朝文物
+  - museum_id: jiangsu
+    name: 六朝博物馆
+    location: 南京
+    reason: 六朝专题
+  - museum_id: shanxi-datong
+    name: 大同市博物馆
+    reason: 北魏平城时代，司马金龙墓漆画屏风
+  - museum_id: shanxi
+    name: 山西博物院
+    reason: 虞弘墓石椁（北齐-隋）
+  - museum_id: qingzhou
+    name: 青州博物馆
+    reason: 龙兴寺佛教造像（"青州微笑"）
+  - museum_id: mogao
+    name: 敦煌莫高窟
+    reason: 北朝早期洞窟
+  - museum_id: shandong
+    name: 山东博物馆
+    reason: 青州北朝佛像

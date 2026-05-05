@@ -1,0 +1,54 @@
+id: yinxu
+name: 殷墟博物馆
+lat: 36.1272
+lng: 114.3131
+location: 河南省安阳市殷都区小屯村
+level: 全国重点文物保护单位 / UNESCO世界文化遗产（2006年）
+core_period: 商代晚期（约前1300-前1046年）
+specialty: 中国考古学的诞生地，甲骨文的发现地，商代晚期都城遗址。殷墟的发掘开启了中国现代考古学，甲骨文的释读将中国有文字记载的历史上推至3300年前。2024年新馆是目前全面展示商文明的最现代化场馆。
+dynasty_coverage: 商代晚期（盘庚迁殷至纣王灭国，约270年）
+timeline: 约前1300年盘庚迁殷，此后殷墟作为商都约270年。前1046年（一说前1045年）周武王克商，商朝灭亡。殷墟是商代最后也是最辉煌的都城，甲骨文、青铜器、玉器代表了商文明的最高成就
+treasures:
+  - name: 甲骨文卜辞
+  - name: 妇好墓青铜器群
+  - name: 司母辛鼎（后母辛鼎）
+  - name: 亚长牛尊
+  - name: 玉凤
+halls:
+  - name: 甲骨文专题展
+  - name: 妇好墓原址及随葬品展示
+  - name: 青铜器展厅
+  - name: 车马坑展示
+  - name: 宫殿宗庙遗址区
+artifacts:
+  - name: 甲骨文卜辞
+    description: 商代晚期（前13-前11世纪）。1899年被发现，是中国已知最早的成熟文字系统。殷墟出土甲骨约15万片，内容涉及祭祀、战争、农业、天象等，是研究商代社会的第一手资料。甲骨文的发现改变了世界对中国古代文明的认识。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/22/Yinxu_Oracle_Bone_Inscriptions_for_Divination_%2810185440455%29_cropped.jpg
+    image_license: CC0
+    image_attribution: photograph by Gary Todd, cropped by Kanguole
+  - name: 司母辛鼎（后母辛鼎）
+    description: 商代晚期。妇好墓出土，与中国国家博物馆的后母戊鼎形制相近但略小，铭文"司母辛"（或"后母辛"），是妇好之子为其所铸的祭器。
+  - name: 妇好鸮尊
+    description: 商代晚期。妇好墓出土的猫头鹰形青铜酒器，造型独特威武，是商代青铜器的代表作之一（原件藏河南博物院，殷墟有复制品及其他妇好墓青铜器）。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9d/Fuhao_Owl_Zun_front.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Cangminzho
+  - name: 亚长牛尊
+    description: 商代晚期。以青铜铸成的写实水牛形酒器，体态浑圆，造型生动，出土于殷墟亚长墓，是商代动物形青铜器的杰作。
+  - name: 玉凤
+    description: 商代晚期。妇好墓出土，以和田玉雕成的凤鸟，造型简洁而优美，是商代玉器的标志性作品。
+  - name: 甲骨文"天象记录"
+    description: 商代晚期。部分甲骨记录了日食、月食、新星等天文现象，是世界最早的天文记录之一。
+  - name: 车马坑
+    description: 商代晚期。殷墟发现的车马坑是中国最早的马车实物证据，对研究商代交通和军事制度有重要价值。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/0/0e/%E6%AE%B7%E5%A2%9F%E8%BD%A6%E9%A9%AC%E5%9D%91.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Acot一杯茶
+  - name: 人殉与人牲遗存
+    description: 商代晚期。殷墟王陵区发现大量殉人和祭祀坑，虽然令人不安，但这是理解商代宗教和社会等级制度不可回避的实物证据。
+dynasty_connections:
+  - dynasty: 商代
+    description: 殷墟是商代研究的基石，也是中国考古学的起点。    - **甲骨文与文字起源**：甲骨文有约4500个单字，已释读约1500字。它是汉字的直系祖先，从甲骨文到金文、篆书、隶书、楷书，一脉相承三千余年。2017年甲骨文入选UNESCO"世界记忆名录"。    - **妇好与商代女性**：妇好是商王武丁的王后，甲骨卜辞记载她曾领兵征伐、主持祭祀，是中国有文字记载的第一位女军事家。1976年其墓被完整发掘，出土随葬品1928件（含青铜器468件、玉器755件），是殷墟唯一未被盗掘的王室墓葬。    - **青铜文明巅峰**：商代晚期是中国青铜文明的巅峰。后母戊鼎（重832.84公斤，现藏国家博物馆）是世界已知最重的青铜器。殷墟出土的青铜器铸造工艺精湛，代表了人类早期金属冶铸的最高水平。    - **与三星堆的对话**：殷墟与四川三星堆是同时期的两大文明中心，风格截然不同。殷墟青铜器以礼器为主，三星堆以神像和面具为主，两者对比揭示了商代中国文明的多元面貌。
+sources:
+  - source: "殷墟博物馆官网: https://www.ayyx.com/"
+  - source: UNESCO世界文化遗产名录（2006年）

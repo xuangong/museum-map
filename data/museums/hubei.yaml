@@ -1,0 +1,65 @@
+id: hubei
+name: 湖北省博物馆
+lat: 30.5674
+lng: 114.373
+location: 湖北省武汉市武昌区东湖路160号
+level: 国家一级博物馆
+core_period: 先秦（楚文化）、春秋战国
+specialty: 曾侯乙墓出土文物是镇馆之基，尤其是编钟——改写了世界音乐史。楚文化收藏全国最强，漆器、丝绣、青铜器系统完整。
+dynasty_coverage: 春秋战国（楚国、曾国）为核心，秦（云梦秦简）、元明亦有精品
+timeline: 曾侯乙墓（前433年）是战国早期最重要的考古发现之一。曾国（随国）地处楚国北界，墓葬反映了楚文化圈的辐射范围和先秦礼乐制度的实物面貌。
+treasures:
+  - name: 1. 曾侯乙编钟（战国早期）— 65件青铜编钟
+  - name: 可演奏完整音阶
+  - name: 2400年前的乐器奇迹
+halls:
+  - name: 曾侯乙展厅（核心）
+  - name: 楚文化展
+  - name: 编钟演奏（每日定时）
+  - name: 梁庄王墓展
+artifacts:
+  - name: 曾侯乙编钟
+    period: 前433年
+    description: 总重2567kg，音域跨五个半八度，可演奏中外乐曲。铭文2828字，记载了先秦乐律学体系
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9e/%E6%9B%BE%E4%BE%AF%E4%B9%99%E7%BC%96%E9%92%9F%E9%92%9F%E7%B0%A86.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三十三画生
+  - name: 越王勾践剑
+    period: 春秋，约前5世纪
+    description: 剑长55.7cm，锡青铜铸造，剑身菱形暗纹，千年不锈
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/25/20230208_Bronze_sword_used_by_King_Goujian_of_Yue_01.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Windmemories
+  - name: 曾侯乙尊盘
+    period: 前433年
+    description: 尊与盘套合，镂空附饰用失蜡法铸造，铜器铸造工艺的极限
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/13/%E6%9B%BE%E4%BE%AF%E4%B9%99%E9%9D%92%E9%93%9C%E5%B0%8A%E7%9B%98%EF%BC%8C2015-04-06_01.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Siyuwj
+  - name: 云梦睡虎地秦简
+    period: 秦，前217年入葬
+    description: 1155枚竹简，包含秦律、日书等，是了解秦代法律和社会的第一手资料
+    image_url: https://upload.wikimedia.org/wikipedia/commons/d/d6/Bamboo_Slips_of_Qin_Dynasty_Unearthed_from_Shuihudi_2013-01.JPG
+    image_license: CC-BY-SA-3.0
+    image_attribution: 猫猫的日记本
+  - name: 曾侯乙外棺
+    period: 战国
+    description: 彩绘漆棺，纹饰为神话人物和窗格纹
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/1f/%E6%9B%BE%E4%BE%AF%E4%B9%99%E5%A2%93%E5%A4%96%E6%A3%BA%EF%BC%8C2014-04-06_01.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Siyuwj
+  - name: 虎座鸟架鼓
+    period: 战国·楚
+    description: 楚文化标志性器物造型
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/1f/%E8%99%8E%E5%BA%A7%E9%B8%9F%E6%9E%B6%E9%BC%93%EF%BC%88%E4%B9%9D%E8%BF%9E%E5%A2%A9%EF%BC%89.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三十三画生
+  - name: 元青花四爱图梅瓶
+    period: 元
+    description: 画面描绘王羲之爱兰、陶渊明爱菊、林和靖爱梅鹤、周敦颐爱莲
+    image_url: https://upload.wikimedia.org/wikipedia/commons/4/40/%E5%85%83%E9%9D%92%E8%8A%B1%E5%9B%9B%E7%88%B1%E5%9B%BE%E6%A2%85%E7%93%B6.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三十三画生
+sources:
+  - source: "湖北省博物馆官网: https://www.hbww.org/"
+  - source: 曾侯乙编钟总重2567kg（多源核实）

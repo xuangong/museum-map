@@ -1,0 +1,51 @@
+id: shandong
+name: 山东博物馆
+lat: 36.6488
+lng: 117.101
+location: 山东省济南市历下区经十路11899号
+level: 国家一级博物馆
+core_period: 新石器时代（大汶口-龙山文化）、先秦（齐鲁文化）、明代（鲁王府/衡王府）
+specialty: 以史前考古收藏见长，蛋壳黑陶杯是龙山文化的巅峰之作。齐鲁文化是中华文明的核心源头之一，馆内对齐国和鲁国有系统展示。明代鲁王府旧藏的大量文物也是重要特色。
+dynasty_coverage: 新石器时代（大汶口、龙山文化）、商、西周、春秋战国（齐鲁）、汉、北朝、明
+timeline: 大汶口文化（前4100-前2600年）→ 龙山文化（前2600-前2000年）→ 齐鲁立国（前1046年分封）→ 汉代儒学中心
+treasures:
+  - name: 蛋壳黑陶高柄杯
+  - name: 红陶兽形壶
+  - name: 鲁国大玉璧
+  - name: 亚丑钺
+  - name: 明衡王府九旒冕
+halls:
+  - name: 史前文明
+  - name: 齐鲁文化
+  - name: 佛教造像艺术
+  - name: 明代鲁王展
+artifacts:
+  - name: 蛋壳黑陶高柄杯
+    period: 龙山文化，约前2500-前2000年
+    description: —日照出土，器壁最薄处仅0.2毫米，重量不足50克，"薄如蛋壳、黑如漆、亮如镜"。是龙山文化制陶工艺的巅峰之作，代表了史前陶器技术的最高水平，无法在现代条件下完美复制。
+  - name: 红陶兽形壶
+    period: 大汶口文化，约前4000年
+    description: —泰安大汶口出土，猪形（一说狗形），造型憨态可掬，是大汶口文化的标志性器物，体现了先民的生活情趣和艺术想象力。
+  - name: 鲁国大玉璧
+    period: 战国
+    description: —曲阜鲁国故城出土，直径32.8厘米，是目前所见战国玉壁中最大的一件。纹饰精美复杂，分内外区，体现了鲁国"周礼尽在鲁"的用玉传统。
+  - name: 亚丑钺
+    period: 商代晚期
+    description: —青州苏埠屯出土，铜钺上有"亚丑"铭文和人面纹饰，造型威严狰狞。是商代晚期东方方国的重要遗物，"亚丑"可能是商代的一个重要族群。
+  - name: 颂簋
+    period: 西周晚期
+    description: —传世品，铭文152字，记载周王册命颂的事迹。是西周青铜器铭文学研究的重要材料。
+  - name: 明衡王府九旒冕
+    period: 明代
+    description: —青州明衡王墓出土，是目前国内唯一保存完整的明代亲王冕冠实物。金丝编制，九旒各缀玉珠，完整再现了明代亲王的冕服制度。
+  - name: 东平汉墓壁画
+    period: 东汉
+    description: —东平出土，保存完好，绘有宴饮、车马出行等场面。是山东地区汉代壁画的重要发现，填补了该区域汉代墓葬壁画的空白。
+  - name: 甲骨文
+    period: 商代
+    description: —馆藏甲骨数量丰富，是研究商代后期历史的重要文字资料。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/7b/%E4%BB%A5%E5%95%86%E4%BB%A3%E7%94%B2%E9%AA%A8%E6%96%87%E5%9B%BE%E7%89%87%E4%B8%BA%E8%83%8C%E6%99%AF%E7%9A%84%E8%A5%BF%E5%91%A8%E5%8E%9F%E5%88%BB%E7%9F%B3%E7%AE%80.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-3.0
+    image_attribution: Liuzpy
+sources:
+  - source: "山东博物馆官网: https://www.sdmuseum.com/"

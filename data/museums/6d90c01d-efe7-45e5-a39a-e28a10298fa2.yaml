@@ -1,0 +1,81 @@
+id: 6d90c01d-efe7-45e5-a39a-e28a10298fa2
+name: 白马寺
+lat: 34.6836
+lng: 112.6269
+location: 河南省洛阳市瀍河回族区白马寺镇310国道边
+level: 第一批全国重点文物保护单位（国家AAAA级旅游景区）
+core_period: 东汉（公元68年）
+specialty: 中国第一座官办佛教寺院，中国佛教的发源地，被誉为"释源""祖庭"
+dynasty_coverage: 东汉、曹魏、唐、宋、金、明、清
+timeline: 东汉永平十一年（公元68年）始建，历经曹魏、唐、宋、金、明、清各代修缮，延续至今，逾1950年
+treasures:
+  - name: 释迦牟尼佛舍利（2颗）
+  - name: 元代十八罗汉夹纻像
+  - name: 明代大钟（嘉靖三十四年铸，重2500斤）
+  - name: 贝叶经
+  - name: 石马（北宋·魏咸信墓前石像）
+  - name: 缅甸卧玉佛（长5米，重8吨）
+  - name: 中华古佛（泰国赠送）
+halls:
+  - name: 山门（天下第一古刹山门）
+  - name: 天王殿
+  - name: 大佛殿
+  - name: 大雄殿
+  - name: 接引殿
+  - name: 清凉台（毗卢阁所在）
+  - name: 毗卢阁
+  - name: 钟楼
+  - name: 鼓楼
+  - name: 法宝阁
+  - name: 藏经阁
+  - name: 卧佛殿
+  - name: 玉佛殿
+  - name: 六祖殿
+  - name: 齐云塔院
+  - name: 泰式佛殿
+  - name: 缅式佛殿
+  - name: 印式佛殿
+artifacts:
+  - name: 元代十八罗汉夹纻像
+    period: 元代
+    description: 采用夹纻工艺制成，造型生动，为白马寺镇寺之宝，极具历史与艺术价值
+  - name: 明代大钟
+    period: 明代嘉靖三十四年（1555年）
+    description: 悬挂于大佛殿东南角，通高1.65米，重二千五百斤，钟声洪亮，可传数里，为洛阳著名古迹
+  - name: 石马
+    period: 北宋
+    description: 山门前左右各一，高1.8米，长2.2米，原为北宋太师太保魏咸信墓前石像，相传为汉代驮经白马
+    image_url: https://upload.wikimedia.org/wikipedia/commons/4/4c/%E7%99%BD%E9%A9%AC%E6%8B%96%E7%BB%8F.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-3.0
+    image_attribution: Weiqing
+  - name: 释迦牟尼佛舍利
+    period: 东汉
+    description: 白马寺供奉的释迦牟尼佛真身舍利，共2颗，极为珍贵
+  - name: 缅甸卧玉佛
+    period: 现代
+    description: 由缅甸赠送，供奉于卧佛殿，身长5米，重约8吨，以整块白玉雕成
+  - name: 贝叶经
+    period: 古代
+    description: 用贝树叶书写的古代佛经，是佛教文献的珍贵实物遗存，现藏白马寺
+dynasty_connections:
+  - dynasty: 东汉
+    description: 永平十一年（公元68年），汉明帝敕令兴建，是佛教传入中国后第一座官办寺院，摄摩腾、竺法兰在此译出《四十二章经》
+  - dynasty: 曹魏
+    description: 建安二十五年（220年）重建；嘉平二年（250年）印度高僧昙柯迦罗在此译出第一部汉文佛教戒律《僧祇戒心》
+  - dynasty: 唐代
+    description: 垂拱元年（685年）武则天敕修，寺院规模达到鼎盛，为历史上的黄金时代
+  - dynasty: 宋代
+    description: 淳化三年（992年）宋太宗敕修，寺院得到大规模整治
+  - dynasty: 金代
+    description: 大定十五年（1175年）重修齐云塔（释迦舍利塔），现为白马寺标志性建筑
+  - dynasty: 明代
+    description: 洪武二十三年（1390年）朱元璋敕修；嘉靖三十四年（1555年）司礼监太监黄锦大规模整修，奠定寺院现存格局
+  - dynasty: 清代
+    description: 多次维修；同治年间接引殿被烧毁，光绪年间重建，基本形成现存规模
+sources:
+  - source: http://www.chinabaimasi.com
+  - source: https://www.henan.gov.cn/2018/12-28/728138.html
+  - source: https://wwj.henan.gov.cn/2023/06-02/2754866.html
+  - source: https://www.henan.gov.cn/2025/05-21/3160188.html
+  - source: https://baike.baidu.com/item/%E7%99%BD%E9%A9%AC%E5%AF%BA/4680
+  - source: https://zh.wikipedia.org/wiki/%E7%99%BD%E9%A9%AC%E5%AF%BA

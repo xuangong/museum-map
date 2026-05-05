@@ -1,0 +1,46 @@
+id: chengdu
+name: 成都博物馆
+lat: 30.657
+lng: 104.0635
+location: 四川省成都市青羊区小河街1号（天府广场西侧）
+level: 国家一级博物馆
+core_period: 古蜀至近现代（成都城市通史）
+specialty: 成都城市史的完整叙事，从古蜀到当代。2012年老官山汉墓出土的织机模型是世界纺织史重大发现。新馆建筑面积约6.5万平方米，是西南地区规模最大的城市博物馆之一。
+dynasty_coverage: 古蜀（宝墩文化/三星堆/金沙）→ 秦汉（蜀郡/老官山）→ 三国（蜀汉）→ 唐宋（繁荣期）→ 明清 → 近现代
+timeline: 成都建城2300余年，城址未迁。秦李冰修都江堰使成都平原成为"天府之国"。老官山汉墓织机证明蜀锦技术在西汉就已高度发达。
+treasures:
+  - name: 老官山汉墓织机模型（西汉）
+  - name: 石犀（秦汉）
+  - name: 经穴漆人（西汉）
+  - name: 皮影戏藏品
+halls:
+  - name: 花重锦官城——成都历史文化陈列"（通史主线）
+  - name: 影舞万象·偶戏大千——中国皮影木偶展
+artifacts:
+  - name: 老官山汉墓织机模型
+    period: 西汉，约前1世纪
+    description: 2012年天回镇老官山汉墓出土4部织机模型，是世界上发现最早的提花织机模型，证明蜀锦技术在西汉就达到相当高度。填补了中国纺织史的重大空白
+  - name: 石犀
+    period: 秦汉
+    description: 2012年天府广场出土，长3.3米、高1.7米、重约8.5吨。可能与李冰治水传说中"作石犀以镇水精"有关
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b6/%E7%9F%B3%E7%8A%80-%E7%A7%A6%E6%B1%89-%E6%88%90%E9%83%BD%E5%8D%9A%E7%89%A9%E9%A6%86_01.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36
+  - name: 经穴漆人
+    period: 西汉
+    description: 老官山汉墓出土，漆人身上标注经络和穴位，是目前发现最早最完整的人体经穴模型，对中医学史研究意义重大
+    image_url: https://upload.wikimedia.org/wikipedia/commons/4/4b/%E6%88%90%E9%83%BD%E8%80%81%E5%AE%98%E5%B1%B1%E6%B1%89%E5%A2%93-%E7%BB%8F%E7%A9%B4%E6%BC%86%E4%BA%BA-%E8%A5%BF%E6%B1%89%EF%BC%88%E5%89%8D202-8%E5%B9%B4%EF%BC%89-%E6%88%90%E9%83%BD%E5%B8%82%E5%8D%9A%E7%89%A9%E9%A6%86_2025-02-28.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36
+  - name: 医简
+    period: 西汉
+    description: 老官山汉墓出土920余支竹简，含多部医书，部分内容与《黄帝内经》相关
+    image_url: https://upload.wikimedia.org/wikipedia/commons/d/df/%E6%88%90%E9%83%BD%E8%80%81%E5%AE%98%E5%B1%B1%E5%A2%93%E5%9C%B0%E5%87%BA%E5%9C%9F-%E5%8C%BB%E7%AE%80-%E8%A5%BF%E6%B1%89-%E6%88%90%E9%83%BD%E8%80%83%E5%8F%A4%E4%B8%AD%E5%BF%83_2024-10-17.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36
+  - name: 皮影戏藏品
+    period: 东汉
+    description: 成都地区出土的画像砖，描绘宴饮、车马出行、农耕等场景，是了解汉代四川社会生活的图像资料
+sources:
+  - source: 核心信息基于AI知识库
+  - source: "老官山汉墓织机: 2013年考古发掘报道"

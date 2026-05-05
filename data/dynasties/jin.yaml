@@ -1,0 +1,88 @@
+id: jin
+name: 两晋（公元265年—420年）
+period: 公元265年—420年
+order_index: 9
+overview: |-
+  两晋分为西晋（265—316年）和东晋（317—420年）。
+
+  **西晋**（265—316年）：司马炎代魏建晋，280年灭吴统一天下，但统一仅维持三十余年。西晋的核心问题是宗室分封过重——八王之乱（291—306年）使中央政权崩溃，北方游牧民族趁机南下，永嘉之乱（311年）中匈奴刘聪攻破洛阳，316年长安陷落，西晋灭亡。
+
+  **东晋**（317—420年）：司马睿在建康（今南京）重建政权，史称东晋。东晋政治的最大特点是"王与马，共天下"——皇权羸弱，琅琊王氏、陈郡谢氏等门阀士族轮流执政。383年淝水之战，谢安、谢玄以少胜多击败前秦苻坚，是东晋最辉煌的军事胜利。但此后内部争斗不断，420年刘裕代晋建宋，东晋结束。
+
+  西晋灭亡后，北方进入"五胡十六国"时期（304—439年），匈奴、鲜卑、羯、氐、羌五个民族先后建立多个政权，民族融合在血与火中推进。
+culture:
+  - category: 书法
+    description: 王羲之、王献之父子将书法艺术推向巅峰，"二王"风格影响中国书法千余年
+  - category: 绘画
+    description: 顾恺之"以形写神"，开创中国人物画理论
+  - category: 玄学
+    description: 何晏、王弼注《老子》《易经》，玄学兴盛，"清谈"成为士族风尚
+  - category: 田园诗
+    description: 陶渊明开创田园诗派
+  - category: 佛教发展
+    description: 法显西行取经，佛教在中国深入传播
+  - category: 门阀制度
+    description: 九品中正制演变为门阀垄断，"上品无寒门，下品无势族"
+  - category: 衣冠南渡
+    description: 北方士族南迁，带动江南开发，中国经济重心开始南移
+events:
+  - date: 265年
+    event: 司马炎代魏建晋
+    lat: 32
+    lng: 118.8
+  - date: 280年
+    event: 西晋灭吴，统一天下
+    lat: 32
+    lng: 118.8
+  - date: 291—306年
+    event: 八王之乱
+    lat: 32
+    lng: 118.8
+  - date: 311年
+    event: 永嘉之乱，匈奴破洛阳
+    lat: 34.62
+    lng: 112.45
+  - date: 316年
+    event: 西晋灭亡
+    lat: 32
+    lng: 118.8
+  - date: 317年
+    event: 司马睿在建康建东晋
+    lat: 32.06
+    lng: 118.8
+  - date: 353年
+    event: 王羲之《兰亭集序》写成
+    lat: 32
+    lng: 118.8
+  - date: 383年
+    event: 淝水之战，谢安击败前秦
+    lat: 32.63
+    lng: 116.98
+  - date: 399—412年
+    event: 法显西行求法
+    lat: 32
+    lng: 118.8
+  - date: 420年
+    event: 刘裕代晋建宋，东晋结束
+    lat: 32
+    lng: 118.8
+recommended_museums:
+  - museum_id: nanjing
+    name: 南京博物院
+    reason: 竹林七贤与荣启期砖画（南朝），六朝文物核心
+  - museum_id: jiangsu
+    name: 六朝博物馆
+    location: 南京
+    reason: 东晋至南朝专题展
+  - museum_id: luoyang
+    name: 洛阳博物馆
+    reason: 西晋都城出土文物
+  - museum_id: liaoning
+    name: 辽宁省博物馆
+    reason: 《万岁通天帖》（王羲之家族书法唐摹本）
+  - museum_id: gugong
+    name: 故宫博物院
+    reason: 王羲之书法相关藏品
+  - museum_id: shanxi-datong
+    name: 大同市博物馆
+    reason: 北方十六国至北魏文物

@@ -1,0 +1,43 @@
+id: 8d05e910-ec8f-4d99-8cba-140f10bd9ef2
+name: 汉景帝阳陵博物院
+lat: 34.47
+lng: 109.15
+location: 陕西省西安市咸阳国际机场专线公路东段（渭城区正阳镇张家湾村）
+level: 国家一级博物馆
+core_period: 西汉（公元前153年—公元前126年）
+specialty: 汉代帝陵陵园遗址保护与展示、西汉陶俑艺术
+dynasty_coverage: 西汉
+timeline: 陵园始建于公元前153年，至王皇后下葬（公元前126年）历时约28年建成；1999年汉阳陵考古陈列馆对外开放；2003年帝陵南门阙遗址保护陈列厅建成；2006年3月31日帝陵外藏坑遗址保护展示厅建成开放。
+treasures:
+  - name: 武士俑
+  - name: 仕女俑（侍女俑）
+  - name: 陶塑动物俑
+  - name: 木车马
+  - name: 宗正之印龟钮银印
+  - name: 大官之印铜印
+  - name: 永巷丞印
+  - name: 内官丞印
+  - name: 阳陵令印封泥
+halls:
+  - name: 汉阳陵考古陈列馆
+  - name: 帝陵外藏坑遗址保护展示厅
+  - name: 帝陵南门阙遗址保护展示厅
+  - name: 宗庙遗址展示区
+artifacts:
+  - name: 武士俑
+    period: 西汉
+    description: 披坚执锐、严阵以待，是汉阳陵出土数量最多的陶俑，展现西汉军事风貌
+  - name: 仕女俑（侍女俑）
+    period: 西汉
+    description: 宽衣博带、美目流盼，体态优雅，反映西汉宫廷女性形象
+  - name: 动物俑
+    period: 西汉
+    description: 种类丰富，累千成万，生动异常，包括猪、羊、狗、鸡等家畜家禽陶塑
+  - name: 宗正之印龟钮银印
+    period: 西汉
+    description: 出土于外藏坑，为西汉官署印章，是研究汉代官制的重要实物
+sources:
+  - source: http://www.hylae.com/index.php?ac=article&at=list&tid=10
+  - source: http://www.hylae.com/index.php?ac=article&at=read&did=295
+  - source: https://wwj.shaanxi.gov.cn/zfxxgk/fdzdgknr/zzjg/zsdw/202011/t20201110_2008475.html
+  - source: https://www.museumschina.cn/museums/details?id=61012621800005

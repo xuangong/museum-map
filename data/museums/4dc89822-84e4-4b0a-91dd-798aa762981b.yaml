@@ -1,0 +1,48 @@
+id: 4dc89822-84e4-4b0a-91dd-798aa762981b
+name: 宝鸡周原博物院
+lat: 34.4778
+lng: 107.9039
+location: 陕西省宝鸡市扶风县法门镇召陈村
+level: 国家二级博物馆
+core_period: 西周
+specialty: 社会科学类考古遗址专题博物馆
+dynasty_coverage: 西周及以前
+timeline: 1987年创建，1990年12月正式对外开放
+treasures:
+  - name: 折觥
+  - name: 史墙盘
+  - name: 三年疢壶
+  - name: 胡簋
+  - name: 师同鼎
+  - name: 周原甲骨文
+  - name: 玉圭
+  - name: 玉璋
+  - name: 玉璜
+  - name: 玉璧
+  - name: 玉环
+  - name: 玉鸟
+  - name: 玉鱼
+  - name: 玉蚕
+halls:
+  - name: 周原出土文物展
+  - name: 周原历史文物陈列
+  - name: 西周书法艺术展览
+  - name: 西周酒文化展
+artifacts:
+  - name: 折觥
+    period: 西周
+    description: 造型庄重典雅，纹饰精美富丽，整体为绵羊形，盖体呈羊首形，饰以飞燕、饕餮、夔龙纹等纹饰
+  - name: 史墙盘
+    period: 西周
+    description: 铭文最长的青铜器，计284字，历述西周文、武、成、康、昭、穆六王的主要业绩，有”青铜史书”之称
+  - name: 三年疢壶
+    period: 西周
+    description: 通高65.4厘米，重26公斤，有”壶中之冠”美称，盖内沿有铭文12行60字
+dynasty_connections:
+  - dynasty: 西周
+    description: 周原是西周王朝的发祥地与核心统治区域，出土了大量西周青铜礼器、甲骨文及玉器，是研究西周历史与文化的第一手资料宝库
+sources:
+  - source: https://wwj.baoji.gov.cn/col12953/col12990/col14487/202504/P020250401628882972224.pdf
+  - source: https://www.shaanxi.gov.cn/xw/ldx/ds/202211/t20221103_2258089_wap.html
+  - source: https://baike.baidu.com/item/%E5%AE%9D%E9%B8%A1%E5%91%A8%E5%8E%9F%E5%8D%9A%E7%89%A9%E9%99%A2/53608749
+  - source: https://zh.wikipedia.org/wiki/%E5%AE%9D%E9%B8%A1%E5%91%A8%E5%8E%9F%E5%8D%9A%E7%89%A9%E9%99%A2

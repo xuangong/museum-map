@@ -1,0 +1,47 @@
+id: xinjiang
+name: 新疆维吾尔自治区博物馆
+lat: 43.81
+lng: 87.5775
+location: 新疆维吾尔自治区乌鲁木齐市西北路581号
+level: 国家一级博物馆（2008年首批）
+core_period: 青铜时代至唐代（丝绸之路西域段）
+specialty: 中国唯一全面展示西域文明的省级博物馆。馆藏3.2万件，一级品288件。以古代干尸（楼兰美女等）、多语言文书（汉文、回鹘文、佉卢文、吐火罗文、梵文、粟特文等9种文字）、汉唐丝织品为三大独特收藏。2022年二期投用后，展览面积从6178㎡增至1.13万㎡。2023年设立"国博厅"和"故宫厅"。
+dynasty_coverage: 青铜时代（小河/楼兰）→ 汉（西域都护府，前60年）→ 魏晋南北朝（高昌/龟兹）→ 唐（安西都护府）→ 宋元（回鹘/西辽）→ 清（新疆建省）
+timeline: 前60年汉设西域都护府，新疆正式纳入中国版图。此后历经东汉班超经营西域、唐代安西都护府管辖、清代新疆建省，新疆始终是丝绸之路的核心段和东西方文明交汇之地。
+treasures:
+  - name: 1. "五星出东方利中国"锦护膊（汉代）— 长18.5cm
+  - name: 宽12.5cm
+  - name: 1995年出土
+  - name: 织有汉字"五星出东方利中国"
+halls:
+  - name: 新疆历史文物展"（700余件文物
+  - name: 12个单元
+  - name: 2022年获全国十大陈列展览精品特别奖）
+  - name: 逝而不朽惊天下——新疆古代干尸展"（7个单元）
+  - name: 瀚海霓裳——西域服饰的记忆"（3800年跨度）
+  - name: 新疆民族风情陈列"（12个民族民俗）
+artifacts:
+  - name: '"五星出东方利中国"锦护膊'
+    period: 汉代，1995年尼雅遗址出土
+    description: 长18.5cm，宽12.5cm，织有汉字"五星出东方利中国"和凤凰、鸾鸟、白虎等纹样。是目前所知汉代织锦中工艺最复杂、色彩最丰富的品种之一，被列为首批禁止出国展览文物
+    image_url: https://commons.wikimedia.org/wiki/File:Five_Stars_Rising_in_the_East_Benefiting_for_the_Central_Plains_armband_(20230921114337).jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: N509FZ
+  - name: 楼兰女尸
+    period: 约3800年前，1980年罗布泊铁板河出土
+    description: 身长152cm，生前约155.8cm，死亡年龄40-45岁。栗色直发，尖高鼻梁，眼睛深凹，皮肤呈古铜色。是世界上保存最好的古尸之一
+  - name: 营盘男尸
+    period: 汉晋，1995年尉犁县营盘遗址15号墓出土
+    description: 男性，约25岁，身高约1.8米。面覆金箔面具，身穿红地对人兽树纹罽袍（毛织物，图案含人物、狮鹫和石榴树），具有强烈的希腊化艺术风格，是东西方文化交融的标本
+  - name: 小河墓地女性干尸
+    period: 约3800年前
+    description: 身长158cm，灰棕色头发自然中分，保存极为完好。小河墓地"千口棺材"的发现震惊考古界
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/29/%E8%B7%9D%E4%BB%8A3800%E5%B9%B4%E7%9A%84%E5%B0%8F%E6%B2%B3%E5%A2%93%E5%9C%B0%E5%8F%A4%E4%BB%A3%E6%AC%A7%E7%BD%97%E5%B7%B4%E4%BA%BA%E7%A7%8D%E6%88%90%E5%B9%B4%E5%A5%B3%E6%80%A7%E5%B9%B2%E5%B0%B8_Female_Mummy_And_Dressing%28about_3800_years_ago_Unearthed_at_Xiaohe_Cemetery%294.jpg
+    image_license: CC-BY-SA-2.0
+    image_attribution: Eric Feng
+  - name: 汉唐丝织品
+    period: 汉至唐
+    description: 包括锦、绮、绫、罗、纱等大量丝织品，以及毯、毡、绦带等毛织品，是研究中国古代纺织史和丝路贸易的第一手实物
+sources:
+  - source: 百度百科·新疆维吾尔自治区博物馆（详细词条，含馆藏数据、展厅描述、文物详情）
+  - source: 新疆博物馆官网

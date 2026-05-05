@@ -1,0 +1,47 @@
+id: heilongjiang
+name: 黑龙江省博物馆
+lat: 45.7656
+lng: 126.628
+location: 黑龙江省哈尔滨市南岗区红军街64号
+level: 国家一级博物馆
+core_period: 渤海国（698-926年）、金代（1115-1234年）、自然历史
+specialty: 是中国最早的博物馆之一，馆舍本身即为全国重点文物保护单位（新艺术运动风格建筑）。金代文物和渤海国遗物是核心考古收藏，同时以恐龙化石（满洲龙）和自然标本著称，兼具自然与人文。
+dynasty_coverage: 新石器时代、渤海国、辽、金、元、清（黑龙江流域开发）
+timeline: 靺鞨文化 → 渤海国（698-926年）→ 女真崛起·金建国（1115年）→ 金上京（阿城）→ 元代东北 → 清代流放地 → 中东铁路时代
+treasures:
+  - name: 金代铜坐龙
+  - name: 渤海石灯幢
+  - name: 满洲龙化石
+  - name: 铜镜系列
+  - name: 阿城金代铜人
+halls:
+  - name: 黑龙江历史文物陈列
+  - name: 自然陈列
+  - name: 哈尔滨城史
+artifacts:
+  - name: 金代铜坐龙
+    period: 金代，12世纪
+    description: —阿城金上京遗址出土，龙呈蹲坐状，集龙、麒麟、狮、犬等形象于一身，造型别致。已成为哈尔滨市的城市标志，体现了金代女真民族独特的艺术审美。
+  - name: 满洲龙化石
+    period: 白垩纪晚期，约6600万年前
+    description: —嘉荫县出土，1902年由俄国古生物学家发现，是中国最早发现的恐龙化石。嘉荫因此被称为"恐龙之乡"。
+  - name: 渤海石灯幢
+    period: 渤海国，8-9世纪
+    description: —宁安渤海上京遗址出土，石质灯塔造型，雕刻精美，体现了渤海国佛教建筑艺术。渤海上京龙泉府仿唐长安布局，是当时东北亚最大的城市之一。
+  - name: 金代"上京路"铜印
+    period: 金代
+    description: —官方印信，上京路为金代行政区划（治所在今阿城），此印是金代地方行政制度的实物证据。
+  - name: 金代铜人
+    period: 金代
+    description: —阿城出土，人物造型具有女真族特征，面部表情生动。是研究金代女真人形象和服饰的重要资料。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/8/82/%E2%80%9C%E9%87%91%E2%80%9D%E5%AD%97%E5%8D%B0%E9%93%9C%E4%BA%BA%E6%8A%BC%E8%AE%B0%EF%BC%8C%E7%BB%A5%E5%8C%96%E5%B8%82%E5%8D%9A%E7%89%A9%E9%A6%86.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Amarespeco
+  - name: 清代"龙兴之地"碑刻
+    period: 清代
+    description: —反映了清朝对东北地区"发祥地"的特殊管理，包括封禁政策等。
+  - name: 中东铁路历史文物
+    period: 清末民初
+    description: —哈尔滨因中东铁路（1898年始建）而兴起，馆藏大量中东铁路时期的文物，展示了这座城市独特的近代史。
+sources:
+  - source: "黑龙江省博物馆官网: https://www.hljmuseum.com/"

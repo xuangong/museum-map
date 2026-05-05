@@ -1,0 +1,67 @@
+id: d5a151c4-b6ba-4b0b-a3c0-a74ee9843eee
+name: 晋祠博物馆
+lat: 37.7081
+lng: 112.4344
+location: 山西省太原市晋源区晋祠镇晋祠公园内
+level: 国家一级博物馆 · 国家AAAAA级旅游景区 · 第一批全国重点文物保护单位
+core_period: 西周至民国（跨越约3000年）
+specialty: 以中国现存最早的皇家祭祀园林为依托，集古代建筑、彩塑雕刻、碑刻石刻、楹联匾额、古树名木于一体的综合类历史文化博物馆；被誉为"中国古代建筑博物馆"与"中国古代雕塑艺术宝库"
+dynasty_coverage: 西周、春秋、战国、秦、汉、魏晋南北朝、隋、唐、五代、宋、元、明、清、民国
+timeline: 西周（约公元前11世纪）始建祠庙祭祀唐叔虞；北魏时已见于《水经注》记载；北宋天圣年间追封唐叔虞为汾王，建圣母殿；隋大业十三年（617年）李渊、李世民在此誓师起兵；唐贞观二十年（646年）唐太宗撰《晋祠之铭并序》碑；1952年成立山西晋祠古迹保养所；1955年更名为山西晋祠文物保管所；1961年被国务院公布为第一批全国重点文物保护单位；1990年正式更名为晋祠博物馆；2024年入选第五批国家一级博物馆；2025年10月23日"万古一脉——晋祠博物馆基本陈列"正式面向公众开放
+halls:
+  - name: 圣母殿（宋代彩塑核心殿堂）
+  - name: 唐叔虞祠
+  - name: 鱼沼飞梁
+  - name: 献殿
+  - name: 金人台
+  - name: 水镜台
+  - name: 唐碑亭
+  - name: 傅山纪念馆
+  - name: 董寿平美术馆
+  - name: 晋溪书院（子乔祠）
+  - name: 关帝庙
+  - name: 玉皇阁
+  - name: 文昌宫
+  - name: 昊天神祠
+  - name: 水母楼
+  - name: 奉圣寺
+  - name: 舍利生生塔
+  - name: 翰香馆
+  - name: 陈家息庐（万古一脉基本陈列序厅）
+artifacts:
+  - name: 《晋祠之铭并序》碑
+    period: 唐贞观二十年（646年）
+    description: 唐太宗李世民亲撰并书，是其唯一传世碑刻，融政治思想、文学与书法艺术于一体，现保存于晋祠博物馆唐碑亭内
+  - name: 宋代彩塑侍女像
+    period: 北宋
+    description: 圣母殿内43尊宋代彩塑之一，以写实手法塑造宫廷侍女形象，神态生动各异，是中国古代雕塑艺术的杰出代表，晋祠三绝之一
+  - name: 晋祠铁人（金人台铁人）
+    period: 北宋
+    description: 金人台四隅铸造的北宋铁铸武士像，工艺精湛，至今保存完好
+    image_url: https://upload.wikimedia.org/wikipedia/commons/5/54/%E6%99%8B%E7%A5%A0%E9%87%91%E4%BA%BA%E5%8F%B0%E8%A5%BF%E5%8D%97%E8%A7%92%E9%93%81%E4%BA%BA.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Patrick20242023
+  - name: 唐双鸾瑞兽云纹铜镜
+    period: 唐
+    description: 晋祠博物馆馆藏珍品铜镜，纹饰精美，体现唐代高超铸铜工艺
+  - name: 清乾隆款祭红釉玉壶春瓶
+    period: 清乾隆
+    description: 晋祠博物馆馆藏瓷器珍品，祭红釉色纯正，器型优雅，为清代官窑精品
+dynasty_connections:
+  - dynasty: 西周
+    description: 晋祠始建，为祭祀西周晋国开国诸侯唐叔虞（叔虞封唐，后改国名为晋）的宗祠
+  - dynasty: 北魏
+    description: 郦道元《水经注》已有”唐叔虞祠”及鱼沼飞梁的文字记录
+  - dynasty: 北宋
+    description: 北宋天圣年间追封唐叔虞为汾王，并为圣母邑姜修建圣母殿，现存建筑为宋代典范；殿内43尊宋代彩塑为国宝级文物
+  - dynasty: 唐
+    description: 隋末李渊、李世民晋祠誓师；唐太宗李世民亲撰《晋祠之铭并序》碑，该碑为李世民唯一传世碑刻，现存唐碑亭
+  - dynasty: 明
+    description: 明嘉靖四年（1525年）王琼建晋溪书院（初名晋溪园）；水镜台后台为明代建造
+  - dynasty: 清
+    description: 水镜台前台清代补建；乾隆年间重修舍利生生塔；祠内现存楹联匾额绝大部分为清代原物
+sources:
+  - source: https://www.chinajinci.com/jcbwg（晋祠博物馆官方网站·博物馆介绍页）
+  - source: https://www.chinajinci.com/c/jczs（晋祠博物馆官方网站·晋祠综述页）
+  - source: https://www.taiyuan.gov.cn/jcbwg.html（太原市人民政府门户网站·晋祠博物馆景区概况）
+  - source: https://wlt.shanxi.gov.cn/xwzx/sxdt/202410/t20241017_9674745.shtml（山西省文化和旅游厅政务网·走进晋祠博物馆）

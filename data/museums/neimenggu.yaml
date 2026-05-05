@@ -1,0 +1,57 @@
+id: neimenggu
+name: 内蒙古博物院
+lat: 40.8427
+lng: 111.7588
+location: 内蒙古自治区呼和浩特市新城区新华东街27号
+level: 国家一级博物馆
+core_period: 匈奴至蒙元（北方游牧文化全谱系）
+specialty: 中国收藏北方草原文化文物最丰富的博物馆。从匈奴到鲜卑、突厥、契丹、蒙古，草原帝国的兴衰在这里一览无余。匈奴鹰顶金冠饰是中国草原文物的至高杰作。恐龙化石收藏也很突出。
+dynasty_coverage: 新石器时代（红山文化）、匈奴、鲜卑、突厥、回鹘、契丹（辽）、蒙古（元）、清
+timeline: 红山文化（前4700-前2900年）→ 匈奴帝国（前3世纪-1世纪）→ 鲜卑崛起（1-4世纪）→ 契丹建辽（907/916年）→ 蒙古帝国（1206年）→ 清代归绥
+treasures:
+  - name: 匈奴鹰顶金冠饰
+  - name: 许季姜青铜簋
+  - name: 金银器"胡人牵驼"
+  - name: 契丹女尸（辽代）
+  - name: 查干诺尔恐龙化石
+halls:
+  - name: 远古世界"（恐龙）
+  - name: 草原雄风"（北方民族）
+  - name: 大辽契丹
+  - name: 天骄蒙古
+artifacts:
+  - name: 匈奴鹰顶金冠饰
+    period: 战国晚期，约前4-前3世纪
+    description: —鄂尔多斯杭锦旗阿鲁柴登出土，由鹰形冠顶和黄金冠带组成。冠顶为一只展翅雄鹰俯瞰大地，冠带浮雕虎、马、羊等草原动物。是目前所见唯一的匈奴王金冠，被誉为"草原瑰宝"，是中国考古发现的标志性文物之一。
+  - name: 鄂尔多斯式青铜器群
+    period: 春秋至汉代
+    description: —以动物纹饰为特征的青铜短剑、带扣、牌饰等，是北方草原游牧文化的典型器物。虎噬羊、盘角羊、奔鹿等造型充满草原生命力，与中原青铜器风格截然不同。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e5/Inner_Mongolia_Museum_bronze_ornamental_plaques.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: BabelStone
+  - name: 许季姜青铜簋
+    period: 西周中期
+    description: —铭文记载了周王室与北方的关系，是研究西周北方边疆的重要材料。
+  - name: 契丹贵族墓葬出土文物
+    period: 辽代，10-12世纪
+    description: —包括金银器、玻璃器、丝织品等，辽代契丹贵族墓葬在内蒙古东部大量发现，出土的鎏金银冠、银靴、金面具等展示了契丹贵族的丧葬习俗。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/24/Horse_leading%2C_mural%28part%29_from_Tomb_in_Aohan%2C_Liao_Dynasty.jpg
+    image_license: PD
+    image_attribution: Unknown author
+  - name: 辽代契丹女尸
+    period: 辽代
+    description: —通辽奈曼旗出土，保存状态良好，身着丝绸，佩戴金银饰品。是了解辽代契丹贵族生活和丧葬制度的重要实物。
+  - name: 元代铜权
+    period: 元代
+    description: —元上都遗址出土，体现了蒙古帝国的度量衡制度。元上都（今锡林郭勒盟正蓝旗）是忽必烈的夏都，已列入世界遗产。
+  - name: 查干诺尔龙化石
+    period: 白垩纪
+    description: —锡林郭勒盟出土，巨型蜥脚类恐龙，是内蒙古恐龙化石的代表。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/6/6a/Nuoerosaurus_chaganensis.JPG
+    image_license: PD
+    image_attribution: Giloun at English Wikipedia
+  - name: 金银器"胡人牵驼"摆件
+    period: 唐代
+    description: —展现了丝绸之路上的贸易场景，体现了草原在东西方交流中的桥梁作用。
+sources:
+  - source: "内蒙古博物院官网: https://www.nmgbwy.com/"

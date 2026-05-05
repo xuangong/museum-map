@@ -1,0 +1,59 @@
+id: 31f1ad8e-c4de-4a5e-aafa-c51656c8a1a7
+name: 曲阜孔子博物馆
+lat: 35.6267
+lng: 117.1708
+location: 山东省曲阜市孔子大道100号
+level: 国家一级博物馆
+core_period: 明清时期及孔府档案
+specialty: 社会科学类名人专题博物馆
+dynasty_coverage: 西周至民国
+timeline: 2017年成立，2018年11月26日试运行，2019年9月6日正式开馆
+treasures:
+  - name: 宋·附耳三足小铜盖鼎
+  - name: 西周·鲁中齐夔纹兽首鋬四足铜匜
+  - name: 明·黄地绿龙刻花大盘
+  - name: 清·康熙青花人物大缸
+  - name: 明·人绘《三圣像》
+  - name: 清·郑板桥竹兰盆景轴
+  - name: 元·刻本《周易经传集解》
+  - name: 淳化阁帖拓本
+  - name: 黄玉马
+  - name: 孔府旧藏锡餐具
+halls:
+  - name: 序厅
+  - name: 孔子的时代
+  - name: 孔子的一生
+  - name: 孔子的智慧
+  - name: 孔子与中华文明
+  - name: 孔子与世界文明
+  - name: 诗礼传家基本陈列展
+artifacts:
+  - name: 孔府私家文书档案
+    period: 明代至民国
+    description: 共30万件，涵盖衍圣公袭封、选官、朝觐、祭祀、摄族、修谱等内容
+  - name: 善本古书
+    period: 宋代以来
+    description: 4万多册
+  - name: 明清衣冠服饰
+    period: 明清
+    description: 8000多件
+dynasty_connections:
+  - dynasty: 西周
+    description: 鲁中齐夔纹兽首鋬四足铜匜出土于鲁国故城遗址
+  - dynasty: 战国
+    description: 黄玉马出土于鲁国故城遗址3号墓
+  - dynasty: 宋代
+    description: 宋·附耳三足小铜盖鼎，善本古书始年
+  - dynasty: 元代
+    description: 元·刻本《周易经传集解》，元大德三年（1299年）《三圣像》
+  - dynasty: 明代
+    description: 明·黄地绿龙刻花大盘，孔府档案始年，明清衣冠服饰
+  - dynasty: 清代
+    description: 清·康熙青花人物大缸，清·郑板桥竹兰盆景轴，乾隆御赐淳化阁帖
+  - dynasty: 民国
+    description: 孔府档案延续至民国时期
+sources:
+  - source: https://www.kzbwg.cn/about/jianjie
+  - source: https://www.kzbwg.cn/mbanner/mbanner/2022-12-01/2277.html
+  - source: https://www.kzbwg.cn/zhanlan/jbcl/
+  - source: https://baike.baidu.com/item/%E5%AD%94%E5%AD%90%E5%8D%9A%E7%89%A9%E9%A6%86/496259

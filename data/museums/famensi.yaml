@@ -1,0 +1,57 @@
+id: famensi
+name: 法门寺博物馆（法门寺珍宝馆）
+lat: 34.4439
+lng: 107.9016
+location: 陕西省宝鸡市扶风县法门镇
+level: 国家一级博物馆
+core_period: 唐代（皇家佛教供奉）
+specialty: 1987年法门寺唐代地宫开启，出土2000余件唐代皇室重宝和4枚佛指舍利，被列为"20世纪中国考古重大发现"。地宫封闭于公元874年（唐僖宗），至1987年重现世间，封存长达1113年。秘色瓷的发现解开了困扰学界千年的谜题。
+dynasty_coverage: 唐代（核心），东汉末年始建寺院
+timeline: 法门寺始建于东汉末年。唐高宗至唐僖宗，先后8位皇帝6次迎请佛骨舍利至长安供奉。874年唐僖宗最后一次送还舍利并封闭地宫，直至1987年重见天日。
+treasures:
+  - name: 佛指舍利（4枚
+  - name: 含1枚真身舍利）
+  - name: 八重宝函
+  - name: 鎏金银茶具（中国最早宫廷茶具套件）
+  - name: 秘色瓷（13件）
+  - name: 鎏金双蛾团花纹银香囊
+halls:
+  - name: 法门寺地宫珍宝展
+  - name: 佛指舍利展区
+  - name: 唐代金银器展区
+artifacts:
+  - name: 佛指舍利
+    period: 释迦牟尼真身舍利
+    description: 4枚佛指骨舍利（1枚真身+3枚影骨），以八重宝函层层供奉。唐代先后8位皇帝6次迎奉，是佛教界至高圣物
+  - name: 八重宝函
+    period: 唐·咸通年间
+    description: 供奉佛指舍利的层层嵌套容器，从外到内分别为檀木函、鎏金函、金函等八层，每层均有精美装饰
+  - name: 鎏金银茶具套件
+    period: 唐·咸通年间
+    description: 包括茶碾、茶罗、银风炉、银盐台等，是中国乃至世界上发现最早最完整的宫廷茶具，反映唐代宫廷茶文化
+  - name: 秘色瓷
+    period: 唐
+    description: 13件越窑秘色瓷，地宫《衣物帐》碑上明确记载"瓷秘色"三字，解开了"秘色瓷到底是什么"这一困扰学界千年的谜题。产自浙江慈溪上林湖窑址
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b0/%E7%A7%98%E8%89%B2%E7%93%B7.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-3.0
+    image_attribution: Katherineshang
+  - name: 鎏金双蛾团花纹银香囊
+    period: 唐
+    description: 球形镂空银香囊，内部常平装置使香盂始终保持水平（类似陀螺仪原理），体现唐代精密机械工艺
+  - name: 鎏金四天王盝顶银宝函
+    period: 唐
+    description: 錾刻四大天王像，工艺精湛
+  - name: 琉璃器
+    period: 东罗马/伊斯兰
+    description: 地宫出土的20件琉璃器，来自东罗马帝国和伊斯兰世界，是丝路贸易的实物证据
+dynasty_connections:
+  - dynasty: 政教关系
+    description: 唐代帝王"三十年一开"佛骨的制度，反映了佛教在唐代政治中的特殊地位。韩愈《谏迎佛骨表》与唐宪宗的冲突，是儒佛之争的标志性事件
+  - dynasty: 物质文化
+    description: 金银器工艺代表唐代最高水平；茶具套件是唐代饮茶风俗"从煮到煎"转变的实物见证
+  - dynasty: 国际交流
+    description: 琉璃器来自东罗马和伊斯兰世界，秘色瓷产自浙江，说明唐代皇室能调动全国乃至国际资源供奉佛教  法门寺与陕西历史博物馆互为补充：陕历博展示唐代世俗生活，法门寺展示唐代皇家宗教生活。
+sources:
+  - source: 百度百科·法门国宝
+  - source: 1987年法门寺地宫考古发掘报告
+  - source: '"秘色瓷"相关研究: 法门寺地宫《衣物帐》碑记载'

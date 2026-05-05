@@ -1,0 +1,55 @@
+id: haihunhou
+name: 南昌汉代海昏侯国遗址博物馆
+lat: 28.875
+lng: 115.73
+location: 江西省南昌市新建区大塘坪乡
+level: 国家一级博物馆
+core_period: 西汉（公元前1世纪）
+specialty: 中国迄今发现的保存最好、结构最完整、功能布局最清晰的西汉列侯墓园，也是21世纪中国最重要的考古发现之一。墓主刘贺身份极其传奇——历经王、帝、民、侯四种身份转换。出土文物逾万件，含大量黄金和竹简。
+dynasty_coverage: 西汉（核心）
+timeline: 刘贺（前92-前59年），汉武帝之孙，昌邑王刘髆之子。前74年被霍光拥立为帝，在位仅27天即被废黜，后贬为庶人，前63年封海昏侯，前59年去世。其一生折射了西汉中晚期宫廷政治的激烈博弈
+treasures:
+  - name: '"刘贺"玉印'
+  - name: 马蹄金与麟趾金
+  - name: 当卢（青铜马饰）
+  - name: 孔子屏风
+  - name: 竹简《论语》
+halls:
+  - name: 金色海昏"基本陈列
+  - name: 刘贺主墓展厅
+  - name: 车马坑展示
+  - name: 遗址现场展示区
+artifacts:
+  - name: '"刘贺"玉印'
+    description: 西汉（前1世纪）。白玉质，龟钮，阴刻"刘贺"二字，是确认墓主身份的铁证。印文端庄，是西汉私印中的精品。
+  - name: 马蹄金与麟趾金
+    description: 西汉（前1世纪）。共出土马蹄金48枚、麟趾金25枚、金饼385枚、金板20块，总重超120公斤。马蹄金和麟趾金是汉武帝为庆祝天降祥瑞而特铸，上嵌琉璃，是目前考古发现数量最多的汉代黄金。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/3/34/%E6%B5%B7%E6%98%8F%E4%BE%AF%E5%A2%93%E9%BA%9F%E8%B6%BE%E9%87%914.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 海昏侯
+  - name: 孔子屏风（衣镜架）
+    description: 西汉。漆木屏风上绘有孔子及弟子画像并附传记文字，是目前已知最早的孔子画像实物，对研究西汉儒学传播和孔子形象演变具有极高价值。
+  - name: 竹简（约五千枚）
+    description: 西汉。包含《论语》《易经》《礼记》等儒家经典以及医书、方术类文献。其中的《论语》版本可能包含失传的《齐论语》内容，是学术史上的重大发现。
+  - name: 青铜当卢（马面饰）
+    description: 西汉。鎏金青铜马面装饰，工艺极精，纹饰包含凤鸟和云气纹，反映了西汉贵族出行的排场。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/75/%E6%B5%B7%E6%98%8F%E4%BE%AF%E5%A2%93%E9%9D%92%E9%93%9C%E5%BD%93%E5%8D%A21.JPG
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎
+  - name: 青铜雁鱼灯
+    description: 西汉。造型为大雁回首衔鱼，鱼腹为灯罩，烟气通过雁颈导入雁腹水中过滤，设计精巧环保，是汉代灯具设计的杰作。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/af/%E9%9D%92%E9%93%9B%E9%9B%81%E9%B1%BC%E7%81%AF_%E6%B5%B7%E6%98%8F%E4%BE%AF%E5%9B%BD%E9%81%97%E5%9D%80.JPG
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎
+  - name: 编钟编磬
+    description: 西汉。完整的礼乐器组合，反映了列侯级别的丧葬礼仪规格。
+  - name: 五铢钱（约200万枚，重10余吨）
+    description: 西汉。数量惊人，按串整齐码放，直观展现了西汉列侯的财富规模。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/77/%E4%BA%94%E9%93%A2%E9%92%B1_%E6%B5%B7%E6%98%8F%E4%BE%AF%E5%9B%BD%E9%81%97%E5%9D%802.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎
+dynasty_connections:
+  - dynasty: 西汉
+    description: 海昏侯墓是理解西汉中晚期政治、经济、文化的一把钥匙。    - **政治**：刘贺27天皇帝生涯折射了霍光专权时代的宫廷斗争。他被废黜的理由是"荒淫无道"，但出土的大量儒经竹简表明他可能是一个受过良好教育的贵族，历史叙事可能有偏。    - **经济**：出土的巨量黄金和铜钱直观展示了西汉诸侯的经济实力。马蹄金上"上""中""下"的字样可能与酎金制度有关（诸侯定期向朝廷贡金的制度）。    - **文化**：孔子屏风和儒经竹简证明西汉贵族已深受儒学影响。《论语》竹简可能改写对汉代经学传承的认知。    - **丧葬**：墓园布局完整，包含主墓、夫人墓、祔葬墓、车马坑等，是研究西汉列侯丧葬制度的标准样本。
+sources:
+  - source: "海昏侯国遗址博物馆官网: https://www.haihunhou.cn/"

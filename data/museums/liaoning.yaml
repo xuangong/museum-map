@@ -1,0 +1,63 @@
+id: liaoning
+name: 辽宁省博物馆
+lat: 41.7312
+lng: 123.4689
+location: 辽宁省沈阳市浑南区智慧三街157号
+level: 国家一级博物馆
+core_period: 古代书画（唐宋元明清全序列）、辽金时期
+specialty: 古代书画收藏为全国顶级，与故宫博物院、上海博物馆并称"三大书画收藏重镇"。大量藏品源自清宫散佚的溥仪出宫文物（"东北货"）。辽金文物收藏也极为丰富，是了解契丹-女真文化的最佳去处。
+dynasty_coverage: 红山文化、战国燕、汉、三燕（前燕/后燕/北燕）、辽、金、元、明、清
+timeline: 红山文化（前4700-前2900年）→ 燕国东拓 → 三燕政权 → 契丹建辽（907/916年）→ 女真建金（1115年）→ 清朝发祥地
+treasures:
+  - name: 《簪花仕女图》
+  - name: 《虢国夫人游春图》
+  - name: 《万岁通天帖》
+  - name: 《瑞鹤图》
+  - name: 鸭形玻璃注
+halls:
+  - name: 中国古代书画
+  - name: 辽河文明
+  - name: 满族民俗
+  - name: 古代辽宁
+artifacts:
+  - name: 《簪花仕女图》
+    period: 唐代，传周昉
+    description: —绢本设色，描绘贵族妇女赏花游园的闲适场景，人物丰腴华贵，是唐代仕女画的代表作。此画曾入清宫收藏，后随溥仪流散东北，最终入藏辽博。（近年有学者考证为五代摹本，但不影响其艺术价值。）
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/a9/%E5%94%90%E5%91%A8%E6%98%89%E7%B0%AA%E8%8A%B1%E4%BB%95%E5%A5%B3%E5%9B%BE.jpg
+    image_license: PD
+    image_attribution: 周昉
+  - name: 《虢国夫人游春图》
+    period: 唐代，传张萱，宋摹本
+    description: —描绘杨贵妃之姐虢国夫人率众骑马出行的场景，不画背景而春意自现，构图精妙。是了解盛唐贵族生活的经典图像。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/a1/%E5%94%90_%E5%BC%A0%E8%90%B1_%E8%99%A2%E5%9B%BD%E5%A4%AB%E4%BA%BA%E6%B8%B8%E6%98%A5%E5%9B%BE.jpg
+    image_license: PD
+    image_attribution: 张萱
+  - name: 《万岁通天帖》
+    period: 唐代，697年摹本
+    description: —武则天万岁通天二年，命人摹写王羲之家族书法真迹而成。包含王羲之《姨母帖》、王献之《廿九日帖》等，是现存最接近王氏书法原貌的唐摹本，书法史价值极高。
+  - name: 《瑞鹤图》
+    period: 北宋，赵佶/宋徽宗
+    description: —绢本设色，描绘群鹤翔集于汴京宣德门上空的祥瑞景象。色彩典雅，构图独特，是宋徽宗存世最重要的绘画作品之一。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/5/51/Auspicious_Cranes.jpg
+    image_license: PD
+    image_attribution: Emperor Huizong of Song
+  - name: 鸭形玻璃注
+    period: 北燕，约5世纪初
+    description: —朝阳北票冯素弗墓出土，淡绿色玻璃制成的鸭形容器，通体晶莹。经检测为罗马帝国钠钙玻璃，是丝绸之路东端的重要物证，证明了东北地区与西方的早期贸易联系。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/af/Northern_Yan_duck-shaped_glass.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: Greg kf
+  - name: 契丹文铜镜
+    period: 辽代
+    description: —镜背铸有契丹大字，是研究已基本失传的契丹文字的珍贵实物。辽博收藏的契丹文物在全国最为系统完整。
+  - name: 金代铜坐龙
+    period: 金代
+    description: —阿城（金上京）出土，龙呈蹲坐状，造型独特，与中原传统龙形有明显区别，体现了女真文化的审美特点。
+  - name: 红山文化玉猪龙
+    period: 新石器时代，约前3500年
+    description: —辽西地区出土，C形玉龙，是红山文化的标志性器物，也是中国龙文化的重要早期形态。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/2c/Hongshan_Jade_pig-dragon%28pendant%29.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 名字长的让人受不了
+sources:
+  - source: "辽宁省博物馆官网: https://www.lnmuseum.com.cn/"

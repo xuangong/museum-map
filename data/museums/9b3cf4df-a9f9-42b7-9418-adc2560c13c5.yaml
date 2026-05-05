@@ -1,0 +1,51 @@
+id: 9b3cf4df-a9f9-42b7-9418-adc2560c13c5
+name: 大同华严寺
+lat: 40.09
+lng: 113.292
+location: 山西省大同市平城区下寺坡街459号
+level: 第一批全国重点文物保护单位
+core_period: 辽金时期（1038—1140年）
+specialty: 中国现存年代较早、保存较完整的辽金寺庙建筑群，中国现存三大辽代寺院之一；大雄宝殿是我国现存两座最大的佛殿之一；薄伽教藏殿为现存辽代殿堂式建筑典型作品
+dynasty_coverage: 辽、金、清（916年—近代）
+timeline: 辽重熙七年（1038年）始建薄伽教藏殿；辽清宁八年（1062年）扩建华严寺；金天眷三年（1140年）重建大雄宝殿；清康熙、乾隆、光绪年间屡次修葺；1961年被国务院公布为第一批全国重点文物保护单位
+treasures:
+  - name: 辽代彩塑31尊（薄伽教藏殿）
+  - name: 合掌露齿菩萨（东方维纳斯）
+  - name: 大雄宝殿清代壁画（887.25平方米）
+  - name: 木构天宫楼阁（薄伽教藏殿壁藏）
+  - name: 金代琉璃鸱吻（高4.5米，中国现存古建最大）
+  - name: 明清藏经1700余函
+halls:
+  - name: 山门
+  - name: 天王殿
+  - name: 大雄宝殿
+  - name: 薄伽教藏殿
+  - name: 普光明殿
+  - name: 观音阁
+  - name: 地藏阁
+  - name: 华严宝塔
+artifacts:
+  - name: 合掌露齿菩萨
+    period: 辽代
+    description: 薄伽教藏殿内胁侍菩萨，上身微裸，体型丰满，线条流畅，双手合十，嘴露皓齿，神态生动，被誉为「东方维纳斯」，是辽代雕塑艺术的巅峰之作
+    image_url: https://upload.wikimedia.org/wikipedia/commons/d/d0/%E5%90%88%E6%8E%8C%E9%9C%B2%E9%BD%BF%E8%8F%A9%E8%90%A8.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Bzsgod
+  - name: 琉璃鸱吻
+    period: 金代（北吻）/ 清代（南吻）
+    description: 大雄宝殿屋脊吻兽，高4.5米，由八块琉璃构件组成，为中国现存古建筑中最大的琉璃吻兽，北吻为金代原物
+  - name: 大雄宝殿壁画
+    period: 清代
+    description: 四壁满绘佛教题材壁画，面积887.25平方米，内容涵盖佛本行经变、善财童子五十三参、千手千眼观世音菩萨等，1997年发现底层金代遗风壁画
+dynasty_connections:
+  - dynasty: 辽朝（916—1125）
+    description: 辽重熙七年（1038年）始建，兼具辽国皇室宗庙性质，薄伽教藏殿为现存辽代建筑精品，殿内保存辽代彩塑31尊
+  - dynasty: 金朝（1115—1234）
+    description: 金天眷三年（1140年）重建大雄宝殿，规模宏伟，保存金代原物琉璃鸱吻（北吻）
+  - dynasty: 清朝（1644—1912）
+    description: 康熙、乾隆、光绪年间屡经修葺，现存大雄宝殿四壁清代壁画887.25平方米
+sources:
+  - source: https://www.dt.gov.cn/english/placestovisit/202501/ed041cbc2944459891140a2e12429c7d.shtml
+  - source: https://wlt.shanxi.gov.cn/zxw/zh/sourcefiles/html/attractions/1689.shtml
+  - source: https://www.shanxi.gov.cn/zjsx/sxfg/ajjq/202209/t20220920_7136462.shtml
+  - source: https://baike.baidu.com/item/%E5%8D%8E%E4%B8%A5%E5%AF%BA/2285867

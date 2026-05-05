@@ -1,0 +1,42 @@
+id: 52857eb0-ccb7-46af-a887-79501e299e42
+name: 随州博物馆
+lat: 32.7647
+lng: 113.5549
+location: 湖北省随州市擂鼓墩大道98号
+level: 国家一级博物馆
+core_period: 西周、两周（约公元前11世纪—公元前221年）
+specialty: 青铜器王国，以西周鄂国铜器群、两周曾国铜器群为核心馆藏，是研究先秦礼乐文明的重要基地
+dynasty_coverage: 商周至汉唐
+timeline: 2008年迁至现址（擂鼓墩大道98号）；2020年12月被评定为第四批国家一级博物馆
+treasures:
+  - name: 曾侯乙编钟（复制件及相关出土文物）
+  - name: 西周鄂国铜器群
+  - name: 两周曾国青铜编钟
+  - name: 叶家山西周曾国青铜器群
+halls:
+  - name: 彼美汉东国——曾国历史文化展（A厅、B厅）
+  - name: 钟鸣寰宇——曾国编钟与礼乐文明展
+  - name: 杖戟戎路——随州出土曾国兵器与车马器
+  - name: 川藏明月辉——随州出土曾国玉器
+  - name: 寻找消失的古鄂国
+  - name: 炎帝神农故里 华人谒祖圣地
+  - name: 屹立汉东——随州叶家山西周墓地
+  - name: 曾(随)国迷踪
+  - name: 曾侯乙墓
+  - name: 擂鼓墩二号墓
+  - name: 汉风唐韵
+  - name: 追回的宝藏
+dynasty_connections:
+  - dynasty: 商
+    description: 随州地区已有商文化遗存，叶家山等遗址出土商末青铜器
+  - dynasty: 西周
+    description: 曾国（即随国）为西周封国，叶家山西周曾侯墓地出土大量青铜礼器；鄂国铜器群亦属西周时期
+  - dynasty: 春秋战国
+    description: 曾侯乙墓（战国早期）出土举世闻名的曾侯乙编钟及大量礼器，代表两周礼乐文明巅峰
+  - dynasty: 汉
+    description: 馆内设汉风唐韵专题，展示随州地区汉唐文化遗存
+sources:
+  - source: http://www.suizhou.gov.cn/zwgk/xxgk/shgysyjs/ggwhty/fwxx/202509/t20250929_1368839.shtml
+  - source: http://www.suizhou.gov.cn/gkxx/lyzy/202310/t20231021_1155636.shtml
+  - source: https://szbwg.net/list-3-1.html
+  - source: https://www.szbwg.net/list-10-1.html

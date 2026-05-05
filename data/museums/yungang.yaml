@@ -1,0 +1,61 @@
+id: yungang
+name: 云冈石窟
+lat: 40.1113
+lng: 113.132
+location: 山西省大同市云冈区云冈镇
+level: 世界文化遗产(2001年)、全国重点文物保护单位、国家5A级景区
+core_period: 北魏(460-524年)
+specialty: 中国四大石窟之一(与敦煌莫高窟、洛阳龙门石窟、天水麦积山石窟并列)。云冈石窟是北魏皇家主持开凿的佛教石窟群,现存主要洞窟45个,大小造像59000余尊。开凿时间集中于北魏平城时代,风格融合了印度犍陀罗、中亚和中原艺术,是佛教艺术中国化的里程碑。
+dynasty_coverage: 北魏(为主体)、唐、辽
+timeline: 太武帝灭佛(446年)→ 文成帝复法·昙曜开窟(460年)→ 早期(460-470年,昙曜五窟)→ 中期(471-494年,孝文帝时期大规模营造)→ 迁洛后晚期(494-524年)
+treasures:
+  - name: 昙曜五窟大佛(第16-20窟)
+  - name: 第6窟释迦佛传故事雕刻
+  - name: 第5窟17米大佛
+  - name: 第12窟"音乐窟"
+halls:
+  - name: 昙曜五窟(第16-20窟)
+  - name: 第5-6窟(双窟)
+  - name: 第9-13窟(中期洞窟)
+  - name: 云冈博物馆
+artifacts:
+  - name: 第20窟露天大佛
+    period: 北魏,约460-465年
+    description: -高13.7米,结跏趺坐,面容丰满,两耳垂肩,薄衣贴体(犍陀罗风格),神态庄严安详。因前壁崩塌而露天,成为云冈石窟的标志性形象。此像被认为是以北魏太武帝或文成帝为原型,体现了"帝佛合一"的政治理念--昙曜向文成帝提议"令如帝身"造佛像。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/73/Cave_20%2C_Yungang_Grottoes.jpg
+    image_license: CC0
+    image_attribution: Dudva
+  - name: 第16-20窟(昙曜五窟)
+    period: 北魏,460-470年
+    description: -云冈最早开凿的五个大窟,每窟一尊大佛,分别象征北魏五位皇帝(从道武帝到文成帝)。大佛高13-17米,风格统一而各具特色,体现了印度犍陀罗艺术与凉州佛教艺术的融合。这是中国石窟寺"以帝王之身造佛"的首创。
+  - name: 第6窟释迦佛传浮雕
+    period: 北魏,约471-494年
+    description: -中期代表洞窟,中心塔柱四面及窟壁雕刻了释迦牟尼一生的故事,从诞生到涅槃共33幅连续画面。雕刻精细繁复,是中国石窟叙事浮雕的巅峰之作。中心塔柱高达15米,四面雕满佛像和装饰。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/0/03/Yungang_Grottoes%2C_Cave_6.jpg
+    image_license: PD
+    image_attribution: Anonymous. The postcard set was published in Keijo(Today Seoul) in 1939.
+  - name: 第5窟大佛
+    period: 北魏
+    description: -高17米,是云冈最大的佛像。面容慈祥,衣纹流畅,已开始呈现中国化的审美特征(与昙曜五窟的西域风格相比)。前有清代修建的四层木构阁楼保护。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9a/Yungang_Grottoes_Cave_5_1.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Thebrainchamber1
+  - name: 第12窟"音乐窟"
+    period: 北魏,约471-494年
+    description: -前室壁面雕刻了大量伎乐天人,手持各种乐器(琵琶、筚篥、排箫、细腰鼓等),是研究北魏音乐和乐器的珍贵图像资料,也是中国古代音乐图像最集中的石窟。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/92/Yungang_12.JPG
+    image_license: CC-BY-SA-3.0
+    image_attribution: Marcin Białek
+  - name: 第9-10窟(双窟)
+    period: 北魏中期
+    description: -窟门雕刻中国式的殿堂建筑形式,窟内天花板雕飞天、莲花。是云冈中期洞窟中西合璧风格的典型代表。
+  - name: 第3窟(灵岩寺洞)
+    period: 北魏至唐辽
+    description: -云冈最大的洞窟,可能原计划开凿为大型塔庙窟但未完工。后壁有唐代补刻的一佛二菩萨像。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/15/Cave_3%2C_Yungang_Grottoes_03.2025.jpg
+    image_license: CC0
+    image_attribution: Dudva
+sources:
+  - source: "云冈石窟官网: https://www.yungang.org/"
+  - source: UNESCO世界文化遗产名录（2001年）
+  - source: 现存45个主要洞窟、59000余尊造像（多源核实）

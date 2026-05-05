@@ -1,0 +1,42 @@
+id: hainan
+name: 海南省博物馆
+lat: 19.989
+lng: 110.369
+location: 海南省海口市琼山区国兴大道68号
+level: 国家一级博物馆
+core_period: 宋元明（南海水下考古）
+specialty: 以南海水下考古出水文物为最大亮点，"华光礁I号"沉船特展曾获全国博物馆十大陈列展览精品奖。同时展现海南黎族、苗族独特民族文化。
+dynasty_coverage: 先秦（越王剑）→ 汉（珠崖郡）→ 唐宋（海上丝路/华光礁沉船）→ 明清（黎族文化）
+timeline: 汉武帝设珠崖郡（前110年）标志海南纳入中原版图；宋代华光礁I号沉船是南海航线繁荣的直接证据
+treasures:
+  - name: 华光礁I号沉船出水青白瓷
+  - name: 越王亓北古剑（战国）
+  - name: 黎族龙被（明清）
+  - name: 宋代青白釉花口碟
+  - name: 南海出水铜钱串
+halls:
+  - name: 南溟奇甸"（海南历史陈列
+  - name: 含华光礁I号出水文物展区）
+  - name: 海南少数民族陈列
+artifacts:
+  - name: 华光礁I号出水青白瓷
+    period: 南宋
+    description: 2007年发掘出水，大批景德镇青白瓷和福建窑系产品，是古代海上丝绸之路南海航线的直接物证
+  - name: 越王亓北古剑
+    period: 战国
+    description: 极为罕见的越王剑，剑身铭文"越王亓北自作用剑"，保存完好，先秦铸剑技术杰作
+  - name: 黎族龙被
+    period: 明清
+    description: 黎族织锦最高等级作品，以棉线织成，图案精美色彩绚丽，黎族纺织技艺巅峰
+  - name: 宋代青白釉花口碟
+    period: 南宋
+    description: 华光礁I号出水，釉色温润，反映宋代瓷器外销的高超水准
+  - name: 南海出水铜钱串
+    period: 宋代
+    description: 大量宋代铜钱从海底打捞而出，反映宋代海上贸易以铜钱为重要交易媒介
+  - name: 唐三彩陶马
+    period: 唐代
+    description: 海南出土，说明唐代海南与中原文化交流密切
+sources:
+  - source: "海南省博物馆官网: https://www.hainanmuseum.org/"
+  - source: '"大海的方向——华光礁I号沉船特展": https://www.hainanmuseum.org/hnbwgcms/info/621'

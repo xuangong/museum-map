@@ -1,0 +1,121 @@
+id: eastern-zhou
+name: 东周：春秋与战国（公元前770年—前221年）
+period: 公元前770年—前221年
+order_index: 4
+overview: |-
+  东周是中国历史上最动荡也最精彩的时期，分为春秋（前770—前476年）和战国（前475—前221年）两段。周天子名义上仍是天下共主，但实际权力落入各路诸侯手中。春秋时期"礼崩乐坏"，齐桓公、晋文公等五霸先后称雄，大国以"尊王攘夷"为名行争霸之实。战国时期，兼并战争白热化，七雄（齐楚燕韩赵魏秦）逐鹿中原，最终秦国横扫六国，统一天下。
+
+  这五百多年的乱世恰恰是中华文明的轴心时代。百家争鸣产生了孔子、老子、墨子、孟子、庄子、荀子、韩非子等伟大思想家，他们的思想塑造了中国此后两千年的精神世界。儒家重仁义礼乐，道家崇自然无为，墨家讲兼爱非攻，法家主赏罚严明——这场思想大爆炸与古希腊哲学、古印度佛教同属雅斯贝尔斯所说的"轴心时代"。
+
+  技术层面，铁器和牛耕的推广引发了农业革命，都江堰、郑国渠等大型水利工程改变了经济版图。各国纷纷变法图强（李悝变法、商鞅变法等），从贵族分封制向官僚郡县制转变，为秦统一后的帝国制度奠定了基础。
+culture:
+  - category: 百家争鸣
+    description: 儒、道、墨、法、名、兵、农、阴阳等学派并起，中国哲学的黄金时代
+  - category: 文学
+    description: 《诗经》编定、《楚辞》创作、诸子散文（《论语》《孟子》《庄子》《韩非子》等）
+  - category: 军事理论
+    description: 《孙子兵法》《吴子兵法》等，对世界军事思想影响深远
+  - category: 铁器革命
+    description: 铁制农具和兵器普及，生产力大幅提升
+  - category: 水利工程
+    description: 都江堰（李冰父子，前256年）、郑国渠、芍陂
+  - category: 城市兴起
+    description: 临淄、邯郸、大梁等都城人口达数十万
+  - category: 天文历法
+    description: 甘德、石申的恒星观测记录，《甘石星经》
+  - category: 医学
+    description: 扁鹊开创望闻问切诊法
+  - category: 货币
+    description: 各国铸币（布币、刀币、蚁鼻钱、圜钱），商品经济发展
+events:
+  - date: 前770年
+    event: 周平王东迁洛邑，东周开始
+    lat: 34.7
+    lng: 112.5
+  - date: 前685年
+    event: 管仲相齐，齐桓公开始称霸
+    lat: 34.7
+    lng: 112.5
+  - date: 前632年
+    event: 城濮之战，晋文公败楚，确立霸业
+    lat: 34.7
+    lng: 112.5
+  - date: 前597年
+    event: 邲之战，楚庄王称霸，"问鼎中原"
+    lat: 34.7
+    lng: 112.5
+  - date: 前551年
+    event: 孔子诞生于鲁国
+    lat: 34.7
+    lng: 112.5
+  - date: 前506年
+    event: 吴国伐楚，攻入郢都
+    lat: 34.7
+    lng: 112.5
+  - date: 前473年
+    event: 越王勾践灭吴，卧薪尝胆
+    lat: 34.7
+    lng: 112.5
+  - date: 前403年
+    event: 三家分晋（韩赵魏），战国格局正式形成
+    lat: 34.7
+    lng: 112.5
+  - date: 前356年
+    event: 商鞅第一次变法
+    lat: 34.7
+    lng: 112.5
+  - date: 前278年
+    event: 秦将白起攻破楚国郢都，屈原投汨罗江
+    lat: 34.7
+    lng: 112.5
+  - date: 前260年
+    event: 长平之战，秦将白起坑杀赵军四十万（数字有争议）
+    lat: 34.7
+    lng: 112.5
+  - date: 前256年
+    event: 秦灭东周王室
+    lat: 34.7
+    lng: 112.5
+  - date: 前230—前221年
+    event: 秦先后灭韩赵魏楚燕齐，统一六国
+    lat: 34.7
+    lng: 112.5
+recommended_museums:
+  - museum_id: hubei
+    name: 湖北省博物馆
+    location: 武汉
+    reason: 曾侯乙编钟（战国早期，65件，总重2567公斤）是镇馆之宝，也是中国古代音乐和青铜铸造的巅峰
+  - museum_id: henan
+    name: 河南博物院
+    location: 郑州
+    reason: 莲鹤方壶（春秋，新郑出土）等东周青铜精品
+  - museum_id: guobo
+    name: 中国国家博物馆
+    location: 北京
+    reason: 收藏大量春秋战国青铜器、兵器和货币
+  - museum_id: gugong
+    name: 故宫博物院
+    location: 北京
+    reason: 收藏东周玉器和青铜器精品
+  - museum_id: hunan
+    name: 湖南省博物馆
+    location: 长沙
+    reason: 楚文化漆器、帛画等，展示南方楚文化的独特魅力
+  - museum_id: 92a0de78-943a-412a-b064-45327f3c3573
+    name: 荆州博物馆
+    location: 荆州
+    reason: 楚国都城所在地，楚文化核心区域，出土丝织品和漆器
+  - museum_id: 31f1ad8e-c4de-4a5e-aafa-c51656c8a1a7
+    name: 曲阜孔子博物馆
+    location: 曲阜
+    reason: 2019年新开，孔子及儒学相关文物，配合孔庙孔府参观
+  - museum_id: jinsha
+    name: 成都金沙遗址博物馆/都江堰景区
+    reason: 了解秦蜀关系和都江堰水利工程
+  - museum_id: 054543c3-1850-471d-be28-e611f77ba9c4
+    name: 宝鸡青铜器博物院
+    reason: 秦公钟等早期秦文化文物
+  - museum_id: 52857eb0-ccb7-46af-a887-79501e299e42
+    name: 随州博物馆
+    location: 随州
+    reason: 曾侯乙墓部分出土文物

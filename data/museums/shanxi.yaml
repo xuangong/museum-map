@@ -1,0 +1,54 @@
+id: shanxi
+name: 山西博物院
+lat: 37.8636
+lng: 112.5226
+location: 山西省太原市万柏林区滨河西路北段13号
+level: 国家一级博物馆
+core_period: 西周至春秋（晋文化）、北朝至隋唐（佛教艺术）
+specialty: 晋国青铜器收藏全国首屈一指，鸟尊为镇馆之宝。佛教造像从北魏到唐代形成完整序列，侯马盟书是春秋晚期政治史的珍贵文字资料。山西作为"中国古建筑博物馆"，馆内对古建筑也有专题展示。
+dynasty_coverage: 新石器时代（庙底沟）、商、西周、春秋、北魏、北齐、唐、宋、辽金
+timeline: 庙底沟文化（前4000年）→ 晋国（前1033-前376年）→ 北魏平城/洛阳时代 → 唐代佛教兴盛
+treasures:
+  - name: 晋侯鸟尊
+  - name: 侯马盟书
+  - name: 龙形觥
+  - name: 兽形觥
+  - name: 庙底沟彩陶
+halls:
+  - name: 晋国霸业
+  - name: 佛风遗韵
+  - name: 土木华章
+  - name: 文明摇篮
+artifacts:
+  - name: 晋侯鸟尊
+    period: 西周，约前9世纪
+    description: —曲沃天马-曲村晋侯墓地114号墓出土，凤鸟回首造型，背上有盖，尾部有象鼻形鋬。是晋侯燮父时期的青铜礼器，造型独特，已成为山西博物院的标志。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/4/41/%E6%99%8B%E4%BE%AF%E9%B8%9F%E5%B0%8A.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 蓦然回首已千年
+  - name: 侯马盟书
+    period: 春秋晚期，约前497-前489年
+    description: —侯马晋国遗址出土，用毛笔写在玉石片上的盟誓文书，共5000余片。记载了晋国赵氏内部及赵氏与其他卿族的盟誓活动，是研究春秋晚期政治斗争的第一手资料，也是目前所见最早的毛笔书写文字实物之一。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/91/Houma_Treaty_of_Alliance_and_Wenxian_Treaty_of_Alliance%2C_Spring_and_Autumn_period%2C_Shanxi_Museum_and_Henan_Institute_of_Historic_Relic_Archaeology_and_Research.jpg
+    image_license: CC0
+    image_attribution: Huangdan2060
+  - name: 龙形觥
+    period: 商代晚期
+    description: —山西石楼出土，整器为龙形，龙首张口为流，通体饰鼍纹、夔龙纹。造型在商代青铜器中极为罕见，体现了晋陕高原青铜文化的独特面貌。
+  - name: 兽形觥
+    period: 商代晚期
+    description: —灵石旌介出土，整体呈四足兽形，兽背上有盖，造型浑厚生动。是商代晚期青铜酒器的杰出代表。
+  - name: 庙底沟彩陶
+    period: 新石器时代，约前4000年
+    description: —以花瓣纹、旋涡纹为典型装饰，代表了仰韶文化庙底沟类型，这一文化类型从山西、陕西扩展至黄河中游广大地区，被认为是华夏文化早期扩张的考古学证据。
+  - name: 虞弘墓汉白玉石椁
+    period: 北齐-隋，592年
+    description: —太原出土，石椁浮雕表现了大量中亚祆教风格的宴饮、狩猎、乐舞场面，墓主虞弘为鱼国（中亚）人。是丝绸之路文化交融的重要实物。
+  - name: 司马金龙墓漆画屏风
+    period: 北魏，484年
+    description: —大同司马金龙墓出土，以漆画描绘列女故事，线条流畅，色彩鲜艳。是北魏绘画遗存中最精美的作品之一（此件现存大同市博物馆，山西博物院有部分展示）。
+  - name: 木雕彩绘观音像
+    period: 宋代
+    description: —山西古建筑中流出的木雕精品，体现了山西宋代佛教造像的高超水平。
+sources:
+  - source: "山西博物院官网: https://www.shanximuseum.com/"

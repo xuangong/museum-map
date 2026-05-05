@@ -1,0 +1,57 @@
+id: yunnan
+name: 云南省博物馆
+lat: 24.963
+lng: 102.748
+location: 云南省昆明市官渡区广福路6393号
+level: 国家一级博物馆
+core_period: 古滇国（战国至西汉）、南诏/大理（唐宋）
+specialty: 云南唯一的省级综合性博物馆。馆藏文物22万余件，其中一级文物509件。以古滇国青铜器（晋宁石寨山/江川李家山出土）为核心特色，是中国青铜文化中独立于中原的重要一支。南诏大理国时期佛教艺术和云南少数民族文物也极为丰富。
+dynasty_coverage: 旧石器（元谋人，距今约170万年）→ 新石器 → 青铜时代（古滇国，战国至西汉）→ 东汉至隋 → 南诏（唐）→ 大理（宋）→ 元明清（改土归流）→ 近现代（滇越铁路/西南联大/抗战）
+timeline: 元谋人（约170万年前）是中国境内已知最早的古人类化石之一。古滇国（约前5世纪-前109年）以晋宁石寨山为王墓所在地，汉武帝赐滇王金印后纳入版图。南诏（738-902年）和大理（937-1253年）是云南地方政权的高峰期。
+treasures:
+  - name: 1. 牛虎铜案（战国·古滇）— 晋宁石寨山出土
+  - name: 一虎扑牛
+  - name: 牛腹下藏小牛
+  - name: 中国古代青铜艺术杰作
+halls:
+  - name: 远古云南——史前时期的云南
+  - name: 文明之光——青铜时代的云南"（古滇青铜器核心展）
+  - name: 妙香佛国——南诏大理历史文化
+  - name: 百年风云——近现代时期的云南
+artifacts:
+  - name: 牛虎铜案
+    period: 战国·古滇国，晋宁石寨山出土
+    description: 一只大牛四足立地，背部为承物的浅盘，牛尾立一猛虎，虎口咬住牛尾，大牛腹下藏一小牛犊。构图大胆，充满生命力，是中国青铜艺术的杰作和云南省博的标志
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/19/%E7%89%9B%E8%99%8E%E9%93%9C%E6%A1%88_%E8%99%8B.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Cangminzho
+  - name: 四牛鎏金骑士贮贝器
+    period: 西汉·古滇，石寨山出土
+    description: 贮贝器是古滇国特有的器型（用于储存海贝货币），器盖上有一鎏金骑士和四牛。古滇国以海贝为货币，贮贝器是滇文化的标识
+    image_url: https://upload.wikimedia.org/wikipedia/commons/3/30/%E4%BA%91%E5%8D%97%E7%9C%81%E5%8D%9A%E7%89%A9%E9%A6%86-%E8%A5%BF%E6%B1%89-%E6%99%8B%E5%AE%81%E7%9F%B3%E5%AF%A8%E5%B1%B1-%E9%8E%8F%E9%87%91%E9%AA%91%E5%A3%AB%E8%B4%AE%E8%B4%9D%E5%99%A8.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Zhangmoon618
+  - name: 战争场面叠鼓形贮贝器
+    period: 西汉·古滇
+    description: 器盖上铸有数十个人物的战争场面群雕，包括骑马的将领、持兵器的步兵、被俘的敌人等，是古滇社会军事生活的微缩场景
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/17/%E4%BA%91%E5%8D%97%E7%9C%81%E5%8D%9A%E7%89%A9%E9%A6%86-%E8%A5%BF%E6%B1%89-%E6%99%8B%E5%AE%81%E7%9F%B3%E5%AF%A8%E5%B1%B1-%E5%8F%A0%E9%BC%93%E5%BD%A2%E6%88%98%E4%BA%89%E5%9C%BA%E9%9D%A2%E9%93%9C%E8%B4%AE%E8%B4%9D%E5%99%A8.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Zhangmoon618
+  - name: 滇王金印
+    period: 西汉，复制品/相关文物
+    description: 汉武帝元封二年（前109年）赐滇王尝羌金印，原印出土于石寨山，现藏中国国家博物馆。是云南纳入中央版图的里程碑
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/1e/Gold_Seal_for_King_of_Dian_Kingdom.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: 幽灵巴尼
+  - name: 银鎏金镶珠金翅鸟
+    period: 大理国，大理崇圣寺三塔出土
+    description: 佛教中的迦楼罗鸟造型，银鎏金工艺，镶嵌宝珠，是大理国佛教艺术的代表
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/74/%E5%A4%A7%E7%90%86%E5%B4%87%E5%9C%A3%E5%AF%BA%E5%8D%83%E5%AF%BB%E5%A1%94%E5%87%BA%E5%9C%9F-%E9%93%B6%E9%8E%8F%E9%87%91%E9%95%B6%E7%8F%A0%E9%87%91%E7%BF%85%E9%B8%9F-%E5%A4%A7%E7%90%86%E5%9B%BD-%E4%BA%91%E5%8D%97%E7%9C%81%E5%8D%9A%E7%89%A9%E9%A6%86_2025-09-18_02.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36
+  - name: 大理国写经和佛像
+    period: 近代
+    description: 国歌《义勇军进行曲》曲作者、云南玉溪人聂耳使用的小提琴，近现代革命文物中的珍品
+sources:
+  - source: 核心数据基于AI知识库，牛虎铜案等核心文物数据已多源交叉核实
+  - source: 百度百科·云南省博物馆词条因多义词页面未能完整获取

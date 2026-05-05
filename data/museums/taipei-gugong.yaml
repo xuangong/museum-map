@@ -1,0 +1,70 @@
+id: taipei-gugong
+name: 台北故宫博物院
+lat: 25.1024
+lng: 121.5485
+location: 台湾省台北市士林区至善路二段221号
+level: 世界级博物馆（与北京故宫、大英博物馆等并列）
+core_period: 宋元明清（中国古代书画/瓷器/青铜器/玉器精品）
+specialty: 中国三大博物馆之一。截至2021年馆藏698854件/册，源自紫禁城、沈阳故宫、避暑山庄、颐和园等皇家旧藏精华。1948-1949年分三批从南京迁台：故宫2972箱、中央博物院筹备处852箱。瓷器25595件、绘画6744件、书法3741件、玉器13478件、铜器6241件、善本图书216507册、档案文献395551册件。甲骨档案2万余片（世界第二）。建筑为宫殿式，淡蓝色琉璃瓦覆顶。2015年南部院区（嘉义）开馆。
+dynasty_coverage: 商周（甲骨/青铜器）→ 秦汉 → 魏晋南北朝 → 唐 → 宋（书画/瓷器高峰）→ 元明清（宫廷收藏鼎盛）
+timeline: 台北故宫的藏品是中国皇家收藏历经千年积淀的精华。从1933年故宫文物南迁避日军，到抗战期间辗转巴县、峨眉、乐山，再到1948-1949年迁台——这批文物经历了中国近代史上最大规模的文物迁移，也是国家分裂的文化缩影。
+treasures:
+  - name: 1. 西周毛公鼎 — 铭文497字
+  - name: 现存青铜器铭文最长
+halls:
+  - name: 书画厅（轮换展出历代名家真迹）
+  - name: 瓷器厅（汝窑/官窑/哥窑等宋瓷精品）
+  - name: 青铜器厅（毛公鼎/散氏盘等）
+  - name: 玉器厅（翠玉白菜等）
+artifacts:
+  - name: 毛公鼎
+    period: 西周晚期
+    description: 铭文497字，是现存商周青铜器中铭文最长的一件，记录了周宣王对毛公的册命，是研究西周政治制度的第一手资料
+    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e2/Ding_cauldron_of_Duke_Mao.jpg
+    image_license: CC-BY-4.0
+    image_attribution: anonymous
+  - name: 翠玉白菜
+    period: 清代
+    description: 以一块半白半绿的翠玉雕琢成白菜造型，菜叶上伏螽斯和蝗虫，寓意多子多孙。原置于紫禁城永和宫，据传为光绪妃嫔嫁妆
+    image_url: https://upload.wikimedia.org/wikipedia/commons/d/de/Jadeite_Cabbage%2C_National_Palace_Museum.jpg
+    image_license: CC-BY-4.0
+    image_attribution: Image file retrieved from the Exhibition Packages Download for National Treasures
+  - name: 王羲之《快雪时晴帖》
+    period: 东晋/唐摹本
+    description: 乾隆"三希堂"三件珍宝之首。帖文仅28字，但被乾隆帝视为至宝
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/2f/%E5%BF%AB%E9%9B%AA%E6%99%82%E6%99%B4%E5%B8%96%28%E5%B1%80%E9%83%A8%29.jpg
+    image_license: PD
+    image_attribution: Wang Xizhi
+  - name: 黄公望《富春山居图》（无用师卷）
+    period: 元代
+    description: 中国十大传世名画之一的后半卷（前半卷"剩山图"藏于浙江省博物馆）
+    image_url: https://upload.wikimedia.org/wikipedia/commons/f/f9/Huang_Gongwang._Dwelling_in_the_Fuchun_Mountains._detail._National_Palace_Museum%2C_Taipei.jpg
+    image_license: PD
+    image_attribution: Huang Gongwang
+  - name: 汝窑瓷器
+    period: 北宋
+    description: 台北故宫藏21件，全球存世仅约90件。汝窑釉色"天青"被誉为宋瓷之冠
+  - name: 怀素《自叙帖》
+    period: 唐代
+    description: 狂草极致，中国书法史巅峰之作
+    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e6/Huaisu_-_Autobiography.jpg
+    image_license: PD
+    image_attribution: Huaisu
+  - name: 苏轼《寒食帖》
+    period: 北宋
+    description: '"天下第三行书"'
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/7b/%E5%AF%92%E9%A3%9F%E5%B8%96.jpg
+    image_license: PD
+    image_attribution: Su Shi
+  - name: 散氏盘
+    period: 西周晚期
+    description: 铭文357字，记录西周土地契约
+dynasty_connections:
+  - dynasty: 商周青铜器
+    description: 毛公鼎、散氏盘等西周重器，是中国金石学的核心实物
+  - dynasty: 宋代书画与瓷器
+    description: 宋代是中国文人艺术的巅峰。台北故宫的宋画收藏（范宽/郭熙/李唐等）和汝窑瓷器为全球之冠
+  - dynasty: 元明清
+    description: 元四家、明四家到清代宫廷画家的作品完整呈现了中国绘画史的后半段。善本《四库全书》（文渊阁本）是清代文化工程的顶峰
+sources:
+  - source: 百度百科·台北故宫博物院（详细词条，含馆藏统计、文物迁移史、建筑布局）

@@ -1,0 +1,63 @@
+id: b27bc4cc-0ca1-4cf9-a934-9370b40c0732
+name: 茂陵博物馆
+lat: 34.4578
+lng: 108.5933
+location: 陕西省咸阳市兴平市南位镇汉武帝茂陵东侧
+level: 国家二级博物馆
+core_period: 汉武帝时期（西汉）
+specialty: 以汉武帝茂陵、霍去病墓及大型石刻群等为主的西汉断代史博物馆
+dynasty_coverage: 西汉
+timeline: 1956年茂陵文管所建立；1979年改为茂陵博物馆并正式对外开放
+treasures:
+  - name: 汉武帝茂陵
+  - name: 霍去病墓
+  - name: 大型石刻群
+  - name: 西汉马踏匈奴
+  - name: 西汉鎏金铜马
+  - name: 西汉鎏金银竹节薰炉
+  - name: 西汉错金银铜犀尊
+  - name: 西汉四神纹青玉雕铺首
+  - name: 卫青陪葬墓
+  - name: 霍光陪葬墓
+  - name: 金日磾陪葬墓
+  - name: 李夫人陪葬墓
+halls:
+  - name: 东展厅
+  - name: 西展厅
+  - name: 西汉石雕艺术陈列
+  - name: 出土文物陈列
+  - name: 珍贵文物陈列
+  - name: 霍去病生平事迹展
+  - name: 汉武帝故事造像展
+  - name: 霍去病墓石刻展
+  - name: 汉茂陵历史文化菁华展
+  - name: 汉茂陵出土文物菁华展
+artifacts:
+  - name: 一级文物
+    period: 西汉
+    description: 馆藏一级文物70件，包括马踏匈奴、鎏金铜马、鎏金银竹节薰炉等珍品
+  - name: 二级文物
+    period: 西汉
+    description: 馆藏二级文物54件
+  - name: 三级文物
+    period: 西汉
+    description: 馆藏三级文物578件
+  - name: 马踏匈奴
+    period: 西汉
+    description: 霍去病墓前大型石刻，以战马踏踩匈奴俘虏为题材，是西汉石雕艺术的巅峰之作
+  - name: 鎏金银竹节薰炉
+    period: 西汉
+    description: 造型精美的宫廷熏香器，鎏金鎏银工艺，出土于茂陵陪葬坑
+  - name: 错金银铜犀尊
+    period: 西汉
+    description: 以犀牛造型铸就的铜质酒器，错金银装饰，工艺极为精湛
+    image_url: https://upload.wikimedia.org/wikipedia/commons/d/dd/Bronze_rhinoceros_wine_vessel.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-3.0
+    image_attribution: BabelStone
+dynasty_connections:
+  - dynasty: 西汉
+    description: 以汉武帝茂陵、霍去病墓及大型石刻群等为主的西汉断代史博物馆，重点呈现西汉武帝朝的历史文化与陵寝制度
+sources:
+  - source: https://maoling.com/Outline/
+  - source: https://wwj.shaanxi.gov.cn/sy/dtyw/dsdt/202401/t20240129_2315452.html
+  - source: https://baike.baidu.com/item/%E8%8C%82%E9%99%B5%E5%8D%9A%E7%89%A9%E9%A6%86/5421525

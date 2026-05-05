@@ -1,0 +1,52 @@
+id: liangzhu
+name: 良渚博物院
+lat: 30.3966
+lng: 119.993
+location: 浙江省杭州市余杭区良渚街道美丽洲路1号
+level: 国家一级博物馆 / 良渚古城遗址为世界文化遗产(2019年)
+core_period: 新石器时代晚期(约前3300-前2300年)
+specialty: 良渚文明是实证中华5000年文明史的圣地。2019年申遗成功,被认定为世界最早的国家形态之一。玉器工艺登峰造极,城市规划令人惊叹(300万平方米古城+大型水利系统)。
+dynasty_coverage: 新石器时代(良渚文化,前3300-前2300年)
+timeline: 良渚文明(前3300-前2300年)比夏朝早一千年,拥有城市、水利、等级社会、统一信仰符号(神人兽面纹),是判定中国文明起源时间的关键证据。其衰落原因可能是洪水,之后长三角地区文明一度中断。
+treasures:
+  - name: 1. 玉琮王(良渚文化)- 最大最重的玉琮,刻有"神人兽面纹"
+halls:
+  - name: 良渚博物院全部展厅 + 良渚古城遗址公园(城墙
+  - name: 宫殿区
+  - name: 反山王陵
+  - name: 莫角山)
+artifacts:
+  - name: 玉琮王
+    period: 约前3000年
+    description: 重6.5kg,高8.8cm,刻有完整的"神人兽面纹"--头戴羽冠的神人骑在神兽之上,是良渚信仰体系的核心图案
+    image_url: https://commons.wikimedia.org/wiki/File:Jade_Cong_King,_2018-06-09_01.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Siyuwj
+  - name: 玉钺王
+    period: 约前3000年
+    description: 钺是斧形礼器,象征军权。此件两面刻有神人兽面纹,是目前发现的最高等级玉钺
+  - name: 反山M12玉器群
+    period: 约前3000年
+    description: 一座墓出土玉器数百件,包括琮、钺、璧、三叉形器等完整组合,墓主可能是良渚"王"
+  - name: 玉璧
+    period: 良渚
+    description: 大量出土,可能是财富或礼仪用途
+  - name: 玉三叉形器
+    period: 良渚
+    description: 插在发冠上,是贵族身份标识
+  - name: 刻符陶罐
+    period: 良渚
+    description: 陶器上的刻划符号,可能是原始文字的前身
+  - name: 碳化稻谷
+    period: 良渚
+    description: 大量水稻遗存,证明良渚是稻作农业高度发达的社会
+dynasty_connections:
+  - dynasty: 与中原的关系
+    description: 良渚的玉琮、玉璧形制后来被夏商周继承("以苍璧礼天,以黄琮礼地"),说明良渚对后世礼制有深远影响
+  - dynasty: 文明要素
+    description: 城市(古城面积290万平方米)、水利系统(11条水坝)、等级分化(王陵与平民墓差距悬殊)、统一信仰(神人兽面纹),符合"文明"的判定标准
+  - dynasty: 衰落之谜
+    description: 约前2300年突然衰落,可能与大规模洪水有关。之后长三角进入文化低谷,直到商周时期才重新崛起  良渚是回答“中华文明到底有多久”这个问题的关键节点。
+sources:
+  - source: "良渚博物院官网: https://www.lzmuseum.cn/"
+  - source: UNESCO世界文化遗产名录（2019年）

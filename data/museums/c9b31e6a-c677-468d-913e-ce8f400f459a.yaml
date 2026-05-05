@@ -1,0 +1,57 @@
+id: c9b31e6a-c677-468d-913e-ce8f400f459a
+name: 明十三陵定陵博物馆
+lat: 40.2667
+lng: 116.0167
+location: 北京市昌平区大峪山东麓
+level: 全国重点文物保护单位 / 世界文化遗产
+core_period: 明朝万历年间（1584—1590年）
+specialty: 遗址性专题博物馆，以明代帝陵地宫原址及出土文物为核心
+dynasty_coverage: 明朝（1368—1644年）
+timeline: 万历十二年（1584年）始建，历时6年建成；1956年5月经国务院批准启动考古发掘；1957年开启地宫，出土文物4000余件；1959年9月正式建立定陵博物馆，同年10月对外开放；2003年作为明清皇家陵寝的组成部分列入《世界遗产名录》
+treasures:
+  - name: 金丝翼善冠（万历帝纯金冠，国宝级文物）
+  - name: 十二龙九凤冠（孝端皇后凤冠）
+  - name: 皇后龙凤冠（镶嵌3500颗珍珠、195块各色宝石）
+  - name: 缂丝衮服
+  - name: 绣花袍衫及大量明代丝织品
+  - name: 汉白玉石门
+  - name: 定陵出土文物4000余件（含礼器、金银器、瓷器等）
+halls:
+  - name: 地宫前殿
+  - name: 地宫中殿
+  - name: 地宫后殿
+  - name: 地宫左配殿
+  - name: 地宫右配殿
+  - name: 陵恩门
+  - name: 陵恩殿
+  - name: 方城明楼
+  - name: 宝城宝顶
+artifacts:
+  - name: 金丝翼善冠
+    period: 明朝万历年间
+    description: 明神宗万历帝的纯金冠冕，以极细金丝编织而成，工艺精湛，为出土于定陵的国宝级文物，现藏定陵博物馆
+  - name: 十二龙九凤冠
+    period: 明朝万历年间
+    description: 孝端皇后所用凤冠，冠上饰十二龙九凤，镶嵌大量珍珠宝石，为国家一级文物
+  - name: 皇后龙凤冠
+    period: 明朝万历年间
+    description: 共出土四顶凤冠，其中一顶镶嵌3500颗珍珠和195块各色宝石，极为华美
+  - name: 地宫
+    period: 明朝万历年间
+    description: 由前、中、后及左右配殿五座石室构成，总面积1195平方米，是目前国内对外开放的唯一明代帝王地下宫殿
+  - name: 汉白玉石门
+    period: 明朝万历年间
+    description: 地宫入口处的石门，采用整块汉白玉雕凿而成，设有自来石顶门机关，工艺巧妙
+  - name: 缂丝衮服
+    period: 明朝万历年间
+    description: 出土于定陵的明代织物精品，以缂丝工艺织就，反映明代高超的手工业水平
+    image_url: https://upload.wikimedia.org/wikipedia/commons/f/f8/Yellow_Kesi_in_Ming_tombs_%28%E8%A1%AE%E6%9C%8D%29.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: ꧁༒𝓷𝓱𝓪𝓬𝓷𝔥༒꧂
+dynasty_connections:
+  - dynasty: 明朝
+    description: 定陵是明十三陵中第十座陵墓，为明神宗万历帝朱翊钧及其孝端皇后、孝靖皇后的合葬陵寝，是中国迄今唯一经国家批准主动发掘的帝王陵墓
+sources:
+  - source: https://wwj.beijing.gov.cn/bjww/362771/362772/545799/index.html
+  - source: https://www.beijing.gov.cn/renwen/rwzyd/bwg/msslbwg/202301/t20230112_2897516.html
+  - source: https://baike.baidu.com/item/%E5%AE%9A%E9%99%B5%E5%8D%9A%E7%89%A9%E9%A6%86/2977631

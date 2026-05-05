@@ -1,0 +1,51 @@
+id: fujian
+name: 福建博物院
+lat: 26.0998
+lng: 119.2812
+location: 福建省福州市鼓楼区西湖公园旁
+level: 国家一级博物馆
+core_period: 秦汉（闽越国）、宋元明（海上丝绸之路）、近代（船政文化）
+specialty: 以闽越文化、海上丝绸之路和船政文化为三大特色，是理解中国东南沿海海洋文明的核心场馆。馆藏德化白瓷、寿山石雕等福建特色工艺品也十分丰富。
+dynasty_coverage: 新石器时代（昙石山文化）→ 秦汉（闽越国）→ 唐宋（海上丝绸之路兴盛）→ 宋代（建窑）→ 元明清（德化窑、海外贸易）→ 近代（福建船政）
+timeline: 闽越国（前334-前110年）是东南沿海最重要的地方政权；泉州在宋元时期是世界最大港口之一（2021年列入世界遗产）；马尾船政局（1866年）是中国近代海军的摇篮
+treasures:
+  - name: 闽越国"万岁"瓦当
+  - name: 南宋建窑兔毫盏
+  - name: 云纹青铜大铙
+  - name: 寿山石田黄冻雕件
+  - name: 德化白瓷观音
+halls:
+  - name: 福建古代文明之光"通史陈列
+  - name: 丝路帆远——海上丝绸之路"专题展
+  - name: 船政文化展
+  - name: 闽越王城专题
+artifacts:
+  - name: 闽越国"万岁"瓦当
+    description: 西汉（前2世纪）。福州冶山闽越王城遗址出土，"万岁"二字反映闽越国的政治野心，是闽越国存在的重要物证。
+  - name: 南宋建窑兔毫盏
+    description: 南宋（12-13世纪）。建窑（建阳）黑釉茶盏，兔毫纹自然天成，是宋代点茶文化的代表器物，深受日本茶道推崇。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9d/建窑兔毫盏_CM.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Isakomirro
+  - name: 云纹青铜大铙
+    description: 西周（约前10世纪）。福建出土的大型青铜乐器，证明商周时期中原文化已向东南沿海传播。
+  - name: 宋代沉船出水瓷器
+    description: 宋代。福建沿海发现的海上丝绸之路沉船出水的大量外销瓷，是海上贸易繁荣的直接证据。
+  - name: 德化窑白釉观音像
+    description: 明代（16-17世纪）。何朝宗款白瓷观音，釉色温润如玉，被欧洲称为"中国白"（Blanc de Chine），代表了德化瓷塑的最高水平。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/bc/德化窑白釉何朝宗款观音像.JPG
+    image_license: CC-BY-SA-3.0
+    image_attribution: 乌拉跨氪
+  - name: 寿山石田黄冻印章
+    description: 明清。田黄石产于福州寿山，有"石帝"之称，质地温润，是中国印石文化的极品。
+  - name: 闽越国铁器和建筑构件
+    description: 西汉。武夷山城村闽越王城遗址出土，展现了闽越国发达的城市建设和冶铁技术。
+dynasty_connections:
+  - dynasty: 秦汉（闽越国）
+    description: 闽越是百越族群的一支，秦统一后设闽中郡，汉初封无诸为闽越王。闽越国在福州、武夷山等地建有宫殿城池，前110年被汉武帝灭国。福建博物院是了解闽越历史的首要场馆。
+  - dynasty: 宋元（海上丝绸之路）
+    description: 宋元时期，泉州（刺桐港）是世界最大的港口之一，马可·波罗称其为"光明之城"。福建的建窑、德化窑、磁灶窑大量生产外销瓷器。"丝路帆远"展是理解中国海洋贸易史的经典展览。
+  - dynasty: 近代（船政文化）
+    description: 1866年左宗棠在福州马尾创办福建船政局，是中国第一个现代造船厂和海军学堂。培养了严复、邓世昌等近代人物，是中国近代化的重要起点。
+sources:
+  - source: "福建博物院官网: https://www.fjbwg.com/"

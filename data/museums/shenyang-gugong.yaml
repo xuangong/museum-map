@@ -1,0 +1,50 @@
+id: shenyang-gugong
+name: 沈阳故宫博物院
+lat: 41.7957
+lng: 123.4553
+location: 辽宁省沈阳市沈河区沈阳路171号
+level: 世界文化遗产（2004年作为明清皇宫扩展项目）、第一批全国重点文物保护单位（1961年）、国家一级博物馆（2017年）
+core_period: 清代前期（后金/清入关前，1625-1644年）
+specialty: 中国现存仅次于北京故宫的第二大古代宫殿建筑群。始建于努尔哈赤，续建于皇太极，乾隆时期大规模扩建。分东路（大政殿+十王亭，体现八旗制度）、中路（大清门→崇政殿→凤凰楼→清宁宫，前朝后寝）、西路（文溯阁，藏《四库全书》）。宫殿建筑融合满族、汉族和蒙藏建筑风格。曾是与北京宫苑、承德避暑山庄齐名的清代三大文物宝库之一。2024年接待观众突破500万人次，2025年达585万人次。
+dynasty_coverage: 后金/清（1625-清末）；建筑营建跨天命至乾隆
+timeline: 1625年努尔哈赤迁都沈阳，始建大政殿。1626年皇太极继位后扩建中路。1636年皇太极在此改国号"大清"。1644年顺治在此登基后迁都北京，沈阳故宫成为"陪都宫殿"。康熙至道光四帝先后10次东巡驻跸于此。
+treasures:
+  - name: 1. 宫殿建筑群本身 — 清入关前皇宫
+  - name: 满族建筑风格的最高代表
+halls:
+  - name: 大政殿与十王亭（八旗制度建筑化身）
+  - name: 崇政殿（皇太极朝政之所）
+  - name: 凤凰楼/清宁宫（后寝区
+  - name: 高台城堡式）
+  - name: 文溯阁（藏书楼）
+artifacts:
+  - name: 大政殿
+    period: 1625年始建
+    description: 八角重檐攒尖式建筑，殿顶满铺黄琉璃瓦镶绿剪边，正中相轮火焰珠顶，宝顶八条铁链连力士。殿前双金龙盘柱，殿内梵文天花和降龙藻井。这是清太祖举行大典之所，顺治帝在此登基
+    image_url: https://upload.wikimedia.org/wikipedia/commons/8/8d/%E6%B2%88%E9%98%B3%E6%95%85%E5%AE%AB%E5%A4%A7%E6%94%BF%E6%AE%BF.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: KangTyngrwey
+  - name: 十王亭
+    period: 天命年间
+    description: 大政殿两侧八字形排列10座亭子，分属八旗和左右翼王。是满族八旗制度在建筑上的直接体现，脱胎于游牧民族的帐殿形制——"帐篷的固化"
+  - name: 凤凰楼/清宁宫
+    period: 天聪年间
+    description: 中路高台建筑，寝宫区建于正方形高台之上，形成"城堡式"寝区。清宁宫保留了满族传统的口袋房（万字炕/烟囱建在山墙外侧等满族居住习俗）
+    image_url: https://upload.wikimedia.org/wikipedia/commons/8/8d/%E6%B2%88%E9%98%B3%E6%95%85%E5%AE%AB%E5%87%A4%E5%87%B0%E6%A5%BC2019.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: ScareCriterion12
+  - name: 文溯阁
+    period: 乾隆四十六年/1781年建
+    description: 藏《四库全书》的藏书楼。外观两层、内部三层（含暗层），仿宁波天一阁。与北京文渊阁等并列为"北四阁"之一
+    image_url: https://upload.wikimedia.org/wikipedia/commons/0/03/%E6%B2%88%E9%98%B3%E6%95%85%E5%AE%AB%E6%96%87%E6%BA%AF%E9%98%812019.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: ScareCriterion12
+dynasty_connections:
+  - dynasty: 后金/清初（1625-1644年）
+    description: 大政殿+十王亭的布局完美体现了满族八旗制度——一殿统八旗，这是其他任何宫殿都没有的。中路"前低后高"的寝宫区保留了满族筑城居高的传统
+  - dynasty: 清中期（康熙-乾隆东巡）
+    description: 150年间四帝十次东巡，乾隆增建行宫和文溯阁，并从北京运来大量皇家珍宝贮藏，使沈阳故宫成为清代三大文物宝库之一
+  - dynasty: 近代离散
+    description: 1914年11万余件藏品被迁北平，1933年部分随故宫文物南迁，1948年部分被运至台湾。原藏于沈阳故宫的文物如今分散在国内多家博物馆
+sources:
+  - source: 百度百科·沈阳故宫（详细词条，含建筑布局、历史沿革、文物详情）

@@ -1,0 +1,74 @@
+id: e275d5c3-b7d6-429e-8825-52f25dbca7c8
+name: 陈家祠（陈氏书院）广东民间工艺博物馆
+lat: 23.1285
+lng: 113.2441
+location: 广州市荔湾区中山七路恩龙里34号
+level: 国家一级博物馆 · 国家AAAA旅游景区 · 全国重点文物保护单位
+core_period: 清代（光绪十四年1888年筹建，光绪十九年1893年落成）
+specialty: 岭南广东民间工艺（木雕、砖雕、石雕、陶塑、灰塑、铜铁铸、彩绘"七绝"工艺）
+dynasty_coverage: 展藏题材跨越商周至明清；建筑本体为清末岭南祠堂建筑典范
+timeline: 1888年：清光绪十四年各县陈氏宗族合议筹建；1893年：清光绪十九年正式落成启用；1905年：废科举后改为陈氏实业学堂；民国期间：先后用作文范学校、广东体育专科学校、聚贤中学；1950年：设广州市行政干部学校；1957年：列为广州市文物保护单位；1959年：辟为广东民间工艺馆（对外开放）；1960年：列为广东省文物保护单位；1988年：列为全国重点文物保护单位；1994年：更名为广东民间工艺博物馆；2016—2021年：建设古建筑安全动态监测系统；2022年：优化提升为文物预防性保护智能监测平台
+treasures:
+  - name: 石湾陶
+  - name: 广彩瓷
+  - name: 象牙雕刻（牙雕）
+  - name: 粤绣
+  - name: 广州木雕
+  - name: 榄雕
+  - name: 岭南押花
+  - name: 广州玉雕
+  - name: 手工打金
+  - name: 砖雕（梁山聚义·梧桐杏柳凤凰群）
+  - name: 石雕
+  - name: 灰塑
+  - name: 陶塑脊饰
+  - name: 铜铁铸
+halls:
+  - name: 前院
+  - name: 后院
+  - name: 东院
+  - name: 西院
+  - name: 聚贤堂（中路主厅）
+  - name: 首进门厅
+  - name: 中进大厅
+  - name: 后进后寝
+artifacts:
+  - name: 梁山聚义砖雕
+    period: 清代（光绪年间）
+    description: 位于正门两侧外墙的大型砖雕，画内建筑物雕工精细、层次分明，为近代罕见之作
+  - name: 梧桐杏柳凤凰群砖雕
+    period: 清代（光绪年间）
+    description: 正门两侧外墙大型砖雕，花鸟题材，凤凰栩栩如生，构图饱满
+  - name: 木雕
+    period: 清代
+    description: 岭南七绝之首，陈家祠梁架、屏门、檐板均以通雕、浮雕相结合，题材涵盖历史故事与山水花鸟
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/7d/%E9%99%88%E5%AE%B6%E7%A5%A0%EF%BC%8C%E5%B1%95%E5%93%81%E6%9C%A8%E9%9B%95%E9%97%A8%E6%9D%BF_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-3.0
+    image_attribution: zengsx
+  - name: 石雕
+    period: 清代
+    description: 廊柱、月台栏杆等处大量使用，岭南七绝之一
+  - name: 陶塑脊饰
+    period: 清代
+    description: 屋脊上大型石湾陶塑，人物故事与花鸟瑞兽交织，色彩鲜艳，为岭南建筑装饰精华
+  - name: 灰塑
+    period: 清代
+    description: 墀头、山墙等处灰塑，以矿物颜料着色，历经百年仍色泽鲜明
+  - name: 铜铁铸
+    period: 清代
+    description: 铁栏杆、铜构件等，将实用与装饰融为一体，岭南七绝之一
+  - name: 彩绘
+    period: 清代
+    description: 门廊、厅堂满布彩绘，题材从商周到明清经典故事一应俱全
+dynasty_connections:
+  - dynasty: 清代（光绪年间）
+    description: 由清代广东七十二县陈氏宗族合资兴建，是现存规模最大、保存最完好、装饰最精美的清代岭南祠堂式建筑，集”岭南七绝”建筑装饰工艺之大成
+  - dynasty: 民国
+    description: 民国期间先后改作文范学校、广东体育专科学校、聚贤中学，是岭南近代教育转型的实物见证
+  - dynasty: 中华人民共和国（现当代）
+    description: 1959年辟为广东民间工艺馆，1994年正式更名广东民间工艺博物馆，持续征集、研究、展示岭南非物质文化遗产与传统工艺
+sources:
+  - source: https://www.gzcjc.com.cn/MYwebsite/rc/my_index.htm
+  - source: https://www.gz.gov.cn/zlgz/gzly/wzgz/wbcg/content/post_9587900.html
+  - source: https://wglj.gz.gov.cn/ztmb/gzhyn/ajjq/4a/content/post_9773088.html
+  - source: https://www.gdwsw.gov.cn/wsgdxxyt/content/post_36308.html

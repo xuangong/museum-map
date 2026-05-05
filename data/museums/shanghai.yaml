@@ -1,0 +1,58 @@
+id: shanghai
+name: 上海博物馆
+lat: 31.2286
+lng: 121.4747
+location: 上海市浦东新区世博大道（东馆）/ 黄浦区人民大道201号（人民广场馆）
+level: 国家一级博物馆
+core_period: 青铜器（商周）、书画（唐宋元明清）、陶瓷（全时期）
+specialty: 以青铜器、书画、陶瓷三大收藏闻名世界。文物系统性极强，是学术研究型博物馆的典范。2022年起东馆陆续开放，展览面积大幅扩展。
+dynasty_coverage: 商周（青铜）、唐宋元明清（书画）、全时期（陶瓷）
+timeline: 上博的青铜器收藏构成了从商到战国的完整序列，是理解中国青铜时代的最佳场所之一。书画收藏则覆盖唐至清的核心脉络。
+treasures:
+  - name: 1. 大克鼎（西周）— 铭文290字
+  - name: 与大盂鼎并称"海内三宝"之二
+halls:
+  - name: 中国古代青铜馆
+  - name: 中国历代书法馆
+  - name: 中国历代绘画馆
+  - name: 中国历代陶瓷馆
+artifacts:
+  - name: 大克鼎
+    period: 西周孝王
+    description: 膳夫克为祭祖而铸，铭文记载西周土地制度
+    image_url: https://upload.wikimedia.org/wikipedia/commons/4/40/Big_Ke_Ding_%284004385989%29.jpg
+    image_license: CC-BY-SA-2.0
+    image_attribution: x li
+  - name: 商鞅方升
+    period: 战国·秦孝公十八年
+    description: 刻有秦始皇统一度量衡诏书，跨越两个时代的实物
+    image_url: https://upload.wikimedia.org/wikipedia/commons/4/4f/%E5%95%86%E9%9E%85%E6%96%B9%E5%8D%87%E6%8B%93%E7%89%87.jpg
+    image_license: PD
+    image_attribution: Unknown
+  - name: 晋侯稣钟
+    period: 西周厉王
+    description: 16件编钟，铭文记载西周晚期战争
+    image_url: https://upload.wikimedia.org/wikipedia/commons/0/03/%E6%99%8B%E4%BE%AF%E7%A8%A3%E9%92%9F_164313.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Hpppp0527
+  - name: 《高逸图》
+    period: 唐·孙位
+    description: 描绘竹林七贤，现存最可靠的唐代人物画之一
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b1/%E9%AB%98%E9%80%B8%E5%9C%96.jpg
+    image_license: PD
+    image_attribution: Sun Wei
+  - name: 《淳化阁帖》最善本
+    period: 北宋
+    description: 中国法帖之祖，上博藏本为最佳版本
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/a1/%E6%B7%B3%E5%8C%96%E9%98%81%E5%B8%96%E4%BF%AE%E5%86%85%E5%8F%B8%E4%B8%9C_1.jpg
+    image_license: PD
+    image_attribution: Shanghai Museum
+  - name: 牺尊
+    period: 春秋
+    description: 动物形青铜酒器，工艺精湛
+  - name: 越窑青瓷莲花碗
+    period: 五代
+    description: 秘色瓷代表作
+sources:
+  - source: "上海博物馆官网: https://www.shanghaimuseum.net/"
+  - source: 核心文物数据已多源交叉核实

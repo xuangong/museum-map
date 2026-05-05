@@ -1,0 +1,47 @@
+id: guangxi
+name: 广西壮族自治区博物馆
+lat: 22.8155
+lng: 108.366
+location: 广西壮族自治区南宁市青秀区民族大道34号
+level: 国家一级博物馆
+core_period: 先秦至汉代（百越文化与铜鼓文明）
+specialty: 拥有世界上数量最多、类型最齐全的铜鼓收藏，是研究中国南方及东南亚铜鼓文化的核心机构。合浦汉墓出土文物系统展示了汉代海上丝绸之路始发港的繁荣面貌，百越民族文化与中原文明的交融是贯穿始终的主题。
+dynasty_coverage: 先秦百越、秦汉、东汉、唐宋、明清
+timeline: 先秦骆越/西瓯文化 → 秦设桂林郡 → 西汉合浦郡（海丝始发港）→ 唐代邕州 → 明清土司制度
+treasures:
+  - name: 翔鹭纹铜鼓（云雷纹大铜鼓）
+  - name: 西汉羽纹铜凤灯
+  - name: 东汉大铜马
+  - name: 合浦出土罗马玻璃碗
+  - name: 西汉铜牛
+halls:
+  - name: 瓯骆遗粹——广西百越文化
+  - name: 铜鼓文化
+  - name: 合浦汉代文化
+artifacts:
+  - name: 翔鹭纹铜鼓
+    period: 战国至西汉
+    description: —面径超过160厘米，鼓面有翔鹭纹和太阳纹，体型巨大，铸造精良。铜鼓在百越社会中是权力和财富的象征，此鼓是广西乃至全世界已知最大的铜鼓之一。
+    image_url: https://commons.wikimedia.org/wiki/File:%E7%BF%94%E9%B9%AD%E9%93%9C%E7%BA%B9%E9%BC%93.JPG
+    image_license: CC-BY-SA-3.0
+    image_attribution: Davidzdh
+  - name: 西汉羽纹铜凤灯
+    period: 西汉
+    description: —合浦望牛岭汉墓出土，凤鸟回首衔灯，灯盘可蓄油点燃，凤身中空导烟。造型优美、设计巧妙，与长信宫灯异曲同工，是百越地区汉代青铜灯具的杰出代表。
+  - name: 合浦出土罗马玻璃碗
+    period: 东汉，约1-2世纪
+    description: —合浦汉墓出土，深蓝色半透明玻璃，钠钙玻璃成分证实为罗马帝国制品。是汉代海上丝绸之路连通罗马帝国的直接物证，极为珍贵。
+  - name: 东汉大铜马
+    period: 东汉
+    description: —体量巨大、造型雄健，四肢比例准确。是岭南地区出土的最大青铜马，反映了汉代合浦地区的经济实力和铸造水平。
+  - name: 西汉铜牛
+    period: 西汉
+    description: —贵县（今贵港）罗泊湾汉墓出土，牛身壮硕、刻有花纹，是用于祭祀的礼器。体现了骆越人与农耕文化的密切关系。
+  - name: 合浦出土琥珀饰件
+    period: 汉代
+    description: —数量多、品种丰富，包括狮形、蛙形等造型，原料来自缅甸。是汉代南海贸易网络的重要物证。
+  - name: 铜鼓王（北流型大铜鼓）
+    period: 汉代
+    description: —北流出土，面径达165厘米，重约300公斤，是世界上已知最大的铜鼓，被称为"铜鼓王"，现为广西博物馆标志性藏品。
+sources:
+  - source: "广西壮族自治区博物馆官网: https://www.gxmuseum.cn/"

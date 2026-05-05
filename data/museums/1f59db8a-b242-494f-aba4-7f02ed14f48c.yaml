@@ -1,0 +1,95 @@
+id: 1f59db8a-b242-494f-aba4-7f02ed14f48c
+name: 杭州南宋官窑博物馆
+lat: 30.2582
+lng: 120.1635
+location: 浙江省杭州市上城区南复路60号
+level: 国家一级博物馆
+core_period: 南宋（1127—1279年）
+specialty: 陶瓷文化专题博物馆（南宋官窑青瓷）
+dynasty_coverage: 良渚文化至明代
+timeline: 1987年筹建；1992年正式对外开放；2002年完成扩建与陈列改造；2007年完成二期扩建
+treasures:
+  - name: 南宋官窑青瓷簋式炉
+  - name: 南宋官窑青瓷花口壶
+  - name: 南宋官窑青瓷鸭形器
+  - name: 南宋官窑青瓷八卦熏炉盖
+  - name: 南宋官窑青瓷玉壶春瓶
+  - name: 南宋官窑青瓷梅瓶
+  - name: 南宋官窑青瓷盏托
+  - name: 南宋官窑青瓷樽式炉
+  - name: 南宋官窑青瓷花盆
+  - name: 南宋官窑龙纹素烧盘底
+  - name: 战国原始瓷兽头鼎
+  - name: 战国原始瓷插座
+  - name: 三国青釉堆塑罐
+  - name: 五代—北宋越窑青釉水波纹盏托
+  - name: 元青花观音像
+  - name: 元龙泉窑粉青印花凤尾瓶
+  - name: 明弘治黄釉盘
+  - name: 良渚玉璧
+  - name: 辽代水晶天鹅摆件
+  - name: 南宋铁线巷陈二郎金叶子
+  - name: 南宋金铤
+  - name: 清康熙青花西湖风景观音瓶
+  - name: 清康熙五彩雷峰夕照盘
+  - name: 清诸升《竹石图》
+  - name: 民国都锦生平湖秋月织锦
+halls:
+  - name: 第一展厅（南宋官窑概述）
+  - name: 第二展厅（官窑工艺与器型）
+  - name: 第三展厅（中国陶瓷文化陈列）
+  - name: 作坊遗址保护展示大厅
+  - name: 龙窑遗址保护展厅
+artifacts:
+  - name: 南宋官窑青瓷簋式炉
+    period: 南宋
+    description: 仿青铜簋造型烧制的官窑青瓷香炉，釉色粉青，是南宋宫廷祭祀礼器的代表作。
+  - name: 南宋官窑青瓷花口壶
+    period: 南宋
+    description: 花口造型独特，釉面开片自然，是南宋官窑典型器型之一。
+  - name: 南宋官窑青瓷鸭形器
+    period: 南宋
+    description: 造型生动写实，釉质莹润，为南宋官窑陈设器珍品。
+  - name: 南宋官窑青瓷樽式炉
+    period: 南宋
+    description: 仿汉代铜樽造型，三足，粉青釉，开片明显，宫廷气息浓郁。
+  - name: 战国原始瓷兽头鼎
+    period: 战国
+    description: 原始瓷制品，造型仿青铜鼎，兽形耳装饰，是浙江原始瓷烧造传统的重要标本。
+  - name: 元青花观音像
+    period: 元
+    description: 元代景德镇烧制的青花瓷塑，造型端庄，青花发色浓艳，弥足珍贵。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/70/%E5%85%83%E9%9D%92%E8%8A%B1%E8%A7%82%E9%9F%B3%E5%83%8F.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎
+  - name: 良渚玉璧
+    period: 良渚文化
+    description: 良渚文化代表性玉礼器，体现距今约5000年的高度文明。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b5/SUZHOU_MUSEUM_WEST_-%E7%8E%89%E7%92%A7%2C_%E8%89%AF%E6%B8%9A%E6%96%87%E5%8C%96.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 颐园居
+  - name: 清康熙青花西湖风景观音瓶
+    period: 清（康熙）
+    description: 瓶身以青花绘西湖十景，是清代官窑瓷器中杭州地方特色的典型代表。
+dynasty_connections:
+  - dynasty: 南宋
+    description: 博物馆建于南宋修内司官窑遗址之上，核心展示南宋官窑青瓷的烧造工艺、器型特征与宫廷礼仪文化，是研究南宋官窑的最重要基地。
+  - dynasty: 良渚文化
+    description: 中国陶瓷文化陈列收藏有良渚玉璧等史前文物，展示浙江地区文明起源。
+  - dynasty: 战国
+    description: 展出战国原始瓷兽头鼎、原始瓷插座，反映浙江原始瓷烧造传统的深远渊源。
+  - dynasty: 三国—西晋
+    description: 展出三国青釉堆塑罐、西晋越窑青瓷兽纹双系罐，呈现越窑青瓷的早期发展脉络。
+  - dynasty: 唐—五代
+    description: 展出唐越窑青瓷瓯、五代—北宋越窑青釉水波纹盏托，见证越窑走向鼎盛的历程。
+  - dynasty: 元
+    description: 展出元青花观音像、元龙泉窑粉青印花凤尾瓶，反映官窑体系之外元代名窑的成就。
+  - dynasty: 明
+    description: 展出明弘治黄釉盘，代表明代单色釉瓷器的烧造水平。
+  - dynasty: 清
+    description: 展出清康熙青花西湖风景观音瓶、清康熙五彩雷峰夕照盘等，体现清代官窑瓷器与杭州地域文化的交融。
+sources:
+  - source: https://www.westlakemuseum.com/index.php/bwggk/gqjs/968-nsgybwg.html
+  - source: https://www.westlakemuseum.com/index.php/gcjp/jpzs2
+  - source: https://westlake.hangzhou.gov.cn/art/2023/12/26/art_1639433_59045332.html
+  - source: https://zh.wikipedia.org/zh-cn/%E6%9D%AD%E5%B7%9E%E8%A5%BF%E6%B9%96%E5%8D%9A%E7%89%A9%E9%A6%86%E6%80%BB%E9%A6%86%E5%8D%97%E5%AE%8B%E5%AE%98%E7%AA%91%E9%A6%86%E5%8C%BA

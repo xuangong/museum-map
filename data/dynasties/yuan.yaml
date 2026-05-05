@@ -1,0 +1,87 @@
+id: yuan
+name: 元朝（公元1271年—1368年）
+period: 公元1271年—1368年
+order_index: 17
+overview: |-
+  元朝由蒙古族建立，是中国历史上疆域最辽阔的大一统王朝，也是第一个由北方游牧民族建立的全国性政权。
+
+  成吉思汗（铁木真）于1206年统一蒙古各部，此后蒙古帝国向东西两个方向大规模扩张。忽必烈于1271年改国号为"大元"（取《易经》"大哉乾元"之义），1279年灭南宋（崖山之战），完成统一。元朝定都大都（今北京），疆域北至西伯利亚，西抵中亚，南含云南、西藏，东达朝鲜。
+
+  元朝的统治特点包括：四等人制（蒙古人、色目人、汉人、南人）的民族等级制度；驿站系统（站赤）使帝国内部交通畅通；开放的对外贸易使中国与欧洲、中亚、东南亚的联系空前密切。马可·波罗在元朝的游历使欧洲人对东方产生了强烈好奇。
+
+  但元朝后期政治腐败、自然灾害频发、民族矛盾激化，1351年红巾军起义爆发，1368年朱元璋攻克大都，元朝北遁，退回蒙古草原（北元）。
+culture:
+  - category: 元曲
+    description: 元杂剧是中国戏曲艺术的第一个高峰，关汉卿、马致远、郑光祖、白朴"四大家"
+  - category: 书画
+    description: 赵孟頫引领"复古"书风；元四家（黄公望、吴镇、倪瓒、王蒙）是文人山水画巅峰
+  - category: 青花瓷
+    description: 景德镇元青花是中国陶瓷史的革命性突破，远销世界各地
+  - category: 天文历法
+    description: 郭守敬《授时历》比现行公历早300年，精度相当
+  - category: 驿站系统
+    description: 帝国范围内的高效通讯和交通网络
+  - category: 中外交流
+    description: 马可·波罗来华、伊本·白图泰到访、阿拉伯天文学和医学传入
+events:
+  - date: 1206年
+    event: 铁木真统一蒙古，称成吉思汗
+    lat: 39.9
+    lng: 116.4
+  - date: 1234年
+    event: 蒙古联宋灭金
+    lat: 39.9
+    lng: 116.4
+  - date: 1271年
+    event: 忽必烈改国号为元
+    lat: 39.9
+    lng: 116.4
+  - date: 1274年、1281年
+    event: 元军两次东征日本，均遭"神风"失败
+    lat: 39.9
+    lng: 116.4
+  - date: 1276年
+    event: 元军攻占临安（杭州），南宋朝廷投降
+    lat: 30.25
+    lng: 120.15
+  - date: 1279年
+    event: 崖山之战，南宋灭亡（陆秀夫背幼帝跳海）
+    lat: 22.08
+    lng: 113.08
+  - date: 1292年
+    event: 郭守敬完成《授时历》
+    lat: 39.9
+    lng: 116.4
+  - date: 1351年
+    event: 红巾军起义爆发
+    lat: 39.9
+    lng: 116.4
+  - date: 1368年
+    event: 朱元璋攻克大都，元朝灭亡
+    lat: 39.91
+    lng: 116.4
+recommended_museums:
+  - museum_id: gugong
+    name: 故宫博物院
+    reason: 元代书画（赵孟頫等），宫廷收藏
+  - museum_id: taipei-gugong
+    name: 台北故宫
+    reason: 黄公望《富春山居图》（无用师卷）、元代书画精品
+  - museum_id: hubei
+    name: 湖北省博物馆
+    reason: 元青花四爱图梅瓶
+  - museum_id: jingdezhen
+    name: 景德镇中国陶瓷博物馆
+    reason: 元青花通史
+  - museum_id: yangzhou
+    name: 扬州博物馆
+    reason: 霁蓝釉白龙纹梅瓶
+  - museum_id: neimenggu
+    name: 内蒙古博物院
+    reason: 元上都遗址相关文物
+  - museum_id: xizang
+    name: 西藏博物馆
+    reason: 元代藏传佛教（帝师八思巴）
+  - museum_id: mogao
+    name: 敦煌莫高窟
+    reason: 元代洞窟

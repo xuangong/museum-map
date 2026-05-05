@@ -1,0 +1,73 @@
+id: liao
+name: 辽（公元907年—1125年）
+period: 公元907年—1125年
+order_index: 15
+overview: |-
+  辽朝由契丹族首领耶律阿保机于907年建立（916年正式称帝），是中国北方最强大的游牧-农耕复合帝国之一。辽朝创造性地实行"南北面官制"——以游牧制度管理契丹等北方民族（北面官），以汉式制度管理汉人和渤海人（南面官），"以国制治契丹，以汉制待汉人"，是中国历史上第一个系统实行"一国两制"的政权。
+
+  辽朝鼎盛时疆域广大，北至外蒙古，东至日本海，南以幽云十六州与宋对峙。936年后晋石敬瑭割让幽云十六州后，辽朝获得了这片战略要地和大量汉族人口，国力大增。1004年辽宋澶渊之盟后，双方维持了百余年的和平关系——宋向辽缴纳"岁币"，辽则不再南侵。
+
+  1125年金灭辽，部分契丹贵族西迁建立西辽（1124—1218），延续于中亚近百年。契丹的影响如此之大，以至于在俄语、波斯语中"中国"至今仍被称为"Kitay/Cathay"（契丹的音译）。
+culture:
+  - category: 契丹文字
+    description: 创制契丹大字（920年）和契丹小字，目前仅部分释读
+  - category: 南北面官制
+    description: 首创"因俗而治"的双轨行政制度
+  - category: 佛教
+    description: 辽代佛教兴盛，辽藏（辽代刻印的大藏经）、应县木塔（1056年建成，世界现存最高木结构建筑）
+  - category: 辽三彩
+    description: 继承唐三彩技法，风格粗犷
+  - category: 鸡冠壶
+    description: 契丹特色器物，模仿皮囊形状的陶瓷
+  - category: 建筑
+    description: 应县佛宫寺释迦塔（木塔）、独乐寺观音阁（天津蓟州）
+events:
+  - date: 907年
+    event: 耶律阿保机称可汗（916年称帝）
+    lat: 41
+    lng: 117
+  - date: 926年
+    event: 辽灭渤海国
+    lat: 41
+    lng: 117
+  - date: 936年
+    event: 后晋石敬瑭割让幽云十六州予辽
+    lat: 41
+    lng: 117
+  - date: 938年
+    event: 改国号为"辽"
+    lat: 41
+    lng: 117
+  - date: 946年
+    event: 辽太宗灭后晋，短暂入主中原
+    lat: 41
+    lng: 117
+  - date: 1004年
+    event: 澶渊之盟，辽宋百年和平
+    lat: 41
+    lng: 117
+  - date: 1125年
+    event: 金灭辽
+    lat: 41
+    lng: 117
+  - date: 1124—1218年
+    event: 耶律大石建立西辽，延续于中亚
+    lat: 41
+    lng: 117
+recommended_museums:
+  - museum_id: liaoning
+    name: 辽宁省博物馆
+    reason: 辽代文物系统收藏，契丹文铜镜
+  - museum_id: neimenggu
+    name: 内蒙古博物院
+    reason: 契丹/辽代文物
+  - museum_id: tianjin
+    name: 天津博物馆
+    reason: 辽代瓷器
+  - museum_id: shanxi-datong
+    name: 大同市博物馆
+    reason: 辽金时期的大同（辽西京）
+  - museum_id: ef6658c6-03b4-4edb-98ca-e19523bdaaa7
+    name: 应县木塔
+    location: 山西朔州
+    reason: 辽代建筑巅峰（可远观不可登临）

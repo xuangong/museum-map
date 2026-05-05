@@ -1,0 +1,54 @@
+id: shaanxi
+name: 陕西历史博物馆
+lat: 34.222
+lng: 108.9554
+location: 陕西省西安市雁塔区小寨东路91号
+level: 国家一级博物馆（中国第一座大型现代化博物馆）
+core_period: 周、秦、汉、唐
+specialty: 地处十三朝古都西安，藏品170余万件，以周秦汉唐四大盛世文物最为系统完整。唐代金银器和壁画收藏为全国之冠。
+dynasty_coverage: 西周、秦、西汉、唐为核心，上溯蓝田人，下至明清
+timeline: 西安（长安）是西周、秦、西汉、隋唐的都城。陕历博以都城视角串联了中国古代最辉煌的几个时期。
+treasures:
+  - name: 1. 兽首玛瑙杯（唐）— 海内孤品
+  - name: 可能为中亚传入的珍贵酒器
+halls:
+  - name: 基本陈列（周秦汉唐通史）
+  - name: 唐代壁画珍品馆（需另购票）
+  - name: 大唐遗宝展
+artifacts:
+  - name: 兽首玛瑙杯
+    period: 唐
+    description: 用整块红色缠丝玛瑙雕成，兽首形杯口，可能是从中亚丝路传入的异域珍品
+  - name: 鎏金舞马衔杯纹银壶
+    period: 唐
+    description: 唐玄宗生日宴上舞马衔杯祝寿的故事在此壶上得到实物印证
+  - name: 唐三彩骆驼载乐俑
+    period: 唐
+    description: 骆驼背上载有胡人乐队，丝路文化融合的标志
+  - name: 五祀卫鼎
+    period: 西周共王
+    description: 铭文207字，记载了一起完整的土地诉讼案
+  - name: 皇后之玺
+    period: 西汉
+    description: 迄今发现唯一的皇后玉玺，可能属于吕后
+  - name: 鸳鸯莲瓣纹金碗
+    period: 唐
+    description: 唐代金器工艺巅峰
+  - name: 杜虎符
+    period: 战国·秦
+    description: 虎形铜符，调兵凭证，铭文40字
+  - name: 黑釉油滴碗
+    period: 宋
+    description: 建窑精品
+dynasty_connections:
+  - dynasty: 西周
+    description: 礼乐制度、青铜铭文
+  - dynasty: 秦
+    description: 统一、法制、军事
+  - dynasty: 西汉
+    description: 汉承秦制、丝绸之路起点
+  - dynasty: 唐
+    description: 开放包容、国际化大都市长安  唐代部分最为璀璨，壁画馆保存了大量唐墓壁画原件，是其他博物馆无法替代的。
+sources:
+  - source: "陕西历史博物馆官网: https://www.sxhm.com/"
+  - source: 百度百科·陕西历史博物馆（馆藏170余万件）

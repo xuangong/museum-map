@@ -1,0 +1,59 @@
+id: nanyue
+name: 南越王博物院
+lat: 23.1375
+lng: 113.259
+location: 广东省广州市越秀区（王墓展区）/ 北京路（王宫展区）
+level: 国家一级博物馆
+core_period: 秦汉（南越国，前203-前111年）
+specialty: 建于南越国第二代王赵眜（赵胡）墓原址之上，是华南地区发现的规模最大、保存最完好的汉代彩绘石室墓。王宫展区展示南越国宫署遗址和御苑遗迹，两个展区合为完整的南越国都城图景。
+dynasty_coverage: 秦代（赵佗南征）→ 西汉（南越国五代王）→ 东汉至六朝（岭南开发）
+timeline: 秦始皇统一岭南（前214年）→ 赵佗建南越国（前203年）→ 赵眜继位（约前137年）→ 汉武帝灭南越（前111年）。南越国存续近百年，是岭南从百越部落社会向汉文化圈转型的关键时期
+treasures:
+  - name: 丝缕玉衣
+  - name: '"文帝行玺"金印'
+  - name: 角形玉杯
+  - name: 铜屏风构件
+  - name: 船纹铜提筒
+halls:
+  - name: 主墓室原址展示
+  - name: 玉器专题展
+  - name: 南越王宫署遗址
+  - name: 曲流石渠御苑遗迹
+artifacts:
+  - name: '"文帝行玺"金印'
+    description: 西汉（前2世纪）。纯金铸造，龙钮，印文"文帝行玺"，是迄今发现的最大的汉代金印。直接证明墓主为南越文帝赵眜，也是研究南越国政治制度的关键实物——南越王自称"帝"而非"王"，反映了其与汉朝的微妙关系。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/99/Gold_Seal_with_Dragon_Knob_at_Nanyue_King_Museum.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Shujianyang
+  - name: 丝缕玉衣
+    description: 西汉（前2世纪）。以丝线穿缀2291块玉片而成，是目前发现年代最早、保存最完整的丝缕玉衣。比中原的金缕玉衣等级略低，反映了南越国对汉制的模仿和调适。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e3/Si_l%C3%BC_yu_yi.JPG
+    image_license: CC-BY-SA-2.5
+  - name: 角形玉杯
+    description: 西汉。以整块青玉雕成犀角形，杯口沿浮雕一只矫健的夔龙，造型独特，兼具中原玉器和草原风格，是汉代玉器中的孤品。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/5/58/Jade_Drinking_Vessel_in_Rhino_Horn_Shape_at_Nanyue_King_Museum_02.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Shujianyang
+  - name: 铜屏风构件（朱雀、人操蛇等）
+    description: 西汉。大型铜铸鎏金屏风的构件，有朱雀衔环、人操蛇等造型，工艺精湛，反映了南越宫廷的审美趣味。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/28/Bronze_screen_parts_at_Nanyue_King_Museum_01.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Shujianyang
+  - name: 船纹铜提筒
+    description: 西汉。越式铜器，筒壁刻有战船、羽人等纹饰，与越南东山文化铜鼓风格相似，是南越国海洋文化和百越传统的直接证据。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/5/5d/Bronze_Bucket_with_Boating_Paintings_at_Nanyue_King_Museum_03.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Shujianyang
+  - name: 银盒（波斯风格）
+    description: 西汉。锤揲工艺制作的银盒，造型和纹饰具有明显的西亚波斯风格，是早期海上丝绸之路的实物证据。
+  - name: 南越国宫署遗址"万岁"瓦当
+    description: 西汉。"万岁"文字瓦当，与闽越国类似，反映了南方诸越国的政治自主性。
+dynasty_connections:
+  - dynasty: 秦代
+    description: 秦始皇于前214年发兵五十万征服岭南，设南海、桂林、象郡三郡。秦将赵佗被任命为南海郡龙川县令，这是中原政权首次有效管辖岭南。
+  - dynasty: 西汉（南越国）
+    description: 秦末乱世，赵佗据南海郡自立，前203年建南越国，定都番禺（广州）。南越国传五代王，前后近百年。赵眜（第二代王）墓的发现揭示了南越国的文化面貌：既大量采用中原汉制（玉衣、印玺、编钟），又保留了浓厚的百越传统（铜提筒、人操蛇屏风），同时通过海上贸易接触了西亚文化（银盒），呈现出多元融合的特色。前111年汉武帝灭南越，岭南正式纳入汉帝国版图。
+  - dynasty: 海上丝绸之路
+    description: 南越国的银盒等外来器物证明，早在西汉早期，岭南地区已经通过海上通道与东南亚、南亚乃至西亚有贸易往来，广州是中国最早的海上丝绸之路起点之一。
+sources:
+  - source: "南越王博物院官网: https://www.nywmuseum.com/"

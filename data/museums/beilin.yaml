@@ -1,0 +1,60 @@
+id: beilin
+name: 西安碑林博物馆
+lat: 34.2535
+lng: 108.953
+location: 陕西省西安市碑林区三学街15号
+level: 国家一级博物馆、全国重点文物保护单位
+core_period: 汉代至清代（历代碑刻书法）
+specialty: 中国收藏碑石最多的博物馆，现藏碑石、墓志4000余方，是中国书法艺术和文字学的宝库。从秦代《峄山刻石》到清代碑刻，历代名家书法汇聚于此。碑林始建于北宋，最初为保存唐代《开成石经》而设，历经900余年不断扩充。
+dynasty_coverage: 秦、汉、魏晋、北朝、隋、唐、宋、元、明、清
+timeline: 秦统一文字 → 汉隶成熟 → 魏晋书法自觉 → 北碑南帖分流 → 唐代楷书极盛·开成石经（837年）→ 北宋移碑建林（1087年）→ 历代增补
+treasures:
+  - name: 《开成石经》（唐）
+  - name: 《大秦景教流行中国碑》（唐）
+  - name: 颜真卿《多宝塔碑》《颜家庙碑》
+  - name: 怀素《千字文》碑
+  - name: 昭陵六骏（其中四骏）
+halls:
+  - name: 第一展室（《开成石经》）
+  - name: 第二展室（唐代名碑）
+  - name: 第三展室（历代书法）
+  - name: 石刻艺术室（昭陵六骏）
+artifacts:
+  - name: 《开成石经》
+    period: 唐代，837年
+    description: —唐文宗开成二年刻成，共114石228面，刻《周易》《尚书》《诗经》《周礼》《仪礼》《礼记》《春秋左传》《春秋公羊传》《春秋穀梁传》《论语》《孝经》《尔雅》十二部儒家经典，共65万余字。是保存最完整的唐代石经，也是碑林创建的缘起。在印刷术尚未普及的时代，石经是国家级的"教科书标准版本"。
+  - name: 《大秦景教流行中国碑》
+    period: 唐代，781年
+    description: —记载了基督教聂斯脱里派（景教）在唐代中国的传播历程，碑文以汉文为主，旁有叙利亚文。是东西方宗教文化交流的重要物证，在世界宗教史上具有极高地位。1625年出土后引起来华传教士极大关注。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/f/f9/Stele_of_the_Spread_of_the_Assyrian_Teachings_of_the_Great_Qin_to_the_Central_States_WDL3047.jpg
+    image_license: PD
+    image_attribution: Jingjing
+  - name: 颜真卿《多宝塔碑》
+    period: 唐代，752年
+    description: —颜真卿44岁时所书，楷书端庄秀丽，结构严谨。是学习颜体楷书的经典范本，也是唐代楷书的代表作之一。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/23/%E5%A4%9A%E5%AE%9D%E5%A1%94%E7%A2%91.%E5%94%90.%E9%A2%9C%E7%9C%9F%E5%8D%BF.%E4%B9%A6.%E6%B8%85%E4%B8%AD%E6%99%9A%E6%9C%9F%E6%8B%93%E7%89%87.%E4%B8%9C%E4%BA%AC%E5%9B%BD%E7%AB%8B%E5%8D%9A%E7%89%A9%E9%A6%86%E8%97%8F.jpg
+    image_license: PD
+    image_attribution: Yan Zhenqing
+  - name: 颜真卿《颜家庙碑》
+    period: 唐代，780年
+    description: —颜真卿晚年力作，笔力雄浑苍劲，气势磅礴。与早期的《多宝塔碑》对比，可以清晰看到颜体书法的演变轨迹。
+  - name: 怀素《千字文》碑
+    period: 唐代
+    description: —草书大家怀素的代表作之一，笔势奔放连绵。碑林藏有多种怀素作品的刻石。
+  - name: 《曹全碑》
+    period: 东汉，185年
+    description: —隶书精品，笔画秀润流丽，结体扁平匀称。是汉隶的经典代表之一，历代书法家临习隶书的必选范本。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/3/31/%E6%9B%B9%E5%85%A8%E7%A2%91-%E4%B8%9C%E6%B1%89%E4%B8%AD%E5%B9%B3%E4%BA%8C%E5%B9%B4%EF%BC%88185%EF%BC%89-%E8%A5%BF%E5%AE%89%E7%A2%91%E6%9E%97%E7%AC%AC%E4%B8%89%E5%AE%A4_2023-09-29_02.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36
+  - name: 昭陵六骏石刻
+    period: 唐代，约636年
+    description: —唐太宗李世民昭陵前的六块骏马浮雕，分别记录了李世民征战天下时所骑的六匹战马。其中"飒露紫"和"拳毛騧"两骏于1914年被盗卖至美国（现藏宾夕法尼亚大学博物馆），其余四骏现存碑林。浮雕造型生动有力，是唐代石刻艺术的巅峰。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/71/Six_Steeds_of_Zhao_Mausoleum_%289913066396%29.jpg
+    image_license: CC0
+    image_attribution: Gary Todd from Xinzheng, China
+  - name: 《皇甫诞碑》
+    period: 唐代，欧阳询书
+    description: —欧阳询楷书代表作之一，笔力险劲，结构精密。欧体、颜体、柳体、赵体并称楷书四大家，碑林集中收藏了这些名家的碑刻真迹。
+sources:
+  - source: "西安碑林博物馆官网: https://www.beilin-museum.com/"

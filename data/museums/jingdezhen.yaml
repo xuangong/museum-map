@@ -1,0 +1,59 @@
+id: jingdezhen
+name: 景德镇中国陶瓷博物馆
+lat: 29.2932
+lng: 117.2068
+location: 江西省景德镇市昌江区
+level: 国家一级博物馆
+core_period: 宋元明清（瓷器通史，尤以明清御窑为核心）
+specialty: 全球唯一系统展示景德镇千年制瓷史的专题博物馆，藏品从五代至现代，涵盖官窑民窑，品类齐全。是理解中国瓷器如何从一种材料变成一种世界性文化的最佳场馆。
+dynasty_coverage: 五代（南方白瓷兴起）→ 宋代（影青瓷/青白瓷）→ 元代（青花瓷诞生）→ 明代（御窑厂建立、五彩斗彩）→ 清代（粉彩珐琅彩、瓷器巅峰）
+timeline: 宋真宗景德年间（1004-1007）赐名景德镇；元代创烧成熟青花瓷，改变世界陶瓷格局；明洪武二年（1369）设御器厂，此后五百年景德镇为皇家御窑所在；清康雍乾三朝为制瓷技术巅峰
+treasures:
+  - name: 元青花缠枝牡丹纹梅瓶
+  - name: 明永乐甜白釉暗刻龙纹梅瓶
+  - name: 清雍正粉彩蝠桃纹橄榄瓶
+  - name: 宋影青瓷注壶注碗
+  - name: 明成化斗彩瓷
+halls:
+  - name: 瓷业千年"通史陈列
+  - name: 历代名窑展
+  - name: 御窑精品展
+  - name: 现当代陶瓷艺术展
+artifacts:
+  - name: 元青花缠枝牡丹纹梅瓶
+    description: 元代（14世纪）。青花瓷是景德镇对世界文明最重要的贡献，元青花存世极少，此瓶造型饱满，青花发色浓艳，纹饰层次丰富。
+  - name: 明永乐甜白釉暗刻龙纹梅瓶
+    description: 明永乐（15世纪初）。甜白釉是永乐朝的独创，釉色温润如凝脂，暗刻龙纹若隐若现，代表了明初御窑的最高水平。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/74/%E7%94%9C%E7%99%BD%E9%87%89%E6%A2%85%E7%93%B608611.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Augusthaiho
+  - name: 清雍正粉彩蝠桃纹橄榄瓶
+    description: 清雍正（18世纪初）。粉彩在雍正朝达到巅峰，此瓶色彩雅致，绘画精细，蝠（福）桃（寿）寓意吉祥。
+  - name: 宋影青（青白瓷）注壶注碗
+    description: 宋代（11-12世纪）。青白瓷是景德镇宋代的代表品种，釉色介于青白之间，如冰似玉，此套注壶注碗造型典雅，是宋人饮酒器具的代表。
+  - name: 明成化斗彩鸡缸杯
+    description: 明成化（15世纪晚期）。斗彩技法将釉下青花与釉上彩结合，鸡缸杯小巧精致，自古被视为瓷中极品，明代即已价值连城。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/0/02/%E6%98%8E%E6%88%90%E5%8C%96_%E6%99%AF%E5%BE%B7%E9%8E%AE%E7%AA%AF%E9%AC%A5%E5%BD%A9%E9%9B%9E%E7%BC%B8%E6%9D%AF-Chicken_Cup_MET_1987_85_2015AT_001_%28cropped%29.jpg
+    image_license: CC0
+    image_attribution: This file was donated to Wikimedia Commons as part of a project by the Metropolitan Museum of Art
+  - name: 清乾隆各种釉彩大瓶（瓷母）
+    description: 清乾隆（18世纪中期）。集十余种釉彩于一身，是清代制瓷技术的"炫技"之作，虽有争议但确为技术巅峰。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/c/c3/13_Glazed_Vase.jpg
+    image_license: CC-BY-2.0
+    image_attribution: Chez Cåsver (Xuan Che)
+  - name: 五代白瓷
+    description: 五代（10世纪）。景德镇制瓷的起点，南方白瓷的代表，为后来青白瓷的发展奠定基础。
+  - name: 明宣德青花瓷
+    description: 明宣德（15世纪）。宣德青花被公认为明代青花的巅峰，使用进口苏麻离青料，发色浓重有铁锈斑，气韵生动。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/f/ff/%E6%98%8E%E5%AE%A3%E5%BE%B7%E9%9D%92%E8%8A%B1%E6%8A%98%E6%9E%9C%E8%8A%B1%E6%9E%9C%E7%BA%B9%E5%A4%A7%E7%A2%97_20240612.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Uuongkinghe
+dynasty_connections:
+  - dynasty: 宋代
+    description: 景德镇因宋真宗赐年号为名，影青（青白瓷）是宋代景德镇的标志产品，质地细腻、釉色淡雅，深受文人喜爱。此时景德镇已成为全国重要窑场之一。
+  - dynasty: 元代
+    description: 蒙古帝国的全球贸易网络带来了波斯钴蓝料，催生了成熟的青花瓷。青花瓷结合了中国的瓷器技术与伊斯兰的审美趣味，迅速成为全球最受欢迎的商品之一，彻底改变了世界陶瓷贸易格局。
+  - dynasty: 明清（御窑）
+    description: 明洪武二年设御器厂（后称御窑厂），景德镇成为皇家瓷器的唯一产地。永乐甜白、宣德青花、成化斗彩、嘉万五彩，至清代康熙五彩、雍正粉彩、乾隆各色釉彩，技术不断攀升。御窑制度持续近六百年，是人类制瓷史的奇迹。
+sources:
+  - source: "景德镇中国陶瓷博物馆官网: https://www.jdztcbwg.com/"

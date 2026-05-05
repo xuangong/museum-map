@@ -1,0 +1,51 @@
+id: jinsha
+name: 金沙遗址博物馆
+lat: 30.6774
+lng: 104.013
+location: 四川省成都市青羊区金沙遗址路2号
+level: 国家一级博物馆
+core_period: 古蜀文明后期（商代晚期至春秋早期，约前1200-前650年）
+specialty: 2001年在成都市区施工时偶然发现，是继三星堆之后古蜀文明最重要的考古发现。太阳神鸟金饰已被确定为中国文化遗产标志。遗址出土金器、铜器、玉器、象牙等珍贵文物6000余件，大量象牙的出土尤为引人注目。博物馆由遗迹馆（保护原始发掘现场）和陈列馆两部分组成。
+dynasty_coverage: 商代晚期 → 西周 → 春秋早期
+timeline: 金沙遗址（约前1200-前650年）是三星堆文明衰落后古蜀政治中心南迁至成都的证据。三星堆→金沙构成了古蜀文明的完整序列。金沙的衰落与开明王朝的兴起（之后秦灭蜀）相衔接。
+treasures:
+  - name: 1. 太阳神鸟金饰（商周）— 中国文化遗产标志
+  - name: 外径12.5cm
+  - name: 厚0.02cm
+halls:
+  - name: 遗迹馆（原始发掘现场保护展示）
+  - name: 陈列馆"走进金沙"（五个展厅：远古家园→王都剪影→天地不绝→千载遗珍→解读金沙）
+artifacts:
+  - name: 太阳神鸟金饰
+    period: 商周，约前1200-前900年
+    description: 外径12.5cm，内径5.29cm，厚仅0.02cm，重20g。用自然砂金加工而成，含金量94.2%。图案为四只逆时针飞行的神鸟围绕十二道旋转的太阳光芒，被认为是古蜀人太阳崇拜的象征。2005年被国家文物局确定为中国文化遗产标志。
+    image_url: https://commons.wikimedia.org/wiki/File:太阳神鸟金饰_Golden_Sun_Bird.png
+    image_license: PD
+    image_attribution: "Jinsha Site Museum. Original author: ancient Shu people."
+  - name: 黄金面具
+    period: 商周
+    description: 金面具宽19.5cm，高11cm，厚约0.04cm，重46g。与三星堆出土的黄金面罩风格一致，证明金沙与三星堆属于同一文化传统。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/5/5f/%E9%87%91%E6%B2%99%E9%81%97%E5%9D%80%E5%8D%9A%E7%89%A9%E9%A6%86-%E5%95%86%E5%91%A8%E9%BB%84%E9%87%91%E9%9D%A2%E5%85%B7%E9%9B%95%E5%A1%91.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36
+  - name: 十节玉琮
+    period: 新石器时代良渚文化风格，出土于金沙商周地层
+    description: 这件玉琮的形制和纹饰与浙江良渚文化玉琮高度相似（带有简化人面纹），说明古蜀与远在千里之外的长三角存在文化交流或传承。这是考古学上的重大发现。
+  - name: 铜立人像
+    period: 商周
+    description: 小型铜立人，双手持物姿态与三星堆大立人相似，但尺寸更小、风格更简化，展现了古蜀造像传统的演变。
+  - name: 石虎
+    period: 商周
+    description: 圆雕石虎，姿态为俯卧状，造型生动，体现古蜀人对虎的崇拜。
+  - name: 象牙
+    period: 商周
+    description: 金沙遗址出土了大量象牙（数以吨计），说明商周时期成都平原有大量野生象群，与今天的气候和生态完全不同。
+  - name: 玉璋群
+    period: 商周
+    description: 大量玉璋出土，其中"肩扛象牙人形纹玉璋"图案描绘了人物肩扛象牙的祭祀场景。
+  - name: 兽面纹玉钺
+    period: 商周
+    description: 浮雕兽面纹与商代中原青铜器纹饰相似，是中原文化影响古蜀的证据。
+sources:
+  - source: 百度百科·成都金沙遗址博物馆（馆藏玉器详细数据）
+  - source: "太阳神鸟金饰数据: 国家文物局2005年公布"

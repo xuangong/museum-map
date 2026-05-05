@@ -1,0 +1,54 @@
+id: gugong
+name: 故宫博物院
+lat: 39.9163
+lng: 116.3972
+location: 北京市东城区景山前街4号
+level: 国家一级博物馆 / 世界文化遗产（1987年）
+core_period: 明清（1368-1912）
+specialty: 世界上现存规模最大、保存最完整的木质结构古建筑群。藏品180余万件（套），涵盖书画、陶瓷、青铜、玉器、宫廷用品。建筑本身即是最大的展品。
+dynasty_coverage: 明、清为主，藏品横跨新石器至清末
+timeline: 明永乐帝迁都北京（1420年建成）→ 明清两代24位皇帝居所 → 1925年建院。宫廷收藏的集大成者。
+treasures:
+  - name: 1. 《清明上河图》（北宋·张择端）— 中国十大传世名画之首
+halls:
+  - name: 珍宝馆（宁寿宫区）
+  - name: 钟表馆（奉先殿）
+  - name: 书画馆
+  - name: 陶瓷馆
+artifacts:
+  - name: 《清明上河图》
+    period: 北宋
+    description: 5米长卷描绘汴京繁华，社会史百科全书
+    image_url: https://upload.wikimedia.org/wikipedia/commons/e/eb/%E6%B8%85%E6%98%8E%E4%B8%8A%E6%B2%B3%E5%9B%BE.jpg
+    image_license: PD
+    image_attribution: User Zhuwq on zh.wikipedia
+  - name: 《千里江山图》
+    period: 北宋
+    description: 王希孟18岁所作，青绿山水绝唱
+    image_url: https://upload.wikimedia.org/wikipedia/commons/3/37/Wang_Ximeng._A_Thousand_Li_of_Rivers_and_Mountains._%28Complete%2C_51%2C3x1191%2C5_cm%29._1113._Palace_museum%2C_Beijing.jpg
+    image_license: PD
+    image_attribution: Wang Xi
+  - name: 各种釉彩大瓶
+    period: 清乾隆
+    description: 融合15种釉彩技法，工艺极限
+  - name: 金瓯永固杯
+    period: 清乾隆
+    description: 皇帝元旦开笔仪式用杯
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/98/%E9%87%91%E7%94%8C%E6%B0%B8%E5%9B%BA%E6%9D%AF.png
+    image_license: CC-BY-4.0
+    image_attribution: anonymous
+  - name: 大禹治水图玉山
+    period: 清乾隆
+    description: 重5吨，中国最大玉雕
+  - name: 郎窑红釉穿带直口瓶
+    period: 清康熙
+    description: 红釉瓷器巅峰
+  - name: 酗亚方樽
+    period: 商晚期
+    description: 青铜酒器精品
+  - name: 张成造款雕漆云纹盘
+    period: 元
+    description: 漆器工艺巅峰
+sources:
+  - source: "故宫博物院官网·藏品: https://www.dpm.org.cn/explore/collections.html（藏品180余万件/套）"
+  - source: "故宫博物院官网·历史: https://www.dpm.org.cn/classify/architecture.html"

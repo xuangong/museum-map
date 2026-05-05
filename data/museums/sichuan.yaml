@@ -1,0 +1,49 @@
+id: sichuan
+name: 四川博物院
+lat: 30.65
+lng: 104.03
+location: 四川省成都市浣花南路251号（浣花溪历史文化风景区内）
+level: 国家一级博物馆（2012年）、中央地方共建国家级博物馆候选
+core_period: 古蜀文明（先秦）、汉代、藏传佛教
+specialty: 西南地区最大的综合性博物馆。馆藏35万余件，珍贵文物7万余件。14个展厅，展厅面积约12635㎡。张大千临摹敦煌壁画收藏（183幅）为全球最大规模。万佛寺石刻南朝造像独具特色。巴蜀青铜器汇聚了三星堆、金沙等系列重大考古出土文物。
+dynasty_coverage: 新石器 → 古蜀（三星堆/金沙）→ 秦汉（画像砖/陶俑）→ 南朝至唐（万佛寺石刻/佛教造像）→ 宋元明清 → 近现代（抗战/红军长征）
+timeline: 四川是"天府之国"，从古蜀文明到秦统一、再到汉代富庶、唐代佛教艺术繁荣、直至近代抗战大后方，四川的文化积淀极其深厚。四川博物院的藏品时间跨度和门类广度堪称西南之最。
+treasures:
+  - name: 1. 张大千临摹敦煌壁画（183幅）— 全球最大单批张大千敦煌壁画收藏
+halls:
+  - name: 巴蜀青铜馆"（三星堆/金沙/涪陵小田溪等出土青铜器）
+  - name: 张大千书画馆"（183幅临摹敦煌壁画）
+  - name: 万佛寺石刻馆"（南朝至唐代石刻造像）
+  - name: 汉代陶石艺术展
+  - name: 藏传佛教文物馆
+  - name: 四川民族文物展
+artifacts:
+  - name: 张大千临摹敦煌壁画
+    period: 1941-1943年绘制，1963年家属捐赠
+    description: 183幅，张大千在敦煌近3年系统临摹莫高窟壁画的成果。大部分为未完稿，包含北魏、西魏、隋、唐、五代等各时期壁画临摹，是研究敦煌壁画和张大千艺术的珍贵资料
+  - name: 巴蜀青铜器
+    period: 商周至战国
+    description: 汇集三星堆、金沙、新繁水观音、巴县冬笋坝、彭州竹瓦街、新都马家乡、涪陵小田溪等重大考古出土。巴蜀青铜器以多样的锋刃器（兵器/工具）为特色，器上常有巴蜀特殊符号铭文
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/1e/%E5%9B%9B%E5%B7%9D%E7%9C%81%E5%BD%AD%E5%8E%BF%EF%BC%88%E4%BB%8A%E5%BD%AD%E5%B7%9E%EF%BC%89%E7%AB%B9%E7%93%A6%E5%85%AC%E7%A4%BE%E4%B8%83%E5%A4%A7%E9%98%9F%E5%9B%9B%E9%98%9F%E5%87%BA%E5%9C%9F-%E9%9D%92%E9%93%9C%E6%88%90-%E8%A5%BF%E5%91%A8%EF%BC%88%E5%89%8D1046-%E5%89%8D771%EF%BC%89-%E5%9B%9B%E5%B7%9D%E5%8D%9A%E7%89%A9%E9%99%A2%E8%97%8F_2024-10-31.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36
+  - name: 万佛寺石刻造像
+    period: 南朝梁至唐代，约200余件
+    description: 万佛寺（成都西门外）自清光绪八年（1882年）以来先后四次出土大批石刻造像，包括佛像、菩萨像、造像碑、伎乐像。南朝造像风格秀美，是长江流域佛教艺术的高峰
+  - name: 汉代画像砖
+    period: 东汉
+    description: 四川汉代画像砖题材极为丰富（盐井、市集、宴饮、车马出行、播种收获等），是汉代社会生活的图像百科全书
+    image_url: https://upload.wikimedia.org/wikipedia/commons/8/8f/%E5%9B%9B%E5%B7%9D%E5%B7%9C%E7%9C%81%E5%BD%AD%E5%B7%9E%E5%B8%82%E5%A4%AA%E5%B9%B3%E4%B9%A1%E5%87%BA%E5%9C%9F-%E4%B8%83%E7%9B%98%E8%88%9E%E6%9D%82%E6%8A%80%E7%94%BB%E5%83%8F%E7%A0%96-%E4%B8%9C%E6%B1%89%EF%BC%8825-220%EF%BC%89-%E5%9B%9B%E5%B7%9D%E5%8D%9A%E7%89%A9%E9%99%A2%E8%97%8F_2024-10-31.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36
+  - name: 新都马家乡大墓出土铜器
+    period: 战国
+    description: 礼器形制和纹饰与楚器相似，反映巴蜀与楚文化的交流
+  - name: 格萨尔唐卡
+    period: 清至近代
+    description: 描绘藏族英雄史诗《格萨尔》故事的唐卡系列，川西藏区文化的珍贵遗产
+    image_url: https://upload.wikimedia.org/wikipedia/commons/6/62/Gesar_Gruschke.jpg
+    image_license: CC-BY-SA-3.0-DE
+    image_attribution: Gruschke Anonymer tibetischer Maler
+sources:
+  - source: 百度百科·四川博物院（详细词条，含馆藏数据、展厅描述、历史沿革）

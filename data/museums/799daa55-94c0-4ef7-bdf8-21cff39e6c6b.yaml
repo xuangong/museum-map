@@ -1,0 +1,50 @@
+id: 799daa55-94c0-4ef7-bdf8-21cff39e6c6b
+name: 承德避暑山庄博物院
+lat: 40.9971
+lng: 117.939
+location: 中国河北省承德市双桥区武烈河东岸
+level: 国家一级博物馆
+core_period: 清代
+specialty: 以清代宫廷文物为核心，重点收藏瓷器、珐琅器、钟表及避暑山庄相关历史文物
+dynasty_coverage: 清代为主
+timeline: 1961年成立承德避暑山庄博物馆；2019年11月20日承德博物馆正式对外开放；2022年9月整合组建承德避暑山庄博物院；2024年5月18日被评定为国家一级博物馆
+treasures:
+  - name: 亚牧鼎
+  - name: 四方洞遗址出土文物
+  - name: 铜鎏金凤凰脊兽
+  - name: 清代宫廷瓷器
+  - name: 清代宫廷珐琅器
+  - name: 清代宫廷钟表
+halls:
+  - name: 文物展厅（六个）
+  - name: 临时展厅（两个）
+  - name: 多媒体展厅
+  - name: 文化讲堂
+  - name: 多功能厅
+  - name: 会议室
+  - name: 承德博物馆展区
+  - name: 避暑山庄博物馆展区
+artifacts:
+  - name: 亚牧鼎
+    period: 商周
+    description: 馆藏重要青铜器文物
+  - name: 铜鎏金凤凰脊兽
+    period: 清代
+    description: 国家二级文物，2025年6月由厦门市博物馆移交归还
+  - name: 清代宫廷瓷器
+    period: 清代
+    description: 避暑山庄藏瓷艺术展核心展品，展现清代御窑瓷器工艺
+  - name: 清代宫廷珐琅器
+    period: 清代
+    description: 避暑山庄典藏珐琅展核心展品，反映清代宫廷珐琅工艺水平
+  - name: 清代宫廷钟表
+    period: 清代
+    description: 避暑山庄典藏钟表展核心展品
+dynasty_connections:
+  - dynasty: 清代
+    description: 避暑山庄为清代皇家夏宫，康熙、乾隆等帝在此理政避暑，馆藏文物以清宫秘藏、帝后生活用品为主
+sources:
+  - source: https://www.chdmuseum.cn/a/about/
+  - source: https://www.chdmuseum.cn/a/zhanlan/
+  - source: https://wenwu.hebei.gov.cn/system/2024/03/04/030278980.shtml
+  - source: https://baike.baidu.com/item/%E6%89%BF%E5%BE%B7%E9%81%BF%E6%9A%91%E5%B1%B1%E5%BA%84%E5%8D%9A%E7%89%A9%E9%99%A2/64919556

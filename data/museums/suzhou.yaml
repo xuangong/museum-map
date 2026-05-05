@@ -1,0 +1,55 @@
+id: suzhou
+name: 苏州博物馆
+lat: 31.323
+lng: 120.6318
+location: 江苏省苏州市姑苏区东北街
+level: 国家一级博物馆
+core_period: 春秋（吴国）、五代宋元（丝织、书画）、明清（文人文化）
+specialty: 建筑本身即为最大展品——贝聿铭封刀之作，将现代建筑与苏州传统园林完美融合。馆藏以吴文化文物、宋元明清书画和苏作工艺为核心，是文人江南美学的集中体现。
+dynasty_coverage: 新石器时代（草鞋山）→ 春秋（吴国）→ 六朝 → 唐宋 → 明清（苏州为经济文化中心）
+timeline: 吴国（约前12世纪-前473年）以姑苏为都，是春秋五霸之一；苏州自唐代起即为中国最繁华的城市之一，明清时期苏州府赋税占全国十分之一，是全国经济文化重心
+treasures:
+  - name: 五代秘色瓷莲花碗
+  - name: 明代真珠舍利宝幢
+  - name: 北宋黄庭坚草书（局部）
+  - name: 吴王余眜剑
+  - name: 明代文徵明手卷
+halls:
+  - name: 吴地遗珍（吴文化考古）
+  - name: 吴门书画（明四家）
+  - name: 吴中风雅（文人生活）
+  - name: 现代艺术厅
+  - name: 贝聿铭建筑本体
+artifacts:
+  - name: 五代秘色瓷莲花碗
+    description: 五代（10世纪）。1956年苏州虎丘云岩寺塔发现，碗托与碗身合为莲花形，釉色青翠如湖水，是存世秘色瓷中的极品，也是确认秘色瓷概念的关键实物。
+  - name: 明代真珠舍利宝幢
+    description: 北宋（1013年）。虎丘云岩寺塔出土，高1.22米，以珍珠、玛瑙、水晶等七宝装饰，工艺极其繁复，是宋代佛教艺术的巅峰之作。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/d/d8/%E7%91%9E%E5%85%89%E5%AF%BA%E5%A1%94%E5%87%BA%E5%9C%9F%E7%9C%9F%E7%8F%A0%E8%88%8D%E5%88%A9%E5%AE%9D%E5%B9%A2.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Siyuwj
+  - name: 吴王余眜剑
+    description: 春秋（约前6世纪）。铸有铭文"攻吾王余眜自作用剑"，是吴国青铜兵器的代表，反映了吴国高超的铸剑技术。
+  - name: 明代文徵明书画
+    description: 明代（16世纪）。苏州是"吴门画派"的大本营，文徵明、沈周、唐寅、仇英合称"明四家"，苏博收藏丰富。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/16/%E6%96%87%E5%BE%B5%E6%98%8E%E7%94%BB%E8%99%8E%E4%B8%98%E5%9B%BE%E9%A2%99%E7%90%B0%E4%B9%A6%E8%AF%97%E6%88%90%E6%89%87.png
+    image_license: PD
+    image_attribution: Wen Zhengming
+  - name: 宋代碑刻《天文图》《地理图》《帝王绍运图》《平江图》
+    description: 南宋。苏州文庙"四大宋碑"，其中《平江图》是现存最古老的苏州城市地图，展示了宋代苏州的城市格局。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/76/%E5%9B%9B%E5%A4%A7%E5%AE%8B%E7%A2%91%E2%80%94%E2%80%94%E5%A4%A9%E6%96%87%E5%9B%BE%EF%BC%8C2016-05-15.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Siyuwj
+  - name: 明清苏作家具
+    description: 明清。苏作家具以黄花梨、紫檀为材，造型简约雅致，是中国古典家具的最高代表，深刻影响了世界家具设计。
+  - name: 草鞋山出土纺织品残片
+    description: 新石器时代（约前4000年）。是中国已知最早的葛布残片之一，证明苏州地区纺织传统源远流长。
+dynasty_connections:
+  - dynasty: 春秋（吴国）
+    description: 阖闾、夫差以姑苏为都城，伍子胥筑城，孙武练兵。吴国铸剑技术冠绝诸侯，干将莫邪的传说即出于此。苏博的吴国青铜器是理解吴文化军事和礼仪的核心。
+  - dynasty: 明代（吴门画派）
+    description: 明中期苏州经济繁荣，文人荟萃，诞生了以沈周、文徵明为代表的吴门画派，以及昆曲、苏绣、苏作家具等文化艺术形式。苏州博物馆是吴门书画收藏的重镇。
+  - dynasty: 建筑本身的时代意义
+    description: 贝聿铭（1917-2019）是苏州望族后人，苏博新馆是他的收官之作。建筑以白墙灰瓦、几何山水呼应苏州传统，同时用现代材料和光影手法创造了全新的空间体验，本身就是一件连接古今的艺术品。
+sources:
+  - source: "苏州博物馆官网: https://www.szmuseum.com/"

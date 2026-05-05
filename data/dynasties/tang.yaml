@@ -1,0 +1,121 @@
+id: tang
+name: 唐朝（公元618年—907年）
+period: 公元618年—907年
+order_index: 12
+overview: |-
+  唐朝是中国古代文明的巅峰之一，也是中国历史上最具国际影响力的王朝。李渊建唐后，其子李世民（唐太宗）通过玄武门之变即位，开创了"贞观之治"，以开明的政治、繁荣的经济和开放的文化闻名于世。唐太宗的治国理念——"以人为镜，可以明得失"——和他与魏征的君臣关系，成为后世明君贤臣的典范。
+
+  唐朝最为辉煌的时期是从贞观到开元年间（约627—755年）。唐玄宗的"开元盛世"将唐朝推向经济和文化的顶点：长安城是当时世界上最大的城市（人口约百万），胡商、僧侣、使节从波斯、大食、日本、新罗纷至沓来，丝绸之路贸易空前繁荣。唐诗达到中国古典诗歌的最高峰——李白、杜甫、王维、白居易等大诗人群星闪耀。
+
+  755年安史之乱是唐朝由盛转衰的分水岭。此后藩镇割据、宦官专权、朋党之争三大痼疾困扰着唐朝后半段历史。黄巢起义（875—884年）进一步摧毁了帝国根基，907年朱温篡唐，五代十国的乱世开始。
+culture:
+  - category: 唐诗
+    description: 中国古典诗歌的巅峰，《全唐诗》收录近五万首，李白、杜甫、王维、白居易、李商隐等巨匠辈出
+  - category: 书法
+    description: 颜真卿（颜体）、柳公权（柳体）、欧阳询（欧体）、张旭（草书）、怀素
+  - category: 绘画
+    description: 阎立本（《步辇图》《历代帝王图》）、吴道子（画圣）、周昉（仕女画）
+  - category: 敦煌莫高窟
+    description: 唐代壁画和彩塑达到艺术巅峰，如第220窟、第45窟
+  - category: 佛教
+    description: 玄奘翻译大量佛经，唯识宗和禅宗在中国定型
+  - category: 陶瓷
+    description: 唐三彩、越窑青瓷（"千峰翠色"）、邢窑白瓷，"南青北白"格局形成
+  - category: 音乐舞蹈
+    description: 融合西域和中原音乐，"霓裳羽衣曲"
+  - category: 三省六部制
+    description: 完善的中央官僚制度——中书省决策、门下省审核、尚书省执行
+  - category: 科举制
+    description: 在隋代基础上完善，进士科成为主要选官途径
+events:
+  - date: 618年
+    event: 李渊建唐，定都长安
+    lat: 34.26
+    lng: 108.94
+  - date: 626年
+    event: 玄武门之变，李世民杀兄弟即位
+    lat: 34.3
+    lng: 108.9
+  - date: 627—649年
+    event: 贞观之治，唐朝政治制度成熟
+    lat: 34.3
+    lng: 108.9
+  - date: 629—645年
+    event: 玄奘西行取经
+    lat: 34.3
+    lng: 108.9
+  - date: 690年
+    event: 武则天称帝，改国号为周
+    lat: 34.3
+    lng: 108.9
+  - date: 705年
+    event: 神龙政变，武则天退位，唐朝复辟
+    lat: 34.3
+    lng: 108.9
+  - date: 712年
+    event: 唐玄宗即位，开元盛世开始
+    lat: 34.3
+    lng: 108.9
+  - date: 751年
+    event: 怛罗斯之战，唐军败于阿拔斯王朝，造纸术西传
+    lat: 34.3
+    lng: 108.9
+  - date: 755年
+    event: 安史之乱爆发，唐朝由盛转衰
+    lat: 34.3
+    lng: 108.9
+  - date: 763年
+    event: 安史之乱结束，但藩镇割据从此开始
+    lat: 34.3
+    lng: 108.9
+  - date: 835年
+    event: 甘露之变，宦官势力巩固
+    lat: 34.3
+    lng: 108.9
+  - date: 875—884年
+    event: 黄巢起义
+    lat: 34.3
+    lng: 108.9
+  - date: 907年
+    event: 朱温篡唐，唐朝灭亡
+    lat: 34.3
+    lng: 108.9
+recommended_museums:
+  - museum_id: shaanxi
+    name: 陕西历史博物馆
+    location: 西安
+    reason: 唐代文物收藏最丰富的博物馆，唐三彩、金银器、壁画精品（壁画馆需单独购票），何家村窖藏金银器
+  - museum_id: guobo
+    name: 中国国家博物馆
+    location: 北京
+    reason: 大量唐代文物，包括三彩骆驼载乐俑等
+  - museum_id: gugong
+    name: 故宫博物院
+    location: 北京
+    reason: 唐代绘画和书法珍品，如《步辇图》摹本
+  - museum_id: mogao
+    name: 敦煌研究院/莫高窟
+    location: 敦煌
+    reason: 唐代洞窟是莫高窟艺术巅峰，必须实地感受壁画的震撼
+  - museum_id: famensi
+    name: 法门寺博物馆
+    location: 宝鸡扶风
+    reason: 唐代皇家供奉佛指舍利及大量金银器、秘色瓷，地宫1987年发现震惊世界
+  - museum_id: beilin
+    name: 西安碑林博物馆
+    reason: 收藏大量唐代碑刻，颜真卿《多宝塔碑》等书法原石
+  - museum_id: 817569a4-234c-46ce-9bcd-89ef8f271011
+    name: 乾陵博物馆/懿德太子墓
+    location: 咸阳
+    reason: 唐高宗和武则天合葬墓，附属墓有精美壁画
+  - museum_id: luoyang
+    name: 洛阳博物馆
+    location: 洛阳
+    reason: 唐代东都洛阳出土文物
+  - museum_id: liaoning
+    name: 辽宁省博物馆
+    location: 沈阳
+    reason: 收藏《簪花仕女图》（传周昉），唐代仕女画精品
+  - name: 日本正仓院
+    location: 奈良
+    reason: 虽在日本，但收藏大量唐代文物（每年秋季限时展出），是理解唐代国际影响力的关键

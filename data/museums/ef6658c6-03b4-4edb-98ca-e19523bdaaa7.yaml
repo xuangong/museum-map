@@ -1,0 +1,38 @@
+id: ef6658c6-03b4-4edb-98ca-e19523bdaaa7
+name: 应县木塔（佛宫寺释迦塔）
+lat: 39.5644
+lng: 113.1756
+location: 山西省朔州市应县老城西北角佛宫寺院内
+level: 全国重点文物保护单位（第一批，1961年）
+core_period: 辽代（辽清宁二年，公元1056年）
+specialty: 世界上现存最古、最高的纯木结构楼阁式建筑；现存唯一具有多层使用空间的古代木构佛塔；2016年获吉尼斯世界纪录认证"世界上最高的木塔"
+dynasty_coverage: 辽代至今，跨越近千年
+timeline: 公元1056年（辽清宁二年/北宋至和三年）建成；历经40余次地震（含两次烈度七度以上强震）巍然不倒；1305年元大德九年怀仁地震幸存；1626年明天启六年灵丘地震幸存；1926年军阀混战炮击受损；1933年梁思成等营造学社人员实地测绘；1961年公布为第一批全国重点文物保护单位；1966年、1974年先后在塔内发现两枚释迦牟尼佛牙舍利；1970—1981年国家组织维修加固；2007年起中国文化遗产研究院持续保护研究；2016年9月获吉尼斯世界纪录认证；2020年7月应县木塔保护研究工作站正式揭牌
+halls:
+  - name: 山门
+  - name: 释迦塔（木塔主体）
+  - name: 大雄宝殿
+  - name: 钟楼
+  - name: 鼓楼
+artifacts:
+  - name: 木塔主体建筑
+    description: 八角五层六檐楼阁式木塔，内部实为九层（五明层四暗层）；全高65.84米，底层总面阔30.27米，相当于23层普通住宅楼高度；除砖石塔基、屋面瓦作、一层墙体和铁制塔刹外，全部为木构件榫卯搭建，不用一根铁钉
+    image_url: https://upload.wikimedia.org/wikipedia/commons/6/6f/Pagoda_of_Fogong_Temple_at_Dust.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Charlie fong
+  - name: 结构体系
+    description: 刚柔相济的分层结构：明层为开敞佛殿（柔性层），暗层满布斜撑（刚性层），刚柔相间叠置；上下层柱采用「叉柱造」；全塔使用54种斗栱，被誉为「斗栱博物馆」
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/26/Pagodaoffogongtemple2019.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Charlie fong
+  - name: 佛牙舍利
+    description: 塔内供奉的两枚释迦牟尼佛牙舍利，分别于1966年和1974年在塔内被发现，为辽代高僧奉藏，是塔内最重要的宗教圣物
+  - name: 契丹藏残卷
+    description: 1974年在塔内发现的辽代契丹文大藏经残卷，具有极高的历史与文献价值
+  - name: 明代御题匾额
+    description: 明成祖朱棣亲笔题书「峻极神工」匾，明武宗朱厚照亲笔题书「天下奇观」匾，是塔内52块历代牌匾中最具皇家代表性的文物
+sources:
+  - source: http://www.yingxian.gov.cn/zjyx/yxmt/201912/t20191220_306071.html
+  - source: http://www.ncha.gov.cn/art/2020/10/19/art_722_163691.html
+  - source: https://wwj.shanxi.gov.cn/wwzy/wwlb/bkydww/qgzdwwbhdw/dypgb/202109/t20210908_1980823.shtml
+  - source: https://www.shanxi.gov.cn/zfxxgk/zfxxgkzl/fdzdgknr/ghxx/202005/t20200520_5988929.shtml

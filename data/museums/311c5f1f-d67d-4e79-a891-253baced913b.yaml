@@ -1,0 +1,54 @@
+id: 311c5f1f-d67d-4e79-a891-253baced913b
+name: 太原北齐壁画博物馆
+lat: 37.8302
+lng: 112.5986
+location: 山西省太原市迎泽区王家峰村（南十方街与东峰路交汇处西北方向）
+level: 市级（隶属太原市文物保护研究院）/ 依托全国重点文物保护单位（徐显秀墓、娄叡墓、九原岗墓）
+core_period: 北齐（550—577年）
+specialty: 全国首座原址建设的北齐壁画专题遗址类博物馆，依托北齐徐显秀墓原址保护与展示
+dynasty_coverage: 北朝晚期（北魏、东魏、北齐）
+timeline: 2002年徐显秀墓入选"全国十大考古新发现"；2009年11月博物馆正式成立；2020年10月26日启动新馆建设；2023年12月20日正式面向公众开放
+treasures:
+  - name: 徐显秀墓壁画（原址保存，300余平方米，彩绘人物180余、马匹7、牛车1、神兽8，国内保存最完好的北齐壁画）
+  - name: 太原娄叡墓壁画（胡风国俗主题）
+  - name: 忻州九原岗墓壁画（大型狩猎图）
+  - name: 朔州水泉梁墓壁画（墓主夫妇宴饮图及出行仪仗图）
+  - name: 金镶嵌蓝宝石戒指及银指环（徐显秀墓出土）
+  - name: 徐显秀墓志及墓志盖
+halls:
+  - name: 第一展厅：别都华彩（北齐墓葬壁画综合展示，含娄叡墓壁画、九原岗墓壁画及多媒体互动投影）
+  - name: 第二展厅：一眼千年（徐显秀墓原址核心展区，含墓道、墓室原版壁画及出土文物）
+  - name: 第三展厅：简易标美（太原娄叡墓、忻州九原岗墓、朔州水泉梁墓壁画系统展示）
+artifacts:
+  - name: 徐显秀墓壁画
+    period: 北齐（550—577年）
+    description: 分布于墓道、过洞、天井、甬道及墓室，内容涵盖仪仗队列、仪卫、墓主夫妇宴饮与出行图，彩绘人物180余、马匹7、牛车1、神兽8，画面图像与现实同大，是北齐最高绘画水平的代表作，2002年度全国十大考古新发现之一
+  - name: 太原娄叡墓壁画
+    period: 北齐
+    description: 展现北齐胡风国俗的大型壁画，反映北朝时期游牧文化与农耕文化的融合
+  - name: 忻州九原岗墓壁画
+    period: 北朝晚期
+    description: 以大型狩猎图为核心，描绘北朝贵族出猎场景，是研究北朝社会生活的珍贵图像史料
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b2/%E5%A3%81%E7%94%BB%EF%BC%8C%E4%B8%9C%E9%AD%8F%EF%BC%8D%E5%8C%97%E9%BD%90%EF%BC%8C%E5%B1%B1%E8%A5%BF%E5%BF%BB%E5%B7%9E%E4%B9%9D%E5%8E%9F%E5%B2%97%E5%A2%93%E5%87%BA%E5%9C%9F%EF%BC%8C%E5%B1%B1%E8%A5%BF%E5%8D%9A%E7%89%A9%E9%99%A2%E8%97%8F.jpg
+    image_license: PD
+    image_attribution: "Artist: 6th century artist in China. Photographer: unknown"
+  - name: 朔州水泉梁墓壁画
+    period: 北齐
+    description: 保存较为完整，北壁绘墓主夫妇宴饮图，东西壁绘出行仪仗图，南壁绘鼓吹图，生动再现北齐社会风貌
+  - name: 金镶嵌蓝宝石戒指及银指环
+    period: 北齐
+    description: 徐显秀墓出土金器，镶嵌蓝宝石，体现北齐时期东西方文明交流互鉴的实物证据
+dynasty_connections:
+  - dynasty: 北齐（550—577年）
+    description: 博物馆核心主题朝代，徐显秀、娄叡等北齐权贵墓葬壁画为主要藏品，反映北齐晋阳作为'别都'的政治文化中心地位
+  - dynasty: 东魏（534—550年）
+    description: 北齐前身，晋阳作为高欢政治根据地的时期，奠定了北齐壁画艺术发展基础
+  - dynasty: 北魏（386—534年）
+    description: 北朝早期，晋阳文化的重要渊源朝代，博物馆展览涵盖北朝文化演进脉络
+  - dynasty: 隋唐
+    description: 展览解读北朝至隋唐时期晋阳在文化交流、民族融合方面的历史地位与传承
+sources:
+  - source: https://www.taiyuan.gov.cn/bqbhbwg.html
+  - source: https://www.taiyuan.gov.cn/c/www/tytt/30089282.jhtml
+  - source: https://www.news.cn/culture/20231221/c59ac49303394e158c2f0b6ceb8784d7/c.html
+  - source: https://baike.baidu.com/item/%E5%A4%AA%E5%8E%9F%E5%8C%97%E9%BD%90%E5%A3%81%E7%94%BB%E5%8D%9A%E7%89%A9%E9%A6%86/53554099

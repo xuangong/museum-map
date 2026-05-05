@@ -1,0 +1,52 @@
+id: bingmayong
+name: 秦始皇兵马俑博物馆（秦始皇帝陵博物院）
+lat: 34.3841
+lng: 109.2785
+location: 陕西省西安市临潼区秦陵北路
+level: 国家一级博物馆 / 世界文化遗产
+core_period: 秦（前221-前207）
+specialty: 世界第八大奇迹。三个兵马俑坑出土陶俑8000余件，每个面孔都不同。是秦始皇陵的陪葬坑，展现了秦帝国的军事力量和工匠技艺。
+dynasty_coverage: 秦
+timeline: 秦始皇陵始建于前246年（始皇13岁即位时），动用70万人修建近40年。兵马俑坑是陵园外围的军事陪葬，整个陵园面积56平方公里，大部分尚未发掘。
+treasures:
+  - name: 1. 一号坑兵马俑军阵（秦）— 6000余件陶俑排列成实战军阵
+halls:
+  - name: 一号坑（最大
+  - name: 军阵全景）
+  - name: 铜车马展厅
+  - name: 二号坑（多兵种混编）
+  - name: 三号坑（指挥部）
+artifacts:
+  - name: 一号坑军阵
+    period: 秦
+    description: 长230米、宽62米，6000余陶俑排列成前锋、主体、侧翼的实战阵型
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b8/Terracotta_Army_-09-5-11.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: Kougo
+  - name: 铜车马
+    period: 秦
+    description: 两乘：立车（高车）和安车（轿车），用3000多个零件组装，最细的金丝直径仅0.5mm
+  - name: 将军俑
+    period: 秦
+    description: 戴鹖冠、穿彩色铠甲，面部表情沉着威严
+  - name: 跪射俑
+    period: 秦
+    description: 单膝跪地持弩射击姿态，鞋底纹路清晰可见
+    image_url: https://upload.wikimedia.org/wikipedia/commons/f/fa/2023-10-08_Chin_dynasty_Terracotta_Kneeling_Archer_%E7%A7%A6%E5%A7%8B%E7%9A%87%E5%85%B5%E9%A6%AC%E4%BF%91%E5%8D%9A%E7%89%A9%E9%A4%A8%E6%96%87%E7%89%A9%E9%99%B3%E5%88%97%E5%BB%B3%E8%B7%AA%E5%B0%84%E4%BF%91_02.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 源義信
+  - name: 青铜剑
+    period: 秦
+    description: 出土时仍锋利，表面经过铬盐氧化处理（比西方早2000年）
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/1a/Qin_bronze_swords.jpg
+    image_license: CC0
+    image_attribution: Flickr user Gary Todd
+  - name: 石铠甲
+    period: 秦
+    description: 用石片穿缀的铠甲，每件由数百片石片组成
+  - name: 彩绘陶俑
+    period: 秦
+    description: 原本兵马俑都是彩色的，少数保留了颜料痕迹
+sources:
+  - source: "秦始皇帝陵博物院官网: https://www.bmy.com.cn/"
+  - source: UNESCO世界文化遗产名录（1987年）

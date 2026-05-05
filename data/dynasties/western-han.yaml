@@ -1,0 +1,114 @@
+id: western-han
+name: 西汉（公元前202年—公元9年）
+period: 公元前202年—公元9年
+order_index: 6
+overview: |-
+  西汉是中国历史上第一个长期稳定的大一统帝国，奠定了"汉族""汉字""汉文化"的命名基础。刘邦（汉高祖）在楚汉争霸中击败项羽后建国，定都长安。西汉前期实行黄老无为之治，与民休息，经济迅速恢复。文帝和景帝的"文景之治"积累了大量国力，为汉武帝的扩张奠定了基础。
+
+  汉武帝是西汉最具影响力的皇帝。他"罢黜百家，独尊儒术"，确立儒家作为官方意识形态的地位；设立太学，建立察举制（选拔人才的制度）；派张骞出使西域，开辟丝绸之路；多次北击匈奴，将帝国疆域扩展到前所未有的范围。然而武帝晚年穷兵黩武、好大喜功，导致国力损耗，晚年下"轮台罪己诏"反思。
+
+  西汉后期外戚专权日益严重，最终王莽以"禅让"形式篡汉建新（公元9年）。西汉的制度遗产——郡国并行制到郡县制的过渡、儒家官僚体系、丝绸之路贸易——深刻影响了此后中国历史的走向。
+culture:
+  - category: 《史记》
+    description: 司马迁著，130篇，开创纪传体史学传统
+  - category: 儒学官方化
+    description: 设太学、置五经博士，建立以经学为核心的教育和选官体系
+  - category: 造纸术萌芽
+    description: 西汉已有原始纸张（放马滩纸等），早于蔡伦改进
+  - category: 丝绸之路
+    description: 东西方贸易和文化交流通道，丝绸、漆器西传，西域良种和音乐东来
+  - category: 天文历法
+    description: 落下闳制定《太初历》，确立以正月为岁首
+  - category: 数学
+    description: 《周髀算经》《九章算术》（部分内容成于西汉）
+  - category: 文学
+    description: 汉赋（司马相如《子虚赋》《上林赋》）、乐府诗
+  - category: 建筑
+    description: 长安城面积36平方公里，是当时世界最大城市之一
+  - category: 医学
+    description: 《黄帝内经》成书（部分），奠定中医理论基础
+events:
+  - date: 前202年
+    event: 刘邦击败项羽，建立西汉，定都长安
+    lat: 34.26
+    lng: 108.94
+  - date: 前200年
+    event: 白登之围，刘邦被匈奴围困，此后实行和亲政策
+    lat: 34.3
+    lng: 108.9
+  - date: 前180年
+    event: 吕后去世，诸吕之乱被平定，文帝即位
+    lat: 34.3
+    lng: 108.9
+  - date: 前154年
+    event: 七国之乱，削藩引发诸侯王叛乱，被平定后中央集权加强
+    lat: 34.3
+    lng: 108.9
+  - date: 前141年
+    event: 汉武帝即位，西汉进入最强盛时期
+    lat: 34.3
+    lng: 108.9
+  - date: 前136年
+    event: 设五经博士，"罢黜百家，独尊儒术"
+    lat: 34.3
+    lng: 108.9
+  - date: 前138年
+    event: 张骞第一次出使西域（被匈奴扣留十年）
+    lat: 41
+    lng: 85
+  - date: 前119年
+    event: 漠北之战，卫青霍去病大破匈奴
+    lat: 34.3
+    lng: 108.9
+  - date: 前104年
+    event: 司马迁开始撰写《史记》（约前104—前91年）
+    lat: 34.3
+    lng: 108.9
+  - date: 前91年
+    event: 巫蛊之祸，太子刘据被逼自杀
+    lat: 34.3
+    lng: 108.9
+  - date: 前87年
+    event: 武帝驾崩，托孤霍光辅政
+    lat: 34.3
+    lng: 108.9
+  - date: 公元9年
+    event: 王莽篡汉，建立新朝
+    lat: 34.3
+    lng: 108.9
+recommended_museums:
+  - museum_id: shaanxi
+    name: 陕西历史博物馆
+    location: 西安
+    reason: 西汉都城所在地，馆藏大量汉代金银器、玉器、壁画，皇后之玺等重要文物
+  - museum_id: guobo
+    name: 中国国家博物馆
+    location: 北京
+    reason: '"古代中国"展中汉代部分，金缕玉衣、错金银博山炉等'
+  - museum_id: hebei
+    name: 河北博物院
+    location: 石家庄
+    reason: 满城汉墓出土文物：刘胜金缕玉衣、长信宫灯、错金银博山炉，件件国宝
+  - museum_id: nanjing
+    name: 南京博物院
+    reason: 汉代漆器、铜器精品
+  - museum_id: xuzhou
+    name: 徐州博物馆/狮子山楚王陵
+    location: 徐州
+    reason: 楚王陵出土金缕玉衣、兵马俑等
+  - museum_id: hunan
+    name: 湖南省博物馆
+    location: 长沙
+    reason: 马王堆汉墓：辛追夫人（西汉女尸）、T形帛画、素纱单衣（仅49克）
+  - museum_id: gansu
+    name: 甘肃省博物馆
+    location: 兰州
+    reason: 铜奔马（马踏飞燕，虽出土于东汉墓但常与汉代整体关联）、丝路文物
+  - museum_id: 8d05e910-ec8f-4d99-8cba-140f10bd9ef2
+    name: 汉阳陵博物馆
+    location: 西安
+    reason: 景帝阳陵，地下遗址厅可近距离观看陪葬坑
+  - museum_id: b27bc4cc-0ca1-4cf9-a934-9370b40c0732
+    name: 茂陵博物馆
+    location: 咸阳兴平
+    reason: 汉武帝茂陵，霍去病墓石刻（马踏匈奴等）

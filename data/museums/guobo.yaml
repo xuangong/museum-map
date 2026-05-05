@@ -1,0 +1,69 @@
+id: guobo
+name: 中国国家博物馆
+lat: 39.9046
+lng: 116.4035
+location: 北京市东城区东长安街16号（天安门广场东侧）
+level: 国家一级博物馆
+core_period: 通史（远古至近现代）
+specialty: 中国最大的综合性博物馆，建筑面积近20万平方米。"古代中国"基本陈列是了解中国通史的最佳单一展览，从远古到明清一气呵成。
+dynasty_coverage: 全覆盖，从远古到现代
+timeline: 如果只能选一个博物馆了解中国历史全貌，就是这里。"古代中国"展用文物串起从170万年前到清末的完整叙事。
+treasures:
+  - name: 1. 后母戊鼎（商）— 世界最重青铜器
+  - name: 832.84公斤
+halls:
+  - name: 古代中国"常设展（通史主线）
+  - name: 复兴之路"（近现代史）
+  - name: 青铜器展厅
+artifacts:
+  - name: 后母戊鼎
+    period: 商后期
+    description: 重832.84kg，商王为祭祀母亲"戊"而铸，体现商代国力与青铜铸造技术
+    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e6/%E5%8F%B8%E6%AF%8D%E6%88%8A%E9%BC%8E-2011.4.2.jpg
+    image_license: CC-BY-3.0
+    image_attribution: Wasami007
+  - name: 四羊方尊
+    period: 商晚期
+    description: 四角各铸一卷角羊头，湖南宁乡出土，商代南方青铜文明证据
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/ae/Square_zun_with_four_sheep_01.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: user:smartneddy
+  - name: 大盂鼎
+    period: 西周康王
+    description: 铭文详述分封制度，是研究西周政治的一手史料
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/26/%E5%A4%A7%E7%9B%82%E9%BC%8E_Da_Yu_ding.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Baomi
+  - name: 人面鱼纹彩陶盆
+    period: 约6000年前
+    description: 仰韶文化代表，可能与原始巫术或图腾崇拜有关
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/26/%E4%BA%BA%E9%9D%A2%E9%B1%BC%E7%BA%B9%E5%BD%A2%E5%BD%A9%E9%99%B6%E7%9B%8608737.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Augusthaiho
+  - name: 击鼓说唱俑
+    period: 东汉
+    description: 四川出土，表现民间艺人表演"说唱"的瞬间
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b7/Ceramic_figure_of_a_story-teller.jpg
+    image_license: CC0
+    image_attribution: Shujianyang
+  - name: 虢季子白盘
+    period: 西周
+    description: 铭文111字，记载周宣王时的战争
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/13/Guoji_Zibai_pan_inscription.jpg
+    image_license: PD
+    image_attribution: Chinese inscription dated to 816 BCE
+  - name: 红山文化玉龙
+    period: 约5000年前
+    description: '"中华第一龙"'
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/96/Neolithic_jade_dragon%2C_Hongshan_Culture%2C_Inner_Mongolia%2C_1971.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Prof. Gary Lee Todd
+  - name: 彩绘鹳鱼石斧图缸
+    period: 新石器·仰韶
+    description: 中国最早的彩绘画之一
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/2f/%E9%B9%B3%E9%B1%BC%E7%9F%B3%E6%96%A7%E5%9B%BE%E5%BD%A9%E7%BB%98%E9%99%B6%E7%BC%B808765.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Augusthaiho
+sources:
+  - source: "中国国家博物馆官网: https://www.chnmuseum.cn/"
+  - source: 后母戊鼎重832.84kg（国博官网核实）

@@ -1,0 +1,121 @@
+id: song
+name: 宋朝（公元960年—1279年）
+period: 公元960年—1279年
+order_index: 14
+overview: |-
+  宋朝分为北宋（960—1127年，都开封）和南宋（1127—1279年，都临安/杭州），是中国经济、文化和科技最繁荣的时代之一。赵匡胤"陈桥兵变、黄袍加身"建国后，以"杯酒释兵权"化解武将威胁，确立了"重文抑武"的基本国策。这一政策使宋朝成为中国历史上文人地位最高、市民文化最发达的朝代，但也导致了军事上的长期被动。
+
+  宋代经济高度繁荣，城市商业突破了唐代坊市制的限制，出现了夜市和通宵经营的商业街。北宋开封人口超过百万，是当时世界上最大的城市。世界最早的纸币"交子"在北宋四川出现。海上丝绸之路在宋代达到鼎盛，泉州成为世界最大港口之一。
+
+  文化方面，宋代是中国文人画的成熟期，理学（以朱熹为代表的新儒学）重塑了中国哲学的面貌，宋词（苏轼、李清照、辛弃疾等）与唐诗并称中国文学双峰。科技上，活字印刷术、火药武器和指南针的实用化（"三大发明"的成熟期）改变了世界历史进程。
+culture:
+  - category: 宋词
+    description: 婉约派（柳永、李清照、姜夔）和豪放派（苏轼、辛弃疾）并峙
+  - category: 理学（新儒学）
+    description: 程颢、程颐、朱熹等建立的哲学体系，融合儒释道，影响东亚数百年
+  - category: 绘画
+    description: 山水画巅峰（范宽《溪山行旅图》、郭熙《早春图》、马远、夏圭），花鸟画精妙（宋徽宗）
+  - category: 瓷器
+    description: 五大名窑（汝、官、哥、钧、定），宋瓷以素雅含蓄著称，代表中国陶瓷美学巅峰
+  - category: 活字印刷术
+    description: 毕昇泥活字，促进知识传播
+  - category: 火药武器
+    description: 火箭、突火枪、震天雷等，军事技术革新
+  - category: 指南针
+    description: 用于航海，推动海上贸易
+  - category: 建筑
+    description: 李诫《营造法式》，中国现存最早的完整建筑技术专著
+  - category: 纸币
+    description: 北宋交子，世界最早的纸币
+  - category: 《资治通鉴》
+    description: 司马光主编，294卷编年体通史
+events:
+  - date: 960年
+    event: 陈桥兵变，赵匡胤建立北宋
+    lat: 34.8
+    lng: 114.3
+  - date: 961年
+    event: 杯酒释兵权，解除武将兵权
+    lat: 34.8
+    lng: 114.3
+  - date: 1004年
+    event: 澶渊之盟，宋辽议和，每年输送岁币
+    lat: 34.8
+    lng: 114.3
+  - date: 1040年代
+    event: 毕昇发明泥活字印刷术
+    lat: 34.8
+    lng: 114.3
+  - date: 1069年
+    event: 王安石变法开始
+    lat: 34.8
+    lng: 114.3
+  - date: 1085年
+    event: 司马光执政，尽废新法
+    lat: 34.8
+    lng: 114.3
+  - date: 1100年
+    event: 宋徽宗即位，艺术天才但治国昏庸
+    lat: 34.8
+    lng: 114.3
+  - date: 1115年
+    event: 女真建金国
+    lat: 34.8
+    lng: 114.3
+  - date: 1127年
+    event: 靖康之变，金军攻破开封，掳走徽钦二帝，北宋灭亡
+    lat: 34.79
+    lng: 114.31
+  - date: 1127年
+    event: 赵构建立南宋，定都临安（杭州）
+    lat: 30.25
+    lng: 120.15
+  - date: 1141年
+    event: 绍兴和议，南宋向金称臣，岳飞被杀
+    lat: 34.8
+    lng: 114.3
+  - date: 1271年
+    event: 忽必烈建立元朝
+    lat: 34.8
+    lng: 114.3
+  - date: 1279年
+    event: 崖山海战，南宋灭亡，陆秀夫背幼帝投海
+    lat: 22.08
+    lng: 113.08
+recommended_museums:
+  - museum_id: gugong
+    name: 故宫博物院
+    location: 北京
+    reason: 宋代书画珍品收藏最丰富：范宽《溪山行旅图》在台北故宫，但北京故宫有大量宋画和宋瓷精品
+  - museum_id: taipei-gugong
+    name: 台北故宫博物院
+    reason: 范宽《溪山行旅图》、郭熙《早春图》、宋徽宗书画等，宋代书画的最高殿堂；汝窑藏品全球最多（21件）
+  - museum_id: henan
+    name: 河南博物院
+    location: 郑州
+    reason: 北宋都城河南，收藏汝窑、钧窑精品
+  - museum_id: kaifeng
+    name: 开封博物馆
+    location: 开封
+    reason: 北宋都城所在地，虽文物因历史散失但有丰富的宋代文化展示
+  - museum_id: guobo
+    name: 中国国家博物馆
+    location: 北京
+    reason: 宋代文物综合展示
+  - museum_id: 1f59db8a-b242-494f-aba4-7f02ed14f48c
+    name: 杭州博物馆/南宋官窑博物馆
+    location: 杭州
+    reason: 南宋都城，官窑遗址博物馆可参观窑址
+  - museum_id: zhejiang
+    name: 浙江省博物馆
+    location: 杭州
+    reason: 宋代文物特别是南宋文物丰富
+  - museum_id: shanghai
+    name: 上海博物馆
+    reason: 宋代瓷器收藏精良，汝窑、哥窑等均有
+  - name: 大英博物馆
+    location: 伦敦
+    reason: 收藏宋瓷精品，特别是定窑和磁州窑
+  - name: 大阪市立东洋陶磁美术馆
+    location: 大阪
+    reason: 安宅收藏，汝窑青瓷和油滴天目茶碗等宋瓷精品

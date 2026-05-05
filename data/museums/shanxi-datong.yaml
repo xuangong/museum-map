@@ -1,0 +1,56 @@
+id: shanxi-datong
+name: 大同市博物馆
+lat: 40.0769
+lng: 113.2971
+location: 山西省大同市平城区御河西路南段
+level: 国家一级博物馆
+core_period: 北魏平城时代（398-494年）
+specialty: 大同是北魏都城平城，历时近百年（398-494年迁洛阳）。大同博物馆集中展示了这一时期鲜卑拓跋氏政权从草原到中原的文化转型，是了解北魏前期最重要的博物馆。辽金西京大同府的文物也是重要收藏。
+dynasty_coverage: 北魏、东魏、北齐、辽、金
+timeline: 拓跋鲜卑南迁 → 北魏建国（386年）→ 迁都平城（398年）→ 太武帝统一北方（439年）→ 孝文帝迁洛（494年）→ 辽代西京大同府 → 金代西京
+treasures:
+  - name: 司马金龙墓漆画屏风
+  - name: 北魏石雕柱础
+  - name: 封和突墓出土品
+  - name: 宋绍祖墓石椁
+  - name: 琅琊王墓出土品
+halls:
+  - name: 魏都平城
+  - name: 辽金西京
+  - name: 大同恐龙
+artifacts:
+  - name: 司马金龙墓漆画屏风
+    period: 北魏，484年
+    description: —大同石家寨出土。木板上以漆绘列女、孝子等故事，人物线条流畅，色彩鲜艳，构图源自汉代画像传统。司马金龙是晋朝宗室后裔，娶北魏皇族拓跋氏女。此屏风是北魏绘画遗存中最精美的作品，展示了北魏汉化进程中的文化融合。（为国宝级文物）
+    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e6/Funerary_panels%2C_from_the_tomb_of_Sima_Jinlong%2C_484_CE._Datong%2C_Shanxi_Province.jpg
+    image_license: PD
+    image_attribution: "Artist: 5th century artist in China. Photographer: unknown"
+  - name: 北魏石雕柱础
+    period: 北魏，5世纪
+    description: —大同城内出土，浮雕忍冬纹、莲花纹等装饰，风格兼具中原和西域特色。是北魏宫殿建筑构件的重要实物。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/a4/Northern_Wei_Stone_Pillar_Base%2C_Tomb_of_Sima_Jinlong%2C_484_AD_%2810100504063%29.jpg
+    image_license: CC0
+    image_attribution: Gary Todd from Xinzheng, China
+  - name: 封和突墓出土品
+    period: 北魏，504年
+    description: —封和突为鲜卑贵族，墓中出土陶俑、铜器等。陶俑面部特征和服饰反映了鲜卑族的形象特点，部分俑已穿汉式服装，体现了孝文帝改革后的文化变化。
+  - name: 宋绍祖墓石椁
+    period: 北魏，477年
+    description: —石椁仿木结构建筑，屋顶、门窗俱全，雕刻精美。是了解北魏建筑形式的重要实物资料，反映了北魏时期丧葬制度对中原传统的吸收。
+  - name: 琅琊王司马金龙墓志
+    period: 北魏
+    description: —墓志铭文书法工整，是北魏书法的重要遗存，对研究北碑书法有重要意义。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/2c/Northern_Wei_Epitaph%2C_Tomb_of_Sima_Jinlong%2C_484_AD_%2810100505915%29.jpg
+    image_license: CC0
+    image_attribution: Gary Todd from Xinzheng, China
+  - name: 辽代壁画墓壁画
+    period: 辽代，10-11世纪
+    description: —大同地区发现多座辽代壁画墓，绘有宴饮、出行、侍奉等场面，人物服饰兼具契丹和汉族特征，是辽代社会生活的生动写照。
+  - name: 北魏彩绘人物陶俑群
+    period: 北魏
+    description: —成组出土的彩绘陶俑，包括武士俑、文官俑、侍女俑、胡人俑等，面部特征多样，反映了平城时期多民族杂居的社会面貌。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/4/42/Pottery_Tomb_Figurines%2C_Northern_Wei_%28tomb_of_Sima_Jinlong%29.jpg
+    image_license: CC-BY-SA-2.0
+    image_attribution: BY Chu
+sources:
+  - source: "大同市博物馆官网: http://www.dtbwg.com/"

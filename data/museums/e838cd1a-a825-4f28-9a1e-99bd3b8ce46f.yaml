@@ -1,0 +1,28 @@
+id: e838cd1a-a825-4f28-9a1e-99bd3b8ce46f
+name: 拙政园
+lat: 31.324361
+lng: 120.629876
+location: 江苏省苏州市姑苏区东北街178号
+level: 国家AAAAA级旅游景区 / 全国重点文物保护单位 / 联合国教科文组织世界文化遗产
+core_period: 明、清
+specialty: 江南古典私家园林，以水为主题、疏朗自然的造园风格，是中国四大名园之一，亦是苏州古典园林的典型例证
+dynasty_coverage: 明、清（始建于明正德年间，现存格局多为晚清遗存）
+timeline: 明正德四年（1509年）由御史王献臣在大弘寺旧址拓建，聘文征明参与设计，历时16年建成；此后屡易其主，几度入官，迭经兴衰分合。明崇祯四年（1631年）东部归侍郎王心一，建"归田园居"。清咸丰十年（1860年）太平军进驻苏州，拙政园为忠王府。清光绪三年（1877年）西部归富商张履谦，名"补园"。1951年整修，1952年正式对外开放。1961年列为第一批全国重点文物保护单位。1992年建成中国第一座以园林为专题的博物馆（苏州园林博物馆）。1997年列入《世界遗产名录》。2007年评为国家AAAAA级旅游景区。
+halls:
+  - name: 东花园（归田园居）
+  - name: 中花园（主景区）
+  - name: 西花园（补园）
+  - name: 苏州园林博物馆（住宅区）
+artifacts:
+  - name: 清代银杏木松竹梅鹊飞罩
+    period: 清
+    description: 位于留听阁内，银杏木立体雕刻，将”岁寒三友”与”喜鹊登梅”两种图案融合，刀法娴熟，构思巧妙，为园林飞罩中不可多得的精品。
+  - name: 文征明《王氏拙政园记》图咏
+    period: 明（嘉靖十二年，1533年）
+    description: 文征明依园中景物绘图三十一幅，各系以诗，并作《王氏拙政园记》，是研究明代拙政园最重要的文献与艺术史料。
+sources:
+  - source: https://ylj.suzhou.gov.cn/szsylj/sjyc/201905/c1df393edc8745abb20e8a9bd5525782.shtml
+  - source: https://fg.suzhou.gov.cn/szfgw/szyl/202311/e31de791ab254942ab931e9e74c31526.shtml
+  - source: https://visitsz.wglj.suzhou.com.cn/world-heritage-detail.aspx?id=1
+  - source: https://baike.baidu.com/item/%E6%8B%99%E6%94%BF%E5%9B%AD/154079
+  - source: https://zh.wikipedia.org/wiki/%E6%8B%99%E6%94%BF%E5%9B%AD

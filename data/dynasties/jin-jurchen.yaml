@@ -1,0 +1,84 @@
+id: jin-jurchen
+name: 金（公元1115年—1234年）
+period: 公元1115年—1234年
+order_index: 16
+overview: |-
+  金朝由女真族完颜阿骨打于1115年建立，是中国历史上又一个由北方民族建立的强大政权。女真人原居白山黑水（今东北地区），长期受辽朝统治。阿骨打起兵反辽，仅用十年便灭辽（1125年），随后于1127年发动"靖康之变"，攻破北宋都城开封，俘虏徽钦二帝，北宋灭亡。此后金与南宋以秦岭-淮河一线对峙百余年。
+
+  金朝中期进行了深度汉化——海陵王完颜亮迁都燕京（今北京，1153年）、金世宗推行"大定之治"、金章宗时期文化艺术繁荣。金朝的中央集权程度和汉化水平远超辽朝。
+
+  1234年蒙古联宋灭金。金朝虽亡，但女真文化传统和制度经验对后来的满族（后金/清）产生了深远影响。
+culture:
+  - category: 女真文字
+    description: 仿汉字和契丹字创制女真大字（1119年）和女真小字
+  - category: 诸宫调
+    description: 说唱文学形式，金代董解元《西厢记诸宫调》是元杂剧的先声
+  - category: 文学
+    description: 元好问诗词，被誉为金代文学之冠
+  - category: 陶瓷
+    description: 金代磁州窑、钧窑继续发展，白地黑花装饰风格突出
+  - category: 建筑
+    description: 燕京（北京）作为都城的建设始于金朝，奠定了今日北京城的基础
+  - category: 铜坐龙
+    description: 金代标志性文物，女真艺术风格
+events:
+  - date: 1115年
+    event: 完颜阿骨打建金，定都会宁（今黑龙江阿城）
+    lat: 45.77
+    lng: 126.63
+  - date: 1120年
+    event: 宋金"海上之盟"，约定联合灭辽
+    lat: 45.7
+    lng: 126.6
+  - date: 1125年
+    event: 金灭辽
+    lat: 45.7
+    lng: 126.6
+  - date: 1127年
+    event: 靖康之变，金灭北宋，俘徽钦二帝
+    lat: 45.7
+    lng: 126.6
+  - date: 1141年
+    event: 绍兴和议，宋金以秦岭-淮河为界
+    lat: 45.7
+    lng: 126.6
+  - date: 1153年
+    event: 海陵王迁都燕京（改名中都）
+    lat: 39.91
+    lng: 116.4
+  - date: 1161年
+    event: 海陵王南征失败，被弑
+    lat: 45.7
+    lng: 126.6
+  - date: 1189—1208年
+    event: 金章宗时期，文化鼎盛
+    lat: 45.7
+    lng: 126.6
+  - date: 1211年起
+    event: 蒙古成吉思汗侵金
+    lat: 45.7
+    lng: 126.6
+  - date: 1214年
+    event: 金宣宗南迁开封
+    lat: 34.79
+    lng: 114.31
+  - date: 1234年
+    event: 蒙古联宋灭金
+    lat: 45.7
+    lng: 126.6
+recommended_museums:
+  - museum_id: heilongjiang
+    name: 黑龙江省博物馆
+    reason: 金代铜坐龙，金上京（阿城）出土文物
+  - museum_id: jilin
+    name: 吉林省博物院
+    reason: 女真/金代文物
+  - museum_id: gugong
+    name: 故宫博物院
+    reason: 金中都相关文物
+  - museum_id: kaifeng
+    name: 开封博物馆
+    reason: 金代开封（汴京陷落后金曾短暂以此为都，1214年金宣宗迁都于此）
+  - museum_id: neimenggu
+    name: 内蒙古博物院
+    reason: 金代草原区域文物

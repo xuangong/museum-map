@@ -1,0 +1,60 @@
+id: gansu
+name: 甘肃省博物馆
+lat: 36.0611
+lng: 103.8343
+location: 甘肃省兰州市七里河区西津西路3号
+level: 国家一级博物馆（2012年升级）
+core_period: 新石器彩陶、汉代丝绸之路、佛教艺术
+specialty: 馆藏8万余件，以甘肃彩陶（时跨7000-3000年，体系最完整）、汉代简牍文书、汉唐丝绸之路珍品、佛教艺术萃宝为四大特色。铜奔马（马踏飞燕）是中国旅游标志。总面积43000平方米，平面呈"山"字形。国宝级文物16件（组），国家一级文物720余件（组）。
+dynasty_coverage: 新石器时代（大地湾/仰韶/马家窑/齐家）→ 先秦 → 秦汉（丝路/简牍）→ 魏晋（壁画砖）→ 十六国至隋唐（佛教艺术）→ 宋元明清
+timeline: 甘肃是彩陶之乡（马家窑彩陶代表中国新石器彩陶最高成就）和丝绸之路的黄金段。河西走廊是连接中原与西域的唯一通道，武威、张掖、酒泉、敦煌四郡自汉代设置以来就是丝路重镇。
+treasures:
+  - name: 1. 铜奔马（东汉）— 武威雷台汉墓出土
+  - name: 通高34.5cm
+  - name: 长45cm
+  - name: 重7.3kg
+  - name: 中国旅游标志
+halls:
+  - name: 甘肃丝绸之路文明展"（420余件丝路文物）
+  - name: 甘肃彩陶展"（大地湾→仰韶→马家窑→青铜时代）
+  - name: 庄严妙相——甘肃佛教艺术展"（十六国至明清佛教艺术）
+artifacts:
+  - name: 铜奔马
+    period: 东汉，武威雷台汉墓出土
+    description: 通高34.5cm，长45cm，重7.3kg。三足腾空，一足踏飞鸟（鹰），塑造奔马超掠飞鹰的瞬间。着力点集中在踏鸟的一足上，精确掌握力学平衡。1983年被确定为中国旅游标志。集西域马和蒙古马优点于一身，展现河西走马的对侧步特征。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/25/Gansu_Museum_2007_257.jpg
+    image_license: CC BY-SA 4.0
+    image_attribution: G41rn8 / Wikimedia Commons
+  - name: 人头形器口彩陶瓶
+    period: 仰韶文化，约5000年前
+    description: 瓶口塑为人头形，齐刘海发型，耳有耳洞，身上绘三角茎叶纹与飞鸟纹，是新石器时代最具人文气息的彩陶作品之一
+    image_url: https://upload.wikimedia.org/wikipedia/commons/3/35/%E4%BB%B0%E9%9F%B6%E6%96%87%E5%8C%96%E4%BA%BA%E5%A4%B4%E5%BD%A2%E5%99%A8%E5%8F%A3%E5%BD%A9%E9%99%B6%E7%93%B6.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎
+  - name: 铜车马仪仗队
+    period: 东汉，武威雷台汉墓
+    description: 含铜奔马在内的成组铜车马群，是了解汉代车马制度和军事仪仗的实物资料
+    image_url: https://upload.wikimedia.org/wikipedia/commons/c/cc/%E9%9B%B7%E5%8F%B0%E6%B1%89%E5%A2%93%E9%93%9C%E8%BD%A6%E9%A9%AC%E4%BB%AA%E4%BB%97%E9%98%9F.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎
+  - name: 莲花形玻璃托盏
+    period: 元代，漳县汪世显家族墓出土
+    description: 普蓝色半透明玻璃，盏为七瓣莲花形，托为八瓣莲花形，迄今出土最完整的元代玻璃器
+    image_url: https://upload.wikimedia.org/wikipedia/commons/6/67/Yuan_Lotus-shaped_Glass_Calix_%2810096176946%29.jpg
+    image_license: CC0
+    image_attribution: Gary Todd from Xinzheng, China
+  - name: 彩绘木博戏俑
+    period: 西汉，武威磨嘴子汉墓出土
+    description: 两位老者对弈博戏，高29cm，生动刻画蓄势待发的对弈场面
+  - name: 绢底平绣人像
+    period: 西汉，武威磨嘴子汉墓
+    description: 红色绢底，用多色丝线平绣二人像，是极珍贵的汉代丝绣实物
+  - name: 魏晋壁画砖
+    period: 魏晋，嘉峪关墓出土
+    description: 烫鸡、烤肉煮肉等日常生活场景画像砖，生动反映河西地区魏晋社会生活
+  - name: 葫芦形网纹彩陶壶
+    period: 马家窑文化半山类型，约4500年前
+    description: 高46.7cm，红黑彩绘葫芦形网纹，马家窑彩陶代表作
+sources:
+  - source: 百度百科·甘肃省博物馆（含馆藏数据、文物尺寸、展厅信息）
+  - source: "甘肃省博物馆官网: http://www.gansumuseum.com/"

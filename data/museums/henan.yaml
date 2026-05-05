@@ -1,0 +1,67 @@
+id: henan
+name: 河南博物院
+lat: 34.7879
+lng: 113.672
+location: 河南省郑州市金水区农业路8号
+level: 国家一级博物馆
+core_period: 夏商周(中原文明核心区)
+specialty: 地处中原腹地,夏商周三代文物收藏无可比拟。"泱泱华夏 择中建都"基本陈列以"中原"为视角重述中国文明史。贾湖骨笛改写了世界音乐史。
+dynasty_coverage: 新石器(裴李岗、仰韶)、夏、商、西周、春秋为核心,唐宋亦有亮点
+timeline: 河南是中国文明的摇篮--夏都二里头、商都郑州和安阳、西周东都洛邑、东周都洛阳,再到北宋都开封。中国八大古都河南占四个。河南博物院是理解中原文明核心地位的最佳场所。
+treasures:
+  - name: 1. 贾湖骨笛(新石器,约前7000年)- 世界上最早的可吹奏乐器
+halls:
+  - name: 泱泱华夏 择中建都"(通史主线)
+  - name: 夏商周展厅(精华)
+artifacts:
+  - name: 贾湖骨笛
+    period: 约前7000年
+    description: 用鹤骨制成,7孔,可吹奏七声音阶。将人类音乐史推前了数千年
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/af/%E8%B4%BE%E6%B9%96%E9%AA%A8%E7%AC%9B_%E7%AB%96.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Cangminzho
+  - name: 杜岭方鼎
+    period: 商早期,约前1400年
+    description: 郑州出土,高87cm,是商代早期都城在郑州的证据
+  - name: 妇好鸮尊
+    period: 商晚期
+    description: 鸮(猫头鹰)形青铜酒器,妇好是商王武丁之妻,中国最早的女将军
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9d/Fuhao_Owl_Zun_front.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Cangminzho
+  - name: 莲鹤方壶
+    period: 春秋,约前6世纪
+    description: 器盖上莲瓣托起展翅仙鹤,被郭沫若称为"时代精神的象征"
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b7/%E6%B2%B3%E5%8D%97%E5%8D%9A%E7%89%A9%E9%99%A2%E8%97%8F%E8%8E%B2%E9%B9%A4%E6%96%B9%E5%A3%B6.jpg
+    image_license: CC-BY-3.0
+    image_attribution: Greg kf
+  - name: 武则天金简
+    period: 唐·700年
+    description: 武则天在嵩山封禅时投放,祈求除罪消灾
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/a6/20210220_Wu_Zetian_Gold_Strip%2C_Henan_Museum.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Windmemories
+  - name: 汝窑天青釉瓷器
+    period: 北宋
+    description: 存世极少的汝窑精品
+    image_url: https://upload.wikimedia.org/wikipedia/commons/8/81/20210220_Bluish_green_glazed_porcelain_vase%2C_Ru_Kiln%2C_Henan_Museum.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Windmemories
+  - name: 四神云气图
+    period: 西汉
+    description: 梁国王陵壁画,描绘青龙白虎朱雀玄武
+    image_url: https://upload.wikimedia.org/wikipedia/commons/f/f0/Sishen_Yunqi_Painting_from_Liu_Mai_tomb.jpg
+    image_license: PD
+    image_attribution: Unknown author
+dynasty_connections:
+  - dynasty: 新石器
+    description: 贾湖文化(骨笛、龟甲符号)可能是文字和音乐的源头
+  - dynasty: 夏
+    description: 二里头遗址的证据使"夏"从传说走向考古
+  - dynasty: 商
+    description: 郑州商城和安阳殷墟分别代表商代早期和晚期,甲骨文在此诞生
+  - dynasty: 西周/春秋
+    description: 洛邑作为东都,莲鹤方壶标志着从凝重到活泼的艺术转型  河南博物院是理解“中原为什么是中心”这个问题的最佳答案。
+sources:
+  - source: "河南博物院官网: https://www.chnmus.net/"
+  - source: 贾湖骨笛约前7000年（多源核实）

@@ -1,0 +1,41 @@
+id: wenzi
+name: 中国文字博物馆
+lat: 36.099
+lng: 114.3928
+location: 河南省安阳市人民大道东段656号
+level: 国家一级博物馆
+core_period: 商代（甲骨文）至当代（汉字发展全史）
+specialty: 全球首座以文字为主题的国家级博物馆，位于甲骨文故乡安阳殷墟旁。由主体馆"宣文馆"、东馆"徽文馆"、西馆"博文馆"和汉字公园组成，总占地470.4亩。从甲骨文到信息时代，完整呈现汉字及中国少数民族文字的发展历程。
+dynasty_coverage: 商（甲骨文）→ 西周（金文）→ 秦（小篆/统一文字）→ 汉（隶书）→ 魏晋（楷书）→ 唐宋元明清（印刷术）→ 当代
+timeline: 安阳殷墟出土的甲骨文是中国发现的年代最早的成熟文字系统，把中国信史向上推进了约1000年。文字博物馆在殷墟旁建馆，形成"文字+考古"的完整体验
+treasures:
+  - name: 甲骨文实物
+  - name: 青铜器铭文拓片
+  - name: 秦代诏版（统一文字证据）
+  - name: 历代碑帖善本
+  - name: 少数民族文字文物
+halls:
+  - name: 中国文字发展史"常设展（宣文馆）
+  - name: 一片甲骨惊天下"甲骨文专题展
+  - name: 字书琼林"（徽文馆）
+artifacts:
+  - name: 甲骨文实物
+    period: 商代晚期，约前1300-前1046年
+    description: 龟甲和兽骨上的刻辞，是商王室占卜的记录。自1899年王懿荣首次发现以来，累计出土约16万片，已识别字形约4500个，可释读约1500字
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/7b/%E4%BB%A5%E5%95%86%E4%BB%A3%E7%94%B2%E9%AA%A8%E6%96%87%E5%9B%BE%E7%89%87%E4%B8%BA%E8%83%8C%E6%99%AF%E7%9A%84%E8%A5%BF%E5%91%A8%E5%8E%9F%E5%88%BB%E7%9F%B3%E7%AE%80.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-3.0
+    image_attribution: Liuzpy
+  - name: 青铜器铭文
+    period: 西周
+    description: 展示金文（钟鼎文）的发展，字形比甲骨文更规整，内容涉及册命、赏赐、战争等，是西周社会的直接文献
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/95/%E9%99%95%E8%A5%BF%E7%9C%89%E5%8E%BF%E9%A9%AC%E5%AE%B6%E9%95%87%E6%9D%A8%E5%AE%B6%E6%9D%91-%E5%9B%9B%E5%8D%81%E4%B8%89%E5%B9%B4%E9%80%A8%E9%BC%8E%EF%BC%88%E4%B8%99%EF%BC%89-%E8%A5%BF%E5%91%A8-%E5%AE%9D%E9%B8%A1%E9%9D%92%E9%93%9C%E5%99%A8%E5%8D%9A%E7%89%A9%E9%99%A2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36
+  - name: 秦代诏版
+    period: 秦，前221年后
+    description: 刻有秦始皇统一度量衡诏书的铜版/铁版，是"书同文"政策的实物证据
+sources:
+  - source: "中国文字博物馆官网: https://www.wzbwg.com/"
+  - source: 百度百科·中国文字博物馆
+  - source: 维基百科·中国文字博物馆
+  - source: "国家民委报道: https://www.neac.gov.cn/seac/xwzx/202603/1187705.shtml"

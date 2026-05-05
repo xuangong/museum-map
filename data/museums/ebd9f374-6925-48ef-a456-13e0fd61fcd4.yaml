@@ -1,0 +1,52 @@
+id: ebd9f374-6925-48ef-a456-13e0fd61fcd4
+name: 明孝陵博物馆
+lat: 32.04718
+lng: 118.83809
+location: 江苏省南京市玄武区中山门外四方城1号
+level: 国家二级博物馆 / 世界文化遗产 / 全国重点文物保护单位
+core_period: 明代（1368—1644年）
+specialty: 明太祖朱元璋、世界文化遗产明孝陵与南京明文化专题展馆
+dynasty_coverage: 明代
+timeline: 1381年始建明孝陵；1398年朱元璋安葬于此；1413年"大明孝陵神功圣德碑"建成；2003年7月3日明孝陵列入《世界遗产名录》，博物馆正式成立；2009年2月新馆（利用原南京手表厂旧厂房改造）正式开放；2020年被中国博物馆协会评定为国家二级博物馆；2025年基本陈列《大明孝陵》完成微改造升级
+treasures:
+  - name: 明孝陵出土石刻砖瓦
+  - name: 陶瓷器
+  - name: 木雕
+  - name: 铜器及铁器
+  - name: 明东陵及周边寺庙出土文物（馆藏文物共计3432件）
+halls:
+  - name: 大明孝陵主题展厅（含孝陵雄姿、传奇帝王、选址建陵、创新规制、历史地位、孝陵沧桑六个单元）
+  - name: 观朴明式家具艺术馆
+  - name: 大明生活馆（含明代织锦馆、洪武大明贡茶茶艺馆）
+  - name: 360度环幕影院
+  - name: 临时展厅
+  - name: 文化书吧
+  - name: 文创产品超市
+artifacts:
+  - name: 大金门石构件
+    period: 明代（1381—1413年）
+    description: 明孝陵大金门为陵寝外郭入口，相关石构件现存于景区，是明代陵寝营造的典型实物遗存
+    image_url: https://upload.wikimedia.org/wikipedia/commons/4/45/%E6%98%8E%E5%AD%9D%E9%99%B5-%E5%A4%A7%E9%87%91%E9%97%A8.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: Kallgan
+  - name: 神功圣德碑（四方城碑亭）
+    period: 明代永乐十一年（1413年）
+    description: 记载明太祖朱元璋功德的巨型石碑，碑亭（四方城）为全国重点文物保护单位
+    image_url: https://upload.wikimedia.org/wikipedia/commons/0/0c/Stone_Sifangcheng.jpg
+    image_license: CC-BY-SA-2.0
+    image_attribution: wang leon from Nanjing, China
+  - name: 石象路石刻
+    period: 明代（1381—1413年）
+    description: 神道两侧排列的石狮、獬豸、骆驼、象、麒麟、马等六种石兽及石人，是中国现存规模最大的明代帝陵神道石刻群
+    image_url: https://upload.wikimedia.org/wikipedia/commons/e/eb/%E6%98%8E%E5%AD%9D%E9%99%B5%E7%9F%B3%E8%B1%A1%E8%B7%AF%E7%A5%9E%E9%81%93.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 董辰兴
+dynasty_connections:
+  - dynasty: 明朝
+    description: 博物馆依托明朝开国皇帝朱元璋与皇后马氏的陵寝——明孝陵建立，专注研究、展示明太祖生平、明孝陵营造规制及南京明文化，是明清皇家陵寝系列世界遗产的核心展示场所
+sources:
+  - source: https://zschina.nanjing.gov.cn/ztzl/bwgjl/202401/t20240124_4154542.html
+  - source: https://zschina.nanjing.gov.cn/ztzl/bwgjl/202401/t20240124_4154535.html
+  - source: https://zschina.nanjing.gov.cn/fjms/jqjd/mxljq/
+  - source: https://zschina.nanjing.gov.cn/lyzx/202504/t20250423_5133769.html
+  - source: https://zh.wikipedia.org/wiki/%E6%98%8E%E5%AD%9D%E9%99%B5%E5%8D%9A%E7%89%A9%E9%A6%86

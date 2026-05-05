@@ -1,0 +1,33 @@
+id: 92a0de78-943a-412a-b064-45327f3c3573
+name: 荆州博物馆
+lat: 30.3394
+lng: 112.1782
+location: 湖北省荆州市荆州区荆中路166号
+level: 首批国家一级博物馆
+core_period: 新石器时代至明清，重点为春秋战国至秦汉（楚文化鼎盛期）
+specialty: 楚文化与江汉平原历史文化；战国秦汉漆木器、丝织刺绣、简牍、楚玉、青铜器
+dynasty_coverage: 新石器时代—清代
+timeline: 1951年前身（湖北省文史馆荆州工作组）成立；1958年正式建馆；1993年获国家文物局评定"地县级十佳优秀博物馆之首"；1999年《江汉平原楚汉文化展》获全国十大陈列展览精品奖；2000年获国家旅游局4A级旅游单位称号；2008年列入首批国家一级博物馆名单；2021年荣获"全国文化和旅游系统先进集体"称号
+halls:
+  - name: 漫天星斗——江汉平原原始文化展
+  - name: 吉金耀彩——荆州出土铜器展
+  - name: 楚玉菁英——荆州出土玉器展
+  - name: 书于竹木——荆州出土简牍展
+  - name: 陶苑奇珍——荆州出土古代瓷器展
+  - name: 五大夫遂——凤凰山168号汉墓展（珍品馆）
+  - name: 丹漆神韵——楚秦汉漆器精品展（珍品馆）
+  - name: 开元观历史文化陈列（全国重点文物保护单位开元观）
+dynasty_connections:
+  - dynasty: 楚国（春秋战国）
+    description: 荆州为楚国故都纪南城所在地，馆藏楚文化文物涵盖丝织刺绣、青铜礼乐器、漆木器、楚玉等几乎所有楚文化种类，是全国楚文化研究最重要的实物中心
+  - dynasty: 西汉
+    description: 凤凰山168号汉墓出土保存完好的西汉男尸及大量漆器、简牍，张家山汉简含《二年律令》《算数书》等重要文献，是研究西汉早期社会的珍贵史料
+  - dynasty: 战国秦汉
+    description: 馆藏战国秦汉饱水漆木器数量约占全国总数40%，楚玉数量居全国之首，战国和西汉丝织品更属独一无二
+  - dynasty: 新石器时代
+    description: 设有《漫天星斗——江汉平原原始文化展》，系统展示大溪文化等江汉平原史前文化
+sources:
+  - source: http://www.jzmsm.org/about/index-cate_id-2.html
+  - source: http://jzmsm.org/news/index-cate_id-17.html
+  - source: https://zwgk.jingzhou.gov.cn/54760/202302/t20230222/305254.shtml
+  - source: https://www.museumschina.cn/museums/details?id=202209071350244756

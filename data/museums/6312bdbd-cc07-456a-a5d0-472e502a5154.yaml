@@ -1,0 +1,56 @@
+id: 6312bdbd-cc07-456a-a5d0-472e502a5154
+name: 响堂山石窟
+lat: 36.4386
+lng: 114.1986
+location: 河北省邯郸市峰峰矿区
+level: 第一批全国重点文物保护单位
+core_period: 北齐（550—577年）
+specialty: 北齐石窟艺术宝库，集佛教、建筑、雕刻、美术、书法于一体，在中国石窟艺术由北朝向唐代写实风格演变中起承上启下作用
+dynasty_coverage: 东魏、北齐、隋、唐、宋、元、明
+timeline: 东魏武定初年（约543年）始凿，历经北齐、隋、唐、宋、元、明各代续凿修缮
+treasures:
+  - name: 北齐所刻《维摩诘经》石刻
+  - name: 塔形龛
+  - name: 千佛洞
+  - name: 大佛洞
+  - name: 北齐佛教造像群
+halls:
+  - name: 北响堂山石窟
+  - name: 南响堂山石窟
+  - name: 水浴寺石窟
+artifacts:
+  - name: 北齐摩崖石刻《维摩诘经》
+    period: 北齐
+    description: 刻于北响堂山石窟崖壁，是北齐书法与佛教经典的重要实物遗存，具有极高的书法艺术与宗教史价值
+  - name: 大佛洞主尊造像
+    period: 北齐
+    description: 北响堂山大佛洞内，主尊佛像高大雄浑，体现北齐雕刻艺术的成熟风格
+    image_url: https://upload.wikimedia.org/wikipedia/commons/c/cc/Buddha_Amitabha%2C_Hebei_province%2C_Fengfeng%2C_southern_Xiangtangshan_Cave_Temples%2C_Cave_2%2C_Northern_Qi_dynasty%2C_550-577_AD%2C_limestone_with_traces_of_pigment_-_Freer_Gallery_of_Art_-_DSC05723.JPG
+    image_license: CC0
+    image_attribution: Daderot
+  - name: 千佛洞造像群
+    period: 北齐至隋唐
+    description: 南响堂山千佛洞内密布小型佛龛造像，题材丰富，代表响堂山石窟造像艺术的多元面貌
+  - name: 塔形龛
+    period: 北齐
+    description: 响堂山石窟特有的塔柱式龛形，为研究北朝佛教建筑与石窟形制演变的重要实例
+dynasty_connections:
+  - dynasty: 东魏
+    description: 武定初年（约543年），北响堂山石窟始凿，奠定石窟开凿之基
+  - dynasty: 北齐
+    description: 武平初年建成北响堂主要洞窟，天统元年（565年）至北齐末年开凿南响堂，为主体营造时期
+  - dynasty: 隋
+    description: 隋代对南北响堂均有修缮与续凿
+  - dynasty: 唐
+    description: 唐代继续扩凿并补刻造像与题记
+  - dynasty: 宋
+    description: 宋代有局部修缮与补刻
+  - dynasty: 元
+    description: 元代有局部修缮与续凿
+  - dynasty: 明
+    description: 明代对石窟进行修缮，并增刻部分题记与碑刻
+sources:
+  - source: https://www.hd.gov.cn/zjhd/wwgj/qgzdww/sksjsk/202206/t20220601_1571152.html
+  - source: https://wenwu.hebei.gov.cn/system/2025/03/28/030336151.shtml
+  - source: https://baike.baidu.com/item/%E5%93%8D%E5%A0%82%E5%B1%B1%E7%9F%B3%E7%AA%9F/1280065
+  - source: https://zh.wikipedia.org/zh-hans/%E5%93%8D%E5%A0%82%E5%B1%B1%E7%9F%B3%E7%AA%9F

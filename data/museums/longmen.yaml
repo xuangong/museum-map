@@ -1,0 +1,58 @@
+id: longmen
+name: 龙门石窟
+lat: 34.4653
+lng: 112.471
+location: 河南省洛阳市洛龙区龙门镇,伊河两岸
+level: 全国重点文物保护单位 / UNESCO世界文化遗产(2000年)
+core_period: 北魏(5-6世纪)、唐代(7-8世纪)
+specialty: 中国三大石窟之一(与敦煌莫高窟、大同云冈石窟并列),现存窟龛2345个、造像近11万尊、碑刻题记2860余品。北魏造像秀骨清像,唐代造像丰腴雄健,两种风格对比鲜明,是理解中国佛教艺术风格演变的最佳实地课堂。
+dynasty_coverage: 北魏 → 东西魏 → 北齐 → 隋代 → 唐代 → 五代 → 北宋
+timeline: 493年北魏孝文帝迁都洛阳,开始营造龙门石窟(接续云冈石窟的皇家营造传统);唐高宗和武则天时期(650-705年)是龙门第二个营造高峰,奉先寺卢舍那大佛即此时所造
+treasures:
+  - name: 奉先寺卢舍那大佛
+  - name: 宾阳中洞"帝后礼佛图"(原作流失海外)
+  - name: 古阳洞造像题记
+  - name: 莲花洞天顶大莲花
+  - name: 药方洞石刻药方
+halls:
+  - name: 奉先寺(卢舍那大佛)
+  - name: 宾阳三洞(北魏皇家窟)
+  - name: 古阳洞(最早的窟)
+  - name: 万佛洞(唐代)
+  - name: 莲花洞
+  - name: 龙门石窟研究院数字展示中心
+artifacts:
+  - name: 奉先寺卢舍那大佛
+    description: 唐代(675年完工)。通高17.14米,面容丰满端庄,传说以武则天为蓝本,是龙门石窟的标志,也是唐代雕塑艺术的巅峰。"卢舍那"意为"光明遍照",为报身佛。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/4/4e/%E6%B4%9B%E9%98%B3%E9%BE%99%E9%97%A8%E7%9F%B3%E7%AA%9F%E5%8D%A2%E8%88%8D%E9%82%A3%E5%A4%A7%E4%BD%9B.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: DS90
+  - name: 宾阳中洞"帝后礼佛图"
+    description: 北魏(约520年代)。原为北魏宣武帝为孝文帝和文昭皇太后营造的功德窟,浮雕帝后礼佛场景。1930年代被盗凿,现分藏于美国纽约大都会博物馆和堪萨斯城纳尔逊-阿特金斯博物馆,是中国文物流失的痛史。
+  - name: 古阳洞造像题记(龙门二十品)
+    description: 北魏(5-6世纪)。古阳洞是龙门最早开凿的洞窟,窟内造像题记书法被誉为"龙门二十品",是北魏书法(魏碑)的代表,对中国书法史影响深远。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/f/ff/Guyang_Grotto%2C_2015-09-23_10.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: Siyuwj
+  - name: 莲花洞天顶大莲花
+    description: 北魏。洞顶浮雕直径达3米的大莲花,周围环绕飞天,雕刻精美,是北魏装饰艺术的杰作。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/5/5e/%E9%BE%99%E9%97%A8%E7%9F%B3%E7%AA%9F-%E8%8E%B2%E8%8A%B1%E6%B4%9E_-_panoramio.jpg
+    image_license: CC-BY-3.0
+    image_attribution: 江上清风1961
+  - name: 药方洞石刻药方
+    description: 唐代(约7世纪)。洞口两壁刻有140余个药方,涉及内科、外科、小儿科等,是中国现存最早的石刻药方,具有重要的医学史价值。
+  - name: 万佛洞
+    description: 唐代(680年)。南北两壁密布一万五千尊小佛像,主佛阿弥陀佛端坐莲台,洞口力士像肌肉刚健,是唐代石窟造像的代表。
+  - name: 宾阳南洞阿弥陀佛像
+    description: 唐代。面相丰满,衣纹流畅,是唐代佛教雕塑的典范之作。
+dynasty_connections:
+  - dynasty: 北魏(493-534年)
+    description: 孝文帝拓跋宏迁都洛阳后推行全面汉化,龙门石窟是汉化政策在宗教艺术上的直接体现。北魏造像从早期的云冈风格(雄健厚重、西域色彩浓)转变为龙门风格(秀骨清像、褒衣博带),反映了鲜卑贵族主动融入汉文化的进程。古阳洞、宾阳三洞为皇家主导的工程。
+  - dynasty: 唐代(618-907年)
+    description: 唐代是龙门石窟的第二个营造高峰期,造像数量约占总数的三分之二。唐代造像丰腴雄健,充满自信与活力,与北魏的清瘦风格形成鲜明对比。奉先寺卢舍那大佛集唐代雕塑之大成,是中国古代雕塑的里程碑。唐代龙门的营造与武则天关系密切--她曾捐"脂粉钱"两万贯资助奉先寺工程。
+  - dynasty: 书法史（魏碑）
+    description: 龙门石窟的造像题记是“魏碑”书法的核心资源。“龙门二十品”方劲雄强，与晋唐帖学并列为中国书法的两大传统。清代碑学运动重新发现魏碑价值，龙门题记成为书法家的圣地。
+sources:
+  - source: "龙门石窟官网: http://www.lmsk.cn/"
+  - source: UNESCO世界文化遗产名录（2000年）
+  - source: 现存窟龛2345个、造像近11万尊（多源核实）

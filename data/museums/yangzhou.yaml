@@ -1,0 +1,58 @@
+id: yangzhou
+name: 扬州博物馆 / 中国大运河博物馆
+lat: 32.3942
+lng: 119.435
+location: 扬州博物馆：江苏省扬州市邗江区；中国大运河博物馆：扬州市广陵区三湾古运河畔
+level: 均为国家一级博物馆
+core_period: 隋唐（大运河开凿、唐代扬州极盛）、清代（盐商文化）
+specialty: 扬州博物馆以地方通史和雕版印刷为特色；中国大运河博物馆是唯一全面展示大运河2500年历史的国家级专题馆，建筑恢宏，沉浸式体验突出。两馆配合可完整理解运河与扬州的共生关系。
+dynasty_coverage: 春秋（吴王夫差开邗沟）→ 隋代（开凿大运河）→ 唐代（扬州为国际都会）→ 宋元 → 明清（盐商文化、扬州学派）
+timeline: 邗沟（前486年）是大运河最早的河段；隋炀帝（605-610年）贯通南北大运河，扬州为起点；唐代扬州是中国最富庶的城市之一，"扬一益二"；2014年大运河列入世界遗产
+treasures:
+  - name: 元代霁蓝釉白龙纹梅瓶（扬博）
+  - name: 隋炀帝墓出土蹀躞金玉带（扬博）
+  - name: 唐代长沙窑瓷器（大运河博物馆）
+  - name: 雕版印刷古籍
+halls:
+  - name: 扬博"广陵潮——扬州城市故事
+  - name: 大运河博物馆"大运河——中国的世界文化遗产
+  - name: 运河上的舟楫"（1:1复原古船）
+  - name: 河之恋"沉浸式体验厅
+artifacts:
+  - name: 元代霁蓝釉白龙纹梅瓶
+    description: 元代（14世纪）。扬博镇馆之宝，全球仅存三件同类器之一。钴蓝釉上以白泥堆塑游龙，气势磅礴，是元代景德镇瓷器的极品。
+  - name: 隋炀帝墓出土蹀躞金玉带
+    description: 隋代（7世纪初）。2013年扬州曹庄发现隋炀帝墓，出土的十三环蹀躞金玉带是确认墓主帝王身份的关键证据。
+  - name: 隋炀帝墓铜编钟铜编磬
+    description: 隋代。随葬礼乐器，虽经缩小制作但规制完整，反映了隋代宫廷礼仪制度。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9e/20251018_Bronze_Bianzhong_and_Stone_Qing.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Windmemories
+  - name: 唐代长沙窑青釉褐彩瓷器
+    description: 唐代（9世纪）。大运河沿线出土的外销瓷，证明运河作为南北商品流通大动脉的角色。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/c/c5/%E4%B8%9C%E6%99%8B%E7%93%AF%E7%AA%91%E9%9D%92%E9%87%89%E8%A4%90%E5%BD%A9%E7%93%B7%E7%BE%8A1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎
+  - name: 清代扬州雕版印刷版片
+    description: 清代。扬州是中国雕版印刷的重镇，清代刻印了《全唐诗》等大型丛书，版片保存至今。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/ad/%E9%9B%95%E7%89%88%E5%88%BB%E5%88%B6.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎
+  - name: 唐代铜镜
+    description: 唐代。扬州是唐代最重要的铜镜产地之一，出土的铜镜纹饰精美，反映了唐代扬州手工业的繁荣。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/10/%E6%BD%8D%E5%9D%8A%E5%8D%9A%E7%89%A9%E9%A6%86%E8%97%8F%E5%94%90%E4%BB%A3%E9%93%9C%E9%95%9C.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Ngguls
+  - name: 汉代广陵王刘胥墓出土漆器
+    description: 西汉。扬州（古称广陵）汉墓出土的漆器工艺精湛，反映了汉代扬州作为漆器生产中心的地位。
+dynasty_connections:
+  - dynasty: 春秋（邗沟）
+    description: 前486年吴王夫差为北伐齐国，开凿邗沟连接长江与淮河，这是大运河最早的河段，也是扬州因运河而生的起点。
+  - dynasty: 隋代（大运河贯通）
+    description: 隋炀帝以洛阳为中心贯通南北大运河，三下江都（扬州）。大运河全长近2700公里，是世界最长的人工运河。2013年扬州发现隋炀帝真墓，推翻了此前多处"伪墓"的说法。
+  - dynasty: 唐代（扬州极盛）
+    description: 唐代扬州是长江与运河交汇处的国际都会，人口超百万，"天下之盛，扬为首"。鉴真从扬州东渡日本，阿拉伯商人聚居于此。李白"烟花三月下扬州"即咏此盛况。
+  - dynasty: 明清（盐商文化）
+    description: 两淮盐运使驻扬州，盐商富甲天下，资助了扬州八怪等艺术流派，建造了精美的私家园林，形成了独特的扬州文化。
+sources:
+  - source: "中国大运河博物馆官网: https://www.canal-museum.cn/"

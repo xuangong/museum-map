@@ -1,0 +1,59 @@
+id: zhongshanguo
+name: 中山古城遗址·中山国王陵陈列馆
+lat: 38.334
+lng: 114.142
+location: 河北省石家庄市平山县三汲乡
+level: 全国重点文物保护单位，遗址类博物馆
+core_period: 战国中山国（前414年-前296年）
+specialty: 中国唯一专门展示战国中山国历史的遗址博物馆。中山国是战国"千乘之国"，由白狄鲜虞族建立，虽非"七雄"却创造了令人惊叹的青铜文明。遗址包括中山国都城灵寿和王陵区，出土文物精美绝伦。
+dynasty_coverage: 战国
+timeline: 白狄鲜虞（春秋，前6世纪）→ 中山国建立（前414年）→ 鼎盛期（前4世纪中后期）→ 被赵国所灭（前296年）
+treasures:
+  - name: 错金银四龙四凤铜方案座
+  - name: 中山王铁足铜鼎（刻铭469字）
+  - name: 错金银虎噬鹿铜屏风座
+  - name: 十五连盏铜灯
+  - name: 中山王"兆域图"铜版
+halls:
+  - name: 王陵区（1号墓
+  - name: 6号墓出土品）
+  - name: 中山古城遗址展示
+artifacts:
+  - name: 错金银四龙四凤铜方案座
+    period: 战国中期，前4世纪
+    description: —1号墓出土，案座底部四只梅花鹿伏卧承托，中间四条蟠龙翼然腾起，龙身之间四只凤鸟展翅。整器用失蜡法铸造，工艺极其复杂，是中国青铜铸造技术的巅峰之作。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/d/db/20250118_Bronze_Square_Table_Stand_Decorated_with_Dragon-and-phoenix.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Windmemories
+  - name: 中山王铁足铜鼎
+    period: 战国中期
+    description: —鼎腹刻铭文469字，为目前所见铭文最长的战国铜鼎之一。铭文记载中山王讨伐燕国的胜利及对嗣子的告诫，语言文辞典雅，内容涉及中山国与燕、赵等国的政治军事关系，是研究中山国历史的第一手资料。
+  - name: 错金银虎噬鹿铜屏风座
+    period: 战国中期
+    description: —猛虎咬住小鹿的瞬间造型，虎身错金银斑纹，鹿做挣扎状。构图紧张生动，是战国动物题材青铜器的杰作，可能受到了北方草原文化"动物搏斗"题材的影响。
+  - name: 十五连盏铜灯
+    period: 战国中期
+    description: —树形灯架分三层，共十五个灯盏。树上有猿猴攀缘、群鸟栖息，底座有两个人形力士。是战国灯具中造型最复杂、最精美的一件。
+  - name: 中山王"兆域图"铜版
+    period: 战国中期
+    description: —一块铜版上刻有王陵区的建筑规划图，标注了各建筑的名称和尺寸。是中国目前所见最早的建筑平面设计图，也是世界上最古老的铜版建筑规划图之一。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/8/8e/20250118_Architectural_Plan_of_Mausoleum_Layout_on_Bronze_plate_with_Details_in_Gold_and_Silver.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Windmemories
+  - name: 错银双翼神兽
+    period: 战国中期
+    description: —有翼神兽造型，错银装饰。造型融合了中原与北方草原的审美元素，体现了中山国作为非华夏族裔国家的独特文化气质。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/ba/20250118_Bronze_Mythical_Winged_Beasts_Inlaid_with_Silver_02.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Windmemories
+  - name: 山字形器
+    period: 战国
+    description: —中山国特有的器物，用途不明（可能是仪仗或旗座），已成为中山国的标志性符号，现为平山县县标。
+  - name: 中山王方壶
+    period: 战国中期
+    description: —壶腹刻铭文450字，内容与铁足铜鼎铭文相呼应，记载了中山国的政治理念和历史事件。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/ad/Warring_States_Bronze_Hu_1.jpg
+    image_license: CC0
+    image_attribution: Gary Todd
+sources:
+  - source: 中山古城遗址（河北省文物局）
