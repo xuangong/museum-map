@@ -26,8 +26,8 @@ describe("UsersRepo", () => {
     const byEmail = await repo.findByEmail(email)
     expect(byEmail?.id).toBe(u.id)
 
-    await repo.setGoogleSub(u.id, "google-sub-123")
-    const byGoogle = await repo.findByGoogleSub("google-sub-123")
+    await repo.setGoogleSub(u.id, `google-sub-${Date.now()}-${Math.random()}`)
+    const byGoogle = await repo.findByGoogleSub((await repo.findById(u.id))!.google_sub!)
     expect(byGoogle?.id).toBe(u.id)
   })
 

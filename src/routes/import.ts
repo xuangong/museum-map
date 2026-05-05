@@ -9,6 +9,9 @@ import { scorePayload, generateAiComment, classifySource } from "~/services/revi
 import { flattenProvenance, type MuseumPayload, type Provenance } from "~/services/import-schema"
 import { buildEvidence } from "~/services/dynasty-museum-match"
 import { generateReason } from "~/services/dynasty-reason"
+import { sessionMiddleware, requireAdmin } from "~/middleware/session"
+import type { UserRow } from "~/repo/users"
+import type { SessionRow } from "~/repo/sessions"
 
 interface RouteContext {
   env: Env
@@ -16,23 +19,15 @@ interface RouteContext {
   body: any
   params: any
   set: any
-}
-
-function checkAuth(env: Env, request: Request): { ok: true } | { ok: false; status: number; body: any } {
-  if (!env.ADMIN_TOKEN) return { ok: false, status: 503, body: { error: "import disabled: ADMIN_TOKEN not configured" } }
-  const token = request.headers.get("x-admin-token") || ""
-  if (token !== env.ADMIN_TOKEN) return { ok: false, status: 401, body: { error: "unauthorized" } }
-  return { ok: true }
+  user: UserRow | null
+  session: SessionRow | null
 }
 
 export const importRoute = new Elysia()
+  .use(sessionMiddleware)
   .post("/api/import", async (ctx) => {
     const { env, request, body, set } = ctx as unknown as RouteContext
-    const auth = checkAuth(env, request)
-    if (!auth.ok) {
-      set.status = auth.status
-      return auth.body
-    }
+    if (!requireAdmin(ctx as any)) return { error: "forbidden" }
     if (env.COPILOT_GATEWAY_URL == null || env.COPILOT_GATEWAY_KEY == null) {
       set.status = 503
       return { error: "import unavailable: gateway not configured" }
@@ -79,11 +74,7 @@ export const importRoute = new Elysia()
   })
   .get("/api/pending", async (ctx) => {
     const { env, request, set } = ctx as unknown as RouteContext
-    const auth = checkAuth(env, request)
-    if (!auth.ok) {
-      set.status = auth.status
-      return auth.body
-    }
+    if (!requireAdmin(ctx as any)) return { error: "forbidden" }
     const url = new URL(request.url)
     const status = url.searchParams.get("status") || undefined
     const repo = new MuseumsPendingRepo(env.DB)
@@ -109,11 +100,7 @@ export const importRoute = new Elysia()
   })
   .get("/api/pending/:id", async (ctx) => {
     const { env, request, params, set } = ctx as unknown as RouteContext
-    const auth = checkAuth(env, request)
-    if (!auth.ok) {
-      set.status = auth.status
-      return auth.body
-    }
+    if (!requireAdmin(ctx as any)) return { error: "forbidden" }
     const repo = new MuseumsPendingRepo(env.DB)
     const row = await repo.get(params.id)
     if (!row) {
@@ -144,11 +131,7 @@ export const importRoute = new Elysia()
   })
   .post("/api/pending/:id/approve", async (ctx) => {
     const { env, request, params, body, set } = ctx as unknown as RouteContext
-    const auth = checkAuth(env, request)
-    if (!auth.ok) {
-      set.status = auth.status
-      return auth.body
-    }
+    if (!requireAdmin(ctx as any)) return { error: "forbidden" }
     const repo = new MuseumsPendingRepo(env.DB)
     const row = await repo.get(params.id)
     if (!row) {
@@ -179,11 +162,7 @@ export const importRoute = new Elysia()
   })
   .post("/api/pending/:id/reject", async (ctx) => {
     const { env, request, params, body, set } = ctx as unknown as RouteContext
-    const auth = checkAuth(env, request)
-    if (!auth.ok) {
-      set.status = auth.status
-      return auth.body
-    }
+    if (!requireAdmin(ctx as any)) return { error: "forbidden" }
     const repo = new MuseumsPendingRepo(env.DB)
     const ok = await repo.updateStatus(params.id, "rejected", typeof body?.notes === "string" ? body.notes : undefined)
     if (!ok) {
@@ -194,11 +173,7 @@ export const importRoute = new Elysia()
   })
   .delete("/api/pending/:id", async (ctx) => {
     const { env, request, params, set } = ctx as unknown as RouteContext
-    const auth = checkAuth(env, request)
-    if (!auth.ok) {
-      set.status = auth.status
-      return auth.body
-    }
+    if (!requireAdmin(ctx as any)) return { error: "forbidden" }
     const repo = new MuseumsPendingRepo(env.DB)
     const ok = await repo.delete(params.id)
     if (!ok) {
@@ -209,11 +184,7 @@ export const importRoute = new Elysia()
   })
   .post("/api/museums/:id/unpublish", async (ctx) => {
     const { env, request, params, set } = ctx as unknown as RouteContext
-    const auth = checkAuth(env, request)
-    if (!auth.ok) {
-      set.status = auth.status
-      return auth.body
-    }
+    if (!requireAdmin(ctx as any)) return { error: "forbidden" }
     const r = await env.DB.prepare("DELETE FROM museums WHERE id = ?").bind(params.id).run()
     const removed = (r.meta?.changes ?? 0) > 0
     if (!removed) {
@@ -224,11 +195,7 @@ export const importRoute = new Elysia()
   })
   .post("/api/museums/:id/enrich-images", async (ctx) => {
     const { env, request, params, set } = ctx as unknown as RouteContext
-    const auth = checkAuth(env, request)
-    if (!auth.ok) {
-      set.status = auth.status
-      return auth.body
-    }
+    if (!requireAdmin(ctx as any)) return { error: "forbidden" }
     if (env.COPILOT_GATEWAY_URL == null || env.COPILOT_GATEWAY_KEY == null) {
       set.status = 503
       return { error: "enrichment unavailable: gateway not configured" }
@@ -264,11 +231,7 @@ export const importRoute = new Elysia()
   })
   .post("/api/admin/dynasty-reasons/generate", async (ctx) => {
     const { env, request, set } = ctx as unknown as RouteContext
-    const auth = checkAuth(env, request)
-    if (!auth.ok) {
-      set.status = auth.status
-      return auth.body
-    }
+    if (!requireAdmin(ctx as any)) return { error: "forbidden" }
     if (env.COPILOT_GATEWAY_URL == null || env.COPILOT_GATEWAY_KEY == null) {
       set.status = 503
       return { error: "gateway not configured" }

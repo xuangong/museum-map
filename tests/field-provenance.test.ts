@@ -39,8 +39,33 @@ async function freshDb(): Promise<D1Database> {
     db.prepare(
       "CREATE TABLE field_provenance (museum_id TEXT NOT NULL, field_path TEXT NOT NULL, source_url TEXT, authority TEXT, recorded_at INTEGER NOT NULL, PRIMARY KEY (museum_id, field_path), FOREIGN KEY (museum_id) REFERENCES museums(id) ON DELETE CASCADE)",
     ),
+    db.prepare(
+      "CREATE TABLE users (id TEXT PRIMARY KEY, email TEXT NOT NULL UNIQUE, email_normalized TEXT NOT NULL, password_hash TEXT, google_sub TEXT UNIQUE, display_name TEXT, avatar_url TEXT, is_admin INTEGER NOT NULL DEFAULT 0, created_at INTEGER NOT NULL, last_login_at INTEGER)",
+    ),
+    db.prepare(
+      "CREATE TABLE sessions (id TEXT PRIMARY KEY, user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE, created_at INTEGER NOT NULL, expires_at INTEGER NOT NULL, last_seen_at INTEGER NOT NULL, user_agent TEXT, ip TEXT)",
+    ),
   ])
   return db as unknown as D1Database
+}
+
+async function makeAdminSession(db: D1Database): Promise<string> {
+  const now = Date.now()
+  const uid = "admin-test-user"
+  const sid = "admin-test-session-" + now
+  await db
+    .prepare(
+      "INSERT INTO users (id, email, email_normalized, is_admin, created_at) VALUES (?, ?, ?, 1, ?)",
+    )
+    .bind(uid, `admin-${now}@example.com`, `admin-${now}@example.com`, now)
+    .run()
+  await db
+    .prepare(
+      "INSERT INTO sessions (id, user_id, created_at, expires_at, last_seen_at) VALUES (?, ?, ?, ?, ?)",
+    )
+    .bind(sid, uid, now, now + 86400000, now)
+    .run()
+  return sid
 }
 
 describe("flattenProvenance", () => {
@@ -132,8 +157,9 @@ describe("FieldProvenanceRepo", () => {
 describe("approve flow persists provenance + GET ?withProvenance=1", () => {
   it("end-to-end: pending → approve → fetch with _provenance", async () => {
     const db = await freshDb()
-    const env: any = { DB: db, ADMIN_TOKEN: "secret", DISABLE_CHAT: "1" }
+    const env: any = { DB: db, DISABLE_CHAT: "1" }
     const app = createApp(env)
+    const sid = await makeAdminSession(db)
 
     const pending = new MuseumsPendingRepo(db)
     const payload: MuseumPayload = {
@@ -155,7 +181,7 @@ describe("approve flow persists provenance + GET ?withProvenance=1", () => {
     const approveRes = await app.handle(
       new Request("http://localhost/api/pending/test-1/approve", {
         method: "POST",
-        headers: { "x-admin-token": "secret", "content-type": "application/json" },
+        headers: { cookie: `sid=${sid}`, "content-type": "application/json", origin: "http://localhost", host: "localhost" },
         body: "{}",
       }),
     )
@@ -177,8 +203,9 @@ describe("approve flow persists provenance + GET ?withProvenance=1", () => {
 
   it("approve succeeds even when pending row has null provenance (legacy)", async () => {
     const db = await freshDb()
-    const env: any = { DB: db, ADMIN_TOKEN: "secret", DISABLE_CHAT: "1" }
+    const env: any = { DB: db, DISABLE_CHAT: "1" }
     const app = createApp(env)
+    const sid = await makeAdminSession(db)
 
     const pending = new MuseumsPendingRepo(db)
     const payload: MuseumPayload = { name: "Legacy", lat: 30, lng: 120 }
@@ -187,7 +214,7 @@ describe("approve flow persists provenance + GET ?withProvenance=1", () => {
     const res = await app.handle(
       new Request("http://localhost/api/pending/legacy-1/approve", {
         method: "POST",
-        headers: { "x-admin-token": "secret", "content-type": "application/json" },
+        headers: { cookie: `sid=${sid}`, "content-type": "application/json", origin: "http://localhost", host: "localhost" },
         body: "{}",
       }),
     )
