@@ -24,12 +24,13 @@ export function Sidebar(): string {
   </template>
   <template x-if="me">
     <div>
-      <div x-show="!nameForm.editing" style="display:flex;align-items:center;gap:8px;width:100%;overflow:hidden;">
-        <div style="font-family:var(--sans);font-size:12px;color:var(--ink-mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 0;min-width:0;" x-text="(me && me.displayName) || me.email"></div>
+      <div x-show="!nameForm.editing" style="display:flex;align-items:baseline;gap:6px;width:100%;overflow:hidden;font-family:var(--sans);font-size:12px;color:var(--ink-mid);">
+        <span style="white-space:nowrap;">你好</span>
+        <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 0;min-width:0;color:var(--ink);" x-text="(me && me.displayName) || me.email"></span>
         <button @click="startEditName()" title="编辑昵称"
-          style="border:none;background:transparent;font-family:var(--sans);font-size:12px;color:var(--vermilion);cursor:pointer;padding:0;flex:0 0 auto;line-height:1;">✎</button>
-        <button @click="doLogout()" title="退出"
-          style="border:none;background:transparent;font-family:var(--sans);font-size:11px;color:var(--ink-mid);cursor:pointer;padding:0;flex:0 0 auto;line-height:1;">↩</button>
+          style="border:none;background:transparent;font-family:var(--sans);font-size:11px;color:var(--vermilion);cursor:pointer;padding:0;flex:0 0 auto;">✎</button>
+        <a href="#" @click.prevent="doLogout()"
+          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;">退出</a>
       </div>
       <div x-show="nameForm.editing" x-cloak>
         <input x-model="nameForm.value" type="text" maxlength="80" placeholder="昵称（留空则显示邮箱）"
