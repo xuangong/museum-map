@@ -193,7 +193,7 @@ window.museumApp = function() {
       var d = this.currentDynasty();
       if (this.visits.footprintMode) {
         var visited = this.visitedMuseums();
-        window.MuseumMap.setMarkers(visited, function(id){ self.openMuseum(id); }, { recommended: true });
+        window.MuseumMap.setMarkers(visited, function(id){ self.openMuseum(id); }, { recommended: true, isVisited: function(){ return true; } });
         window.MuseumMap.clearEvents();
       } else if (d) {
         // Filter mode: only recommended museums + event markers
