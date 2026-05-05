@@ -44,6 +44,8 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
           style="border:none;background:transparent;font-family:var(--sans);font-size:11px;color:var(--vermilion);cursor:pointer;padding:0;flex:0 0 auto;">✎</button>
         <a x-show="me && me.isAdmin" href="#" @click.prevent="createInvite()" title="生成邀请链接"
           style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;">邀请</a>
+        <a x-show="me && me.handle" href="#" @click.prevent="copyShareLink()" title="复制公开主页链接"
+          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;">分享</a>
         <a href="#" @click.prevent="doLogout()"
           style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;">退出</a>
       </div>

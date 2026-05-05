@@ -30,6 +30,8 @@ window.museumApp = function() {
     inviteCode: '',
     authOpen: false,
     nameForm: { editing: false, value: '', loading: false, error: '' },
+    viewingProfile: null,
+    isReadOnly: false,
     toast: '',
     _toastTimer: null,
     _suppressHashChange: false,
@@ -41,6 +43,10 @@ window.museumApp = function() {
       var data = JSON.parse(bs.textContent);
       this.museums = data.museums;
       this.dynasties = data.dynasties;
+      if (data.viewingProfile) {
+        this.viewingProfile = data.viewingProfile;
+        this.isReadOnly = true;
+      }
 
       // Surface any uncaught error very visibly — helps debug the timeline-blank issue.
       window.addEventListener('error', function(e){
@@ -78,8 +84,11 @@ window.museumApp = function() {
         self.me = window.MuseumAuth ? window.MuseumAuth.user : null;
         return self.loadVisits();
       }).then(function(){
+        if (self.isReadOnly) {
+          self.visits.footprintMode = true;
+        }
         self.refreshMarkers();
-        self.loadCachedReview();
+        if (!self.isReadOnly) self.loadCachedReview();
         self.applyHashRoute();
       });
 
@@ -652,6 +661,19 @@ window.museumApp = function() {
     },
 
     async loadVisits() {
+      if (this.isReadOnly && this.viewingProfile) {
+        var pv = this.viewingProfile.visits || [];
+        var pIds = pv.map(function(x){ return x.museumId; });
+        var pById = {};
+        pv.forEach(function(x){ pById[x.museumId] = x; });
+        this.visits.ids = pIds;
+        this.visits.byId = pById;
+        if (this.viewingProfile.review && this.viewingProfile.review.summary) {
+          this.visits.review = this.viewingProfile.review.summary;
+          this.visits.reviewGeneratedAt = this.viewingProfile.review.generatedAt;
+        }
+        return;
+      }
       if (window.MuseumAuth && window.MuseumAuth.isAuthenticated()) {
         try {
           var res = await fetch('/api/visits', { credentials: 'same-origin' });
@@ -678,6 +700,10 @@ window.museumApp = function() {
     },
 
     async toggleVisit(id) {
+      if (this.isReadOnly) {
+        this.flashToast('只读模式：点击右上角「退出」回到自己的视图');
+        return;
+      }
       var visited = this.isVisited(id);
       try {
         if (window.MuseumAuth && window.MuseumAuth.isAuthenticated()) {
@@ -762,6 +788,13 @@ window.museumApp = function() {
       } catch(e) {
         this.flashToast('生成失败：' + ((e && e.message) || ''));
       }
+    },
+
+    async copyShareLink() {
+      if (!this.me || !this.me.handle) return;
+      var url = window.location.origin + '/u/' + encodeURIComponent(this.me.handle);
+      try { await navigator.clipboard.writeText(url); this.flashToast('公开主页链接已复制'); }
+      catch(_) { window.prompt('复制公开主页链接：', url); }
     },
 
     async doLogout() {

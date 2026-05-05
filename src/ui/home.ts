@@ -10,10 +10,17 @@ import { CHAT_SCRIPT } from "./client/chat"
 import { AUTH_SCRIPT } from "./client/auth"
 import { APP_SCRIPT } from "./client/app"
 
+export interface ViewingProfile {
+  user: { handle: string | null; displayName: string | null }
+  visits: Array<{ museumId: string; visitedAt: number; note: string | null }>
+  review: { summary: string; count: number; generatedAt: number } | null
+}
+
 export interface HomeData {
   museums: MuseumListItem[]
   dynasties: DynastyFull[]
   googleEnabled?: boolean
+  viewingProfile?: ViewingProfile | null
 }
 
 const today = () =>
@@ -28,6 +35,12 @@ export function HomePage(data: HomeData): string {
     children: `
 <style>[x-cloak] { display: none !important; }</style>
 <div class="app-shell" x-data="museumApp()">
+  <template x-if="isReadOnly && viewingProfile">
+    <div style="background:var(--vermilion);color:var(--paper);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;font-family:var(--sans);font-size:12px;letter-spacing:0.06em;">
+      <span>正在浏览 <strong x-text="(viewingProfile.user.displayName || ('@' + viewingProfile.user.handle))"></strong> 的足迹（只读）</span>
+      <a href="/" style="color:var(--paper);text-decoration:underline;font-size:11px;">退出只读 →</a>
+    </div>
+  </template>
   <header class="masthead">
     <div class="left">
       <span class="eyebrow">Established · MMXXVI</span>

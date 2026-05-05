@@ -9,6 +9,7 @@ export interface UserRow {
   display_name: string | null
   avatar_url: string | null
   is_admin: number
+  handle: string | null
   created_at: number
   last_login_at: number | null
 }
@@ -93,6 +94,15 @@ export class UsersRepo {
 
   async setDisplayName(id: string, displayName: string | null): Promise<void> {
     await this.db.prepare("UPDATE users SET display_name = ? WHERE id = ?").bind(displayName, id).run()
+  }
+
+  async findByHandle(handle: string): Promise<UserRow | null> {
+    const r = await this.db.prepare("SELECT * FROM users WHERE handle = ?").bind(handle).first<UserRow>()
+    return r ?? null
+  }
+
+  async setHandle(id: string, handle: string): Promise<void> {
+    await this.db.prepare("UPDATE users SET handle = ? WHERE id = ?").bind(handle, id).run()
   }
 
   async touchLogin(id: string): Promise<void> {

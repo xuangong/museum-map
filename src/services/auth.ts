@@ -4,6 +4,7 @@ import { SessionsRepo, type SessionRow } from "~/repo/sessions"
 import { InvitesRepo } from "~/repo/invites"
 import { hashPassword, verifyPassword } from "~/lib/crypto"
 import { normalizeEmail } from "~/lib/email-norm"
+import { ensureHandle } from "~/services/handles"
 
 const SESSION_TTL_SECONDS = 60 * 60 * 24 * 30
 const MIN_PASSWORD_LENGTH = 8
@@ -58,6 +59,7 @@ export class AuthService {
       const consumed = await this.invites.markUsed(invite.code, user.id)
       if (!consumed) throw new Error("invite_used")
     }
+    await ensureHandle(this.users, user.id, opts.displayName ?? null)
     await this.users.touchLogin(user.id)
     const session = await this.sessions.create({
       userId: user.id,
@@ -65,7 +67,8 @@ export class AuthService {
       ip: opts.ip ?? null,
       ttlSeconds: SESSION_TTL_SECONDS,
     })
-    return { user: { ...user, is_admin: isFirst ? 1 : 0 }, session }
+    const fresh = (await this.users.findById(user.id))!
+    return { user: { ...fresh, is_admin: isFirst ? 1 : 0 }, session }
   }
 
   async login(opts: {
@@ -116,6 +119,7 @@ export class AuthService {
         })
       }
     }
+    await ensureHandle(this.users, user.id, opts.name ?? null)
     await this.users.touchLogin(user.id)
     const session = await this.sessions.create({
       userId: user.id,

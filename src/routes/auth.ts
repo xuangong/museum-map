@@ -10,6 +10,7 @@ import { checkAndIncrement, bucketKey } from "~/lib/rateLimit"
 import type { UserRow } from "~/repo/users"
 import { UsersRepo } from "~/repo/users"
 import { InvitesRepo } from "~/repo/invites"
+import { ensureHandle } from "~/services/handles"
 import type { SessionRow } from "~/repo/sessions"
 
 interface Ctx {
@@ -57,6 +58,7 @@ function clearSidCookie(set: any, secure: boolean) {
 function userView(u: UserRow) {
   return {
     id: u.id, email: u.email, displayName: u.display_name, avatarUrl: u.avatar_url, isAdmin: u.is_admin === 1,
+    handle: u.handle,
   }
 }
 
@@ -132,8 +134,14 @@ export const authRoute = new Elysia()
     c.set.status = 204
     return ""
   })
-  .get("/auth/me", (ctx) => {
+  .get("/auth/me", async (ctx) => {
     const c = ctx as unknown as Ctx
+    if (c.user && !c.user.handle) {
+      const users = new UsersRepo(c.env.DB)
+      await ensureHandle(users, c.user.id, c.user.display_name)
+      const fresh = await users.findById(c.user.id)
+      if (fresh) c.user = fresh
+    }
     return { user: c.user ? userView(c.user) : null }
   })
   .patch("/auth/me", async (ctx) => {
