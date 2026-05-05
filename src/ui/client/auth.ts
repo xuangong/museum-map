@@ -65,6 +65,17 @@ export const AUTH_SCRIPT = `
     await fetch('/auth/logout', { method: 'POST', credentials: 'same-origin' });
     window.MuseumAuth.user = null;
   }
+  async function setDisplayName(name){
+    var res = await fetch('/auth/me', {
+      method: 'PATCH', credentials: 'same-origin',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ displayName: name }),
+    });
+    var j = await res.json();
+    if (!res.ok) throw new Error(j.error || 'update_failed');
+    window.MuseumAuth.user = j.user;
+    return j.user;
+  }
   function googleStart(){
     window.location.href = '/auth/google/start';
   }
@@ -88,6 +99,7 @@ export const AUTH_SCRIPT = `
     register: register,
     login: login,
     logout: logout,
+    setDisplayName: setDisplayName,
     googleStart: googleStart,
     mergeLocal: mergeLocal,
     isAuthenticated: function(){ return !!window.MuseumAuth.user; },

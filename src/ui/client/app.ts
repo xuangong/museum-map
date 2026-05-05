@@ -27,6 +27,7 @@ window.museumApp = function() {
     dynastyReviews: {},
     me: null,
     authForm: { email: '', password: '', loading: false, error: '' },
+    nameForm: { editing: false, value: '', loading: false, error: '' },
     toast: '',
     _toastTimer: null,
     _suppressHashChange: false,
@@ -734,6 +735,30 @@ window.museumApp = function() {
     },
 
     doGoogleLogin() { window.MuseumAuth.googleStart(); },
+
+    startEditName() {
+      this.nameForm.value = (this.me && (this.me.displayName || '')) || '';
+      this.nameForm.error = '';
+      this.nameForm.editing = true;
+    },
+
+    cancelEditName() {
+      this.nameForm.editing = false;
+      this.nameForm.error = '';
+    },
+
+    async submitDisplayName() {
+      if (this.nameForm.loading) return;
+      this.nameForm.loading = true; this.nameForm.error = '';
+      try {
+        var u = await window.MuseumAuth.setDisplayName(this.nameForm.value);
+        this.me = u;
+        this.nameForm.editing = false;
+        this.flashToast('已更新昵称');
+      } catch(e) {
+        this.nameForm.error = (e && e.message) || '更新失败';
+      } finally { this.nameForm.loading = false; }
+    },
 
     toggleFootprint() {
       this.visits.footprintMode = !this.visits.footprintMode;

@@ -23,10 +23,28 @@ export function Sidebar(): string {
     </div>
   </template>
   <template x-if="me">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
-      <div style="font-family:var(--sans);font-size:12px;color:var(--ink-mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" x-text="me.email"></div>
-      <button @click="doLogout()"
-        style="border:none;background:transparent;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-mid);cursor:pointer;border-bottom:0.5px solid var(--ink-mid);">退出</button>
+    <div>
+      <div x-show="!nameForm.editing" style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <div style="font-family:var(--sans);font-size:12px;color:var(--ink-mid);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;min-width:0;">
+          <span x-text="(me && me.displayName) || me.email"></span>
+          <button @click="startEditName()" title="编辑昵称"
+            style="margin-left:6px;border:none;background:transparent;font-family:var(--sans);font-size:10px;color:var(--vermilion);cursor:pointer;padding:0;">✎</button>
+        </div>
+        <button @click="doLogout()"
+          style="border:none;background:transparent;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-mid);cursor:pointer;border-bottom:0.5px solid var(--ink-mid);flex-shrink:0;">退出</button>
+      </div>
+      <div x-show="nameForm.editing" x-cloak>
+        <input x-model="nameForm.value" type="text" maxlength="80" placeholder="昵称（留空则显示邮箱）"
+          @keydown.enter="submitDisplayName()" @keydown.escape="cancelEditName()"
+          style="width:100%;padding:8px 10px;font-size:16px;border:0.5px solid var(--rule);background:var(--paper);font-family:var(--sans);margin-bottom:8px;box-sizing:border-box;" />
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button @click="submitDisplayName()" :disabled="nameForm.loading"
+            style="border:none;background:var(--vermilion);color:var(--paper);padding:6px 12px;font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;">保存</button>
+          <button @click="cancelEditName()" :disabled="nameForm.loading"
+            style="border:none;background:transparent;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-mid);cursor:pointer;">取消</button>
+          <span x-show="nameForm.error" x-text="nameForm.error" style="font-size:11px;color:var(--vermilion);"></span>
+        </div>
+      </div>
     </div>
   </template>
 </div>`

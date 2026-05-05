@@ -91,6 +91,10 @@ export class UsersRepo {
     await this.db.prepare("UPDATE users SET is_admin = ? WHERE id = ?").bind(isAdmin ? 1 : 0, id).run()
   }
 
+  async setDisplayName(id: string, displayName: string | null): Promise<void> {
+    await this.db.prepare("UPDATE users SET display_name = ? WHERE id = ?").bind(displayName, id).run()
+  }
+
   async touchLogin(id: string): Promise<void> {
     await this.db.prepare("UPDATE users SET last_login_at = ? WHERE id = ?").bind(Date.now(), id).run()
   }

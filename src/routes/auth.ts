@@ -8,6 +8,7 @@ import { sessionMiddleware, requireUser } from "~/middleware/session"
 import { getClientIp } from "~/lib/getClientIp"
 import { checkAndIncrement, bucketKey } from "~/lib/rateLimit"
 import type { UserRow } from "~/repo/users"
+import { UsersRepo } from "~/repo/users"
 import type { SessionRow } from "~/repo/sessions"
 
 interface Ctx {
@@ -129,6 +130,22 @@ export const authRoute = new Elysia()
   .get("/auth/me", (ctx) => {
     const c = ctx as unknown as Ctx
     return { user: c.user ? userView(c.user) : null }
+  })
+  .patch("/auth/me", async (ctx) => {
+    const c = ctx as unknown as Ctx
+    if (!originOk(c.request)) { c.set.status = 403; return { error: "csrf" } }
+    const u = requireUser(c)
+    if (!u) return { error: "unauthorized" }
+    const raw = c.body?.displayName
+    if (raw !== null && typeof raw !== "string") {
+      c.set.status = 400; return { error: "invalid_display_name" }
+    }
+    const trimmed = typeof raw === "string" ? raw.trim().slice(0, 80) : null
+    const next = trimmed && trimmed.length > 0 ? trimmed : null
+    const users = new UsersRepo(c.env.DB)
+    await users.setDisplayName(u.id, next)
+    const fresh = await users.findById(u.id)
+    return { user: fresh ? userView(fresh) : userView(u) }
   })
   .get("/auth/google/start", (ctx) => {
     const c = ctx as unknown as Ctx
