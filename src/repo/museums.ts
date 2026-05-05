@@ -2,6 +2,14 @@ import type { MuseumFull, MuseumListItem } from "./types"
 import type { MuseumPayload } from "~/services/import-schema"
 import { normalizeLevel } from "~/services/level-tiers"
 
+/** Rewrite upload.wikimedia.org URLs to go through our /img/wikimedia/* proxy.
+ * Some networks (mainland China) cannot reach upload.wikimedia.org directly. */
+function proxyImageUrl(url: string | null): string | null {
+  if (!url) return url
+  const m = url.match(/^https?:\/\/upload\.wikimedia\.org\/(.+)$/)
+  return m ? `/img/wikimedia/${m[1]}` : url
+}
+
 /**
  * Coerce a possibly-non-array field into an array.
  * The import LLM occasionally emits list fields as JSON-encoded strings
@@ -82,7 +90,7 @@ export class MuseumsRepo {
       tiers: normalizeLevel(head.level),
       treasures: treasures.results.map((r) => r.name),
       halls: halls.results.map((r) => r.name),
-      artifacts: artifacts.results,
+      artifacts: artifacts.results.map((a) => ({ ...a, image: proxyImageUrl(a.image) })),
       dynastyConnections: conns.results,
       sources: sources.results.map((r) => r.source),
     }

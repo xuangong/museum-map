@@ -7,6 +7,7 @@ const CDN_MAP: Record<string, string> = {
   "leaflet.css": "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
   "html2canvas.js": "https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js",
   "leaflet-image.js": "https://unpkg.com/leaflet-image@0.4.0/leaflet-image.js",
+  "qrcode.js": "https://unpkg.com/qrcode-generator@1.4.4/qrcode.js",
 }
 
 export const cdnRoute = new Elysia()
@@ -34,6 +35,33 @@ export const cdnRoute = new Elysia()
       headers: {
         "Content-Type": "image/png",
         "Cache-Control": "public, max-age=2592000",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+  })
+  // Proxy Wikimedia upload images. Origin upload.wikimedia.org is blocked from
+  // some networks (notably mainland China). Path: /img/wikimedia/<rest-of-path>
+  // where <rest-of-path> is the part after https://upload.wikimedia.org/
+  .get("/img/wikimedia/*", async ({ request }) => {
+    const url = new URL(request.url)
+    // strip the "/img/wikimedia/" prefix; keep the rest verbatim (already URL-encoded)
+    const rest = url.pathname.replace(/^\/img\/wikimedia\//, "")
+    if (!rest) return new Response("bad path", { status: 400 })
+    const upstream = await fetch(`https://upload.wikimedia.org/${rest}`, {
+      headers: {
+        // Wikimedia silently 403s without a meaningful UA.
+        "User-Agent":
+          "museum-map/1.0 (+https://museummap.xianliao.de5.net; contact via github)",
+      },
+    })
+    if (!upstream.ok) {
+      return new Response("upstream error", { status: upstream.status })
+    }
+    return new Response(upstream.body, {
+      status: upstream.status,
+      headers: {
+        "Content-Type": upstream.headers.get("content-type") || "image/jpeg",
+        "Cache-Control": "public, max-age=2592000, immutable",
         "Access-Control-Allow-Origin": "*",
       },
     })
