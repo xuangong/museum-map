@@ -13,6 +13,7 @@ import { APP_SCRIPT } from "./client/app"
 export interface HomeData {
   museums: MuseumListItem[]
   dynasties: DynastyFull[]
+  googleEnabled?: boolean
 }
 
 const today = () =>
@@ -47,7 +48,7 @@ export function HomePage(data: HomeData): string {
   <div class="stage">
     <div class="toc-overlay" :class="tocOpen ? 'open' : ''" @click="tocOpen = false" x-cloak></div>
     <div class="toc-wrap" :class="tocOpen ? 'open' : ''">
-      ${Sidebar()}
+      ${Sidebar({ googleEnabled: !!data.googleEnabled })}
     </div>
     <div class="canvas">
       <div class="canvas-bg"></div>

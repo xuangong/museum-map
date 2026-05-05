@@ -20,7 +20,8 @@ export const homeRoute = new Elysia().get("/", async (ctx) => {
         headers: { "content-type": "text/html; charset=utf-8" },
       })
     }
-    return new Response(HomePage({ museums, dynasties }), {
+    const googleEnabled = !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET && env.OAUTH_REDIRECT_URI)
+    return new Response(HomePage({ museums, dynasties, googleEnabled }), {
       headers: { "content-type": "text/html; charset=utf-8" },
     })
   } catch (e: any) {

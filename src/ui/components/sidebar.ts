@@ -1,4 +1,10 @@
-export function Sidebar(): string {
+export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
+  const googleBlock = opts.googleEnabled
+    ? `<div style="margin-top:10px;">
+        <button @click="doGoogleLogin()"
+          style="width:100%;border:0.5px solid var(--ink);background:var(--paper);color:var(--ink);padding:8px 12px;font-family:var(--sans);font-size:12px;cursor:pointer;">使用 Google 登录</button>
+      </div>`
+    : ``
   const authBar = `<div style="margin-bottom:14px;border-bottom:0.5px solid var(--rule);padding-bottom:14px;">
   <template x-if="!me">
     <div>
@@ -14,10 +20,7 @@ export function Sidebar(): string {
           style="border:0.5px solid var(--vermilion);background:transparent;color:var(--vermilion);padding:8px 14px;font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;">注册</button>
         <span x-show="authForm.loading" style="font-size:11px;color:var(--ink-mid);">…</span>
       </div>
-      <div style="margin-top:10px;">
-        <button @click="doGoogleLogin()"
-          style="width:100%;border:0.5px solid var(--ink);background:var(--paper);color:var(--ink);padding:8px 12px;font-family:var(--sans);font-size:12px;cursor:pointer;">使用 Google 登录</button>
-      </div>
+      ${googleBlock}
       <div x-show="authForm.error" x-text="authForm.error"
         style="margin-top:8px;font-size:12px;color:var(--vermilion);"></div>
     </div>
