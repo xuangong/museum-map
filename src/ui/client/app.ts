@@ -25,6 +25,8 @@ window.museumApp = function() {
     _captionTimer: null,
     visits: { ids: [], byId: {}, footprintMode: false, review: '', reviewLoading: false, exporting: false, chatDirty: false, chatStartIdx: -1, reviewStale: false, reviewGeneratedAt: 0, shaking: false, muted: true },
     dynastyReviews: {},
+    me: null,
+    authForm: { email: '', password: '', loading: false, error: '' },
     toast: '',
     _toastTimer: null,
     _suppressHashChange: false,
@@ -47,7 +49,20 @@ window.museumApp = function() {
 
       window.MuseumMap.init(35.0, 105.0);
       var self = this;
-      this.loadVisits().then(function(){
+
+      // OAuth callback cleanup
+      if (window.location.search.indexOf('logged_in=1') >= 0) {
+        try {
+          var url = new URL(window.location.href);
+          url.searchParams.delete('logged_in');
+          window.history.replaceState({}, '', url.toString());
+        } catch(_) {}
+      }
+
+      (window.MuseumAuth ? window.MuseumAuth.syncMe() : Promise.resolve(null)).then(function(){
+        self.me = window.MuseumAuth ? window.MuseumAuth.user : null;
+        return self.loadVisits();
+      }).then(function(){
         self.refreshMarkers();
         self.loadCachedReview();
         self.applyHashRoute();
@@ -622,16 +637,25 @@ window.museumApp = function() {
     },
 
     async loadVisits() {
-      try {
-        var res = await fetch('/api/visits');
-        if (!res.ok) return;
-        var j = await res.json();
-        var ids = (j.items || []).map(function(x){ return x.museumId; });
-        var byId = {};
-        (j.items || []).forEach(function(x){ byId[x.museumId] = x; });
-        this.visits.ids = ids;
-        this.visits.byId = byId;
-      } catch(_) {}
+      if (window.MuseumAuth && window.MuseumAuth.isAuthenticated()) {
+        try {
+          var res = await fetch('/api/visits', { credentials: 'same-origin' });
+          if (!res.ok) return;
+          var j = await res.json();
+          var ids = (j.items || []).map(function(x){ return x.museumId; });
+          var byId = {};
+          (j.items || []).forEach(function(x){ byId[x.museumId] = x; });
+          this.visits.ids = ids;
+          this.visits.byId = byId;
+        } catch(_) {}
+      } else {
+        var anon = (window.MuseumAuth && window.MuseumAuth.anon.read()) || [];
+        var ids2 = anon.map(function(v){ return v.museumId; });
+        var byId2 = {};
+        anon.forEach(function(v){ byId2[v.museumId] = { museumId: v.museumId, visitedAt: v.visitedAt, note: null }; });
+        this.visits.ids = ids2;
+        this.visits.byId = byId2;
+      }
     },
 
     isVisited(id) {
@@ -641,10 +665,15 @@ window.museumApp = function() {
     async toggleVisit(id) {
       var visited = this.isVisited(id);
       try {
-        if (visited) {
-          await fetch('/api/visits/' + encodeURIComponent(id), { method: 'DELETE' });
-        } else {
-          await fetch('/api/visits/' + encodeURIComponent(id), { method: 'POST', headers: {'content-type':'application/json'}, body: '{}' });
+        if (window.MuseumAuth && window.MuseumAuth.isAuthenticated()) {
+          if (visited) {
+            await fetch('/api/visits/' + encodeURIComponent(id), { method: 'DELETE', credentials: 'same-origin' });
+          } else {
+            await fetch('/api/visits/' + encodeURIComponent(id), { method: 'POST', credentials: 'same-origin', headers: {'content-type':'application/json'}, body: '{}' });
+          }
+        } else if (window.MuseumAuth) {
+          if (visited) window.MuseumAuth.anon.remove(id);
+          else window.MuseumAuth.anon.push(id, Date.now());
         }
         await this.loadVisits();
         this.refreshMarkers();
@@ -664,6 +693,47 @@ window.museumApp = function() {
         }
       } catch(_) {}
     },
+
+    async submitLogin() {
+      if (this.authForm.loading) return;
+      this.authForm.loading = true; this.authForm.error = '';
+      try {
+        await window.MuseumAuth.login(this.authForm.email, this.authForm.password);
+        this.me = window.MuseumAuth.user;
+        this.authForm.email = ''; this.authForm.password = '';
+        await this.loadVisits(); this.refreshMarkers();
+        this.flashToast('已登录');
+      } catch(e) {
+        this.authForm.error = (e && e.message) || '登录失败';
+      } finally { this.authForm.loading = false; }
+    },
+
+    async submitRegister() {
+      if (this.authForm.loading) return;
+      this.authForm.loading = true; this.authForm.error = '';
+      try {
+        await window.MuseumAuth.register(this.authForm.email, this.authForm.password);
+        this.me = window.MuseumAuth.user;
+        this.authForm.email = ''; this.authForm.password = '';
+        await this.loadVisits(); this.refreshMarkers();
+        this.flashToast('已注册并登录');
+      } catch(e) {
+        var msg = (e && e.message) || '注册失败';
+        if (msg === 'email_taken') msg = '邮箱已注册';
+        if (msg === 'weak_password') msg = '密码至少 8 位';
+        if (msg === 'invalid_email') msg = '邮箱格式不对';
+        this.authForm.error = msg;
+      } finally { this.authForm.loading = false; }
+    },
+
+    async doLogout() {
+      await window.MuseumAuth.logout();
+      this.me = null;
+      await this.loadVisits(); this.refreshMarkers();
+      this.flashToast('已退出');
+    },
+
+    doGoogleLogin() { window.MuseumAuth.googleStart(); },
 
     toggleFootprint() {
       this.visits.footprintMode = !this.visits.footprintMode;
