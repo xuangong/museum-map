@@ -42,12 +42,10 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
         <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 0;min-width:0;color:var(--ink);" x-text="(me && me.displayName) || me.email"></span>
         <button @click="startEditName()" title="编辑昵称"
           style="border:none;background:transparent;font-family:var(--sans);font-size:11px;color:var(--vermilion);cursor:pointer;padding:0;flex:0 0 auto;">✎</button>
+        <a x-show="me && me.isAdmin" href="#" @click.prevent="createInvite()" title="生成邀请链接"
+          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;">邀请</a>
         <a href="#" @click.prevent="doLogout()"
           style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;">退出</a>
-      </div>
-      <div x-show="!nameForm.editing && me && me.isAdmin" x-cloak style="margin-top:6px;">
-        <a href="#" @click.prevent="createInvite()"
-          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;">+ 生成邀请链接</a>
       </div>
       <div x-show="nameForm.editing" x-cloak>
         <input x-model="nameForm.value" type="text" maxlength="80" placeholder="昵称（留空则显示邮箱）"
