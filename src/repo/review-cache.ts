@@ -9,7 +9,7 @@ export interface ReviewCacheRow {
 export class ReviewCacheRepo {
   constructor(private db: D1Database) {}
 
-  async get(userId = "me"): Promise<ReviewCacheRow | null> {
+  async get(userId: string): Promise<ReviewCacheRow | null> {
     const r = await this.db
       .prepare("SELECT * FROM review_cache WHERE user_id = ?")
       .bind(userId)
@@ -17,7 +17,7 @@ export class ReviewCacheRepo {
     return r ?? null
   }
 
-  async save(summary: string, visitCount: number, withChatContext: boolean, userId = "me", at?: number): Promise<void> {
+  async save(userId: string, summary: string, visitCount: number, withChatContext: boolean, at?: number): Promise<void> {
     const ts = at ?? Date.now()
     await this.db
       .prepare(
@@ -27,7 +27,7 @@ export class ReviewCacheRepo {
       .run()
   }
 
-  async clear(userId = "me"): Promise<void> {
+  async clear(userId: string): Promise<void> {
     await this.db.prepare("DELETE FROM review_cache WHERE user_id = ?").bind(userId).run()
   }
 }

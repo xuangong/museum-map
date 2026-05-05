@@ -9,7 +9,7 @@ export interface DynastyReviewCacheRow {
 export class DynastyReviewCacheRepo {
   constructor(private db: D1Database) {}
 
-  async get(dynastyId: string, userId = "me"): Promise<DynastyReviewCacheRow | null> {
+  async get(dynastyId: string, userId: string): Promise<DynastyReviewCacheRow | null> {
     const r = await this.db
       .prepare("SELECT * FROM dynasty_review_cache WHERE user_id = ? AND dynasty_id = ?")
       .bind(userId, dynastyId)
@@ -17,7 +17,7 @@ export class DynastyReviewCacheRepo {
     return r ?? null
   }
 
-  async save(dynastyId: string, summary: string, visitCount: number, userId = "me", at?: number): Promise<void> {
+  async save(dynastyId: string, userId: string, summary: string, visitCount: number, at?: number): Promise<void> {
     const ts = at ?? Date.now()
     await this.db
       .prepare(

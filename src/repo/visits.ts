@@ -8,7 +8,7 @@ export interface VisitRow {
 export class VisitsRepo {
   constructor(private db: D1Database) {}
 
-  async list(userId = "me"): Promise<VisitRow[]> {
+  async list(userId: string): Promise<VisitRow[]> {
     const { results } = await this.db
       .prepare("SELECT * FROM visits WHERE user_id = ? ORDER BY visited_at DESC")
       .bind(userId)
@@ -16,12 +16,12 @@ export class VisitsRepo {
     return results
   }
 
-  async listIds(userId = "me"): Promise<string[]> {
+  async listIds(userId: string): Promise<string[]> {
     const rows = await this.list(userId)
     return rows.map((r) => r.museum_id)
   }
 
-  async checkIn(museumId: string, userId = "me", note?: string, at?: number): Promise<void> {
+  async checkIn(museumId: string, userId: string, note?: string, at?: number): Promise<void> {
     const ts = at ?? Date.now()
     await this.db
       .prepare(
@@ -31,7 +31,7 @@ export class VisitsRepo {
       .run()
   }
 
-  async remove(museumId: string, userId = "me"): Promise<boolean> {
+  async remove(museumId: string, userId: string): Promise<boolean> {
     const r = await this.db
       .prepare("DELETE FROM visits WHERE user_id = ? AND museum_id = ?")
       .bind(userId, museumId)
