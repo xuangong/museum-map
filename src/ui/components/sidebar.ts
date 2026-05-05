@@ -8,25 +8,31 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
   const authBar = `<div style="margin-bottom:14px;border-bottom:0.5px solid var(--rule);padding-bottom:14px;">
   <template x-if="!me">
     <div>
-      <div style="font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-mid);margin-bottom:8px;">登录后保存到云端</div>
-      <input x-model="authForm.email" type="email" placeholder="Email" autocomplete="email"
-        style="width:100%;padding:8px 10px;font-size:16px;border:0.5px solid var(--rule);background:var(--paper);font-family:var(--sans);margin-bottom:6px;box-sizing:border-box;" />
-      <input x-model="authForm.password" type="password" placeholder="密码（≥8 位）" autocomplete="current-password"
-        style="width:100%;padding:8px 10px;font-size:16px;border:0.5px solid var(--rule);background:var(--paper);font-family:var(--sans);margin-bottom:8px;box-sizing:border-box;" />
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-        <button @click="submitLogin()" :disabled="authForm.loading"
-          style="border:none;background:var(--vermilion);color:var(--paper);padding:8px 14px;font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;">登录</button>
-        <button x-show="inviteCode" @click="submitRegister()" :disabled="authForm.loading"
-          style="border:0.5px solid var(--vermilion);background:transparent;color:var(--vermilion);padding:8px 14px;font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;">注册</button>
-        <span x-show="!inviteCode" style="font-size:11px;color:var(--ink-mid);font-style:italic;">注册需邀请码</span>
-        <span x-show="authForm.loading" style="font-size:11px;color:var(--ink-mid);">…</span>
+      <a href="#" @click.prevent="authOpen = !authOpen"
+        style="display:flex;align-items:center;justify-content:space-between;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-mid);text-decoration:none;cursor:pointer;">
+        <span>登录后保存到云端</span>
+        <span x-text="authOpen ? '−' : '+'" style="font-family:var(--mono);font-size:14px;color:var(--vermilion);"></span>
+      </a>
+      <div x-show="authOpen" x-cloak style="margin-top:8px;">
+        <input x-model="authForm.email" type="email" placeholder="Email" autocomplete="email"
+          style="width:100%;padding:8px 10px;font-size:16px;border:0.5px solid var(--rule);background:var(--paper);font-family:var(--sans);margin-bottom:6px;box-sizing:border-box;" />
+        <input x-model="authForm.password" type="password" placeholder="密码（≥8 位）" autocomplete="current-password"
+          style="width:100%;padding:8px 10px;font-size:16px;border:0.5px solid var(--rule);background:var(--paper);font-family:var(--sans);margin-bottom:8px;box-sizing:border-box;" />
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <button @click="submitLogin()" :disabled="authForm.loading"
+            style="border:none;background:var(--vermilion);color:var(--paper);padding:8px 14px;font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;">登录</button>
+          <button x-show="inviteCode" @click="submitRegister()" :disabled="authForm.loading"
+            style="border:0.5px solid var(--vermilion);background:transparent;color:var(--vermilion);padding:8px 14px;font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;">注册</button>
+          <span x-show="!inviteCode" style="font-size:11px;color:var(--ink-mid);font-style:italic;">注册需邀请码</span>
+          <span x-show="authForm.loading" style="font-size:11px;color:var(--ink-mid);">…</span>
+        </div>
+        <div x-show="inviteCode" x-cloak style="margin-top:6px;font-size:11px;color:var(--ink-mid);">
+          已识别邀请码 <span x-text="inviteCode.slice(0,8)+'…'" style="font-family:var(--mono);"></span>
+        </div>
+        ${googleBlock}
+        <div x-show="authForm.error" x-text="authForm.error"
+          style="margin-top:8px;font-size:12px;color:var(--vermilion);"></div>
       </div>
-      <div x-show="inviteCode" x-cloak style="margin-top:6px;font-size:11px;color:var(--ink-mid);">
-        已识别邀请码 <span x-text="inviteCode.slice(0,8)+'…'" style="font-family:var(--mono);"></span>
-      </div>
-      ${googleBlock}
-      <div x-show="authForm.error" x-text="authForm.error"
-        style="margin-top:8px;font-size:12px;color:var(--vermilion);"></div>
     </div>
   </template>
   <template x-if="me">

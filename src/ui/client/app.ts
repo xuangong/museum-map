@@ -28,6 +28,7 @@ window.museumApp = function() {
     me: null,
     authForm: { email: '', password: '', loading: false, error: '' },
     inviteCode: '',
+    authOpen: false,
     nameForm: { editing: false, value: '', loading: false, error: '' },
     toast: '',
     _toastTimer: null,
@@ -58,6 +59,7 @@ window.museumApp = function() {
         var inv = u0.searchParams.get('invite');
         if (inv) {
           this.inviteCode = inv;
+          this.authOpen = true;
           u0.searchParams.delete('invite');
           window.history.replaceState({}, '', u0.toString());
         }
