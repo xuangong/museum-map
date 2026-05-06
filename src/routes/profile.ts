@@ -8,6 +8,7 @@ import { MuseumsRepo } from "~/repo/museums"
 import { DynastiesRepo } from "~/repo/dynasties"
 import { HomePage, ErrorPage } from "~/ui/home"
 import { ProfilePage } from "~/ui/profile"
+import { annotateAll } from "~/services/pinyin"
 import { sessionMiddleware } from "~/middleware/session"
 import type { UserRow } from "~/repo/users"
 import type { SessionRow } from "~/repo/sessions"
@@ -84,7 +85,8 @@ export const profileRoute = new Elysia()
     }
     const museumsRepo = new MuseumsRepo(env.DB)
     const dynastiesRepo = new DynastiesRepo(env.DB)
-    const [museums, dynasties] = await Promise.all([museumsRepo.list(), dynastiesRepo.listFull()])
+    const [museumsRaw, dynasties] = await Promise.all([museumsRepo.list(), dynastiesRepo.listFull()])
+    const museums = annotateAll(museumsRaw)
     const googleEnabled = !!(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET && env.OAUTH_REDIRECT_URI)
     return new Response(
       HomePage({ museums, dynasties, googleEnabled, viewingProfile: profile }),

@@ -442,9 +442,15 @@ window.museumApp = function() {
       }
       var q = (this.search || '').trim().toLowerCase();
       if (!q) return base;
+      // Strip spaces from pinyin queries so "gu gong" matches "gugong"
+      var qNoSpace = q.replace(/\\s+/g, '');
       return base.filter(function(m){
-        return (m.name || '').toLowerCase().indexOf(q) >= 0
-            || (m.corePeriod || '').toLowerCase().indexOf(q) >= 0;
+        if ((m.name || '').toLowerCase().indexOf(q) >= 0) return true;
+        if ((m.corePeriod || '').toLowerCase().indexOf(q) >= 0) return true;
+        // Pinyin annotations are SSR-injected; absent for old clients = no-op
+        if (m.pinyin && m.pinyin.indexOf(qNoSpace) >= 0) return true;
+        if (m.pinyinInitials && m.pinyinInitials.indexOf(qNoSpace) >= 0) return true;
+        return false;
       });
     },
 

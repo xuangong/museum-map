@@ -7,6 +7,8 @@ export interface MuseumListItem {
   tiers: string[]
   corePeriod: string | null
   dynastyCoverage: string | null
+  pinyin?: string
+  pinyinInitials?: string
 }
 
 export interface MuseumArtifact {

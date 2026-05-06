@@ -2,12 +2,19 @@ import type { MuseumFull, MuseumListItem } from "./types"
 import type { MuseumPayload } from "~/services/import-schema"
 import { normalizeLevel } from "~/services/level-tiers"
 
-/** Rewrite upload.wikimedia.org URLs to go through our /img/wikimedia/* proxy.
+/** Rewrite Wikimedia image URLs to go through our /img/* proxy.
+ * - upload.wikimedia.org/<path>          → /img/wikimedia/<path>   (direct file)
+ * - commons.wikimedia.org/wiki/File:<n>  → /img/commons/<n>        (description page; proxy resolves to file)
  * Some networks (mainland China) cannot reach upload.wikimedia.org directly. */
 function proxyImageUrl(url: string | null): string | null {
   if (!url) return url
-  const m = url.match(/^https?:\/\/upload\.wikimedia\.org\/(.+)$/)
-  return m ? `/img/wikimedia/${m[1]}` : url
+  const direct = url.match(/^https?:\/\/upload\.wikimedia\.org\/(.+)$/)
+  if (direct) return `/img/wikimedia/${direct[1]}`
+  // commons.wikimedia.org/wiki/File:Foo.jpg  (description page; LLM sometimes wrote
+  // these instead of the upload.* direct link) — route via Special:FilePath proxy
+  const commons = url.match(/^https?:\/\/commons\.wikimedia\.org\/wiki\/(?:File|文件):(.+)$/i)
+  if (commons) return `/img/commons/${commons[1]}`
+  return url
 }
 
 /**

@@ -25,6 +25,7 @@
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",
     "elysia": "^1.4.28",
+    "pinyin-pro": "^3.28.1",
     "yaml": "^2.8.4"
   }
 }

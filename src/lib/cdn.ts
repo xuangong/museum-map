@@ -66,3 +66,34 @@ export const cdnRoute = new Elysia()
       },
     })
   })
+  // Proxy Wikimedia Commons "description page" file references (legacy seed data
+  // sometimes points at https://commons.wikimedia.org/wiki/File:Foo.jpg rather
+  // than the direct upload.* URL). We resolve via Special:FilePath which 302s
+  // to the real file, then stream the result.
+  // Path: /img/commons/<filename> (URL-encoded)
+  .get("/img/commons/*", async ({ request }) => {
+    const url = new URL(request.url)
+    const filename = url.pathname.replace(/^\/img\/commons\//, "")
+    if (!filename) return new Response("bad path", { status: 400 })
+    const upstream = await fetch(
+      `https://commons.wikimedia.org/wiki/Special:FilePath/${filename}`,
+      {
+        redirect: "follow",
+        headers: {
+          "User-Agent":
+            "museum-map/1.0 (+https://museum.xianliao.de5.net; contact via github)",
+        },
+      },
+    )
+    if (!upstream.ok) {
+      return new Response("upstream error", { status: upstream.status })
+    }
+    return new Response(upstream.body, {
+      status: upstream.status,
+      headers: {
+        "Content-Type": upstream.headers.get("content-type") || "image/jpeg",
+        "Cache-Control": "public, max-age=2592000, immutable",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+  })
