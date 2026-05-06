@@ -47,7 +47,7 @@ export function HomePage(data: HomeData): string {
       <span class="eyebrow">Established · MMXXVI</span>
     </div>
     <div class="center">
-      <div class="title">中國博物館地圖<a href="/plaza" class="plaza-mini" title="同好之径">✦ 广场</a></div>
+      <div class="title"><span class="title-zh">中國博物館地圖</span><a href="/plaza" class="plaza-mini" title="同好之径">✦ 广场</a></div>
       <div class="subtitle">An Atlas of Chinese Museums &amp; Their Dynasties</div>
     </div>
     <div class="right">

@@ -123,11 +123,13 @@ a { color: inherit; text-decoration: none; }
   border-bottom: 0.5px solid var(--vermilion); padding-bottom: 1px; white-space: nowrap;
 }
 .plaza-mini {
+  /* Sit at the baseline of the Chinese title without changing line height. */
+  position: relative;
   display: inline-block;
   margin-left: 8px;
-  vertical-align: sub;
   font-family: var(--sans); font-size: 11px; letter-spacing: 0.04em; font-weight: 500;
   color: var(--vermilion); text-decoration: none; white-space: nowrap;
+  line-height: 1; vertical-align: baseline;
 }
 .plaza-mini:hover { text-decoration: underline; }
 
