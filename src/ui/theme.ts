@@ -111,7 +111,7 @@ a { color: inherit; text-decoration: none; }
 .masthead .right { text-align: right; }
 .footprint-pill {
   font-family: var(--sans); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-  padding: 6px 12px; border: 0.5px solid var(--vermilion); background: transparent;
+  padding: 6px 12px; border: 1px solid var(--vermilion); background: transparent;
   color: var(--vermilion); cursor: pointer; border-radius: 999px;
   transition: background .15s, color .15s;
 }
