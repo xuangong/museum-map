@@ -122,6 +122,11 @@ a { color: inherit; text-decoration: none; }
   color: var(--vermilion); text-decoration: none; margin-right: 14px;
   border-bottom: 0.5px solid var(--vermilion); padding-bottom: 1px; white-space: nowrap;
 }
+.plaza-mini {
+  font-family: var(--sans); font-size: 11px; letter-spacing: 0.04em;
+  color: var(--vermilion); text-decoration: none; white-space: nowrap;
+}
+.plaza-mini:hover { text-decoration: underline; }
 
 .footprint-review {
   font-family: var(--body); font-size: 14px; line-height: 1.6; color: var(--ink);

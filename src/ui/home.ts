@@ -48,10 +48,11 @@ export function HomePage(data: HomeData): string {
     </div>
     <div class="center">
       <div class="title">中國博物館地圖</div>
-      <div class="subtitle">An Atlas of Chinese Museums &amp; Their Dynasties</div>
+      <div class="subtitle">An Atlas of Chinese Museums &amp; Their Dynasties
+        <a href="/plaza" class="plaza-mini" title="同好之径"> · ✦ 广场</a>
+      </div>
     </div>
     <div class="right">
-      <a href="/plaza" class="plaza-link" title="同好之径">✦ 广场</a>
       <button class="footprint-pill" :class="visits.footprintMode ? 'active' : ''" @click="toggleFootprint()" :title="visits.footprintMode ? '退出足迹模式' : '查看我的足迹'">
         <span x-show="!visits.footprintMode">✦ 足迹 <span style="font-variant-numeric:lining-nums;" x-text="visits.ids.length"></span></span>
         <span x-show="visits.footprintMode">✕ 退出足迹</span>
