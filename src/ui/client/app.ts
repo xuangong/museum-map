@@ -106,6 +106,8 @@ window.museumApp = function() {
 
       // Sidebar (TOC) resize handle — desktop only
       this.initTocResize();
+      // Image lightbox — click any .artifact-image img to view full-screen
+      this.initLightbox();
 
       // First-visit welcome message in chat
       if (!window.localStorage.getItem('museumChatWelcomed')) {
@@ -702,6 +704,161 @@ window.museumApp = function() {
         window.localStorage.removeItem(KEY);
         try { window.dispatchEvent(new Event('resize')); } catch(_) {}
       });
+    },
+
+    initLightbox() {
+      var self = this;
+      // Event delegation: any artifact image opens a full-screen overlay.
+      document.addEventListener('click', function(e){
+        var t = e.target;
+        if (!t || t.tagName !== 'IMG') return;
+        var wrap = t.closest && t.closest('.artifact-image');
+        if (!wrap) return;
+        e.preventDefault();
+        self.openLightbox(t.getAttribute('src'), t.getAttribute('alt') || '', wrap);
+      });
+      document.addEventListener('keydown', function(e){
+        if (e.key === 'Escape') self.closeLightbox();
+      });
+    },
+
+    openLightbox(src, alt, wrap) {
+      this.closeLightbox(true);
+      var caption = alt;
+      if (wrap) {
+        var capEl = wrap.querySelector('.artifact-image-caption');
+        if (capEl && capEl.textContent) {
+          caption = (alt ? alt + ' · ' : '') + capEl.textContent;
+        }
+      }
+      // Capture the source thumbnail rect for FLIP-style transition
+      var sourceImg = wrap ? wrap.querySelector('img') : null;
+      var fromRect = sourceImg ? sourceImg.getBoundingClientRect() : null;
+
+      var box = document.createElement('div');
+      box.className = 'lightbox';
+      box.setAttribute('role', 'dialog');
+      box.setAttribute('aria-label', alt || 'image');
+      // Start with transparent backdrop; chrome hidden until expansion completes
+      box.style.background = 'rgba(15,12,8,0)';
+      var img = document.createElement('img');
+      // Use the already-loaded thumbnail image as initial src so we have
+      // natural dimensions immediately and avoid waiting on full-res download.
+      // Then upgrade to the high-res src after the animation kicks off.
+      img.src = (sourceImg && sourceImg.src) || src;
+      img.alt = alt || '';
+      img.style.transformOrigin = 'center center';
+      img.style.willChange = 'transform';
+      box.appendChild(img);
+      var close = document.createElement('button');
+      close.className = 'lb-close';
+      close.setAttribute('aria-label', 'Close');
+      close.textContent = '×';
+      close.style.opacity = '0';
+      close.style.transition = 'opacity .2s ease-out .1s';
+      box.appendChild(close);
+      var cap = null;
+      if (caption) {
+        cap = document.createElement('div');
+        cap.className = 'lb-caption';
+        cap.textContent = caption;
+        cap.style.opacity = '0';
+        cap.style.transition = 'opacity .2s ease-out .1s';
+        box.appendChild(cap);
+      }
+      var self = this;
+      box.addEventListener('click', function(e){
+        if (e.target === img) return;
+        self.closeLightbox();
+      });
+
+      // CRITICAL: append + measure + apply START transform must run in the
+      // same synchronous frame so the browser never paints the un-transformed
+      // (full-screen) state. Then animate to identity in the next rAF.
+      document.body.appendChild(box);
+      document.body.style.overflow = 'hidden';
+      this._lightbox = box;
+      this._lightboxSourceImg = sourceImg;
+      this._lightboxFromRect = fromRect;
+
+      if (fromRect && img.naturalWidth) {
+        var toRect = img.getBoundingClientRect();
+        if (toRect.width && toRect.height) {
+          var dx = fromRect.left + fromRect.width / 2 - (toRect.left + toRect.width / 2);
+          var dy = fromRect.top + fromRect.height / 2 - (toRect.top + toRect.height / 2);
+          var sx = fromRect.width / toRect.width;
+          var sy = fromRect.height / toRect.height;
+          img.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ')';
+          if (sourceImg) sourceImg.style.visibility = 'hidden';
+          // Force the start transform to commit before the next paint
+          img.getBoundingClientRect();
+          requestAnimationFrame(function(){
+            box.style.transition = 'background .3s ease-out';
+            box.style.background = 'rgba(15,12,8,0.92)';
+            img.style.transition = 'transform .32s cubic-bezier(.2,.7,.2,1)';
+            img.style.transform = 'translate(0,0) scale(1,1)';
+            close.style.opacity = '1';
+            if (cap) cap.style.opacity = '1';
+          });
+        }
+      } else {
+        // No source rect — just fade the backdrop
+        box.style.transition = 'background .2s';
+        requestAnimationFrame(function(){
+          box.style.background = 'rgba(15,12,8,0.92)';
+          close.style.opacity = '1';
+          if (cap) cap.style.opacity = '1';
+        });
+      }
+
+      // Upgrade to full-resolution after the animation has started.
+      if (img.src !== src) {
+        var hi = new Image();
+        hi.onload = function(){ if (self._lightbox === box) img.src = src; };
+        hi.src = src;
+      }
+    },
+
+    closeLightbox(immediate) {
+      var box = this._lightbox;
+      if (!box) {
+        document.body.style.overflow = '';
+        return;
+      }
+      this._lightbox = null;
+      var sourceImg = this._lightboxSourceImg;
+      var fromRect = this._lightboxFromRect;
+      this._lightboxSourceImg = null;
+      this._lightboxFromRect = null;
+      function cleanup() {
+        if (box.parentNode) box.parentNode.removeChild(box);
+        if (sourceImg) sourceImg.style.visibility = '';
+        document.body.style.overflow = '';
+      }
+      if (immediate || !fromRect) { cleanup(); return; }
+      var img = box.querySelector('img');
+      if (!img) { cleanup(); return; }
+      var toRect = img.getBoundingClientRect();
+      if (!toRect.width || !toRect.height) { cleanup(); return; }
+      var dx = fromRect.left + fromRect.width / 2 - (toRect.left + toRect.width / 2);
+      var dy = fromRect.top + fromRect.height / 2 - (toRect.top + toRect.height / 2);
+      var sx = fromRect.width / toRect.width;
+      var sy = fromRect.height / toRect.height;
+      box.style.transition = 'background .25s ease-in';
+      box.style.background = 'rgba(15,12,8,0)';
+      // Hide caption/close buttons during exit
+      var chrome = box.querySelectorAll('.lb-close, .lb-caption');
+      for (var i = 0; i < chrome.length; i++) {
+        chrome[i].style.transition = 'opacity .15s';
+        chrome[i].style.opacity = '0';
+      }
+      img.style.transition = 'transform .3s cubic-bezier(.4,.0,.6,1)';
+      img.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + sx + ',' + sy + ')';
+      var done = false;
+      function finish(){ if (done) return; done = true; cleanup(); }
+      img.addEventListener('transitionend', finish, { once: true });
+      // Safety net in case transitionend doesn't fire
+      setTimeout(finish, 400);
     },
 
     applyHashRoute() {

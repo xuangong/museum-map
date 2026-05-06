@@ -697,10 +697,42 @@ body.toc-resizing * { cursor: col-resize !important; user-select: none !importan
 .artifact-image img {
   max-width: 100%; max-height: 220px; border-radius: 2px;
   border: 0.5px solid var(--rule-soft); display: block;
+  cursor: zoom-in;
 }
 .artifact-image-caption {
   font-size: 11px; color: var(--ink-mute);
   margin-top: 4px; font-family: var(--mono);
+}
+
+/* Lightbox — full-screen image viewer */
+.lightbox {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(15, 12, 8, 0.92);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px; box-sizing: border-box;
+  cursor: zoom-out;
+}
+.lightbox img {
+  max-width: 100%; max-height: 100%;
+  object-fit: contain;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  background: #1a1612;
+  will-change: transform;
+}
+.lightbox .lb-close {
+  position: absolute; top: 16px; right: 20px;
+  width: 36px; height: 36px;
+  border: none; background: rgba(255,255,255,0.1);
+  color: var(--paper); font-size: 22px; line-height: 1;
+  border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.lightbox .lb-close:hover { background: rgba(255,255,255,0.2); }
+.lightbox .lb-caption {
+  position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+  font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.4); padding: 6px 12px; border-radius: 2px;
+  max-width: 90%; text-align: center;
 }
 
 /* Event row */
