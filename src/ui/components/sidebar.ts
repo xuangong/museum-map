@@ -43,18 +43,18 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
         <button @click="startEditName()" title="编辑昵称"
           style="border:none;background:transparent;font-family:var(--sans);font-size:11px;color:var(--vermilion);cursor:pointer;padding:0;flex:0 0 auto;">✎</button>
         <a x-show="me && me.isAdmin" href="#" @click.prevent="createInvite()" title="生成邀请链接"
-          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;">邀请</a>
+          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:none;flex:0 0 auto;white-space:nowrap;">邀请</a>
         <a x-show="me && me.handle" href="#" @click.prevent="copyShareLink()" title="复制公开主页链接"
-          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;">分享</a>
+          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:none;flex:0 0 auto;white-space:nowrap;">分享</a>
         <a x-show="me && me.handle && !me.handleChangedAt" href="#" @click.prevent="editHandle()" title="自定义分享链接（仅可改一次，旧链接将失效）"
           style="font-family:var(--sans);font-size:11px;color:var(--ink-mid);text-decoration:none;flex:0 0 auto;white-space:nowrap;">✎链接</a>
         <a x-show="me && me.handle" href="#" @click.prevent="togglePlazaVisibility()"
           :title="me && me.showOnPlaza ? '当前公开在广场，点击隐藏' : '当前不在广场，点击公开'"
-          :style="(me && me.showOnPlaza) ? 'font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;' : 'font-family:var(--sans);font-size:11px;color:var(--ink-mid);text-decoration:none;flex:0 0 auto;white-space:nowrap;'">
+          :style="(me && me.showOnPlaza) ? 'font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:none;flex:0 0 auto;white-space:nowrap;' : 'font-family:var(--sans);font-size:11px;color:var(--ink-mid);text-decoration:none;flex:0 0 auto;white-space:nowrap;'">
           <span x-text="(me && me.showOnPlaza) ? '✦广场' : '✧广场'"></span>
         </a>
         <a href="#" @click.prevent="doLogout()"
-          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;">退出</a>
+          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:none;flex:0 0 auto;white-space:nowrap;">退出</a>
       </div>
       <div x-show="nameForm.editing" x-cloak>
         <input x-model="nameForm.value" type="text" maxlength="80" placeholder="昵称（留空则显示邮箱）"
