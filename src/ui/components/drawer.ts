@@ -18,6 +18,7 @@ export function Drawer(): string {
 
   <div x-show="!drawer.loading && !drawer.error">
     <div class="drawer-hero" x-show="!(drawer.kind === 'dynasty' && tocVisible)">
+      <div class="kicker" x-text="drawer.kind === 'dynasty' ? 'Dynasty · 朝代' : 'Museum · 馆'"></div>
       <h2 class="title" x-text="drawer.title"></h2>
       <div class="subtitle" x-text="drawer.subtitle"></div>
     </div>
