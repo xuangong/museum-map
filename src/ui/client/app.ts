@@ -46,6 +46,19 @@ window.museumApp = function() {
       if (data.viewingProfile) {
         this.viewingProfile = data.viewingProfile;
         this.isReadOnly = true;
+        var drs = (data.viewingProfile.dynastyReviews) || [];
+        for (var i = 0; i < drs.length; i++) {
+          var dr = drs[i];
+          this.dynastyReviews[dr.dynastyId] = {
+            summary: dr.summary || '',
+            loading: false,
+            exporting: false,
+            stale: false,
+            relevantVisitCount: dr.count || 0,
+            totalRelevant: dr.count || 0,
+            generatedAt: dr.generatedAt || 0,
+          };
+        }
       }
 
       // Surface any uncaught error very visibly — helps debug the timeline-blank issue.
@@ -84,15 +97,15 @@ window.museumApp = function() {
         self.me = window.MuseumAuth ? window.MuseumAuth.user : null;
         return self.loadVisits();
       }).then(function(){
-        if (self.isReadOnly) {
-          self.visits.footprintMode = true;
-        }
         self.refreshMarkers();
         if (!self.isReadOnly) self.loadCachedReview();
         self.applyHashRoute();
       });
 
       window.addEventListener('hashchange', function(){ self.applyHashRoute(); });
+
+      // Sidebar (TOC) resize handle — desktop only
+      this.initTocResize();
 
       // First-visit welcome message in chat
       if (!window.localStorage.getItem('museumChatWelcomed')) {
@@ -357,6 +370,29 @@ window.museumApp = function() {
       return this.dynasties.find(function(x){ return x.id === this.currentDynastyId; }.bind(this)) || null;
     },
 
+    get tocVisible() {
+      return (typeof window !== 'undefined') && window.matchMedia
+        && window.matchMedia('(min-width: 920px)').matches;
+    },
+
+    showDynastyPeriod() {
+      var d = this.currentDynasty();
+      return !!(d && d.period);
+    },
+
+    dynastyTitle() {
+      var d = this.currentDynasty();
+      if (!d) return '';
+      var n = d.name || '';
+      var p = d.period || '';
+      // If name contains the period in parens (e.g. "两晋（公元265年—420年）"),
+      // strip the parenthesized portion — the period is shown as subtitle.
+      if (p && n.indexOf(p) >= 0) {
+        return n.replace(/[（(][^)）]*[)）]\s*$/, '').trim() || n;
+      }
+      return n;
+    },
+
     recommendedMuseums(dynasty) {
       var ids = (dynasty.recommendedMuseums || [])
         .map(function(r){ return r.museumId; })
@@ -458,10 +494,17 @@ window.museumApp = function() {
     },
 
     openDynastyDrawer(d) {
+      // If name contains the period in parens (e.g. "两晋（公元265年—420年）"),
+      // strip the parens portion from the title so subtitle shows the period.
+      var name = d.name || '';
+      var period = d.period || '';
+      var title = (period && name.indexOf(period) >= 0)
+        ? (name.replace(/[（(][^)）]*[)）]\s*$/, '').trim() || name)
+        : name;
       this.drawer = {
         open: true, loading: false, error: false, kind: 'dynasty',
-        title: d.name,
-        subtitle: d.period || '',
+        title: title,
+        subtitle: period,
         dynastyId: d.id,
         sections: this.buildDynastySections(d),
         _loadFn: () => this.openDynastyDrawer(d),
@@ -476,7 +519,11 @@ window.museumApp = function() {
       var sections = [];
       function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
       function md(s){ try { return window.MuseumChat.renderMarkdown(String(s||'')); } catch(e){ return '<p>' + escapeHtml(s) + '</p>'; } }
-      if (d.overview) sections.push({ title: 'Overview · 概述', html: '<div class="md">' + md(d.overview) + '</div>' });
+      // Sidebar (TOC) is permanently visible on desktop (>= 920px) and shows
+      // dynasty.overview already — skip the duplicate "Overview · 概述" section.
+      var tocVisible = (typeof window !== 'undefined') && window.matchMedia
+        && window.matchMedia('(min-width: 920px)').matches;
+      if (d.overview && !tocVisible) sections.push({ title: 'Overview · 概述', html: '<div class="md">' + md(d.overview) + '</div>' });
       if (d.culture && d.culture.length) {
         sections.push({ title: 'Culture · 文化', html: d.culture.map(function(c){
           return '<div style="margin-bottom:14px;"><div style="font-family:var(--display-cn);font-weight:600;font-size:15px;margin-bottom:4px;">' + escapeHtml(c.category) + '</div><div class="md" style="font-size:14px;color:var(--ink-mid);">' + md(c.description || '') + '</div></div>';
@@ -598,6 +645,57 @@ window.museumApp = function() {
         if (++attempts < 10) requestAnimationFrame(tryRestore);
       }
       requestAnimationFrame(tryRestore);
+    },
+
+    initTocResize() {
+      var handle = document.getElementById('toc-resize');
+      var stage = document.querySelector('.stage');
+      if (!handle || !stage) return;
+      var MIN = 240, MAX = 640, KEY = 'museumMapTocWidth';
+      var saved = parseInt(window.localStorage.getItem(KEY) || '', 10);
+      if (saved && saved >= MIN && saved <= MAX) {
+        document.documentElement.style.setProperty('--toc-w', saved + 'px');
+      }
+      var dragging = false;
+      function onMove(e){
+        if (!dragging) return;
+        var x = (e.touches && e.touches[0]) ? e.touches[0].clientX : e.clientX;
+        var rect = stage.getBoundingClientRect();
+        var w = Math.max(MIN, Math.min(MAX, x - rect.left));
+        document.documentElement.style.setProperty('--toc-w', w + 'px');
+        try { window.dispatchEvent(new Event('resize')); } catch(_) {}
+      }
+      function onUp(){
+        if (!dragging) return;
+        dragging = false;
+        handle.classList.remove('dragging');
+        document.body.classList.remove('toc-resizing');
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('touchend', onUp);
+        var cur = getComputedStyle(document.documentElement).getPropertyValue('--toc-w').trim();
+        var n = parseInt(cur, 10);
+        if (n) window.localStorage.setItem(KEY, String(n));
+      }
+      function onDown(e){
+        if (window.matchMedia && window.matchMedia('(max-width: 920px)').matches) return;
+        dragging = true;
+        handle.classList.add('dragging');
+        document.body.classList.add('toc-resizing');
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+        document.addEventListener('touchmove', onMove, { passive: false });
+        document.addEventListener('touchend', onUp);
+        e.preventDefault();
+      }
+      handle.addEventListener('mousedown', onDown);
+      handle.addEventListener('touchstart', onDown, { passive: false });
+      handle.addEventListener('dblclick', function(){
+        document.documentElement.style.removeProperty('--toc-w');
+        window.localStorage.removeItem(KEY);
+        try { window.dispatchEvent(new Event('resize')); } catch(_) {}
+      });
     },
 
     applyHashRoute() {
@@ -795,6 +893,63 @@ window.museumApp = function() {
       var url = window.location.origin + '/u/' + encodeURIComponent(this.me.handle);
       try { await navigator.clipboard.writeText(url); this.flashToast('公开主页链接已复制'); }
       catch(_) { window.prompt('复制公开主页链接：', url); }
+    },
+
+    async editHandle() {
+      if (!this.me || !this.me.handle) return;
+      if (this.me.handleChangedAt) {
+        this.flashToast('链接只能修改一次，已改过');
+        return;
+      }
+      var next = window.prompt(
+        '自定义你的分享链接（/u/...）\\n\\n' +
+        '⚠️ 警告：只能修改一次。修改后旧链接立即失效，已分享出去的链接将打不开。\\n\\n' +
+        '允许：中文、英文、数字、连字符；2–24 字符。',
+        this.me.handle
+      );
+      if (next == null) return;
+      next = String(next).trim();
+      if (!next || next === this.me.handle) return;
+      try {
+        var res = await fetch('/auth/me', {
+          method: 'PATCH',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ handle: next }),
+        });
+        var j = await res.json();
+        if (!res.ok) {
+          var msg = j.error === 'handle_taken' ? '该链接已被占用'
+            : j.error === 'handle_already_changed' ? '链接只能修改一次，已改过'
+            : j.error === 'invalid_handle' ? '链接格式不合法（2–24 字符，中英数字/连字符）'
+            : ('修改失败：' + (j.error || res.status));
+          this.flashToast(msg);
+          return;
+        }
+        this.me = j.user;
+        if (window.MuseumAuth) window.MuseumAuth.user = j.user;
+        this.flashToast('已更新，新链接：/u/' + this.me.handle);
+      } catch(_) {
+        this.flashToast('网络错误');
+      }
+    },
+
+    async togglePlazaVisibility() {
+      if (!this.me) return;
+      var next = !this.me.showOnPlaza;
+      try {
+        var res = await fetch('/auth/me', {
+          method: 'PATCH',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ showOnPlaza: next }),
+        });
+        var j = await res.json();
+        if (!res.ok) { this.flashToast('更新失败'); return; }
+        this.me = j.user;
+        if (window.MuseumAuth) window.MuseumAuth.user = j.user;
+        this.flashToast(next ? '已在广场显示' : '已从广场隐藏');
+      } catch(_) {
+        this.flashToast('网络错误');
+      }
     },
 
     async doLogout() {
@@ -996,6 +1151,7 @@ window.museumApp = function() {
     },
 
     async fetchDynastyReview(id) {
+      if (this.isReadOnly) return; // already injected from viewingProfile.dynastyReviews
       var s = this.dynastyReviewState(id);
       try {
         var res = await fetch('/api/dynasties/' + encodeURIComponent(id) + '/review');

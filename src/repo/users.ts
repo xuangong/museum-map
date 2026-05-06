@@ -10,6 +10,8 @@ export interface UserRow {
   avatar_url: string | null
   is_admin: number
   handle: string | null
+  handle_changed_at: number | null
+  show_on_plaza: number
   created_at: number
   last_login_at: number | null
 }
@@ -103,6 +105,20 @@ export class UsersRepo {
 
   async setHandle(id: string, handle: string): Promise<void> {
     await this.db.prepare("UPDATE users SET handle = ? WHERE id = ?").bind(handle, id).run()
+  }
+
+  // Allow user to change their own handle exactly once. Returns false if already changed
+  // or if the handle is taken (caller should pre-check uniqueness anyway).
+  async changeHandleOnce(id: string, handle: string): Promise<boolean> {
+    const r = await this.db
+      .prepare("UPDATE users SET handle = ?, handle_changed_at = ? WHERE id = ? AND handle_changed_at IS NULL")
+      .bind(handle, Date.now(), id)
+      .run()
+    return (r.meta?.changes ?? 0) > 0
+  }
+
+  async setShowOnPlaza(id: string, show: boolean): Promise<void> {
+    await this.db.prepare("UPDATE users SET show_on_plaza = ? WHERE id = ?").bind(show ? 1 : 0, id).run()
   }
 
   async touchLogin(id: string): Promise<void> {

@@ -221,11 +221,28 @@ a { color: inherit; text-decoration: none; }
 /* ─── Main grid ─── */
 .stage {
   display: grid;
-  grid-template-columns: minmax(320px, 360px) 1fr;
+  grid-template-columns: var(--toc-w, 360px) 6px 1fr;
   flex: 1; min-height: 0;
   overflow: hidden;
   position: relative;
 }
+
+/* ─── TOC resize handle (desktop only) ─── */
+.toc-resize {
+  cursor: col-resize;
+  background: transparent;
+  border-left: 1px solid var(--rule);
+  border-right: 1px solid transparent;
+  transition: background 0.15s, border-color 0.15s;
+  user-select: none;
+  touch-action: none;
+}
+.toc-resize:hover, .toc-resize.dragging {
+  background: var(--paper-elev);
+  border-left-color: var(--ink);
+}
+body.toc-resizing { cursor: col-resize !important; user-select: none !important; }
+body.toc-resizing * { cursor: col-resize !important; user-select: none !important; }
 
 /* ─── Sidebar = TOC ─── */
 .toc {
@@ -1037,6 +1054,7 @@ body.chat-locked .chat-body { touch-action: pan-y; }
 
   /* Stage = single column (map full-width); TOC becomes a slide-in sheet */
   .stage { grid-template-columns: 1fr; position: relative; }
+  .toc-resize { display: none; }
   .toc-wrap {
     display: block;
     position: fixed; left: 0; top: 0; bottom: 0;

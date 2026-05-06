@@ -10,7 +10,7 @@ import { checkAndIncrement, bucketKey } from "~/lib/rateLimit"
 import type { UserRow } from "~/repo/users"
 import { UsersRepo } from "~/repo/users"
 import { InvitesRepo } from "~/repo/invites"
-import { ensureHandle } from "~/services/handles"
+import { ensureHandle, normalizeHandle } from "~/services/handles"
 import type { SessionRow } from "~/repo/sessions"
 
 interface Ctx {
@@ -59,6 +59,8 @@ function userView(u: UserRow) {
   return {
     id: u.id, email: u.email, displayName: u.display_name, avatarUrl: u.avatar_url, isAdmin: u.is_admin === 1,
     handle: u.handle,
+    handleChangedAt: u.handle_changed_at,
+    showOnPlaza: u.show_on_plaza === 1,
   }
 }
 
@@ -149,14 +151,32 @@ export const authRoute = new Elysia()
     if (!originOk(c.request)) { c.set.status = 403; return { error: "csrf" } }
     const u = requireUser(c)
     if (!u) return { error: "unauthorized" }
-    const raw = c.body?.displayName
-    if (raw !== null && typeof raw !== "string") {
-      c.set.status = 400; return { error: "invalid_display_name" }
-    }
-    const trimmed = typeof raw === "string" ? raw.trim().slice(0, 80) : null
-    const next = trimmed && trimmed.length > 0 ? trimmed : null
     const users = new UsersRepo(c.env.DB)
-    await users.setDisplayName(u.id, next)
+    // Optional: rename handle (allowed exactly once per user).
+    if (typeof c.body?.handle === "string") {
+      if (u.handle_changed_at) { c.set.status = 409; return { error: "handle_already_changed" } }
+      const next = normalizeHandle(c.body.handle)
+      if (!next) { c.set.status = 400; return { error: "invalid_handle" } }
+      if (next !== u.handle) {
+        const taken = await users.findByHandle(next)
+        if (taken && taken.id !== u.id) { c.set.status = 409; return { error: "handle_taken" } }
+        const ok = await users.changeHandleOnce(u.id, next)
+        if (!ok) { c.set.status = 409; return { error: "handle_already_changed" } }
+      }
+    }
+    if ("displayName" in (c.body || {})) {
+      const raw = c.body?.displayName
+      if (raw !== null && typeof raw !== "string") {
+        c.set.status = 400; return { error: "invalid_display_name" }
+      }
+      const trimmed = typeof raw === "string" ? raw.trim().slice(0, 80) : null
+      const next = trimmed && trimmed.length > 0 ? trimmed : null
+      await users.setDisplayName(u.id, next)
+    }
+    if ("showOnPlaza" in (c.body || {})) {
+      const raw = c.body?.showOnPlaza
+      await users.setShowOnPlaza(u.id, !!raw)
+    }
     const fresh = await users.findById(u.id)
     return { user: fresh ? userView(fresh) : userView(u) }
   })

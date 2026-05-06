@@ -4,9 +4,18 @@ import { generateToken } from "~/lib/crypto"
 function slug(s: string): string {
   return (s || "")
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
+    .normalize("NFC")
+    .replace(/[^a-z0-9\u3400-\u9fff]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 24)
+}
+
+// Public validator: returns the canonical handle if valid, else null.
+// Rules: 2..24 chars after normalization, allowed chars [a-z 0-9 CJK -].
+export function normalizeHandle(input: string): string | null {
+  const s = slug(input)
+  if (s.length < 2) return null
+  return s
 }
 
 export async function ensureHandle(repo: UsersRepo, userId: string, hint?: string | null): Promise<string> {

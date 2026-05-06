@@ -46,6 +46,13 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
           style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;">邀请</a>
         <a x-show="me && me.handle" href="#" @click.prevent="copyShareLink()" title="复制公开主页链接"
           style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;">分享</a>
+        <a x-show="me && me.handle && !me.handleChangedAt" href="#" @click.prevent="editHandle()" title="自定义分享链接（仅可改一次，旧链接将失效）"
+          style="font-family:var(--sans);font-size:11px;color:var(--ink-mid);text-decoration:none;flex:0 0 auto;white-space:nowrap;">✎链接</a>
+        <a x-show="me && me.handle" href="#" @click.prevent="togglePlazaVisibility()"
+          :title="me && me.showOnPlaza ? '当前公开在广场，点击隐藏' : '当前不在广场，点击公开'"
+          :style="(me && me.showOnPlaza) ? 'font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;' : 'font-family:var(--sans);font-size:11px;color:var(--ink-mid);text-decoration:none;flex:0 0 auto;white-space:nowrap;'">
+          <span x-text="(me && me.showOnPlaza) ? '✦广场' : '✧广场'"></span>
+        </a>
         <a href="#" @click.prevent="doLogout()"
           style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:underline;flex:0 0 auto;white-space:nowrap;">退出</a>
       </div>
@@ -119,8 +126,8 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
         <span style="margin-left:8px;">·</span>
         <span style="margin-left:8px;font-style:italic;">Dynasty Edition</span>
       </div>
-      <h1 class="dynasty-name" x-text="(currentDynasty() || {}).name || ''"></h1>
-      <div class="dynasty-period" x-text="(currentDynasty() || {}).period || ''"></div>
+      <h1 class="dynasty-name" x-text="dynastyTitle()"></h1>
+      <div class="dynasty-period" x-show="showDynastyPeriod()" x-text="(currentDynasty() || {}).period || ''"></div>
       <div class="dynasty-overview md" x-html="window.MuseumChat.renderMarkdown((currentDynasty() || {}).overview || '')" x-show="(currentDynasty() || {}).overview"></div>
       <div class="stats">
         <div class="stat">

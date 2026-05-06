@@ -14,6 +14,7 @@ export interface ViewingProfile {
   user: { handle: string | null; displayName: string | null }
   visits: Array<{ museumId: string; visitedAt: number; note: string | null }>
   review: { summary: string; count: number; generatedAt: number } | null
+  dynastyReviews?: Array<{ dynastyId: string; summary: string; count: number; generatedAt: number }>
 }
 
 export interface HomeData {
@@ -50,6 +51,8 @@ export function HomePage(data: HomeData): string {
       <div class="subtitle">An Atlas of Chinese Museums &amp; Their Dynasties</div>
     </div>
     <div class="right">
+      <a href="/plaza" class="eyebrow" title="同好之径"
+        style="margin-right:14px;color:var(--vermilion);text-decoration:none;border-bottom:0.5px solid var(--vermilion);padding-bottom:1px;">✦ 广场</a>
       <button class="footprint-pill" :class="visits.footprintMode ? 'active' : ''" @click="toggleFootprint()" :title="visits.footprintMode ? '退出足迹模式' : '查看我的足迹'">
         <span x-show="!visits.footprintMode">✦ 足迹 <span style="font-variant-numeric:lining-nums;" x-text="visits.ids.length"></span></span>
         <span x-show="visits.footprintMode">✕ 退出足迹</span>
@@ -63,6 +66,7 @@ export function HomePage(data: HomeData): string {
     <div class="toc-wrap" :class="tocOpen ? 'open' : ''">
       ${Sidebar({ googleEnabled: !!data.googleEnabled })}
     </div>
+    <div class="toc-resize" id="toc-resize" role="separator" aria-orientation="vertical" aria-label="拖动调整目录宽度" title="拖动调整目录宽度"></div>
     <div class="canvas">
       <div class="canvas-bg"></div>
       <div id="map"></div>

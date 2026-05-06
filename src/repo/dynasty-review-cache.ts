@@ -17,6 +17,14 @@ export class DynastyReviewCacheRepo {
     return r ?? null
   }
 
+  async listByUser(userId: string): Promise<DynastyReviewCacheRow[]> {
+    const r = await this.db
+      .prepare("SELECT * FROM dynasty_review_cache WHERE user_id = ?")
+      .bind(userId)
+      .all<DynastyReviewCacheRow>()
+    return r.results ?? []
+  }
+
   async save(dynastyId: string, userId: string, summary: string, visitCount: number, at?: number): Promise<void> {
     const ts = at ?? Date.now()
     await this.db

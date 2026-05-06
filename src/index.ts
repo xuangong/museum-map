@@ -7,6 +7,7 @@ import { importRoute } from "~/routes/import"
 import { visitsRoute } from "~/routes/visits"
 import { authRoute } from "~/routes/auth"
 import { profileRoute } from "~/routes/profile"
+import { plazaRoute } from "~/routes/plaza"
 import { cdnRoute } from "~/lib/cdn"
 import { homeRoute } from "~/routes/home"
 
@@ -40,6 +41,7 @@ export function createApp(env: Env) {
     .use(visitsRoute)
     .use(authRoute)
     .use(profileRoute)
+    .use(plazaRoute)
 }
 
 export default {
