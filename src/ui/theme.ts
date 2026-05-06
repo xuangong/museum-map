@@ -117,6 +117,11 @@ a { color: inherit; text-decoration: none; }
 }
 .footprint-pill:hover { background: var(--vermilion); color: var(--paper); }
 .footprint-pill.active { background: var(--vermilion); color: var(--paper); }
+.plaza-link {
+  font-family: var(--sans); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--vermilion); text-decoration: none; margin-right: 14px;
+  border-bottom: 0.5px solid var(--vermilion); padding-bottom: 1px; white-space: nowrap;
+}
 
 .footprint-review {
   font-family: var(--body); font-size: 14px; line-height: 1.6; color: var(--ink);
@@ -1041,6 +1046,7 @@ body.chat-locked .chat-body { touch-action: pan-y; }
   .masthead .center { grid-area: center; text-align: center; }
   .masthead .right { grid-area: right; text-align: right; }
   .masthead .right .eyebrow { display: none; }
+  .plaza-link { font-size: 10px; letter-spacing: 0.12em; margin-right: 8px; padding-bottom: 0; }
   .masthead .title { font-size: 20px; letter-spacing: 0.06em; }
   .masthead .subtitle { font-size: 11px; margin-top: 2px; }
   .footprint-pill { padding: 4px 10px; font-size: 10px; letter-spacing: 0.12em; }

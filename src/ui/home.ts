@@ -51,8 +51,7 @@ export function HomePage(data: HomeData): string {
       <div class="subtitle">An Atlas of Chinese Museums &amp; Their Dynasties</div>
     </div>
     <div class="right">
-      <a href="/plaza" class="eyebrow" title="同好之径"
-        style="margin-right:14px;color:var(--vermilion);text-decoration:none;border-bottom:0.5px solid var(--vermilion);padding-bottom:1px;">✦ 广场</a>
+      <a href="/plaza" class="plaza-link" title="同好之径">✦ 广场</a>
       <button class="footprint-pill" :class="visits.footprintMode ? 'active' : ''" @click="toggleFootprint()" :title="visits.footprintMode ? '退出足迹模式' : '查看我的足迹'">
         <span x-show="!visits.footprintMode">✦ 足迹 <span style="font-variant-numeric:lining-nums;" x-text="visits.ids.length"></span></span>
         <span x-show="visits.footprintMode">✕ 退出足迹</span>
