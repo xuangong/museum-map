@@ -36,7 +36,28 @@ export function requireUser(ctx: { user: UserRow | null; set: any }): UserRow | 
   return ctx.user
 }
 
-export function requireAdmin(ctx: { user: UserRow | null; set: any }): UserRow | null {
+export function requireAdmin(ctx: { user: UserRow | null; set: any; request?: Request; env?: any }): UserRow | null {
+  // Token-based admin escape hatch for scripts/CI: x-admin-token header must
+  // match env.ADMIN_TOKEN. Returns a synthetic admin user view.
+  const env = (ctx as any).env
+  const req = (ctx as any).request as Request | undefined
+  if (env?.ADMIN_TOKEN && req) {
+    const tok = req.headers.get("x-admin-token") || ""
+    if (tok && tok === env.ADMIN_TOKEN) {
+      return {
+        id: "__token_admin__",
+        email: null,
+        display_name: "Token Admin",
+        avatar_url: null,
+        is_admin: 1,
+        handle: null,
+        handle_changed_at: null,
+        show_on_plaza: 0,
+        created_at: 0,
+        last_login_at: null,
+      } as unknown as UserRow
+    }
+  }
   const u = requireUser(ctx)
   if (!u) return null
   if (u.is_admin !== 1) {

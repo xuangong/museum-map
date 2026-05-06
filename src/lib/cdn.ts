@@ -10,6 +10,39 @@ const CDN_MAP: Record<string, string> = {
   "qrcode.js": "https://unpkg.com/qrcode-generator@1.4.4/qrcode.js",
 }
 
+// Wrap a (req → upstream Response) function with Cloudflare edge caching.
+// CF Workers do NOT auto-cache fetch() results — Cache-Control headers alone
+// don't help unless we explicitly use caches.default.
+async function withEdgeCache(
+  request: Request,
+  build: () => Promise<Response>,
+): Promise<Response> {
+  const cache = (globalThis as any).caches?.default as Cache | undefined
+  if (!cache) return build()
+  const cacheKey = new Request(request.url, { method: "GET" })
+  const hit = await cache.match(cacheKey)
+  if (hit) {
+    const h = new Headers(hit.headers)
+    h.set("X-Cache", "HIT")
+    return new Response(hit.body, { status: hit.status, headers: h })
+  }
+  const fresh = await build()
+  // Only cache successful responses with cacheable headers.
+  if (!fresh.ok || fresh.status !== 200) {
+    const h = new Headers(fresh.headers)
+    h.set("X-Cache", "BYPASS")
+    return new Response(fresh.body, { status: fresh.status, headers: h })
+  }
+  // Buffer the body so we can write to cache AND respond reliably.
+  // (Streaming body + clone+put has been flaky for us — the put silently
+  // races the response close, leaving the cache empty.)
+  const buf = await fresh.arrayBuffer()
+  await cache.put(cacheKey, new Response(buf, { status: 200, headers: fresh.headers }))
+  const h = new Headers(fresh.headers)
+  h.set("X-Cache", "MISS")
+  return new Response(buf, { status: 200, headers: h })
+}
+
 export const cdnRoute = new Elysia()
   .get("/cdn/:file", async ({ params }) => {
     const url = CDN_MAP[params.file]
@@ -42,7 +75,7 @@ export const cdnRoute = new Elysia()
   // Proxy Wikimedia upload images. Origin upload.wikimedia.org is blocked from
   // some networks (notably mainland China). Path: /img/wikimedia/<rest-of-path>
   // where <rest-of-path> is the part after https://upload.wikimedia.org/
-  .get("/img/wikimedia/*", async ({ request }) => {
+  .get("/img/wikimedia/*", async ({ request }) => withEdgeCache(request, async () => {
     const url = new URL(request.url)
     // strip the "/img/wikimedia/" prefix; keep the rest verbatim (already URL-encoded)
     const rest = url.pathname.replace(/^\/img\/wikimedia\//, "")
@@ -51,7 +84,7 @@ export const cdnRoute = new Elysia()
       headers: {
         // Wikimedia silently 403s without a meaningful UA.
         "User-Agent":
-          "museum-map/1.0 (+https://museummap.xianliao.de5.net; contact via github)",
+          "museum-map/1.0 (+https://museum.xianliao.de5.net; contact via github)",
       },
     })
     if (!upstream.ok) {
@@ -65,13 +98,13 @@ export const cdnRoute = new Elysia()
         "Access-Control-Allow-Origin": "*",
       },
     })
-  })
+  }))
   // Proxy Wikimedia Commons "description page" file references (legacy seed data
   // sometimes points at https://commons.wikimedia.org/wiki/File:Foo.jpg rather
   // than the direct upload.* URL). We resolve via Special:FilePath which 302s
   // to the real file, then stream the result.
   // Path: /img/commons/<filename> (URL-encoded)
-  .get("/img/commons/*", async ({ request }) => {
+  .get("/img/commons/*", async ({ request }) => withEdgeCache(request, async () => {
     const url = new URL(request.url)
     const filename = url.pathname.replace(/^\/img\/commons\//, "")
     if (!filename) return new Response("bad path", { status: 400 })
@@ -96,4 +129,4 @@ export const cdnRoute = new Elysia()
         "Access-Control-Allow-Origin": "*",
       },
     })
-  })
+  }))

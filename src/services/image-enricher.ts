@@ -226,10 +226,16 @@ export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> 
     await opts.onEvent({ type: "done", message: "no artifacts to enrich" })
     return { matched: 0, total: 0 }
   }
+  // Only ask the LLM about artifacts without an existing image (backfill).
+  const pending = m.artifacts.filter((a) => !a.image)
+  if (pending.length === 0) {
+    await opts.onEvent({ type: "done", message: `0/${total} matched (all already have images)` })
+    return { matched: 0, total: 0 }
+  }
 
   const userMsg =
     `当前博物馆：**${m.name}**\n请为以下馆藏文物逐一查找 Wikimedia Commons 图片，按 SYSTEM 中的接受/拒绝规则严格判断。\n\n文物列表：\n` +
-    m.artifacts
+    pending
       .map((a, i) => `${i + 1}. ${a.name}${a.period ? ` (${a.period})` : ""}`)
       .join("\n")
   const messages: any[] = [{ role: "user", content: userMsg }]
@@ -339,6 +345,8 @@ export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> 
 
   let matched = 0
   const newArtifacts = m.artifacts.map((a) => {
+    // Never overwrite an existing image — backfill mode only.
+    if (a.image) return a
     const hit = matchByKey.get(a.name.trim().toLowerCase())
     if (!hit?.url) return a
     matched++

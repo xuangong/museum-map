@@ -6,7 +6,7 @@
  *   ADMIN_TOKEN=xxx bun run scripts/enrich-all.ts -- --skip-existing  (skip museums that already have ≥1 image)
  */
 
-const BASE = process.env.BASE ?? "https://museummap.xianliao.de5.net"
+const BASE = process.env.BASE ?? "https://museum.xianliao.de5.net"
 const TOKEN = process.env.ADMIN_TOKEN
 if (!TOKEN) {
   console.error("ADMIN_TOKEN env required")
