@@ -131,24 +131,87 @@ export function ProfilePage(opts: {
   const css = `
   body { background: var(--paper); margin: 0; }
   .profile-wrap {
-    max-width: 760px; margin: 0 auto; padding: 56px 32px 96px;
+    max-width: 720px; margin: 0 auto; padding: 88px 36px 120px;
     color: var(--ink); font-family: var(--display);
   }
-  .profile-head { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; padding-bottom: 28px; border-bottom: 0.5px solid var(--rule); }
+  @media (max-width: 600px) { .profile-wrap { padding: 56px 22px 88px; } }
+
+  /* —— 刊头：编号 / 日期 —— */
+  .profile-masthead {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--sans); font-size: 10px; letter-spacing: 0.32em;
+    text-transform: uppercase; color: var(--ink-mid);
+    padding-bottom: 14px; border-bottom: 0.5px solid var(--rule);
+    margin-bottom: 56px;
+  }
+  .profile-masthead .left { color: var(--vermilion); }
+
+  /* —— 头部：头像 + 大字主标 —— */
+  .profile-head { margin-bottom: 72px; }
+  .profile-head-row {
+    display: flex; align-items: center; gap: 22px; margin-bottom: 0;
+  }
+  .profile-head-text { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
   .profile-avatar {
-    width: 76px; height: 76px; border-radius: 50%;
+    width: 88px; height: 88px; border-radius: 50%;
     background: var(--vermilion); color: var(--paper);
     display: flex; align-items: center; justify-content: center;
-    font-family: var(--display); font-weight: 700; font-size: 36px; flex: 0 0 auto;
+    font-family: var(--display); font-weight: 600; font-size: 40px;
+    letter-spacing: 0; flex: 0 0 auto;
   }
-  .profile-name { font-family: var(--display); font-weight: 700; font-size: 32px; line-height: 1.1; margin: 0 0 6px; }
-  .profile-handle { font-family: var(--mono); font-size: 13px; color: var(--ink-mid); }
-  .profile-stats { display: flex; gap: 28px; margin-top: 12px; font-family: var(--sans); font-size: 12px; letter-spacing: 0.06em; color: var(--ink-mid); }
-  .profile-stats strong { color: var(--vermilion); font-variant-numeric: lining-nums; font-weight: 600; }
-  .profile-section { margin-top: 36px; }
-  .profile-section-eyebrow { font-family: var(--sans); font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--vermilion); margin-bottom: 12px; }
-  .profile-review { font-family: var(--display); font-size: 18px; line-height: 1.65; }
-  .profile-review p { margin: 0 0 14px; }
+  .profile-name {
+    font-family: var(--display); font-weight: 400; font-size: 56px;
+    line-height: 1.04; letter-spacing: -0.015em; margin: 0;
+  }
+  @media (max-width: 600px) {
+    .profile-name { font-size: 36px; }
+    .profile-avatar { width: 68px; height: 68px; font-size: 30px; }
+    .profile-head-row { gap: 16px; }
+  }
+  .profile-handle {
+    font-family: var(--mono); font-size: 12px; color: var(--ink-mid);
+    letter-spacing: 0.02em;
+  }
+  .profile-stats {
+    display: flex; gap: 0; margin-top: 32px;
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink-mid);
+  }
+  .profile-stats > span {
+    flex: 1; padding: 14px 0 0; border-top: 0.5px solid var(--rule);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .profile-stats > span + span { padding-left: 18px; }
+  .profile-stats strong {
+    display: block; color: var(--ink);
+    font-family: var(--display); font-weight: 400; font-size: 28px;
+    font-variant-numeric: oldstyle-nums;
+    letter-spacing: 0; text-transform: none;
+  }
+
+  /* —— 分节 eyebrow：编号 + 标签 —— */
+  .profile-section { margin-top: 64px; }
+  .profile-section-eyebrow {
+    display: flex; align-items: baseline; gap: 14px;
+    font-family: var(--sans); font-size: 10px; letter-spacing: 0.32em;
+    text-transform: uppercase; color: var(--ink-mid);
+    margin-bottom: 28px; padding-bottom: 12px;
+    border-bottom: 0.5px solid var(--rule);
+  }
+  .profile-section-eyebrow .num {
+    font-family: var(--mono); color: var(--vermilion);
+    font-size: 11px; letter-spacing: 0.04em;
+  }
+  .profile-section-eyebrow .label { flex: 1; }
+  .profile-section-eyebrow .meta { color: var(--ink-mid); letter-spacing: 0.18em; }
+
+  .profile-review { font-family: var(--display); font-size: 17px; line-height: 1.78; color: var(--ink); }
+  .profile-review > p:first-child::first-letter {
+    font-family: var(--display); font-weight: 400;
+    float: left; font-size: 56px; line-height: 0.92;
+    padding: 6px 10px 0 0; color: var(--vermilion);
+  }
+  .profile-review p { margin: 0 0 16px; }
   .profile-review strong { color: var(--vermilion); }
   .profile-review em { color: var(--ink-mid); }
   .profile-review ul, .profile-review ol { padding-left: 22px; margin: 8px 0 14px; }
@@ -161,14 +224,31 @@ export function ProfilePage(opts: {
   .profile-review pre { background: var(--paper-deep); padding: 10px 14px; overflow-x: auto; }
   .profile-review hr { border: none; border-top: 0.5px solid var(--rule-soft); margin: 16px 0; }
   .profile-review a { color: var(--vermilion); }
-  .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  @media (max-width: 600px) { .profile-grid { grid-template-columns: 1fr; } }
-  .dyn-card { display: block; border: 0.5px solid var(--rule); padding: 16px 18px; background: var(--paper-elev); color: var(--ink); text-decoration: none; transition: border-color 0.12s; }
-  .dyn-card:hover { border-color: var(--vermilion); }
-  .dyn-card .name { font-family: var(--display); font-weight: 600; font-size: 19px; }
-  .dyn-card .period { font-family: var(--mono); font-size: 11px; color: var(--ink-mid); margin: 2px 0 8px; }
-  .dyn-card .count { font-family: var(--sans); font-size: 11px; color: var(--vermilion); letter-spacing: 0.08em; margin-bottom: 8px; }
-  .dyn-card .body { font-family: var(--display); font-size: 14px; line-height: 1.6; color: var(--ink); }
+  .profile-grid { display: grid; grid-template-columns: 1fr; gap: 0; }
+  .dyn-card {
+    display: block; padding: 28px 0; background: transparent;
+    color: var(--ink); text-decoration: none;
+    border-bottom: 0.5px solid var(--rule-soft);
+  }
+  .dyn-card:last-child { border-bottom: none; }
+  .dyn-card:hover .name { color: var(--vermilion); }
+  .dyn-card .head-row {
+    display: flex; align-items: baseline; gap: 12px;
+    margin-bottom: 4px;
+  }
+  .dyn-card .name {
+    font-family: var(--display); font-weight: 400; font-size: 28px;
+    letter-spacing: -0.01em; line-height: 1.1;
+    transition: color 0.12s;
+  }
+  .dyn-card .period { font-family: var(--mono); font-size: 11px; color: var(--ink-mid); flex: 1; }
+  .dyn-card .count {
+    font-family: var(--sans); font-size: 10px; color: var(--ink-mid);
+    letter-spacing: 0.22em; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .dyn-card .count strong { color: var(--vermilion); font-weight: 400; font-family: var(--display); font-size: 13px; letter-spacing: 0; }
+  .dyn-card .body { font-family: var(--display); font-size: 15px; line-height: 1.72; color: var(--ink); }
   .dyn-card .body p { margin: 0 0 8px; }
   .dyn-card .body p:last-child { margin-bottom: 0; }
   .dyn-card .body strong { color: var(--vermilion); }
@@ -191,43 +271,89 @@ export function ProfilePage(opts: {
   .dyn-card details[open] .body-clip { max-height: none; overflow: visible; }
   .dyn-card details .body-clip::after {
     content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 4em;
-    background: linear-gradient(to bottom, transparent, var(--paper-elev) 80%);
+    background: linear-gradient(to bottom, transparent, var(--paper) 80%);
     pointer-events: none; transition: opacity 0.18s ease;
   }
   .dyn-card details[open] .body-clip::after { opacity: 0; }
   .dyn-card .toggle-hint {
-    display: block; margin-top: 8px;
+    display: inline-block; margin-top: 12px;
     font-family: var(--sans); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--vermilion); text-align: center;
-    border-top: 0.5px dashed var(--vermilion-soft); padding-top: 8px;
+    color: var(--vermilion);
   }
   .dyn-card details[open] .toggle-hint .more-text { display: none; }
   .dyn-card details:not([open]) .toggle-hint .less-text { display: none; }
-  .dyn-card .more { display: inline-block; margin-top: 12px; font-family: var(--sans); font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-mid); border-bottom: 0.5px solid var(--ink-mid); padding-bottom: 1px; }
+  .dyn-card .more {
+    display: inline-block; margin-top: 16px;
+    font-family: var(--sans); font-size: 10px; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--vermilion);
+    text-decoration: none;
+  }
+  .dyn-card .more:hover { border-bottom: 0.5px solid var(--vermilion); padding-bottom: 1px; }
   .visit-list { list-style: none; padding: 0; margin: 0; }
-  .visit-item { display: grid; grid-template-columns: 88px 1fr; gap: 14px; padding: 10px 0; border-bottom: 0.5px solid var(--rule-soft); align-items: baseline; }
+  .visit-item {
+    display: grid; grid-template-columns: 92px 1fr; gap: 22px;
+    padding: 16px 0; border-bottom: 0.5px solid var(--rule-soft);
+    align-items: baseline;
+  }
   .visit-item:last-child { border-bottom: none; }
-  .visit-date { font-family: var(--mono); font-size: 12px; color: var(--ink-mid); font-variant-numeric: lining-nums; }
-  .visit-name { font-family: var(--display); font-size: 16px; font-weight: 500; }
-  .visit-note { font-family: var(--display); font-style: italic; color: var(--ink-mid); font-size: 13px; margin-top: 2px; }
-  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; padding-top: 28px; border-top: 0.5px solid var(--rule); }
-  .cta-primary { background: var(--vermilion); color: var(--paper); padding: 12px 22px; font-family: var(--sans); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none; }
-  .cta-secondary { background: transparent; color: var(--vermilion); padding: 12px 0; font-family: var(--sans); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; text-decoration: none; border-bottom: 0.5px solid var(--vermilion); }
-  .footer-meta { margin-top: 56px; padding-top: 18px; border-top: 0.5px solid var(--rule); font-family: var(--sans); font-size: 11px; letter-spacing: 0.08em; color: var(--ink-mid); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .visit-date {
+    font-family: var(--mono); font-size: 11px; color: var(--ink-mid);
+    font-variant-numeric: lining-nums; letter-spacing: 0.04em;
+  }
+  .visit-name {
+    font-family: var(--display); font-size: 18px; font-weight: 400;
+    line-height: 1.3; letter-spacing: -0.005em;
+  }
+  .visit-note {
+    font-family: var(--display); font-style: italic;
+    color: var(--ink-mid); font-size: 14px; margin-top: 6px; line-height: 1.55;
+  }
+  .cta-row {
+    display: flex; flex-wrap: wrap; gap: 28px; align-items: baseline;
+    margin-top: 64px; padding-top: 32px;
+    border-top: 0.5px solid var(--rule);
+  }
+  .cta-primary {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--vermilion);
+    text-decoration: none; padding-bottom: 4px;
+    border-bottom: 1px solid var(--vermilion);
+  }
+  .cta-secondary {
+    font-family: var(--sans); font-size: 11px; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--ink-mid);
+    text-decoration: none; padding-bottom: 4px;
+    border-bottom: 0.5px solid var(--rule);
+  }
+  .cta-secondary:hover { color: var(--ink); border-color: var(--ink); }
+  .footer-meta {
+    margin-top: 88px; padding-top: 18px; border-top: 0.5px solid var(--rule);
+    font-family: var(--sans); font-size: 10px; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--ink-mid);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  }
   .footer-meta a { color: var(--vermilion); text-decoration: none; }
-  .empty { font-family: var(--display); font-style: italic; color: var(--ink-mid); padding: 16px 0; }
+  .empty { font-family: var(--display); font-style: italic; color: var(--ink-mid); padding: 16px 0; font-size: 16px; }
   `
 
   const reviewBlock = profile.review
     ? `<section class="profile-section">
-        <div class="profile-section-eyebrow">AI 总评 · ${esc(fmtDate(profile.review.generatedAt))} · 基于 ${profile.review.count} 馆</div>
+        <div class="profile-section-eyebrow">
+          <span class="num">No.01</span>
+          <span class="label">AI 总评</span>
+          <span class="meta">${esc(fmtDate(profile.review.generatedAt))} · ${profile.review.count} 馆</span>
+        </div>
         <div class="profile-review">${renderMd(profile.review.summary)}</div>
       </section>`
     : ""
 
   const dynastyBlock = dynastyCards.length
     ? `<section class="profile-section">
-        <div class="profile-section-eyebrow">朝代品鉴 · ${dynastyCards.length} 朝</div>
+        <div class="profile-section-eyebrow">
+          <span class="num">No.02</span>
+          <span class="label">朝代品鉴</span>
+          <span class="meta">${dynastyCards.length} 朝</span>
+        </div>
         <div class="profile-grid">
           ${dynastyCards
             .map(({ d, r, count }) => {
@@ -243,9 +369,11 @@ export function ProfilePage(opts: {
                   </details>`
                 : html
               return `<div class="dyn-card">
-                <div class="name">${esc(d.name)}</div>
-                <div class="period">${esc(d.period || "")}</div>
-                <div class="count">打卡 ${count} 馆 · ${esc(fmtDate(r.generatedAt))}</div>
+                <div class="head-row">
+                  <span class="name">${esc(d.name.replace(/[（(][^)）]*[)）]\s*$/, "").trim())}</span>
+                  <span class="period">${esc(d.period || "")}</span>
+                </div>
+                <div class="count">打卡 <strong>${count}</strong> 馆 · ${esc(fmtDate(r.generatedAt))}</div>
                 <div class="body">${bodyBlock}</div>
                 <a class="more" href="${mapHref}" title="在地图上查看 ${esc(d.name)}">在地图上查看 →</a>
               </div>`
@@ -257,7 +385,11 @@ export function ProfilePage(opts: {
 
   const visitsBlock = recentVisits.length
     ? `<section class="profile-section">
-        <div class="profile-section-eyebrow">最近足迹 · 共 ${visitCount} 馆</div>
+        <div class="profile-section-eyebrow">
+          <span class="num">No.03</span>
+          <span class="label">最近足迹</span>
+          <span class="meta">共 ${visitCount} 馆</span>
+        </div>
         <ul class="visit-list">
           ${recentVisits
             .map((v) => {
@@ -275,7 +407,10 @@ export function ProfilePage(opts: {
         </ul>
       </section>`
     : `<section class="profile-section">
-        <div class="profile-section-eyebrow">足迹</div>
+        <div class="profile-section-eyebrow">
+          <span class="num">No.03</span>
+          <span class="label">足迹</span>
+        </div>
         <div class="empty">还没有公开的打卡记录。</div>
       </section>`
 
@@ -288,16 +423,23 @@ export function ProfilePage(opts: {
     title: `${displayName} 的足迹 · 中国博物馆地图`,
     head: `<style>${css}</style>`,
     children: `<div class="profile-wrap">
+      <div class="profile-masthead">
+        <span class="left">中國博物館地圖 · ATLAS</span>
+        <span>个人足迹 · Vol. ${visitCount}</span>
+      </div>
+
       <header class="profile-head">
-        <div class="profile-avatar">${esc(initial)}</div>
-        <div>
-          <h1 class="profile-name">${esc(displayName)}</h1>
-          <div class="profile-handle">@${esc(handle)}</div>
-          <div class="profile-stats">
-            <span>打卡 <strong>${visitCount}</strong> 馆</span>
-            <span>跨越 <strong>${dynastyCount}</strong> 朝</span>
-            ${profile.review ? `<span>AI 评 <strong>${profile.review.count}</strong></span>` : ""}
+        <div class="profile-head-row">
+          <div class="profile-avatar">${esc(initial)}</div>
+          <div class="profile-head-text">
+            <h1 class="profile-name">${esc(displayName)}</h1>
+            <div class="profile-handle">@${esc(handle)}</div>
           </div>
+        </div>
+        <div class="profile-stats">
+          <span>打卡馆数<strong>${visitCount}</strong></span>
+          <span>跨越朝代<strong>${dynastyCount}</strong></span>
+          ${profile.review ? `<span>AI 评<strong>${profile.review.count}</strong></span>` : ""}
         </div>
       </header>
 
@@ -311,7 +453,7 @@ export function ProfilePage(opts: {
       </div>
 
       <div class="footer-meta">
-        <span>中国博物馆地图 · An Atlas of Chinese Museums</span>
+        <span>An Atlas of Chinese Museums</span>
         ${selfLink}
       </div>
     </div>`,
