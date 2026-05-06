@@ -104,10 +104,10 @@ a { color: inherit; text-decoration: none; }
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   gap: 24px;
-  align-items: baseline;
+  align-items: center;
 }
 .masthead .left  { text-align: left; }
-.masthead .center { text-align: center; }
+.masthead .center { text-align: center; align-self: baseline; }
 .masthead .right { text-align: right; }
 .footprint-pill {
   font-family: var(--sans); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
