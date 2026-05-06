@@ -9,6 +9,7 @@
     "predev": "wrangler d1 migrations apply museum-map-db --local",
     "deploy": "wrangler deploy",
     "seed": "bun run scripts/seed.ts",
+    "init": "bun run scripts/init.ts",
     "snapshot": "bun run scripts/snapshot.ts",
     "restore": "bun run scripts/restore.ts",
     "test": "bun test",

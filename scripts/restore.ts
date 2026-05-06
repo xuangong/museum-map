@@ -3,6 +3,11 @@
 //
 // SAFETY: without --confirm, prints SQL preview and aborts. Restore is destructive
 // (DELETE-then-INSERT for each table covered in the snapshot). Atomic per wrangler run.
+//
+// PROTECTED — restore NEVER touches these tables (user privacy):
+//   users, sessions, invites, visits, review_cache, dynasty_review_cache, museums_pending.
+// If you add new museum/dynasty columns, extend snapshot.ts + this file.
+// If you add new USER tables, leave them out of both.
 import { mkdir, readdir } from "node:fs/promises"
 import { $ } from "bun"
 import YAML from "yaml"

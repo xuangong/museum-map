@@ -4,7 +4,9 @@
 // Output is deterministic (sorted by id, fixed key order) so git diffs are clean.
 // Tables snapshotted: museums (+ children), dynasties (+ children),
 //   dynasty_museum_reasons, field_provenance.
-// Excluded: visits, *_review_cache, museums_pending (user state / regenerable).
+// PROTECTED — NEVER snapshot (privacy; data goes to git):
+//   users, sessions, invites, visits, review_cache, dynasty_review_cache,
+//   museums_pending (user state / regenerable / secrets).
 import { mkdir, rm } from "node:fs/promises"
 import { $ } from "bun"
 import YAML from "yaml"

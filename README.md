@@ -39,7 +39,18 @@ bunx wrangler deploy
 
 D1 ↔ git 双向同步，YAML 序列化、确定性输出（多次运行 byte-identical），
 覆盖 museums / dynasties / dynasty_museum_reasons / field_provenance
-（排除 visits / *_review_cache / museums_pending 等用户态/可再生数据）。
+（排除 visits / *_review_cache / museums_pending / users / sessions / invites 等用户态/隐私数据）。
+
+### 一键初始化新站点
+
+裸库 → 跑通：
+
+```bash
+bun run init                              # 本地 D1：apply migrations + restore data/
+bun run init -- --target=remote --confirm # 远程 D1（DESTRUCTIVE：会清空博物馆/朝代表）
+```
+
+之后第一个通过 UI 注册的用户自动成为 admin，无需 invite。
 
 ```bash
 bun run snapshot                             # 远程 D1 → data/*.yaml
