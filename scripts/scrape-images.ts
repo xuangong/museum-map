@@ -229,6 +229,27 @@ function pickExt(contentType: string, url: string): string {
   return ".jpg"
 }
 
+async function writeArtifactImage(opts: {
+  museumId: string
+  artifactIdx: number
+  imageUrl: string
+  license: string
+  attribution: string
+  sourceUrl: string
+  authority: string
+}): Promise<boolean> {
+  const r = await fetch(`${BASE}/api/admin/set-artifact-image`, {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-admin-token": ADMIN_TOKEN! },
+    body: JSON.stringify(opts),
+  })
+  if (!r.ok) {
+    console.log(`      ✗ admin endpoint ${r.status}`)
+    return false
+  }
+  return true
+}
+
 main().catch((e) => { console.error(e); process.exit(1) })
 
 async function main() {
