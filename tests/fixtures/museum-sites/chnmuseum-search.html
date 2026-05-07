@@ -1,0 +1,1533 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link type="text/css" rel="stylesheet" href="../images/base_v2018.css">
+    <link type="text/css" rel="stylesheet" href="../images/zhanlan_gb2018.css">
+    <script src="../images/jquery-1.12.4.min.js"></script>
+    <script src="../images/jquery.SuperSlide.2.1.1.js"></script>
+    <title>搜索页</title>
+    <meta name="SiteName" content="中国国家博物馆官方网站" />
+<meta name="SiteDomain" content="www.chnmuseum.cn" />
+<meta name="SiteIDCode" content="" />
+<meta name="ColumnName" content="全文检索" />
+<meta name="ColumnDescription" content="中国国家博物馆网站全面及时介绍中国国家博物馆概况,藏品,展览,活动,学术研究,国际交流等各项内容，提供参观导览,门票预约,留言问答等多类服务，努力为公众了解国家博物馆,参观国家博物馆和享受国家博物馆提供的各类文化休闲服务提供支持" />
+<meta name="ColumnKeywords" content="中国国家博物馆,国家博物馆,国博,北京国家博物馆,国家博物馆官网,中国历史博物馆,革命博物馆,革命历史博物馆,国家博物馆预约,国家博物馆复兴之路,国博官网,古代中国,复兴之路,复兴之路新时代部分,参观预约,导览,展览,藏品,学术,后母戊方鼎,四羊方尊" />
+<meta name="ColumnType" content="全文检索" />
+<meta name="others" content="页面生成时间 2019-01-21 15:49:52" />
+</head>
+
+<style>
+    .hit {
+        color: red
+    }
+</style>
+<script type="text/javascript">
+    function delHtmlTag(str) {
+        if (!str && typeof str != "undefined") {
+            str = str.replace("<!--ContentStart-->", "").replace("<!--ContentStart-->", "").replace("<!--ContentStart-->", "").replace("<!--ContentStart-->", "");
+            str = str.replace("<!--ContentEnd-->", "").replace("<!--ContentEnd-->", "").replace("<!--ContentEnd-->", "").replace("<!--ContentEnd-->", "");
+            str = str.replace("<!--ContentStart--\/>", "").replace("<!--ContentStart--\/>", "").replace("<!--ContentStart--\/>", "").replace("<!--ContentStart--\/>", "");
+            return str.replace(/<[^>]+>/g, "");//去掉所有的html标记
+        } else {
+            return str;
+        }
+    }
+
+    //控制检索范围的字段
+    var chnlslimit = "0,410,68,73,141,80,115,305,99,376,148,58,60,473,232";
+    //分类检索的固定字段
+    var chnls = 0;
+    var SearchScope = "DOCTITLE";
+    var TimeScope = null;
+    var SortOrder = "-RELEVANCE";
+    var SearchWord = null;
+    //开始查询的位置 以0为开始
+    var PageNum = 1;
+    var PageSize = 20;
+    //文章数量
+    var recordCount = 0;
+    //藏品分类，0为所有
+    var classification = 0;
+    //检索花费时间
+    var spendTime = 1;
+    var cutsize = 80;
+    var notchnls = "157,413,435,147,172,170,200,201,236,272,315,224,120,132,188,137,204,244,439,189,100,101,102,108,228,343,344,345,346,389,444,151,152,153,156,275,484,72,181,448,449,450,182,451,452,183,453,454,184,455,456,185,457,458,186,460,461,187,269,420,421,435,170,200,236,516,188,137,204,244,138,139,140,228,380,381,384,383,165,308,309,445,392,163,61,168,166,164,214,295,226,230,231,232,234,1104,313,473,474,475,476,1103,1177,1178,1201,1107,1108,1109,1110,1111,1112,1155,1156,1157,1158,1159,1167,1160,1161,1162,1163,1164,1165,1166,1186,1187,1188,1189,1190,1191,1192,303,2202,203,411,342,110,1359,1361,1348,1294,1113,189,486,317,1763"
+    var notInclude = 0;
+
+    var scenarizedTotal = 0 // 场景化检索列表总数
+    var scenarizedListHtml = '' // 场景化检索列表html
+    var cjhListFinished = false
+    function searchStart(value) {
+        scenarizedListHtml = ''
+        if (SearchScope == "" || SearchScope == "null") {
+            SearchScope = "DOCTITLE";
+        }
+        var PageNum = 1;
+        //分类chnls需要的栏目id
+        SearchWord = $("#searchword").val();
+        var values = value.split('=');
+        if (values[0] == "chnls") {
+            chnls = values[1];
+        } else if ("SearchScope" == values[0]) {
+            SearchScope = values[1];
+        } else if ("TimeScope" == values[0]) {
+
+            TimeScope = values[1];
+        } else if ("SortOrder" == values[0]) {
+            SortOrder = values[1];
+        } else if ("PageNum" == values[0]) {
+            PageNum = values[1];
+        } else if ("notInclude" == values[0]) {
+            notInclude = values[1];
+        } else {
+
+        }
+        //$("dd.cj_hd_list3 ul li").removeClass();
+        //$("dd.cj_hd_list6 ul li").removeClass();
+        $(function () {
+            $('dd.cj_hd_list3 ul li').click(function () {
+                $(this).addClass('cj_hd_ac3').siblings().removeClass('cj_hd_ac3');
+            })
+        })
+
+        $(function () {
+            $('dd.cj_hd_list6 ul li').click(function () {
+                $(this).addClass('cj_hd_ac6').siblings().removeClass('cj_hd_ac6');
+            })
+        })
+        //获取url中的参数
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+        }
+        notInclude = getUrlParam('notInclude');
+
+        if (SearchScope == 'DOCTITLE') {
+            $('#SearchScopedocor').removeClass('cj_hd_ac6');
+            $('#SearchScopeDOCTITLE').addClass('cj_hd_ac6');
+            $('#SearchScopeDOCCONTENT').removeClass('cj_hd_ac6');
+            $('.cxfw_xx2020 span').text('标题');
+        } else if (SearchScope == 'DOCCONTENT') {
+            $('#SearchScopedocor').removeClass('cj_hd_ac6');
+            $('#SearchScopeDOCTITLE').removeClass('cj_hd_ac6');
+            $('#SearchScopeDOCCONTENT').addClass('cj_hd_ac6');
+            $('.cxfw_xx2020 span').text('正文');
+        } else {
+            $('#SearchScopedocor').addClass('cj_hd_ac6');
+            $('.cxfw_xx2020 span').text('所有结果');
+            $('#SearchScopeDOCTITLE').removeClass('cj_hd_ac6');
+            $('#SearchScopeDOCCONTENT').removeClass('cj_hd_ac6');
+        }
+
+        if (TimeScope == 'day') {
+            $('#TimeScopenull').removeClass('cj_hd_ac6');
+            $('#TimeScopeday').addClass('cj_hd_ac6');
+            $('#TimeScopeweek').removeClass('cj_hd_ac6');
+            $('#TimeScopemonth').removeClass('cj_hd_ac6');
+            $('#TimeScopeyear').removeClass('cj_hd_ac6');
+            $('.sjfw_xx2020 span').text('当天');
+
+        } else if (TimeScope == 'week') {
+            $('#TimeScopenull').removeClass('cj_hd_ac6');
+            $('#TimeScopeday').removeClass('cj_hd_ac6');
+            $('#TimeScopeweek').addClass('cj_hd_ac6');
+            $('#TimeScopemonth').removeClass('cj_hd_ac6');
+            $('#TimeScopeyear').removeClass('cj_hd_ac6');
+            $('.sjfw_xx2020 span').text('一周内');
+
+        } else if (TimeScope == 'month') {
+            $('#TimeScopenull').removeClass('cj_hd_ac6');
+            $('#TimeScopeday').removeClass('cj_hd_ac6');
+            $('#TimeScopeweek').removeClass('cj_hd_ac6');
+            $('#TimeScopemonth').addClass('cj_hd_ac6');
+            $('#TimeScopeyear').removeClass('cj_hd_ac6');
+            $('.sjfw_xx2020 span').text('一个月内');
+        } else if (TimeScope == 'year') {
+            $('#TimeScopenull').removeClass('cj_hd_ac6');
+            $('#TimeScopeday').removeClass('cj_hd_ac6');
+            $('#TimeScopeweek').removeClass('cj_hd_ac6');
+            $('#TimeScopemonth').removeClass('cj_hd_ac6');
+            $('#TimeScopeyear').addClass('cj_hd_ac6');
+            $('.sjfw_xx2020 span').text('一年内');
+        } else {
+            $('#TimeScopenull').addClass('cj_hd_ac6');
+            $('.sjfw_xx2020 span').text('时间不限');
+            $('#TimeScopeday').removeClass('cj_hd_ac6');
+            $('#TimeScopeweek').removeClass('cj_hd_ac6');
+            $('#TimeScopemonth').removeClass('cj_hd_ac6');
+            $('#TimeScopeyear').removeClass('cj_hd_ac6');
+        }
+
+        $('.cj_hd_listJgpx ul li').removeClass('cj_hd_ac6');
+        if (SortOrder == '-RELEVANCE') {
+            $('.cj_ss_shijian dd a.cj_xiangguan').css({
+                'background-image': 'url(/images/cj_xiangguan.png)',
+                'background-position': '0px -16px'
+            });
+            $('.cj_ss_shijian dd a.cj_xiangguan2').css({
+                'background-image': 'url(/images/cj_xiangguan.png)',
+                'background-position': '0px 0px'
+            });
+
+            $(".cj_ss_shijian dd a.cj_xiangguan2").unbind('click');//解除原绑定click事件
+            $(".cj_ss_shijian dd a.cj_xiangguan2").click(function () {
+                searchStart('SortOrder=-DOCRELTIME')
+            });//重新绑定click事件
+            $('.cj_hd_listJgpx ul li').eq(0).addClass('cj_hd_ac6');
+            $('.jgpx_xx2020 span').text('按相关度');
+        } else if (SortOrder == '+DOCRELTIME') {
+            $('.cj_ss_shijian dd a.cj_xiangguan').css({
+                'background-image': 'url(/images/cj_xiangguan.png)',
+                'background-position': '0px 0px'
+            });
+            $('.cj_ss_shijian dd a.cj_xiangguan2').css({
+                'background-image': 'url(/images/cj_xiangguan2.png)',
+                'background-position': '0px -16px'
+            });
+            $('.cj_hd_listJgpx ul li').eq(1).addClass('cj_hd_ac6');
+            $('.jgpx_xx2020 span').text('时间升序');
+
+            $(".cj_ss_shijian dd a.cj_xiangguan2").unbind('click');//解除原绑定click事件
+            $(".cj_ss_shijian dd a.cj_xiangguan2").click(function () {
+                searchStart('SortOrder=-DOCRELTIME')
+            });//重新绑定click事件
+        } else if (SortOrder == '-DOCRELTIME') {
+            $('.cj_ss_shijian dd a.cj_xiangguan').css({
+                'background-image': 'url(/images/cj_xiangguan.png)',
+                'background-position': '0px 0px'
+            });
+            $('.cj_ss_shijian dd a.cj_xiangguan2').css({
+                'background-image': 'url(/images/cj_xiangguan.png)',
+                'background-position': '0px -16px'
+            });
+            $('.cj_hd_listJgpx ul li').eq(2).addClass('cj_hd_ac6');
+            $('.jgpx_xx2020 span').text('时间降序');
+            $(".cj_ss_shijian dd a.cj_xiangguan2").unbind('click');//解除原绑定click事件
+            $(".cj_ss_shijian dd a.cj_xiangguan2").click(function () {
+                searchStart('SortOrder=+DOCRELTIME')
+            });//重新绑定click事件
+        }
+
+
+        if (SearchWord == null || SearchWord == "") {
+            alert("请输入检索关键词");
+        } else {
+            // 场景化检索开始 只第一页需要
+            if (PageNum == 1) {
+                scenarizedSearch()
+            }
+            $.ajax({
+                url: "/pinyinToChinese",
+                async: false,
+                data: {
+                    "word": SearchWord,
+                },
+                success: function (value) {
+                    console.log(value)
+                    if (value.indexOf('<html') != -1 || value.indexOf('Please enable JavaScript') != -1) {
+                        SearchWord = '';
+                    } else {
+                        SearchWord = value
+                    }
+                },
+                error: function () {
+                    //	alert("error");
+                },
+            });
+
+            //相关短语
+            $.ajax({
+                url: "/searchDy",
+                async: false,
+                data: {
+                    "option": 1,
+                    "word": SearchWord,
+                },
+                success: function (value) {
+                    console.log(value);
+
+                    if (value == undefined || value == null || value == '' || value.indexOf('<html') != -1 || value.indexOf('Please enable JavaScript') != -1) {
+
+                    } else {
+                        SearchWord = SearchWord + " OR " + value;
+                    }
+
+                    //console.log("相关短语: "+SearchWord );
+
+                },
+                error: function () {
+                    //       alert("error");
+
+                }
+            });
+
+            $.ajax({
+                url: "/SearchAll",
+                data: {
+                    //控制检索范围的字段
+                    "chnlslimit": chnlslimit,
+                    //检索范围
+                    "SearchScope": SearchScope,
+                    //时间范围
+                    "TimeScope": TimeScope,
+                    //排列方式
+                    "SortOrder": SortOrder,
+                    //检索词
+                    "SearchWord": SearchWord,
+                    //显示多少条
+                    "PageSize": PageSize,
+                    //第几页
+                    "PageNum": PageNum,
+                    //分类检索固定字段
+                    "chnls": chnls,
+                    "classification": classification,
+                    "cutsize": cutsize,
+                    "notchnls": notchnls,
+                    "notInclude": notInclude
+                },
+                success: function (value) {
+                    // console.log("v: "+value);
+                    var t = "";
+
+                    var j = eval('(' + value + ')');
+                    //console.log(j.length);
+                    var newSearchWord = '<font style="color:red">' + SearchWord + '</font>';
+                    var ulHtml = "";
+                    for (var i = 0; i < j.length; i++) {
+
+                        // if(j[i]["dOCHTMLCON"]&&j[i]["dOCHTMLCON"]!=''&&j[i]["dOCHTMLCON"].indexOf("embed")>0){
+                        if (j[i]["dOCHTMLCON"] && j[i]["dOCHTMLCON"] != '' && j[i]["dOCHTMLCON"].indexOf("embed") > 0) {
+                            j[i]["dOCHTMLCON"] = delHtmlTag(j[i]["dOCHTMLCON"]);
+                            j[i]["dOCCONTENT"] = delHtmlTag(j[i]["dOCCONTENT"]);
+                        } else {
+                            //console.log("---------------" + j[i]["dOCCONTENT"]);
+                        }
+                        if (j[i]["dOCTITLE"]) {
+                            j[i]["dOCTITLE"] = j[i]["dOCTITLE"].replace(new RegExp(SearchWord, 'g'), newSearchWord)
+                        }
+                        var clsbool = false;
+                        var cls = j[i]["chnls"].split(";")
+                        for (var f = 0; f < cls.length; f++) {
+                            if (cls[f] == "75") {
+                                clsbool = true;
+                            } else if (cls[f] == "99") {
+                                j[i]["dOCCONTENT"] = '';
+                            }
+                        }
+                        if (j[i]["dOCCONTENT"]) {
+                            //j[i]["dOCCONTENT"] = j[i]["dOCCONTENT"].replace(new RegExp(SearchWord, 'g'), newSearchWord)
+                            j[i]["dOCCONTENT"] = j[i]["dOCCONTENT"].replace(/\r\n  /g, "");
+                            j[i]["dOCCONTENT"] = j[i]["dOCCONTENT"].replace("<!--ContentStart-->", "").replace("<!--ContentStart-->", "").replace("<!--ContentStart-->", "").replace("<!--ContentStart-->", "").replace("<!--ContentStart-->", "").replace("<!--ContentStart-->", "");
+                            j[i]["dOCCONTENT"] = j[i]["dOCCONTENT"].replace("<!--ContentEnd-->", "").replace("<!--ContentEnd-->", "").replace("<!--ContentEnd-->", "").replace("<!--ContentEnd-->", "").replace("<!--ContentEnd-->", "").replace("<!--ContentEnd-->", "");
+                            j[i]["dOCCONTENT"] = j[i]["dOCCONTENT"].replace("<!--ContentStart--\/>", "").replace("<!--ContentStart--\/>", "").replace("<!--ContentStart--\/>", "").replace("<!--ContentStart--\/>", "").replace("<!--ContentStart--\/>", "").replace("<!--ContentStart--\/>", "");
+                            j[i]["dOCCONTENT"] = j[i]["dOCCONTENT"].replace(/<[^>]+>/g, "");
+
+                            j[i]["dOCCONTENT"] = j[i]["dOCCONTENT"].replace("　　", "");
+                        } else {
+                            j[i]["dOCCONTENT"] = '';
+                        }
+                        if (j[i]["dOCHTMLCON"]) {
+
+                            j[i]["dOCHTMLCON"] = j[i]["dOCHTMLCON"].replace("<!--ContentStart-->", "").replace("<!--ContentStart-->", "").replace("<!--ContentStart-->", "").replace("<!--ContentStart-->", "").replace("<!--ContentStart-->", "").replace("<!--ContentStart-->", "");
+                            j[i]["dOCHTMLCON"] = j[i]["dOCHTMLCON"].replace("<!--ContentEnd-->", "").replace("<!--ContentEnd-->", "").replace("<!--ContentEnd-->", "").replace("<!--ContentEnd-->", "").replace("<!--ContentEnd-->", "").replace("<!--ContentEnd-->", "");
+                            j[i]["dOCHTMLCON"] = j[i]["dOCHTMLCON"].replace("<!--ContentStart--\/>", "").replace("<!--ContentStart--\/>", "").replace("<!--ContentStart--\/>", "").replace("<!--ContentStart--\/>", "").replace("<!--ContentStart--\/>", "").replace("<!--ContentStart--\/>", "");
+                            j[i]["dOCHTMLCON"] = j[i]["dOCHTMLCON"].replace(/<[^>]+>/g, "");
+                        }
+
+                        //j[i]["chnls"].indexOf("73") != -1
+                        if (clsbool) {
+
+                            ulHtml += '<li class="cj_ss_tang1">';
+                            if (j[i]["ztzlurl"] == null || j[i]["ztzlurl"] == "" || j[i]["ztzlurl"] == "null" || j[i]["ztzlurl"] == "undefined" || j[i]["ztzlurl"] == undefined) {
+                                ulHtml += '<div class="cj_hd_ls_img6"><a  target="_blank"  href="' + j[i]["dOCPUBURL"] + '" title="">';
+                            } else {
+                                ulHtml += '<div class="cj_hd_ls_img6"><a  target="_blank"  href="' + j[i]["ztzlurl"] + '" title="">';
+                            }
+                            //ulHtml+='<div class="cj_hd_ls_img6"><a  target="_blank"  href="'+j[i]["dOCPUBURL"]+'" title="">';
+                            ulHtml += '<img src="' + j[i]["slt"] + '" alt="" /></a></div>';
+                            // ulHtml += '<div class="cj_hd_ls_txt6"><div class="cj_hd_biaoti6">';
+                            ulHtml += '<div class=""><div class="cj_hd_biaoti6">';
+                            ulHtml += '<a  target="_blank"  href="' + j[i]["dOCPUBURL"] + '" title="">' + j[i]["dOCTITLE"] + '</a></div>';
+
+                            if (j[i]["nd"] != undefined) {
+                                j[i]["nd"] = j[i]["nd"].replace(new RegExp(SearchWord, 'g'), newSearchWord)
+                                var reg = new RegExp(",", "g");
+                                ulHtml += '<dl class="cj_hd_shijian6"><dt>藏品时代：</dt><dd>' + j[i]["nd"].replace(reg, "·") + '</dd>';
+
+
+                            } else {
+                                //ulHtml+='<dl class="cj_hd_shijian6"><dt>藏品时代：</dt><dd></dd>';
+                            }
+                            if (j[i]["gg"] != undefined) {
+                                j[i]["gg"] = j[i]["gg"].replace(new RegExp(SearchWord, 'g'), newSearchWord)
+                                ulHtml += '</dl><dl class="cj_hd_shijian6"><dt>规格：</dt><dd>' + j[i]["gg"] + '</dd>';
+                            } else {
+                                ulHtml += '</dl><dl class="cj_hd_shijian6"><dt>规格：</dt><dd></dd>';
+                            }
+
+                            if (j[i]["dOCHTMLCON"] == "在另外数据表中" || j[i]["dOCHTMLCON"] == undefined) {
+                                ulHtml += '</dl><dl class="cj_hd_shijian6"><dt>简介：</dt><dd>&nbsp;</dd></dl></div></li>';
+                            } else {
+                                ulHtml += '</dl><dl class="cj_hd_shijian6"><dt>简介：</dt><dd>' + j[i]["dOCHTMLCON"] + '</dd></dl></div></li>';
+                            }
+
+
+                        } else {
+                            if (j[i]["ztzlurl"] == null || j[i]["ztzlurl"] == "" || j[i]["ztzlurl"] == "null" || j[i]["ztzlurl"] == "undefined" || j[i]["ztzlurl"] == undefined) {
+                                ulHtml += '<li class="cj_ss_tang2"><dl><dt><a target="_blank"   href="' + j[i]["dOCPUBURL"] + '" title="">' + j[i]["dOCTITLE"] + '</a>';
+                            } else {
+                                ulHtml += '<li class="cj_ss_tang2"><dl><dt><a target="_blank"   href="' + j[i]["ztzlurl"] + '" title="">' + j[i]["dOCTITLE"] + '</a>';
+                            }
+                            if (j[i]["dOCRELTIME"]) {
+                                ulHtml += '<span>' + j[i]["dOCRELTIME"].substr(0, 10) + '</span>'
+                            }
+                            if (j[i]["dOCHTMLCON"] == "在另外数据表中" || j[i]["dOCHTMLCON"] == undefined) {
+                                ulHtml += '</dt><dd><p>&nbsp;</p></dd></dl></li>';
+                            } else {
+                                //var con = j[i]["dOCCONTENT"].substring(0, 300);
+                                var con = j[i]["dOCCONTENT"];
+                                ulHtml += '</dt><dd><p>' + con + '</p></dd></dl></li>';
+                            }
+                        }
+
+                    }
+
+                    // if (PageNum == 1) {
+                    //     $("#ulHtml").append(ulHtml);
+                    // } else {
+                    //     $("#ulHtml").html(ulHtml);
+                    // }
+                    // $("#ulHtml").html('')
+                    // $("#ulHtml").append(ulHtml);
+                    if (PageNum == 1) {
+                        var cjhHtmlTimer = setInterval(() => {
+                            console.log('1111111111111111');
+                            if (cjhListFinished) {
+                                ulHtml = scenarizedListHtml + ulHtml
+                                $("#ulHtml").html(ulHtml);
+                                clearInterval(cjhHtmlTimer)
+                            }
+                        }, 250);
+                    } else {
+                        $("#ulHtml").html(ulHtml);
+                    }
+
+
+
+
+                },
+                error: function () {
+                    //      alert("error");
+
+                }
+            });
+
+            $.ajax({
+                url: "/Getsum",
+                data: {
+                    //分类chnls需要的栏目id
+                    "chnlslimit": chnlslimit,
+                    //检索范围
+                    "SearchScope": SearchScope,
+                    //时间范围
+                    "TimeScope": TimeScope,
+                    //排列方式
+                    "SortOrder": SortOrder,
+                    //检索词
+                    "SearchWord": SearchWord,
+                    //显示多少条
+                    "PageSize": PageSize,
+                    //第几页
+                    "PageNum": PageNum,
+                    //需要检索的栏目id
+                    "chnls": chnls,
+                    "classification": classification,
+                    "siteid": 5,
+                    "cutsize": cutsize,
+                    "notchnls": notchnls,
+                    "notInclude": notInclude
+                },
+                success: function (value) {
+                    var j = eval('(' + value + ')');
+                    var a = j[0]["sum"] + ":用时" + (j[1]["spendTime"]) + "毫秒";
+
+                    recordCount = j[0]["sum"];
+                    spendTime = (j[1]["spendTime"]);
+
+                    var cjhTimer = setInterval(() => {
+                        console.log('00000000000000');
+                        if (cjhListFinished) {
+                            recordCount = Number(recordCount) + Number(scenarizedTotal)
+                            $("#spendTimeAndSum").html("找到约" + recordCount + "条结果");
+                            clearInterval(cjhTimer)
+                        }
+                    }, 250);
+                    var pageString = showpage(PageNum, recordCount, PageSize);
+                    $("#showpage").html(pageString);
+
+
+                },
+                error: function () {
+                    //   alert("error");
+
+                }
+            });
+            $.ajax({
+                url: "/Getchnlssort",
+                data: {
+
+                    //控制需要检索的id
+                    "chnlslimit": chnlslimit,
+                    //检索范围
+                    "SearchScope": SearchScope,
+                    //时间范围
+                    "TimeScope": TimeScope,
+                    //排列方式
+                    "SortOrder": SortOrder,
+                    //检索词
+                    "SearchWord": SearchWord,
+                    //显示多少条
+                    "PageSize": PageSize,
+                    //第几页
+                    "PageNum": PageNum,
+                    //分类需要传回的字段
+                    "chnls": "0,410,68,73,141,80,115,305,99,376,148,58,60,473,232",
+                    "classification": classification,
+                    "cutsize": cutsize,
+                    "siteid": 5,
+                    "notchnls": notchnls,
+                    "notInclude": notInclude
+                },
+                success: function (value) {
+
+                    if (value != "") {
+
+                        var j = eval('(' + value + ')');
+
+                        if (j[0]["410"] == undefined) {
+                            j[0]["410"] = 0
+                        }
+                        if (j[0]["68"] == undefined) {
+                            j[0]["68"] = 0
+                        }
+                        if (j[0]["73"] == undefined) {
+                            j[0]["73"] = 0
+                        }
+                        if (j[0]["141"] == undefined) {
+                            j[0]["141"] = 0
+                        }
+                        if (j[0]["80"] == undefined) {
+                            j[0]["80"] = 0
+                        }
+                        if (j[0]["115"] == undefined) {
+                            j[0]["115"] = 0
+                        }
+                        if (j[0]["305"] == undefined) {
+                            j[0]["305"] = 0
+                        }
+                        if (j[0]["99"] == undefined) {
+                            j[0]["99"] = 0
+                        }
+                        if (j[0]["376"] == undefined) {
+                            j[0]["376"] = 0
+                        }
+                        if (j[0]["148"] == undefined) {
+                            j[0]["148"] = 0
+                        }
+                        if (j[0]["58"] == undefined) {
+                            j[0]["58"] = 0
+                        }
+                        if (j[0]["60"] == undefined) {
+                            j[0]["60"] = 0
+                        }
+                        if (j[0]["473"] == undefined) {
+                            j[0]["473"] = 0
+                        }
+                        if (j[0]["232"] == undefined) {
+                            j[0]["232"] = 0
+                        }
+
+                        $("#chnls410").html("全景国博（" + j[0]["410"] + "）");
+                        $("#chnls68").html("征集（" + j[0]["68"] + "）");
+                        $("#chnls73").html("保管（" + j[0]["73"] + "）");
+                        $("#chnls141").html("研究（" + j[0]["141"] + "）");
+                        $("#chnls80").html("展览（" + j[0]["80"] + "）");
+                        $("#chnls115").html("社教（" + j[0]["115"] + "）");
+                        $("#chnls305").html("文创（" + j[0]["305"] + "）");
+                        $("#chnls99").html("服务（" + j[0]["99"] + "）");
+                        $("#chnls376").html("学习（" + j[0]["376"] + "）");
+                        $("#chnls148").html("视频（" + j[0]["148"] + "）");
+                        $("#chnls58").html("资讯（" + j[0]["58"] + "）");
+                        $("#chnls60").html("通知公告（" + j[0]["60"] + "）");
+                        $("#chnls473").html("国际联络（" + j[0]["473"] + "）");
+                        $("#chnls232").html("联系我们（" + j[0]["232"] + "）");
+
+                    } else {
+                        alert("暂无数据，请尝试更换'检索范围'或'检索词'！");
+                        $("#chnls410").html("全景国博");
+                        $("#chnls68").html("征集");
+                        $("#chnls73").html("保管");
+                        $("#chnls141").html("研究");
+                        $("#chnls80").html("展览");
+                        $("#chnls115").html("社教");
+                        $("#chnls305").html("文创");
+                        $("#chnls99").html("服务");
+                        $("#chnls376").html("学习");
+                        $("#chnls148").html("视频");
+                        $("#chnls58").html("资讯");
+                        $("#chnls60").html("通知公告");
+                        $("#chnls473").html("国际联络");
+                        $("#chnls232").html("联系我们");
+                    }
+                },
+                error: function () {
+                    //      alert("error");
+                }
+            });
+        }
+    }
+
+
+
+    // 场景化检索
+    function scenarizedSearch() {
+        $.ajax({
+            url: "/api/ckm/pinyin-correct?model=demo&word=" + $('#searchword').val(),
+            type: 'post',
+            success: function (res) {
+                console.log(res);
+                if (res.code = "20000") {
+                    var resHtml = ""
+                    if (res.data.candidates.length > 0) {
+                         res.data.candidates = res.data.candidates.length > 3 ? res.data.candidates.slice(0, 3) : res.data.candidates
+                        for (let i = 0; i < res.data.candidates.length; i++) {
+                            var ele = res.data.candidates[i];
+                            if (!(ele.py == $('#searchword').val().trim())) {
+                                resHtml += '<span>' + ele.py + '</span>'
+                            }
+                        }
+                        $('.gc-right').html(resHtml)
+                        $('.guess-correct').css({ 'height': 'auto' })
+
+                        if ((res.data.candidates.length == 1) && ($('#searchword').val().trim() == res.data.candidates[0].py)) {
+                            $('.gc-right').html('')
+                            $('.guess-correct').css({ 'height': 0 })
+                        }
+                    } else {
+                        $('.gc-right').html('')
+                        $('.guess-correct').css({ 'height': 0 })
+                    }
+
+                    if (/^[A-Za-z]+$/.test($('#searchword').val())) {
+                        scenarizedList(res.data.candidates[0].py)
+                    } else {
+                        scenarizedList($('#searchword').val())
+                    }
+                }
+            },
+            error: function () {
+                cjhListFinished = true
+                console.log('ckm/pinyin-correct error')
+                $('.gc-right').html('')
+                $('.guess-correct').css({ 'height': 0 })
+            }
+        })
+    }
+
+    // 场景化检索列表
+    function scenarizedList(data) {
+        $.ajax({
+            url: "/v1/search/default?tableName=default&start=0&limit=100&keyword=" + data,
+            type: 'get',
+            success: function (res) {
+                console.log(res);
+                if (res.code = "20000") {
+
+                    for (let i = 0; i < res.data.records.length; i++) {
+                        var ele = res.data.records[i];
+                        scenarizedListHtml += '<li class="cj_ss_tang2 scenarized_li">' +
+                            '    <dl>' +
+                            '        <dt><a target="_blank" href="' + ele.docpuburl + '" title="">' + ele.doctitle + '</a><span>' + ele.docreltime.substr(0, 10) + '</span></dt>' +
+                            '        <dd><p>' + ele.docabstract + '</p></dd></dl></li>'
+
+                    }
+
+                    scenarizedTotal = res.data.total
+                    cjhListFinished = true
+                    // $('#ulHtml').prepend(resHtml)
+                } else {
+                    cjhListFinished = true
+                    scenarizedTotal = 0
+                }
+            },
+            error: function () {
+                console.log('search/default error')
+                cjhListFinished = true
+                scenarizedTotal = 0
+            }
+        })
+    }
+
+
+</script>
+
+<script>
+    function keyup_submit(e) {
+        var evt = window.event || e;
+        if (evt.keyCode == 13) {
+            //回车事件
+            searchStart('0')
+        }
+    }
+</script>
+
+<body class="cj_shengzi2">
+    <!--header_menu-->
+    <div class="header">
+        <div class="logo2"><a href="/" title="国家博物馆"><img src="../images/header-logo.png" title="国家博物馆" alt="国家博物馆" /></a></div>
+    </div>
+    <!--/header_menu-->
+
+    <div class="cj_ercom_wai cj_huise cj_pb25">
+        <div class="cj_wz_list">
+		当前位置：<a href="../" target="_self" title="首页">首页</a><span>></span><a class="cj_wz_active3">全文检索</a>
+	</div>
+    </div>
+
+    <!--位置-->
+    <div class="cj_ercom_wai cj_bg_write cj_pb25" style="overflow:visible;">
+        <div class="cj_gaojisou">
+            <dl class="cj_soutou" style="position: relative; z-index:9991;">
+                <dt>
+                    <div class="cj_hd_list22">
+                        <input class="cj_iput11" id="searchword" type="text" name="" value="" placeholder="请输入检索关键词" onkeydown="keyup_submit(event);" autocomplete="off" /><input type="button" class="cj_tijiao11" value="" name="" onclick="searchStart('0')" />
+                    </div>
+
+                </dt>
+                <!--<dd>搜索热词：<a href="" title="">预约</a><a href="" title="">青铜器</a><a href="" title="">瓷器</a><a href="" title="">龙</a><a href="" title="">丝绸之路</a><a href="" title="">四羊方尊</a><a href="" title="">志愿者</a><a href="" title="">招聘</a><a href="" title="">复兴之路</a><a href="" title="">青铜</a></dd>-->
+                <div class="searchword_dows" style="display: none;">
+                    <ul>
+                        <li></li>
+                    </ul>
+                </div>
+            </dl>
+
+            <style type="text/css">
+                .searchword_dows {
+                    position: absolute;
+                    top: 60px;
+                    background-color: #FFFFFF;
+                    -moz-box-shadow: 1px 2px 8px #878787;
+                    -webkit-box-shadow: 1px 2px 8px #878787;
+                    box-shadow: 1px 2px 8px #878787;
+                    width: 813px;
+                    left: 50%;
+                    margin-left: -406px;
+                    z-index: 9;
+                    border-radius: 6px;
+                }
+
+                .searchword_dows ul {
+                    padding: 10px;
+                }
+
+                .searchword_dows ul li {
+                    border-bottom: 1px solid #a9a9a9;
+                    font-size: 16px;
+                    color: #4d4d4d;
+                    line-height: 30px;
+                    padding: 2px 0px;
+                    cursor: pointer;
+                }
+            </style>
+            <script type="text/javascript">
+
+                var flag = true;
+                $('#searchword').on('compositionstart', function () {
+                    flag = false;
+                });
+                $('#searchword').on('compositionend', function () {
+                    flag = true;
+                    shur_val()
+                });
+                $('#searchword').on('input', function () {
+                    if (flag) {
+                        shur_val()
+                    }
+                });
+                $("#searchword").focus(function () {
+                    shur_val();
+                });
+                // $("#searchword").blur(function(){
+                // 	shur_val();
+                // });
+
+                function shur_val() {
+                    var word = $("#searchword").val();
+                    $.ajax({
+                        url: "/searchDy",
+                        data: {
+                            "option": 2,
+                            "word": word,
+                        },
+                        success: function (value) {
+                            var newWord = "<font color='red'>" + word + "</font>";
+                            var s_array = eval(value);
+                            // console.log(s_array);
+                            if (s_array != undefined) {
+                                if (s_array.length > 0) {
+                                    var s_html = '';
+                                    for (var i = 0; i < s_array.length; i++) {
+                                        if (s_array[i].indexOf(word) != -1) {
+                                            var str = s_array[i];
+                                            var newStr = str.replace(word, newWord);
+                                            s_html += '<li>' + newStr + '</li>'
+                                        }
+
+                                    }
+                                    $('.searchword_dows ul').html(s_html);
+                                     $('.searchword_dows').show();
+                                }
+                            }
+                            else {
+                                $('.searchword_dows ul').html('');
+                                $('.searchword_dows').hide();
+                            }
+                        },
+                        error: function () {
+                            //   alert("error");
+                        }
+                    });
+                }
+                $(document).bind('click', function () {
+                    $(".searchword_dows").hide();
+                });
+                $('body').on('click', '.searchword_dows li', function () {
+                    $('#searchword').val($(this).text());
+                });
+            </script>
+
+            <style type="text/css">
+                .qwjs_yangshi2020 {
+                    height: 40px;
+                    padding-left: 94px;
+                    z-index: 999;
+                    position: relative;
+                }
+
+                .cj_hd_left2020 {
+                    width: 178px;
+                    height: 36px;
+                    float: left;
+                    position: relative;
+                    margin-left: 34px;
+                }
+
+                .cj_hd_left2020 dt {
+                    font-size: 16px;
+                    color: #a9a9a9;
+                    border: 1px solid #d8d8d8;
+                    border-radius: 36px;
+                    height: 36px;
+                    line-height: 36px;
+                    background-image: url(../images/js_icon01_t2020.png);
+                    background-repeat: no-repeat;
+                    background-position: 138px 13px;
+                    cursor: pointer;
+                }
+
+                .cj_hd_left2020 dt.jgpx_gjjs2020 {
+                    background-image: url(../images/js_icon03_t2020.png);
+                    background-position: 138px 8px
+                }
+
+                .cj_hd_left2020 dt span {
+                    display: block;
+                    width: 120px;
+                    text-indent: 30px;
+                    background-image: url(../images/js_icon02_t2020.png);
+                    background-repeat: no-repeat;
+                    background-position: 119px 7px;
+                }
+
+                .cj_hd_left2020 dt a {
+                    display: block;
+                    text-indent: 30px;
+                    background-image: url(../images/js_icon02_t2020.png);
+                    background-repeat: no-repeat;
+                    background-position: 120px 7px;
+                    color: #a9a9a9;
+                }
+
+                .cj_hd_left2020 dd {
+                    border: 1px solid #b6b6b6;
+                    background-image: url(../images/js_icon04_t2020.png);
+                    position: absolute;
+                    top: 43px;
+                    left: 0px;
+                    width: 100%;
+                    border-radius: 6px;
+                    display: none;
+                    -moz-box-shadow: 1px 2px 8px #878787;
+                    -webkit-box-shadow: 1px 2px 8px #878787;
+                    box-shadow: 1px 2px 8px #878787;
+                }
+
+                .cj_hd_left2020 dd ul {
+                    padding: 10px;
+                }
+
+                .cj_hd_left2020 dd ul li {
+                    border-bottom: 1px solid #a9a9a9;
+                    font-size: 16px;
+                    color: #4d4d4d;
+                    text-indent: 20px;
+                    line-height: 30px;
+                    padding: 2px 0px;
+                }
+
+                .cj_hd_left2020 dd ul li a {
+                    display: block;
+                }
+
+                .cj_hd_left2020 dd ul li.cj_hd_ac6 {}
+
+                .cj_hd_left2020 dd ul li.cj_hd_ac6 a {
+                    background-color: #aa343c;
+                    color: #fff;
+                    border-radius: 5px;
+                }
+
+                .cj_hd_list22 {
+                    background-image: url(../images/js_icon05_t2020.png);
+                    width: 813px;
+                    height: 60px;
+                }
+
+                .cj_soutou dt {
+                    padding-left: 126px;
+                }
+
+                .cj_iput11 {
+                    height: 60px;
+                    line-height: 60px;
+                    width: 714px;
+                }
+
+                .cj_tijiao11 {
+                    width: 32px;
+                    height: 32px;
+                    background-image: url(../images/js_icon06_t2020.png);
+                }
+
+                .cj_hd_left2 dd.cj_hd_list3 {
+                    padding: 6px 11px;
+                    border-left: 1px solid #b6b6b6;
+                    border-right: 1px solid #b6b6b6;
+                    border-bottom: 1px solid #b6b6b6;
+                    background-color: #fff;
+                }
+
+                .cj_hd_left2 dd.cj_hd_list3 ul li:first-child {
+                    border: 0px;
+                }
+
+                .cj_hd_left2 dd.cj_hd_list3 ul li {
+                    background-color: #fff;
+                    border-top: 1px solid #a9a9a9;
+                    padding: 5px 0px;
+                    height: 50px;
+                    line-height: 50px;
+
+                }
+
+                .cj_hd_left2 dd.cj_hd_list3 ul li a {
+                    color: #4d4d4d;
+                    background-position: 188px 15px;
+                }
+
+                .cj_hd_left2 dd.cj_hd_list3 ul li.cj_hd_ac3 a {
+                    background-color: #aa343c;
+                    border-radius: 6px;
+                }
+
+                .cj_hd_left2 dd.cj_hd_list3 ul li a:hover {
+                    background-color: #aa343c;
+                    content: #fff;
+                    border-radius: 6px;
+                }
+            </style>
+            <div class="qwjs_yangshi2020">
+                <dl class="cj_hd_left2020">
+                    <dt class="cxfw_xx2020"><span>查询范围</span></dt>
+                    <dd class="cj_hd_list2020">
+                        <ul>
+                            <li id="SearchScopedocor" class="cj_hd_ac6"><a href="javascript:void(0)" title=""
+                                    onclick="searchStart('SearchScope=docor')">所有结果</a></li>
+                            <li id="SearchScopeDOCTITLE"><a href="javascript:void(0)" title=""
+                                    onclick="searchStart('SearchScope=DOCTITLE')">标题</a></li>
+                            <li id="SearchScopeDOCCONTENT"><a href="javascript:void(0)" title=""
+                                    onclick="searchStart('SearchScope=DOCCONTENT')">正文</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+                <dl class="cj_hd_left2020">
+                    <dt class="sjfw_xx2020"><span>时间范围</span></dt>
+                    <dd class="cj_hd_list2020">
+                        <ul>
+                            <li id="TimeScopenull" class="cj_hd_ac6"><a href="javascript:void(0)" title=""
+                                    onclick="searchStart('TimeScope=null')">时间不限</a></li>
+                            <li id="TimeScopeday"><a href="javascript:void(0)" title=""
+                                    onclick="searchStart('TimeScope=day')">当天</a></li>
+                            <li id="TimeScopeweek"><a href="javascript:void(0)" title=""
+                                    onclick="searchStart('TimeScope=week')">一周内</a></li>
+                            <li id="TimeScopemonth"><a href="javascript:void(0)" title=""
+                                    onclick="searchStart('TimeScope=month')">一个月内</a></li>
+                            <li id="TimeScopeyear"><a href="javascript:void(0)" title=""
+                                    onclick="searchStart('TimeScope=year')">一年内</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+                <dl class="cj_hd_left2020">
+                    <dt class="jgpx_xx2020"><span>结果排序</span></dt>
+                    <dd class="cj_hd_list2020 cj_hd_listJgpx">
+                        <ul>
+                            <!-- <li class="cj_hd_ac6"><a href="javascript:void(0)" title=""  onclick="searchStart('SortOrder=+RELEVANCE')">按相关度升序</a></li> -->
+                            <li class="cj_hd_ac6"><a href="javascript:void(0)" title=""
+                                    onclick="searchStart('SortOrder=-RELEVANCE')">按相关度</a></li>
+                            <li><a href="javascript:void(0)" title=""
+                                    onclick="searchStart('SortOrder=+DOCRELTIME')">时间升序</a></li>
+                            <li><a href="javascript:void(0)" title=""
+                                    onclick="searchStart('SortOrder=-DOCRELTIME')">时间降序</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+                <dl class="cj_hd_left2020">
+                    <dt class="jgpx_xx2020 jgpx_gjjs2020"><a href="/gjjs/">高级检索</a></dt< /dl>
+            </div>
+
+        </div>
+    </div>
+    <!--/位置-->
+
+
+    <!--展览视频-->
+    <div class="cj_hd_wai cj_paddingbobo cj_yaojing">
+        <div class="cj_hd_1066">
+            <div class="cj_hd_left_wai">
+                <dl class="cj_hd_left2">
+                    <dt>结果范围</dt>
+                    <dd class="cj_hd_list3">
+                        <ul>
+                            <li class="cj_hd_ac3"><a id="chnls0" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=0')">全部</a></li>
+                            <li><a id="chnls410" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=410')">全景国博</a></li>
+                            <li><a id="chnls68" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=68')">征集</a></li>
+                            <li><a id="chnls73" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=73')">保管</a></li>
+                            <li><a id="chnls141" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=141')">研究</a></li>
+                            <li><a id="chnls80" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=80')">展览</a></li>
+                            <li><a id="chnls115" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=115')">社教</a></li>
+                            <li><a id="chnls305" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=305')">文创</a></li>
+                            <li><a id="chnls99" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=99')">服务</a></li>
+                            <li><a id="chnls376" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=376')">学习</a></li>
+                            <li><a id="chnls148" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=148')">视频 </a></li>
+                            <li><a id="chnls58" href="javascript:void(0)" title="" onclick="searchStart('chnls=58')">资讯
+                                </a></li>
+                            <li><a id="chnls60" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=60')">通知公告 </a></li>
+                            <li><a id="chnls473" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=473')">国际联络</a></li>
+                            <li><a id="chnls232" href="javascript:void(0)" title=""
+                                    onclick="searchStart('chnls=232')">联系我们 </a></li>
+                        </ul>
+                    </dd>
+                </dl>
+
+            </div>
+
+            <div class="cj_hd_right">
+                <dl class="cj_ss_shijian">
+                    <dt id="spendTimeAndSum">找到约0条结果</dt>
+                    <dd>
+                        <a href="javascript:void(0)" title="按相关度" class="cj_xiangguan"
+                            onclick="searchStart('SortOrder=-RELEVANCE')">按相关度</a><span>|</span><a
+                            href="javascript:void(0)" title="按时间" class="cj_xiangguan2">按时间</a>
+                    </dd>
+                </dl>
+                <style>
+                    .guess-correct {
+                        margin-bottom: 15px;
+                        overflow: hidden;
+                        /* display: none; */
+                        font-size: 18px;
+                        height: 0;
+                    }
+
+                    .gc-left {
+                        float: left;
+                    }
+
+                    .gc-right {
+                        float: left;
+                    }
+
+                    .gc-right span {
+                        color: red;
+                        margin: 0 6px;
+                        cursor: pointer;
+                    }
+                </style>
+                <div class="guess-correct">
+                    <div class="gc-left">您要找的是不是：</div>
+                    <div class="gc-right"></div>
+                </div>
+                <ul class="cj_hd_zhanh6" id="ulHtml">
+                </ul>
+                <div class="cj_clear"></div>
+                <div class='cj_page6' id="showpage">
+
+                    <script>
+                        //定义翻页需要的变量
+                        //共多少页
+                        function showpage(PageNum, recordCount, PageSize) {
+                            var pagehtml = "";
+                            var countPage = Math.ceil(recordCount / PageSize);
+
+                            //输出分页
+                            var prevPage = PageNum - 1
+                            var nextPage = parseInt(PageNum) + 1
+                            var endPage = countPage
+                            var num = 9;
+                            var startPage = PageNum - 2;
+                            if (startPage <= 0) startPage = 1;
+                            var endpage = startPage + num;
+                            if (endpage > countPage)
+                                endpage = countPage;
+                            if (endpage - 9 > 0) {
+                                startPage = endpage - 9;
+                            } else {
+                                startPage = 1;
+                            }
+
+
+
+                            if (countPage > 1 && PageNum != 1 && PageNum != 2)
+                                pagehtml += ("<a class='cj_shang6' href='javascript:void(0)' onclick=searchStart('PageNum=" + (prevPage) + "') >上一页</a>");
+                            else if (countPage > 1 && PageNum == 2)
+                                pagehtml += ("<a  class='cj_shang6'  href='javascript:void(0)' onclick=searchStart('PageNum=1') >上一页</a>");
+                            else
+                                pagehtml += ("<a  class='cj_shang6' >上一页</a>");
+
+
+
+
+
+                            for (var i = startPage; i <= endpage; i++) {
+                                if (PageNum == i) {
+                                    pagehtml += ("<a class='cj_pg_active6'>" + i + "</a>");
+                                } else if (i == 0) {
+                                    pagehtml += ("<a href='javascript:void(0)'  onclick=searchStart('PageNum=1')>" + 1 + "</a> ");
+                                } else {
+                                    pagehtml += ("<a href='javascript:void(0)' onclick=searchStart('PageNum=" + i + "')>" + i + "</a>");
+                                }
+                            }
+                            if (countPage > 1 && PageNum != (countPage))
+                                pagehtml += ("<a  class='cj_shang6' href='javascript:void(0)' onclick=searchStart('PageNum=" + nextPage + "')>下一页</a>");
+                            else
+                                pagehtml += ("<a   class='cj_shang6' >下一页</a>");
+
+                            pagehtml += ("<span class='tebie_gong'>共" + countPage + "页</span>");
+
+
+                            return pagehtml;
+                        }
+
+                    </script>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!--/展览简讯-->
+
+    <!--footer-->
+    <!--footer-->
+<style>
+.footerEwmUl li {
+    margin-left: 77px;
+    width: 112px;
+}
+.footer-link a {
+    padding: 0 57px 0 52px;
+    font-size:14px;
+
+}
+.footer-txt p span{padding: 0 22px;}
+.zgyh_logo_left{
+    width: 383px;
+    float: left;
+    text-align: center;
+}
+.gjbwg_con_right{
+    width: 677px;
+    float: right;
+}
+.zgyh_logo_left img{width: 150px; margin-top: 10px;}
+</style>
+<div class="footer">
+    <div class="main" style="width:1060px;">
+        <div style="">
+            <div>
+                <div class="footer-txt" style="text-align: left;position: relative;color: #cacaca;">
+                    <a href="https://www.chnmuseum.cn/shxg/wbwx/" title="融媒矩阵" style="color:#cacaca;">中国国家博物馆融媒矩阵</a>：
+                </div>
+                <ul class="footerEwmUl">
+                	<li>
+                	   <img src="/images/wx1Ewm20200314.png" alt="国家博物馆微信服务号" />
+                	   <p>国家博物馆<br>微信服务号</p>
+                	</li>
+
+                        <!--<li>
+                	   <img src="/images/gjenfwh20200801.jpg" alt="国家博物馆英文版微信服务号" />
+                	   <p>国家博物馆英文版<br>微信服务号</p>
+                	</li>-->
+
+                	<li>
+                	   <img src="/images/wx2Ewm20200314.png" alt="国博君微信订阅号" />
+                	   <p>国博君<br>微信订阅号</p>
+                	</li>
+
+                        <!--<li>
+                	   <img src="/images/gjzlfwh20200801.jpg" alt="国家展览微信服务号" />
+                	   <p>国家展览<br>微信服务号</p>
+                	</li>-->
+                        <li> 
+                	   <img src="/images/gjbwgapp20220221.jpg" alt="国家博物馆APP" />
+                	   <p>国家博物馆<br>APP</p>
+                	</li>
+                        <li> 
+                	   <img src="/images/gbxhsh20251112.png" alt="国家博物馆APP" />
+                	   <p>国家博物馆<br>小红书</p>
+                	</li>
+                	<li>
+                	   <img src="/images/wbEwm20200314.png" alt="国家博物馆官方微博" />
+                	   <p>官方微博</p>
+                	</li>
+                	<li>
+                	   <img src="/images/dyEwm20200314.png" alt="国家博物馆官方抖音" />
+                	   <p>官方抖音</p>
+                	</li>
+                </ul>
+                <div class="footer-link" style="text-align: center; border-bottom: 1px solid #adadad;">
+                    <!--<a class="header-lang" title="网站导航">网站导航</a>-->
+                    <a style="padding-left:0px;" href="https://www.chnmuseum.cn/shxg/sitemap/" title="网站地图">网站地图</a>
+                    <a href="https://www.chnmuseum.cn/shxg/yqlj/" title="友情链接">友情链接</a>
+                    <!--<a href="https://www.chnmuseum.cn/sp/" title="国博视频">国博视频</a>-->
+                    <a href="https://www.chnmuseum.cn/cg/lybd/" title="留言板">留言板</a>
+                    <a href="https://www.chnmuseum.cn/shxg/lxwm/" title="联系我们">联系我们</a>
+                    <a href="https://www.chnmuseum.cn/shxg/bqsm/" title="版权声明">版权声明</a>
+                    <a style="background:none; padding-right: 0px;"  href="https://www.chnmuseum.cn/shxg/yszc/" title="隐私安全声明">隐私安全声明</a>
+                    <!--<a href="https://www.chnmuseum.cn/shxg/yszc/" title="隐私政策">隐私政策</a>-->
+                    <!--<a style="background:none; padding-right: 0px;" href="https://www.chnmuseum.cn/shxg/wjdc/" title="问卷调查">问卷调查</a>-->
+
+                </div>
+
+                <div class="footer-txt" style="text-align: left;position: relative;overflow:hidden;">
+                    <div class="zgyh_logo_left"><a href="https://www.boc.cn" target="_blank"><img src="/images/zgyg_logo.png" /></a></div>
+                    <div class="gjbwg_con_right">
+                        <p style="text-align: left;">
+                            <span style="padding-left:0px;">中国国家博物馆版权所有</span>|
+                            <a href="https://beian.miit.gov.cn" target="_blank"><span>京ICP备05008885号</span></a>|
+                            <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010102003012" target="_blank"><span>京公网安备11010102003012号</span></a> 
+                                
+                        </p>
+                        <p style="text-align: left;">
+                            <span style="padding-left:0px;">内容运维：新闻传播处&nbsp;&nbsp;&nbsp;&nbsp;<!--国博（北京）文化传媒有限公司--></span>|<span>技术保障：信息技术部&nbsp;&nbsp;&nbsp;<a  style="color:#cacaca;">北京拓尔思信息技术股份有限公司</a></span>
+                        </p>
+                        <p style="text-align: left;"><span style="padding-left: 0px;">EMAIL：service@chnmuseum.cn</span></p>
+                        <div style="display: inline-block;margin-left: 40px;position: absolute;right:0;top:20px">
+                          <a href="//bszs.conac.cn/sitename?method=show&amp;id=30E0CF203BE827D8E053022819AC57DB" target="_blank"><img src="/images/blue.png" /></a>
+                        </div> 
+                    </div>
+                    
+                </div>
+            </div>
+
+            <!--<div style="float: right;">
+                <ul class="ft_xiamian_jiand">
+                    <li ><a href="https://weibo.com/chnmuseum/" target="_blank"><img src="/images/ft_20190410_icon1.png" /></a></li>
+                    <li class="ft_teshuxu">
+                        <a href="javascript:void(0);"><img src="/images/ft_20190410_icon2.png" /></a>
+                        <div class="ft_ying_weixin"><img src="/images/ft_20190410_wei2.jpg" /><img src="/images/ft_20190410_wei1.jpg" /></div>
+                    </li>
+                    <li style="display: none;"><a href=""><img src="/images/ft_20190410_icon3.png" /></a></li>
+                </ul>
+            </div>-->
+        </div>
+        <div class="footer-logo"><img src="/images/footer-logo.png" title="国家博物馆" alt="国家博物馆" /></div>
+    </div>
+</div>
+<!--/footer-->
+
+
+
+<!--全屏弹出层位置-->
+
+
+
+<script>
+$(function(){
+    var windowwidth=$(window).width();
+      if(windowwidth<1200){
+       $(".header,.footer").css("width","1200px");
+      }else{
+       $(".header,.footer").css("width","100%");
+      }
+    $(window).resize(function(){
+     var windowwidth=$(window).width();
+      if(windowwidth<1200){
+       $(".header,.footer").css("width","1200px");
+      }else{
+       $(".header,.footer").css("width","100%");
+      }
+      
+    });
+
+/*导航弹出层 开始*/
+   
+    $('.nav_eject_Bul .nav_eject_Bli:last-child').css('border','0');
+    $('.header-lang').click(function(){
+        
+         $('.nav_eject_Box').show();
+          var windowHeight = $(window).height();
+         //var navejectcenterH = $('.nav_eject_center').height();
+         //$('.nav_eject_center').css('margin-top',(windowHeight-navejectcenterH)*0.5+'px')
+    })
+    $('.nav_eject_close').click(function(){
+        $('.nav_eject_Box').hide();
+    })
+    /*导航弹出层 结束*/
+
+
+    $('.nav_eject_Bul li a').click(function(){
+        $('.nav_eject_Box').hide();
+    })
+
+
+    $(".ft_teshuxu").hover(function(){
+        $(".ft_ying_weixin").show(); 
+    },function(){
+        $(".ft_ying_weixin").hide(); 
+    })
+
+})
+
+
+
+    var zl_jiekou="https://www.chnmuseum.cn/zl/?";
+    var zl_maodian="#zl_zzzl";
+
+    function gotofuwi0(){
+        var zhanlan0 = $("#zhanlan0").attr("value")
+        location.href=zl_jiekou+"tex="+encodeURI(zhanlan0)+zl_maodian;
+        $('.nav_eject_Box').hide();
+    }
+
+    function gotofuwi1(){
+        var zhanlan1 = $("#zhanlan1").attr("value")
+        location.href=zl_jiekou+"tex="+encodeURI(zhanlan1)+zl_maodian;
+        $('.nav_eject_Box').hide();
+    }
+
+    function gotofuwi2(){
+        var zhanlan2 = $("#zhanlan2").attr("value")
+        location.href=zl_jiekou+"tex="+encodeURI(zhanlan2)+zl_maodian;
+        $('.nav_eject_Box').hide();
+    }
+
+
+
+    var qj_jiekou="http://www.chnmuseum.cn/";
+    var qj_maodian="#qj_lishil";
+    var qj_maodianzl="#znjdlsj";
+
+    function gotoquanjing0(){
+        var quanjing0 = $("#quanjing0").attr("value")
+        location.href=qj_jiekou+"tex="+encodeURI(quanjing0)+qj_maodian;
+        $('.nav_eject_Box').hide();
+    }
+
+
+    function gotoquanjing1(){
+        var quanjing1 = $("#quanjing1").attr("value")
+        location.href=qj_jiekou+"tex="+encodeURI(quanjing1)+qj_maodian;
+        $('.nav_eject_Box').hide();
+    }
+
+    function gotoquanjing2(){
+        var quanjing2 = $("#quanjing2").attr("value")
+        location.href=qj_jiekou+"tex="+encodeURI(quanjing2)+qj_maodian;
+        $('.nav_eject_Box').hide();
+    }
+
+
+    function gotoquanjing3(){
+        var quanjing3 = $("#quanjing3").attr("value")
+        location.href=qj_jiekou+"tex="+encodeURI(quanjing3)+qj_maodianzl;
+        $('.nav_eject_Box').hide();
+    }
+
+    //20200517修改去掉链接qjgb
+  //$(function() {
+       // $(".zljsCBox a").each(function(){
+          //var dstxghrem=$(this).attr("href").substring(5, 0);
+
+          //if(dstxghrem=="/qjgb"){
+           // var dstxghreh=$(this).attr("href").substring(5);
+           // $(this).attr("href",dstxghreh)
+         // }
+
+       // });
+  //});
+
+</script>
+
+<!--网脉-->
+<script id="_trs_ta_js" src="//ta.trs.cn/c/js/ta.js?mpid=2797" async="async" defer="defer"></script>
+
+<!--百度-->
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d8512e191052092ef1dd135588660448";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+    <!--/footer-->
+    <script type="text/javascript">
+        //轮播图js效果
+        var ary = location.href.split("&");
+        $(".slideBox").slide({
+            mainCell: ".bd ul",
+            effect: "fold",
+            autoPlay: "true",
+            trigger: ary[3],
+            easing: ary[4],
+            delayTime: ary[5],
+            mouseOverStop: ary[6],
+            pnLoop: ary[7]
+        });
+
+    </script>
+    <script>
+        function getParameter(param) {
+            var query = window.location.search;
+            var iLen = param.length;
+            var iStart = query.indexOf(param);
+            if (iStart == -1)
+                return "";
+            iStart += iLen + 1;
+            var iEnd = query.indexOf("&", iStart);
+            if (iEnd == -1)
+                return query.substring(iStart);
+            return query.substring(iStart, iEnd);
+        }
+        window.onload = function () {
+        }
+
+        $().ready(function () {
+
+            var searchword = getParameter("searchword");
+
+            if (searchword != "") {
+
+                SearchScope = getParameter("SearchScope");
+                TimeScope = getParameter("TimeScope");
+                SearchWord = decodeURI(searchword);
+                $("#searchword").val(SearchWord);
+                searchStart('0');
+            }
+
+        });
+
+        $(function () {
+            $('.cj_ss_shijian dd a.cj_xiangguan').css({ 'background-image': 'url(/images/cj_xiangguan.png)', 'background-position': '0px -16px' });
+            $('.cj_ss_shijian dd a.cj_xiangguan2').css({ 'background-image': 'url(/images/cj_xiangguan.png)', 'background-position': '0px 0px' });
+            $(".cj_ss_shijian dd a.cj_xiangguan2").click(function () { searchStart('SortOrder=-DOCRELTIME') });
+        })
+
+
+    </script>
+
+
+    <script type="text/javascript">
+        // 　　　　$(function(){
+        // 　　　　　　$(document).bind("click",function(e){
+        // 　　　　　　  var target  = $(e.target);
+        // 　　　　　  　if(target.closest(".cj_hd_list2020").length == 0){
+        // 　　　　　　   $(".cj_hd_list2020").hide();
+        // 　　　　　　     }　　　　
+        // 　　　　　　})
+
+        //             $(".cj_hd_left2020 dt").click(function(){
+        //               //$(this).parent().find(".cj_hd_list2020").toggle();
+        //               $(".cj_hd_list2020").show();
+        //             });
+
+        // 　　　　})
+
+
+
+        //点击#btnClick时要阻止冒泡，否则.pop是不显示的，
+        //因为冒泡了，会执行到下面的方法。
+        function stopPropagation(e) {
+            var ev = e || window.event;
+            if (ev.stopPropagation) {
+                ev.stopPropagation();
+            }
+            else if (window.event) {
+                window.event.cancelBubble = true;//兼容IE
+            }
+        }
+        $(".cj_hd_left2020 dt").click(function (e) {
+            $(this).parent().find(".cj_hd_list2020").toggle();
+            $(this).parent().siblings().find(".cj_hd_list2020").hide();
+            stopPropagation(e);
+        });
+        $(document).bind('click', function () {
+            $(".cj_hd_list2020").hide();
+        });
+        // $("#pop").click(function (e) {
+        //     stopPropagation(e);
+        // });
+        // 候选词点击
+        $('.gc-right').on('click', 'span', function () {
+            console.log($(this).text())
+            $('#searchword').val($(this).text())
+            setTimeout(() => {
+                $('.cj_tijiao11').click()
+            }, 300);
+        })
+    </script>
+<div style="width:-100px; height:-100px; display:none;"><a href="/ics/cpf/hlink119290"></a></div></body>
+
+</html>

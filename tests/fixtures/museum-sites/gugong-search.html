@@ -1,0 +1,1806 @@
+<!doctype html>
+<html>
+<script type="text/javascript">
+    if (!window.matchMedia) {
+        var el = document.createElement('div');
+        el.style.cssText =
+            "position: fixed; left: 0; top: 0; width: 100%; height: 100%; background-color: #575757; z-index: 999999;";
+        el.innerHTML =
+            '<div style="position: absolute; top: 40%; left: 0; right: 0; margin: auto; width: 80%; font-family: Microsoft YaHei; font-size: 2em; font-weight: bold; text-align: center; color: #fff;">您当前使用的浏览器版本过低，<br>建议尽快升级您的浏览器，以获得更好的浏览体验！</div>';
+        document.documentElement.appendChild(el);
+    }
+</script>
+<head>
+    <meta charset="utf-8">
+    <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no,email=no,adress=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="SiteName" content="故宫博物院" >
+<meta name="SiteDomain" content="www.dpm.org.cn" >
+<meta name="ColumnKeywords"   content="故宫博物院,故宫,故宫官网,故宫博物院官网">
+<meta name="ColumnDescription"   content="故宫博物院成立于1925年10月10日，是以明清两代皇宫和宫廷旧藏文物为基础建立起来的大型综合性古代艺术博物馆，是世界文化遗产地、全国重点文物保护单位和爱国主义教育示范基地。">
+        <meta name="ColumnName" content="搜索结果" >
+        <meta name="ColumnType" content="搜索结果" >
+            <title>全文检索 - 故宫博物院</title>
+                <meta name="Keywords" content="故宫博物院,故宫,故宫官网,故宫博物院官网" />
+                    <meta name="Description" content="故宫博物院成立于1925年10月10日，是以明清两代皇宫和宫廷旧藏文物为基础建立起来的大型综合性古代艺术博物馆，是世界文化遗产地、全国重点文物保护单位和爱国主义教育示范基地。" />
+                <link rel="stylesheet" href="/static/themes/css/vendor.css?v=744416">
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/static/themes/css/main.css?v=744416">
+    <!-- endinject -->
+    <script src="/static/themes/js/vendor.js?v=744416"></script>
+    <!-- inject:js -->
+    <script src="/static/themes/js/main.js?v=744416"></script>
+    <!-- endinject -->
+    <script src="/static/jquery/jquery.cookie.js?v=744416"></script>
+    <script src="//www.dpm.org.cn/static/api/js/share.js?v=744416"></script>
+    <script>
+        var imgs_ico = ""?"":'/static/themes/themes_wap/image/wechat_share1.png';
+        var title = ""?"":"全文检索";
+        if(title != ''){
+            title = title + ' - ' + "故宫博物院";
+        }else{
+            title = "故宫博物院";
+        }
+        var tContent = ""?"":"";
+    </script>
+    <script type="text/javascript" src="//res2.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+<script type="text/javascript" src="//weigugong.dpm.org.cn/api/jssdk/ticket?mpid=B1335266910"></script>
+<script type="text/javascript">
+    var urls2 = window.location.href;
+    if(typeof imgs_ico === 'undefined' || imgs_ico == ''){
+        imgs_ico = '/static/themes/themes_wap/image/wechat_share1.png?v=744416';
+    }
+    if(typeof title === 'undefined' || title == ''){
+       title =  "全文检索 - 故宫博物院";
+    }
+    if(typeof tContent === 'undefined' || tContent == ''){
+        tContent =  "故宫博物院成立于1925年10月10日，是以明清两代皇宫和宫廷旧藏文物为基础建立起来的大型综合性古代艺术博物馆，是世界文化遗产地、全国重点文物保护单位和爱国主义教育示范基地。";
+    }
+
+    function isWeiXin() {
+        //判断是否微信
+        var ua = window.navigator.userAgent.toLowerCase();
+        // console.log(ua);//mozilla/5.0 (iphone; cpu iphone os 9_1 like mac os x) applewebkit/601.1.46 (khtml, like gecko)version/9.0 mobile/13b143 safari/601.1
+        if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    function isdingding(){
+        //判断是不是钉钉
+        var ua = navigator.userAgent.toLowerCase();
+        return ua.indexOf("dingtalk") >= 0;
+    }
+    if(isWeiXin()){
+        if(!(urls2.indexOf("?") >= 0) ) { //判断urls2地址中是否包含link字符串
+            urls2 += '?from=groupmessage';
+        }else if((urls2.indexOf("?from=groupmessage")) >= 0){
+            window.location.href = urls2.substr(0,urls2.indexOf("?from=groupmessage"));
+        }else if((urls2.indexOf("?from=singlemessage")) >= 0){
+            window.location.href = urls2.substr(0,urls2.indexOf("?from=singlemessage"));
+        }
+        if(imgs_ico.indexOf("https://img.dpm.org.cn") >= 0){
+        }else{
+            imgs_ico = 'https://img.dpm.org.cn'+imgs_ico;
+        }
+    }else if(isdingding()){
+        if(!(urls2.indexOf("?") >= 0) ) { //判断urls2地址中是否包含link字符串
+            window.location.href = urls2 + '?_wap=1';
+        }else if(!(urls2.indexOf("_wap")>= 0) ){
+            window.location.href = urls2 + '&_wap=1';
+        }
+    }
+    window.shareData = {
+        "imgUrl": imgs_ico,  //分享图片地址
+        "timeLineLink": urls2, // 分享朋友圈地址链接
+        "sendFriendLink": urls2, // 分享好友地址链接
+        "tTitle": title, //分享标题
+        "tContent": tContent //分享描述
+    };
+    //     "timeLineLink": "https://www.dpm.org.cn/index.html?", // 分享朋友圈地址链接
+    // "sendFriendLink": "https://www.dpm.org.cn/index.html?", // 分享好友地址链接
+    // "weiboLink": "https://www.dpm.org.cn/index.html?", // 分享微博地址链接
+    // "tContent": "故宫博物院贺岁迎祥展" //分享描述
+</script>
+<script type="text/javascript" src="//www.dpm.org.cn/front/share.js?v=744416"></script>
+    <meta property="og:title" content="全文检索 - 故宫博物院" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.dpm.org.cn/Home.html?_wap=1" />
+<meta property="og:image" content="/static/themes_wap/image/wechat_share1.png" />
+<meta property="og:description" content="" />
+<meta property="og:site_name" content="故宫博物院" />
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 设置OG标题
+        var ogTitle = document.querySelector('meta[property="og:title"]');
+        ogTitle.setAttribute("content", title);
+
+        // 设置OG类型
+        var ogType = document.querySelector('meta[property="og:type"]');
+        ogType.setAttribute("content", "article");
+
+        // 设置OG链接
+        var ogUrl = document.querySelector('meta[property="og:url"]');
+        ogUrl.setAttribute("content", urls2);
+
+        // 设置OG图片
+        var ogImage = document.querySelector('meta[property="og:image"]');
+        ogImage.setAttribute("content", imgs_ico);
+
+        // 设置OG描述
+        var ogDescription = document.querySelector('meta[property="og:description"]');
+        ogDescription.setAttribute("content", tContent); // 请替换为实际的描述内容
+
+        // 设置OG网站名称
+        var ogSiteName = document.querySelector('meta[property="og:site_name"]');
+        ogSiteName.setAttribute("content", "故宫博物院");
+    });
+
+</script>
+    <script>
+        const SHOW_NEW_TIME = "15" * 86400;
+        const FILTER_ID = ["256458"];
+        function newTag(parentObj, titleObj, timeObj){
+            const _parent = parentObj||'#datalist .li'
+            const _title  = titleObj||'.p'
+            const _time  = timeObj||'.y'
+            let today = new Date();
+            today.setHours(0, 0, 0, 0); // 设置时分秒和毫秒为0
+            $(_parent).find(_title).each(function(){
+                var date = new Date($(this).parents(_parent).find(_time).text())
+                date.setHours(0, 0, 0, 0);
+                var timeDifference = Math.round(Math.abs(today - date) / 1000);
+                var href = $(this).parents(_parent).find('a').attr('href')||'';
+                var mach = href.match(/\/(\w+\/)?(\d+)(?:\.\w+)?$/);
+                var id = (mach && mach.length>=3)? mach[2].toString() : '';
+                if(SHOW_NEW_TIME - timeDifference > 0 && !$(this).find('em').length && FILTER_ID.indexOf(id) < 0){
+                    $(this).append('<em class="em">新</em>')
+                }
+            })
+        }
+        function downFile(url, fileName) {
+            const x = new XMLHttpRequest()
+            x.open('GET', url, true)
+            x.responseType = 'blob'
+            x.onload = function() {
+                const url = window.URL.createObjectURL(x.response)
+                const a = document.createElement('a')
+                a.href = url
+                a.download = fileName
+                a.click()
+            }
+            x.send()
+        }
+        $(function(){
+            newTag()
+        })
+        // 初始化时检查hash
+        window.onload = function() {
+            checkHash();
+        };
+        // 监听popstate事件
+        window.addEventListener('popstate', function(event) {
+            checkHash();
+        });
+        // 自定义函数来检查hash并处理变化
+        function checkHash() {
+            var hash = window.location.hash;
+            if($(window).width() <= 768 && $(hash).length){
+                var __top = 75;
+                if($('.s-top').length > 0){
+                    __top = 130;
+                }
+                console.log(__top);
+                $("html,body").animate({
+                    scrollTop: $(hash).offset().top - __top
+                },200);
+            }
+        }
+    </script>
+</head>
+<script charset='UTF-8' src="/static/jquery/sa-sdk-javascript-1.27.2/dist/web/sensorsdata.js"></script>
+<script charset='UTF-8' src="/static/jquery/sa-sdk-javascript-1.27.2/dist/web/plugin/pageleave/index.js"></script>
+<script>
+    // 确保变量已经被定义
+    var topic_name = topic_name || null; // 如果topic_name未定义，则默认为null
+    var topic_id = topic_id || null; // 如果topic_id未定义，则默认为null
+    var sensors = window['sensorsDataAnalytic201505'];
+    var server_url = '';
+    if(window.location.hostname == 'ticket.dpm.org.cn' || window.location.hostname == 'www.dpm.org.cn'){
+        server_url = '//gugong-pro.datasink.sensorsdata.cn/sa?project=production&token=d55b8755fac048ef';
+    }else{
+        server_url = '//gugong-pro.datasink.sensorsdata.cn/sa?project=default&token=d55b8755fac048ef';
+    }
+    sensors.init({
+        server_url: server_url,
+        is_track_single_page:false, // 单页面配置，默认开启，若页面中有锚点设计，需要将该配置删除，否则触发锚点会多触发 $pageview 事件
+        use_client_time:true,
+        send_type:'beacon',
+        show_log:false, // 是否显示日志
+        heatmap: {
+            //是否开启点击图，default 表示开启，自动采集 $WebClick 事件，可以设置 'not_collect' 表示关闭。
+            clickmap:'default',
+            //是否开启触达图，not_collect 表示关闭，不会自动采集 $WebStay 事件，可以设置 'default' 表示开启。
+            scroll_notice_map:'default'
+        }
+    });
+    // 初始化 SDK
+
+    // 注册公共属性
+    sensors.registerPage({
+        current_url: location.href,
+        referrer: document.referrer,
+        platform_type:'web端',
+        business_line:'故宫中文网站',
+        language_type:"中文",
+        special_topic_name:topic_name,
+        special_topic_id:topic_id,
+        product_version:"1.0.0",
+    });
+    sensors.quick('autoTrack');
+    // sensors.use('pageleave',{
+    //     custom_props:{
+    //         prop1:'value1'
+    //     },
+    //     heartbeat_interval_time: 5,
+    //     max_duration: 5 * 24 * 60 * 60,
+    //     isCollectUrl: function(url){
+    //         // url 为要采集页面浏览时长的页面地址。
+    //         return true; // 采集
+    //         // return false; // 不采集
+    //     }
+    // });
+    function shence_sensors(type_name, arr){
+        sensors.track(type_name, arr);
+    }
+</script>
+<script type="module">
+    import pageleave from '/static/jquery/sa-sdk-javascript-1.27.2/dist/web/plugin/pageleave/index.es6.js';
+    sensors.use(pageleave,{
+        custom_props:{
+            page_name:$('title').text(),
+            view_percent:100
+        },
+        heartbeat_interval_time: 5,
+        max_duration: 5 * 24 * 60 * 60,
+        isCollectUrl: function(url){
+            // url 为要采集页面浏览时长的页面地址。
+            return true; // 采集
+            // return false; // 不采集
+        }
+    });
+</script>
+<script src="/static/themes/js/xss.js?v=744416"></script>
+<script>
+var CONFIG = {
+    UID: -1,
+    UID_STATUS: false,
+    timestamp: function() {
+        return Date.parse(new Date())/1000;
+    },
+    checkLogin: function(callback) {
+        var c = this;
+
+        if (c.UID === -1) {
+            $.cookie.path = '/';
+            c.UID = $.cookie("user_auth");
+
+
+            var check_time = $.cookie("user_check_time");
+            if ( c.UID && (! check_time || (c.timestamp() - check_time > 60 * 5)) ) {
+
+                $.post("/member/get_uid.html", function(res) {
+                    console.log('get_uid', res);
+
+                    data = res.data
+                    if (! data || ! data.uid || data.uid != c.UID) {
+                        $.removeCookie("user_auth");
+                    }
+                    else if (data && data.uid) {
+                        localStorage.setItem("get_sso", data.uid);
+                        c.UID = data.uid;
+                    }
+
+                    $.cookie("user_check_time", c.timestamp());
+                    c.checkLogin(callback);
+                });
+                return;
+            }
+        }
+
+        if (c.UID) {
+            if (typeof(callback) == 'function') {
+                callback(c.UID, c);
+            }
+            c.UID_STATUS = sessionStorage.getItem("user_auth_status") ? true : false;
+            if(c.UID_STATUS === false){
+                localStorage.setItem("get_sso", c.UID);
+
+            }
+            sessionStorage.setItem("user_auth_status",1)
+            return true;
+        }else{
+            c.UID_STATUS = false;
+            sessionStorage.removeItem("user_auth_status");
+        }
+
+        return false;
+    },
+    getSeasonal: function (callback) {
+        //获取季节
+        $.cookie.path = '/';
+        // var SEASONAL = localStorage.getItem("seasonal");
+        // console.log(SEASONAL)
+        // if (!SEASONAL) {
+            $.post("/ajax/get_season.html", function (data) {
+                if (data && data.msg) {
+                    localStorage.setItem("seasonal", data.msg);
+                    if(typeof callback === 'function'){
+                        callback(data.msg)
+                    }
+                }
+            });
+        // } else {
+        //     if(typeof callback === 'function'){
+        //         callback(SEASONAL)
+        //     }
+        // }
+    },
+    setSeasonal: function (seasonal) {
+        $.post("/ajax/set_season.html", {seasonal: seasonal}, function (data) {
+
+        });
+        // localStorage.setItem("seasonal", seasonal);
+    }
+};
+
+setTimeout(function() {
+    var get_sso = localStorage.getItem('get_sso');
+    if (get_sso !== undefined && get_sso !== null && get_sso !== '') {
+        $.get("/passport/get_sso.html", {uid: get_sso}, function(data) {
+            if (data.status) {
+
+                $.each(data.urls, function(i, url) {
+                    $.ajax({
+                        url: url,
+                        type: "GET",
+                        data:data.user,
+                        dataType: "jsonp", //指定服务器返回的数据类型
+                        success: function(urlData) {
+                            console.log('urlData', urlData);
+                        }
+                    });
+                });
+                localStorage.removeItem('get_sso');
+            }
+        })
+    }
+}, 800);
+
+function login_out() {
+    CONFIG.checkLogin(function(user_id, c) {
+        localStorage.setItem('get_sso', user_id);
+    });
+    window.location.href='/member/logout.html';
+}
+
+$(function(){
+    if(CONFIG.UID == undefined || CONFIG.UID == -1){
+        CONFIG.checkLogin(function(user_id, c) {
+            $('.login_1 .ul').html('<a class="a" href="/member/index.html">个人中心</a><a class="a" onclick="login_out();" href="javascript:;">退出</a>');
+        });
+    }
+
+    if (CONFIG.UID >= 1) {
+        var url = "";
+        var cid = "";
+        var typeid = "0";
+        var dataid = "0";
+        var objno = "0";
+        var footprint_column = "";
+        
+        if (url) {
+            $.post("/ajax/footprint/add.html", {
+                url: url,
+                cid: cid,
+                typeid: typeid,
+                dataid: dataid,
+                objno: objno,
+            }, function(data) {
+
+            });
+        }
+
+        $('.login_1 .ul').html('<a class="a" href="/member/index.html">个人中心</a><a class="a" onclick="login_out();" href="javascript:;">退出</a>');
+    }
+})
+
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split("&");
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair[0] == variable) {
+            return pair[1];
+        }
+    }
+    return (false);
+}
+
+// 滚动公告事件部码
+$(document).on('click', 'body .s-top .li a', function(e){
+    if($(this).attr('href') != undefined && $(this).attr('href') != 'javascript:void(0);'){
+        var link = $(this).attr('href');
+        //神策埋点
+        //故宫中文网站_购票顶部公告栏点击
+        sensors.track('ggzwwz_BookTicketTopRollAnnounceClick', {
+            announce_name : $(this).attr('title'),
+        });
+        if (link) {
+            window.open(link);
+        }
+        return false;
+    }
+});
+</script>
+<body>
+<!-- 2024-4-10 start-->
+<div class="pop-mod pop-text1">
+
+    <div class="pop-panel" pop-hide>
+        <div class="pop-dialog">
+            <div class="pop-cont">
+                <div class="pop-close xicon xicon-close"></div>
+
+                <div class="cgalert">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 2024-4-10 end-->
+<div id="alertBox" class="pop-mod pop-box1">
+    <div class="pop-panel" pop-hide>
+        <div class="pop-dialog" >
+            <div class="pop-cont">
+                <div class="pop-close"></div>
+                <div class="box">
+                    <div class="t"></div>
+                    <div class="qd">
+                        <a>确 定</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#alertBox .pop-cont .box .qd').on('click', function () {
+            $('#alertBox').trigger('hide');
+        });
+    });
+</script>
+
+<div class="pop-mod pop-box1" id="my_alert">
+    <div class="pop-panel" pop-hide>
+        <div class="pop-dialog" style="padding: 0; height: auto;">
+            <div class="pop-cont">
+                <div class="pop-close"></div>
+                <div class="box">
+                    <div class="t"></div>
+                    <div class="qd">
+                        <a href="javascript:;">确 定</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var my_alert = function(content, url) {
+        $.utils.unWinScroll();
+        url = url ? url : 'javascript:;';
+
+        $('#my_alert .box .t').html(content);
+        $('#my_alert .qd a').attr('href', url);
+
+        $("#my_alert").trigger("show");
+        if (typeof(url) == 'function') {
+            $('#my_alert .qd a').attr('href', 'javascript:;');
+            $('#my_alert .qd a').click(function(e) {
+                $.utils.enWinScroll();
+                url();
+                $("#my_alert").trigger("hide");
+                return false;
+            });
+        }else{
+            $('#my_alert .qd a').click(function(e) {
+                $.utils.enWinScroll();
+                if(url != 'javascript:;' && url != 'javascript:void(0)' && url != ''){
+                    window.location.href = url;
+                }
+                $("#my_alert").trigger("hide");
+            });
+        }
+    }
+</script>
+<div class="x-layout">
+    <div class="top-mod">
+        <div class="mess_ance">
+            <div class="liuyan">
+                <div class="icon">
+                    <img src="/static/themes/image/icon_mess.png" alt="" class="i">
+                </div>
+                <div class="p">我要留言</div>
+                <a href="/bottom/ask.html" class="aa" title="我要留言"></a>
+            </div>
+            <div class="liuyan">
+                <div class="icon">
+                    <img src="/static/themes/image/icon_mess2.png" alt="" class="i">
+                </div>
+                <div class="p">无障碍<span>浏览</span></div>
+                <a class="aa esdTli" style="cursor: pointer;"  onclick="document.getElementById('toolbarSwitch').click();" role="button" aria-label="无障碍"></a>
+            </div>
+        </div>
+        <div class="topping xfont xicon-up"></div>
+    </div>
+    <div class="x-header ">
+    <div class="p-header">
+        <div class="x-wrap">
+            <div id="tq"></div>
+            <div class="logo-w"><div class="logo">
+    <a href="/">
+        <img src="/Uploads/image/2024/04/30/1714450493JdsBlxksO1.png" alt="故宫博物院" class="red"/>
+        <img src="/Uploads/image/2024/04/30/1714450493mKvocjUTZ1.png" alt="故宫博物院" class="wht"/>
+    </a>
+</div>
+<div class="logo_m">
+    <a href="/">
+        <img src="/Uploads/image/2024/04/30/1714450493oMLPHAkOn1.png" alt="故宫博物院" class="red"/>
+    </a>
+</div></div>            <div class="nav_main">
+    <ul>
+                    <li>
+                <a  href="/Home.html" title="首页">首页</a>
+            </li>
+                    <li>
+                <a  href="/Visit.html" title="导览">导览</a>
+            </li>
+                    <li>
+                <a  href="/shows.html" title="展览">展览</a>
+            </li>
+                    <li>
+                <a  href="/Events.html" title="教育">教育</a>
+            </li>
+                    <li>
+                <a  href="/Explore.html" title="探索">探索</a>
+            </li>
+                    <li>
+                <a  href="/Research.html" title="学术">学术</a>
+            </li>
+                    <li>
+                <a  href="/Creative.html" title="文创">文创</a>
+            </li>
+                    <li>
+                <a  href="/About.html" title="关于">关于</a>
+            </li>
+            </ul>
+</div>
+<div class="nav_child">
+        <ul class="item">
+            </ul>
+        <ul class="item">
+                <li>
+            <a  href="/Visit.html#block3" title="开放时间">开放时间</a>
+        </li>
+                <li>
+            <a  href="https://ticket.dpm.org.cn/" target="_blank" title="在线订票">在线订票</a>
+        </li>
+                <li>
+            <a  href="/Visit.html#block5" title="交通路线">交通路线</a>
+        </li>
+                <li>
+            <a  href="/Visit.html#block6" title="参观须知">参观须知</a>
+        </li>
+                <li>
+            <a  href="https://pano.dpm.org.cn/" target="_blank" title="全景故宫">全景故宫</a>
+        </li>
+            </ul>
+        <ul class="item">
+                <li>
+            <a  href="/shows.html#temporary2" title="近期展览">近期展览</a>
+        </li>
+                <li>
+            <a  href="/shows.html#temporary4" title="专馆">专馆</a>
+        </li>
+                <li>
+            <a  href="/shows.html#temporary_5" title="原状陈列">原状陈列</a>
+        </li>
+                <li>
+            <a  href="/shows.html#temporary_6" title="赴外展览">赴外展览</a>
+        </li>
+            </ul>
+        <ul class="item">
+                <li>
+            <a  href="/Events.html#hd1-2" title="教育新闻">教育新闻</a>
+        </li>
+                <li>
+            <a  href="/gugongforum.html" title="故宫讲坛">故宫讲坛</a>
+        </li>
+                <li>
+            <a  href="/calligraphy_paint/index.html" title="书画考级">书画考级</a>
+        </li>
+                <li>
+            <a  href="/Events.html#hd1-3" title="故宫博物院教育中心">故宫博物院教育中心</a>
+        </li>
+                <li>
+            <a  href="/Events.html#hd1-6" title="国际博协培训中心">国际博协培训中心</a>
+        </li>
+                <li>
+            <a  href="/Events.html#hd1-7" title="故宫志愿者">故宫志愿者</a>
+        </li>
+            </ul>
+        <ul class="item">
+                <li>
+            <a  href="/explore/buildings.html" title="建筑">建筑</a>
+        </li>
+                <li>
+            <a  href="/explore/collections.html" title="藏品">藏品</a>
+        </li>
+                <li>
+            <a  href="/explore/ancients.html" title="古籍">古籍</a>
+        </li>
+                <li>
+            <a  href="/explores/courts.html" title="宫廷历史">宫廷历史</a>
+        </li>
+                <li>
+            <a  href="/explore/protects.html" title="文物医院">文物医院</a>
+        </li>
+                <li>
+            <a  href="/explore/cultures.html" title="文化专题">文化专题</a>
+        </li>
+                <li>
+            <a  href="http://minghuaji.dpm.org.cn" target="_blank" title="名画记">名画记</a>
+        </li>
+                <li>
+            <a  href="/shuziduobaoge.html" target="_blank" title="数字多宝阁">数字多宝阁</a>
+        </li>
+                <li>
+            <a  href="https://digicol.dpm.org.cn/" target="_blank" title="数字文物库">数字文物库</a>
+        </li>
+                <li>
+            <a  href="https://zm-digicol.dpm.org.cn/" target="_blank" title="藏品总目">藏品总目</a>
+        </li>
+            </ul>
+        <ul class="item">
+                <li>
+            <a  href="/learning/dynamic.html" title="学术资讯">学术资讯</a>
+        </li>
+                <li>
+            <a  href="/expert.html" title="专家名录">专家名录</a>
+        </li>
+                <li>
+            <a  href="/achaime/institute.html" title="故宫学研究院">故宫学研究院</a>
+        </li>
+                <li>
+            <a  href="/Research.html#other_institution1" title="其他学术机构">其他学术机构</a>
+        </li>
+                <li>
+            <a  href="/journals.html" title="故宫博物院院刊">故宫博物院院刊</a>
+        </li>
+            </ul>
+        <ul class="item">
+                <li>
+            <a  href="/publishes.html" title="故宫出版">故宫出版</a>
+        </li>
+                <li>
+            <a  href="/Creative.html#protects" title="文创产品">文创产品</a>
+        </li>
+                <li>
+            <a  href="/lights/royal.html" title="故宫壁纸">故宫壁纸</a>
+        </li>
+                <li>
+            <a  href="/Creative.html#app" title="故宫APP">故宫APP</a>
+        </li>
+                <li>
+            <a  href="http://young.dpm.org.cn/damaoxian#gamezone" target="_blank" title="故宫游戏">故宫游戏</a>
+        </li>
+            </ul>
+        <ul class="item">
+                <li>
+            <a  href="/about/about_view.html" title="总说">总说</a>
+        </li>
+                <li>
+            <a  href="/about/leader_list.html" title="领导">领导</a>
+        </li>
+                <li>
+            <a  href="/about/information.html" title="资讯">资讯</a>
+        </li>
+                <li>
+            <a  href="/about/about_chron.html" title="院史编年">院史编年</a>
+        </li>
+                <li>
+            <a  href="/about/patrons+benefactors.html" title="景仁榜">景仁榜</a>
+        </li>
+                <li>
+            <a  href="/about/organization.html" title="机构设置">机构设置</a>
+        </li>
+            </ul>
+    </div>            <div class="tools">
+                <ul>
+                                            <li class="esdTli"  id="toolbarSwitch"  onclick="EsdToolbarInit.openClickFunc();" onkeydown="EsdToolbarInit.openKeydownFunc(event);" >
+                            <div class="icn"  ></div>
+                            <a href="javascript:;" role="button" aria-label="无障碍" >无障碍</a>
+                        </li>
+                                        <li class="meg">
+                        <a class="icn" href="/bottom/ask.html"></a>
+                        <div class="ul">
+                            <a href="/bottom/ask.html" class="a">留言板</a>
+                        </div>
+                    </li>
+                    <li class="login_1">
+                        <a class="icn" href="/passport/login.html"></a>
+                        <div class="ul">
+                            <a href="/passport/login.html" class="a">登录</a>
+                            <a href="/passport/login.html?type=register" class="a">注册</a>
+                        </div>
+                    </li>
+                    <li class="lang">
+                        <div class="icn">
+                            <a href="/">中</a>
+                        </div>
+                        <div class="ul">
+                            <a href="https://young.dpm.org.cn" role="button" aria-label="青少" target="_blank" class="a">青少</a>
+                            <a href="https://intl.dpm.org.cn/index.html?l=tc" role="button" aria-label="繁体中文" target="_blank" class="a">繁体中文</a>
+                            <a href="https://intl.dpm.org.cn/index.html?l=en" role="button" aria-label="英语" target="_blank" class="a">English</a>
+                            <a href="https://intl.dpm.org.cn/index.html?l=es" role="button" aria-label="西班牙语" target="_blank" class="a">Español</a>
+                            <a href="https://intl.dpm.org.cn/index.html?l=ru" role="button" aria-label="俄语" target="_blank" class="a">Русский язык</a>
+                            <a href="https://intl.dpm.org.cn/index.html?l=jp" role="button" aria-label="日本语" target="_blank" class="a">日本語</a>
+                            <a href="https://intl.dpm.org.cn/index.html?l=fr" role="button" aria-label="法语" target="_blank" class="a">Français</a>
+                        </div>
+                    </li>
+                    <li class="sc">
+                        <a class="sc_sear"></a>
+
+                        <div class="search">
+                            <input type="text" class="kw" placeholder="搜索关键词..."/>
+                            <input type="button" class="ok">
+                            <span class="close1"></span>
+                        </div>
+                    </li>
+                </ul>
+                <a class="menu1"></a>
+            </div>
+        </div>
+        <div class="nav_menu"><div class="nav_menu">
+    <a class="close"></a>
+    <div class="ww_b">
+        <div class="box0">
+            <a href="https://young.dpm.org.cn" role="button" aria-label="青少"  target="_blank" class="a">青少</a>
+            <a href="https://intl.dpm.org.cn/index.html?l=tc" role="button" aria-label="繁体中文"  target="_blank" class="a">繁体中文</a>
+            <a href="https://intl.dpm.org.cn/index.html?l=en" role="button" aria-label="英语"  target="_blank" class="a">English</a>
+            <a href="https://intl.dpm.org.cn/index.html?l=es" role="button" aria-label="西班牙语"  target="_blank" class="a">Español</a>
+            <a href="https://intl.dpm.org.cn/index.html?l=ru" role="button" aria-label="俄语"  target="_blank" class="a">Русский язык</a>
+            <a href="https://intl.dpm.org.cn/index.html?l=jp" role="button" aria-label="日本语"  target="_blank" class="a">日本語</a>
+            <a href="https://intl.dpm.org.cn/index.html?l=fr" role="button" aria-label="法语"  target="_blank" class="a">Français</a>
+        </div>
+        <div class="list">
+                                    <div class="item">
+                <h1>
+                                        <a href="/Visit.html">导览</a>
+                                    </h1>
+                <dl>
+                                        <dd>
+                                                <a href="/Visit.html#block3">开放时间</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="https://ticket.dpm.org.cn/" target="_blank">在线订票</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/Visit.html#block5">交通路线</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/Visit.html#block6">参观须知</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="https://pano.dpm.org.cn/" target="_blank">全景故宫</a>
+                                            </dd>
+                                    </dl>
+            </div>
+                                    <div class="item">
+                <h1>
+                                        <a href="/shows.html">展览</a>
+                                    </h1>
+                <dl>
+                                        <dd>
+                                                <a href="/shows.html#temporary2">近期展览</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/shows.html#temporary4">专馆</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/shows.html#temporary_5">原状陈列</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/shows.html#temporary_6">赴外展览</a>
+                                            </dd>
+                                    </dl>
+            </div>
+                                    <div class="item">
+                <h1>
+                                        <a href="/Events.html">教育</a>
+                                    </h1>
+                <dl>
+                                        <dd>
+                                                <a href="/Events.html#hd1-2">教育新闻</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/gugongforum.html">故宫讲坛</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/calligraphy_paint/index.html">书画考级</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/Events.html#hd1-3">故宫博物院教育中心</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/Events.html#hd1-6">国际博协培训中心</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/Events.html#hd1-7">故宫志愿者</a>
+                                            </dd>
+                                    </dl>
+            </div>
+                                    <div class="item">
+                <h1>
+                                        <a href="/Explore.html">探索</a>
+                                    </h1>
+                <dl>
+                                        <dd>
+                                                <a href="/explore/buildings.html">建筑</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/explore/collections.html">藏品</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/explore/ancients.html">古籍</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/explores/courts.html">宫廷历史</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/explore/protects.html">文物医院</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/explore/cultures.html">文化专题</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="http://minghuaji.dpm.org.cn" target="_blank">名画记</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/shuziduobaoge.html" target="_blank">数字多宝阁</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="https://digicol.dpm.org.cn/" target="_blank">数字文物库</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="https://zm-digicol.dpm.org.cn/" target="_blank">藏品总目</a>
+                                            </dd>
+                                    </dl>
+            </div>
+                                    <div class="item">
+                <h1>
+                                        <a href="/Research.html">学术</a>
+                                    </h1>
+                <dl>
+                                        <dd>
+                                                <a href="/learning/dynamic.html">学术资讯</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/expert.html">专家名录</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/achaime/institute.html">故宫学研究院</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/Research.html#other_institution1">其他学术机构</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/journals.html">故宫博物院院刊</a>
+                                            </dd>
+                                    </dl>
+            </div>
+                                    <div class="item">
+                <h1>
+                                        <a href="/Creative.html">文创</a>
+                                    </h1>
+                <dl>
+                                        <dd>
+                                                <a href="/publishes.html">故宫出版</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/Creative.html#protects">文创产品</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/lights/royal.html">故宫壁纸</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/Creative.html#app">故宫APP</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="http://young.dpm.org.cn/damaoxian#gamezone" target="_blank">故宫游戏</a>
+                                            </dd>
+                                    </dl>
+            </div>
+                                    <div class="item">
+                <h1>
+                                        <a href="/About.html">关于</a>
+                                    </h1>
+                <dl>
+                                        <dd>
+                                                <a href="/about/about_view.html">总说</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/about/leader_list.html">领导</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/about/information.html">资讯</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/about/about_chron.html">院史编年</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/about/patrons+benefactors.html">景仁榜</a>
+                                            </dd>
+                                        <dd>
+                                                <a href="/about/organization.html">机构设置</a>
+                                            </dd>
+                                    </dl>
+            </div>
+                                </div>
+    </div>
+    <div class="box2 bdsharebuttonbox bdshare-button-style0-16" data-bd-bind="1629107126014">
+        <a style="padding-left:0; float:none" data-cmd="weixin" class="a a2" href="javascript:void(0)" title="分享到微信"></a>
+        <a style="padding-left:0; float:none" data-cmd="tsina" class="a a3" href="javascript:void(0)" title="分享到新浪微博"></a>
+    </div>
+</div></div>    </div>
+
+</div>
+
+<script>
+    $(function () {
+        $.get("/ajax/get_tq2.html", {r: Math.random()}, function (data) {
+            $('#tq').html(data);
+        });
+
+        $('.search .ok').on('click', function () {
+            let kw = $.trim($('.search .kw').val());
+            if (!kw) {
+                $('#alertBox').find('.pop-cont .box .t').text('请输入关键词').end().trigger('show');
+                return false;
+            }
+            // //判断特殊符号包括中文符号
+            // if (!/^[\u4e00-\u9fa5a-zA-Z0-9]+$/.test(kw)) {
+            //     $('#alertBox').find('.pop-cont .box .t').text('搜索请不要添加符号').end().trigger('show');
+            //     return false;
+            // }
+            // 神策埋点
+            // 故宫中文网站_顶部搜索栏点击
+            shence_sensors('ggzwwz_TopSearchClick',{});
+            let sourceTitle = "全文检索";
+            window.open('/fully_search?kw=' + encodeURIComponent(kw) + '&source=' + encodeURIComponent(sourceTitle), '', 'noopener');
+        });
+
+        $('.search .kw').on('keyup', function (e) {
+            if (e.keyCode === 13) {
+                $('.search .ok').click();
+            }
+        });
+    });
+
+    if(!page_name){
+        var page_name = "全文检索";
+    }
+    $('.nav_main a,.nav_child a, .nav_menu .ww_b .list a').click(function(){
+        let nav_level = '一级导航';
+        var navigationName = $(this).text();
+        var secondNavigationName = '';
+        if($(this).parents('.nav_child').length > 0 || $(this).parents('dl').length > 0  ){
+            nav_level = '二级导航';
+            secondNavigationName = $(this).text();
+            if($(this).parents('.nav_menu').length > 0){
+                navigationName = $(this).parents('.item').find('h1 a').text().replace(/[\s\n]+$/, '');
+            }else{
+                navigationName = $('.p-header .x-wrap .nav_main li').eq($(this).parents('.item').index()).find('a').text();
+            }
+
+        }
+
+        // 神策埋点
+        // 故宫中文网站_顶部注册登陆点击
+        shence_sensors('ggzwwz_TopNavigationBarClick',{
+            navigation_name: navigationName,
+            second_navigation_name: secondNavigationName,
+        });
+    })
+    $('.login_1 a').click(function(){
+        var text = $(this).text() != '注册' ? '登录' : '注册';
+        // 神策埋点
+        // 故宫中文网站_点击顶部登陆注册按钮时上报
+        shence_sensors('ggzwwz_TopLoginClick',{
+            button_name:text,
+        });
+    })
+</script>
+
+    <div class="x-container" >
+        <div class="bread-mod p-show" style="display: block;">
+    <div class="s-wrap">
+        <div class="bread-item"><a class="bread-link" href="/">首页</a></div>
+                        <div class="bread-item"><a href="javascript:;" class="bread-link">搜索</a></div>
+                        </div>
+</div>
+<div id="bread" class="m-show">
+    <a class="arrow" href="javascript:history.back(-1);"></a>
+    <div class="tit">
+        搜索结果    </div>
+</div>
+<script type="text/javascript">
+    function _initBread(){
+        if ($('.bread-mod a:last').text() !== "搜索结果") {
+            $('.bread-mod a:last').attr('href', 'javascript:;');
+            $('.bread-mod a:last').css({'cursor': 'default'});
+        }
+    }
+    _initBread()
+</script>
+<script>
+    $(".bread-mod a[href^='javascript']").css({'cursor': 'default'});
+</script>
+                <style>
+    .hotwords a {cursor: pointer;}
+    .allHidden{
+        display:none;
+    }
+    .allShow{
+        display:block;
+    }
+</style>
+<script src="/static/auto-fit/smartcrop.js?v=744416"></script>
+<script src="/static/auto-fit/tracking-min.js?v=744416"></script>
+<script src="/static/auto-fit/tracking-face-min.js?v=744416"></script>
+<script src="/static/auto-fit/jquery.facedetection.min.js?v=744416"></script>
+<script src="/static/auto-fit/auto-fit.js?v=744416"></script>
+<div class="fulltext-feedback" style="min-width:50px"><div class="fb-box">
+    <div class="pad">
+        <div class="icon"><img src="/static/themes/image/lys/png26.png" alt=""></div>
+        <div class="txt">搜索反馈</div>
+    </div>
+</div>
+<a  href="/questionnaire/detail/26.html" target="_blank" class="a" role="button" aria-label="搜索反馈"></a></div><div class="fulltext_retrieval1">
+    <div class="s-wrap">
+        <div class="box">
+            <div class="t">搜索分类 :</div>
+            <div class="tab-mod tracker-mod dir-hor">
+                <div class="tracker-box">
+                    <div class="tab-bar tracker-track category">
+                        <div class="tab-term tracker-item">
+                            <div class="p">全部</div>
+                        </div>
+                                                    <div data-id="3" class="tab-term tracker-item">
+                                <div data-id="3" class="p">古建</div>
+                            </div>
+                                                    <div data-id="4" class="tab-term tracker-item">
+                                <div data-id="4" class="p">藏品</div>
+                            </div>
+                                                    <div data-id="5" class="tab-term tracker-item">
+                                <div data-id="5" class="p">古籍</div>
+                            </div>
+                                                    <div data-id="13" class="tab-term tracker-item">
+                                <div data-id="13" class="p">论文</div>
+                            </div>
+                                                    <div data-id="10" class="tab-term tracker-item">
+                                <div data-id="10" class="p">人物</div>
+                            </div>
+                                                    <div data-id="15" class="tab-term tracker-item">
+                                <div data-id="15" class="p">词条</div>
+                            </div>
+                                                    <div data-id="1" class="tab-term tracker-item">
+                                <div data-id="1" class="p">专题</div>
+                            </div>
+                                                    <div data-id="16" class="tab-term tracker-item">
+                                <div data-id="16" class="p">资讯</div>
+                            </div>
+                                                    <div data-id="17" class="tab-term tracker-item">
+                                <div data-id="17" class="p">三维文物</div>
+                            </div>
+                                            </div>
+                </div>
+            </div>
+        </div>
+        <!-- 手机下拉选择框 -->
+        <!-- end -->
+        <div class="search-wrap">
+            <div class="select-mod select_column m-show">
+                <div class="select-bar">
+                    <div class="select-txt">
+                        <div class="select-val placeholder">全部</div>
+                    </div>
+                    <div class="select-btn xicon xicon-down"></div>
+                </div>
+                <div class="select-cont">
+                    <div class="select-opts wap_category">
+                        <div class="select-item" data-val="0">全部</div>
+                                                    <div class="select-item" data-val="3">古建</div>
+                                                    <div class="select-item" data-val="4">藏品</div>
+                                                    <div class="select-item" data-val="5">古籍</div>
+                                                    <div class="select-item" data-val="13">论文</div>
+                                                    <div class="select-item" data-val="10">人物</div>
+                                                    <div class="select-item" data-val="15">词条</div>
+                                                    <div class="select-item" data-val="1">专题</div>
+                                                    <div class="select-item" data-val="16">资讯</div>
+                                                    <div class="select-item" data-val="17">三维文物</div>
+                                            </div>
+                </div>
+            </div>
+            <div class="select-mod gjz">
+                <div class="select-bar">
+                    <div class="name">关键字：</div>
+                    <input id="adv_keywords1" type="text" class="inp" autocomplete="off" value="玉璧" />
+                </div>
+            </div>
+            <div class="select-mod mods">
+                <div class="select-bar">
+                    <div class="select-txt">
+                        <div class="select-val placeholder adv_value">并 含</div>
+                    </div>
+                    <div class="select-btn xicon xicon-down"></div>
+                </div>
+                <div class="select-cont">
+                    <div class="select-opts search_type">
+                        <div class="select-item" search-type="binghan">并 含</div>
+                        <div class="select-item" search-type="huohan">或 含</div>
+                        <div class="select-item" search-type="buhan">不 含</div>
+                    </div>
+                </div>
+            </div>
+            <div class="select-mod">
+                <div class="select-bar">
+                    <div class="name">关键字：</div>
+                    <input id="adv_keywords2" type="text" class="inp" autocomplete="off" />
+                </div>
+            </div>
+            <!-- pc搜索按钮 -->
+            <div class="link-w p-show">
+                <a id="adv_search" href="javascript:;" class="link link_back">搜 索</a>
+            </div>
+        </div>
+        <div class="hotpos">
+            <div class="s1">关键词位置： 查询关键词位于</div>
+            <div class="abox select_location">
+                <a data-id="" href="javascript:;" class="now">
+                    <i></i>网页的任何地方
+                </a>
+                <a data-id="1" href="javascript:;">
+                    <i></i>仅网页的标题中
+                </a>
+            </div>
+        </div>
+        <!-- 手机搜索按钮 -->
+        <a class="btn1 m-show" href="javascript:;" id="adv_search2">搜索</a>
+        <div class="resultt m-show allHiddenWap">找到相关记录共<span id="wap_total">0</span>条</div>
+        <!--end-->
+        <div class="hotwords">    <style>
+        .page-result .hotwords a{
+            display: inline-block;
+        }
+    </style>
+    <span>搜索热词：</span>
+            <a  href="/Visit.html" target="_blank">参观</a>
+            <a  href="/Visit.html" target="_blank">开放时间</a>
+            <a  href="/explore/cultures.html" target="_blank">网上展览</a>
+            <a  href="/Visit.html#block4" target="_blank">门票</a>
+            <a  href="/yygg.html" target="_blank">云游故宫</a>
+            <a >养心殿</a>
+            <a  href="/explores/courts.html" target="_blank">宫廷历史</a>
+            <a >秦石鼓</a>
+            <a >各种釉彩大瓶</a>
+    </div>    </div>
+</div>
+<div class="fulltext_retrieval2">
+    <div class="s-wrap">
+        <div class="box">
+            <div class="left">
+                <div class="labelbox p-show allHiddenPc">
+                    <div class="lb">相关结果约<span id="total">0</span>个</div>
+                </div>
+                <div class="sear-result1 allShow">
+                    <div class="tit1">相关结果约<span id="total1">0</span>个，具体分类如下：</div>
+                    <div class="link1">
+                    </div>
+                </div>
+                <div class="caption m-show">
+                    <div class="source">来源/类型</div>
+                </div>
+                <div class="result_list" id="datalist">
+
+                </div>
+            </div>
+            <div class="right p-show">
+                <div class="part1" id="right_image">
+
+                </div>
+                <div class="may part2 may_collection" id="right_collection_era">
+                    
+                </div>
+                <div class="may may_figure">
+                    <div class="part2" id="right_figure_era">
+                        
+                    </div>
+                    <div class="part2" id="right_figure_dianzhi">
+                        
+                    </div>
+                    <div class="part2" id="right_figure_event">
+                        
+                    </div>
+                </div>
+                <div class="may may_building">
+                    <div class="part2" id="right_building_area">
+                        
+                    </div>
+                    <div class="part2" id="right_building_type">
+                        
+                    </div>
+                </div>
+
+                <div class="may may_other">
+                    <div class="part2" id="right_rel_collection">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- inject:private:js -->
+<script>
+    "use strict";
+
+    window.ftwcmSanitizeKwString = function (v) {
+        if (typeof v !== 'string') return '';
+        var nv = v;
+        nv = nv.replace(/[\u0000-\u001F\u007F]/g, '');
+        nv = nv.replace(/[<>\\]/g, '');
+        return nv;
+    };
+ 
+    $(function () {
+        $(".fulltext_retrieval1 .hotpos .abox a").bind("click", function () {
+            $(this).addClass('now').siblings().removeClass('now');
+            return false;
+        });
+    });
+</script>
+<!-- endinject -->
+
+<script>
+    // var pagesize = $(window).width() <= 768 ? 6 : 11;
+    var pagesize = 11;
+    var search = {
+        category_id: 90,
+        tpl_file: "fully_search",
+        pagesize: pagesize
+    };
+    //设置不让多次点击
+    var a = 0;
+    // Out
+    search['kw'] = "玉璧";
+
+    $('.category').on('click', '.tracker-item', function(){
+        var _this = $(this);
+        search['column'] = _this.attr('data-id');
+        // 直接使用高级搜索
+        adv_column = $(this).attr('data-id');
+        search['adv_column'] = adv_column;
+
+        $('#adv_search').click();
+    });
+
+    $('.wap_category .select-item').on('click', function () {
+        var _this = $(this);
+        // console.log(_this.data('val'));
+        search['column'] = _this.data('val');
+        // 直接使用高级搜索
+        adv_column = $(this).data('val');
+        search['adv_column'] = adv_column;
+
+        $('#adv_search').click();
+    })
+
+    // Pagination
+    $(document).on('click', '.pages a', function(){
+        refrush($(this).attr('href'), null, true);
+        return false;
+    });
+
+    // Adv
+    var search_type = 'binghan';
+    $('.search_type').on('click', '.select-item', function(){
+        search_type = $(this).attr('search-type');
+        search['search_type'] = search_type;
+    });
+    // adv_column
+    var adv_column = '';
+    // 关键词位置
+    var adv_location = '';
+    $('#adv_search2').on('click',function (){
+        $('#adv_search').click();
+    });
+    $('#adv_search').on('click', function(){
+        var kw1Raw = $('#adv_keywords1').val();
+        var kw2Raw = $('#adv_keywords2').val();
+        var kw1 = window.ftwcmSanitizeKwString(kw1Raw);
+        var kw2 = window.ftwcmSanitizeKwString(kw2Raw);
+        var regex = /(?=(\D|\b))(\d{8})(?=(\D|\b))/;
+        if(regex.test(kw1)){
+            // 将字符串中包含的斜杠替换成下划线
+            // kw1 = kw1.replace(/\//g,'_');
+        }
+        if(regex.test(kw2)){
+            // 将字符串中包含的斜杠替换成下划线
+            // kw2 = kw2.replace(/\//g,'_');
+        }
+        $('#adv_keywords1').val(kw1);
+        $('#adv_keywords2').val(kw2);
+        var pattern = /(王亚|亚民|闫宏|宏斌)/;
+        if( ( kw1 && pattern.test(kw1) ) || ( kw2 && pattern.test(kw2) )){
+            my_alert("暂无相关信息");
+            return false;
+        }
+        search['kw1'] = kw1;
+        search['kw2'] = kw2;
+        search['search_type'] = search_type;
+        search['adv_column'] = adv_column;
+        search['adv_location'] = adv_location;
+        if (search['adv_location'] == 1) {
+            $('.select_location[data-id=1]').click();
+        }
+        if( search['adv_column'] > 0  ){
+            if( $(window).width() <= 768 ){
+                $('.allShow').hide();
+                $('.allHiddenWap').show();
+                delete search['aggs'];
+            }else{
+                $('.allShow').hide();
+                $('.allHiddenPc').show();
+                delete search['aggs'];
+            }
+        }else {
+            $('.allHiddenPc').hide();
+            $('.allHiddenWap').hide();
+            $('.allShow').show();
+            search['aggs'] = 1;
+        }
+        delete search['kw'];
+        if (!$.trim(search['kw1']) && !$.trim(search['kw2'])) {
+            my_alert('请输入关键字');
+            return false;
+        } else {
+            if ($.trim(search['kw1']) && $.trim(search['kw2'])) {
+                delete search['single'];
+            } else {
+                // 单一关键字
+                search['single'] = 1;
+            }
+            refrush("/ess/fully.html", search);
+
+            $(".result_alert,.mask50").removeClass("show");
+        }
+    });
+    if (search['kw']) {
+        $('#adv_search').click();
+        // refrush("/ess/fully.html", search);
+    }
+    $('.select_location a').click(function(){
+
+        search['adv_location'] = $(this).attr('data-id');
+        adv_location = search['adv_location'];
+        if (!$.trim(search['kw1']) && !$.trim(search['kw2'])) {
+            my_alert('请输入关键字');
+            return false;
+        }
+
+        refrush("/ess/fully.html", search);
+    });
+
+    // Hotwords
+    $('.hotwords').on('click', 'a', function(){
+        if ( ! $(this).attr('href') ) {
+            var kw1 = window.ftwcmSanitizeKwString($(this).text());
+            search['kw1'] = kw1;
+            search['kw2'] = '';
+            search['single'] = 1;
+            search['search_type'] = search_type;
+            search['adv_column'] = adv_column;
+            search['adv_location'] = adv_location;
+            delete search['kw'];
+            $('#adv_keywords1').val(kw1);
+            $('#adv_keywords2').val('');
+            var regex = /(?=(\D|\b))(\d{8})(?=(\D|\b))/;
+            if(regex.test(search['kw1'])){
+                // 将字符串中包含的斜杠替换成下划线
+                search['kw1'] = search['kw1'].replace(/\//g,'_');
+            }
+            $('#adv_keywords1').val(search['kw1']);
+            refrush("/ess/fully.html", search);
+        }
+    });
+    $(document).on('click', '.allShow .link1 a', function(){
+        if($(this).hasClass('cur')){
+            $(this).removeClass('cur');
+            delete search['adv_column'];
+        }else{
+            $(this).addClass('cur').siblings().removeClass('cur');
+            search['adv_column'] = $(this).data('id');
+        }
+        delete search['aggs'];
+        refrush("/ess/fully.html", search);
+    })
+
+    function refrush (url, datas, anchor) {
+        if(datas['kw1']){
+            // regex = /[古建故新]\d{5,}/;
+            regex = /(?=(\D|\b))(\d{8})(?=(\D|\b))/;
+            if(regex.test(datas['kw1'])){
+                datas['objno_type'] = 1;
+            }else{
+                datas['objno_type'] = 0;
+            }
+        }
+
+        if(a !== 0){
+            return false;
+        }else{
+            a = 1;
+        }
+        $.get(url + '?' + Math.random(), datas, function(data){
+            if(data) {
+                $('#datalist').html(data);
+                if(datas['aggs']){
+                    $('.allShow .link1').html('');
+                    $('.allShow .link1').html($('.datatyps').html());
+                }
+                if (anchor) {
+                    $("html,body").animate({
+                        scrollTop: $(".resultbox").offset().top
+                    },200);
+                }
+            }
+
+            setTimeout(function(){
+                if (search['kw']) {
+                    var souce_title = "";
+                    // 神策埋点
+                    // 故宫中文网站_顶部搜索结果返回
+                    shence_sensors('ggzwwz_TopSearchResult',{
+                        search_keyword : search['kw'],
+                        is_search_result : ! $.trim($('.result_list').find('.empty-data').html())?true:false,
+                    });
+                } else {
+                    var souce_title = "";
+                    // 神策埋点
+                    // 故宫中文网站_顶部搜索结果返回
+                    shence_sensors('ggzwwz_TopSearchResult',{
+                        search_keyword : search['kw1'] + ( search['kw2'] ? "+" + search['kw2'] : "" ),
+                        is_search_result:! $.trim($('.result_list').find('.empty-data').html())?true:false,
+                    });
+                }
+            },300)
+        });
+    }
+
+    $(function(){
+        //回车自动提交
+        $('#keywords').keydown(function(e){
+            if(e.keyCode==13){
+                $('.tt-hint').hide();
+                $('.tt-menu').hide();
+            }
+        });
+
+        $('#adv_keywords1,#adv_keywords2').keydown(function(e){
+            if (e.keyCode==13) {
+                $('#adv_search').click();
+            }
+        });
+    })
+</script>
+
+<script>
+    function refrush_left (url, datas, obj) {
+        $.get(url + '?' + Math.random(), datas, function(data){
+            if(data) {
+                $('#'+obj).html(data);
+                setTimeout(function () {
+                    new autoFit($(document).find('.auto-fit-left'), {"width": 106, "height": 105});
+                }, 300);
+            }
+        });
+    }
+
+    function refrush_right (url, datas, obj) {
+        $.get(url + '?' + Math.random(), datas, function(data){
+            if(data) {
+                $('#'+obj).html(data);
+                setTimeout(function () {
+                    new autoFit($(document).find('.auto-fit'), {"width": 111, "height": 109});
+                }, 300);
+            }
+        });
+    }
+    function refrush_right_info (url, datas, obj) {
+        $.get(url + '?' + Math.random(), datas, function(data){
+            if(data) {
+                $('#'+obj).html(data);
+            }
+        });
+    }
+</script>
+
+    </div>
+    
+<div class="x-footer">
+    <div class="footer" id="footer">
+        <div class="wrap">
+            <div class="dd" style="text-align: center;">    <div class="suds-mod">
+        <div class="icon">
+            <img alt="" title="" src="/Uploads/image/2024/06/19/1718777318GXykGfXVu1.png" alt="">
+        </div>
+        <span>微博</span>
+        <div class="suds-pop at-t">
+            <div class="img"><img alt="" title="" src="/Uploads/image/2024/10/30/微博-rAnSDAriV260.jpg" alt=""></div>
+        </div>
+    </div>
+    <div class="suds-mod">
+        <div class="icon">
+            <img alt="" title="" src="/Uploads/image/2024/06/13/1718252091PCWUaAJGl1.png" alt="">
+        </div>
+        <span>微信</span>
+        <div class="suds-pop at-t">
+            <div class="img"><img alt="" title="" src="/Uploads/image/2024/10/30/微信-PKgMtrmlY260.jpg" alt=""></div>
+        </div>
+    </div>
+    <div class="suds-mod">
+        <div class="icon">
+            <img alt="" title="" src="/Uploads/image/2024/04/10/1712732694TjffWygwM1.png" alt="">
+        </div>
+        <span>小程序</span>
+        <div class="suds-pop at-t">
+            <div class="img"><img alt="" title="" src="/Uploads/image/2024/10/30/小程序-bsJzckSpJ260.jpg" alt=""></div>
+        </div>
+    </div>
+    <div class="suds-mod">
+        <div class="icon">
+            <img alt="" title="" src="/Uploads/image/2024/04/10/1712732694TutGSjrcR1.png" alt="">
+        </div>
+        <span>学习强国号</span>
+        <div class="suds-pop at-t">
+            <div class="img"><img alt="" title="" src="/Uploads/image/2024/10/30/学习强国号-XMhbQaYmz260.jpg" alt=""></div>
+        </div>
+    </div>
+    <div class="suds-mod">
+        <div class="icon">
+            <img alt="" title="" src="/Uploads/image/2024/04/10/1712732694guXTmRlCJ1.png" alt="">
+        </div>
+        <span>视频号</span>
+        <div class="suds-pop at-t">
+            <div class="img"><img alt="" title="" src="/Uploads/image/2024/10/30/视频号-GLHkqBniy260.jpg" alt=""></div>
+        </div>
+    </div>
+    <div class="suds-mod">
+        <div class="icon">
+            <img alt="" title="" src="/Uploads/image/2024/06/13/1718252091iedZOgVid1.png" alt="">
+        </div>
+        <span>抖音号</span>
+        <div class="suds-pop at-t">
+            <div class="img"><img alt="" title="" src="/Uploads/image/2024/10/30/抖音号-EdLLogkez260.jpg" alt=""></div>
+        </div>
+    </div>
+</div>            <div><div id="footernum" class="num">网站访问量
+    <span class="inner"></span>
+</div>
+<div class="nav_foot">
+            <a href="/sitemap.html" target="_blank" >网站地图</a>
+            <a href="/bottom/friend.html" target="_blank" >相关链接</a>
+            <a href="/bottom/apply_image.html" target="_blank" >影像授权</a>
+            <a href="/bottom/privacy/252.html" target="_blank" >隐私政策</a>
+            <a href="/bottom/privacy/236341.html" target="_blank" >版权声明 </a>
+            <a href="/bottom/ask.html" target="_blank" >留言板</a>
+            <a href="/singles_detail/252829.html" target="_blank" >联系我们</a>
+            <a href="/bottom/aboutus.html" target="_blank" >关于我们  </a>
+    </div>
+<script>
+    $.get("/ajax/get_pageview.html?"+Math.random(), function(data){
+        if ( data.status*1 === 1 ) {
+            $('.footer .num,.footer .inner').attr('aria-label', '网站访问量' +data.pageview +'次').attr('role','text');
+            const pageView = data.pageview || '';
+            var pageViewArray = pageView.toString().split('');
+            const footerNumHtml = pageViewArray.map(char => "<i>"+char+"</i>").join('')
+            if($('#footer .num').length > 0){
+                $(".footer .num .inner").html(footerNumHtml);
+                $('#footer .num').css("visibility","inherit");
+            }
+            if($('#footernum').length > 0){
+                $("#footernum .inner").html(footerNumHtml);
+                $('#footernum').css("visibility","inherit");
+            }
+        }
+    }, "json");
+</script></div>            <div><div class="copyright">
+    <div class="p">
+        <p>网站维护：故宫博物院数字与信息部 </p>
+        <p>
+                        联系方式：<a href="mailto:gugong@dpm.org.cn">gugong@dpm.org.cn</a>
+        </p>
+    </div>
+    <div class="p">
+        <p>
+            <a  href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010102004165" target="_blank">
+                <img src="/static/themes/image/ico.png"><span style="margin-left: 3px;">京公网安备 11010102004165号 </span>
+            </a>
+        </p>
+        <p>
+            <a  href="https://beian.miit.gov.cn/" target="_blank">京ICP备05067311号-1</a>
+        </p>
+    </div>
+    <div class="p">
+        <p>© 2001- 现在 故宫博物院</p>
+        <p>
+            <a href="http://www.fractal-technology.com/" target="_blank">网站建设</a>：<a
+                href="http://www.fractal-technology.com/" target="_blank">北京分形科技</a>
+        </p>
+    </div>
+</div>
+<div class="btns"><a href="javascript:;" class="jy">浏览建议</a></div>
+<div class="proposal"> 火狐 谷歌 360浏览器 最佳分辨率（1920 * 1080） </div>
+<script>
+    $(".proposal").bind("mouseout", function(e) {
+        $(this).animate({
+            bottom: '-60px',
+        });
+    });
+</script></div>            <div class="sydw">
+                <span id="_ideConac"><a href="https://bszs.conac.cn/sitename?method=show&id=A259806FC2A45840E05310291AAC4BBA" target="_blank"><img id="imgConac" vspace="0" hspace="0" border="0" src="https://dcs.conac.cn/image/blue.png" data-bd-imgshare-binded="1" alt="全国党政机关事业单位互联网网站标识管理服务平台" title="全国党政机关事业单位互联网网站标识管理服务平台"></a></span>
+<!--                <script type="text/javascript">-->
+<!--                    document.write(unescape(-->
+<!--                        "%3Cspan id='_ideConac' %3E%3C/span%3E%3Cscript src='https://dcs.conac.cn/js/33/000/0000/60957384/CA330000000609573840001.js' type='text/javascript'%3E%3C/script%3E"-->
+<!--                    ));-->
+<!--                </script>-->
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="/static/jquery/makewords/makewords.js?v=744416"></script>
+<script>
+    $(function(){
+        // 自造词
+        setTimeout(function(){
+            new repWords($('body'), '/static/jquery/makewords/imgwords/');
+        },500);
+    })
+</script>
+<script>
+$(function(){
+    $(window).on('load', function() {
+        setTimeout(function(){
+            window._bd_share_config = {
+                share: []
+            }
+            with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = '//www.dpm.org.cn/static/api/js/share.js?cdnversion=' + ~(-new Date() / 36e5)];
+        }, 1000);
+    });
+});
+</script>
+
+<script>
+    $(function(){
+        $('.x-header.blk').parents('body').addClass('container-pdtop');
+        $('.p-header.blk').parents('body').addClass('container-pdtop');
+        $(document).ready(function() {
+            // 为所有iframe添加沙箱属性
+            $('iframe').each(function() {
+                // 检查是否已经有sandbox属性
+                if (!$(this).attr('sandbox')) {
+                    // 根据iframe的用途添加适当的沙箱属性
+                    if ($(this).attr('src') && $(this).attr('src').indexOf('v.qq.com') !== -1) {
+                        // 腾讯视频播放器
+                        $(this).attr('sandbox', 'allow-scripts allow-same-origin allow-popups allow-fullscreen allow-downloads');
+                    } else if ($(this).attr('src') && $(this).attr('src').indexOf('pano.dpm.org.cn') !== -1) {
+                        // 全景故宫
+                        $(this).attr('sandbox', 'allow-scripts allow-same-origin allow-popups allow-downloads');
+                    } else {
+                        // 其他iframe
+                        $(this).attr('sandbox', 'allow-scripts allow-same-origin allow-downloads');
+                    }
+                }
+            });
+        });
+    })
+</script>
+
+<script>
+    $(function(){
+        $(window).on('load', function() {
+            setTimeout(function(){
+                window._bd_share_config = {
+                    share: []
+                }
+                // with(document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = '//auth.mangren.com/boots/dpm.org.cn/esdToolsInit.js?v=' + ~(-new Date() / 36e5)];
+            }, 300);
+        });
+        // 路径不包含 subject_ 、2025snakeyear、siwang
+        if (window.location.href.indexOf('topic/onegold') == -1 && window.location.href.indexOf('2025chinesenewyear') == -1 && window.location.href.indexOf('subject_') == -1 && window.location.href.indexOf('2025snakeyear') == -1 && window.location.href.indexOf('siwang') == -1 || window.location.href.indexOf('subject_booking') > -1 ){
+            if($.utils.is_mobile){
+                $('body').append("<script src='//auth.mangren.com/boots/textdpm.org.cn/esdToolsInit.js?v=1111' ><\/script>");
+            }else{
+                $('body').append("<script src='//auth.mangren.com/boots/dpm.org.cn/esdToolsInit.js?v=1111' ><\/script>");
+            }
+        }
+        // <a href="javascript:void(0);" id="toolbarSwitch" onclick="EsdToolbarInit.openClickFunc();" onkeydown="EsdToolbarInit.openKeydownFunc(event);" >开启辅助工具</a>
+    });
+</script>
+<script>
+    $(function(){
+        // 无障碍阅读处理
+        setTimeout(function(){
+            $('.close,.close1,.pop-close,.pop_close').attr('aria-label','关闭').attr('role','button');
+            $('.sc_sear').attr('role','button');
+            $('.xicon-right,.page-next,.next').attr('aria-label','下一页').attr('role','button');
+            $('.xicon-left,.page-prev,.prev').attr('aria-label','上一页').attr('role','button');
+            $(".sidebar_arr .xicon-right").attr('aria-label','展开收起').attr('role','button');
+            // $('.topping-mod').attr('aria-label','回到顶部').attr('role','button');
+        },100);
+    });
+</script>
+<script>
+    // 无用功能请求不刷新
+    $(document).on("ajaxComplete", function(event, jqXHR, ajaxOptions) {
+        // 请求的 URL 不已 /ajax/get_pageview 和   /ajax/get_tq 开头
+        if (ajaxOptions.url.indexOf('/ajax/get_pageview') != 0 && ajaxOptions.url.indexOf('/ajax/get_tq') != 0) {
+            // 你的其他逻辑
+            $("body").find('.ESDAssetsTextCon').removeClass('ESDAssetsTextCon');
+        }
+    });
+</script>
+<!--<div style="position: absolute; width: 0; height: 0;" id="toolbarSwitch"  onclick="EsdToolbarInit.openClickFunc();" onkeydown="EsdToolbarInit.openKeydownFunc(event);"></div>-->
+<script>
+    $(function(){
+        $(".x-header .esdTli .icn,.x-header .esdTli a").on("click",function(){
+            sensors.track('Accessibility_Entry_Click', {
+                entry_location : '导航无障碍入口',
+            });
+            // $("#toolbarSwitch").trigger("click");
+        })
+        $(".mess_ance .liuyan .esdTli").on("click",function(){
+            sensors.track('Accessibility_Entry_Click', {
+                entry_location : '浮动无障碍入口',
+            });
+            // $("#toolbarSwitch").trigger("click");
+        })
+    })
+</script>
+</div>
+</body>
+</html>
