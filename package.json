@@ -12,6 +12,7 @@
     "init": "bun run scripts/init.ts",
     "snapshot": "bun run scripts/snapshot.ts",
     "restore": "bun run scripts/restore.ts",
+    "scrape-images": "bun run scripts/scrape-images.ts --",
     "test": "bun test",
     "typecheck": "bunx tsc --noEmit"
   },
