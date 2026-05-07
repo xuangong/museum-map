@@ -199,7 +199,7 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
       letter-spacing: 0.2em; color: #6B6760; text-align: center; }
     .styles { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
     .styles a { font-family: var(--display); font-size: 12px; padding: 8px 14px;
-      border: 0.5px solid #6B6760; color: #E8E2D2; text-decoration: none;
+      border: 1px solid #6B6760; color: #E8E2D2; text-decoration: none;
       letter-spacing: 0.12em; transition: all 0.15s; }
     .styles a:hover { border-color: #B73E18; color: #F4EFE3; }
     .styles a.active { background: #B73E18; border-color: #B73E18; color: #F4EFE3; }
