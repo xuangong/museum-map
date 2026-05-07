@@ -14,6 +14,7 @@ import { homeRoute } from "~/routes/home"
 export interface Env {
   DB: D1Database
   RATE: KVNamespace
+  IMAGES: R2Bucket
   RATE_PER_MIN?: string
   RATE_PER_DAY?: string
   GLOBAL_PER_DAY?: string
