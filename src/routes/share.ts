@@ -203,6 +203,17 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
       letter-spacing: 0.12em; transition: all 0.15s; }
     .styles a:hover { border-color: #B73E18; color: #F4EFE3; }
     .styles a.active { background: #B73E18; border-color: #B73E18; color: #F4EFE3; }
+    .post-share { margin-top: 22px; max-width: 420px; padding: 18px 20px;
+      border: 1px solid #4a443c; background: rgba(247,239,221,0.04);
+      font-family: var(--display); color: #E8E2D2; }
+    .post-share .ps-title { font-size: 14px; color: #B73E18; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .post-share .ps-step { font-size: 13px; line-height: 1.7; color: #C8C2B2; margin-bottom: 12px; }
+    .post-share .ps-step b { color: #F4EFE3; font-weight: 500; }
+    .post-share .ps-link { font-size: 12px; color: #8A857B; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .post-share .ps-link code { font-family: var(--mono); color: #E8E2D2; word-break: break-all; }
+    .post-share .ps-copy { font-family: var(--display); font-size: 11px; padding: 4px 10px;
+      border: 1px solid #6B6760; background: transparent; color: #E8E2D2; cursor: pointer; letter-spacing: 0.08em; }
+    .post-share .ps-copy:hover { border-color: #B73E18; }
   `
   const safeName = `museum-atlas-${handle}.png`
   const styleParam = currentStyle
@@ -218,10 +229,12 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
       const stepEl = loading.querySelector('.step');
       const quipEl = loading.querySelector('.quip');
       const btnShare = document.getElementById('btn-share');
-      const btnPng = document.getElementById('btn-png');
       const btnSvg = document.getElementById('btn-svg');
       const hintEl = document.getElementById('hint-text');
-      btnShare.disabled = true; btnPng.disabled = true; btnSvg.disabled = true;
+      const postShare = document.getElementById('post-share');
+      const psUrl = document.getElementById('ps-url');
+      const psCopy = document.getElementById('ps-copy');
+      btnShare.disabled = true; btnSvg.disabled = true;
 
       const steps = [
         '检索你的足迹',
@@ -255,10 +268,7 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
           svgEl = tpl.querySelector('svg');
           if (!svgEl) throw new Error('海报为空');
           frame.appendChild(svgEl);
-          btnShare.disabled = false; btnPng.disabled = false; btnSvg.disabled = false;
-          if (!(navigator.share)) {
-            btnShare.textContent = '复制链接';
-          }
+          btnShare.disabled = false; btnSvg.disabled = false;
         })
         .catch(function(e){
           clearInterval(ticker);
@@ -311,41 +321,58 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
         }
       }
 
-      btnPng.addEventListener('click', async function(){
-        if (!svgEl) return;
-        btnPng.disabled = true; btnPng.textContent = '生成中…';
-        try {
-          const png = await renderPng();
-          if (!png) throw new Error('PNG 生成失败');
-          download(png, ${JSON.stringify(safeName)});
-        } catch (e) {
-          alert('保存失败：' + (e && e.message || e));
-        } finally {
-          btnPng.disabled = false; btnPng.textContent = '保存为图片';
-        }
-      });
-
       btnShare.addEventListener('click', async function(){
+        if (!svgEl) return;
+        btnShare.disabled = true; btnShare.textContent = '渲染中…';
         const profileFullUrl = location.origin + ${JSON.stringify(profileUrl)};
         const title = ${JSON.stringify(shareTitle)};
         const text = ${JSON.stringify(shareText)};
-        // URL-only share: 小红书/微信 share targets reject files but accept url+text
-        if (navigator.share) {
+        let png = null;
+        try {
+          png = await renderPng();
+          if (!png) throw new Error('PNG 生成失败');
+        } catch (e) {
+          alert('图片生成失败：' + (e && e.message || e));
+          btnShare.disabled = false; btnShare.textContent = '分享图片';
+          return;
+        }
+        const fileName = ${JSON.stringify(safeName)};
+        // Try Web Share with file (iOS Safari, some Android). 微信/小红书 内置浏览器
+        // 都不支持，会抛错；我们 catch 后走「保存到相册」+ 引导卡。
+        if (navigator.share && navigator.canShare) {
           try {
-            await navigator.share({ title: title, text: text, url: profileFullUrl });
-            return;
+            const file = new File([png], fileName, { type: 'image/png' });
+            const payload = { files: [file], title: title, text: text };
+            if (navigator.canShare(payload)) {
+              await navigator.share(payload);
+              btnShare.disabled = false; btnShare.textContent = '分享图片';
+              return;
+            }
           } catch (e) {
-            if (e && e.name === 'AbortError') return;
-            // fall through to clipboard
+            if (e && e.name === 'AbortError') {
+              btnShare.disabled = false; btnShare.textContent = '分享图片';
+              return;
+            }
+            // fall through to save-to-album path
           }
         }
+        // Fallback: 保存图片到相册 / 下载，并展示「下一步」引导卡
+        download(png, fileName);
+        psUrl.textContent = profileFullUrl;
+        postShare.hidden = false;
+        hintEl.hidden = true;
+        btnShare.disabled = false; btnShare.textContent = '再保存一次';
+      });
+
+      psCopy.addEventListener('click', async function(){
+        const profileFullUrl = location.origin + ${JSON.stringify(profileUrl)};
         try {
           await navigator.clipboard.writeText(profileFullUrl);
-          const orig = btnShare.textContent;
-          btnShare.textContent = '链接已复制';
-          setTimeout(function(){ btnShare.textContent = orig; }, 2000);
+          const orig = psCopy.textContent;
+          psCopy.textContent = '已复制';
+          setTimeout(function(){ psCopy.textContent = orig; }, 1500);
         } catch (e) {
-          prompt('复制此链接分享：', profileFullUrl);
+          prompt('复制此链接：', profileFullUrl);
         }
       });
     })();
@@ -372,11 +399,15 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
         </div>
       </div>
       <div class="actions">
-        <button class="btn ghost" id="btn-png">保存图片</button>
-        <button class="btn" id="btn-share">分享链接</button>
+        <button class="btn" id="btn-share">分享图片</button>
         <button class="btn ghost" id="btn-svg">下载 SVG</button>
       </div>
-      <div class="hint" id="hint-text">先「保存图片」到相册，再点「分享链接」发到微信/小红书</div>
+      <div class="hint" id="hint-text">手机长按图片可直接保存到相册</div>
+      <div class="post-share" id="post-share" hidden>
+        <div class="ps-title">图片已保存到相册</div>
+        <div class="ps-step">下一步 · 打开 <b>微信</b> 或 <b>小红书</b>，在发布页里从相册选这张图</div>
+        <div class="ps-link">配上链接：<code id="ps-url"></code> <button class="ps-copy" id="ps-copy">复制</button></div>
+      </div>
       <script>${script}</script>
     `,
   })
