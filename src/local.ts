@@ -34,6 +34,7 @@ async function main() {
 
   const appEnv: Env = {
     DB, RATE,
+    IMAGES: undefined as any as R2Bucket,
     RATE_PER_MIN: "10", RATE_PER_DAY: "100", GLOBAL_PER_DAY: "5000",
     COPILOT_GATEWAY_URL: env.gatewayUrl,
     COPILOT_GATEWAY_KEY: env.gatewayKey,

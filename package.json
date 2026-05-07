@@ -12,6 +12,7 @@
     "init": "bun run scripts/init.ts",
     "snapshot": "bun run scripts/snapshot.ts",
     "restore": "bun run scripts/restore.ts",
+    "scrape-images": "bun run scripts/scrape-images.ts --",
     "test": "bun test",
     "typecheck": "bunx tsc --noEmit"
   },
@@ -24,6 +25,7 @@
   },
   "dependencies": {
     "@elysiajs/cors": "^1.4.1",
+    "cheerio": "^1.2.0",
     "elysia": "^1.4.28",
     "pinyin-pro": "^3.28.1",
     "yaml": "^2.8.4"

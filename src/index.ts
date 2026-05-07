@@ -8,12 +8,15 @@ import { visitsRoute } from "~/routes/visits"
 import { authRoute } from "~/routes/auth"
 import { profileRoute } from "~/routes/profile"
 import { plazaRoute } from "~/routes/plaza"
+import { adminImageRoute } from "~/routes/admin-image"
 import { cdnRoute } from "~/lib/cdn"
 import { homeRoute } from "~/routes/home"
+import { imageProxyRoute } from "~/routes/image-proxy"
 
 export interface Env {
   DB: D1Database
   RATE: KVNamespace
+  IMAGES: R2Bucket
   RATE_PER_MIN?: string
   RATE_PER_DAY?: string
   GLOBAL_PER_DAY?: string
@@ -33,6 +36,7 @@ export function createApp(env: Env) {
     .decorate("env", env)
     .get("/health", () => ({ status: "ok" }))
     .use(cdnRoute)
+    .use(imageProxyRoute)
     .use(homeRoute)
     .use(museumsRoute)
     .use(dynastiesRoute)
@@ -42,6 +46,7 @@ export function createApp(env: Env) {
     .use(authRoute)
     .use(profileRoute)
     .use(plazaRoute)
+    .use(adminImageRoute)
 }
 
 export default {

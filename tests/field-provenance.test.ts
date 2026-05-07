@@ -157,7 +157,7 @@ describe("FieldProvenanceRepo", () => {
 describe("approve flow persists provenance + GET ?withProvenance=1", () => {
   it("end-to-end: pending → approve → fetch with _provenance", async () => {
     const db = await freshDb()
-    const env: any = { DB: db, DISABLE_CHAT: "1" }
+    const env: any = { DB: db, DISABLE_CHAT: "1", IMAGES: undefined as any }
     const app = createApp(env)
     const sid = await makeAdminSession(db)
 
@@ -203,7 +203,7 @@ describe("approve flow persists provenance + GET ?withProvenance=1", () => {
 
   it("approve succeeds even when pending row has null provenance (legacy)", async () => {
     const db = await freshDb()
-    const env: any = { DB: db, DISABLE_CHAT: "1" }
+    const env: any = { DB: db, DISABLE_CHAT: "1", IMAGES: undefined as any }
     const app = createApp(env)
     const sid = await makeAdminSession(db)
 
