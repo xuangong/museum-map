@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll } from "bun:test"
 import { Miniflare } from "miniflare"
 import { createApp } from "~/index"
 
-describe("GET /images/:hash", () => {
+describe("GET /img/:hash", () => {
   let mf: Miniflare
   beforeAll(async () => {
     mf = new Miniflare({
@@ -24,7 +24,7 @@ describe("GET /images/:hash", () => {
       RATE: await mf.getKVNamespace("RATE"),
       IMAGES: await mf.getR2Bucket("IMAGES"),
     } as any
-    const res = await createApp(env).handle(new Request("http://localhost/images/abc123.jpg"))
+    const res = await createApp(env).handle(new Request("http://localhost/img/abc123.jpg"))
     expect(res.status).toBe(200)
     expect(res.headers.get("content-type")).toBe("image/jpeg")
     expect(res.headers.get("cache-control")).toContain("immutable")
@@ -38,7 +38,7 @@ describe("GET /images/:hash", () => {
       RATE: await mf.getKVNamespace("RATE"),
       IMAGES: await mf.getR2Bucket("IMAGES"),
     } as any
-    const res = await createApp(env).handle(new Request("http://localhost/images/nope.jpg"))
+    const res = await createApp(env).handle(new Request("http://localhost/img/nope.jpg"))
     expect(res.status).toBe(404)
   })
 })

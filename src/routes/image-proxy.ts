@@ -4,25 +4,24 @@ import type { Env } from "~/index"
 interface RouteContext {
   env: Env
   params: { hash: string }
+  set: { status?: number; headers: Record<string, string> }
 }
 
-export const imageProxyRoute = new Elysia().get("/images/:hash", async ({ params, env }: any) => {
+export const imageProxyRoute = new Elysia().get("/img/:hash", async (ctx) => {
+  const { env, params, set } = ctx as unknown as RouteContext
   const key = params.hash
   if (!/^[a-zA-Z0-9._-]{1,128}$/.test(key)) {
-    return new Response("bad key", { status: 400 })
+    set.status = 400
+    return "bad key"
   }
   const obj = await env.IMAGES.get(key)
   if (!obj) {
-    return new Response("not found", { status: 404 })
+    set.status = 404
+    return "not found"
   }
-  // Buffer the body so it can be cloned by CORS middleware
-  const buf = await obj.arrayBuffer()
-  return new Response(buf, {
-    headers: {
-      "content-type": obj.httpMetadata?.contentType ?? "image/jpeg",
-      "cache-control": "public, max-age=31536000, immutable",
-      ...(obj.etag ? { "etag": obj.etag } : {})
-    }
-  })
+  set.headers["content-type"] = obj.httpMetadata?.contentType ?? "image/jpeg"
+  set.headers["cache-control"] = "public, max-age=31536000, immutable"
+  if (obj.etag) set.headers["etag"] = obj.etag
+  return await obj.arrayBuffer()
 })
 
