@@ -53,11 +53,21 @@ export async function extractBaikeImages(opts: {
   const $ = cheerio.load(html)
   const out: BaikeImage[] = []
   const seen = new Set<string>()
+  // Filter Baidu's generic placeholder/logo images. These are returned as
+  // og:image when the lemma has no real picture, causing identical hashes
+  // across unrelated artifacts.
+  const isPlaceholder = (url: string): boolean => {
+    if (/bkssl\.bdimg\.com\/cms\/static\//i.test(url)) return true   // baike.png logo
+    if (/\/cms\/static\//i.test(url)) return true                    // any cms static asset
+    if (/bdstatic\.com\/img\/[^/]+\/static/i.test(url)) return true  // baidu static
+    return false
+  }
   const push = (url: string | undefined, alt: string | null, source: BaikeImage["source"]) => {
     if (!url) return
     let normalized = url.trim()
     if (normalized.startsWith("//")) normalized = "https:" + normalized
     if (!/^https?:\/\//.test(normalized)) return
+    if (isPlaceholder(normalized)) return
     if (seen.has(normalized)) return
     seen.add(normalized)
     out.push({ url: normalized, alt, source })

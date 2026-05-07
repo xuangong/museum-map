@@ -225,8 +225,15 @@ describe("runImageEnricher", () => {
 
     const wmFetcher = (async (input: any) => {
       const u = typeof input === "string" ? input : input.url
+      const isYubi = u.indexOf(encodeURIComponent("玉璧")) >= 0
       if (u.indexOf("list=search") >= 0) {
-        return new Response(JSON.stringify({ query: { search: [{ title: "File:Yu_bi.jpg", ns: 6 }] } }), { status: 200 })
+        if (isYubi) {
+          return new Response(JSON.stringify({ query: { search: [{ title: "File:Yu_bi.jpg", ns: 6 }] } }), { status: 200 })
+        }
+        return new Response(JSON.stringify({ query: { search: [] } }), { status: 200 })
+      }
+      if (u.indexOf("wbsearchentities") >= 0) {
+        return new Response(JSON.stringify({ search: [] }), { status: 200 })
       }
       if (u.indexOf("prop=imageinfo") >= 0) {
         return new Response(

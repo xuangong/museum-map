@@ -6,7 +6,7 @@ import type { MuseumPayload } from "./import-schema"
 
 export const ENRICHER_MODEL = "claude-haiku-4-5"
 export const ENRICHER_MAX_TOKENS = 2048
-export const ENRICHER_MAX_ITERS = 40
+export const ENRICHER_MAX_ITERS = 24
 export const ENRICHER_WALL_MS = 180_000
 
 export interface EnrichEvent {
@@ -44,33 +44,33 @@ export interface ArtifactMatch {
   qid?: string
 }
 
-const SYSTEM = `你是一名艺术品图片采编员。给定一个博物馆的代表文物列表，你要为每件文物从 Wikimedia 找一张可用的图片。
+const SYSTEM = `你是一名艺术品图片采编员。系统已为每件文物在 Wikimedia 预查到 0–3 个候选图片，你的工作是逐一判断接受哪一个，或全部跳过。
 
 工作流程：
-1. **优先 commons_search**：用文物名（可加馆名/年代/材质等关键词）直接在 Wikimedia Commons 搜索文件。绝大多数中国文物在 Commons 有图但在 Wikidata 没有单独条目。
-2. 如果 commons_search 没有合理结果，可尝试 wikidata_search → wikidata_image。
-3. 如果两条路都没有命中，**跳过该文物**，绝不编造。
-4. **每件文物最多尝试 2 次搜索**——找不到就跳过，节约迭代。
-5. 全部处理完后**必须**调用一次 submit_results 提交结果。**绝不能因为没找到任何图片就不调用 submit_results**——空 matches 也要提交（matches: {}）。
-6. **不要做"汇总思考"**——直接调用 submit_results。已经在内部消息里梳理过的结果，提交时直接照抄。
+1. 用户消息会列出每件文物以及预查候选（标注 A/B/C 及来源 commons_search / wikidata_image）。
+2. 你**优先在候选里挑选**。若候选齐全且有可接受的，按规则选择并照抄四个字段即可。
+3. **当某文物预查候选为空（"无候选"）时**，主动发起 **1-2 次** 工具调用补搜：
+   - 先 commons_search（用文物名 + 馆名/年代/材质等关键词重组查询，比如 "金沙遗址 太阳神鸟"、"清代瓷瓶 西湖"）；
+   - 若 commons_search 无果，可再 wikidata_search → wikidata_image。
+   - 若仍无果，**跳过该文物**。
+4. 全部判完后**必须**调用一次 submit_results。即使 matches 为空 ({}) 也要提交。
 
 **质量底线**（违反任意一条 → 跳过该文物，不要列入 matches）：
-- 不接受 \`.djvu / .pdf / 古籍 / 詩集 / 文獻 / 縣誌\` 这类古籍数字化文件——这些是文献扫描，不是文物照片。
+- 不接受 \`.djvu / .pdf / 古籍 / 詩集 / 文獻 / 縣誌\` 类古籍数字化文件。
 - **接受规则**（满足任意一条即可）：
-  (a) Commons 文件标题**完整包含文物名**（例如文物 "绿松石龙形器" 对应 "File:绿松石龙形器.jpg" 或 "File:绿松石龙形器及铜铃.jpg"），这种命名说明上传者明确指代该件文物，可以接受；
-  (b) 文件标题包含本馆名/所在地/同一遗址（例如 "二里头出土..."、"故宫博物院藏..."）；
-  (c) 文物本身就是举世闻名的孤品（"四羊方尊"、"越王勾践剑"、"司母戊鼎"、"曾侯乙编钟" 等），并且文件标题至少含文物核心名。
+  (a) Commons 文件标题**完整包含文物中文名**（如 "File:绿松石龙形器.jpg"），明确指代该件文物；
+  (b) 文件标题包含本馆名/所在地/同一遗址（如 "二里头出土..."、"故宫博物院藏..."）；
+  (c) 文物本身就是举世闻名的孤品（"四羊方尊"、"越王勾践剑"、"司母戊鼎"、"曾侯乙编钟"、"史墙盘"、"长信宫灯" 等），并且文件标题至少含文物核心名（中文或对应英文，如 "Shi Qiang pan"）；
+  (d) **来源是 wikidata_image**（即 Wikidata 实体的 P18 主图）——这通常是该文物的官方代表图，可以接受。
 - **拒绝规则**：
-  - 文物名包含具体的纹饰/形制（如 "乳钉纹青铜爵"、"网格纹青铜鼎"），但文件只是泛泛 "青铜爵" / "青铜鼎"——纹饰是辨识依据，缺失就算泛化匹配，跳过。
-  - 类型相同但具体形制不同（如 "龙形牙璋" vs 文件 "玉璋"——牙璋和玉璋是不同形制），跳过。
-  - 同一时代/类型但不同地域、不同出土地（如本馆是定州，文件来自正定龙兴寺），跳过。
+  - 文物名包含具体的纹饰/形制（如 "乳钉纹青铜爵"），但文件只是泛泛 "青铜爵"——纹饰是辨识依据，缺失就算泛化匹配，跳过。
+  - 类型相同但具体形制不同（如 "龙形牙璋" vs "玉璋"），跳过。
+  - 同一时代/类型但不同地域、不同出土地，跳过。
 - 宁可少匹配，也不要错匹配。
 
-submit_results.matches 是一个对象：键是文物名（与输入完全一致），值是 { url, license, attribution, source }，其中 source 是用于 provenance 的来源 URL：
-- 来自 commons_search：填 \`https://commons.wikimedia.org/wiki/<title>\`（title 即返回的文件标题）
-- 来自 wikidata_image：填 \`https://www.wikidata.org/wiki/<QID>\`
+submit_results.matches 是一个对象：键是文物名（与输入完全一致），值是 { url, license, attribution, source }——直接从你选中的候选**原样照抄** url/license/attribution/source 四个字段即可。
 
-只列入找到图片的文物，未找到的不要列出。最多 24 轮工具调用。`
+只列入接受的文物，未接受的不要列出。最多 12 轮工具调用。`
 
 function buildTools(): any[] {
   return [
@@ -233,11 +233,103 @@ export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> 
     return { matched: 0, total: 0 }
   }
 
-  const userMsg =
-    `当前博物馆：**${m.name}**\n请为以下馆藏文物逐一查找 Wikimedia Commons 图片，按 SYSTEM 中的接受/拒绝规则严格判断。\n\n文物列表：\n` +
-    pending
-      .map((a, i) => `${i + 1}. ${a.name}${a.period ? ` (${a.period})` : ""}`)
+  // ── Server-side prefetch: for each pending artifact, run two independent
+  //    candidate hunts in parallel (commons-zh + wikidata-zh→P18 + commons-en).
+  //    The agent then only judges/disambiguates instead of issuing tool calls.
+  await opts.onEvent({ type: "thinking", message: `预查 ${pending.length} 件文物的候选图…` })
+  type Cand = { label: string; url: string; license: string | null; attribution: string | null; source: string; via: string }
+  async function huntOne(name: string, period: string | null | undefined): Promise<Cand[]> {
+    const out: Cand[] = []
+    const seen = new Set<string>()
+    const push = (c: Cand) => {
+      if (seen.has(c.url)) return
+      seen.add(c.url)
+      out.push(c)
+    }
+    const queries = [name, period ? `${name} ${period}` : null].filter(Boolean) as string[]
+    // Path 1: commons in chinese.
+    const cTasks = queries.map((q) =>
+      searchCommonsFile({ query: q, fetcher: wmFetcher })
+        .then((hit) => {
+          if (hit) {
+            push({
+              label: `commons-zh "${q}"`,
+              url: hit.url,
+              license: hit.license,
+              attribution: hit.attribution,
+              source: `https://commons.wikimedia.org/wiki/${encodeURIComponent(hit.title)}`,
+              via: "commons_search",
+            })
+          }
+        })
+        .catch(() => {}),
+    )
+    // Path 2: wikidata-zh → P18 → commons (uses english label too).
+    const wTask = searchWikidataEntity({ query: name, fetcher: wmFetcher })
+      .then(async (ent) => {
+        if (!ent) return
+        const img = await fetchWikidataImage({ qid: ent.qid, fetcher: wmFetcher }).catch(() => null)
+        if (img) {
+          push({
+            label: `wikidata ${ent.qid} (${ent.label})`,
+            url: img.url,
+            license: img.license,
+            attribution: img.attribution,
+            source: `https://www.wikidata.org/wiki/${ent.qid}`,
+            via: "wikidata_image",
+          })
+        }
+        // Path 3: english label → commons (catches files like "Shi Qiang pan.jpg")
+        if (ent.label && /[a-zA-Z]/.test(ent.label) && ent.label.toLowerCase() !== name.toLowerCase()) {
+          const enHit = await searchCommonsFile({ query: ent.label, fetcher: wmFetcher }).catch(() => null)
+          if (enHit) {
+            push({
+              label: `commons-en "${ent.label}"`,
+              url: enHit.url,
+              license: enHit.license,
+              attribution: enHit.attribution,
+              source: `https://commons.wikimedia.org/wiki/${encodeURIComponent(enHit.title)}`,
+              via: "commons_search",
+            })
+          }
+        }
+      })
+      .catch(() => {})
+    await Promise.all([...cTasks, wTask])
+    return out
+  }
+  // Cap concurrency so wikidata doesn't 429 us.
+  const CONCURRENCY = 4
+  const candByName = new Map<string, Cand[]>()
+  for (let i = 0; i < pending.length; i += CONCURRENCY) {
+    const slice = pending.slice(i, i + CONCURRENCY)
+    const results = await Promise.all(slice.map((a) => huntOne(a.name, a.period)))
+    slice.forEach((a, idx) => {
+      candByName.set(a.name, results[idx]!)
+    })
+  }
+  const totalCands = Array.from(candByName.values()).reduce((s, cs) => s + cs.length, 0)
+  await opts.onEvent({ type: "thinking", message: `预查完成：${totalCands} 个候选 / ${pending.length} 件文物` })
+
+  // Render candidates inline so the agent can judge without extra tool calls.
+  const renderCands = (cs: Cand[]): string => {
+    if (!cs.length) return "  （无候选——除非文物极有名，否则跳过）"
+    return cs
+      .map((c, i) => {
+        const tag = String.fromCharCode(65 + i) // A/B/C
+        return `  ${tag}. [${c.via}] ${c.label}\n     url: ${c.url}\n     source: ${c.source}\n     license: ${c.license || "?"} · attribution: ${c.attribution || "?"}`
+      })
       .join("\n")
+  }
+
+  const userMsg =
+    `当前博物馆：**${m.name}**\n下面每件文物已预查到候选图，请按 SYSTEM 中的接受/拒绝规则严格判断，挑出可接受的候选并调用 submit_results。直接照抄候选的 url/license/attribution/source 四个字段。\n\n` +
+    pending
+      .map((a, i) => {
+        const cs = candByName.get(a.name) || []
+        return `${i + 1}. **${a.name}**${a.period ? ` (${a.period})` : ""}\n${renderCands(cs)}`
+      })
+      .join("\n\n")
   const messages: any[] = [{ role: "user", content: userMsg }]
 
   let submitted: Record<string, ArtifactMatch> | null = null
@@ -247,6 +339,12 @@ export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> 
    *  Used as a safety-net fallback when the agent submits an empty {} despite having
    *  successful tool_results — a known Haiku failure mode. */
   const candidates: { query: string; hit: { url: string; license: string | null; attribution: string | null; source: string } }[] = []
+  // Seed candidates from prefetch so the existing fallback recovery path can use them.
+  for (const [name, cs] of candByName.entries()) {
+    for (const c of cs) {
+      candidates.push({ query: name, hit: { url: c.url, license: c.license, attribution: c.attribution, source: c.source } })
+    }
+  }
   const recordCandidate = (query: string, hit: { url: string; license: string | null; attribution: string | null; source: string }) => {
     candidates.push({ query, hit })
   }
@@ -359,7 +457,7 @@ export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> 
   })
 
   if (matched === 0) {
-    await opts.onEvent({ type: "done", message: `0/${total} matched` })
+    await opts.onEvent({ type: "done", message: `0/${pending.length} matched` })
     return { matched: 0, total }
   }
 
@@ -391,13 +489,28 @@ export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> 
     sources: m.sources,
   }
 
-  // Existing provenance rows must be preserved; add per-image rows on top.
+  // Existing provenance rows must be preserved; only drop image rows whose
+  // artifact we just re-enriched in this run.
   const existing = await provRepo.listFor(opts.museumId)
   const ts = now()
-  const merged = existing.filter((r) => !r.field_path.endsWith(".image"))
+  // Compute which artifact indexes got fresh hits this run.
+  const refreshedIdx = new Set<number>()
   newArtifacts.forEach((a, i) => {
     if (!a.image) return
-    const hit = matchByKey.get(a.name.trim().toLowerCase())!
+    const hit = matchByKey.get(a.name.trim().toLowerCase())
+    if (hit) refreshedIdx.add(i)
+  })
+  const merged = existing.filter((r) => {
+    const m = r.field_path.match(/^artifacts\[(\d+)\]\.image$/)
+    if (!m) return true
+    return !refreshedIdx.has(Number(m[1]))
+  })
+  newArtifacts.forEach((a, i) => {
+    if (!a.image) return
+    const hit = matchByKey.get(a.name.trim().toLowerCase())
+    // Only write provenance for artifacts we just enriched in this run.
+    // Pre-existing images keep whatever provenance row already exists.
+    if (!hit) return
     let sourceUrl: string
     if (hit.source && /^https?:\/\//.test(hit.source)) {
       sourceUrl = hit.source
@@ -429,6 +542,6 @@ export async function runImageEnricher(opts: EnrichOpts): Promise<EnrichResult> 
   )
   await opts.db.batch(stmts)
 
-  await opts.onEvent({ type: "done", message: `✅ ${matched}/${total} matched` })
+  await opts.onEvent({ type: "done", message: `✅ ${matched}/${pending.length} matched` })
   return { matched, total }
 }

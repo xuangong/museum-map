@@ -58,4 +58,13 @@ describe("extractBaikeImages", () => {
     const imgs = await extractBaikeImages({ entryUrl: "https://baike.baidu.com/item/x", fetcher })
     expect(imgs.length).toBeLessThanOrEqual(5)
   })
+
+  it("filters Baidu placeholder logo (bkssl.bdimg.com/cms/static/...)", async () => {
+    const html = `<html><head>
+      <meta property="og:image" content="https://bkssl.bdimg.com/cms/static/baike.png">
+    </head><body></body></html>`
+    const fetcher = fakeFetcher({ "/item/": { body: html } })
+    const imgs = await extractBaikeImages({ entryUrl: "https://baike.baidu.com/item/x", fetcher })
+    expect(imgs.length).toBe(0)
+  })
 })
