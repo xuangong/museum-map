@@ -207,6 +207,9 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
   const safeName = `museum-atlas-${handle}.png`
   const styleParam = currentStyle
   const svgUrl = `/u/${encodeURIComponent(handle)}/share?format=svg&style=${styleParam}`
+  const profileUrl = `/u/${encodeURIComponent(handle)}`
+  const shareTitle = `${displayName} 的博物馆足迹`
+  const shareText = `${displayName} 走过的博物馆 · 中国博物馆地图`
   const script = `
     (function(){
       const W = ${POSTER_W}, H = ${POSTER_H};
@@ -214,9 +217,11 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
       const loading = document.querySelector('.loading');
       const stepEl = loading.querySelector('.step');
       const quipEl = loading.querySelector('.quip');
+      const btnShare = document.getElementById('btn-share');
       const btnPng = document.getElementById('btn-png');
       const btnSvg = document.getElementById('btn-svg');
-      btnPng.disabled = true; btnSvg.disabled = true;
+      const hintEl = document.getElementById('hint-text');
+      btnShare.disabled = true; btnPng.disabled = true; btnSvg.disabled = true;
 
       const steps = [
         '检索你的足迹',
@@ -250,7 +255,12 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
           svgEl = tpl.querySelector('svg');
           if (!svgEl) throw new Error('海报为空');
           frame.appendChild(svgEl);
-          btnPng.disabled = false; btnSvg.disabled = false;
+          btnShare.disabled = false; btnPng.disabled = false; btnSvg.disabled = false;
+          // If running in a browser without Web Share API, label & hint differ
+          if (!(navigator.share && navigator.canShare)) {
+            btnShare.textContent = '复制链接';
+            hintEl.textContent = '长按图片可保存 · 链接可粘贴到微信/小红书';
+          }
         })
         .catch(function(e){
           clearInterval(ticker);
@@ -281,13 +291,12 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
         const blob = new Blob([svgString()], { type: 'image/svg+xml' });
         download(blob, ${JSON.stringify(safeName.replace(/\.png$/, ".svg"))});
       });
-      btnPng.addEventListener('click', async function(){
-        if (!svgEl) return;
-        btnPng.disabled = true; btnPng.textContent = '生成中…';
+
+      async function renderPng(){
+        const svg = svgString();
+        const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
         try {
-          const svg = svgString();
-          const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
-          const url = URL.createObjectURL(blob);
           const img = new Image();
           img.crossOrigin = 'anonymous';
           await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
@@ -298,12 +307,61 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
           ctx.fillStyle = '#F4EFE3';
           ctx.fillRect(0, 0, cv.width, cv.height);
           ctx.drawImage(img, 0, 0, cv.width, cv.height);
+          return await new Promise((res) => cv.toBlob(res, 'image/png'));
+        } finally {
           URL.revokeObjectURL(url);
-          await new Promise((res) => cv.toBlob((b) => { if (b) download(b, ${JSON.stringify(safeName)}); res(null); }, 'image/png'));
+        }
+      }
+
+      btnPng.addEventListener('click', async function(){
+        if (!svgEl) return;
+        btnPng.disabled = true; btnPng.textContent = '生成中…';
+        try {
+          const png = await renderPng();
+          if (!png) throw new Error('PNG 生成失败');
+          download(png, ${JSON.stringify(safeName)});
         } catch (e) {
           alert('保存失败：' + (e && e.message || e));
         } finally {
           btnPng.disabled = false; btnPng.textContent = '保存为图片';
+        }
+      });
+
+      btnShare.addEventListener('click', async function(){
+        if (!svgEl) return;
+        const profileFullUrl = location.origin + ${JSON.stringify(profileUrl)};
+        const title = ${JSON.stringify(shareTitle)};
+        const text = ${JSON.stringify(shareText)} + ' ' + profileFullUrl;
+        // Web Share API with file (iOS Safari, Android Chrome) — best path
+        if (navigator.share && navigator.canShare) {
+          btnShare.disabled = true; btnShare.textContent = '准备中…';
+          try {
+            const png = await renderPng();
+            if (!png) throw new Error('PNG 生成失败');
+            const file = new File([png], ${JSON.stringify(safeName)}, { type: 'image/png' });
+            const payload = { files: [file], title: title, text: text, url: profileFullUrl };
+            if (navigator.canShare(payload)) {
+              await navigator.share(payload);
+              return;
+            }
+            // Some browsers reject files but accept text+url
+            await navigator.share({ title: title, text: text, url: profileFullUrl });
+            return;
+          } catch (e) {
+            if (e && e.name === 'AbortError') return; // user cancelled
+            // fall through to copy
+          } finally {
+            btnShare.disabled = false; btnShare.textContent = '分享';
+          }
+        }
+        // Desktop fallback: copy URL to clipboard
+        try {
+          await navigator.clipboard.writeText(profileFullUrl);
+          const orig = btnShare.textContent;
+          btnShare.textContent = '链接已复制';
+          setTimeout(function(){ btnShare.textContent = orig; }, 2000);
+        } catch (e) {
+          prompt('复制此链接分享：', profileFullUrl);
         }
       });
     })();
@@ -330,10 +388,11 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
         </div>
       </div>
       <div class="actions">
-        <button class="btn" id="btn-png">保存为图片</button>
+        <button class="btn" id="btn-share">分享</button>
+        <button class="btn ghost" id="btn-png">保存为图片</button>
         <button class="btn ghost" id="btn-svg">下载 SVG</button>
       </div>
-      <div class="hint">长按图片或点击「保存为图片」即可分享</div>
+      <div class="hint" id="hint-text">长按图片或点击「分享」即可发到微信</div>
       <script>${script}</script>
     `,
   })
