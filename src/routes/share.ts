@@ -10,7 +10,7 @@ import { ErrorPage } from "~/ui/home"
 import { generatePoetCopy } from "~/services/share-poet"
 import { buildQrSvg } from "~/services/qr"
 import { currentSolarTerm, chineseYear } from "~/services/solar-term"
-import { renderPosterSvg, POSTER_W, POSTER_H } from "~/ui/share-poster"
+import { renderPosterSvg, POSTER_W, POSTER_H, pickStyle, POSTER_STYLES, POSTER_STYLE_LABELS, type PosterStyle } from "~/ui/share-poster"
 import { Layout } from "~/ui/layout"
 
 interface Ctx {
@@ -45,6 +45,19 @@ export const shareRoute = new Elysia()
     if (!env.COPILOT_GATEWAY_URL || !env.COPILOT_GATEWAY_KEY) {
       return new Response(ErrorPage("分享海报暂不可用（AI 网关未配置）"), {
         status: 503,
+        headers: { "content-type": "text/html; charset=utf-8" },
+      })
+    }
+
+    const url0 = new URL(c.request.url)
+    const wantsSvg = url0.searchParams.get("format") === "svg"
+    const styleParam0 = url0.searchParams.get("style") || undefined
+    const style0 = pickStyle(userHandle, styleParam0)
+
+    // Fast path: serve loading shell instantly. Browser will fetch ?format=svg async.
+    if (!wantsSvg) {
+      const displayName0 = u.display_name || `@${userHandle}`
+      return new Response(SharePage({ displayName: displayName0, handle: userHandle, currentStyle: style0 }), {
         headers: { "content-type": "text/html; charset=utf-8" },
       })
     }
@@ -117,8 +130,7 @@ export const shareRoute = new Elysia()
       })
     }
 
-    const url = new URL(c.request.url)
-    const profileUrl = `${url.origin}/u/${encodeURIComponent(userHandle)}`
+    const profileUrl = `${url0.origin}/u/${encodeURIComponent(userHandle)}`
     const qr = buildQrSvg(profileUrl)
     const term = currentSolarTerm()
 
@@ -134,20 +146,13 @@ export const shareRoute = new Elysia()
       qrModuleCount: qr.modules,
       solarTerm: term.name,
       yearZh: chineseYear(term.year),
-    })
+    }, style0)
 
-    // SVG-only endpoint (?format=svg) for previews / debugging.
-    if (url.searchParams.get("format") === "svg") {
-      return new Response(svg, { headers: { "content-type": "image/svg+xml; charset=utf-8" } })
-    }
-
-    return new Response(SharePage({ svg, displayName, handle: userHandle }), {
-      headers: { "content-type": "text/html; charset=utf-8" },
-    })
+    return new Response(svg, { headers: { "content-type": "image/svg+xml; charset=utf-8", "cache-control": "no-store" } })
   })
 
-function SharePage(opts: { svg: string; displayName: string; handle: string }): string {
-  const { svg, displayName, handle } = opts
+function SharePage(opts: { displayName: string; handle: string; currentStyle: PosterStyle }): string {
+  const { displayName, handle, currentStyle } = opts
   const css = `
     body { background: #2A2724; margin: 0; min-height: 100dvh;
       display: flex; flex-direction: column; align-items: center;
@@ -159,25 +164,104 @@ function SharePage(opts: { svg: string; displayName: string; handle: string }): 
       font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; }
     .poster-frame {
       max-width: min(720px, calc(100vw - 36px));
+      width: 100%;
+      aspect-ratio: ${POSTER_W} / ${POSTER_H};
+      background: #F4EFE3;
       box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6), 0 8px 20px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
     }
     .poster-frame svg { width: 100%; height: auto; display: block; }
+    .loading { position: absolute; inset: 0; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 18px; color: #6B6760;
+      font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; }
+    .loading .ring { width: 38px; height: 38px; border: 1px solid #D9D2C2;
+      border-top-color: #B73E18; border-radius: 50%; animation: spin 0.9s linear infinite; }
+    .loading .step { color: #8A857B; font-size: 12px; letter-spacing: 0.18em;
+      font-family: var(--display); transition: opacity 0.3s; min-height: 18px; }
+    .loading .quip { color: #B73E18; font-family: var(--display); font-size: 13px;
+      letter-spacing: 0.06em; text-transform: none; max-width: 260px; text-align: center;
+      line-height: 1.6; opacity: 0.85; }
+    .loading .bar { width: 180px; height: 2px; background: #E8E2D2; overflow: hidden; }
+    .loading .bar i { display: block; width: 30%; height: 100%; background: #B73E18;
+      animation: slide 1.6s ease-in-out infinite; }
+    .loading.error { color: #B73E18; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(430%); } }
     .actions { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; justify-content: center; }
     .btn { font-family: var(--display); font-size: 14px;
       padding: 12px 22px; border: 0.5px solid #B73E18; background: #B73E18; color: #F4EFE3;
       border-radius: 0; cursor: pointer; letter-spacing: 0.06em; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
     .btn.ghost { background: transparent; color: #E8E2D2; border-color: #6B6760; }
     .hint { margin-top: 18px; font-family: var(--mono); font-size: 11px;
       letter-spacing: 0.2em; color: #6B6760; text-align: center; }
+    .styles { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+    .styles a { font-family: var(--display); font-size: 12px; padding: 8px 14px;
+      border: 0.5px solid #6B6760; color: #E8E2D2; text-decoration: none;
+      letter-spacing: 0.12em; transition: all 0.15s; }
+    .styles a:hover { border-color: #B73E18; color: #F4EFE3; }
+    .styles a.active { background: #B73E18; border-color: #B73E18; color: #F4EFE3; }
   `
   const safeName = `museum-atlas-${handle}.png`
+  const styleParam = currentStyle
+  const svgUrl = `/u/${encodeURIComponent(handle)}/share?format=svg&style=${styleParam}`
   const script = `
     (function(){
-      const svgEl = document.querySelector('.poster-frame svg');
+      const W = ${POSTER_W}, H = ${POSTER_H};
+      const frame = document.querySelector('.poster-frame');
+      const loading = document.querySelector('.loading');
+      const stepEl = loading.querySelector('.step');
+      const quipEl = loading.querySelector('.quip');
       const btnPng = document.getElementById('btn-png');
       const btnSvg = document.getElementById('btn-svg');
-      const W = ${POSTER_W}, H = ${POSTER_H};
+      btnPng.disabled = true; btnSvg.disabled = true;
+
+      const steps = [
+        '检索你的足迹',
+        '请 AI 题诗',
+        '雕版用印',
+        '装裱排版',
+      ];
+      const quips = [
+        '正在让 Claude 翻一翻你走过的博物馆…',
+        '为你斟酌一句配得上这份足迹的古诗…',
+        '蘸朱砂、压印章，慢工出细活…',
+        '马上好——好诗值得多等几秒。',
+      ];
+      let idx = 0;
+      function tick(){
+        stepEl.textContent = steps[Math.min(idx, steps.length - 1)];
+        quipEl.textContent = quips[Math.min(idx, quips.length - 1)];
+        idx++;
+      }
+      tick();
+      const ticker = setInterval(tick, 3500);
+
+      let svgEl = null;
+      fetch(${JSON.stringify(svgUrl)}, { cache: 'no-store' })
+        .then(function(r){ if(!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+        .then(function(text){
+          clearInterval(ticker);
+          loading.remove();
+          const tpl = document.createElement('div');
+          tpl.innerHTML = text.trim();
+          svgEl = tpl.querySelector('svg');
+          if (!svgEl) throw new Error('海报为空');
+          frame.appendChild(svgEl);
+          btnPng.disabled = false; btnSvg.disabled = false;
+        })
+        .catch(function(e){
+          clearInterval(ticker);
+          loading.classList.add('error');
+          stepEl.textContent = '生成失败';
+          quipEl.textContent = (e && e.message) ? e.message : '请稍后再试';
+          const ring = loading.querySelector('.ring'); if (ring) ring.remove();
+          const bar = loading.querySelector('.bar'); if (bar) bar.remove();
+        });
+
       function svgString(){
+        if (!svgEl) return '';
         const clone = svgEl.cloneNode(true);
         clone.setAttribute('xmlns','http://www.w3.org/2000/svg');
         clone.setAttribute('width', W);
@@ -191,11 +275,13 @@ function SharePage(opts: { svg: string; displayName: string; handle: string }): 
         document.body.appendChild(a); a.click(); a.remove();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
       }
-      btnSvg && btnSvg.addEventListener('click', function(){
+      btnSvg.addEventListener('click', function(){
+        if (!svgEl) return;
         const blob = new Blob([svgString()], { type: 'image/svg+xml' });
         download(blob, ${JSON.stringify(safeName.replace(/\.png$/, ".svg"))});
       });
-      btnPng && btnPng.addEventListener('click', async function(){
+      btnPng.addEventListener('click', async function(){
+        if (!svgEl) return;
         btnPng.disabled = true; btnPng.textContent = '生成中…';
         try {
           const svg = svgString();
@@ -221,6 +307,10 @@ function SharePage(opts: { svg: string; displayName: string; handle: string }): 
       });
     })();
   `
+  const styleChips = POSTER_STYLES.map((s) => {
+    const cls = s === currentStyle ? "active" : ""
+    return `<a class="${cls}" href="/u/${esc(handle)}/share?style=${s}">${esc(POSTER_STYLE_LABELS[s])}</a>`
+  }).join("")
   return Layout({
     title: `${displayName} 的海报 · 中国博物馆地图`,
     head: `<style>${css}</style>`,
@@ -229,7 +319,15 @@ function SharePage(opts: { svg: string; displayName: string; handle: string }): 
         <h1>${esc(displayName)} · 足迹海报</h1>
         <a href="/u/${esc(handle)}">← 返回主页</a>
       </div>
-      <div class="poster-frame">${svg}</div>
+      <div class="styles">${styleChips}</div>
+      <div class="poster-frame">
+        <div class="loading">
+          <div class="ring"></div>
+          <div class="step">检索你的足迹</div>
+          <div class="bar"><i></i></div>
+          <div class="quip">正在让 Claude 翻一翻你走过的博物馆…</div>
+        </div>
+      </div>
       <div class="actions">
         <button class="btn" id="btn-png">保存为图片</button>
         <button class="btn ghost" id="btn-svg">下载 SVG</button>
