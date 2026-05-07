@@ -14,6 +14,10 @@ migrations_dir = "migrations"
 binding = "RATE"
 id = "b7144b616ae44e09bb0d376df7db0a4e"
 
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "museum-images"
+
 [vars]
 RATE_PER_MIN = "10"
 RATE_PER_DAY = "100"
