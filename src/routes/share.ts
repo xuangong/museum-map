@@ -256,10 +256,8 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
           if (!svgEl) throw new Error('海报为空');
           frame.appendChild(svgEl);
           btnShare.disabled = false; btnPng.disabled = false; btnSvg.disabled = false;
-          // If running in a browser without Web Share API, label & hint differ
-          if (!(navigator.share && navigator.canShare)) {
+          if (!(navigator.share)) {
             btnShare.textContent = '复制链接';
-            hintEl.textContent = '长按图片可保存 · 链接可粘贴到微信/小红书';
           }
         })
         .catch(function(e){
@@ -328,33 +326,19 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
       });
 
       btnShare.addEventListener('click', async function(){
-        if (!svgEl) return;
         const profileFullUrl = location.origin + ${JSON.stringify(profileUrl)};
         const title = ${JSON.stringify(shareTitle)};
-        const text = ${JSON.stringify(shareText)} + ' ' + profileFullUrl;
-        // Web Share API with file (iOS Safari, Android Chrome) — best path
-        if (navigator.share && navigator.canShare) {
-          btnShare.disabled = true; btnShare.textContent = '准备中…';
+        const text = ${JSON.stringify(shareText)};
+        // URL-only share: 小红书/微信 share targets reject files but accept url+text
+        if (navigator.share) {
           try {
-            const png = await renderPng();
-            if (!png) throw new Error('PNG 生成失败');
-            const file = new File([png], ${JSON.stringify(safeName)}, { type: 'image/png' });
-            const payload = { files: [file], title: title, text: text, url: profileFullUrl };
-            if (navigator.canShare(payload)) {
-              await navigator.share(payload);
-              return;
-            }
-            // Some browsers reject files but accept text+url
             await navigator.share({ title: title, text: text, url: profileFullUrl });
             return;
           } catch (e) {
-            if (e && e.name === 'AbortError') return; // user cancelled
-            // fall through to copy
-          } finally {
-            btnShare.disabled = false; btnShare.textContent = '分享';
+            if (e && e.name === 'AbortError') return;
+            // fall through to clipboard
           }
         }
-        // Desktop fallback: copy URL to clipboard
         try {
           await navigator.clipboard.writeText(profileFullUrl);
           const orig = btnShare.textContent;
@@ -388,11 +372,11 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
         </div>
       </div>
       <div class="actions">
-        <button class="btn" id="btn-share">分享</button>
-        <button class="btn ghost" id="btn-png">保存为图片</button>
+        <button class="btn ghost" id="btn-png">保存图片</button>
+        <button class="btn" id="btn-share">分享链接</button>
         <button class="btn ghost" id="btn-svg">下载 SVG</button>
       </div>
-      <div class="hint" id="hint-text">长按图片或点击「分享」即可发到微信</div>
+      <div class="hint" id="hint-text">先「保存图片」到相册，再点「分享链接」发到微信/小红书</div>
       <script>${script}</script>
     `,
   })
