@@ -8,6 +8,7 @@ import { visitsRoute } from "~/routes/visits"
 import { authRoute } from "~/routes/auth"
 import { profileRoute } from "~/routes/profile"
 import { plazaRoute } from "~/routes/plaza"
+import { adminImageRoute } from "~/routes/admin-image"
 import { cdnRoute } from "~/lib/cdn"
 import { homeRoute } from "~/routes/home"
 import { imageProxyRoute } from "~/routes/image-proxy"
@@ -45,6 +46,7 @@ export function createApp(env: Env) {
     .use(authRoute)
     .use(profileRoute)
     .use(plazaRoute)
+    .use(adminImageRoute)
 }
 
 export default {
