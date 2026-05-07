@@ -170,9 +170,63 @@ async function processArtifact(museumId: string, art: Artifact): Promise<boolean
   return await persistImage(museumId, art, winner)
 }
 
-async function persistImage(_museumId: string, _art: Artifact, _winner: Cand): Promise<boolean> {
-  // TODO Task 4 + Task 5
-  return false
+async function persistImage(museumId: string, art: Artifact, winner: Cand): Promise<boolean> {
+  let bytes: Uint8Array
+  let contentType: string
+  try {
+    const res = await fetch(winner.url, { headers: { "user-agent": "Mozilla/5.0 museum-map/0.1" } })
+    if (!res.ok) {
+      console.log(`      ✗ download ${winner.url}: ${res.status}`)
+      return false
+    }
+    contentType = res.headers.get("content-type") ?? "image/jpeg"
+    bytes = new Uint8Array(await res.arrayBuffer())
+  } catch (e) {
+    console.log(`      ✗ download err: ${(e as Error).message}`)
+    return false
+  }
+  if (bytes.length < 1024) {
+    console.log(`      ✗ image too small (${bytes.length} bytes) — likely placeholder`)
+    return false
+  }
+  const hash = createHash("sha256").update(winner.url).digest("hex").slice(0, 16)
+  const ext = pickExt(contentType, winner.url)
+  const key = `${hash}${ext}`
+  const tmp = `/tmp/scrape-${hash}${ext}`
+  await Bun.write(tmp, bytes)
+  const put = spawnSync("bunx", [
+    "wrangler", "r2", "object", "put",
+    `museum-images/${key}`,
+    `--file=${tmp}`,
+    `--content-type=${contentType}`,
+    "--remote",
+  ], { encoding: "utf-8" })
+  if (put.status !== 0) {
+    console.log(`      ✗ r2 put failed: ${put.stderr}`)
+    return false
+  }
+  const ok = await writeArtifactImage({
+    museumId,
+    artifactIdx: art.idx,
+    imageUrl: `/img/${key}`,
+    license: winner.license,
+    attribution: winner.attribution,
+    sourceUrl: winner.pageUrl,
+    authority: winner.source === "wikimedia" || winner.source === "baidu-baike" ? "encyclopedia" : "official",
+  })
+  if (!ok) console.log(`      ✗ d1 write failed`)
+  return ok
+}
+
+function pickExt(contentType: string, url: string): string {
+  const ct = contentType.toLowerCase()
+  if (ct.includes("jpeg") || ct.includes("jpg")) return ".jpg"
+  if (ct.includes("png")) return ".png"
+  if (ct.includes("webp")) return ".webp"
+  if (ct.includes("gif")) return ".gif"
+  const m = url.match(/\.(jpg|jpeg|png|webp|gif)(\?|$)/i)
+  if (m) return "." + m[1]!.toLowerCase().replace("jpeg", "jpg")
+  return ".jpg"
 }
 
 main().catch((e) => { console.error(e); process.exit(1) })
