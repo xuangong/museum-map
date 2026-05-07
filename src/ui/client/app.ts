@@ -1769,7 +1769,7 @@ window.museumApp = function() {
           if (a.image) {
             var att = a.imageAttribution ? escapeHtml(a.imageAttribution) : '';
             var lic = a.imageLicense ? escapeHtml(a.imageLicense) : '';
-            var caption = [att, lic].filter(Boolean).join(' · ');
+            var caption = lic === 'fair-use' ? att : [att, lic].filter(Boolean).join(' · ');
             imgBlock = '<div class="artifact-image"><img src="' + escapeHtml(a.image) + '" alt="' + escapeHtml(a.name) + '" loading="lazy">' + (caption ? '<div class="artifact-image-caption">' + caption + '</div>' : '') + '</div>';
           }
           return '<div class="artifact">' + imgBlock + '<div><span class="artifact-name">' + escapeHtml(a.name) + '</span>' + (a.period ? '<span class="artifact-period">' + escapeHtml(a.period) + '</span>' : '') + '</div><div class="artifact-desc">' + escapeHtml(a.description || '') + '</div></div>';
