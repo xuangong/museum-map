@@ -449,6 +449,7 @@ export function ProfilePage(opts: {
 
       <div class="cta-row">
         <a class="cta-primary" href="/u/${encodeURIComponent(handle)}/map">在地图上查看 →</a>
+        <a class="cta-secondary" href="/u/${encodeURIComponent(handle)}/share">生成分享海报</a>
         ${isOwn ? `<a class="cta-secondary" href="/">← 我的地图</a>` : `<a class="cta-secondary" href="/">访问中国博物馆地图</a>`}
       </div>
 

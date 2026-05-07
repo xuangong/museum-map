@@ -7,6 +7,7 @@ import { importRoute } from "~/routes/import"
 import { visitsRoute } from "~/routes/visits"
 import { authRoute } from "~/routes/auth"
 import { profileRoute } from "~/routes/profile"
+import { shareRoute } from "~/routes/share"
 import { plazaRoute } from "~/routes/plaza"
 import { adminImageRoute } from "~/routes/admin-image"
 import { cdnRoute } from "~/lib/cdn"
@@ -45,6 +46,7 @@ export function createApp(env: Env) {
     .use(visitsRoute)
     .use(authRoute)
     .use(profileRoute)
+    .use(shareRoute)
     .use(plazaRoute)
     .use(adminImageRoute)
 }
