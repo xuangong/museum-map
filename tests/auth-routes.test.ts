@@ -11,10 +11,12 @@ async function makeEnv(extra: Record<string, string> = {}) {
     d1Databases: { DB: "764ebd41-0f3b-442b-934f-a537f63b9fc6" },
     d1Persist: ".wrangler/state/v3/d1",
     kvNamespaces: ["RATE"],
+    r2Buckets: ["IMAGES"],
   })
   const DB = await mf.getD1Database("DB")
   const RATE = await mf.getKVNamespace("RATE")
-  return { DB, RATE, ...extra } as any
+  const IMAGES = await mf.getR2Bucket("IMAGES")
+  return { DB, RATE, IMAGES, ...extra } as any
 }
 
 async function seedInvite(env: any): Promise<string> {

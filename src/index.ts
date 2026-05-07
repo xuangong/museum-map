@@ -10,6 +10,7 @@ import { profileRoute } from "~/routes/profile"
 import { plazaRoute } from "~/routes/plaza"
 import { cdnRoute } from "~/lib/cdn"
 import { homeRoute } from "~/routes/home"
+import { imageProxyRoute } from "~/routes/image-proxy"
 
 export interface Env {
   DB: D1Database
@@ -34,6 +35,7 @@ export function createApp(env: Env) {
     .decorate("env", env)
     .get("/health", () => ({ status: "ok" }))
     .use(cdnRoute)
+    .use(imageProxyRoute)
     .use(homeRoute)
     .use(museumsRoute)
     .use(dynastiesRoute)
