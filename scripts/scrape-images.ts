@@ -73,7 +73,107 @@ async function listMuseumIds(): Promise<string[]> {
   return arr.map((m: any) => m.id as string)
 }
 
-async function processMuseum(_m: Museum): Promise<number> { return 0 }
+type Cand = ComparatorCandidate
+
+async function huntCandidates(museumId: string, art: Artifact): Promise<Cand[]> {
+  const out: Cand[] = []
+  const seen = new Set<string>()
+  const push = (c: Cand) => { if (seen.has(c.url)) return; seen.add(c.url); out.push(c) }
+
+  // Source A: Baidu Baike
+  const baidu = (async () => {
+    try {
+      const entry = await searchBaikeEntry({ query: art.name })
+      if (!entry) return
+      const imgs = await extractBaikeImages({ entryUrl: entry.url })
+      for (const img of imgs.slice(0, 3)) {
+        push({
+          url: img.url,
+          source: "baidu-baike",
+          license: "fair-use",
+          attribution: `来源：百度百科 · ${entry.url}`,
+          pageUrl: entry.url,
+        })
+      }
+    } catch (e) { console.warn(`    baidu err: ${(e as Error).message}`) }
+  })()
+
+  // Source B: museum-site adapter (returns 0 candidates today — JS-rendered SPAs)
+  const adapter = findAdapterFor(museumId)
+  const site = adapter
+    ? (async () => {
+        try {
+          const cands = await adapter.find({ artifactName: art.name, period: art.period })
+          for (const c of cands.slice(0, 3)) {
+            push({
+              url: c.url,
+              source: adapter.sourceLabel,
+              license: "fair-use",
+              attribution: `来源：${adapter.sourceLabel} · ${c.pageUrl}`,
+              pageUrl: c.pageUrl,
+            })
+          }
+        } catch (e) { console.warn(`    adapter err: ${(e as Error).message}`) }
+      })()
+    : Promise.resolve()
+
+  // Source C: existing Wikimedia URL (preserve CC/PD)
+  if (art.image && art.license && /^(CC|PD)/i.test(art.license) && /upload\.wikimedia\.org/.test(art.image)) {
+    push({
+      url: art.image,
+      source: "wikimedia",
+      license: art.license,
+      attribution: art.attribution ?? art.license,
+      pageUrl: art.image,
+    })
+  }
+
+  await Promise.all([baidu, site])
+  return out
+}
+
+async function processMuseum(m: Museum): Promise<number> {
+  const targets = m.artifacts.filter((a) => {
+    if (force) return true
+    if (a.license === "fair-use") return false
+    return true
+  })
+  if (targets.length === 0) return 0
+  let matched = 0
+  for (let i = 0; i < targets.length; i += concurrency) {
+    const slice = targets.slice(i, i + concurrency)
+    const results = await Promise.all(slice.map((a) => processArtifact(m.id, a)))
+    matched += results.filter(Boolean).length
+  }
+  return matched
+}
+
+async function processArtifact(museumId: string, art: Artifact): Promise<boolean> {
+  const cands = await huntCandidates(museumId, art)
+  if (cands.length === 0) {
+    console.log(`    · ${art.name}: 0 cands → skip`)
+    return false
+  }
+  const choice = await compareAndChoose({
+    artifact: { name: art.name, period: art.period },
+    candidates: cands,
+    gatewayUrl: GATEWAY_URL!,
+    gatewayKey: GATEWAY_KEY!,
+  })
+  if (choice.chosen === null) {
+    console.log(`    · ${art.name}: ${cands.length} cands, none accepted (${choice.reason})`)
+    return false
+  }
+  const winner = cands[choice.chosen]!
+  console.log(`    · ${art.name}: chose [${choice.chosen}] ${winner.source} — ${choice.reason}`)
+  if (dryRun) return true
+  return await persistImage(museumId, art, winner)
+}
+
+async function persistImage(_museumId: string, _art: Artifact, _winner: Cand): Promise<boolean> {
+  // TODO Task 4 + Task 5
+  return false
+}
 
 main().catch((e) => { console.error(e); process.exit(1) })
 
