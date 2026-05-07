@@ -301,21 +301,32 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
         const ua = navigator.userAgent || '';
         const isWeChat = /MicroMessenger/i.test(ua);
         const isHarmony = /HarmonyOS|HMSCore|HuaweiBrowser/i.test(ua);
-        const url = URL.createObjectURL(blob);
         if (isWeChat || isHarmony) {
-          showLongPress(url);
+          // 长按保存菜单不识别 blob: URL — 必须用 data: URL
+          blobToDataUrl(blob).then(showLongPress).catch(function(e){
+            alert('图片预览失败：' + (e && e.message || e));
+          });
           return;
         }
+        const url = URL.createObjectURL(blob);
         try {
           const a = document.createElement('a');
           a.href = url; a.download = name;
           document.body.appendChild(a); a.click(); a.remove();
           setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
         } catch (e) {
-          showLongPress(url);
+          blobToDataUrl(blob).then(showLongPress);
         }
       }
-      function showLongPress(url){
+      function blobToDataUrl(blob){
+        return new Promise(function(res, rej){
+          const fr = new FileReader();
+          fr.onload = function(){ res(fr.result); };
+          fr.onerror = function(){ rej(new Error('读取 blob 失败')); };
+          fr.readAsDataURL(blob);
+        });
+      }
+      function showLongPress(dataUrl){
         const wrap = document.createElement('div');
         wrap.className = 'longpress';
         wrap.innerHTML =
@@ -323,10 +334,9 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
           '<div class="lp-tip">长按上方图片 → 选择「保存图片」即可存到相册</div>' +
           '<button class="lp-close">关闭</button>';
         const img = wrap.querySelector('img');
-        img.src = url;
+        img.src = dataUrl;
         wrap.querySelector('.lp-close').addEventListener('click', function(){
           wrap.remove();
-          setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
         });
         document.body.appendChild(wrap);
       }
