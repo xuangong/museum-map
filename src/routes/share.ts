@@ -214,6 +214,14 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
     .post-share .ps-copy { font-family: var(--display); font-size: 11px; padding: 4px 10px;
       border: 1px solid #6B6760; background: transparent; color: #E8E2D2; cursor: pointer; letter-spacing: 0.08em; }
     .post-share .ps-copy:hover { border-color: #B73E18; }
+    .longpress { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 20px; gap: 14px; }
+    .longpress img { max-width: 92vw; max-height: 70vh; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+    .longpress .lp-tip { color: #F4EFE3; font-family: var(--display); font-size: 14px;
+      text-align: center; max-width: 320px; line-height: 1.6; }
+    .longpress .lp-close { font-family: var(--display); font-size: 13px; color: #E8E2D2;
+      background: transparent; border: 1px solid #6B6760; padding: 8px 18px; cursor: pointer; }
   `
   const safeName = `museum-atlas-${handle}.png`
   const styleParam = currentStyle
@@ -288,11 +296,39 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
         return new XMLSerializer().serializeToString(clone);
       }
       function download(blob, name){
+        // <a download> is unreliable in 微信/HarmonyOS webviews — they may open
+        // a new tab or do nothing. Detect those and fall back to long-press.
+        const ua = navigator.userAgent || '';
+        const isWeChat = /MicroMessenger/i.test(ua);
+        const isHarmony = /HarmonyOS|HMSCore|HuaweiBrowser/i.test(ua);
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = name;
-        document.body.appendChild(a); a.click(); a.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        if (isWeChat || isHarmony) {
+          showLongPress(url);
+          return;
+        }
+        try {
+          const a = document.createElement('a');
+          a.href = url; a.download = name;
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(function(){ URL.revokeObjectURL(url); }, 4000);
+        } catch (e) {
+          showLongPress(url);
+        }
+      }
+      function showLongPress(url){
+        const wrap = document.createElement('div');
+        wrap.className = 'longpress';
+        wrap.innerHTML =
+          '<img alt="海报" />' +
+          '<div class="lp-tip">长按上方图片 → 选择「保存图片」即可存到相册</div>' +
+          '<button class="lp-close">关闭</button>';
+        const img = wrap.querySelector('img');
+        img.src = url;
+        wrap.querySelector('.lp-close').addEventListener('click', function(){
+          wrap.remove();
+          setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+        });
+        document.body.appendChild(wrap);
       }
       btnSvg.addEventListener('click', function(){
         if (!svgEl) return;
@@ -302,23 +338,57 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
 
       async function renderPng(){
         const svg = svgString();
-        const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
+        // Use base64 data URL instead of blob: URL — HarmonyOS/微信 webview can
+        // silently fail to load blob: image/svg+xml, leaving onload/onerror
+        // both unfired. Also do NOT set crossOrigin (it causes some webviews to
+        // mark the canvas tainted even for same-origin blobs).
+        let dataUrl;
         try {
-          const img = new Image();
-          img.crossOrigin = 'anonymous';
-          await new Promise((res, rej) => { img.onload = res; img.onerror = rej; img.src = url; });
-          const scale = 2;
-          const cv = document.createElement('canvas');
-          cv.width = W * scale; cv.height = H * scale;
-          const ctx = cv.getContext('2d');
-          ctx.fillStyle = '#F4EFE3';
-          ctx.fillRect(0, 0, cv.width, cv.height);
-          ctx.drawImage(img, 0, 0, cv.width, cv.height);
-          return await new Promise((res) => cv.toBlob(res, 'image/png'));
-        } finally {
-          URL.revokeObjectURL(url);
+          // unicode-safe base64 (utf-8 -> latin1 -> btoa)
+          const utf8 = unescape(encodeURIComponent(svg));
+          dataUrl = 'data:image/svg+xml;base64,' + btoa(utf8);
+        } catch (e) {
+          throw new Error('SVG 编码失败：' + (e && e.message || e));
         }
+        const img = new Image();
+        const loaded = new Promise(function(res, rej){
+          img.onload = function(){ res(null); };
+          img.onerror = function(){ rej(new Error('SVG 解码失败（浏览器不支持？）')); };
+          // safety timeout — if neither fires, we still surface an error
+          setTimeout(function(){ rej(new Error('SVG 加载超时')); }, 12000);
+        });
+        img.src = dataUrl;
+        await loaded;
+        const scale = 2;
+        const cv = document.createElement('canvas');
+        cv.width = W * scale; cv.height = H * scale;
+        const ctx = cv.getContext('2d');
+        if (!ctx) throw new Error('canvas 不可用');
+        ctx.fillStyle = '#F4EFE3';
+        ctx.fillRect(0, 0, cv.width, cv.height);
+        try {
+          ctx.drawImage(img, 0, 0, cv.width, cv.height);
+        } catch (e) {
+          throw new Error('画布绘制失败：' + (e && e.message || e));
+        }
+        // Try toBlob first; fall back to toDataURL for webviews where toBlob
+        // silently returns null (some EMUI/HarmonyOS builds).
+        let blob = await new Promise(function(res){
+          try { cv.toBlob(function(b){ res(b); }, 'image/png'); }
+          catch (e) { res(null); }
+        });
+        if (!blob) {
+          try {
+            const durl = cv.toDataURL('image/png');
+            const bin = atob(durl.split(',')[1]);
+            const arr = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+            blob = new Blob([arr], { type: 'image/png' });
+          } catch (e) {
+            throw new Error('PNG 编码失败（画布可能被标记跨源）');
+          }
+        }
+        return blob;
       }
 
       btnShare.addEventListener('click', async function(){
@@ -405,7 +475,7 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
       <div class="hint" id="hint-text">手机长按图片可直接保存到相册</div>
       <div class="post-share" id="post-share" hidden>
         <div class="ps-title">图片已保存到相册</div>
-        <div class="ps-step">下一步 · 打开 <b>微信</b> 或 <b>小红书</b>，在发布页里从相册选这张图</div>
+        <div class="ps-step">长按预览图 → 「保存图片」到相册，再打开 <b>微信</b> 或 <b>小红书</b> 从相册选这张图</div>
         <div class="ps-link">配上链接：<code id="ps-url"></code> <button class="ps-copy" id="ps-copy">复制</button></div>
       </div>
       <script>${script}</script>
