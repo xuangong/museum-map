@@ -119,6 +119,7 @@ export const shareRoute = new Elysia()
           recentMuseums,
           reviewSummary: review?.summary ?? null,
           dynastyReviews,
+          style: style0,
         },
         gatewayUrl: env.COPILOT_GATEWAY_URL,
         gatewayKey: env.COPILOT_GATEWAY_KEY,

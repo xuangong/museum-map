@@ -13,6 +13,8 @@ export interface PoetInput {
   recentMuseums: string[]
   reviewSummary: string | null
   dynastyReviews: Array<{ dynastyName: string; count: number; summary: string }>
+  /** Poster style key — nudges the poem mood. */
+  style?: string
 }
 
 export interface PoetCopy {
@@ -69,6 +71,12 @@ function buildUserPrompt(input: PoetInput): string {
   if (input.recentMuseums.length > 0) {
     parts.push(`近访博物馆：${input.recentMuseums.slice(0, 8).join("、")}`)
   }
+  const moodHint = STYLE_MOOD[input.style ?? ""]
+  if (moodHint) {
+    parts.push("")
+    parts.push(`本次海报版式：${moodHint.label} —— ${moodHint.mood}`)
+    parts.push("请挑一句**与该版式气质相称**的诗（不必与上次相同）。")
+  }
   parts.push("")
   parts.push("—— AI 总评 ——")
   parts.push(input.reviewSummary ? input.reviewSummary.slice(0, 800) : "（无）")
@@ -83,6 +91,15 @@ function buildUserPrompt(input: PoetInput): string {
     }
   }
   return parts.join("\n")
+}
+
+/** Per-style mood hints — let Sonnet pick a poem in the matching key. */
+const STYLE_MOOD: Record<string, { label: string; mood: string }> = {
+  grid:    { label: "窗格 / 编辑部杂志页",    mood: "克制、留白、文人随手记下的一句；意象偏静物、桌上、窗前" },
+  scroll:  { label: "立轴 / 古卷",             mood: "悠远、空旷、山水之远；适合长境、远眺、独立的句子" },
+  ticket:  { label: "门票 / 入场券",           mood: "出发、入场、片刻、轻盈；意象偏行旅初出、一程将启" },
+  seal:    { label: "印谱 / 拓印册页",         mood: "金石感、古拙、铭刻；意象偏古碑、青铜、刻字、月下" },
+  archive: { label: "档案卡 / 标本说明",       mood: "考据、冷静、博物学口吻；意象偏物、器、纹、古事的细节" },
 }
 
 function stripCodeFence(s: string): string {
@@ -128,6 +145,7 @@ export async function generatePoetCopy(opts: PoetOpts): Promise<PoetCopy> {
       model: POET_MODEL,
       max_tokens: POET_MAX_TOKENS,
       stream: false,
+      temperature: 0.85,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: userPrompt }],
     }),
