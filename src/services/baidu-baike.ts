@@ -38,7 +38,7 @@ export async function searchBaikeEntry(opts: {
   if (!url || !title) return null
   // Normalize protocol-relative or missing scheme.
   const canonical = url.startsWith("//") ? "https:" + url : (url.startsWith("http://") ? url.replace("http://", "https://") : url)
-  if (!/^https:\/\/baike\.baidu\.com\/item\//.test(canonical)) return null
+  if (!/^https:\/\/baike\.baidu\.com\/(item|subview|view)\//.test(canonical)) return null
   return { url: canonical, title }
 }
 

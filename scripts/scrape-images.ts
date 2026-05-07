@@ -83,7 +83,8 @@ async function huntCandidates(museumId: string, art: Artifact): Promise<Cand[]> 
   // Source A: Baidu Baike
   const baidu = (async () => {
     try {
-      const entry = await searchBaikeEntry({ query: art.name })
+      const q = art.name.replace(/[《》〈〉「」『』""''\s]+/g, "").trim() || art.name
+      const entry = await searchBaikeEntry({ query: q })
       if (!entry) return
       const imgs = await extractBaikeImages({ entryUrl: entry.url })
       for (const img of imgs.slice(0, 3)) {
