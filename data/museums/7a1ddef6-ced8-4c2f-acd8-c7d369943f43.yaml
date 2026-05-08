@@ -1,0 +1,47 @@
+id: 7a1ddef6-ced8-4c2f-acd8-c7d369943f43
+name: 北京中轴线
+lat: 39.9163
+lng: 116.3972
+location: 北京市东城区（核心轴线南起永定门，北至钟鼓楼）
+level: 世界遗产
+core_period: 明永乐十七年（1419年）至今；2024年7月27日列入联合国教科文组织《世界遗产名录》
+specialty: 中国传统都城中轴线发展至成熟阶段的杰出范例，中国现存最为完整的传统都城中轴线建筑群
+dynasty_coverage: 元、明、清三朝
+timeline: 元代确立中轴线格局；明永乐十七年（1419年）大规模营建；明正统年间持续扩建；清代沿用并扩充；1988年正阳门列为全国重点文物保护单位；2024年7月27日整体列入《世界遗产名录》
+treasures:
+  - name: 正阳门城楼
+  - name: 正阳门箭楼
+  - name: 正阳门门钉
+  - name: 万宁桥
+  - name: 外金水桥
+  - name: 天安门广场及建筑群
+  - name: 中轴线南段道路遗存
+halls:
+  - name: 钟鼓楼
+  - name: 景山
+  - name: 故宫（紫禁城）
+  - name: 端门
+  - name: 天安门
+  - name: 天安门广场及建筑群
+  - name: 太庙
+  - name: 社稷坛
+  - name: 正阳门城楼
+  - name: 正阳门箭楼
+  - name: 先农坛
+  - name: 天坛
+  - name: 永定门
+  - name: 万宁桥
+  - name: 外金水桥
+  - name: 城楼展厅《正阳门历史文化展》
+dynasty_connections:
+  - dynasty: 元朝
+    description: 北京中轴线在元大都时期确立基本格局，正南门最初称丽正门
+  - dynasty: 明朝
+    description: 明永乐十七年（1419年）大规模营建中轴线建筑群；永乐正统年间正阳门城楼、箭楼相继建成，正统四年（1439年）正式改名正阳门
+  - dynasty: 清朝
+    description: 清朝全面沿用明代中轴线，并在天坛、先农坛等处持续增建，形成现存完整格局
+sources:
+  - source: https://bjaxiscloud.com.cn/
+  - source: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+  - source: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+  - source: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1729986/1729988/index.html

@@ -44,28 +44,43 @@ artifacts:
   - name: 南宋官窑青瓷簋式炉
     period: 南宋
     description: 仿青铜簋造型烧制的官窑青瓷香炉，釉色粉青，是南宋宫廷祭祀礼器的代表作。
+    image_url: /img/3973ea4d9f31572e.png
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/subview/3423812/15023867.htm
   - name: 南宋官窑青瓷花口壶
     period: 南宋
     description: 花口造型独特，釉面开片自然，是南宋官窑典型器型之一。
+    image_url: /img/bffdd04b5b3aa8e5.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/3423777.htm
   - name: 南宋官窑青瓷鸭形器
     period: 南宋
     description: 造型生动写实，釉质莹润，为南宋官窑陈设器珍品。
+    image_url: /img/865c94aa56eaee79.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/3423789.htm
   - name: 南宋官窑青瓷樽式炉
     period: 南宋
     description: 仿汉代铜樽造型，三足，粉青釉，开片明显，宫廷气息浓郁。
+    image_url: /img/c227090b464df6db.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/3423799.htm
   - name: 战国原始瓷兽头鼎
     period: 战国
     description: 原始瓷制品，造型仿青铜鼎，兽形耳装饰，是浙江原始瓷烧造传统的重要标本。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/f/fd/%E6%88%98%E5%9B%BD%E5%8E%9F%E5%A7%8B%E7%93%B7%E9%92%B2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎
   - name: 元青花观音像
     period: 元
     description: 元代景德镇烧制的青花瓷塑，造型端庄，青花发色浓艳，弥足珍贵。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/7/70/%E5%85%83%E9%9D%92%E8%8A%B1%E8%A7%82%E9%9F%B3%E5%83%8F.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: 三猎
+    image_url: /img/daa0d983896251ec.gif
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/subview/6631179/15023622.htm
   - name: 良渚玉璧
     period: 良渚文化
     description: 良渚文化代表性玉礼器，体现距今约5000年的高度文明。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b5/SUZHOU_MUSEUM_WEST_-%E7%8E%89%E7%92%A7%2C_%E8%89%AF%E6%B8%9A%E6%96%87%E5%8C%96.jpg
+    image_url: /img/wikimedia/wikipedia/commons/b/b5/SUZHOU_MUSEUM_WEST_-%E7%8E%89%E7%92%A7%2C_%E8%89%AF%E6%B8%9A%E6%96%87%E5%8C%96.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: 颐园居
   - name: 清康熙青花西湖风景观音瓶

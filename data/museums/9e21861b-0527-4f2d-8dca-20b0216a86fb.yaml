@@ -1,0 +1,39 @@
+id: 9e21861b-0527-4f2d-8dca-20b0216a86fb
+name: 中国国家典籍博物馆
+lat: 39.9605
+lng: 116.3256
+location: 北京市海淀区中关村南大街33号（国家图书馆内）
+level: 国家级
+core_period: 中国历代至现代
+specialty: 典籍文化、古籍保护与展示、中华文化传承
+dynasty_coverage: 中国历代全覆盖（先秦至近现代）
+timeline: 2012年7月挂牌成立，2014年9月正式对公众开放
+treasures:
+  - name: 《永乐大典》
+  - name: 甲骨文
+  - name: 中华历代珍贵典籍文物
+halls:
+  - name: 第一展厅
+  - name: 第二展厅
+  - name: 第五展厅
+  - name: 第七展厅
+  - name: 第八展厅
+artifacts:
+  - name: 《永乐大典》
+    period: 明代
+    description: 明代编纂的大型类书，是中国古代最大的百科全书式典籍，国家图书馆藏有其中数册，为镇馆之宝之一
+  - name: 甲骨文
+    period: 商代
+    description: 商代占卜用龟甲兽骨上的文字，是中国现存最古老的成熟文字体系，馆内藏有珍贵甲骨标本
+dynasty_connections:
+  - dynasty: 商代
+    description: 馆藏甲骨文实物，记录商代历史与占卜文化
+  - dynasty: 明代
+    description: 馆藏《永乐大典》残卷，为明成祖时期编纂的旷世巨典
+  - dynasty: 清代
+    description: 馆藏大量清代官修典籍、舆图及档案文献
+sources:
+  - source: https://www.nlc.cn/nmcb/bwgjj/djbwgjs/index.shtml
+  - source: https://www.nlc.cn/nmcb/cgzn/index.shtml
+  - source: https://www.nlc.cn/nmcb/jpww/index.shtml
+  - source: https://www.beijing.gov.cn/gate/big5/www.beijing.gov.cn/renwen/zt/gjdjbwg/yw/202207/t20220720_2775592.html

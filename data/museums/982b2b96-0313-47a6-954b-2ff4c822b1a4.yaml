@@ -1,0 +1,36 @@
+id: 982b2b96-0313-47a6-954b-2ff4c822b1a4
+name: 北京石刻艺术博物馆
+lat: 39.9408
+lng: 116.3322
+location: 北京市海淀区五塔寺24号（真觉寺旧址，俗称五塔寺）
+level: 市级
+core_period: 明代至当代
+specialty: 石刻文物的收藏、展示、研究与保护利用，是中国第一家专门收集北京全市石刻文物的专题博物馆
+dynasty_coverage: 明代及以后各历史时期
+timeline: 博物馆建于明代真觉寺旧址（金刚宝座塔建于明成化九年，1473年）；1987年正式对外开放
+treasures:
+  - name: 金刚宝座塔（明代，全国重点文物保护单位）
+  - name: 北京地区历代石刻文物精品
+  - name: 耶稣会士碑刻（明清时期）
+  - name: 祠墓碑刻
+halls:
+  - name: 北京石刻文化展
+  - name: 真觉寺金刚宝座历史文化展
+  - name: 露天石刻文物展
+  - name: 石刻坊
+  - name: 观碑刻区
+  - name: 祠墓碑刻区
+  - name: 耶稣会士碑刻区
+  - name: 综合碑刻区
+artifacts:
+  - name: 真觉寺金刚宝座塔
+    period: 明代（成化九年，1473年）
+    description: 仿照印度佛陀伽耶金刚宝座塔样式建造，是中国现存最早的金刚宝座式塔之一，全国重点文物保护单位
+dynasty_connections:
+  - dynasty: 明代
+    description: 馆址真觉寺为明代永乐年间所建皇家藏传佛教寺庙，金刚宝座塔建于明成化九年（1473年），是明代石刻艺术的杰出代表
+sources:
+  - source: https://www.bjstoneartmuseum.org.cn/Museum/
+  - source: https://www.bjstoneartmuseum.org.cn/CN/service/zhantingfenbu/
+  - source: https://wwj.beijing.gov.cn/bjww/362690/362698/362703/325735308/index.html
+  - source: https://www.beijing.gov.cn/renwen/rwzyd/bwg/bjskysbwg/202301/t20230112_2897489.html

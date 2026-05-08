@@ -17,37 +17,43 @@ artifacts:
   - name: 青铜纵目面具
     period: 商,前1300-前1100年
     description: 宽1.38米,眼球柱状外突16cm。可能是传说中蜀王蚕丛"纵目"的写照,也可能是巫师通神的面具
-    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9b/%E9%9D%92%E9%93%9C%E7%BA%B5%E7%9B%AE%E9%9D%A2%E5%85%B7B.jpg
+    image_url: /img/wikimedia/wikipedia/commons/9/9b/%E9%9D%92%E9%93%9C%E7%BA%B5%E7%9B%AE%E9%9D%A2%E5%85%B7B.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Tyg728
   - name: 青铜大立人像
     period: 商
     description: 全高2.62米,双手呈环形持物(持物已佚),头戴冠,身着三层衣。可能是大祭司或蜀王
-    image_url: https://upload.wikimedia.org/wikipedia/commons/2/24/%E4%B8%89%E6%98%9F%E5%A0%86%E5%87%BA%E5%9C%9F%E9%9D%92%E9%93%9C%E5%A4%A7%E7%AB%8B%E4%BA%BA%E5%83%8F%2C_2017-09-17.jpg
+    image_url: /img/wikimedia/wikipedia/commons/2/24/%E4%B8%89%E6%98%9F%E5%A0%86%E5%87%BA%E5%9C%9F%E9%9D%92%E9%93%9C%E5%A4%A7%E7%AB%8B%E4%BA%BA%E5%83%8F%2C_2017-09-17.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Siyuwj
   - name: 青铜神树
     period: 商
     description: 残高3.96米(完整约5米),树上9枝、9鸟(太阳鸟),可能是扶桑树或建木的写照
-    image_url: https://upload.wikimedia.org/wikipedia/commons/d/d3/%E2%85%A0%E5%8F%B7%E5%A4%A7%E5%9E%8B%E9%9D%92%E9%93%9C%E7%A5%9E%E6%A0%91.jpg
+    image_url: /img/wikimedia/wikipedia/commons/d/d3/%E2%85%A0%E5%8F%B7%E5%A4%A7%E5%9E%8B%E9%9D%92%E9%93%9C%E7%A5%9E%E6%A0%91.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Tyg728
   - name: 金杖
     period: 商
     description: 长1.42米,可能是王权象征。纹饰为鱼、鸟、箭,可能讲述蜀王传说
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b2/%E4%B8%89%E6%98%9F%E5%A0%86%E5%87%BA%E5%9C%9F%E6%96%87%E7%89%A914.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: 陳寅恪
   - name: 黄金面罩
     period: 商,2021年出土
     description: 重280g,覆盖青铜头像面部
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/24/Sanxingdui_Oct_2007_585.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: G41rn8
   - name: 青铜人头像群
     period: 商
     description: 数十件大小各异的青铜人头像,可能代表不同等级的祭祀参与者
-    image_url: https://upload.wikimedia.org/wikipedia/commons/a/ad/%E5%9B%9B%E5%B7%9D%E7%9C%81%E5%B9%BF%E6%B1%89%E5%B8%82%E4%B8%89%E6%98%9F%E5%A0%86%E9%81%97%E5%9D%80%E5%87%BA%E5%9C%9F-%E9%9D%92%E9%93%9C%E4%BA%BA%E5%A4%B4%E5%83%8F-%E5%95%86%E4%BB%A3%E6%99%9A%E6%9C%9F%EF%BC%88%E5%89%8D1300%E2%80%94%E5%89%8D1100%EF%BC%89-%E5%9B%9B%E5%B7%9D%E5%B9%BF%E6%B1%89%E4%B8%89%E6%98%9F%E5%A0%86%E5%8D%9A%E7%89%A9%E9%A6%86%E8%97%8F_2024-10-31.jpg
+    image_url: /img/wikimedia/wikipedia/commons/a/ad/%E5%9B%9B%E5%B7%9D%E7%9C%81%E5%B9%BF%E6%B1%89%E5%B8%82%E4%B8%89%E6%98%9F%E5%A0%86%E9%81%97%E5%9D%80%E5%87%BA%E5%9C%9F-%E9%9D%92%E9%93%9C%E4%BA%BA%E5%A4%B4%E5%83%8F-%E5%95%86%E4%BB%A3%E6%99%9A%E6%9C%9F%EF%BC%88%E5%89%8D1300%E2%80%94%E5%89%8D1100%EF%BC%89-%E5%9B%9B%E5%B7%9D%E5%B9%BF%E6%B1%89%E4%B8%89%E6%98%9F%E5%A0%86%E5%8D%9A%E7%89%A9%E9%A6%86%E8%97%8F_2024-10-31.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Kcx36
   - name: 玉璋
     period: 商
     description: 大量玉璋出土,与中原二里头文化有联系
-    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b6/%E4%B8%89%E6%98%9F%E5%A0%86%E9%81%97%E5%9D%80%E5%87%BA%E5%9C%9F%E7%8E%89%E7%92%8B.jpg
+    image_url: /img/wikimedia/wikipedia/commons/b/b6/%E4%B8%89%E6%98%9F%E5%A0%86%E9%81%97%E5%9D%80%E5%87%BA%E5%9C%9F%E7%8E%89%E7%92%8B.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Tyg728
   - name: 象牙

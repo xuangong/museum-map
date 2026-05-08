@@ -22,6 +22,9 @@ halls:
 artifacts:
   - name: 元青花缠枝牡丹纹梅瓶
     description: 元代（14世纪）。青花瓷是景德镇对世界文明最重要的贡献，元青花存世极少，此瓶造型饱满，青花发色浓艳，纹饰层次丰富。
+    image_url: /img/92f680c707968470.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/1278371.htm
   - name: 明永乐甜白釉暗刻龙纹梅瓶
     description: 明永乐（15世纪初）。甜白釉是永乐朝的独创，釉色温润如凝脂，暗刻龙纹若隐若现，代表了明初御窑的最高水平。
     image_url: https://upload.wikimedia.org/wikipedia/commons/7/74/%E7%94%9C%E7%99%BD%E9%87%89%E6%A2%85%E7%93%B608611.jpg
@@ -29,6 +32,9 @@ artifacts:
     image_attribution: Augusthaiho
   - name: 清雍正粉彩蝠桃纹橄榄瓶
     description: 清雍正（18世纪初）。粉彩在雍正朝达到巅峰，此瓶色彩雅致，绘画精细，蝠（福）桃（寿）寓意吉祥。
+    image_url: /img/42a89d418a96ff55.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/7921218.htm
   - name: 宋影青（青白瓷）注壶注碗
     description: 宋代（11-12世纪）。青白瓷是景德镇宋代的代表品种，釉色介于青白之间，如冰似玉，此套注壶注碗造型典雅，是宋人饮酒器具的代表。
   - name: 明成化斗彩鸡缸杯
@@ -45,9 +51,9 @@ artifacts:
     description: 五代（10世纪）。景德镇制瓷的起点，南方白瓷的代表，为后来青白瓷的发展奠定基础。
   - name: 明宣德青花瓷
     description: 明宣德（15世纪）。宣德青花被公认为明代青花的巅峰，使用进口苏麻离青料，发色浓重有铁锈斑，气韵生动。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/f/ff/%E6%98%8E%E5%AE%A3%E5%BE%B7%E9%9D%92%E8%8A%B1%E6%8A%98%E6%9E%9C%E8%8A%B1%E6%9E%9C%E7%BA%B9%E5%A4%A7%E7%A2%97_20240612.jpg
+    image_url: /img/wikimedia/wikipedia/commons/f/ff/%E6%98%8E%E5%AE%A3%E5%BE%B7%E9%9D%92%E8%8A%B1%E6%8A%98%E6%9E%9D%E8%8A%B1%E6%9E%9C%E7%BA%B9%E5%A4%A7%E7%A2%97_20240612.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Uuongkinghe
+    image_attribution: Wikimedia Commons
 dynasty_connections:
   - dynasty: 宋代
     description: 景德镇因宋真宗赐年号为名，影青（青白瓷）是宋代景德镇的标志产品，质地细腻、釉色淡雅，深受文人喜爱。此时景德镇已成为全国重要窑场之一。

@@ -28,6 +28,9 @@ artifacts:
   - name: 黎族龙被
     period: 明清
     description: 黎族织锦最高等级作品，以棉线织成，图案精美色彩绚丽，黎族纺织技艺巅峰
+    image_url: /img/830e5a808cd3f63a.png
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E9%BB%8E%E6%97%8F%E9%BE%99%E8%A2%AB
   - name: 宋代青白釉花口碟
     period: 南宋
     description: 华光礁I号出水，釉色温润，反映宋代瓷器外销的高超水准
@@ -37,6 +40,9 @@ artifacts:
   - name: 唐三彩陶马
     period: 唐代
     description: 海南出土，说明唐代海南与中原文化交流密切
+    image_url: /img/fc6545384abdfa66.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E5%94%90%E4%B8%89%E5%BD%A9%E9%99%B6%E9%A9%AC
 sources:
   - source: "海南省博物馆官网: https://www.hainanmuseum.org/"
   - source: '"大海的方向——华光礁I号沉船特展": https://www.hainanmuseum.org/hnbwgcms/info/621'

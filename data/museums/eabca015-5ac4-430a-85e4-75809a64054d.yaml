@@ -1,0 +1,53 @@
+id: eabca015-5ac4-430a-85e4-75809a64054d
+name: 国家自然博物馆（北京自然博物馆）
+lat: 39.8833
+lng: 116.3975
+location: 北京市东城区天桥南大街126号，北京中轴线南段东侧，毗邻北京天坛
+level: 首批国家一级博物馆
+core_period: 1951年至今（中华人民共和国时期）
+specialty: 古生物、动物、植物和人类学等地球科学、生命科学领域的标本收藏、科学研究和科学普及；馆藏标本37万余件，珍稀标本数量居国内自然博物馆首位
+timeline: 1951年4月，中央自然博物馆筹备处成立；1958年5月，主体建筑落成；1959年1月，在天桥正式开馆；1962年1月，定名为北京自然博物馆；2008年，向公众免费开放；2023年6月5日，正式更名为国家自然博物馆
+treasures:
+  - name: 中华侏罗兽化石
+  - name: 赫氏近鸟龙化石
+  - name: 黄河象化石
+  - name: 井研马门溪龙骨架标本
+  - name: 许氏禄丰龙骨架标本
+  - name: 中华鲟标本
+  - name: 矛尾鱼标本（镇馆之宝）
+halls:
+  - name: 脊椎动物的崛起
+  - name: 古爬行动物展厅
+  - name: 古哺乳动物展厅
+  - name: 无脊椎动物的繁荣
+  - name: 恐龙公园
+  - name: 植物世界
+  - name: 人之由来
+  - name: 神奇的非洲
+  - name: 动物——人类的朋友
+  - name: 水生生物馆（水族馆）
+  - name: 走进人体
+artifacts:
+  - name: 中华侏罗兽化石
+    period: 侏罗纪（约1.6亿年前）
+    description: 迄今发现最早的真兽类哺乳动物化石之一，对研究哺乳动物起源具有重要科学价值
+  - name: 赫氏近鸟龙化石
+    period: 侏罗纪晚期
+    description: 世界上已知最早的带羽毛恐龙之一，是鸟类起源于恐龙的关键证据
+  - name: 黄河象化石
+    period: 上新世（约300万年前）
+    description: 迄今发现的世界上最完整的剑齿象骨架化石，全长约8米，出土于甘肃省
+  - name: 井研马门溪龙骨架标本
+    period: 侏罗纪晚期
+    description: 中国最具代表性的大型蜥脚类恐龙骨架之一，颈部极长，是亚洲最大的恐龙之一
+  - name: 矛尾鱼标本
+    period: 现代（活化石）
+    description: 被誉为”活化石”的腔棘鱼，曾以为早已灭绝，属馆藏镇馆之宝之一
+dynasty_connections:
+  - dynasty: 中华人民共和国
+    description: 国家自然博物馆由中央人民政府于1951年筹建，是新中国成立后建立的第一座大型自然历史类博物馆，2023年由国家批准正式更名，成为国家级综合性自然博物馆
+sources:
+  - source: https://www.nnhm.org.cn/bwgjj/bwgjj/index.shtml
+  - source: https://www.nnhm.org.cn/zljs/wap_index.shtml
+  - source: https://www.gov.cn/yaowen/liebiao/202306/content_6884740.htm
+  - source: https://www.beijing.gov.cn/renwen/rwzyd/qxdw/zmzhzhpgj/zrbwg/202309/t20230919_3262144.html

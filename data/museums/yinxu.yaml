@@ -23,14 +23,14 @@ halls:
 artifacts:
   - name: 甲骨文卜辞
     description: 商代晚期（前13-前11世纪）。1899年被发现，是中国已知最早的成熟文字系统。殷墟出土甲骨约15万片，内容涉及祭祀、战争、农业、天象等，是研究商代社会的第一手资料。甲骨文的发现改变了世界对中国古代文明的认识。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/2/22/Yinxu_Oracle_Bone_Inscriptions_for_Divination_%2810185440455%29_cropped.jpg
+    image_url: /img/wikimedia/wikipedia/commons/2/22/Yinxu_Oracle_Bone_Inscriptions_for_Divination_%2810185440455%29_cropped.jpg
     image_license: CC0
     image_attribution: photograph by Gary Todd, cropped by Kanguole
   - name: 司母辛鼎（后母辛鼎）
     description: 商代晚期。妇好墓出土，与中国国家博物馆的后母戊鼎形制相近但略小，铭文"司母辛"（或"后母辛"），是妇好之子为其所铸的祭器。
   - name: 妇好鸮尊
     description: 商代晚期。妇好墓出土的猫头鹰形青铜酒器，造型独特威武，是商代青铜器的代表作之一（原件藏河南博物院，殷墟有复制品及其他妇好墓青铜器）。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9d/Fuhao_Owl_Zun_front.jpg
+    image_url: /img/wikimedia/wikipedia/commons/9/9d/Fuhao_Owl_Zun_front.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Cangminzho
   - name: 亚长牛尊
@@ -41,9 +41,9 @@ artifacts:
     description: 商代晚期。部分甲骨记录了日食、月食、新星等天文现象，是世界最早的天文记录之一。
   - name: 车马坑
     description: 商代晚期。殷墟发现的车马坑是中国最早的马车实物证据，对研究商代交通和军事制度有重要价值。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/0/0e/%E6%AE%B7%E5%A2%9F%E8%BD%A6%E9%A9%AC%E5%9D%91.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: Acot一杯茶
+    image_url: /img/1c7c827d64db84c1.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/subview/629047/23707704.htm
   - name: 人殉与人牲遗存
     description: 商代晚期。殷墟王陵区发现大量殉人和祭祀坑，虽然令人不安，但这是理解商代宗教和社会等级制度不可回避的实物证据。
 dynasty_connections:

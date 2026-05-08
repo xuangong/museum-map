@@ -63,14 +63,11 @@ recommended_museums:
   - museum_id: suzhou
     name: 苏州博物馆
     reason: 秘色瓷莲花碗（虎丘塔出土）
-  - museum_id: kaifeng
-    name: 开封博物馆
+  - name: 开封博物馆
     reason: 五代-北宋东京文物
-  - museum_id: nanjing
-    name: 南京博物院
+  - name: 南京博物院
     reason: 南唐文物
-  - museum_id: gugong
-    name: 故宫博物院/台北故宫
+  - name: 故宫博物院/台北故宫
     reason: 五代书画
   - museum_id: guobo
     name: 中国国家博物馆

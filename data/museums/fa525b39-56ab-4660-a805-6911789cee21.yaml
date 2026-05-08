@@ -1,0 +1,28 @@
+id: fa525b39-56ab-4660-a805-6911789cee21
+name: 妙应寺白塔（白塔寺）
+lat: 39.9265
+lng: 116.3594
+location: 北京市西城区阜成门内大街171号
+level: 全国重点文物保护单位（第一批，1961年）
+core_period: 元代
+specialty: 现存年代最早、体量最大的覆钵式藏式佛塔；北京地区唯一完整的元代文物遗存，是祖国统一、民族团结的象征，也是中尼文化交流的重要标志
+dynasty_coverage: 辽、金、元、明、清
+timeline: 辽寿昌二年（1096年）始建前身；元至元八年（1271年）由尼泊尔工艺家阿尼哥设计建造现存白塔，寺名"大圣寿万安寺"；明天顺元年（1457年）重建寺院，更名"妙应寺"；1961年3月4日国务院公布为第一批全国重点文物保护单位
+treasures:
+  - name: 白塔（覆钵式塔，中国现存最早最大的元代藏式佛塔）
+  - name: 舍利子20颗
+  - name: 至元通宝铜钱
+  - name: 乾隆赐大藏经724函
+  - name: 御书《般若波罗蜜多心经》一卷
+  - name: 藏文尊胜咒
+halls:
+  - name: 大殿
+artifacts:
+  - name: 白塔
+    period: 元至元八年（1271年）
+    description: 覆钵式藏传佛教塔，由尼泊尔著名工艺家阿尼哥设计建造，帝师亦怜真主持装藏。中国现存年代最早、体量最大的元代藏式佛塔，比例匀称、气势磅礴，塔高约50.9米。
+sources:
+  - source: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1730488/1730490/1730491/index.html
+  - source: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742745/545835/index.html
+  - source: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711469.html
+  - source: https://wwj.beijing.gov.cn/bjww/362771/362779/dypqgzdwwbhdw/523220/index.html

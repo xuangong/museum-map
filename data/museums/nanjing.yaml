@@ -18,18 +18,27 @@ artifacts:
   - name: 竹林七贤与荣启期砖画
     period: 南朝
     description: 用数百块砖拼合而成的大型壁画，表现魏晋名士风度
+    image_url: https://upload.wikimedia.org/wikipedia/commons/5/56/%E7%AB%B9%E6%9E%97%E4%B8%83%E8%B4%A4%E4%B8%8E%E8%8D%A3%E5%90%AF%E6%9C%9F%E7%A0%96%E7%94%BB05527.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Augustohai
   - name: 金缕玉衣
     period: 西汉
     description: 用金丝穿缀玉片制成的殓服，体现汉代丧葬制度和玉文化
   - name: 明洪武釉里红岁寒三友纹梅瓶
     period: 明初
     description: 釉里红工艺难度极高，此件品相完美
+    image_url: /img/f8bf85665327e349.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/3265025.htm
   - name: 错银铜牛灯
     period: 东汉
     description: 灯烟通过牛体导入水中过滤，古代"环保"设计
   - name: 银缕玉衣
     period: 东汉
     description: 玉衣等级制度的实物证据
+    image_url: https://upload.wikimedia.org/wikipedia/commons/0/0e/%E9%93%B6%E7%BC%95%E7%8E%89%E8%A1%A3%EF%BC%88%E5%A4%8D%E5%88%B6%E4%BB%B6%EF%BC%891193.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Cangminzho
   - name: 透雕人鸟兽玉饰件
     period: 西周
     description: 玉器工艺精品

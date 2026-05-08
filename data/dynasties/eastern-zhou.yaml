@@ -93,12 +93,10 @@ recommended_museums:
     name: 中国国家博物馆
     location: 北京
     reason: 收藏大量春秋战国青铜器、兵器和货币
-  - museum_id: gugong
-    name: 故宫博物院
+  - name: 故宫博物院
     location: 北京
     reason: 收藏东周玉器和青铜器精品
-  - museum_id: hunan
-    name: 湖南省博物馆
+  - name: 湖南省博物馆
     location: 长沙
     reason: 楚文化漆器、帛画等，展示南方楚文化的独特魅力
   - museum_id: 92a0de78-943a-412a-b064-45327f3c3573
@@ -109,11 +107,9 @@ recommended_museums:
     name: 曲阜孔子博物馆
     location: 曲阜
     reason: 2019年新开，孔子及儒学相关文物，配合孔庙孔府参观
-  - museum_id: jinsha
-    name: 成都金沙遗址博物馆/都江堰景区
+  - name: 成都金沙遗址博物馆/都江堰景区
     reason: 了解秦蜀关系和都江堰水利工程
-  - museum_id: 054543c3-1850-471d-be28-e611f77ba9c4
-    name: 宝鸡青铜器博物院
+  - name: 宝鸡青铜器博物院
     reason: 秦公钟等早期秦文化文物
   - museum_id: 52857eb0-ccb7-46af-a887-79501e299e42
     name: 随州博物馆

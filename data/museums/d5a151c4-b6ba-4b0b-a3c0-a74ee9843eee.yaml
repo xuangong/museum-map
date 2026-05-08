@@ -38,7 +38,7 @@ artifacts:
   - name: 晋祠铁人（金人台铁人）
     period: 北宋
     description: 金人台四隅铸造的北宋铁铸武士像，工艺精湛，至今保存完好
-    image_url: https://upload.wikimedia.org/wikipedia/commons/5/54/%E6%99%8B%E7%A5%A0%E9%87%91%E4%BA%BA%E5%8F%B0%E8%A5%BF%E5%8D%97%E8%A7%92%E9%93%81%E4%BA%BA.jpg
+    image_url: /img/wikimedia/wikipedia/commons/5/54/%E6%99%8B%E7%A5%A0%E9%87%91%E4%BA%BA%E5%8F%B0%E8%A5%BF%E5%8D%97%E8%A7%92%E9%93%81%E4%BA%BA.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Patrick20242023
   - name: 唐双鸾瑞兽云纹铜镜
@@ -47,6 +47,9 @@ artifacts:
   - name: 清乾隆款祭红釉玉壶春瓶
     period: 清乾隆
     description: 晋祠博物馆馆藏瓷器珍品，祭红釉色纯正，器型优雅，为清代官窑精品
+    image_url: https://upload.wikimedia.org/wikipedia/commons/5/57/%E7%A5%AD%E7%BA%A2%E9%87%89%E7%8E%89%E5%A3%B6%E6%98%A5%E7%93%B6_20260218_162102.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Auongkinghe
 dynasty_connections:
   - dynasty: 西周
     description: 晋祠始建，为祭祀西周晋国开国诸侯唐叔虞（叔虞封唐，后改国名为晋）的宗祠

@@ -23,18 +23,24 @@ artifacts:
   - name: 万福台
     period: 清代
     description: 华南地区保存最为完整的古代戏台，建于清初，木构歇山顶，三面开敞，为祭祀演戏之所
-    image_url: https://upload.wikimedia.org/wikipedia/commons/9/98/%E4%B8%87%E7%A6%8F%E5%8F%B0.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: 钉钉
+    image_url: /img/475c79a6a5eea649.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/741154.htm
   - name: 灵应牌坊
     period: 明代
     description: 明代石雕牌坊，位于祖庙入口，雕刻精细，为岭南明代石雕艺术代表
+    image_url: /img/26fd0c726dcd218d.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/1533396.htm
   - name: 锦香池
     period: 明清
     description: 位于前殿与正殿之间的石砌水池，池中有龟蛇石雕，象征真武神灵
   - name: 钟鼓楼
     period: 明清
     description: 祖庙仪式建筑组成部分，用于祭祀时击鼓鸣钟
+    image_url: https://upload.wikimedia.org/wikipedia/commons/6/61/%E7%A5%A5%E5%9F%8E%E9%92%9F%E9%BC%93%E6%A5%BC-%E5%8E%BF%E7%BA%A7%E6%96%87%E4%BF%9D%E7%A2%91.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36
   - name: 前殿
     period: 明清
     description: 祖庙主轴线上的过渡性礼仪空间，建筑梁架精细
@@ -44,7 +50,7 @@ artifacts:
   - name: 庆真楼
     period: 清代
     description: 祖庙建筑群后部楼阁，用于储藏神器及举行宗教活动
-    image_url: https://upload.wikimedia.org/wikipedia/commons/4/49/%E5%BA%86%E7%9C%9F%E6%A5%BC.jpg
+    image_url: /img/wikimedia/wikipedia/commons/4/49/%E5%BA%86%E7%9C%9F%E6%A5%BC.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: 钉钉
 dynasty_connections:

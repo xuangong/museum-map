@@ -1,0 +1,45 @@
+id: 63be34c9-b369-428a-b330-edbf70515cc0
+name: 中国园林博物馆
+lat: 39.8327
+lng: 116.2978
+location: 北京市丰台区射击场路15号（鹰山脚下，永定河畔）
+level: 国家一级博物馆
+core_period: 先秦至近现代（中国园林3000余年发展史）
+specialty: 中国园林历史、文化、艺术与造园技艺
+dynasty_coverage: 先秦、秦汉、魏晋、隋唐、宋元、明清、近现代
+timeline: 2010年开始筹建；2013年5月正式开馆；系中国第一座以园林为主题的国家级博物馆
+treasures:
+  - name: 馆藏瓦当1200余件（含先秦鹿纹瓦当等珍品）
+  - name: 七大藏品体系共8000余件套（含园林历史见证物、文物、文献等10余类别）
+  - name: 北京八大工艺珍品（燕京八绝）实物及资料
+  - name: 孟兆祯院士学术成就展相关文献与图档
+halls:
+  - name: 中国古代园林厅
+  - name: 中国近现代园林厅
+  - name: 世界名园博览厅
+  - name: 中国园林文化厅
+  - name: 中国造园技艺厅
+  - name: 室内展园
+  - name: 室外展区
+  - name: 一号主题展厅
+  - name: 二号主题展厅
+  - name: 三号主题展厅
+artifacts:
+  - name: 鹿纹瓦当
+    period: 秦
+    description: 馆藏代表性瓦当之一，图案精美，为园林建筑装饰艺术的重要实物见证
+  - name: 先秦时期瓦当（园博馆藏瓦当英萃系列）
+    period: 先秦
+    description: 中国园林博物馆馆藏1200余件瓦当之一，图案或文字内容丰富，反映早期园林建筑营造技艺
+dynasty_connections:
+  - dynasty: 先秦
+    description: 馆藏先秦瓦当等文物，展现中国园林3000余年历史之源头
+  - dynasty: 明清
+    description: 固定展厅重点展示明清古典园林建筑类型与造园艺术，以《园冶》等典籍为核心，梳理园林经典案例
+  - dynasty: 近现代
+    description: 中国近现代园林厅专题呈现近现代园林转型与发展成就
+sources:
+  - source: https://www.gardensmuseum.cn/en
+  - source: https://www.gardensmuseum.cn/web/zcqfzgh
+  - source: http://www.gardensmuseum.cn/
+  - source: https://www.beijing.gov.cn/gate/big5/www.beijing.gov.cn/renwen/rwzyd/bwg/zgylbwg/202301/t20230116_2900782.html

@@ -1,0 +1,36 @@
+id: cdeb8a88-0c2a-4b55-8257-c2bd23f3a0d7
+name: 北京鲁迅博物馆
+lat: 39.9287
+lng: 116.3497
+location: 北京市西城区阜成门内大街宫门口二条19号（鲁迅博物馆馆区）；北京市东城区五四大街29号（新文化运动纪念馆馆区）
+level: 国家一级博物馆
+core_period: 民国时期（20世纪新文化运动时期）
+specialty: 鲁迅及新文化运动时期著名人物、重大事件的文物、资料征集、保管、研究与宣传展示
+dynasty_coverage: 民国时期及现当代
+timeline: 1923年10月30日鲁迅购入故居；1924年5月25日鲁迅与朱安夫人迁入居住；1926年8月26日鲁迅南下离京；1949年10月19日故居正式对外开放
+treasures:
+  - name: 鲁迅手稿、藏书、藏画、藏碑拓片、藏友人信札
+  - name: 许广平、周作人、周建人、章太炎、钱玄同、许寿裳、胡风、瞿秋白、冯雪峰、萧军、萧红等新文化运动时期历史人物遗存
+  - name: 鲁迅著译辑编作品版本及鲁迅研究著作、现代文学丛刊与新旧期刊
+  - name: 中外版画名作及李可染、蒋兆和、吴冠中等绘画作品
+halls:
+  - name: 鲁迅旧居（宫门口西三条胡同21号）
+  - name: 陈列厅
+  - name: 新文化运动纪念馆（北大红楼馆区，东城区五四大街29号）
+artifacts:
+  - name: 鲁迅旧居（故居）
+    period: 1923–1926年（鲁迅居住期）；1949年起对外开放
+    description: 全国重点文物保护单位。鲁迅于1923年秋购入，1924年改建完成后入住，是北京保存最完整的鲁迅居所。鲁迅在此生活两年多，写下《华盖集》《华盖集续编》《野草》《彷徨》《朝花夕拾》等重要著作。
+  - name: 北大红楼
+    period: 1916年始建，1918年落成，1961年列为全国重点文物保护单位
+    description: 全国重点文物保护单位，原为北京大学第一院。是新文化运动的大本营、五四运动的发源地及中国共产党早期重要活动地，现为新文化运动纪念馆所在地。
+dynasty_connections:
+  - dynasty: 民国时期
+    description: 鲁迅生活与文学创作的主要时代，博物馆核心收藏与展示均围绕这一时期展开
+  - dynasty: 现当代
+    description: 新文化运动与五四运动时期，是中国思想文化变革的关键历史节点
+sources:
+  - source: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+  - source: http://www.luxunmuseum.com.cn/luxunguji/
+  - source: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/546583/index.html
+  - source: https://www.museumschina.cn/museums/details?id=202208221701469646

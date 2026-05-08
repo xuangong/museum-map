@@ -25,7 +25,7 @@ artifacts:
   - name: 大佛洞主尊造像
     period: 北齐
     description: 北响堂山大佛洞内，主尊佛像高大雄浑，体现北齐雕刻艺术的成熟风格
-    image_url: https://upload.wikimedia.org/wikipedia/commons/c/cc/Buddha_Amitabha%2C_Hebei_province%2C_Fengfeng%2C_southern_Xiangtangshan_Cave_Temples%2C_Cave_2%2C_Northern_Qi_dynasty%2C_550-577_AD%2C_limestone_with_traces_of_pigment_-_Freer_Gallery_of_Art_-_DSC05723.JPG
+    image_url: /img/wikimedia/wikipedia/commons/c/cc/Buddha_Amitabha%2C_Hebei_province%2C_Fengfeng%2C_southern_Xiangtangshan_Cave_Temples%2C_Cave_2%2C_Northern_Qi_dynasty%2C_550-577_AD%2C_limestone_with_traces_of_pigment_-_Freer_Gallery_of_Art_-_DSC05723.JPG
     image_license: CC0
     image_attribution: Daderot
   - name: 千佛洞造像群
@@ -34,6 +34,9 @@ artifacts:
   - name: 塔形龛
     period: 北齐
     description: 响堂山石窟特有的塔柱式龛形，为研究北朝佛教建筑与石窟形制演变的重要实例
+    image_url: https://upload.wikimedia.org/wikipedia/commons/2/2d/%E5%B8%B8%E4%B9%90%E5%AF%BA%E5%A1%94%E4%B8%9C%E5%A1%94_05.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: XiangLeshan
 dynasty_connections:
   - dynasty: 东魏
     description: 武定初年（约543年），北响堂山石窟始凿，奠定石窟开凿之基

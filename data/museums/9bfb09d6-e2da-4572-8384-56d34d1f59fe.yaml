@@ -32,6 +32,9 @@ artifacts:
   - name: 北魏宣武帝景陵
     period: 北魏
     description: 建国以来经国家批准科学发掘的第二座皇帝陵，亦是目前发掘开放时代最早的帝王陵，1991年抢救性发掘后原址展示
+    image_url: https://upload.wikimedia.org/wikipedia/commons/4/4a/Tomb_of_Emperor_Xuanwu_of_Northern_Wei_3.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Gary Lee Todd
   - name: 胡人牵驼壁画
     period: 唐
     description: 唐代墓葬壁画，画中胡人形象鲜明，是丝绸之路东西文化交流的直观见证

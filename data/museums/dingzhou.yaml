@@ -29,6 +29,9 @@ artifacts:
   - name: 定窑白瓷群
     period: 北宋，10-11世纪
     description: —静志寺和净众院两处塔基地宫共出土定窑白瓷等器物700余件，包括碗、盘、瓶、炉、盒等各种器形，许多为定窑精品中的精品。定窑是宋代五大名窑之一，以白瓷著称，"定州花瓷瑕不见"即指此窑。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/0/06/20241025_White-Glazed_Porcelain_Bowl_with_Six_Ridges%2C_Ding_Kiln%2C_Song_Dynasty.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Windmemories
   - name: 西汉错金银铜车伞铤
     period: 西汉
     description: —定州中山王墓出土，车伞的支撑构件，以错金银工艺装饰。体现了西汉中山国的手工业水平，与满城汉墓出土品风格相近。
@@ -41,7 +44,7 @@ artifacts:
   - name: 北朝佛教造像
     period: 北朝，5-6世纪
     description: —定州在北朝时期是佛教重镇，出土大量白石造像，风格独特，被称为"定州样式"，对中国佛教造像艺术有重要影响。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/f/f7/%E5%8C%97%E9%BD%8A%E5%9B%9B%E9%9D%A2%E4%BD%9B%E9%BE%95%E5%83%8F%E7%A2%91.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/wikimedia/wikipedia/commons/f/f7/%E5%8C%97%E9%BD%8A%E5%9B%9B%E9%9D%A2%E4%BD%9B%E9%BE%95%E5%83%8F%E7%A2%91.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
     image_license: CC0
     image_attribution: 氏子
 sources:

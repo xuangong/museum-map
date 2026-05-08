@@ -19,7 +19,7 @@ artifacts:
   - name: 玉琮王
     period: 约前3000年
     description: 重6.5kg,高8.8cm,刻有完整的"神人兽面纹"--头戴羽冠的神人骑在神兽之上,是良渚信仰体系的核心图案
-    image_url: https://commons.wikimedia.org/wiki/File:Jade_Cong_King,_2018-06-09_01.jpg
+    image_url: /img/commons/Jade_Cong_King,_2018-06-09_01.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Siyuwj
   - name: 玉钺王
@@ -31,12 +31,21 @@ artifacts:
   - name: 玉璧
     period: 良渚
     description: 大量出土,可能是财富或礼仪用途
+    image_url: /img/wikimedia/wikipedia/commons/b/b5/SUZHOU_MUSEUM_WEST_-_%E7%8E%89%E7%92%A7%2C_%E8%89%AF%E6%B8%9A%E6%96%87%E5%8C%96.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Wikimedia Commons
   - name: 玉三叉形器
     period: 良渚
     description: 插在发冠上,是贵族身份标识
+    image_url: https://upload.wikimedia.org/wikipedia/commons/d/df/Trident_Jade_Ware_unearthed_from_Tomb_14%2C_Fanshan_Site%2C_Liangzhu.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Siyuwj
   - name: 刻符陶罐
     period: 良渚
     description: 陶器上的刻划符号,可能是原始文字的前身
+    image_url: https://upload.wikimedia.org/wikipedia/commons/0/04/%E8%89%AF%E6%B8%9A%E5%8D%9A%E7%89%A9%E9%A6%86%E8%97%8F%E5%88%BB%E7%AC%A6%E9%99%B6%E7%BD%90%2C_2021-12-04_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Siyuwj
   - name: 碳化稻谷
     period: 良渚
     description: 大量水稻遗存,证明良渚是稻作农业高度发达的社会

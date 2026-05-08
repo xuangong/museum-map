@@ -28,9 +28,9 @@ artifacts:
   - name: 青铜器铭文
     period: 西周
     description: 展示金文（钟鼎文）的发展，字形比甲骨文更规整，内容涉及册命、赏赐、战争等，是西周社会的直接文献
-    image_url: https://upload.wikimedia.org/wikipedia/commons/9/95/%E9%99%95%E8%A5%BF%E7%9C%89%E5%8E%BF%E9%A9%AC%E5%AE%B6%E9%95%87%E6%9D%A8%E5%AE%B6%E6%9D%91-%E5%9B%9B%E5%8D%81%E4%B8%89%E5%B9%B4%E9%80%A8%E9%BC%8E%EF%BC%88%E4%B8%99%EF%BC%89-%E8%A5%BF%E5%91%A8-%E5%AE%9D%E9%B8%A1%E9%9D%92%E9%93%9C%E5%99%A8%E5%8D%9A%E7%89%A9%E9%99%A2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
-    image_license: CC-BY-SA-4.0
-    image_attribution: Kcx36
+    image_url: /img/08c0d15a3b6f6e89.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/7351397.htm
   - name: 秦代诏版
     period: 秦，前221年后
     description: 刻有秦始皇统一度量衡诏书的铜版/铁版，是"书同文"政策的实物证据

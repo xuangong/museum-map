@@ -1,0 +1,48 @@
+id: feac3814-25d3-43ad-ad5b-95535773304e
+name: 首都博物馆
+lat: 39.901
+lng: 116.3672
+location: 北京市西城区复兴门外大街16号
+level: 国家一级博物馆
+core_period: 北京70万年人居史、3000多年建城史、870年建都史
+specialty: 集收藏、展览、研究、考古、公共教育、文化交流于一体的现代化综合性博物馆，尤以北京历史文化、古代文物与民俗展示为特色
+dynasty_coverage: 辽、金、元、明、清代
+timeline: 1953年开始筹备，1981年正式对外开放，2006年5月18日新馆正式开馆
+treasures:
+  - name: 馆藏文物12万余件套，常设展陈展出文物约1800余件套
+  - name: 北京出土西周时期青铜器
+  - name: 明代牌楼
+  - name: 清代丹陛
+halls:
+  - name: 中央礼仪大厅
+  - name: 方形展厅
+  - name: 椭圆形专题展馆
+  - name: 临时展厅
+  - name: 多功能会议厅
+  - name: 数字放映厅
+  - name: 古都北京·历史文化篇
+  - name: 北京文物精品展
+  - name: 古代瓷器艺术精品展
+  - name: 古代佛像艺术精品展
+  - name: 京城旧事—老北京民俗展
+  - name: 古代绘画艺术精品展
+  - name: 古代书法艺术精品展
+  - name: 燕地青铜艺术精品展
+  - name: 古代玉器艺术精品展
+  - name: 书房珍玩精品展
+dynasty_connections:
+  - dynasty: 辽代
+    description: 馆藏辽代文物反映北京地区早期都城历史
+  - dynasty: 金代
+    description: 金中都遗址相关文物及城市发展史料
+  - dynasty: 元代
+    description: 元大都时期城市规划与文物遗存
+  - dynasty: 明代
+    description: 明代牌楼等建筑构件及大量出土文物
+  - dynasty: 清代
+    description: 清代丹陛及皇家礼仪文物
+sources:
+  - source: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+  - source: https://www.museum.bj.cn/zjsb/sbjj.htm
+  - source: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/546445/index.html
+  - source: https://zhuanti.mct.gov.cn/sdbwg2022.html

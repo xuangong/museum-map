@@ -24,9 +24,9 @@ artifacts:
     description: 新石器时代（约前3000年）。体量最大、纹饰最精的良渚玉琮，刻有神人兽面纹，是良渚信仰体系的核心象征，证明了五千年前的复杂社会组织。
   - name: 战国越王者旨於睗剑
     description: 战国（约前5世纪）。越王勾践之子所用青铜剑，铸造精良，铭文保存完好，是越国青铜兵器工艺的代表。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/a/a4/Yuyue_People-_Warring_States_Bronze_Sword_of_Zhu_Ji_Yu_Shi%2C_King_of_the_Yue_-_%E8%B6%8A%E7%8E%8B%E8%80%85%E6%97%A8%E6%96%BC%E7%9D%97%E5%89%91_%E6%B5%99%E6%B1%9F%E5%8D%9A%E7%89%A9%E9%A6%86_%E5%89%91%E8%8C%8E%E7%BB%95%E4%B8%9D%E8%B4%A8%E7%BC%A0%E7%BC%912.jpg
-    image_license: CC0
-    image_attribution: Gary Todd
+    image_url: /img/fb44bd3f812a973c.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/6090868.htm
   - name: 五代吴越鎏金银阿育王塔
     description: 五代（10世纪）。雷峰塔地宫出土，纯银鎏金，工艺极精，是吴越国佛教文化的顶级遗物。
   - name: 元·黄公望《富春山居图》（剩山图卷）
@@ -38,6 +38,9 @@ artifacts:
     description: 清末民初。耗时万工制作的朱金木雕花轿，代表浙东民间工艺的极致，是民俗文物的经典。
   - name: 越窑青瓷莲花碗
     description: 五代（10世纪）。釉色如玉，造型典雅，是"秘色瓷"审美的代表作。
+    image_url: /img/d943a4ed44cd2c46.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/1164422.htm
   - name: 河姆渡文化双鸟朝阳纹象牙蝶形器
     description: 新石器时代（约前5000年）。河姆渡遗址出土，雕刻精细，是长江流域早期艺术的杰作。
 dynasty_connections:

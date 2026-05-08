@@ -22,12 +22,15 @@ artifacts:
   - name: 错金银四龙四凤铜方案座
     period: 战国中期，前4世纪
     description: —1号墓出土，案座底部四只梅花鹿伏卧承托，中间四条蟠龙翼然腾起，龙身之间四只凤鸟展翅。整器用失蜡法铸造，工艺极其复杂，是中国青铜铸造技术的巅峰之作。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/d/db/20250118_Bronze_Square_Table_Stand_Decorated_with_Dragon-and-phoenix.jpg
+    image_url: /img/wikimedia/wikipedia/commons/d/db/20250118_Bronze_Square_Table_Stand_Decorated_with_Dragon-and-phoenix.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Windmemories
   - name: 中山王铁足铜鼎
     period: 战国中期
     description: —鼎腹刻铭文469字，为目前所见铭文最长的战国铜鼎之一。铭文记载中山王讨伐燕国的胜利及对嗣子的告诫，语言文辞典雅，内容涉及中山国与燕、赵等国的政治军事关系，是研究中山国历史的第一手资料。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b7/Bronze_Ding_Tripod_with_Iron_Feet.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Baomi
   - name: 错金银虎噬鹿铜屏风座
     period: 战国中期
     description: —猛虎咬住小鹿的瞬间造型，虎身错金银斑纹，鹿做挣扎状。构图紧张生动，是战国动物题材青铜器的杰作，可能受到了北方草原文化"动物搏斗"题材的影响。
@@ -37,13 +40,13 @@ artifacts:
   - name: 中山王"兆域图"铜版
     period: 战国中期
     description: —一块铜版上刻有王陵区的建筑规划图，标注了各建筑的名称和尺寸。是中国目前所见最早的建筑平面设计图，也是世界上最古老的铜版建筑规划图之一。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/8/8e/20250118_Architectural_Plan_of_Mausoleum_Layout_on_Bronze_plate_with_Details_in_Gold_and_Silver.jpg
+    image_url: /img/wikimedia/wikipedia/commons/8/8e/20250118_Architectural_Plan_of_Mausoleum_Layout_on_Bronze_plate_with_Details_in_Gold_and_Silver.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Windmemories
   - name: 错银双翼神兽
     period: 战国中期
     description: —有翼神兽造型，错银装饰。造型融合了中原与北方草原的审美元素，体现了中山国作为非华夏族裔国家的独特文化气质。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/b/ba/20250118_Bronze_Mythical_Winged_Beasts_Inlaid_with_Silver_02.jpg
+    image_url: /img/wikimedia/wikipedia/commons/b/ba/20250118_Bronze_Mythical_Winged_Beasts_Inlaid_with_Silver_02.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Windmemories
   - name: 山字形器
@@ -52,7 +55,7 @@ artifacts:
   - name: 中山王方壶
     period: 战国中期
     description: —壶腹刻铭文450字，内容与铁足铜鼎铭文相呼应，记载了中山国的政治理念和历史事件。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/a/ad/Warring_States_Bronze_Hu_1.jpg
+    image_url: /img/wikimedia/wikipedia/commons/a/ad/Warring_States_Bronze_Hu_1.jpg
     image_license: CC0
     image_attribution: Gary Todd
 sources:

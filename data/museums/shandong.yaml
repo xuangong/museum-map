@@ -35,6 +35,9 @@ artifacts:
   - name: 颂簋
     period: 西周晚期
     description: —传世品，铭文152字，记载周王册命颂的事迹。是西周青铜器铭文学研究的重要材料。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/6/60/Bronze_Vessels_in_China_Audit_Museum_01_2013-01.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-3.0
+    image_attribution: 猫猫的日记本
   - name: 明衡王府九旒冕
     period: 明代
     description: —青州明衡王墓出土，是目前国内唯一保存完整的明代亲王冕冠实物。金丝编制，九旒各缀玉珠，完整再现了明代亲王的冕服制度。
@@ -44,7 +47,7 @@ artifacts:
   - name: 甲骨文
     period: 商代
     description: —馆藏甲骨数量丰富，是研究商代后期历史的重要文字资料。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/7/7b/%E4%BB%A5%E5%95%86%E4%BB%A3%E7%94%B2%E9%AA%A8%E6%96%87%E5%9B%BE%E7%89%87%E4%B8%BA%E8%83%8C%E6%99%AF%E7%9A%84%E8%A5%BF%E5%91%A8%E5%8E%9F%E5%88%BB%E7%9F%B3%E7%AE%80.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/wikimedia/wikipedia/commons/7/7b/%E4%BB%A5%E5%95%86%E4%BB%A3%E7%94%B2%E9%AA%A8%E6%96%87%E5%9B%BE%E7%89%87%E4%B8%BA%E8%83%8C%E6%99%AF%E7%9A%84%E8%A5%BF%E5%91%A8%E5%8E%9F%E5%88%BB%E7%9F%B3%E7%AE%80.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
     image_license: CC-BY-SA-3.0
     image_attribution: Liuzpy
 sources:

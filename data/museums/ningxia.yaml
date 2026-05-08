@@ -23,7 +23,7 @@ artifacts:
   - name: 鎏金铜牛
     period: 西夏，西夏王陵出土
     description: 国宝级文物，铜牛通体鎏金，体态健壮，铸造工艺精湛，是西夏金属工艺的最高水平代表
-    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e9/%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5%E9%8E%8F%E9%87%91%E9%93%9C%E7%89%9B.jpg
+    image_url: /img/wikimedia/wikipedia/commons/e/e9/%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5%E9%8E%8F%E9%87%91%E9%93%9C%E7%89%9B.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Yanxutong1215
   - name: 胡旋舞石刻墓门
@@ -32,12 +32,15 @@ artifacts:
   - name: 力士志文支座
     period: 西夏，西夏王陵出土
     description: 国宝级文物，男性力士形象的石刻建筑构件，身刻西夏文字，是西夏陵寝建筑制度的重要证据
+    image_url: https://upload.wikimedia.org/wikipedia/commons/3/31/%E7%9F%B3%E9%9B%95%E5%8A%9B%E5%A3%AB%E5%BF%97%E6%96%87%E6%94%AF%E5%BA%A701.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Baomi
   - name: 贺兰山岩画
     period: 旧石器至青铜时代
     description: 贺兰山东麓发现大量岩画，以人面像和动物形象为主，时间跨度数千年，是北方游牧民族精神生活的直接记录
-    image_url: https://upload.wikimedia.org/wikipedia/commons/c/c0/%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%B2%A9%E7%94%BB%E5%A4%AA%E9%98%B3%E7%A5%9E.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: 霧島聖
+    image_url: /img/45faf41fe269ca81.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/subview/31524/31524.htm
   - name: 透雕青铜牌饰
     period: 战国至汉
     description: 北方草原风格的鄂尔多斯式青铜器，反映宁夏地区戎族与中原的文化交流
@@ -47,6 +50,9 @@ artifacts:
   - name: 彩绘泥塑罗汉像
     period: 西夏
     description: 体态丰满，神态怡然，纹饰上贴金箔，是西夏佛教艺术的精品
+    image_url: /img/ef7ef62ed111d210.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/7116385.htm
   - name: 竹雕
     period: 西夏
     description: 细浅阴刻中原人物生活场景，说明西夏与中原文化的交流互鉴

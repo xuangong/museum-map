@@ -22,19 +22,19 @@ artifacts:
   - name: 西汉金缕玉衣
     period: 西汉，约前113年
     description: —中山靖王刘胜的殓服，由2498片岫岩玉用金丝编缀而成，是中国出土年代最早、最完整的金缕玉衣，直接印证了文献记载的汉代丧葬制度。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b7/%E9%87%91%E7%BC%95%E7%8E%89%E8%A1%A3-%E6%B2%B3%E5%8C%97%E5%8D%9A%E7%89%A9%E9%99%A2.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: Suginami
+    image_url: /img/70c9fe708192d53f.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/6428588.htm
   - name: 长信宫灯
     period: 西汉，约前172年前后
     description: —窦绾墓出土，宫女跪坐执灯造型，灯罩可调节光照方向，烟气通过袖管导入体内净化。兼具实用性与艺术性，被誉为"中华第一灯"。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b9/%E9%95%BF%E4%BF%A1%E5%AE%AB%E7%81%AF8.png
+    image_url: /img/wikimedia/wikipedia/commons/b/b9/%E9%95%BF%E4%BF%A1%E5%AE%AB%E7%81%AF8.png
     image_license: CC-BY-SA-4.0
     image_attribution: 陳寅恪
   - name: 错金博山炉
     period: 西汉
     description: —刘胜墓出土，炉身以金丝错出山峦、云气、人物、走兽，山间有猎人与虎豹，炉盖镂空出烟，点燃香料后云雾缭绕如仙山。是汉代错金工艺的巅峰之作。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/8/81/%E9%94%99%E9%87%91%E9%93%9C%E5%8D%9A%E5%B1%B1%E7%82%8911.png
+    image_url: /img/wikimedia/wikipedia/commons/8/81/%E9%94%99%E9%87%91%E9%93%9C%E5%8D%9A%E5%B1%B1%E7%82%8911.png
     image_license: CC-BY-SA-4.0
     image_attribution: 陳寅恪
   - name: 透雕双龙高钮谷纹白玉壁
@@ -43,10 +43,13 @@ artifacts:
   - name: 错金银四龙四凤铜方案座
     period: 战国
     description: —中山国王墓出土，四条龙蜷曲成案座支撑，四只凤鸟展翅，工艺极其复杂。是战国中山国高超铸造技术的代表，也是中山国非华夏族群（白狄鲜虞）艺术风格的体现。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/d/db/20250118_Bronze_Square_Table_Stand_Decorated_with_Dragon-and-phoenix.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Windmemories
   - name: 中山王铁足铜鼎
     period: 战国
     description: —铭文469字，是目前所见战国铭文最长的铜器之一，记载了中山国的政治事件，是研究中山国历史的第一手文献。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b7/Bronze_Ding_Tripod_with_Iron_Feet.jpg
+    image_url: /img/wikimedia/wikipedia/commons/b/b7/Bronze_Ding_Tripod_with_Iron_Feet.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Baomi
   - name: 十五连盏铜灯

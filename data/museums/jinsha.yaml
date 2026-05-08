@@ -19,21 +19,27 @@ artifacts:
   - name: 太阳神鸟金饰
     period: 商周，约前1200-前900年
     description: 外径12.5cm，内径5.29cm，厚仅0.02cm，重20g。用自然砂金加工而成，含金量94.2%。图案为四只逆时针飞行的神鸟围绕十二道旋转的太阳光芒，被认为是古蜀人太阳崇拜的象征。2005年被国家文物局确定为中国文化遗产标志。
-    image_url: https://commons.wikimedia.org/wiki/File:太阳神鸟金饰_Golden_Sun_Bird.png
+    image_url: /img/commons/太阳神鸟金饰_Golden_Sun_Bird.png
     image_license: PD
     image_attribution: "Jinsha Site Museum. Original author: ancient Shu people."
   - name: 黄金面具
     period: 商周
     description: 金面具宽19.5cm，高11cm，厚约0.04cm，重46g。与三星堆出土的黄金面罩风格一致，证明金沙与三星堆属于同一文化传统。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/5/5f/%E9%87%91%E6%B2%99%E9%81%97%E5%9D%80%E5%8D%9A%E7%89%A9%E9%A6%86-%E5%95%86%E5%91%A8%E9%BB%84%E9%87%91%E9%9D%A2%E5%85%B7%E9%9B%95%E5%A1%91.jpg
+    image_url: /img/wikimedia/wikipedia/commons/5/5f/%E9%87%91%E6%B2%99%E9%81%97%E5%9D%80%E5%8D%9A%E7%89%A9%E9%A6%86-%E5%95%86%E5%91%A8%E9%BB%84%E9%87%91%E9%9D%A2%E5%85%B7%E9%9B%95%E5%A1%91.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Kcx36
   - name: 十节玉琮
     period: 新石器时代良渚文化风格，出土于金沙商周地层
     description: 这件玉琮的形制和纹饰与浙江良渚文化玉琮高度相似（带有简化人面纹），说明古蜀与远在千里之外的长三角存在文化交流或传承。这是考古学上的重大发现。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/a/a1/Jade_Cong_Jinsha.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-3.0
+    image_attribution: Farm
   - name: 铜立人像
     period: 商周
     description: 小型铜立人，双手持物姿态与三星堆大立人相似，但尺寸更小、风格更简化，展现了古蜀造像传统的演变。
+    image_url: /img/7e18593bf56e0f5c.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E9%93%9C%E7%AB%8B%E4%BA%BA%E5%83%8F
   - name: 石虎
     period: 商周
     description: 圆雕石虎，姿态为俯卧状，造型生动，体现古蜀人对虎的崇拜。

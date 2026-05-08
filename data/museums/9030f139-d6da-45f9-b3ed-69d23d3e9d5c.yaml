@@ -1,0 +1,39 @@
+id: 9030f139-d6da-45f9-b3ed-69d23d3e9d5c
+name: 北京孔庙和国子监博物馆
+lat: 39.9425
+lng: 116.4089
+location: 北京市东城区国子监街13-15号
+level: 全国重点文物保护单位
+core_period: 元、明、清
+specialty: 元、明、清三代皇家祭孔的重要场所，兼为最高学府和教育行政管理机构，集儒学文化与科举制度研究于一体，"左庙右学"格局保存完整
+dynasty_coverage: 元、明、清三代
+timeline: 元大德六年（1302年）在今址建庙，元大德十年（1306年）建成；明永乐、正统年间先后大规模修缮；清乾隆年间增建辟雍，形成现存建筑规模与格局；2008年6月博物馆正式成立并全面对外开放
+treasures:
+  - name: 衣、冠、车、琴、书册等孔子生前使用物品
+  - name: 乾隆石鼓
+  - name: 进士题名碑
+  - name: 十三经碑林
+  - name: 清代六文字下马碑
+  - name: 琉璃雕花砖影壁
+halls:
+  - name: 先师门
+  - name: 大成门
+  - name: 大成殿
+  - name: 崇圣祠
+  - name: 集贤门
+  - name: 太学门
+  - name: 辟雍殿
+  - name: 彝伦堂
+  - name: 敬一亭
+dynasty_connections:
+  - dynasty: 元朝
+    description: 元世祖忽必烈定都北京后建宣圣庙，元大德六年（1302年）在今址建庙，元大德十年（1306年）建成，奠定基本格局
+  - dynasty: 明朝
+    description: 明永乐、正统年间先后对孔庙和国子监进行大规模修缮与扩建，进一步完善建筑规模
+  - dynasty: 清朝
+    description: 清乾隆年间增建辟雍，形成今日建筑规模和格局；孔庙作为皇家祭孔场所延续至清末
+sources:
+  - source: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+  - source: http://www.kmgzj.cn/cpfl/index.aspx?nodeid=35
+  - source: https://wwj.beijing.gov.cn/bjww/362690/362698/362703/325735320/index.html
+  - source: https://www.beijing.gov.cn/renwen/rwzyd/gdwh/kmhgzjbwg/202107/t20210705_2429470.html

@@ -23,6 +23,9 @@ halls:
 artifacts:
   - name: 五代秘色瓷莲花碗
     description: 五代（10世纪）。1956年苏州虎丘云岩寺塔发现，碗托与碗身合为莲花形，釉色青翠如湖水，是存世秘色瓷中的极品，也是确认秘色瓷概念的关键实物。
+    image_url: /img/420567297f3233d2.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/8948669.htm
   - name: 明代真珠舍利宝幢
     description: 北宋（1013年）。虎丘云岩寺塔出土，高1.22米，以珍珠、玛瑙、水晶等七宝装饰，工艺极其繁复，是宋代佛教艺术的巅峰之作。
     image_url: https://upload.wikimedia.org/wikipedia/commons/d/d8/%E7%91%9E%E5%85%89%E5%AF%BA%E5%A1%94%E5%87%BA%E5%9C%9F%E7%9C%9F%E7%8F%A0%E8%88%8D%E5%88%A9%E5%AE%9D%E5%B9%A2.jpg

@@ -41,9 +41,9 @@ artifacts:
     image_attribution: Shujianyang
   - name: 船纹铜提筒
     description: 西汉。越式铜器，筒壁刻有战船、羽人等纹饰，与越南东山文化铜鼓风格相似，是南越国海洋文化和百越传统的直接证据。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/5/5d/Bronze_Bucket_with_Boating_Paintings_at_Nanyue_King_Museum_03.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: Shujianyang
+    image_url: /img/177c40bea2b59d45.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/1549950.htm
   - name: 银盒（波斯风格）
     description: 西汉。锤揲工艺制作的银盒，造型和纹饰具有明显的西亚波斯风格，是早期海上丝绸之路的实物证据。
   - name: 南越国宫署遗址"万岁"瓦当

@@ -88,19 +88,15 @@ recommended_museums:
   - museum_id: luoyang
     name: 洛阳博物馆
     reason: 东汉都城文物，石辟邪
-  - museum_id: nanjing
-    name: 南京博物院
+  - name: 南京博物院
     reason: 错银铜牛灯（东汉环保灯具设计）
-  - museum_id: 9bfb09d6-e2da-4572-8384-56d34d1f59fe
-    name: 洛阳古墓博物馆
+  - name: 洛阳古墓博物馆
     reason: 汉代壁画墓原址展示
   - museum_id: sichuan
     name: 四川博物院
     reason: 大量东汉画像砖，反映蜀地社会生活
-  - museum_id: shandong
-    name: 山东博物馆
+  - name: 山东博物馆
     reason: 东平汉墓壁画
-  - museum_id: 6d90c01d-efe7-45e5-a39a-e28a10298fa2
-    name: 白马寺
+  - name: 白马寺
     location: 洛阳
     reason: 中国第一座佛寺

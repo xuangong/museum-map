@@ -1,0 +1,59 @@
+id: 706747f5-3e5a-4883-ad52-67c7169d70fc
+name: 天坛公园
+lat: 39.8814
+lng: 116.4074
+location: 北京市东城区天坛内东里7号
+level: 全国重点文物保护单位（1961年）、世界文化遗产（1998年）
+core_period: 明清时期
+specialty: 中国现存规模最大、保存最完整的古代皇家祭天建筑群，明清两代皇帝举行祭天、祈谷典礼的场所
+dynasty_coverage: 明、清两代（1420—1911年）
+timeline: 1420年（明永乐十八年）建成北京天地坛；1530年（明嘉靖九年）天地分祀，建圜丘，天坛由此得名；1751年（清乾隆十六年）改大享殿为祈年殿；1889年（清光绪十五年）祈年殿毁于雷火后重建；1918年辟为公园对外开放；1998年列入世界文化遗产名录
+treasures:
+  - name: 祈年殿
+  - name: 圜丘
+  - name: 皇穹宇
+  - name: 皇乾殿
+  - name: 斋宫
+  - name: 回音壁
+  - name: 三音石
+  - name: 七星石
+  - name: 丹陛桥
+  - name: 神乐署
+  - name: 牺牲所
+halls:
+  - name: 祈年殿
+  - name: 皇乾殿
+  - name: 圜丘坛
+  - name: 皇穹宇
+  - name: 斋宫
+  - name: 无梁殿
+  - name: 长廊
+  - name: 双环万寿亭
+  - name: 神乐署
+artifacts:
+  - name: 祈年殿
+    period: 明嘉靖—清光绪
+    description: 由明嘉靖年间大享殿改建而来，清乾隆十六年（1751年）改名祈年殿，三重檐圆形攒尖顶，覆深蓝色琉璃瓦，是皇帝每年正月祈谷的场所，光绪年间毁于雷火后按原制重建
+  - name: 圜丘
+    period: 明嘉靖
+    description: 明嘉靖九年（1530年）建造，为三层汉白玉圆形石台，皇帝每年冬至日于此举行祭天大典
+  - name: 皇穹宇
+    period: 明清
+    description: 存放祭天神位的单檐圆形殿宇，外围圆形回音壁，1918年随公园开放后向游人开放
+  - name: 古松柏
+    period: 明清
+    description: 全园占地273公顷，外坛广植树木，现存古松柏逾3500株，为北京城存量最大的古树群之一
+dynasty_connections:
+  - dynasty: 明朝·永乐
+    description: 永乐十八年（1420年）建成北京天地坛，作为天地合祀之所
+  - dynasty: 明朝·嘉靖
+    description: 嘉靖九年（1530年）实行天地分祀，另建圜丘专司祭天，天坛正式得名；同年建皇穹宇
+  - dynasty: 清朝·乾隆
+    description: 乾隆年间大规模改建，改大享殿为祈年殿，并对圜丘、皇穹宇等主要建筑进行扩建修缮
+  - dynasty: 清朝·光绪
+    description: 光绪十五年（1889年）祈年殿遭雷火焚毁，随后按原制重建
+sources:
+  - source: https://tiantanpark.cn/aboutus/
+  - source: https://wwj.beijing.gov.cn/bjww/362771/362778/364353/index.html
+  - source: https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_733103.html
+  - source: http://tiantanpark.cn/detail/1286.html

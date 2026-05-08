@@ -22,9 +22,9 @@ artifacts:
   - name: 牛虎铜案
     period: 战国·古滇国，晋宁石寨山出土
     description: 一只大牛四足立地，背部为承物的浅盘，牛尾立一猛虎，虎口咬住牛尾，大牛腹下藏一小牛犊。构图大胆，充满生命力，是中国青铜艺术的杰作和云南省博的标志
-    image_url: https://upload.wikimedia.org/wikipedia/commons/1/19/%E7%89%9B%E8%99%8E%E9%93%9C%E6%A1%88_%E8%99%8B.jpg
+    image_url: /img/wikimedia/wikipedia/commons/f/fc/%E7%89%9B%E8%99%8E%E9%93%9C%E6%A1%88.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Cangminzho
+    image_attribution: Wikimedia Commons
   - name: 四牛鎏金骑士贮贝器
     period: 西汉·古滇，石寨山出土
     description: 贮贝器是古滇国特有的器型（用于储存海贝货币），器盖上有一鎏金骑士和四牛。古滇国以海贝为货币，贮贝器是滇文化的标识
@@ -40,9 +40,9 @@ artifacts:
   - name: 滇王金印
     period: 西汉，复制品/相关文物
     description: 汉武帝元封二年（前109年）赐滇王尝羌金印，原印出土于石寨山，现藏中国国家博物馆。是云南纳入中央版图的里程碑
-    image_url: https://upload.wikimedia.org/wikipedia/commons/1/1e/Gold_Seal_for_King_of_Dian_Kingdom.jpg
-    image_license: CC-BY-SA-3.0
-    image_attribution: 幽灵巴尼
+    image_url: /img/9934055b2b71be85.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/553179.htm
   - name: 银鎏金镶珠金翅鸟
     period: 大理国，大理崇圣寺三塔出土
     description: 佛教中的迦楼罗鸟造型，银鎏金工艺，镶嵌宝珠，是大理国佛教艺术的代表

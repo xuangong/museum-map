@@ -42,21 +42,30 @@ artifacts:
   - name: 明代大钟
     period: 明代嘉靖三十四年（1555年）
     description: 悬挂于大佛殿东南角，通高1.65米，重二千五百斤，钟声洪亮，可传数里，为洛阳著名古迹
+    image_url: https://upload.wikimedia.org/wikipedia/commons/3/39/%E8%85%BE%E5%86%B2%E5%8D%9A%E7%89%A9%E9%A6%86-%E6%98%8E%E4%BB%A3-%E5%8E%9F%E6%96%87%E5%8C%96%E9%A6%86%E7%A7%BB%E4%BA%A4-%E5%A4%A7%E9%93%9C%E9%92%9F.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: 瑞丽江的河水
   - name: 石马
     period: 北宋
     description: 山门前左右各一，高1.8米，长2.2米，原为北宋太师太保魏咸信墓前石像，相传为汉代驮经白马
-    image_url: https://upload.wikimedia.org/wikipedia/commons/4/4c/%E7%99%BD%E9%A9%AC%E6%8B%96%E7%BB%8F.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/wikimedia/wikipedia/commons/4/4c/%E7%99%BD%E9%A9%AC%E6%8B%96%E7%BB%8F.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
     image_license: CC-BY-SA-3.0
     image_attribution: Weiqing
   - name: 释迦牟尼佛舍利
     period: 东汉
     description: 白马寺供奉的释迦牟尼佛真身舍利，共2颗，极为珍贵
+    image_url: /img/0110494890080544.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/6749039.htm
   - name: 缅甸卧玉佛
     period: 现代
     description: 由缅甸赠送，供奉于卧佛殿，身长5米，重约8吨，以整块白玉雕成
   - name: 贝叶经
     period: 古代
     description: 用贝树叶书写的古代佛经，是佛教文献的珍贵实物遗存，现藏白马寺
+    image_url: https://upload.wikimedia.org/wikipedia/commons/6/60/Nagarakertagama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: PD
+    image_attribution: Unknown authorUnknown author
 dynasty_connections:
   - dynasty: 东汉
     description: 永平十一年（公元68年），汉明帝敕令兴建，是佛教传入中国后第一座官办寺院，摄摩腾、竺法兰在此译出《四十二章经》

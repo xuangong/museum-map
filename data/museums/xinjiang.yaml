@@ -24,19 +24,22 @@ artifacts:
   - name: '"五星出东方利中国"锦护膊'
     period: 汉代，1995年尼雅遗址出土
     description: 长18.5cm，宽12.5cm，织有汉字"五星出东方利中国"和凤凰、鸾鸟、白虎等纹样。是目前所知汉代织锦中工艺最复杂、色彩最丰富的品种之一，被列为首批禁止出国展览文物
-    image_url: https://commons.wikimedia.org/wiki/File:Five_Stars_Rising_in_the_East_Benefiting_for_the_Central_Plains_armband_(20230921114337).jpg
+    image_url: /img/commons/Five_Stars_Rising_in_the_East_Benefiting_for_the_Central_Plains_armband_(20230921114337).jpg
     image_license: CC-BY-SA-4.0
     image_attribution: N509FZ
   - name: 楼兰女尸
     period: 约3800年前，1980年罗布泊铁板河出土
     description: 身长152cm，生前约155.8cm，死亡年龄40-45岁。栗色直发，尖高鼻梁，眼睛深凹，皮肤呈古铜色。是世界上保存最好的古尸之一
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/1f/%E8%B7%9D%E4%BB%8A3800%E5%B9%B4%E7%BA%A645%E5%B2%81%E7%9A%84%E6%A5%BC%E5%85%B0%E5%8F%A4%E4%BB%A3%E6%AC%A7%E7%BD%97%E5%B7%B4%E4%BA%BA%E7%A7%8D%E9%93%81%E6%9D%BF%E6%B2%B3%E5%A5%B3%E5%B0%B8_Loulan_Beauty_from_Tiebanhe_Riverside%28about_3800_years_ago%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-2.0
+    image_attribution: Eric Feng
   - name: 营盘男尸
     period: 汉晋，1995年尉犁县营盘遗址15号墓出土
     description: 男性，约25岁，身高约1.8米。面覆金箔面具，身穿红地对人兽树纹罽袍（毛织物，图案含人物、狮鹫和石榴树），具有强烈的希腊化艺术风格，是东西方文化交融的标本
   - name: 小河墓地女性干尸
     period: 约3800年前
     description: 身长158cm，灰棕色头发自然中分，保存极为完好。小河墓地"千口棺材"的发现震惊考古界
-    image_url: https://upload.wikimedia.org/wikipedia/commons/2/29/%E8%B7%9D%E4%BB%8A3800%E5%B9%B4%E7%9A%84%E5%B0%8F%E6%B2%B3%E5%A2%93%E5%9C%B0%E5%8F%A4%E4%BB%A3%E6%AC%A7%E7%BD%97%E5%B7%B4%E4%BA%BA%E7%A7%8D%E6%88%90%E5%B9%B4%E5%A5%B3%E6%80%A7%E5%B9%B2%E5%B0%B8_Female_Mummy_And_Dressing%28about_3800_years_ago_Unearthed_at_Xiaohe_Cemetery%294.jpg
+    image_url: /img/wikimedia/wikipedia/commons/2/29/%E8%B7%9D%E4%BB%8A3800%E5%B9%B4%E7%9A%84%E5%B0%8F%E6%B2%B3%E5%A2%93%E5%9C%B0%E5%8F%A4%E4%BB%A3%E6%AC%A7%E7%BD%97%E5%B7%B4%E4%BA%BA%E7%A7%8D%E6%88%90%E5%B9%B4%E5%A5%B3%E6%80%A7%E5%B9%B2%E5%B0%B8_Female_Mummy_And_Dressing%28about_3800_years_ago_Unearthed_at_Xiaohe_Cemetery%294.jpg
     image_license: CC-BY-SA-2.0
     image_attribution: Eric Feng
   - name: 汉唐丝织品

@@ -1,4 +1,4 @@
-054543c3-1850-471d-be28-e611f77ba9c4:
+0244eaab-d178-4304-9ecc-0ce4ea8b3b63:
   - field_path: artifacts[0].description
   - field_path: artifacts[0].name
   - field_path: artifacts[0].period
@@ -9,6 +9,63 @@
   - field_path: artifacts[2].name
   - field_path: artifacts[2].period
   - field_path: artifacts[3].description
+  - field_path: artifacts[3].name
+  - field_path: artifacts[3].period
+  - field_path: artifacts[4].description
+  - field_path: artifacts[4].name
+  - field_path: artifacts[4].period
+  - field_path: corePeriod
+  - field_path: dynastyConnections[0].description
+  - field_path: dynastyConnections[0].dynasty
+  - field_path: dynastyConnections[1].description
+  - field_path: dynastyConnections[1].dynasty
+  - field_path: dynastyConnections[2].description
+  - field_path: dynastyConnections[2].dynasty
+  - field_path: dynastyCoverage
+  - field_path: halls[0]
+  - field_path: halls[1]
+  - field_path: halls[2]
+  - field_path: halls[3]
+  - field_path: halls[4]
+  - field_path: halls[5]
+  - field_path: halls[6]
+  - field_path: halls[7]
+  - field_path: lat
+  - field_path: level
+  - field_path: lng
+  - field_path: location
+  - field_path: name
+  - field_path: specialty
+  - field_path: timeline
+  - field_path: treasures[0]
+  - field_path: treasures[1]
+  - field_path: treasures[2]
+  - field_path: treasures[3]
+  - field_path: treasures[4]
+  - field_path: treasures[5]
+054543c3-1850-471d-be28-e611f77ba9c4:
+  - field_path: artifacts[0].description
+  - field_path: artifacts[0].image
+    source_url: https://commons.wikimedia.org/wiki/File:He_Zun.jpg
+    authority: encyclopedia
+  - field_path: artifacts[0].name
+  - field_path: artifacts[0].period
+  - field_path: artifacts[1].description
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File:Lai_pan_inscription.jpg
+    authority: encyclopedia
+  - field_path: artifacts[1].name
+  - field_path: artifacts[1].period
+  - field_path: artifacts[2].description
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File:Qingong_Bo,_Spring_and_Autumn_period,_Baoji_Bronze_Ware_Museum.jpg
+    authority: encyclopedia
+  - field_path: artifacts[2].name
+  - field_path: artifacts[2].period
+  - field_path: artifacts[3].description
+  - field_path: artifacts[3].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E4%BA%94%E7%A5%80%E5%8D%AB%E9%BC%8E.jpg
+    authority: encyclopedia
   - field_path: artifacts[3].name
   - field_path: artifacts[3].period
   - field_path: corePeriod
@@ -77,10 +134,196 @@
   - field_path: treasures[3]
     source_url: http://www.ncha.gov.cn/art/2024/10/2/art_722_191592.html
     authority: government
+09fc018e-37d8-4aef-a17c-d9e3c0ac04cc:
+  - field_path: artifacts[0].description
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: artifacts[0].name
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: artifacts[0].period
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: artifacts[1].description
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: artifacts[1].name
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: artifacts[1].period
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: artifacts[2].description
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: artifacts[2].name
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: artifacts[2].period
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: corePeriod
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545883/
+    authority: government
+  - field_path: dynastyConnections[0].description
+  - field_path: dynastyConnections[0].dynasty
+  - field_path: dynastyCoverage
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545883/
+    authority: government
+  - field_path: halls[0]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: lat
+  - field_path: level
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545883/
+    authority: government
+  - field_path: lng
+  - field_path: location
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545883/
+    authority: government
+  - field_path: name
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545883/
+    authority: government
+  - field_path: specialty
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545883/
+    authority: government
+  - field_path: timeline
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: treasures[0]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: treasures[1]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: treasures[2]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+  - field_path: treasures[3]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
+    authority: government
+12cd8af6-fec0-4c29-8e59-771859685447:
+  - field_path: artifacts[0].description
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: artifacts[0].name
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: artifacts[0].period
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: artifacts[1].description
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: artifacts[1].name
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: artifacts[1].period
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: artifacts[2].description
+  - field_path: artifacts[2].name
+  - field_path: artifacts[2].period
+  - field_path: artifacts[3].name
+  - field_path: artifacts[3].period
+  - field_path: artifacts[4].name
+  - field_path: artifacts[4].period
+  - field_path: corePeriod
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: dynastyConnections[0].description
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: dynastyConnections[0].dynasty
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: dynastyConnections[1].description
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: dynastyConnections[1].dynasty
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: dynastyConnections[2].description
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: dynastyConnections[2].dynasty
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: dynastyConnections[3].description
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: dynastyConnections[3].dynasty
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: dynastyConnections[4].description
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: dynastyConnections[4].dynasty
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: dynastyConnections[5].description
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: dynastyConnections[5].dynasty
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: dynastyConnections[6].description
+  - field_path: dynastyConnections[6].dynasty
+  - field_path: dynastyCoverage
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: halls[0]
+    source_url: https://www.canalmuseum.org.cn/index.html
+    authority: official
+  - field_path: halls[1]
+    source_url: https://www.canalmuseum.org.cn/index.html
+    authority: official
+  - field_path: halls[2]
+    source_url: https://www.canalmuseum.org.cn/index.html
+    authority: official
+  - field_path: lat
+  - field_path: level
+  - field_path: lng
+  - field_path: location
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: name
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: specialty
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: timeline
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: treasures[0]
+    source_url: https://www.canalmuseum.org.cn/index.html
+    authority: official
+  - field_path: treasures[1]
+    source_url: https://www.canalmuseum.org.cn/index.html
+    authority: official
+  - field_path: treasures[2]
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742745/743627282/index.html
+    authority: government
+  - field_path: treasures[3]
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742745/743627282/index.html
+    authority: government
+  - field_path: treasures[4]
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742745/743627282/index.html
+    authority: government
+  - field_path: treasures[5]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
+  - field_path: treasures[6]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html
+    authority: government
 1f59db8a-b242-494f-aba4-7f02ed14f48c:
   - field_path: artifacts[0].description
     source_url: https://www.westlakemuseum.com/index.php/bwggk/gqjs/968-nsgybwg.html
     authority: official
+  - field_path: artifacts[0].image
+    source_url: https://baike.baidu.com/subview/3423812/15023867.htm
+    authority: encyclopedia
   - field_path: artifacts[0].name
     source_url: https://www.westlakemuseum.com/index.php/bwggk/gqjs/968-nsgybwg.html
     authority: official
@@ -90,6 +333,9 @@
   - field_path: artifacts[1].description
     source_url: https://www.westlakemuseum.com/index.php/bwggk/gqjs/968-nsgybwg.html
     authority: official
+  - field_path: artifacts[1].image
+    source_url: https://baike.baidu.com/view/3423777.htm
+    authority: encyclopedia
   - field_path: artifacts[1].name
     source_url: https://www.westlakemuseum.com/index.php/bwggk/gqjs/968-nsgybwg.html
     authority: official
@@ -99,6 +345,9 @@
   - field_path: artifacts[2].description
     source_url: https://www.westlakemuseum.com/index.php/bwggk/gqjs/968-nsgybwg.html
     authority: official
+  - field_path: artifacts[2].image
+    source_url: https://baike.baidu.com/view/3423789.htm
+    authority: encyclopedia
   - field_path: artifacts[2].name
     source_url: https://www.westlakemuseum.com/index.php/bwggk/gqjs/968-nsgybwg.html
     authority: official
@@ -108,6 +357,9 @@
   - field_path: artifacts[3].description
     source_url: https://www.westlakemuseum.com/index.php/bwggk/gqjs/968-nsgybwg.html
     authority: official
+  - field_path: artifacts[3].image
+    source_url: https://baike.baidu.com/view/3423799.htm
+    authority: encyclopedia
   - field_path: artifacts[3].name
     source_url: https://www.westlakemuseum.com/index.php/bwggk/gqjs/968-nsgybwg.html
     authority: official
@@ -117,6 +369,9 @@
   - field_path: artifacts[4].description
     source_url: https://www.westlakemuseum.com/index.php/bwggk/gqjs/968-nsgybwg.html
     authority: official
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E6%88%98%E5%9B%BD%E5%8E%9F%E5%A7%8B%E7%93%B7%E9%92%B2.jpg
+    authority: encyclopedia
   - field_path: artifacts[4].name
     source_url: https://www.westlakemuseum.com/index.php/bwggk/gqjs/968-nsgybwg.html
     authority: official
@@ -127,7 +382,7 @@
     source_url: https://www.westlakemuseum.com/index.php/bwggk/gqjs/968-nsgybwg.html
     authority: official
   - field_path: artifacts[5].image
-    source_url: https://commons.wikimedia.org/wiki/File:元青花观音像.jpg
+    source_url: https://baike.baidu.com/subview/6631179/15023622.htm
     authority: encyclopedia
   - field_path: artifacts[5].name
     source_url: https://www.westlakemuseum.com/index.php/bwggk/gqjs/968-nsgybwg.html
@@ -308,7 +563,7 @@
 232d4da5-550c-49eb-89e0-042c913657c8:
   - field_path: artifacts[0].description
   - field_path: artifacts[0].image
-    source_url: https://commons.wikimedia.org/wiki/File:Zhuge_bowl.jpg
+    source_url: https://baike.baidu.com/view/9492931.htm
     authority: encyclopedia
   - field_path: artifacts[0].name
   - field_path: artifacts[0].period
@@ -319,6 +574,9 @@
   - field_path: artifacts[1].name
   - field_path: artifacts[1].period
   - field_path: artifacts[2].description
+  - field_path: artifacts[2].image
+    source_url: https://baike.baidu.com/view/9492585.htm
+    authority: encyclopedia
   - field_path: artifacts[2].name
   - field_path: artifacts[2].period
   - field_path: artifacts[3].description
@@ -403,6 +661,9 @@
     authority: encyclopedia
   - field_path: artifacts[2].description
     source_url: https://baike.baidu.com/item/%e9%b8%a1%e9%b8%a3%e5%af%ba/2150
+    authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://baike.baidu.com/view/7036005.htm
     authority: encyclopedia
   - field_path: artifacts[2].name
     source_url: https://baike.baidu.com/item/%e9%b8%a1%e9%b8%a3%e5%af%ba/2150
@@ -600,10 +861,60 @@
   - field_path: artifacts[3].image
     source_url: https://commons.wikimedia.org/wiki/File:North_Dynasties_Statues_of_the_Buddha_carvings_in_Handan_08.jpg
     authority: encyclopedia
+2f91b70e-838a-4af4-97f0-5511dad3373c:
+  - field_path: artifacts[0].description
+  - field_path: artifacts[0].name
+  - field_path: artifacts[0].period
+  - field_path: artifacts[1].description
+  - field_path: artifacts[1].name
+  - field_path: artifacts[1].period
+  - field_path: artifacts[2].description
+  - field_path: artifacts[2].name
+  - field_path: artifacts[2].period
+  - field_path: artifacts[3].description
+  - field_path: artifacts[3].name
+  - field_path: artifacts[3].period
+  - field_path: artifacts[4].description
+  - field_path: artifacts[4].name
+  - field_path: artifacts[4].period
+  - field_path: corePeriod
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362779/dypqgzdwwbhdw/523238/index.html
+    authority: government
+  - field_path: dynastyCoverage
+  - field_path: halls[0]
+  - field_path: halls[1]
+  - field_path: halls[2]
+  - field_path: halls[3]
+  - field_path: halls[4]
+  - field_path: halls[5]
+  - field_path: lat
+  - field_path: level
+  - field_path: lng
+  - field_path: location
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362779/dypqgzdwwbhdw/523238/index.html
+    authority: government
+  - field_path: name
+    source_url: https://www.beijing.gov.cn/renwen/lsfm/202105/t20210513_2388359.html
+    authority: government
+  - field_path: specialty
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362779/dypqgzdwwbhdw/523238/index.html
+    authority: government
+  - field_path: timeline
+  - field_path: treasures[0]
+    source_url: https://wwj.beijing.gov.cn/bjww/362690/362698/362703/325735344/index.html
+    authority: government
+  - field_path: treasures[1]
+  - field_path: treasures[2]
+  - field_path: treasures[3]
+  - field_path: treasures[4]
+  - field_path: treasures[5]
 311c5f1f-d67d-4e79-a891-253baced913b:
   - field_path: artifacts[0].description
     source_url: https://www.news.cn/culture/20231221/c59ac49303394e158c2f0b6ceb8784d7/c.html
     authority: other
+  - field_path: artifacts[0].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A10-%E5%BE%90%E6%98%BE%E7%A7%80%E5%A2%93%E5%BF%97%2C%20Northern%20Qi%20Mural%20Museum%20%E5%8C%97%E9%BD%90%E5%A3%81%E7%94%BB%E5%8D%9A%E7%89%A9%E9%A6%86%2C%20Shanxi%2C%202024%20(53914804853).jpg
+    authority: encyclopedia
   - field_path: artifacts[0].name
     source_url: https://www.news.cn/culture/20231221/c59ac49303394e158c2f0b6ceb8784d7/c.html
     authority: other
@@ -907,9 +1218,84 @@
   - field_path: treasures[9]
     source_url: https://www.summerpalace.net.cn/court_life/detail/348.html
     authority: other
+4922cadb-30e6-43fc-b441-d545cab51322:
+  - field_path: artifacts[0].description
+  - field_path: artifacts[0].name
+  - field_path: artifacts[0].period
+  - field_path: artifacts[1].description
+  - field_path: artifacts[1].name
+  - field_path: artifacts[1].period
+  - field_path: artifacts[2].description
+  - field_path: artifacts[2].name
+  - field_path: artifacts[2].period
+  - field_path: artifacts[3].description
+  - field_path: artifacts[3].name
+  - field_path: artifacts[3].period
+  - field_path: artifacts[4].description
+  - field_path: artifacts[4].name
+  - field_path: artifacts[4].period
+  - field_path: artifacts[5].description
+  - field_path: artifacts[5].name
+  - field_path: artifacts[5].period
+  - field_path: corePeriod
+  - field_path: dynastyConnections[0].description
+  - field_path: dynastyConnections[0].dynasty
+  - field_path: dynastyConnections[1].description
+  - field_path: dynastyConnections[1].dynasty
+  - field_path: dynastyConnections[2].description
+  - field_path: dynastyConnections[2].dynasty
+  - field_path: dynastyConnections[3].description
+  - field_path: dynastyConnections[3].dynasty
+  - field_path: dynastyConnections[4].description
+  - field_path: dynastyConnections[4].dynasty
+  - field_path: dynastyConnections[5].description
+  - field_path: dynastyConnections[5].dynasty
+  - field_path: dynastyConnections[6].description
+  - field_path: dynastyConnections[6].dynasty
+  - field_path: dynastyCoverage
+  - field_path: halls[0]
+    source_url: http://www.jb.mil.cn/zlcl/jbcl/
+    authority: other
+  - field_path: halls[1]
+    source_url: http://www.jb.mil.cn/zlcl/jbcl/
+    authority: other
+  - field_path: halls[2]
+    source_url: http://www.jb.mil.cn/zlcl/jbcl/
+    authority: other
+  - field_path: halls[3]
+    source_url: http://www.jb.mil.cn/zlcl/jbcl/
+    authority: other
+  - field_path: halls[4]
+    source_url: http://www.jb.mil.cn/zlcl/jbcl/
+    authority: other
+  - field_path: halls[5]
+    source_url: http://www.jb.mil.cn/zlcl/jbcl/
+    authority: other
+  - field_path: lat
+  - field_path: level
+  - field_path: lng
+  - field_path: location
+    source_url: http://www.jb.mil.cn/gcww/wwzj/index.html
+    authority: other
+  - field_path: name
+    source_url: http://www.jb.mil.cn/gcww/wwzj/index.html
+    authority: other
+  - field_path: specialty
+    source_url: http://www.jb.mil.cn/gcww/wwzj/index.html
+    authority: other
+  - field_path: timeline
+  - field_path: treasures[0]
+  - field_path: treasures[1]
+  - field_path: treasures[2]
+  - field_path: treasures[3]
+  - field_path: treasures[4]
+  - field_path: treasures[5]
 4dc89822-84e4-4b0a-91dd-798aa762981b:
   - field_path: artifacts[0].description
     source_url: https://baike.baidu.com/item/%E5%AE%9D%E9%B8%A1%E5%91%A8%E5%8E%9F%E5%8D%9A%E7%89%A9%E9%99%A2/53608749
+    authority: encyclopedia
+  - field_path: artifacts[0].image
+    source_url: https://commons.wikimedia.org/wiki/File%3ABronze%20Zun%2C%20Late%20Shang-Early%20Western%20Zhou%2C%2011th%20C.%20BC%201a.jpg
     authority: encyclopedia
   - field_path: artifacts[0].name
     source_url: https://baike.baidu.com/item/%E5%AE%9D%E9%B8%A1%E5%91%A8%E5%8E%9F%E5%8D%9A%E7%89%A9%E9%99%A2/53608749
@@ -919,6 +1305,9 @@
     authority: encyclopedia
   - field_path: artifacts[1].description
     source_url: https://baike.baidu.com/item/%E5%AE%9D%E9%B8%A1%E5%91%A8%E5%8E%9F%E5%8D%9A%E7%89%A9%E9%99%A2/53608749
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E9%99%95%E8%A5%BF%E5%AE%9D%E9%B8%A1%E6%89%B6%E9%A3%8E%E5%8E%BF%E5%BA%84%E7%99%BD%E6%9D%91-%E5%8F%B2%E5%A2%99%E7%9B%98-%E8%A5%BF%E5%91%A8-%E5%AE%9D%E9%B8%A1%E5%91%A8%E5%8E%9F%E5%8D%9A%E7%89%A9%E9%99%A2%2003.jpg
     authority: encyclopedia
   - field_path: artifacts[1].name
     source_url: https://baike.baidu.com/item/%E5%AE%9D%E9%B8%A1%E5%91%A8%E5%8E%9F%E5%8D%9A%E7%89%A9%E9%99%A2/53608749
@@ -1126,6 +1515,9 @@
   - field_path: artifacts[2].name
   - field_path: artifacts[2].period
   - field_path: artifacts[3].description
+  - field_path: artifacts[3].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E5%B8%B8%E4%B9%90%E5%AF%BA%E5%A1%94%E4%B8%9C%E5%A1%94%2005.jpg
+    authority: encyclopedia
   - field_path: artifacts[3].name
   - field_path: artifacts[3].period
   - field_path: corePeriod
@@ -1219,6 +1611,286 @@
     source_url: https://baike.baidu.com/item/%E5%93%8D%E5%A0%82%E5%B1%B1%E7%9F%B3%E7%AA%9F/1280065
     authority: encyclopedia
   - field_path: treasures[4]
+63be34c9-b369-428a-b330-edbf70515cc0:
+  - field_path: artifacts[0].description
+  - field_path: artifacts[0].name
+  - field_path: artifacts[0].period
+  - field_path: artifacts[1].description
+  - field_path: artifacts[1].name
+  - field_path: artifacts[1].period
+  - field_path: corePeriod
+  - field_path: dynastyConnections[0].description
+  - field_path: dynastyConnections[0].dynasty
+  - field_path: dynastyConnections[1].description
+  - field_path: dynastyConnections[1].dynasty
+  - field_path: dynastyConnections[2].description
+  - field_path: dynastyConnections[2].dynasty
+  - field_path: dynastyCoverage
+  - field_path: halls[0]
+  - field_path: halls[1]
+  - field_path: halls[2]
+  - field_path: halls[3]
+  - field_path: halls[4]
+  - field_path: halls[5]
+  - field_path: halls[6]
+  - field_path: halls[7]
+  - field_path: halls[8]
+  - field_path: halls[9]
+  - field_path: lat
+  - field_path: level
+  - field_path: lng
+  - field_path: location
+  - field_path: name
+    source_url: https://www.gardensmuseum.cn/web/snzt_content?id=4026ea87621e1f2b0162560feac70377
+    authority: official
+  - field_path: specialty
+  - field_path: timeline
+  - field_path: treasures[0]
+  - field_path: treasures[1]
+  - field_path: treasures[2]
+  - field_path: treasures[3]
+66cdfe53-ec02-4828-8732-358a2a0130c5:
+  - field_path: artifacts[0].description
+  - field_path: artifacts[0].name
+  - field_path: artifacts[0].period
+  - field_path: artifacts[1].description
+  - field_path: artifacts[1].name
+  - field_path: artifacts[1].period
+  - field_path: artifacts[2].description
+  - field_path: artifacts[2].name
+  - field_path: artifacts[2].period
+  - field_path: artifacts[3].description
+  - field_path: artifacts[3].name
+  - field_path: artifacts[3].period
+  - field_path: artifacts[4].description
+  - field_path: artifacts[4].name
+  - field_path: artifacts[4].period
+  - field_path: corePeriod
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711464.html
+    authority: government
+  - field_path: dynastyConnections[0].description
+  - field_path: dynastyConnections[0].dynasty
+  - field_path: dynastyConnections[1].description
+  - field_path: dynastyConnections[1].dynasty
+  - field_path: dynastyConnections[2].description
+  - field_path: dynastyConnections[2].dynasty
+  - field_path: dynastyCoverage
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711464.html
+    authority: government
+  - field_path: halls[0]
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1729028/1729029/index.html
+    authority: government
+  - field_path: halls[1]
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1729028/1729029/index.html
+    authority: government
+  - field_path: lat
+  - field_path: level
+  - field_path: lng
+  - field_path: location
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711464.html
+    authority: government
+  - field_path: name
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711464.html
+    authority: government
+  - field_path: specialty
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711464.html
+    authority: government
+  - field_path: timeline
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711464.html
+    authority: government
+  - field_path: treasures[0]
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1729028/1729029/index.html
+    authority: government
+  - field_path: treasures[1]
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1729028/1729029/index.html
+    authority: government
+  - field_path: treasures[2]
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711464.html
+    authority: government
+  - field_path: treasures[3]
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711464.html
+    authority: government
+  - field_path: treasures[4]
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711464.html
+    authority: government
+68c796b2-a0e3-441e-b525-71555b4e59d0:
+  - field_path: artifacts[0].description
+    source_url: https://www.bjp.org.cn/twgjj/index.shtml
+    authority: official
+  - field_path: artifacts[0].name
+    source_url: https://www.bjp.org.cn/twgjj/index.shtml
+    authority: official
+  - field_path: artifacts[0].period
+    source_url: https://www.bjp.org.cn/twgjj/index.shtml
+    authority: official
+  - field_path: artifacts[1].description
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[1].name
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[1].period
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[2].description
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[2].name
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[2].period
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[3].description
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[3].name
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[3].period
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[4].description
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[4].name
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[4].period
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[5].description
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[5].name
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[5].period
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[6].description
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[6].name
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[6].period
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[7].description
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[7].name
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[7].period
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[8].description
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[8].name
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: artifacts[8].period
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: corePeriod
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/lyjq/3A/bjtwg/202210/t20221020_2840080.html
+    authority: government
+  - field_path: dynastyConnections[0].description
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: dynastyConnections[0].dynasty
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: dynastyConnections[1].description
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: dynastyConnections[1].dynasty
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: dynastyConnections[2].description
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: dynastyConnections[2].dynasty
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: dynastyConnections[3].description
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: dynastyConnections[3].dynasty
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: dynastyCoverage
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: halls[0]
+    source_url: https://www.bjp.org.cn/twgjj/index.shtml
+    authority: official
+  - field_path: halls[1]
+    source_url: https://www.bjp.org.cn/twgjj/index.shtml
+    authority: official
+  - field_path: halls[2]
+    source_url: https://www.bjp.org.cn/twgjj/index.shtml
+    authority: official
+  - field_path: halls[3]
+    source_url: https://www.bjp.org.cn/twgjj/index.shtml
+    authority: official
+  - field_path: halls[4]
+    source_url: https://www.bjp.org.cn/twgjj/index.shtml
+    authority: official
+  - field_path: halls[5]
+    source_url: https://www.bjp.org.cn/twgjj/index.shtml
+    authority: official
+  - field_path: halls[6]
+    source_url: https://www.bjp.org.cn/twgjj/index.shtml
+    authority: official
+  - field_path: halls[7]
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: halls[8]
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: lat
+    source_url: https://www.bjp.org.cn/cgzn/ylzn/index.shtml
+    authority: official
+  - field_path: level
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: lng
+    source_url: https://www.bjp.org.cn/cgzn/ylzn/index.shtml
+    authority: official
+  - field_path: location
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/lyjq/3A/bjtwg/202210/t20221020_2840080.html
+    authority: government
+  - field_path: name
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/lyjq/3A/bjtwg/202210/t20221020_2840080.html
+    authority: government
+  - field_path: specialty
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/lyjq/3A/bjtwg/202210/t20221020_2840080.html
+    authority: government
+  - field_path: timeline
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/lyjq/3A/bjtwg/202210/t20221020_2840080.html
+    authority: government
+  - field_path: treasures[0]
+    source_url: https://www.bjp.org.cn/twgjj/index.shtml
+    authority: official
+  - field_path: treasures[1]
+    source_url: https://www.bjp.org.cn/twgjj/index.shtml
+    authority: official
+  - field_path: treasures[2]
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: treasures[3]
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: treasures[4]
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
+  - field_path: treasures[5]
+    source_url: https://www.bjp.org.cn/ggxt/index.shtml
+    authority: official
 6d90c01d-efe7-45e5-a39a-e28a10298fa2:
   - field_path: artifacts[0].description
     source_url: https://baike.baidu.com/item/%E7%99%BD%E9%A9%AC%E5%AF%BA/4680
@@ -1231,6 +1903,9 @@
     authority: encyclopedia
   - field_path: artifacts[1].description
     source_url: https://baike.baidu.com/item/%E7%99%BD%E9%A9%AC%E5%AF%BA/4680
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E8%85%BE%E5%86%B2%E5%8D%9A%E7%89%A9%E9%A6%86-%E6%98%8E%E4%BB%A3-%E5%8E%9F%E6%96%87%E5%8C%96%E9%A6%86%E7%A7%BB%E4%BA%A4-%E5%A4%A7%E9%93%9C%E9%92%9F.jpg
     authority: encyclopedia
   - field_path: artifacts[1].name
     source_url: https://baike.baidu.com/item/%E7%99%BD%E9%A9%AC%E5%AF%BA/4680
@@ -1253,6 +1928,9 @@
   - field_path: artifacts[3].description
     source_url: https://baike.baidu.com/item/%E7%99%BD%E9%A9%AC%E5%AF%BA/4680
     authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://baike.baidu.com/view/6749039.htm
+    authority: encyclopedia
   - field_path: artifacts[3].name
     source_url: https://baike.baidu.com/item/%E7%99%BD%E9%A9%AC%E5%AF%BA/4680
     authority: encyclopedia
@@ -1270,6 +1948,9 @@
     authority: encyclopedia
   - field_path: artifacts[5].description
     source_url: https://baike.baidu.com/item/%E7%99%BD%E9%A9%AC%E5%AF%BA/4680
+    authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://www.wikidata.org/wiki/Q1641020
     authority: encyclopedia
   - field_path: artifacts[5].name
     source_url: https://baike.baidu.com/item/%E7%99%BD%E9%A9%AC%E5%AF%BA/4680
@@ -1409,6 +2090,154 @@
     source_url: https://baike.baidu.com/item/%E7%99%BD%E9%A9%AC%E5%AF%BA/4680
     authority: encyclopedia
   - field_path: treasures[6]
+706747f5-3e5a-4883-ad52-67c7169d70fc:
+  - field_path: artifacts[0].description
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: artifacts[0].name
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: artifacts[0].period
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: artifacts[1].description
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: artifacts[1].name
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: artifacts[1].period
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: artifacts[2].description
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: artifacts[2].name
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: artifacts[2].period
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: artifacts[3].description
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362778/364353/index.html
+    authority: government
+  - field_path: artifacts[3].name
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362778/364353/index.html
+    authority: government
+  - field_path: artifacts[3].period
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362778/364353/index.html
+    authority: government
+  - field_path: corePeriod
+    source_url: http://tiantanpark.cn/detail/1286.html
+    authority: other
+  - field_path: dynastyConnections[0].description
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: dynastyConnections[0].dynasty
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: dynastyConnections[1].description
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: dynastyConnections[1].dynasty
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: dynastyConnections[2].description
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362778/364353/index.html
+    authority: government
+  - field_path: dynastyConnections[2].dynasty
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362778/364353/index.html
+    authority: government
+  - field_path: dynastyConnections[3].description
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362778/364353/index.html
+    authority: government
+  - field_path: dynastyConnections[3].dynasty
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362778/364353/index.html
+    authority: government
+  - field_path: dynastyCoverage
+    source_url: https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_733103.html
+    authority: government
+  - field_path: halls[0]
+    source_url: https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_733103.html
+    authority: government
+  - field_path: halls[1]
+    source_url: https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_733103.html
+    authority: government
+  - field_path: halls[2]
+    source_url: https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_733103.html
+    authority: government
+  - field_path: halls[3]
+    source_url: https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_733103.html
+    authority: government
+  - field_path: halls[4]
+    source_url: https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_733103.html
+    authority: government
+  - field_path: halls[5]
+    source_url: https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_733103.html
+    authority: government
+  - field_path: halls[6]
+    source_url: https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_733103.html
+    authority: government
+  - field_path: halls[7]
+    source_url: https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_733103.html
+    authority: government
+  - field_path: halls[8]
+    source_url: https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_733103.html
+    authority: government
+  - field_path: lat
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362778/364353/index.html
+    authority: government
+  - field_path: level
+    source_url: https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_733103.html
+    authority: government
+  - field_path: lng
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362778/364353/index.html
+    authority: government
+  - field_path: location
+    source_url: http://tiantanpark.cn/detail/1286.html
+    authority: other
+  - field_path: name
+    source_url: http://tiantanpark.cn/detail/1286.html
+    authority: other
+  - field_path: specialty
+    source_url: http://tiantanpark.cn/detail/1286.html
+    authority: other
+  - field_path: timeline
+    source_url: https://gygl.beijing.gov.cn/mlgy/mlgy_lsmy/201911/t20191129_733103.html
+    authority: government
+  - field_path: treasures[0]
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: treasures[10]
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: treasures[1]
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: treasures[2]
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: treasures[3]
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: treasures[4]
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: treasures[5]
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: treasures[6]
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: treasures[7]
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: treasures[8]
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
+  - field_path: treasures[9]
+    source_url: https://tiantanpark.cn/aboutus/
+    authority: other
 799daa55-94c0-4ef7-bdf8-21cff39e6c6b:
   - field_path: artifacts[0].description
     source_url: https://baike.baidu.com/item/%E6%89%BF%E5%BE%B7%E9%81%BF%E6%9A%91%E5%B1%B1%E5%BA%84%E5%8D%9A%E7%89%A9%E9%99%A2/64919556
@@ -1420,6 +2249,9 @@
     source_url: https://baike.baidu.com/item/%E6%89%BF%E5%BE%B7%E9%81%BF%E6%9A%91%E5%B1%B1%E5%BA%84%E5%8D%9A%E7%89%A9%E9%99%A2/64919556
     authority: encyclopedia
   - field_path: artifacts[1].description
+  - field_path: artifacts[1].image
+    source_url: https://baike.baidu.com/item/%E9%93%9C%E9%8E%8F%E9%87%91%E5%87%A4%E5%87%B0%E8%84%8A%E5%85%BD
+    authority: encyclopedia
   - field_path: artifacts[1].name
   - field_path: artifacts[1].period
   - field_path: artifacts[2].description
@@ -1502,10 +2334,155 @@
   - field_path: treasures[5]
     source_url: https://baike.baidu.com/item/%E6%89%BF%E5%BE%B7%E9%81%BF%E6%9A%91%E5%B1%B1%E5%BA%84%E5%8D%9A%E7%89%A9%E9%99%A2/64919556
     authority: encyclopedia
+7a1ddef6-ced8-4c2f-acd8-c7d369943f43:
+  - field_path: corePeriod
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+  - field_path: dynastyConnections[0].description
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+  - field_path: dynastyConnections[0].dynasty
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+  - field_path: dynastyConnections[1].description
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+  - field_path: dynastyConnections[1].dynasty
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+  - field_path: dynastyConnections[2].description
+  - field_path: dynastyConnections[2].dynasty
+  - field_path: dynastyCoverage
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+  - field_path: halls[0]
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1729986/1729988/index.html
+    authority: government
+  - field_path: halls[10]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: halls[11]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: halls[12]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: halls[13]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: halls[14]
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+  - field_path: halls[15]
+  - field_path: halls[1]
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1729986/1729988/index.html
+    authority: government
+  - field_path: halls[2]
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1729986/1729988/index.html
+    authority: government
+  - field_path: halls[3]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: halls[4]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: halls[5]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: halls[6]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: halls[7]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: halls[8]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: halls[9]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: lat
+  - field_path: level
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: lng
+  - field_path: location
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+  - field_path: name
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+  - field_path: specialty
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+  - field_path: timeline
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+  - field_path: treasures[0]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: treasures[1]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: treasures[2]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: treasures[3]
+    source_url: https://www.beijing.gov.cn/renwen/zt/pwzz/zzdb/
+    authority: government
+  - field_path: treasures[4]
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+  - field_path: treasures[5]
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+  - field_path: treasures[6]
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545898/index.html
+    authority: government
+7afef68a-b9d3-48fa-a04e-63c14ee0ec28:
+  - field_path: corePeriod
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545787/index.html
+    authority: government
+  - field_path: dynastyConnections[0].description
+  - field_path: dynastyConnections[0].dynasty
+  - field_path: dynastyConnections[1].description
+  - field_path: dynastyConnections[1].dynasty
+  - field_path: dynastyCoverage
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545787/index.html
+    authority: government
+  - field_path: halls[0]
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545787/index.html
+    authority: government
+  - field_path: halls[1]
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545787/index.html
+    authority: government
+  - field_path: halls[2]
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545787/index.html
+    authority: government
+  - field_path: halls[3]
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545787/index.html
+    authority: government
+  - field_path: lat
+  - field_path: level
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/gdwh/xnt/202107/t20210714_2436543.html
+    authority: government
+  - field_path: lng
+  - field_path: location
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545787/index.html
+    authority: government
+  - field_path: name
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545787/index.html
+    authority: government
+  - field_path: specialty
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545787/index.html
+    authority: government
+  - field_path: timeline
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545787/index.html
+    authority: government
 817569a4-234c-46ce-9bcd-89ef8f271011:
   - field_path: artifacts[0].description
   - field_path: artifacts[0].image
-    source_url: https://commons.wikimedia.org/wiki/File:%E5%94%90%E4%B8%89%E5%BD%A9%E9%87%89%E9%99%B6%E8%BD%BD%E7%89%A9%E9%AA%86%E9%A9%BC.jpg
+    source_url: https://baike.baidu.com/item/%E4%B8%89%E5%BD%A9%E8%BD%BD%E7%89%A9%E9%AA%86%E9%A9%BC
     authority: encyclopedia
   - field_path: artifacts[0].name
   - field_path: artifacts[0].period
@@ -1555,6 +2532,246 @@
   - field_path: treasures[5]
   - field_path: treasures[6]
   - field_path: treasures[7]
+828726c7-fbc5-475b-b8f1-2a6e8bd0676c:
+  - field_path: artifacts[0].description
+  - field_path: artifacts[0].name
+  - field_path: artifacts[0].period
+  - field_path: artifacts[1].description
+  - field_path: artifacts[1].name
+  - field_path: artifacts[1].period
+  - field_path: artifacts[2].description
+  - field_path: artifacts[2].name
+  - field_path: artifacts[2].period
+  - field_path: artifacts[3].description
+  - field_path: artifacts[3].name
+  - field_path: artifacts[3].period
+  - field_path: artifacts[4].description
+  - field_path: artifacts[4].name
+  - field_path: artifacts[4].period
+  - field_path: artifacts[5].description
+  - field_path: artifacts[5].name
+  - field_path: artifacts[5].period
+  - field_path: corePeriod
+    source_url: https://zhuanti.mct.gov.cn/gwfbwg2022_g7yU_1007.html
+    authority: government
+  - field_path: dynastyConnections[0].description
+  - field_path: dynastyConnections[0].dynasty
+  - field_path: dynastyConnections[1].description
+  - field_path: dynastyConnections[1].dynasty
+  - field_path: dynastyConnections[2].description
+  - field_path: dynastyConnections[2].dynasty
+  - field_path: dynastyConnections[3].description
+  - field_path: dynastyConnections[3].dynasty
+  - field_path: dynastyConnections[4].description
+  - field_path: dynastyConnections[4].dynasty
+  - field_path: dynastyCoverage
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zggdwg/202301/t20230112_2897344.html
+    authority: government
+  - field_path: halls[0]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: halls[1]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: halls[2]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: halls[3]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: halls[4]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: halls[5]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: halls[6]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: halls[7]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: halls[8]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zggdwg/202301/t20230112_2897344.html
+    authority: government
+  - field_path: lat
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: level
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zggdwg/202301/t20230112_2897344.html
+    authority: government
+  - field_path: lng
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: location
+    source_url: https://zhuanti.mct.gov.cn/gwfbwg2022_g7yU_1007.html
+    authority: government
+  - field_path: name
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zggdwg/202301/t20230112_2897344.html
+    authority: government
+  - field_path: specialty
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zggdwg/202301/t20230112_2897344.html
+    authority: government
+  - field_path: timeline
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zggdwg/202301/t20230112_2897344.html
+    authority: government
+  - field_path: treasures[0]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: treasures[10]
+    source_url: https://zhuanti.mct.gov.cn/gwfbwg2022_g7yU_1007.html
+    authority: government
+  - field_path: treasures[11]
+    source_url: https://zhuanti.mct.gov.cn/gwfbwg2022_g7yU_1007.html
+    authority: government
+  - field_path: treasures[1]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: treasures[2]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: treasures[3]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: treasures[4]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: treasures[5]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: treasures[6]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: treasures[7]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: treasures[8]
+    source_url: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+    authority: other
+  - field_path: treasures[9]
+    source_url: https://zhuanti.mct.gov.cn/gwfbwg2022_g7yU_1007.html
+    authority: government
+84e9a6e2-1580-4a84-a61c-6d5fe78b610c:
+  - field_path: corePeriod
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: dynastyCoverage
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[0]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[10]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[11]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[12]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[13]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[14]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[15]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[16]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[17]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[18]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[19]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[1]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[20]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[21]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[22]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[23]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[2]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[3]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[4]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[5]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[6]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[7]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[8]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: halls[9]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: lat
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: level
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: lng
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: location
+    source_url: https://www.beijing.gov.cn/renwen/cshd/202308/t20230802_3212877.html
+    authority: government
+  - field_path: name
+    source_url: https://www.beijing.gov.cn/renwen/cshd/202308/t20230802_3212877.html
+    authority: government
+  - field_path: specialty
+    source_url: https://www.beijing.gov.cn/renwen/cshd/202308/t20230802_3212877.html
+    authority: government
+  - field_path: timeline
+    source_url: https://www.beijing.gov.cn/renwen/cshd/202308/t20230802_3212877.html
+    authority: government
+  - field_path: treasures[0]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: treasures[1]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: treasures[2]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: treasures[3]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: treasures[4]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: treasures[5]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
+  - field_path: treasures[6]
+    source_url: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+    authority: government
 88f42955-6058-485d-95e4-c7711d85d326:
   - field_path: artifacts[0].description
   - field_path: artifacts[0].image
@@ -1618,10 +2835,75 @@
   - field_path: treasures[7]
   - field_path: treasures[8]
   - field_path: treasures[9]
+8938ea2e-9aac-4f69-a632-63ae2c75c2a9:
+  - field_path: artifacts[0].description
+  - field_path: artifacts[0].name
+  - field_path: artifacts[0].period
+  - field_path: artifacts[1].description
+  - field_path: artifacts[1].name
+  - field_path: artifacts[1].period
+  - field_path: artifacts[2].description
+  - field_path: artifacts[2].name
+  - field_path: artifacts[2].period
+  - field_path: artifacts[3].description
+  - field_path: artifacts[3].name
+  - field_path: artifacts[3].period
+  - field_path: corePeriod
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgdzbwg/202301/t20230112_2897313.html
+    authority: government
+  - field_path: dynastyConnections[0].description
+  - field_path: dynastyConnections[0].dynasty
+  - field_path: dynastyConnections[1].description
+  - field_path: dynastyConnections[1].dynasty
+  - field_path: dynastyCoverage
+  - field_path: halls[0]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgdzbwg/202301/t20230112_2897313.html
+    authority: government
+  - field_path: halls[1]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgdzbwg/202301/t20230112_2897313.html
+    authority: government
+  - field_path: halls[2]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgdzbwg/202301/t20230112_2897313.html
+    authority: government
+  - field_path: halls[3]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgdzbwg/202301/t20230112_2897313.html
+    authority: government
+  - field_path: halls[4]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgdzbwg/202301/t20230112_2897313.html
+    authority: government
+  - field_path: halls[5]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgdzbwg/202301/t20230112_2897313.html
+    authority: government
+  - field_path: lat
+  - field_path: level
+  - field_path: lng
+  - field_path: location
+  - field_path: name
+    source_url: https://www.museumschina.cn/museums/details?id=202208221127261827
+    authority: association
+  - field_path: specialty
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgdzbwg/202301/t20230112_2897313.html
+    authority: government
+  - field_path: timeline
+  - field_path: treasures[0]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgdzbwg/202301/t20230112_2897313.html
+    authority: government
+  - field_path: treasures[1]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgdzbwg/202301/t20230112_2897313.html
+    authority: government
+  - field_path: treasures[2]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgdzbwg/202301/t20230112_2897313.html
+    authority: government
+  - field_path: treasures[3]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgdzbwg/202301/t20230112_2897313.html
+    authority: government
 8d05e910-ec8f-4d99-8cba-140f10bd9ef2:
   - field_path: artifacts[0].description
     source_url: http://hylae.com/index.php?ac=article&at=list&tid=10
     authority: other
+  - field_path: artifacts[0].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E5%85%83%E9%AA%91%E9%A9%AC%E6%AD%A6%E5%A3%AB%E4%BF%913.jpg
+    authority: encyclopedia
   - field_path: artifacts[0].name
     source_url: http://hylae.com/index.php?ac=article&at=list&tid=10
     authority: other
@@ -1640,6 +2922,9 @@
   - field_path: artifacts[2].description
     source_url: http://hylae.com/index.php?ac=article&at=list&tid=10
     authority: other
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E6%9C%9B%E4%B8%9B%E5%8D%9A%E7%89%A9%E9%A6%86-%E5%8A%A8%E7%89%A9%E6%AE%8B%E4%BF%91%EF%BC%88%E4%B8%9C%E6%B1%89%EF%BC%89.jpg
+    authority: encyclopedia
   - field_path: artifacts[2].name
     source_url: http://hylae.com/index.php?ac=article&at=list&tid=10
     authority: other
@@ -1721,6 +3006,85 @@
   - field_path: treasures[8]
     source_url: http://www.hylae.com/index.php?ac=article&at=read&did=295
     authority: other
+9030f139-d6da-45f9-b3ed-69d23d3e9d5c:
+  - field_path: corePeriod
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: dynastyConnections[0].description
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: dynastyConnections[0].dynasty
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: dynastyConnections[1].description
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: dynastyConnections[1].dynasty
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: dynastyConnections[2].description
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: dynastyConnections[2].dynasty
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: dynastyCoverage
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/gdwh/kmhgzjbwg/202107/t20210705_2429470.html
+    authority: government
+  - field_path: halls[0]
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: halls[1]
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: halls[2]
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: halls[3]
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: halls[4]
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: halls[5]
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: halls[6]
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: halls[7]
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: halls[8]
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: lat
+  - field_path: level
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: lng
+  - field_path: location
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/gdwh/kmhgzjbwg/202107/t20210705_2429470.html
+    authority: government
+  - field_path: name
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/gdwh/kmhgzjbwg/202107/t20210705_2429470.html
+    authority: government
+  - field_path: specialty
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/gdwh/kmhgzjbwg/202107/t20210705_2429470.html
+    authority: government
+  - field_path: timeline
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: treasures[0]
+    source_url: http://www.kmgzj.cn/common/index.aspx?nodeid=58
+    authority: other
+  - field_path: treasures[1]
+    source_url: http://www.kmgzj.cn/cpfl/index.aspx?nodeid=35
+    authority: other
+  - field_path: treasures[2]
+  - field_path: treasures[3]
+  - field_path: treasures[4]
+  - field_path: treasures[5]
 92a0de78-943a-412a-b064-45327f3c3573:
   - field_path: corePeriod
   - field_path: dynastyConnections[0].description
@@ -1749,9 +3113,82 @@
     authority: government
   - field_path: specialty
   - field_path: timeline
+982b2b96-0313-47a6-954b-2ff4c822b1a4:
+  - field_path: artifacts[0].description
+  - field_path: artifacts[0].name
+  - field_path: artifacts[0].period
+  - field_path: corePeriod
+    source_url: https://www.bjstoneartmuseum.org.cn/Museum/
+    authority: official
+  - field_path: dynastyConnections[0].description
+    source_url: https://www.bjstoneartmuseum.org.cn/Museum/
+    authority: official
+  - field_path: dynastyConnections[0].dynasty
+    source_url: https://www.bjstoneartmuseum.org.cn/Museum/
+    authority: official
+  - field_path: dynastyCoverage
+    source_url: https://www.bjstoneartmuseum.org.cn/Museum/
+    authority: official
+  - field_path: halls[0]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/bjskysbwg/202301/t20230112_2897489.html
+    authority: government
+  - field_path: halls[1]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/bjskysbwg/202301/t20230112_2897489.html
+    authority: government
+  - field_path: halls[2]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/bjskysbwg/202301/t20230112_2897489.html
+    authority: government
+  - field_path: halls[3]
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/bjskysbwg/202301/t20230112_2897489.html
+    authority: government
+  - field_path: halls[4]
+    source_url: https://www.bjstoneartmuseum.org.cn/CN/service/zhantingfenbu/
+    authority: official
+  - field_path: halls[5]
+    source_url: https://www.bjstoneartmuseum.org.cn/CN/service/zhantingfenbu/
+    authority: official
+  - field_path: halls[6]
+    source_url: https://www.bjstoneartmuseum.org.cn/CN/service/zhantingfenbu/
+    authority: official
+  - field_path: halls[7]
+    source_url: https://www.bjstoneartmuseum.org.cn/CN/service/zhantingfenbu/
+    authority: official
+  - field_path: lat
+  - field_path: level
+  - field_path: lng
+  - field_path: location
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/bjskysbwg/202301/t20230112_2897489.html
+    authority: government
+  - field_path: name
+    source_url: https://www.bjstoneartmuseum.org.cn/CN/service/zhantingfenbu/
+    authority: official
+  - field_path: specialty
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/bjskysbwg/202301/t20230112_2897489.html
+    authority: government
+  - field_path: timeline
+    source_url: https://www.bjstoneartmuseum.org.cn/Museum/
+    authority: official
+  - field_path: treasures[0]
+    source_url: https://www.bjstoneartmuseum.org.cn/Museum/
+    authority: official
+  - field_path: treasures[1]
+    source_url: https://www.bjstoneartmuseum.org.cn/Museum/
+    authority: official
+  - field_path: treasures[2]
+    source_url: https://www.bjstoneartmuseum.org.cn/Museum/
+    authority: official
+  - field_path: treasures[3]
+    source_url: https://www.bjstoneartmuseum.org.cn/Museum/
+    authority: official
 9b3cf4df-a9f9-42b7-9418-adc2560c13c5:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:合掌露齿菩萨.jpg
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File%3ANingxia%20Museum%20glazed%20architectural%20ornament%20in%20the%20form%20of%20a%20chiwen.jpg
+    authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E5%AE%9C%E5%85%B4%E5%B8%82%E5%A4%A7%E8%A7%89%E5%AF%BA%E5%A4%A7%E9%9B%84%E5%AE%9D%E6%AE%BF%E5%A3%81%E7%94%BB%20-%20panoramio.jpg
     authority: encyclopedia
   - field_path: corePeriod
     source_url: https://baike.baidu.com/item/%E5%8D%8E%E4%B8%A5%E5%AF%BA/2285867
@@ -1850,6 +3287,9 @@
   - field_path: artifacts[1].name
   - field_path: artifacts[1].period
   - field_path: artifacts[2].description
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File:Tomb_of_Emperor_Xuanwu_of_Northern_Wei_3.jpg
+    authority: encyclopedia
   - field_path: artifacts[2].name
   - field_path: artifacts[2].period
   - field_path: artifacts[3].description
@@ -1915,23 +3355,170 @@
   - field_path: treasures[5]
     source_url: https://www.gumumuseum.cn/
     authority: official
+9e21861b-0527-4f2d-8dca-20b0216a86fb:
+  - field_path: artifacts[0].description
+  - field_path: artifacts[0].name
+  - field_path: artifacts[0].period
+  - field_path: artifacts[1].description
+  - field_path: artifacts[1].name
+  - field_path: artifacts[1].period
+  - field_path: corePeriod
+    source_url: https://www.beijing.gov.cn/gate/big5/www.beijing.gov.cn/renwen/zt/gjdjbwg/yw/202207/t20220720_2775592.html
+    authority: government
+  - field_path: dynastyConnections[0].description
+    source_url: https://www.nlc.cn/nmcb/bwgjj/djbwgjs/index.shtml
+    authority: other
+  - field_path: dynastyConnections[0].dynasty
+    source_url: https://www.nlc.cn/nmcb/bwgjj/djbwgjs/index.shtml
+    authority: other
+  - field_path: dynastyConnections[1].description
+  - field_path: dynastyConnections[1].dynasty
+  - field_path: dynastyConnections[2].description
+  - field_path: dynastyConnections[2].dynasty
+  - field_path: dynastyCoverage
+    source_url: https://www.beijing.gov.cn/gate/big5/www.beijing.gov.cn/renwen/zt/gjdjbwg/yw/202207/t20220720_2775592.html
+    authority: government
+  - field_path: halls[0]
+    source_url: https://www.nlc.cn/nmcb/bwgjj/djbwgjs/index.shtml
+    authority: other
+  - field_path: halls[1]
+    source_url: https://www.nlc.cn/nmcb/bwgjj/djbwgjs/index.shtml
+    authority: other
+  - field_path: halls[2]
+    source_url: https://www.nlc.cn/nmcb/bwgjj/djbwgjs/index.shtml
+    authority: other
+  - field_path: halls[3]
+    source_url: https://www.nlc.cn/nmcb/bwgjj/djbwgjs/index.shtml
+    authority: other
+  - field_path: halls[4]
+    source_url: https://www.nlc.cn/nmcb/bwgjj/djbwgjs/index.shtml
+    authority: other
+  - field_path: lat
+    source_url: https://www.nlc.cn/nmcb/cgzn/index.shtml
+    authority: other
+  - field_path: level
+    source_url: https://www.beijing.gov.cn/gate/big5/www.beijing.gov.cn/renwen/zt/gjdjbwg/yw/202207/t20220720_2775592.html
+    authority: government
+  - field_path: lng
+    source_url: https://www.nlc.cn/nmcb/cgzn/index.shtml
+    authority: other
+  - field_path: location
+    source_url: https://www.beijing.gov.cn/gate/big5/www.beijing.gov.cn/renwen/zt/gjdjbwg/yw/202207/t20220720_2775592.html
+    authority: government
+  - field_path: name
+    source_url: https://www.beijing.gov.cn/gate/big5/www.beijing.gov.cn/renwen/zt/gjdjbwg/yw/202207/t20220720_2775592.html
+    authority: government
+  - field_path: specialty
+    source_url: https://www.beijing.gov.cn/gate/big5/www.beijing.gov.cn/renwen/zt/gjdjbwg/yw/202207/t20220720_2775592.html
+    authority: government
+  - field_path: timeline
+    source_url: https://www.beijing.gov.cn/gate/big5/www.beijing.gov.cn/renwen/zt/gjdjbwg/yw/202207/t20220720_2775592.html
+    authority: government
+  - field_path: treasures[0]
+    source_url: https://www.nlc.cn/nmcb/bwgjj/djbwgjs/index.shtml
+    authority: other
+  - field_path: treasures[1]
+    source_url: https://www.nlc.cn/nmcb/cgzn/index.shtml
+    authority: other
+  - field_path: treasures[2]
+    source_url: https://www.nlc.cn/nmcb/cgzn/index.shtml
+    authority: other
+a489df69-d014-4c42-8dfc-327cb07efab1:
+  - field_path: corePeriod
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/546451/index.html
+    authority: government
+  - field_path: dynastyConnections[0].description
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: dynastyConnections[0].dynasty
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: dynastyConnections[1].description
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: dynastyConnections[1].dynasty
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: dynastyConnections[2].description
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: dynastyConnections[2].dynasty
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: dynastyConnections[3].description
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: dynastyConnections[3].dynasty
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: dynastyConnections[4].description
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: dynastyConnections[4].dynasty
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: dynastyConnections[5].description
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: dynastyConnections[5].dynasty
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: dynastyCoverage
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/546451/index.html
+    authority: government
+  - field_path: halls[0]
+  - field_path: lat
+  - field_path: level
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: lng
+  - field_path: location
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/qgzdwwbhdw/wlccbdl/202211/t20221101_2849555.html
+    authority: government
+  - field_path: name
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/qgzdwwbhdw/wlccbdl/202211/t20221101_2849555.html
+    authority: government
+  - field_path: specialty
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/qgzdwwbhdw/wlccbdl/202211/t20221101_2849555.html
+    authority: government
+  - field_path: timeline
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: treasures[0]
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: treasures[1]
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: treasures[2]
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: treasures[3]
+    source_url: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+    authority: government
+  - field_path: treasures[4]
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/546451/index.html
+    authority: government
 anhui:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:Warring_States_Bronze_ZHU_KE_Ding_1a.jpg
     authority: encyclopedia
   - field_path: artifacts[1].image
-    source_url: https://commons.wikimedia.org/wiki/File:凌家滩玉鹰.jpeg
+    source_url: https://baike.baidu.com/view/6774420.htm
+    authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File:%E9%94%99%E9%87%91%E2%80%9C%E9%84%82%E5%90%9B%E5%90%AF%E2%80%9D%E9%9D%92%E9%93%9C%E8%8A%8203699.jpg
     authority: encyclopedia
   - field_path: artifacts[3].image
-    source_url: https://commons.wikimedia.org/wiki/File:Jade_human_figure_at_Lingjiatan_Site,_2017-05-21.jpg
-    authority: encyclopedia
-  - field_path: artifacts[5].image
-    source_url: https://commons.wikimedia.org/wiki/File:吴王光剑.jpg
+    source_url: https://baike.baidu.com/view/6774339.htm
     authority: encyclopedia
 b27bc4cc-0ca1-4cf9-a934-9370b40c0732:
   - field_path: artifacts[0].description
     source_url: https://maoling.com/Outline/
     authority: other
+  - field_path: artifacts[0].image
+    source_url: https://baike.baidu.com/view/2951369.htm
+    authority: encyclopedia
   - field_path: artifacts[0].name
     source_url: https://maoling.com/Outline/
     authority: other
@@ -1950,6 +3537,9 @@ b27bc4cc-0ca1-4cf9-a934-9370b40c0732:
   - field_path: artifacts[2].description
     source_url: https://maoling.com/Outline/
     authority: other
+  - field_path: artifacts[2].image
+    source_url: https://baike.baidu.com/view/2951389.htm
+    authority: encyclopedia
   - field_path: artifacts[2].name
     source_url: https://maoling.com/Outline/
     authority: other
@@ -1957,6 +3547,9 @@ b27bc4cc-0ca1-4cf9-a934-9370b40c0732:
     source_url: https://maoling.com/Outline/
     authority: other
   - field_path: artifacts[3].description
+  - field_path: artifacts[3].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E8%8C%82%E9%99%B5%E9%A9%AC%E8%B8%8F%E5%8C%88%E5%A5%B4%E7%9F%B3%E9%9B%95.JPG
+    authority: encyclopedia
   - field_path: artifacts[3].name
   - field_path: artifacts[3].period
   - field_path: artifacts[4].description
@@ -2069,14 +3662,23 @@ b27bc4cc-0ca1-4cf9-a934-9370b40c0732:
     authority: encyclopedia
 banpo:
   - field_path: artifacts[0].image
-    source_url: https://commons.wikimedia.org/wiki/File:人面鱼纹形彩陶盆08736.jpg
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E4%BA%BA%E9%9D%A2%E9%B1%BC%E7%BA%B9%E5%BD%A2%E5%BD%A9%E9%99%B6%E7%9B%8608737.jpg
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A20251026%20Pottery%20Bottle%20with%20Pointed%20Bottom%20from%20Beishouling.jpg
     authority: encyclopedia
 beilin:
+  - field_path: artifacts[0].image
+    source_url: https://upload.wikimedia.org/wikipedia/commons/b/b5/Classiques_sur_pierre.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    authority: encyclopedia
   - field_path: artifacts[1].image
-    source_url: https://commons.wikimedia.org/wiki/File:Stele_of_the_Spread_of_the_Assyrian_Teachings_of_the_Great_Qin_to_the_Central_States_WDL3047.jpg
+    source_url: https://baike.baidu.com/item/%E5%94%90%E5%A4%A7%E7%A7%A6%E6%99%AF%E6%95%99%E6%B5%81%E8%A1%8C%E4%B8%AD%E5%9B%BD%E7%A2%91/23647197
     authority: encyclopedia
   - field_path: artifacts[2].image
-    source_url: https://commons.wikimedia.org/wiki/File:%E5%A4%9A%E5%AE%9D%E5%A1%94%E7%A2%91.%E5%94%90.%E9%A2%9C%E7%9C%9F%E5%8D%BF.%E4%B9%A6.%E6%B8%85%E4%B8%AD%E6%99%9A%E6%9C%9F%E6%8B%93%E7%89%87.%E4%B8%9C%E4%BA%AC%E5%9B%BD%E7%AB%8B%E5%8D%9A%E7%89%A9%E9%A6%86%E8%97%8F.jpg
+    source_url: https://baike.baidu.com/subview/5897892/19797368.htm
+    authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://baike.baidu.com/item/%E9%A2%9C%E7%9C%9F%E5%8D%BF%E9%A2%9C%E5%AE%B6%E5%BA%99%E7%A2%91
     authority: encyclopedia
   - field_path: artifacts[5].image
     source_url: https://commons.wikimedia.org/wiki/File:%E6%9B%B9%E5%85%A8%E7%A2%91-%E4%B8%9C%E6%B1%89%E4%B8%AD%E5%B9%B3%E4%BA%8C%E5%B9%B4%EF%BC%88185%EF%BC%89-%E8%A5%BF%E5%AE%89%E7%A2%91%E6%9E%97%E7%AC%AC%E4%B8%89%E5%AE%A4_2023-09-29_02.jpg
@@ -2089,6 +3691,9 @@ bfd76fa2-1343-4649-91f0-a8bcc3b0b690:
   - field_path: artifacts[0].name
   - field_path: artifacts[0].period
   - field_path: artifacts[1].description
+  - field_path: artifacts[1].image
+    source_url: https://baike.baidu.com/item/%E9%93%9C%E9%8E%8F%E9%87%91%E8%B1%A1%E9%A6%96
+    authority: encyclopedia
   - field_path: artifacts[1].name
   - field_path: artifacts[1].period
   - field_path: artifacts[2].description
@@ -2101,6 +3706,9 @@ bfd76fa2-1343-4649-91f0-a8bcc3b0b690:
   - field_path: artifacts[4].name
   - field_path: artifacts[4].period
   - field_path: artifacts[5].description
+  - field_path: artifacts[5].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E6%98%9F%E6%B5%B7%E5%B9%BF%E5%9C%BA%E4%BD%8D%E4%BA%8E%E4%B8%AD%E5%9B%BD%E5%A4%A7%E8%BF%9E075973.jpg
+    authority: encyclopedia
   - field_path: artifacts[5].name
   - field_path: artifacts[5].period
   - field_path: corePeriod
@@ -2200,16 +3808,25 @@ bingmayong:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:Terracotta_Army_-09-5-11.jpg
     authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://www.wikidata.org/wiki/Q7267775
+    authority: encyclopedia
   - field_path: artifacts[3].image
     source_url: https://commons.wikimedia.org/wiki/File:2023-10-08_Chin_dynasty_Terracotta_Kneeling_Archer_%E7%A7%A6%E5%A7%8B%E7%9A%87%E5%85%B5%E9%A6%AC%E4%BF%91%E5%8D%9A%E7%89%A9%E9%A4%A8%E6%96%87%E7%89%A9%E9%99%B3%E5%88%97%E5%BB%B3%E8%B7%AA%E5%B0%84%E4%BF%91_02.jpg
     authority: encyclopedia
   - field_path: artifacts[4].image
     source_url: https://commons.wikimedia.org/wiki/File:Qin_bronze_swords.jpg
     authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E8%A5%BF%E5%AE%89%E7%A7%A6%E7%9F%B3%E9%93%A0%E7%94%B2.jpg
+    authority: encyclopedia
 c9b31e6a-c677-468d-913e-ce8f400f459a:
   - field_path: artifacts[0].description
     source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545799/index.html
     authority: government
+  - field_path: artifacts[0].image
+    source_url: https://commons.wikimedia.org/wiki/File%3ABeijing%202006%203-71.jpg
+    authority: encyclopedia
   - field_path: artifacts[0].name
     source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545799/index.html
     authority: government
@@ -2218,6 +3835,9 @@ c9b31e6a-c677-468d-913e-ce8f400f459a:
     authority: government
   - field_path: artifacts[1].description
     source_url: https://baike.baidu.com/item/%E5%AE%9A%E9%99%B5%E5%8D%9A%E7%89%A9%E9%A6%86/2977631
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E5%AD%9D%E7%AB%AF%E6%98%BE%E7%9A%87%E5%90%8E%E4%B9%9D%E9%BE%99%E4%B9%9D%E5%87%A4%E5%86%A0.jpeg
     authority: encyclopedia
   - field_path: artifacts[1].name
     source_url: https://baike.baidu.com/item/%E5%AE%9A%E9%99%B5%E5%8D%9A%E7%89%A9%E9%A6%86/2977631
@@ -2236,6 +3856,9 @@ c9b31e6a-c677-468d-913e-ce8f400f459a:
     authority: encyclopedia
   - field_path: artifacts[3].description
     source_url: https://baike.baidu.com/item/%E5%AE%9A%E9%99%B5%E5%8D%9A%E7%89%A9%E9%A6%86/2977631
+    authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E6%85%88%E6%BA%AA%E9%99%B5%E5%9C%B0%E5%AE%AB.jpg
     authority: encyclopedia
   - field_path: artifacts[3].name
     source_url: https://baike.baidu.com/item/%E5%AE%9A%E9%99%B5%E5%8D%9A%E7%89%A9%E9%A6%86/2977631
@@ -2339,19 +3962,169 @@ c9b31e6a-c677-468d-913e-ce8f400f459a:
   - field_path: treasures[6]
     source_url: https://baike.baidu.com/item/%E5%AE%9A%E9%99%B5%E5%8D%9A%E7%89%A9%E9%A6%86/2977631
     authority: encyclopedia
+ccb305e9-5097-423f-b188-3314412b9ffd:
+  - field_path: corePeriod
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/325821617/index.html
+    authority: government
+  - field_path: dynastyConnections[0].description
+  - field_path: dynastyConnections[0].dynasty
+  - field_path: dynastyCoverage
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/325821617/index.html
+    authority: government
+  - field_path: halls[0]
+    source_url: https://www.cpon.cn/cms/p/introduction.html
+    authority: other
+  - field_path: halls[1]
+    source_url: https://www.cpon.cn/cms/p/introduction.html
+    authority: other
+  - field_path: halls[2]
+    source_url: https://www.cpon.cn/cms/p/introduction.html
+    authority: other
+  - field_path: halls[3]
+    source_url: https://www.cpon.cn/cms/p/introduction.html
+    authority: other
+  - field_path: halls[4]
+    source_url: https://www.cpon.cn/cms/p/introduction.html
+    authority: other
+  - field_path: halls[5]
+    source_url: https://www.cpon.cn/cms/p/introduction.html
+    authority: other
+  - field_path: lat
+  - field_path: level
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/325821617/index.html
+    authority: government
+  - field_path: lng
+  - field_path: location
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/325821617/index.html
+    authority: government
+  - field_path: name
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/325821617/index.html
+    authority: government
+  - field_path: specialty
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/325821617/index.html
+    authority: government
+  - field_path: timeline
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/325821617/index.html
+    authority: government
+  - field_path: treasures[0]
+    source_url: https://www.cpon.cn/cms/p/introduction.html
+    authority: other
+  - field_path: treasures[1]
+    source_url: https://www.cpon.cn/cms/p/introduction.html
+    authority: other
+  - field_path: treasures[2]
+    source_url: https://www.cpon.cn/cms/p/introduction.html
+    authority: other
+  - field_path: treasures[3]
+    source_url: https://www.cpon.cn/cms/p/introduction.html
+    authority: other
+  - field_path: treasures[4]
+    source_url: https://www.cpon.cn/cms/p/introduction.html
+    authority: other
+  - field_path: treasures[5]
+    source_url: https://www.cpon.cn/cms/p/introduction.html
+    authority: other
+cdeb8a88-0c2a-4b55-8257-c2bd23f3a0d7:
+  - field_path: artifacts[0].description
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: artifacts[0].name
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: artifacts[0].period
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: artifacts[1].description
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: artifacts[1].name
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: artifacts[1].period
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: corePeriod
+    source_url: http://www.luxunmuseum.com.cn/luxunguji/
+    authority: official
+  - field_path: dynastyConnections[0].description
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: dynastyConnections[0].dynasty
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: dynastyConnections[1].description
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: dynastyConnections[1].dynasty
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: dynastyCoverage
+  - field_path: halls[0]
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: halls[1]
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: halls[2]
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: lat
+  - field_path: level
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/546583/index.html
+    authority: government
+  - field_path: lng
+  - field_path: location
+    source_url: http://www.luxunmuseum.com.cn/luxunguji/
+    authority: official
+  - field_path: name
+    source_url: http://www.luxunmuseum.com.cn/luxunguji/
+    authority: official
+  - field_path: specialty
+    source_url: http://www.luxunmuseum.com.cn/luxunguji/
+    authority: official
+  - field_path: timeline
+    source_url: http://www.luxunmuseum.com.cn/luxunguji/
+    authority: official
+  - field_path: treasures[0]
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: treasures[1]
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: treasures[2]
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
+  - field_path: treasures[3]
+    source_url: http://www.luxunmuseum.com.cn/bowuguanjieshao/
+    authority: official
 chengdu:
+  - field_path: artifacts[0].image
+    source_url: https://commons.wikimedia.org/wiki/File:%E6%88%90%E9%83%BD%E8%80%81%E5%AE%98%E5%B1%B1%E5%A2%93%E5%9C%B0%E5%87%BA%E5%9C%9F-%E7%BB%87%E6%9C%BA-%E8%A5%BF%E6%B1%89-%E6%88%90%E9%83%BD%E8%80%83%E5%8F%A4%E4%B8%AD%E5%BF%83_2024-10-17.jpg
+    authority: encyclopedia
   - field_path: artifacts[1].image
-    source_url: https://commons.wikimedia.org/wiki/File:石犀-秦汉-成都博物馆_01.jpg
+    source_url: https://baike.baidu.com/subview/2897864/2897864.htm
     authority: encyclopedia
   - field_path: artifacts[2].image
-    source_url: https://commons.wikimedia.org/wiki/File:成都老官山汉墓-经穴漆人-西汉（前202-8年）-成都市博物馆_2025-02-28.jpg
+    source_url: https://baike.baidu.com/item/%E4%BA%BA%E4%BD%93%E7%BB%8F%E7%A9%B4%E6%BC%86%E4%BA%BA
     authority: encyclopedia
   - field_path: artifacts[3].image
     source_url: https://commons.wikimedia.org/wiki/File:成都老官山墓地出土-医简-西汉-成都考古中心_2024-10-17.jpg
     authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E5%92%8C%E9%A1%BA%E5%B0%8F%E5%B7%B7-%E8%85%BE%E5%86%B2%E7%9A%AE%E5%BD%B1%E6%88%8F%2001.jpg
+    authority: encyclopedia
 chongqing:
   - field_path: artifacts[0].image
-    source_url: https://commons.wikimedia.org/wiki/File:白鹤梁唐刻、清刻石鱼.jpg
+    source_url: https://baike.baidu.com/subview/1137752/1137752.htm
+    authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E6%9C%9B%E4%B8%9B%E5%8D%9A%E7%89%A9%E9%A6%86-%E7%94%BB%E5%83%8F%E7%9F%B3%E6%A3%BA%EF%BC%88%E4%B8%9C%E6%B1%89%EF%BC%89%EF%BC%88%E5%A4%8D%E5%88%B6%EF%BC%89%2001.jpg
+    authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A20250522%20Ming%20Yuzhen%20Chenlieguan.jpg
+    authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E4%B9%9D%E6%B1%9F%E5%B8%82%E9%94%81%E6%B1%9F%E6%A5%BC.JPG
     authority: encyclopedia
   - field_path: artifacts[7].image
     source_url: https://commons.wikimedia.org/wiki/File:漢巴郡朐忍令景雲碑.jpg
@@ -2361,7 +4134,7 @@ d07ca61f-47b5-4b8f-b061-ab0b67017ae9:
     source_url: http://www.ncha.gov.cn/art/2018/12/4/art_723_152961.html
     authority: government
   - field_path: artifacts[0].image
-    source_url: https://commons.wikimedia.org/wiki/File:%E6%AD%A3%E5%AE%9A%E9%9A%86%E5%85%B4%E5%AF%BA%E6%91%A9%E5%B0%BC%E6%AE%BF%E6%97%A7%E5%BD%B1.jpg
+    source_url: https://baike.baidu.com/view/1732580.htm
     authority: encyclopedia
   - field_path: artifacts[0].name
     source_url: http://www.ncha.gov.cn/art/2018/12/4/art_723_152961.html
@@ -2408,6 +4181,9 @@ d07ca61f-47b5-4b8f-b061-ab0b67017ae9:
   - field_path: artifacts[4].description
     source_url: https://www.sjz.gov.cn/columns/aee01a7b-4f7d-42b0-a53b-8c8029713e07/202509/25/c03eefbd-36f0-44b4-9e11-5d93244b223d.html
     authority: government
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E9%BE%99%E8%97%8F%E5%AF%BA-%E5%9B%BD%E4%BF%9D%E7%A2%91%202025-06-09.jpg
+    authority: encyclopedia
   - field_path: artifacts[4].name
     source_url: https://www.sjz.gov.cn/columns/aee01a7b-4f7d-42b0-a53b-8c8029713e07/202509/25/c03eefbd-36f0-44b4-9e11-5d93244b223d.html
     authority: government
@@ -2569,6 +4345,9 @@ d5a151c4-b6ba-4b0b-a3c0-a74ee9843eee:
   - field_path: artifacts[3].name
   - field_path: artifacts[3].period
   - field_path: artifacts[4].description
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File:%E7%A5%AD%E7%BA%A2%E9%87%89%E7%8E%89%E5%A3%B6%E6%98%A5%E7%93%B6_20260218_162102.jpg
+    authority: encyclopedia
   - field_path: artifacts[4].name
   - field_path: artifacts[4].period
   - field_path: corePeriod
@@ -2625,6 +4404,9 @@ da80ec30-88cf-4f4f-ae53-1d277f18c96a:
     authority: encyclopedia
   - field_path: artifacts[1].description
     source_url: https://baike.baidu.com/item/%E6%B3%95%E6%BA%90%E5%AF%BA/50398
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File%3ABright%20Filial%20Piety%20Temple.jpg
     authority: encyclopedia
   - field_path: artifacts[1].name
     source_url: https://baike.baidu.com/item/%E6%B3%95%E6%BA%90%E5%AF%BA/50398
@@ -2726,6 +4508,9 @@ da80ec30-88cf-4f4f-ae53-1d277f18c96a:
     source_url: https://wwj.beijing.gov.cn/bjww/362771/362772/545811/index.html
     authority: government
 dingzhou:
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A20241025%20White-Glazed%20Porcelain%20Bowl%20with%20Six%20Ridges%2C%20Ding%20Kiln%2C%20Song%20Dynasty.jpg
+    authority: encyclopedia
   - field_path: artifacts[6].image
     source_url: https://commons.wikimedia.org/wiki/File%3A%E5%8C%97%E9%BD%8A%E5%9B%9B%E9%9D%A2%E4%BD%9B%E9%BE%95%E5%83%8F%E7%A2%91.jpg
     authority: encyclopedia
@@ -2763,6 +4548,9 @@ e275d5c3-b7d6-429e-8825-52f25dbca7c8:
   - field_path: artifacts[3].description
     source_url: https://www.gz.gov.cn/zlgz/gzly/wzgz/wbcg/content/post_9587900.html
     authority: government
+  - field_path: artifacts[3].image
+    source_url: https://www.wikidata.org/wiki/Q328325
+    authority: encyclopedia
   - field_path: artifacts[3].name
     source_url: https://www.gz.gov.cn/zlgz/gzly/wzgz/wbcg/content/post_9587900.html
     authority: government
@@ -2781,6 +4569,9 @@ e275d5c3-b7d6-429e-8825-52f25dbca7c8:
   - field_path: artifacts[5].description
     source_url: https://www.gz.gov.cn/zlgz/gzly/wzgz/wbcg/content/post_9587900.html
     authority: government
+  - field_path: artifacts[5].image
+    source_url: https://commons.wikimedia.org/wiki/File%3APlaster%20relief%20KOTE-E%202010.jpg
+    authority: encyclopedia
   - field_path: artifacts[5].name
     source_url: https://www.gz.gov.cn/zlgz/gzly/wzgz/wbcg/content/post_9587900.html
     authority: government
@@ -2790,6 +4581,9 @@ e275d5c3-b7d6-429e-8825-52f25dbca7c8:
   - field_path: artifacts[6].description
     source_url: https://www.gz.gov.cn/zlgz/gzly/wzgz/wbcg/content/post_9587900.html
     authority: government
+  - field_path: artifacts[6].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E9%84%82%E5%B7%9E%E8%A5%BF%E5%B1%B1%C2%B7%E8%AF%95%E5%89%91%E7%9F%B3.jpg
+    authority: encyclopedia
   - field_path: artifacts[6].name
     source_url: https://www.gz.gov.cn/zlgz/gzly/wzgz/wbcg/content/post_9587900.html
     authority: government
@@ -2799,6 +4593,9 @@ e275d5c3-b7d6-429e-8825-52f25dbca7c8:
   - field_path: artifacts[7].description
     source_url: https://wglj.gz.gov.cn/ztmb/gzhyn/ajjq/4a/content/post_9773088.html
     authority: government
+  - field_path: artifacts[7].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E4%BA%91%E5%86%88%E7%9F%B3%E7%AA%9F%E7%AC%AC9%E7%AA%9F%E5%90%8E%E5%AE%A4%E8%A5%BF%E5%A3%81%E8%8F%A9%E8%90%A8%E5%92%8C%E6%B8%85%E4%BB%A3%E5%BD%A9%E7%BB%98.jpg
+    authority: encyclopedia
   - field_path: artifacts[7].name
     source_url: https://wglj.gz.gov.cn/ztmb/gzhyn/ajjq/4a/content/post_9773088.html
     authority: government
@@ -2930,6 +4727,98 @@ e838cd1a-a825-4f28-9a1e-99bd3b8ce46f:
     authority: government
   - field_path: specialty
   - field_path: timeline
+eabca015-5ac4-430a-85e4-75809a64054d:
+  - field_path: artifacts[0].description
+  - field_path: artifacts[0].name
+  - field_path: artifacts[0].period
+  - field_path: artifacts[1].description
+  - field_path: artifacts[1].name
+  - field_path: artifacts[1].period
+  - field_path: artifacts[2].description
+  - field_path: artifacts[2].name
+  - field_path: artifacts[2].period
+  - field_path: artifacts[3].description
+  - field_path: artifacts[3].name
+  - field_path: artifacts[3].period
+  - field_path: artifacts[4].description
+  - field_path: artifacts[4].name
+  - field_path: artifacts[4].period
+  - field_path: corePeriod
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/qxdw/zmzhzhpgj/zrbwg/202309/t20230919_3262144.html
+    authority: government
+  - field_path: dynastyConnections[0].description
+  - field_path: dynastyConnections[0].dynasty
+  - field_path: halls[0]
+    source_url: https://www.nnhm.org.cn/bwgjj/bwgjj/index.shtml
+    authority: official
+  - field_path: halls[10]
+    source_url: https://www.nnhm.org.cn/zljs/wap_index.shtml
+    authority: official
+  - field_path: halls[1]
+    source_url: https://www.nnhm.org.cn/bwgjj/bwgjj/index.shtml
+    authority: official
+  - field_path: halls[2]
+    source_url: https://www.nnhm.org.cn/bwgjj/bwgjj/index.shtml
+    authority: official
+  - field_path: halls[3]
+    source_url: https://www.nnhm.org.cn/bwgjj/bwgjj/index.shtml
+    authority: official
+  - field_path: halls[4]
+    source_url: https://www.nnhm.org.cn/zljs/wap_index.shtml
+    authority: official
+  - field_path: halls[5]
+    source_url: https://www.nnhm.org.cn/zljs/wap_index.shtml
+    authority: official
+  - field_path: halls[6]
+    source_url: https://www.nnhm.org.cn/zljs/wap_index.shtml
+    authority: official
+  - field_path: halls[7]
+    source_url: https://www.nnhm.org.cn/zljs/wap_index.shtml
+    authority: official
+  - field_path: halls[8]
+    source_url: https://www.nnhm.org.cn/zljs/wap_index.shtml
+    authority: official
+  - field_path: halls[9]
+    source_url: https://www.nnhm.org.cn/zljs/wap_index.shtml
+    authority: official
+  - field_path: lat
+  - field_path: level
+    source_url: https://www.nnhm.org.cn/bwgjj/bwgjj/index.shtml
+    authority: official
+  - field_path: lng
+  - field_path: location
+    source_url: https://www.gov.cn/yaowen/liebiao/202306/content_6884740.htm
+    authority: government
+  - field_path: name
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/qxdw/zmzhzhpgj/zrbwg/202309/t20230919_3262144.html
+    authority: government
+  - field_path: specialty
+    source_url: https://www.beijing.gov.cn/renwen/rwzyd/qxdw/zmzhzhpgj/zrbwg/202309/t20230919_3262144.html
+    authority: government
+  - field_path: timeline
+    source_url: https://www.gov.cn/yaowen/liebiao/202306/content_6884740.htm
+    authority: government
+  - field_path: treasures[0]
+    source_url: https://www.nnhm.org.cn/bwgjj/bwgjj/index.shtml
+    authority: official
+  - field_path: treasures[1]
+    source_url: https://www.nnhm.org.cn/bwgjj/bwgjj/index.shtml
+    authority: official
+  - field_path: treasures[2]
+    source_url: https://www.nnhm.org.cn/bwgjj/bwgjj/index.shtml
+    authority: official
+  - field_path: treasures[3]
+    source_url: https://www.nnhm.org.cn/zljs/wap_index.shtml
+    authority: official
+  - field_path: treasures[4]
+    source_url: https://www.nnhm.org.cn/zljs/wap_index.shtml
+    authority: official
+  - field_path: treasures[5]
+    source_url: https://www.nnhm.org.cn/zljs/wap_index.shtml
+    authority: official
+  - field_path: treasures[6]
+    source_url: https://www.nnhm.org.cn/zljs/wap_index.shtml
+    authority: official
 ebd9f374-6925-48ef-a456-13e0fd61fcd4:
   - field_path: artifacts[0].description
   - field_path: artifacts[0].image
@@ -2976,8 +4865,8 @@ ef6658c6-03b4-4edb-98ca-e19523bdaaa7:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:Pagoda_of_Fogong_Temple_at_Dust.jpg
     authority: encyclopedia
-  - field_path: artifacts[1].image
-    source_url: https://commons.wikimedia.org/wiki/File:Pagodaoffogongtemple2019.jpg
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File%3AMoGokSayaDawGyi%20Relics%20from%20Bone%20and%20blood.jpg
     authority: encyclopedia
   - field_path: corePeriod
     source_url: http://www.ncha.gov.cn/art/2020/10/19/art_722_163691.html
@@ -3028,12 +4917,18 @@ erlitou:
   - field_path: artifacts[2].image
     source_url: https://commons.wikimedia.org/wiki/File:夏七孔玉刀,_2015-09-23.jpg
     authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File:绿松石镶嵌青铜兽面牌饰.png
+    authority: encyclopedia
+  - field_path: artifacts[6].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E5%9B%9B%E5%B7%9D%E6%88%90%E9%83%BD%E9%87%91%E6%B2%99%E9%81%97%E5%9D%80%E3%80%81%E5%9B%9B%E5%B7%9D%E5%B9%BF%E6%B1%89%E4%B8%89%E6%98%9F%E5%A0%86%E9%81%97%E5%9D%80-%E9%93%9C%E9%B8%9F%E3%80%81%E9%93%9C%E6%96%B9%E5%AD%94%E5%BD%A2%E5%99%A8%E3%80%81%E9%93%9C%E9%B8%9F%E5%BD%A2%E9%A5%B0%E3%80%81%E9%93%9C%E9%BE%99%E5%BD%A2%E9%A5%B0%E3%80%81%E9%93%9C%E8%99%8E%E3%80%81%E5%9C%86%E5%BD%A2%E9%93%9C%E6%8C%82%E9%A5%B0%E3%80%81%E5%85%AB%E8%BE%B9%E5%BD%A2%E9%93%9C%E6%8C%82%E9%A5%B0%E3%80%81%E5%8F%8C%E7%BF%BC%E5%B9%B3%E5%8F%A3%E9%93%9C%E9%93%83.jpg
+    authority: encyclopedia
 f72fc18f-cdc2-4ae8-8e68-28d3521eb4ea:
   - field_path: artifacts[0].description
     source_url: https://baike.baidu.com/item/%E4%BD%9B%E5%B1%B1%E5%B8%82%E7%A5%96%E5%BA%99%E5%8D%9A%E7%89%A9%E9%A6%86/16853955
     authority: encyclopedia
   - field_path: artifacts[0].image
-    source_url: https://commons.wikimedia.org/wiki/File:%E4%B8%87%E7%A6%8F%E5%8F%B0.jpg
+    source_url: https://baike.baidu.com/view/741154.htm
     authority: encyclopedia
   - field_path: artifacts[0].name
     source_url: https://baike.baidu.com/item/%E4%BD%9B%E5%B1%B1%E5%B8%82%E7%A5%96%E5%BA%99%E5%8D%9A%E7%89%A9%E9%A6%86/16853955
@@ -3043,6 +4938,9 @@ f72fc18f-cdc2-4ae8-8e68-28d3521eb4ea:
     authority: encyclopedia
   - field_path: artifacts[1].description
     source_url: https://baike.baidu.com/item/%E4%BD%9B%E5%B1%B1%E5%B8%82%E7%A5%96%E5%BA%99%E5%8D%9A%E7%89%A9%E9%A6%86/16853955
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://baike.baidu.com/view/1533396.htm
     authority: encyclopedia
   - field_path: artifacts[1].name
     source_url: https://baike.baidu.com/item/%E4%BD%9B%E5%B1%B1%E5%B8%82%E7%A5%96%E5%BA%99%E5%8D%9A%E7%89%A9%E9%A6%86/16853955
@@ -3061,6 +4959,9 @@ f72fc18f-cdc2-4ae8-8e68-28d3521eb4ea:
     authority: encyclopedia
   - field_path: artifacts[3].description
     source_url: https://baike.baidu.com/item/%E4%BD%9B%E5%B1%B1%E5%B8%82%E7%A5%96%E5%BA%99%E5%8D%9A%E7%89%A9%E9%A6%86/16853955
+    authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E7%A5%A5%E5%9F%8E%E9%92%9F%E9%BC%93%E6%A5%BC-%E5%8E%BF%E7%BA%A7%E6%96%87%E4%BF%9D%E7%A2%91.jpg
     authority: encyclopedia
   - field_path: artifacts[3].name
     source_url: https://baike.baidu.com/item/%E4%BD%9B%E5%B1%B1%E5%B8%82%E7%A5%96%E5%BA%99%E5%8D%9A%E7%89%A9%E9%A6%86/16853955
@@ -3162,10 +5063,171 @@ f72fc18f-cdc2-4ae8-8e68-28d3521eb4ea:
     authority: encyclopedia
   - field_path: treasures[3]
   - field_path: treasures[4]
+fa525b39-56ab-4660-a805-6911789cee21:
+  - field_path: artifacts[0].description
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742745/545835/index.html
+    authority: government
+  - field_path: artifacts[0].name
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742745/545835/index.html
+    authority: government
+  - field_path: artifacts[0].period
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742745/545835/index.html
+    authority: government
+  - field_path: corePeriod
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362779/dypqgzdwwbhdw/523220/index.html
+    authority: government
+  - field_path: dynastyCoverage
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362779/dypqgzdwwbhdw/523220/index.html
+    authority: government
+  - field_path: halls[0]
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742745/545835/index.html
+    authority: government
+  - field_path: lat
+  - field_path: level
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742745/545835/index.html
+    authority: government
+  - field_path: lng
+  - field_path: location
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362779/dypqgzdwwbhdw/523220/index.html
+    authority: government
+  - field_path: name
+    source_url: https://wwj.beijing.gov.cn/bjww/362771/362779/dypqgzdwwbhdw/523220/index.html
+    authority: government
+  - field_path: specialty
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711469.html
+    authority: government
+  - field_path: timeline
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711469.html
+    authority: government
+  - field_path: treasures[0]
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1730488/1730490/1730491/index.html
+    authority: government
+  - field_path: treasures[1]
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711469.html
+    authority: government
+  - field_path: treasures[2]
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711469.html
+    authority: government
+  - field_path: treasures[3]
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711469.html
+    authority: government
+  - field_path: treasures[4]
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711469.html
+    authority: government
+  - field_path: treasures[5]
+    source_url: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711469.html
+    authority: government
 famensi:
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File%3AFamen%20Si%20May%202007%20052.jpg
+    authority: encyclopedia
   - field_path: artifacts[3].image
     source_url: https://commons.wikimedia.org/wiki/File%3A%E7%A7%98%E8%89%B2%E7%93%B7.JPG
     authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://baike.baidu.com/view/5642849.htm
+    authority: encyclopedia
+  - field_path: artifacts[6].image
+    source_url: https://baike.baidu.com/item/%E7%90%89%E7%92%83%E5%99%A8
+    authority: encyclopedia
+feac3814-25d3-43ad-ad5b-95535773304e:
+  - field_path: corePeriod
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: dynastyConnections[0].description
+  - field_path: dynastyConnections[0].dynasty
+  - field_path: dynastyConnections[1].description
+  - field_path: dynastyConnections[1].dynasty
+  - field_path: dynastyConnections[2].description
+  - field_path: dynastyConnections[2].dynasty
+  - field_path: dynastyConnections[3].description
+  - field_path: dynastyConnections[3].dynasty
+  - field_path: dynastyConnections[4].description
+  - field_path: dynastyConnections[4].dynasty
+  - field_path: dynastyCoverage
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[0]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[10]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[11]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[12]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[13]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[14]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[15]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[1]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[2]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[3]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[4]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[5]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[6]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[7]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[8]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: halls[9]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: lat
+    source_url: https://zhuanti.mct.gov.cn/sdbwg2022.html
+    authority: government
+  - field_path: level
+    source_url: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/546445/index.html
+    authority: government
+  - field_path: lng
+    source_url: https://zhuanti.mct.gov.cn/sdbwg2022.html
+    authority: government
+  - field_path: location
+    source_url: https://zhuanti.mct.gov.cn/sdbwg2022.html
+    authority: government
+  - field_path: name
+    source_url: https://zhuanti.mct.gov.cn/sdbwg2022.html
+    authority: government
+  - field_path: specialty
+    source_url: https://zhuanti.mct.gov.cn/sdbwg2022.html
+    authority: government
+  - field_path: timeline
+    source_url: https://www.museum.bj.cn/zjsb/sbjj.htm
+    authority: official
+  - field_path: treasures[0]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: treasures[1]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: treasures[2]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
+  - field_path: treasures[3]
+    source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
+    authority: official
 fujian:
   - field_path: artifacts[1].image
     source_url: https://commons.wikimedia.org/wiki/File:建窑兔毫盏_CM.jpg
@@ -3175,7 +5237,7 @@ fujian:
     authority: encyclopedia
 gansu:
   - field_path: artifacts[0].image
-    source_url: https://www.wikidata.org/wiki/Q15914818
+    source_url: https://baike.baidu.com/item/%E4%B8%9C%E6%B1%89%E9%93%9C%E5%A5%94%E9%A9%AC
     authority: encyclopedia
   - field_path: artifacts[1].image
     source_url: https://commons.wikimedia.org/wiki/File:仰韶文化人头形器口彩陶瓶.jpg
@@ -3186,13 +5248,31 @@ gansu:
   - field_path: artifacts[3].image
     source_url: https://www.wikidata.org/wiki/Q133109456
     authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://baike.baidu.com/item/%E5%BD%A9%E7%BB%98%E6%9C%A8%E5%8D%9A%E6%88%8F%E4%BF%91
+    authority: encyclopedia
 guangdong:
   - field_path: artifacts[1].image
     source_url: https://commons.wikimedia.org/wiki/File:清乾隆广彩人物纹大碗.JPG
     authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File%3AGuangzhou%20Tianhe%20Guangdong%20Sheng%20Bowuguan%2020230811.183606.jpg
+    authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://commons.wikimedia.org/wiki/File%3ABronze%20Bucket%20with%20Boating%20Paintings%20at%20Nanyue%20King%20Museum%2002.jpg
+    authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://baike.baidu.com/view/7251570.htm
+    authority: encyclopedia
 guangxi:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:%E7%BF%94%E9%B9%AD%E9%93%9C%E7%BA%B9%E9%BC%93.JPG
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://baike.baidu.com/item/%E7%BE%BD%E7%BA%B9%E9%93%9C%E5%87%A4%E7%81%AF
+    authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E7%8E%89%E6%BA%AA%E5%B8%82%E5%8D%9A%E7%89%A9%E9%A6%86-%E8%A5%BF%E6%B1%89-%E6%B1%9F%E5%B7%9D%E6%9D%8E%E5%AE%B6%E5%B1%B1-%E9%93%9C%E7%89%9B%E5%A4%B42.jpg
     authority: encyclopedia
 gugong:
   - field_path: artifacts[0].image
@@ -3201,12 +5281,21 @@ gugong:
   - field_path: artifacts[1].image
     source_url: https://commons.wikimedia.org/wiki/File:Wang_Ximeng._A_Thousand_Li_of_Rivers_and_Mountains._(Complete,_51,3x1191,5_cm)._1113._Palace_museum,_Beijing.jpg
     authority: encyclopedia
-  - field_path: artifacts[3].image
-    source_url: https://commons.wikimedia.org/wiki/File:%E9%87%91%E7%94%8C%E6%B0%B8%E5%9B%BA%E6%9D%AF.png
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A13%20Glazed%20Vase.jpg
+    authority: encyclopedia
+  - field_path: artifacts[6].image
+    source_url: https://baike.baidu.com/view/1436790.htm
     authority: encyclopedia
 guizhou:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:%E8%B4%B5%E5%B7%9E%E7%9C%81%E5%8D%9A%E7%89%A9%E9%A6%86%E9%93%9C%E8%BD%A6%E9%A9%AC.jpg
+    authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E5%A4%A7%E7%90%86%E5%B7%9E%E5%8D%9A%E7%89%A9%E9%A6%86-%E7%9F%B3%E5%AF%A8%E5%B1%B1%E5%9E%8B%E9%93%9C%E9%BC%93.jpg
+    authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://baike.baidu.com/item/%E6%98%8E%E5%88%BB%E8%8A%B1%E9%BE%99%E5%A4%B4%E9%87%91%E6%89%8B%E9%95%AF
     authority: encyclopedia
 guobo:
   - field_path: artifacts[0].image
@@ -3243,12 +5332,22 @@ haihunhou:
   - field_path: artifacts[5].image
     source_url: https://commons.wikimedia.org/wiki/File:%E9%9D%92%E9%93%9B%E9%9B%81%E9%B1%BC%E7%81%AF_%E6%B5%B7%E6%98%8F%E4%BE%AF%E5%9B%BD%E9%81%97%E5%9D%80.JPG
     authority: encyclopedia
+  - field_path: artifacts[6].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A20251018%20Bronze%20Bianzhong%20and%20Stone%20Qing.jpg
+    authority: encyclopedia
   - field_path: artifacts[7].image
     source_url: https://commons.wikimedia.org/wiki/File:%E4%BA%94%E9%93%A2%E9%92%B1_%E6%B5%B7%E6%98%8F%E4%BE%AF%E5%9B%BD%E9%81%97%E5%9D%802.jpg
     authority: encyclopedia
+hainan:
+  - field_path: artifacts[2].image
+    source_url: https://baike.baidu.com/item/%E9%BB%8E%E6%97%8F%E9%BE%99%E8%A2%AB
+    authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://baike.baidu.com/item/%E5%94%90%E4%B8%89%E5%BD%A9%E9%99%B6%E9%A9%AC
+    authority: encyclopedia
 hebei:
   - field_path: artifacts[0].image
-    source_url: https://commons.wikimedia.org/wiki/File:金缕玉衣-河北博物院.jpg
+    source_url: https://baike.baidu.com/view/6428588.htm
     authority: encyclopedia
   - field_path: artifacts[1].image
     source_url: https://commons.wikimedia.org/wiki/File:长信宫灯8.png
@@ -3256,12 +5355,21 @@ hebei:
   - field_path: artifacts[2].image
     source_url: https://commons.wikimedia.org/wiki/File:错金铜博山炉11.png
     authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A20250118%20Bronze%20Square%20Table%20Stand%20Decorated%20with%20Dragon-and-phoenix.jpg
+    authority: encyclopedia
   - field_path: artifacts[5].image
     source_url: https://commons.wikimedia.org/wiki/File:Bronze_Ding_Tripod_with_Iron_Feet.jpg
     authority: encyclopedia
 heilongjiang:
+  - field_path: artifacts[2].image
+    source_url: https://baike.baidu.com/view/492785.htm
+    authority: encyclopedia
   - field_path: artifacts[4].image
     source_url: https://commons.wikimedia.org/wiki/File%3A%E2%80%9C%E9%87%91%E2%80%9D%E5%AD%97%E5%8D%B0%E9%93%9C%E4%BA%BA%E6%8A%BC%E8%AE%B0%EF%BC%8C%E7%BB%A5%E5%8C%96%E5%B8%82%E5%8D%9A%E7%89%A9%E9%A6%86.jpg
+    authority: encyclopedia
+  - field_path: artifacts[6].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E3%82%BD%E3%83%95%E3%82%A3%E3%82%B9%E3%82%AB%E3%83%A4%E5%AF%BA%E9%99%A2%E3%83%BB%E8%81%96%E7%B4%A2%E8%8F%B2%E4%BA%9C%E6%95%99%E5%A0%82.jpg
     authority: encyclopedia
 henan:
   - field_path: artifacts[0].image
@@ -3287,7 +5395,7 @@ hubei:
     source_url: https://commons.wikimedia.org/wiki/File:曾侯乙编钟钟簨6.jpg
     authority: encyclopedia
   - field_path: artifacts[1].image
-    source_url: https://commons.wikimedia.org/wiki/File:20230208_Bronze_sword_used_by_King_Goujian_of_Yue_01.jpg
+    source_url: https://baike.baidu.com/item/%E6%98%A5%E7%A7%8B%E8%B6%8A%E7%8E%8B%E5%8B%BE%E8%B7%B5%E5%89%91
     authority: encyclopedia
   - field_path: artifacts[2].image
     source_url: https://commons.wikimedia.org/wiki/File:曾侯乙青铜尊盘，2015-04-06_01.jpg
@@ -3308,6 +5416,9 @@ hunan:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:Xin_Zhui.jpg
     authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File%3AT%E5%BD%A2%E5%B8%9B%E7%94%BB.jpg
+    authority: encyclopedia
   - field_path: artifacts[2].image
     source_url: https://commons.wikimedia.org/wiki/File:%E7%9B%B4%E8%A3%BE%E7%B4%A0%E7%BA%B1%E8%A5%8C%E8%A1%A3%2C_2018-09-28.jpg
     authority: encyclopedia
@@ -3317,8 +5428,15 @@ hunan:
   - field_path: artifacts[4].image
     source_url: https://commons.wikimedia.org/wiki/File:Min_Er_Quan_Bronze_Square_Lei%2C_Shang_dynasty%2C_Hunan_Museum%2C_6_July_2018.jpg
     authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E9%95%B6%E7%8E%89%E6%BC%86%E6%A3%BA_0144.jpg
+    authority: encyclopedia
   - field_path: artifacts[6].image
-    source_url: https://commons.wikimedia.org/wiki/File:%E5%AF%BC%E5%BC%95%E5%8D%87%E4%BB%99%E5%9B%BE0163.jpg
+    source_url: https://baike.baidu.com/view/728679.htm
+    authority: encyclopedia
+jiangsu:
+  - field_path: artifacts[1].image
+    source_url: https://upload.wikimedia.org/wikipedia/commons/8/81/%E5%AE%81%E6%B3%A2%E5%8D%9A%E7%89%A9%E9%A6%86%E8%97%8F%E5%85%AD%E6%9C%9D%E4%BA%BA%E9%9D%A2%E7%BA%B9%E7%93%A6%E5%BD%93.jpg
     authority: encyclopedia
 jiangxi:
   - field_path: artifacts[1].image
@@ -3330,9 +5448,19 @@ jiangxi:
   - field_path: artifacts[6].image
     source_url: https://commons.wikimedia.org/wiki/File:Shang_Bronze_Nao_Bell_01.jpg
     authority: encyclopedia
+jilin:
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E6%88%90%E9%83%BD%E4%B8%9C%E5%8D%8E%E9%97%A8%E5%87%BA%E5%9C%9F-%E7%93%B7%E5%99%A83-%E6%98%8E%E4%BB%A3-%E6%88%90%E9%83%BD%E8%80%83%E5%8F%A4%E4%B8%AD%E5%BF%83%202024-10-17.jpg
+    authority: encyclopedia
 jingdezhen:
+  - field_path: artifacts[0].image
+    source_url: https://baike.baidu.com/view/1278371.htm
+    authority: encyclopedia
   - field_path: artifacts[1].image
     source_url: https://commons.wikimedia.org/wiki/File:甜白釉梅瓶08611.jpg
+    authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://baike.baidu.com/view/7921218.htm
     authority: encyclopedia
   - field_path: artifacts[4].image
     source_url: https://commons.wikimedia.org/wiki/File:明成化_景德鎮窯鬥彩雞缸杯-Chicken_Cup_MET_1987_85_2015AT_001_(cropped).jpg
@@ -3350,9 +5478,18 @@ jinsha:
   - field_path: artifacts[1].image
     source_url: https://commons.wikimedia.org/wiki/File:金沙遗址博物馆-商周黄金面具雕塑.jpg
     authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File%3AJade%20Cong%20Jinsha.JPG
+    authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://baike.baidu.com/item/%E9%93%9C%E7%AB%8B%E4%BA%BA%E5%83%8F
+    authority: encyclopedia
 kaifeng:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:20241025_Stele_of_the_Namelist_of_the_Governors_of_Kaifeng_Fu.jpg
+    authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E6%B1%9D%E7%AA%AF%20%E9%9D%92%E7%93%B7%E8%93%AE%E8%8A%B1%E5%BC%8F%E6%BA%AB%E7%A2%97%20%E7%B4%B0%E7%AF%80.png
     authority: encyclopedia
   - field_path: artifacts[6].image
     source_url: https://commons.wikimedia.org/wiki/File:20241025_Black_Wood_Block_for_Nianhua_Printing%2C_ROC_Period_%281912-1949%29_01.jpg
@@ -3360,6 +5497,15 @@ kaifeng:
 liangzhu:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:Jade_Cong_King,_2018-06-09_01.jpg
+    authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://commons.wikimedia.org/wiki/File%3ASUZHOU%20MUSEUM%20WEST%20-%20%E7%8E%89%E7%92%A7%2C%20%E8%89%AF%E6%B8%9A%E6%96%87%E5%8C%96.jpg
+    authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File%3ATrident%20Jade%20Ware%20unearthed%20from%20Tomb%2014%2C%20Fanshan%20Site%2C%20Liangzhu.jpg
+    authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E8%89%AF%E6%B8%9A%E5%8D%9A%E7%89%A9%E9%A6%86%E8%97%8F%E5%88%BB%E7%AC%A6%E9%99%B6%E7%BD%90%2C%202021-12-04%2003.jpg
     authority: encyclopedia
 liaoning:
   - field_path: artifacts[0].image
@@ -3392,8 +5538,24 @@ luoyang:
     source_url: https://commons.wikimedia.org/wiki/File%3AClay%20Head%20ofa%20Female%20Donor%20Excavated%20at%20Yongning%20Temple.jpg
     authority: encyclopedia
 mogao:
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File%3AWestern%20Pure%20Land%20Illustration%2C%20Cave%20220%2C%20Mogao%20Caves.jpg
+    authority: encyclopedia
   - field_path: artifacts[3].image
     source_url: https://commons.wikimedia.org/wiki/File:2021.12.24-12.26_800pcs_%E7%92%80%E7%92%A8%E6%95%A6%E7%85%8C%E7%B3%BB%E5%88%97%EF%BC%9A%E7%AC%AC257%E7%AA%9F-%E9%B9%BF%E7%8E%8B%E6%9C%AC%E7%94%9F%E5%B1%80%E9%83%A8%E5%9C%96_Mogao_Grottoes_Cave_257_Main_Chamber_West_Wall_%281%29_%2851776320643%29.jpg
+    authority: encyclopedia
+  - field_path: artifacts[6].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A2021.07.16-07.18%20800pcs%20%E7%92%80%E7%92%A8%E6%95%A6%E7%85%8C%E7%B3%BB%E5%88%97%EF%BC%9A%E7%AC%AC57%E7%AA%9F-%E8%A7%80%E9%9F%B3%E8%8F%A9%E8%96%A9%E5%83%8F%20Mogao%20Grottoes%20Cave%20057%20Main%20Chamber%20South%20Wall%20(1)%20(51320058790).jpg
+    authority: encyclopedia
+nanjing:
+  - field_path: artifacts[0].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E7%AB%B9%E6%9E%97%E4%B8%83%E8%B4%A4%E4%B8%8E%E8%8D%A3%E5%90%AF%E6%9C%9F%E7%A0%96%E7%94%BB05527.jpg
+    authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://baike.baidu.com/view/3265025.htm
+    authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E9%93%B6%E7%BC%95%E7%8E%89%E8%A1%A3%EF%BC%88%E5%A4%8D%E5%88%B6%E4%BB%B6%EF%BC%891193.jpg
     authority: encyclopedia
 nanyue:
   - field_path: artifacts[0].image
@@ -3409,7 +5571,7 @@ nanyue:
     source_url: https://commons.wikimedia.org/wiki/File:Bronze_screen_parts_at_Nanyue_King_Museum_01.jpg
     authority: encyclopedia
   - field_path: artifacts[4].image
-    source_url: https://commons.wikimedia.org/wiki/File:Bronze_Bucket_with_Boating_Paintings_at_Nanyue_King_Museum_03.jpg
+    source_url: https://baike.baidu.com/view/1549950.htm
     authority: encyclopedia
 neimenggu:
   - field_path: artifacts[1].image
@@ -3418,6 +5580,9 @@ neimenggu:
   - field_path: artifacts[3].image
     source_url: https://commons.wikimedia.org/wiki/File:Horse_leading,_mural(part)_from_Tomb_in_Aohan,_Liao_Dynasty.jpg
     authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://commons.wikimedia.org/wiki/File%3ALin'an%20Museum%2C%202020-01-05%2025.jpg
+    authority: encyclopedia
   - field_path: artifacts[6].image
     source_url: https://commons.wikimedia.org/wiki/File:Nuoerosaurus_chaganensis.JPG
     authority: encyclopedia
@@ -3425,12 +5590,35 @@ ningxia:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:西夏王陵鎏金铜牛.jpg
     authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E7%9F%B3%E9%9B%95%E5%8A%9B%E5%A3%AB%E5%BF%97%E6%96%87%E6%94%AF%E5%BA%A701.jpg
+    authority: encyclopedia
   - field_path: artifacts[3].image
-    source_url: https://commons.wikimedia.org/wiki/File:贺兰山岩画太阳神.jpg
+    source_url: https://baike.baidu.com/subview/31524/31524.htm
+    authority: encyclopedia
+  - field_path: artifacts[6].image
+    source_url: https://baike.baidu.com/view/7116385.htm
+    authority: encyclopedia
+qinghai:
+  - field_path: artifacts[0].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E8%88%9E%E8%B9%88%E7%BA%B9%E5%BD%A9%E9%99%B6%E7%9B%8608775.jpg
     authority: encyclopedia
 qingzhou:
   - field_path: artifacts[3].image
-    source_url: https://commons.wikimedia.org/wiki/File%3A%E5%8F%A4%E4%BB%A3%E7%8E%89%E4%BA%BA%20%E6%88%98%E5%9B%BD%E7%8E%89%E5%99%A8%20%E7%8E%89%E4%B9%90%E4%BA%BA%E4%BF%91.jpg
+    source_url: https://baike.baidu.com/view/3252791.htm
+    authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://baike.baidu.com/item/%E9%93%9C%E9%8E%8F%E9%87%91%E7%A2%A7%E9%9C%9E%E5%85%83%E5%90%9B%E5%9D%90%E5%83%8F
+    authority: encyclopedia
+quanzhou:
+  - field_path: artifacts[0].image
+    source_url: https://commons.wikimedia.org/wiki/File%3ASong%20Dynasty%20Ancient%20Ship%20of%20Quanzhou%20Bay%2020061229.jpg
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E5%BC%80%E5%85%83%E5%AF%BA%E5%AD%98%E5%8D%B0%E5%BA%A6%E6%95%99%E7%9F%B3%E5%88%BB.jpg
+    authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://commons.wikimedia.org/wiki/File%3AJinjiang%20Cao'an%2020120229-05.jpg
     authority: encyclopedia
 sanxingdui:
   - field_path: artifacts[0].image
@@ -3442,13 +5630,47 @@ sanxingdui:
   - field_path: artifacts[2].image
     source_url: https://commons.wikimedia.org/wiki/File:Ⅰ号大型青铜神树.jpg
     authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://www.wikidata.org/wiki/Q15890057
+    authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://www.wikidata.org/wiki/Q11178546
+    authority: encyclopedia
   - field_path: artifacts[5].image
     source_url: https://commons.wikimedia.org/wiki/File:四川省广汉市三星堆遗址出土-青铜人头像-商代晚期（前1300—前1100）-四川广汉三星堆博物馆藏_2024-10-31.jpg
     authority: encyclopedia
   - field_path: artifacts[6].image
     source_url: https://commons.wikimedia.org/wiki/File:三星堆遗址出土玉璋.jpg
     authority: encyclopedia
+shaanxi:
+  - field_path: artifacts[0].image
+    source_url: https://www.wikidata.org/wiki/Q10894661
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://baike.baidu.com/subview/840987/840987.htm
+    authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A20251026%20Sancai-glazed%20Pottery%20Musician%20on%20Camelback.jpg
+    authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E4%BA%94%E7%A5%80%E5%8D%AB%E9%BC%8E.jpg
+    authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%22%E7%9A%87%E5%90%8E%E4%B9%8B%E7%8E%BA%22%E7%8E%89%E5%8D%B0.jpg
+    authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E9%B8%B3%E9%B8%AF%E8%8E%B2%E7%93%A3%E7%BA%B9%E9%87%91%E7%A2%97%2020091112.jpg
+    authority: encyclopedia
+  - field_path: artifacts[6].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E6%9D%9C%E8%99%8E%E7%AC%A6.jpg
+    authority: encyclopedia
+  - field_path: artifacts[7].image
+    source_url: https://baike.baidu.com/view/1780904.htm
+    authority: encyclopedia
 shandong:
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File%3ABronze%20Vessels%20in%20China%20Audit%20Museum%2001%202013-01.JPG
+    authority: encyclopedia
   - field_path: artifacts[7].image
     source_url: https://commons.wikimedia.org/wiki/File%3A%E4%BB%A5%E5%95%86%E4%BB%A3%E7%94%B2%E9%AA%A8%E6%96%87%E5%9B%BE%E7%89%87%E4%B8%BA%E8%83%8C%E6%99%AF%E7%9A%84%E8%A5%BF%E5%91%A8%E5%8E%9F%E5%88%BB%E7%9F%B3%E7%AE%80.JPG
     authority: encyclopedia
@@ -3466,7 +5688,13 @@ shanghai:
     source_url: https://commons.wikimedia.org/wiki/File:高逸圖.jpg
     authority: encyclopedia
   - field_path: artifacts[4].image
-    source_url: https://www.wikidata.org/wiki/Q132625837
+    source_url: https://baike.baidu.com/view/11405975.htm
+    authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://baike.baidu.com/subview/117224/117224.htm
+    authority: encyclopedia
+  - field_path: artifacts[6].image
+    source_url: https://baike.baidu.com/view/1164422.htm
     authority: encyclopedia
 shanxi:
   - field_path: artifacts[0].image
@@ -3475,15 +5703,21 @@ shanxi:
   - field_path: artifacts[1].image
     source_url: https://commons.wikimedia.org/wiki/File:Houma_Treaty_of_Alliance_and_Wenxian_Treaty_of_Alliance%2C_Spring_and_Autumn_period%2C_Shanxi_Museum_and_Henan_Institute_of_Historic_Relic_Archaeology_and_Research.jpg
     authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File%3AShang%20Bronze%20Guang%2001c.jpg
+    authority: encyclopedia
 shanxi-datong:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:Funerary_panels%2C_from_the_tomb_of_Sima_Jinlong%2C_484_CE._Datong%2C_Shanxi_Province.jpg
     authority: encyclopedia
   - field_path: artifacts[1].image
-    source_url: https://commons.wikimedia.org/wiki/File:Northern_Wei_Stone_Pillar_Base%2C_Tomb_of_Sima_Jinlong%2C_484_AD_%2810100504063%29.jpg
+    source_url: https://baike.baidu.com/view/650623.htm
     authority: encyclopedia
   - field_path: artifacts[4].image
     source_url: https://commons.wikimedia.org/wiki/File:Northern_Wei_Epitaph%2C_Tomb_of_Sima_Jinlong%2C_484_AD_%2810100505915%29.jpg
+    authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://upload.wikimedia.org/wikipedia/commons/8/83/Preparing_for_hunting%2C_mural_from_Tomb_in_Aohan%2C_Liao_Dynasty.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
     authority: encyclopedia
   - field_path: artifacts[6].image
     source_url: https://commons.wikimedia.org/wiki/File:Pottery_Tomb_Figurines%2C_Northern_Wei_%28tomb_of_Sima_Jinlong%29.jpg
@@ -3491,6 +5725,9 @@ shanxi-datong:
 shenyang-gugong:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:沈阳故宫大政殿.jpg
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://baike.baidu.com/view/3415597.htm
     authority: encyclopedia
   - field_path: artifacts[2].image
     source_url: https://commons.wikimedia.org/wiki/File:沈阳故宫凤凰楼2019.jpg
@@ -3506,9 +5743,19 @@ sichuan:
     source_url: https://commons.wikimedia.org/wiki/File:%E5%9B%9B%E5%B7%9D%E5%B7%9C%E7%9C%81%E5%BD%AD%E5%B7%9E%E5%B8%82%E5%A4%AA%E5%B9%B3%E4%B9%A1%E5%87%BA%E5%9C%9F-%E4%B8%83%E7%9B%98%E8%88%9E%E6%9D%82%E6%8A%80%E7%94%BB%E5%83%8F%E7%A0%96-%E4%B8%9C%E6%B1%89%EF%BC%8825-220%EF%BC%89-%E5%9B%9B%E5%B7%9D%E5%8D%9A%E7%89%A9%E9%99%A2%E8%97%8F_2024-10-31.jpg
     authority: encyclopedia
   - field_path: artifacts[5].image
-    source_url: https://www.wikidata.org/wiki/Q842370
+    source_url: https://baike.baidu.com/item/%E6%A0%BC%E8%90%A8%E5%B0%94%E5%94%90%E5%8D%A1/56528423
+    authority: encyclopedia
+silk:
+  - field_path: artifacts[2].image
+    source_url: https://baike.baidu.com/item/%E5%94%90%E6%9C%B5%E8%8A%B1%E7%BA%B9%E8%93%9D%E5%9C%B0%E8%9C%A1%E7%BC%AC%E7%BB%A2
+    authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://baike.baidu.com/item/%E5%85%83%E4%BB%A3%E8%8F%B1%E5%9C%B0%E9%A3%9E%E9%B8%9F%E7%BA%B9%E7%BB%AB%E6%B5%B7%E9%9D%92%E8%A1%A3
     authority: encyclopedia
 suzhou:
+  - field_path: artifacts[0].image
+    source_url: https://baike.baidu.com/view/8948669.htm
+    authority: encyclopedia
   - field_path: artifacts[1].image
     source_url: https://commons.wikimedia.org/wiki/File:瑞光寺塔出土真珠舍利宝幢.jpg
     authority: encyclopedia
@@ -3537,10 +5784,10 @@ taipei-gugong:
   - field_path: artifacts[6].image
     source_url: https://commons.wikimedia.org/wiki/File:寒食帖.jpg
     authority: encyclopedia
-tianjin:
-  - field_path: artifacts[0].image
-    source_url: https://commons.wikimedia.org/wiki/File:Xuejinghanlintu.jpg
+  - field_path: artifacts[7].image
+    source_url: https://commons.wikimedia.org/wiki/File%3A%E5%90%B4%E6%98%8C%E7%A1%95%E4%B8%B4%E6%95%A3%E6%B0%8F%E7%9B%98%20%E8%BD%B4.jpg
     authority: encyclopedia
+tianjin:
   - field_path: artifacts[2].image
     source_url: https://commons.wikimedia.org/wiki/File:Taibao_Ding.jpg
     authority: encyclopedia
@@ -3552,16 +5799,22 @@ wenzi:
     source_url: https://commons.wikimedia.org/wiki/File%3A%E4%BB%A5%E5%95%86%E4%BB%A3%E7%94%B2%E9%AA%A8%E6%96%87%E5%9B%BE%E7%89%87%E4%B8%BA%E8%83%8C%E6%99%AF%E7%9A%84%E8%A5%BF%E5%91%A8%E5%8E%9F%E5%88%BB%E7%9F%B3%E7%AE%80.JPG
     authority: encyclopedia
   - field_path: artifacts[1].image
-    source_url: https://commons.wikimedia.org/wiki/File%3A%E9%99%95%E8%A5%BF%E7%9C%89%E5%8E%BF%E9%A9%AC%E5%AE%B6%E9%95%87%E6%9D%A8%E5%AE%B6%E6%9D%91-%E5%9B%9B%E5%8D%81%E4%B8%89%E5%B9%B4%E9%80%A8%E9%BC%8E%EF%BC%88%E4%B8%99%EF%BC%89-%E8%A5%BF%E5%91%A8-%E5%AE%9D%E9%B8%A1%E9%9D%92%E9%93%9C%E5%99%A8%E5%8D%9A%E7%89%A9%E9%99%A2.jpg
+    source_url: https://baike.baidu.com/view/7351397.htm
     authority: encyclopedia
 xinjiang:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:Five_Stars_Rising_in_the_East_Benefiting_for_the_Central_Plains_armband_(20230921114337).jpg
     authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://upload.wikimedia.org/wikipedia/commons/1/1f/%E8%B7%9D%E4%BB%8A3800%E5%B9%B4%E7%BA%A645%E5%B2%81%E7%9A%84%E6%A5%BC%E5%85%B0%E5%8F%A4%E4%BB%A3%E6%AC%A7%E7%BD%97%E5%B7%B4%E4%BA%BA%E7%A7%8D%E9%93%81%E6%9D%BF%E6%B2%B3%E5%A5%B3%E5%B0%B8_Loulan_Beauty_from_Tiebanhe_Riverside%28about_3800_years_ago%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    authority: encyclopedia
   - field_path: artifacts[3].image
     source_url: https://commons.wikimedia.org/wiki/File:%E8%B7%9D%E4%BB%8A3800%E5%B9%B4%E7%9A%84%E5%B0%8F%E6%B2%B3%E5%A2%93%E5%9C%B0%E5%8F%A4%E4%BB%A3%E6%AC%A7%E7%BD%97%E5%B7%B4%E4%BA%BA%E7%A7%8D%E6%88%90%E5%B9%B4%E5%A5%B3%E6%80%A7%E5%B9%B2%E5%B0%B8_Female_Mummy_And_Dressing%28about_3800_years_ago_Unearthed_at_Xiaohe_Cemetery%294.jpg
     authority: encyclopedia
 xizang:
+  - field_path: artifacts[1].image
+    source_url: https://www.wikidata.org/wiki/Q1641020
+    authority: encyclopedia
   - field_path: artifacts[4].image
     source_url: https://commons.wikimedia.org/wiki/File:Gold_Seal_of_13th_Dalai_Lama,_1909.jpg
     authority: encyclopedia
@@ -3590,7 +5843,7 @@ yinxu:
     source_url: https://commons.wikimedia.org/wiki/File:Fuhao_Owl_Zun_front.jpg
     authority: encyclopedia
   - field_path: artifacts[6].image
-    source_url: https://commons.wikimedia.org/wiki/File:殷墟车马坑.jpg
+    source_url: https://baike.baidu.com/subview/629047/23707704.htm
     authority: encyclopedia
 yungang:
   - field_path: artifacts[0].image
@@ -3619,21 +5872,27 @@ yunnan:
     source_url: https://commons.wikimedia.org/wiki/File:云南省博物馆-西汉-晋宁石寨山-叠鼓形战争场面铜贮贝器.jpg
     authority: encyclopedia
   - field_path: artifacts[3].image
-    source_url: https://commons.wikimedia.org/wiki/File:Gold_Seal_for_King_of_Dian_Kingdom.jpg
+    source_url: https://baike.baidu.com/view/553179.htm
     authority: encyclopedia
   - field_path: artifacts[4].image
     source_url: https://commons.wikimedia.org/wiki/File:大理崇圣寺千寻塔出土-银鎏金镶珠金翅鸟-大理国-云南省博物馆_2025-09-18_02.jpg
     authority: encyclopedia
 zhejiang:
   - field_path: artifacts[1].image
-    source_url: https://commons.wikimedia.org/wiki/File:Yuyue_People-_Warring_States_Bronze_Sword_of_Zhu_Ji_Yu_Shi,_King_of_the_Yue_-_%E8%B6%8A%E7%8E%8B%E8%80%85%E6%97%A8%E6%96%BC%E7%9D%97%E5%89%91_%E6%B5%99%E6%B1%9F%E5%8D%9A%E7%89%A9%E9%A6%86_%E5%89%91%E8%8C%8E%E7%BB%95%E4%B8%9D%E8%B4%A8%E7%BC%A0%E7%BC%912.jpg
+    source_url: https://baike.baidu.com/view/6090868.htm
     authority: encyclopedia
   - field_path: artifacts[3].image
     source_url: https://commons.wikimedia.org/wiki/File:%E5%AF%8C%E6%98%A5%E5%B1%B1%E5%B1%85%E5%9C%96(%E5%89%A9%E5%B1%B1%E5%9C%96).jpg
     authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://baike.baidu.com/view/1164422.htm
+    authority: encyclopedia
 zhongshanguo:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:20250118_Bronze_Square_Table_Stand_Decorated_with_Dragon-and-phoenix.jpg
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File%3ABronze_Ding_Tripod_with_Iron_Feet.jpg
     authority: encyclopedia
   - field_path: artifacts[4].image
     source_url: https://commons.wikimedia.org/wiki/File:20250118_Architectural_Plan_of_Mausoleum_Layout_on_Bronze_plate_with_Details_in_Gold_and_Silver.jpg

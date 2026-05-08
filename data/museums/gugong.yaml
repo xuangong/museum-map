@@ -19,24 +19,24 @@ artifacts:
   - name: 《清明上河图》
     period: 北宋
     description: 5米长卷描绘汴京繁华，社会史百科全书
-    image_url: https://upload.wikimedia.org/wikipedia/commons/e/eb/%E6%B8%85%E6%98%8E%E4%B8%8A%E6%B2%B3%E5%9B%BE.jpg
+    image_url: /img/wikimedia/wikipedia/commons/e/eb/%E6%B8%85%E6%98%8E%E4%B8%8A%E6%B2%B3%E5%9B%BE.jpg
     image_license: PD
     image_attribution: User Zhuwq on zh.wikipedia
   - name: 《千里江山图》
     period: 北宋
     description: 王希孟18岁所作，青绿山水绝唱
-    image_url: https://upload.wikimedia.org/wikipedia/commons/3/37/Wang_Ximeng._A_Thousand_Li_of_Rivers_and_Mountains._%28Complete%2C_51%2C3x1191%2C5_cm%29._1113._Palace_museum%2C_Beijing.jpg
+    image_url: /img/wikimedia/wikipedia/commons/3/37/Wang_Ximeng._A_Thousand_Li_of_Rivers_and_Mountains._%28Complete%2C_51%2C3x1191%2C5_cm%29._1113._Palace_museum%2C_Beijing.jpg
     image_license: PD
     image_attribution: Wang Xi
   - name: 各种釉彩大瓶
     period: 清乾隆
     description: 融合15种釉彩技法，工艺极限
+    image_url: https://upload.wikimedia.org/wikipedia/commons/c/c3/13_Glazed_Vase.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-2.0
+    image_attribution: Chez Cåsver (Xuan Che)
   - name: 金瓯永固杯
     period: 清乾隆
     description: 皇帝元旦开笔仪式用杯
-    image_url: https://upload.wikimedia.org/wikipedia/commons/9/98/%E9%87%91%E7%94%8C%E6%B0%B8%E5%9B%BA%E6%9D%AF.png
-    image_license: CC-BY-4.0
-    image_attribution: anonymous
   - name: 大禹治水图玉山
     period: 清乾隆
     description: 重5吨，中国最大玉雕
@@ -46,6 +46,9 @@ artifacts:
   - name: 酗亚方樽
     period: 商晚期
     description: 青铜酒器精品
+    image_url: /img/63fade5767bec174.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/1436790.htm
   - name: 张成造款雕漆云纹盘
     period: 元
     description: 漆器工艺巅峰

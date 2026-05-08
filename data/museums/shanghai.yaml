@@ -20,39 +20,45 @@ artifacts:
   - name: 大克鼎
     period: 西周孝王
     description: 膳夫克为祭祖而铸，铭文记载西周土地制度
-    image_url: https://upload.wikimedia.org/wikipedia/commons/4/40/Big_Ke_Ding_%284004385989%29.jpg
+    image_url: /img/wikimedia/wikipedia/commons/4/40/Big_Ke_Ding_%284004385989%29.jpg
     image_license: CC-BY-SA-2.0
     image_attribution: x li
   - name: 商鞅方升
     period: 战国·秦孝公十八年
     description: 刻有秦始皇统一度量衡诏书，跨越两个时代的实物
-    image_url: https://upload.wikimedia.org/wikipedia/commons/4/4f/%E5%95%86%E9%9E%85%E6%96%B9%E5%8D%87%E6%8B%93%E7%89%87.jpg
+    image_url: /img/wikimedia/wikipedia/commons/4/4f/%E5%95%86%E9%9E%85%E6%96%B9%E5%8D%87%E6%8B%93%E7%89%87.jpg
     image_license: PD
     image_attribution: Unknown
   - name: 晋侯稣钟
     period: 西周厉王
     description: 16件编钟，铭文记载西周晚期战争
-    image_url: https://upload.wikimedia.org/wikipedia/commons/0/03/%E6%99%8B%E4%BE%AF%E7%A8%A3%E9%92%9F_164313.jpg
+    image_url: /img/wikimedia/wikipedia/commons/0/03/%E6%99%8B%E4%BE%AF%E7%A8%A3%E9%92%9F_164313.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Hpppp0527
   - name: 《高逸图》
     period: 唐·孙位
     description: 描绘竹林七贤，现存最可靠的唐代人物画之一
-    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b1/%E9%AB%98%E9%80%B8%E5%9C%96.jpg
+    image_url: /img/wikimedia/wikipedia/commons/b/b1/%E9%AB%98%E9%80%B8%E5%9C%96.jpg
     image_license: PD
     image_attribution: Sun Wei
   - name: 《淳化阁帖》最善本
     period: 北宋
     description: 中国法帖之祖，上博藏本为最佳版本
-    image_url: https://upload.wikimedia.org/wikipedia/commons/a/a1/%E6%B7%B3%E5%8C%96%E9%98%81%E5%B8%96%E4%BF%AE%E5%86%85%E5%8F%B8%E4%B8%9C_1.jpg
-    image_license: PD
-    image_attribution: Shanghai Museum
+    image_url: /img/b867dccc1be9e9a0.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/11405975.htm
   - name: 牺尊
     period: 春秋
     description: 动物形青铜酒器，工艺精湛
+    image_url: /img/8120f281c9a48c66.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/subview/117224/117224.htm
   - name: 越窑青瓷莲花碗
     period: 五代
     description: 秘色瓷代表作
+    image_url: /img/d943a4ed44cd2c46.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/1164422.htm
 sources:
   - source: "上海博物馆官网: https://www.shanghaimuseum.net/"
   - source: 核心文物数据已多源交叉核实

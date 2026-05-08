@@ -25,13 +25,13 @@ artifacts:
   - name: 绿松石龙形器
     period: 夏，高等级贵族墓葬出土
     description: 长64.5cm，由2000余片各种形状的绿松石片拼合而成，每片仅0.2-0.9cm大小，厚约0.1cm。龙身略呈波状，菱形主纹象征鳞纹，白玉为睛。是中国早期龙形象的杰出代表
-    image_url: https://upload.wikimedia.org/wikipedia/commons/9/99/%E7%BB%BF%E6%9D%BE%E7%9F%B3%E9%BE%99%E5%BD%A2%E5%99%A8.jpg
+    image_url: /img/wikimedia/wikipedia/commons/9/99/%E7%BB%BF%E6%9D%BE%E7%9F%B3%E9%BE%99%E5%BD%A2%E5%99%A8.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: 僧盐
   - name: 七孔玉刀
     period: 夏，1975年出土
     description: 长60.4-65cm，宽9.5cm，墨绿色玉料。两面以交叉直线阴纹组成网状和几何图形，刀背有七个等距圆孔。二里头遗址出土最大的玉器
-    image_url: https://upload.wikimedia.org/wikipedia/commons/c/cd/%E5%A4%8F%E4%B8%83%E5%AD%94%E7%8E%89%E5%88%80%2C_2015-09-23.jpg
+    image_url: /img/wikimedia/wikipedia/commons/c/cd/%E5%A4%8F%E4%B8%83%E5%AD%94%E7%8E%89%E5%88%80%2C_2015-09-23.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Siyuwj
   - name: 网格纹青铜鼎
@@ -40,12 +40,18 @@ artifacts:
   - name: 镶嵌绿松石兽面纹铜牌饰
     period: 夏
     description: 长16.5cm，宽8-11cm。青铜框架上以数百片绿松石拼合镶嵌兽面纹，历经三四千年无一松动脱落。出土时置于墓主人胸前
+    image_url: /img/wikimedia/wikipedia/commons/4/47/%E7%BB%BF%E6%9D%BE%E7%9F%B3%E9%95%B6%E5%B5%8C%E9%9D%92%E9%93%9C%E5%85%BD%E9%9D%A2%E7%89%8C%E9%A5%B0.png
+    image_license: PD
+    image_attribution: User:Shibo77
   - name: 龙形牙璋
     period: 夏
     description: 长48.1cm，造型精美。牙璋是二里头文化典型的玉礼器，随二里头文化扩张传播到南中国和东南亚
   - name: 铜圆形器
     period: 夏
     description: 直径17cm，周边镶嵌61块绿松石，中间两圈各13个十字形绿松石。有专家认为与夏历历法天数相关
+    image_url: https://upload.wikimedia.org/wikipedia/commons/5/55/%E5%9B%9B%E5%B7%9D%E6%88%90%E9%83%BD%E9%87%91%E6%B2%99%E9%81%97%E5%9D%80%E3%80%81%E5%9B%9B%E5%B7%9D%E5%B9%BF%E6%B1%89%E4%B8%89%E6%98%9F%E5%A0%86%E9%81%97%E5%9D%80-%E9%93%9C%E9%B8%9F%E3%80%81%E9%93%9C%E6%96%B9%E5%AD%94%E5%BD%A2%E5%99%A8%E3%80%81%E9%93%9C%E9%B8%9F%E5%BD%A2%E9%A5%B0%E3%80%81%E9%93%9C%E9%BE%99%E5%BD%A2%E9%A5%B0%E3%80%81%E9%93%9C%E8%99%8E%E3%80%81%E5%9C%86%E5%BD%A2%E9%93%9C%E6%8C%82%E9%A5%B0%E3%80%81%E5%85%AB%E8%BE%B9%E5%BD%A2%E9%93%9C%E6%8C%82%E9%A5%B0%E3%80%81%E5%8F%8C%E7%BF%BC%E5%B9%B3%E5%8F%A3%E9%93%9C%E9%93%83.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36
 dynasty_connections:
   - dynasty: 城市规划
     description: 二里头是中国最早的具有明确中轴线布局的宫城。宫殿区、手工业作坊区、贵族居住区和一般居住区的分化，说明国家机器已经形成

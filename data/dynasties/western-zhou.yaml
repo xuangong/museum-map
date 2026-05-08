@@ -57,33 +57,27 @@ events:
     lat: 34.3
     lng: 108.9
 recommended_museums:
-  - museum_id: 054543c3-1850-471d-be28-e611f77ba9c4
-    name: 宝鸡青铜器博物院
+  - name: 宝鸡青铜器博物院
     location: 宝鸡
     reason: 西周青铜器最重要的出土地和收藏地，何尊（"中国"首现）、逨盘等国宝级文物
   - museum_id: guobo
     name: 中国国家博物馆
     location: 北京
     reason: 利簋（武王伐纣的直接证据）、大盂鼎等西周重器
-  - museum_id: shaanxi
-    name: 陕西历史博物馆
+  - name: 陕西历史博物馆
     location: 西安
     reason: 西周都城所在地，大量周原出土文物
-  - museum_id: gugong
-    name: 故宫博物院
+  - name: 故宫博物院
     location: 北京
     reason: 毛公鼎（原件在台北故宫），但散氏盘等西周铭文重器有收藏
-  - museum_id: taipei-gugong
-    name: 台北故宫博物院
+  - name: 台北故宫博物院
     reason: 毛公鼎（497字铭文）、散氏盘，西周金文的巅峰之作
-  - museum_id: 4dc89822-84e4-4b0a-91dd-798aa762981b
-    name: 周原博物馆
+  - name: 周原博物馆
     location: 宝鸡扶风/岐山
     reason: 西周宗庙遗址和甲骨出土地，了解周人起源
   - museum_id: luoyang
     name: 洛阳博物馆
     location: 洛阳
     reason: 成周遗址相关文物
-  - museum_id: shanghai
-    name: 上海博物馆
+  - name: 上海博物馆
     reason: 大克鼎等西周青铜精品

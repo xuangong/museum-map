@@ -30,11 +30,14 @@ artifacts:
   - name: 战国玉人
     period: 北齐
     description: 通高165cm，360度圆雕。头戴透雕花蔓冠，璎珞华丽，裙带上装饰九方浅浮雕图案
-    image_url: https://upload.wikimedia.org/wikipedia/commons/8/8b/%E5%8F%A4%E4%BB%A3%E7%8E%89%E4%BA%BA_%E6%88%98%E5%9B%BD%E7%8E%89%E5%99%A8_%E7%8E%89%E4%B9%90%E4%BA%BA%E4%BF%91.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
-    image_license: CC-BY-SA-4.0
-    image_attribution: Yunfeng9898
+    image_url: /img/449d50113418d067.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/3252791.htm
   - name: 铜鎏金碧霞元君坐像
     period: 明代
     description: 通高180cm，青铜鎏金
+    image_url: /img/1e59061e25f0ae9f.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E9%93%9C%E9%8E%8F%E9%87%91%E7%A2%A7%E9%9C%9E%E5%85%83%E5%90%9B%E5%9D%90%E5%83%8F
 sources:
   - source: 百度百科·青州博物馆（详细词条，含馆藏数据、展厅描述、文物详情）

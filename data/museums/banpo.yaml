@@ -23,15 +23,15 @@ artifacts:
   - name: 人面鱼纹彩陶盆
     period: 约前4800年，1955年出土
     description: 高16.5cm，口径39.5cm。盆内壁绘有对称的两个人面和两条鱼纹。人面圆形，头顶三角形发髻，嘴部以留空法表现，左右各衔一条变形鱼纹，双耳处有两条小鱼，构成人鱼合体图案。其含义自出土以来有图腾说、神话说、祖先形象说、面具说等20余种解释。1961年遗址即被列为全国第一批重点文物保护单位。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/3/3f/%E4%BA%BA%E9%9D%A2%E9%B1%BC%E7%BA%B9%E5%BD%A2%E5%BD%A9%E9%99%B6%E7%9B%8608736.jpg
+    image_url: /img/wikimedia/wikipedia/commons/3/3f/%E4%BA%BA%E9%9D%A2%E9%B1%BC%E7%BA%B9%E5%BD%A2%E5%BD%A9%E9%99%B6%E7%9B%8608736.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Augusthaiho
-  - name: 鱼纹彩陶盆
-    period: 约前4800年
-    description: 高17cm，红陶底，外壁绘三条互相追逐的游鱼，眼圆睁、嘴大张，线条流畅比例准确。鱼纹是半坡彩陶最核心的纹饰主题。
   - name: 小口尖底瓶
     period: 约前4800-前4300年
     description: 半坡文化最典型器物。细泥或细砂硬陶，红色，小口短颈鼓腹尖底，腹侧有双耳。最初被认为是汲水器（利用力学原理自动灌水），后经实验考古证明无法自动灌满，功能至今有争议（酒器说、祭器说等）。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/3/3d/20251026_Pottery_Bottle_with_Pointed_Bottom_from_Beishouling.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Windmemories
   - name: 陶器刻划符号
     period: 约前4800年
     description: 出土陶器上发现22种刻划符号，有些学者认为是中国文字的最早萌芽，但也有学者认为只是工匠标记。

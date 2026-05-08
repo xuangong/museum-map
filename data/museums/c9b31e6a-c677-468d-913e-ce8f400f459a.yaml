@@ -30,22 +30,31 @@ artifacts:
   - name: 金丝翼善冠
     period: 明朝万历年间
     description: 明神宗万历帝的纯金冠冕，以极细金丝编织而成，工艺精湛，为出土于定陵的国宝级文物，现藏定陵博物馆
+    image_url: https://upload.wikimedia.org/wikipedia/commons/0/05/Beijing_2006_3-71.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: G41rn8
   - name: 十二龙九凤冠
     period: 明朝万历年间
     description: 孝端皇后所用凤冠，冠上饰十二龙九凤，镶嵌大量珍珠宝石，为国家一级文物
+    image_url: https://upload.wikimedia.org/wikipedia/commons/5/57/%E5%AD%9D%E7%AB%AF%E6%98%BE%E7%9A%87%E5%90%8E%E4%B9%9D%E9%BE%99%E4%B9%9D%E5%87%A4%E5%86%A0.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: PD
+    image_attribution: 清原染子
   - name: 皇后龙凤冠
     period: 明朝万历年间
     description: 共出土四顶凤冠，其中一顶镶嵌3500颗珍珠和195块各色宝石，极为华美
   - name: 地宫
     period: 明朝万历年间
     description: 由前、中、后及左右配殿五座石室构成，总面积1195平方米，是目前国内对外开放的唯一明代帝王地下宫殿
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/78/%E6%85%88%E6%BA%AA%E9%99%B5%E5%9C%B0%E5%AE%AB.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: 甲基不是橙
   - name: 汉白玉石门
     period: 明朝万历年间
     description: 地宫入口处的石门，采用整块汉白玉雕凿而成，设有自来石顶门机关，工艺巧妙
   - name: 缂丝衮服
     period: 明朝万历年间
     description: 出土于定陵的明代织物精品，以缂丝工艺织就，反映明代高超的手工业水平
-    image_url: https://upload.wikimedia.org/wikipedia/commons/f/f8/Yellow_Kesi_in_Ming_tombs_%28%E8%A1%AE%E6%9C%8D%29.jpg
+    image_url: /img/wikimedia/wikipedia/commons/f/f8/Yellow_Kesi_in_Ming_tombs_%28%E8%A1%AE%E6%9C%8D%29.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: ꧁༒𝓷𝓱𝓪𝓬𝓷𝔥༒꧂
 dynasty_connections:

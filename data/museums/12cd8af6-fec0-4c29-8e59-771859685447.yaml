@@ -1,0 +1,56 @@
+id: 12cd8af6-fec0-4c29-8e59-771859685447
+name: 北京大运河博物馆（大运河北京段遗址群）
+lat: 39.8823
+lng: 116.6708
+location: 北京市通州区绿心路1号院5号楼
+level: 国家级
+core_period: 北周至清代（约557年—1900年代）
+specialty: 智慧型综合性博物馆，集收藏保管、开放式展陈、科学研究、社会教育、文保修复等功能于一体，以大运河北京段历史文化为核心主题
+dynasty_coverage: 北周、隋、唐、后唐、辽、元、明、清
+timeline: 北周宇文觉元年（557年）始建燃灯塔；唐贞观七年（633年）尉迟敬德监修重造；辽代（907—1125年）重建，现存塔基为辽代遗构；元代开凿通惠河，大运河北京段全线贯通；明成化年间重修燃灯塔；清康熙十八年（1679年）地震坍塌，康熙三十五年（1696年）按原样重建；1987年燃灯塔全面修整；2024年北京大运河博物馆正式开放
+treasures:
+  - name: 白浮泉（大运河水源遗址）
+  - name: 燃灯塔（京杭大运河北端标志性建筑）
+  - name: 通州大运河遗址
+  - name: 古代颜色釉瓷器
+  - name: 元代丝织品
+  - name: 燃灯塔铜风铃2248枚
+  - name: 塔身砖刻碑记（第十三层正南面）
+halls:
+  - name: 共享大厅地下一层
+  - name: 共享大厅二层平台
+  - name: 展陈大楼一层
+artifacts:
+  - name: 燃灯塔
+    period: 北周始建，现存为辽代塔基、清代重建
+    description: 八角形十三层砖木结构密檐实心砖塔，全高56米，基围38.4米，对面直径11.4米。束腰部分雕有仙人、力士、花朵等图案。全塔铜风铃共计2248枚，铜铃内壁铭铸捐资者姓名及籍贯。第十三层正南面中间嵌有砖刻碑记一块。为京杭大运河北端的标志型建筑。
+  - name: 塔榆
+    period: 明清以来
+    description: 原生长于燃灯塔塔顶西北处的榆树，高3.7米，冠阔4.2米，根系形如折扇面。1987年修缮时移植至塔下公园，为通州著名景观。
+  - name: 白浮泉遗址
+    period: 元代
+    description: 元代大运河北京段引水工程的水源地，由都水监郭守敬规划引白浮泉水南下，汇入瓮山泊（今昆明湖），再经通惠河入大运河，是元大都漕运的命脉起点。
+  - name: 古代颜色釉瓷器
+    period: 元明清
+  - name: 元代丝织品
+    period: 元代
+dynasty_connections:
+  - dynasty: 北周
+    description: 宇文觉元年（557年）始建燃灯塔
+  - dynasty: 唐
+    description: 贞观七年（633年）由尉迟敬德将军监修再造燃灯塔
+  - dynasty: 后唐
+    description: 武宗灭佛，燃灯塔遭毁坏
+  - dynasty: 辽
+    description: 907—1125年重建，现存燃灯塔为辽代塔基
+  - dynasty: 元
+    description: 开凿通惠河，大运河北京段全线贯通，白浮泉为水源
+  - dynasty: 明
+    description: 成化年间州训导杨明主持重修燃灯塔
+  - dynasty: 清
+    description: 康熙十八年（1679年）地震后坍塌，康熙三十五年（1696年）按原样重建
+sources:
+  - source: https://www.canalmuseum.org.cn/index.html
+  - source: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742745/743627282/index.html
+  - source: https://www.beijing.gov.cn/renwen/zt/sdwhd/dyh/yhdw/202407/t20240717_3751915.html
+  - source: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/fj/fjwwls/201903/t20190328_16115.html

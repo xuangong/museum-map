@@ -87,12 +87,10 @@ events:
     lat: 39.9
     lng: 116.4
 recommended_museums:
-  - museum_id: gugong
-    name: 故宫博物院
+  - name: 故宫博物院
     location: 北京
     reason: 清代皇宫本身，加上186万件馆藏文物中大量清代珍品：珐琅彩瓷器、玉器、书画、宫廷用品
-  - museum_id: taipei-gugong
-    name: 台北故宫博物院
+  - name: 台北故宫博物院
     reason: 翠玉白菜、肉形石、清代书画和瓷器精品，清宫旧藏的重要部分
   - museum_id: guobo
     name: 中国国家博物馆
@@ -106,21 +104,17 @@ recommended_museums:
     name: 承德避暑山庄博物馆
     location: 承德
     reason: 清代皇家园林和外八庙，展示清朝多民族统治智慧
-  - museum_id: nanjing
-    name: 南京博物院
+  - name: 南京博物院
     reason: 清代瓷器和书画精品
   - museum_id: 40b9932c-a873-4aa4-85fe-392abe12ef50
     name: 颐和园
     location: 北京
     reason: 慈禧太后重建的皇家园林，清末政治的重要场所
-  - museum_id: bfd76fa2-1343-4649-91f0-a8bcc3b0b690
-    name: 圆明园遗址公园
+  - name: 圆明园遗址公园
     location: 北京
     reason: 虽已是废墟，但西洋楼遗址是近代屈辱史的实物见证
-  - museum_id: shanghai
-    name: 上海博物馆
+  - name: 上海博物馆
     reason: 清代瓷器、玉器和书画
-  - museum_id: guangdong
-    name: 广东省博物馆
+  - name: 广东省博物馆
     location: 广州
     reason: 清代外销瓷（广彩）和十三行贸易相关文物

@@ -1,0 +1,65 @@
+id: 4922cadb-30e6-43fc-b441-d545cab51322
+name: 中国人民革命军事博物馆
+lat: 39.9043
+lng: 116.31
+location: 北京市海淀区复兴路9号
+level: 国家级
+core_period: 1921年至今（新民主主义革命时期至当代）
+specialty: 中国唯一的国家级大型综合性军事博物馆，收藏、展示中国共产党领导的人民军队珍贵文物、军事历史文献与资料，以及中华民族五千年军事、战争、武器史料
+dynasty_coverage: 先秦至当代（中国历代军事史）
+timeline: 1958年9月21日正式组建；展览大楼1958年10月动工，1959年7月竣工，1960年8月1日正式对外开放，系首都十大建筑之一（国庆十周年献礼工程）；2008年3月起免费开放；2012年9月启动展览大楼加固改造，2017年7月竣工；改造后建筑面积15.3万平方米，设43个陈列厅（区），陈列面积近5.9万平方米，主楼高94.7米
+treasures:
+  - name: 朱德在”八一”南昌起义时使用的警用毛瑟手枪
+  - name: 红星奖章（中华苏维埃共和国中央革命军事委员会颁发）
+  - name: U-2飞机残骸
+  - name: 红旗2号导弹
+  - name: 油画《攻占总统府》
+  - name: 油画《巡逻图》
+halls:
+  - name: 人民军队通史陈列（新民主主义革命时期陈列）
+  - name: 抗美援朝战争馆
+  - name: 兵器陈列
+  - name: 中国历代军事陈列
+  - name: 军事科技陈列
+  - name: 红色记忆——馆藏革命军事艺术作品陈列
+artifacts:
+  - name: 朱德警用毛瑟手枪
+    period: 1927年（民国时期）
+    description: 朱德在1927年”八一”南昌起义时使用的警用毛瑟手枪，是馆藏代表性革命文物
+  - name: 红星奖章
+    period: 土地革命战争时期（1927—1937年）
+    description: 中华苏维埃共和国中央革命军事委员会颁发的红星奖章，土地革命战争时期重要文物
+  - name: U-2飞机残骸
+    period: 20世纪60年代
+    description: 中国击落的美制U-2高空侦察机残骸，陈列于兵器陈列中央大厅，具有重要的军事与历史价值
+  - name: 红旗2号导弹
+    period: 20世纪60—70年代
+    description: 中国自主研制的地空导弹，陈列于兵器陈列区，是中国防空武器发展的重要见证
+  - name: 油画《攻占总统府》
+    period: 现代（建国后创作）
+    description: 描绘1949年人民解放军攻占南京国民政府总统府的大型历史题材油画，馆藏代表性艺术珍品
+  - name: 油画《巡逻图》
+    period: 现代
+    description: 馆藏革命军事题材代表性油画之一，收藏于红色记忆艺术作品陈列
+dynasty_connections:
+  - dynasty: 先秦
+    description: 中国历代军事陈列展示先秦至民国时期数千年军事文明
+  - dynasty: 汉
+    description: 收藏汉代军事遗存文物，纳入中国历代军事陈列
+  - dynasty: 唐
+    description: 收藏唐代军事文物，体现中国古代军事制度演变
+  - dynasty: 明
+    description: 收藏明代兵器与军事史料
+  - dynasty: 清
+    description: 收藏清代军事文物，涵盖近代战争史料
+  - dynasty: 中华民国
+    description: 收藏民国时期革命战争文物，为人民军队通史陈列核心内容
+  - dynasty: 中华人民共和国
+    description: 收藏建国以来当代军事文物，涵盖抗美援朝、国防建设等各历史时期
+sources:
+  - source: http://www.jb.mil.cn/jbgk/
+  - source: http://www.jb.mil.cn/zlcl/jbcl/
+  - source: http://www.jb.mil.cn/gcww/wwzj/index.html
+  - source: http://eng.jb.mil.cn/
+  - source: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgrmgmjsbwg/202301/t20230112_2897409.html
+  - source: https://www.museumschina.cn/museums/details?id=202208221558036203

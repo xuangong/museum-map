@@ -22,28 +22,28 @@ halls:
 artifacts:
   - name: 楚大鼎（铸客大鼎）
     description: 战国（约前4世纪）。中国现存最大的先秦圆鼎之一，重约400公斤，出土于寿县楚王墓，铸有"铸客"铭文，是楚国国力与青铜铸造技术的象征。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/8/81/Warring_States_Bronze_ZHU_KE_Ding_1a.jpg
+    image_url: /img/wikimedia/wikipedia/commons/8/81/Warring_States_Bronze_ZHU_KE_Ding_1a.jpg
     image_license: CC0
     image_attribution: Gary Lee Todd, Ph.D.
   - name: 凌家滩玉鹰
     description: 新石器时代（约前3500年）。玉雕展翅飞鹰，造型抽象而有力，是凌家滩文化的标志性文物，反映了史前先民的精神信仰和高超玉作工艺。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/f/f9/%E5%87%8C%E5%AE%B6%E6%BB%A9%E7%8E%89%E9%B9%B0.jpeg
-    image_license: CC-BY-SA-4.0
-    image_attribution: 章彦博
+    image_url: /img/bf56147364243d6a.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/6774420.htm
   - name: 战国鄂君启金节
     description: 战国（前323年）。楚怀王颁发给鄂君启的免税通行凭证，分车节和舟节，金质错铭，是研究楚国交通、商业和政治制度的珍贵实物。
+    image_url: /img/3426fa7f4b25b51c.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Wikimedia Commons · 错金鄂君启青铜节
   - name: 凌家滩玉人
     description: 新石器时代（约前3500年）。站立玉人像，双手置于胸前，是中国最早的玉雕人像之一，对理解史前社会等级和宗教仪式有重要价值。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/f/f3/Jade_human_figure_at_Lingjiatan_Site%2C_2017-05-21.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: Siyuwj
+    image_url: /img/7b5e4e3621c201ac.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/6774339.htm
   - name: 北宋金棺银椁
     description: 北宋（11世纪）。出土于寿县报恩寺，工艺精湛，是宋代佛教舍利瘗埋制度的重要实物。
   - name: 吴王光剑
     description: 春秋（约前5世纪）。安徽南陵出土，铸有铭文"吴王光自作用剑"，证明了安徽在吴楚争霸中的前线地位。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/7/70/%E5%90%B4%E7%8E%8B%E5%85%89%E5%89%91.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: 怪怪～鱼
   - name: 明代徽州三雕（砖雕、木雕、石雕）
     description: 明清。精美的建筑装饰构件，展现徽派建筑的艺术成就和徽商的文化品位。
 dynasty_connections:

@@ -20,31 +20,40 @@ artifacts:
   - name: 白鹤梁题刻
     period: 唐至清，涪陵长江江心
     description: 被称为"世界第一古代水文站"，石梁上有自唐代以来的163段题刻、3万余字，记录了1200年间长江枯水位变化，是世界水文史的珍贵遗产。三峡蓄水后建成白鹤梁水下博物馆原址保护
-    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e9/%E7%99%BD%E9%B9%A4%E6%A2%81%E5%94%90%E5%88%BB%E3%80%81%E6%B8%85%E5%88%BB%E7%9F%B3%E9%B1%BC.jpg
-    image_license: PD
-    image_attribution: 萧星珙
+    image_url: /img/d97ab1722fc3ab95.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/subview/1137752/1137752.htm
   - name: 巴蜀青铜器
     period: 先秦
     description: 包括巴式柳叶剑、铜钲、虎纽錞于等巴文化标志性器物，与中原和楚国青铜器风格迥异
   - name: 汉代画像石棺和画像砖
     period: 东汉
     description: 巴蜀地区汉代雕塑艺术的精品，题材涵盖生产劳动、宴饮乐舞、神话故事、建筑等，展厅含一级文物47件（套）
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/14/%E6%9C%9B%E4%B8%9B%E5%8D%9A%E7%89%A9%E9%A6%86-%E7%94%BB%E5%83%8F%E7%9F%B3%E6%A3%BA%EF%BC%88%E4%B8%9C%E6%B1%89%EF%BC%89%EF%BC%88%E5%A4%8D%E5%88%B6%EF%BC%89_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36
   - name: 偏将军印章
     period: 汉代
     description: 军事官印
   - name: 明玉珍墓出土文物
     period: 明初，1366年
     description: 明玉珍为元末农民起义军领袖，在重庆建立大夏国，其墓葬出土的文物反映了元末明初的政治格局
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/1d/20250522_Ming_Yuzhen_Chenlieguan.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Yumeto
   - name: 锁江铁柱
     period: 宋
     description: 三峡地区水道军事防御设施
+    image_url: https://upload.wikimedia.org/wikipedia/commons/d/da/%E4%B9%9D%E6%B1%9F%E5%B8%82%E9%94%81%E6%B1%9F%E6%A5%BC.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-3.0
+    image_attribution: Gisling
   - name: 秦良玉"太子太保总镇关防"印
     period: 明末
     description: 秦良玉是中国历史上唯一正式列入正史将相传的女将军
   - name: 朐忍令景云神道碑
     period: 东汉
     description: 重要的汉代碑刻
-    image_url: https://upload.wikimedia.org/wikipedia/commons/c/cb/%E6%BC%A2%E5%B7%B4%E9%83%A1%E6%9C%90%E5%BF%8D%E4%BB%A4%E6%99%AF%E9%9B%B2%E7%A2%91.jpg
+    image_url: /img/wikimedia/wikipedia/commons/c/cb/%E6%BC%A2%E5%B7%B4%E9%83%A1%E6%9C%90%E5%BF%8D%E4%BB%A4%E6%99%AF%E9%9B%B2%E7%A2%91.jpg
     image_license: CC-BY-SA-4.0
     image_attribution: Urga
 sources:

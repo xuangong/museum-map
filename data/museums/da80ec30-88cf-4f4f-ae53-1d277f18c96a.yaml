@@ -36,6 +36,9 @@ artifacts:
   - name: 华严三圣
     period: 明代
     description: 毗卢遮那佛、文殊菩萨和普贤菩萨像，木胎贴金罩漆，毗卢遮那佛像高2米，文殊、普贤像各高2.14米
+    image_url: https://upload.wikimedia.org/wikipedia/commons/7/7a/Bright_Filial_Piety_Temple.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-3.0
+    image_attribution: Chinatravelsavvy
   - name: 明代木雕佛涅盘像
     period: 明代
     description: 长约十米，为北京现存最大卧佛，陈列于藏经楼

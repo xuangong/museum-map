@@ -81,28 +81,23 @@ events:
     lat: 34.3
     lng: 108.9
 recommended_museums:
-  - museum_id: shaanxi
-    name: 陕西历史博物馆
+  - name: 陕西历史博物馆
     location: 西安
     reason: 唐代文物收藏最丰富的博物馆，唐三彩、金银器、壁画精品（壁画馆需单独购票），何家村窖藏金银器
   - museum_id: guobo
     name: 中国国家博物馆
     location: 北京
     reason: 大量唐代文物，包括三彩骆驼载乐俑等
-  - museum_id: gugong
-    name: 故宫博物院
+  - name: 故宫博物院
     location: 北京
     reason: 唐代绘画和书法珍品，如《步辇图》摹本
-  - museum_id: mogao
-    name: 敦煌研究院/莫高窟
+  - name: 敦煌研究院/莫高窟
     location: 敦煌
     reason: 唐代洞窟是莫高窟艺术巅峰，必须实地感受壁画的震撼
-  - museum_id: famensi
-    name: 法门寺博物馆
+  - name: 法门寺博物馆
     location: 宝鸡扶风
     reason: 唐代皇家供奉佛指舍利及大量金银器、秘色瓷，地宫1987年发现震惊世界
-  - museum_id: beilin
-    name: 西安碑林博物馆
+  - name: 西安碑林博物馆
     reason: 收藏大量唐代碑刻，颜真卿《多宝塔碑》等书法原石
   - museum_id: 817569a4-234c-46ce-9bcd-89ef8f271011
     name: 乾陵博物馆/懿德太子墓

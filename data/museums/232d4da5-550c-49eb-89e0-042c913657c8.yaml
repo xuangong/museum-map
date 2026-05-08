@@ -26,9 +26,9 @@ artifacts:
   - name: 明豆青釉诸葛碗
     period: 明代
     description: 豆青釉瓷碗，与诸葛亮传说相关联的典型文物
-    image_url: https://upload.wikimedia.org/wikipedia/commons/a/a9/Zhuge_bowl.jpg
-    image_license: CC-BY-SA-3.0
-    image_attribution: Shizhao
+    image_url: /img/6edadb5d9bf3b72c.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/9492931.htm
   - name: 蜀汉铭文青铜弩机
     period: 蜀汉（三国）
     description: 铸有铭文的青铜弩机，为蜀汉军事文物的重要实物证据
@@ -38,6 +38,9 @@ artifacts:
   - name: 东汉四耳蹲蛙青铜鼓
     period: 东汉
     description: 四耳造型蹲蛙装饰青铜鼓，反映汉代礼乐文化
+    image_url: /img/eec9c0364693d324.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/9492585.htm
   - name: 唐裴度撰《蜀丞相诸葛武侯祠堂碑》
     period: 唐代
     description: 由唐代名臣裴度撰文、柳公绰书丹、鲁建镌刻，史称'三绝碑'，为祠内镇馆之宝

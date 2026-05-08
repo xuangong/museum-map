@@ -71,11 +71,9 @@ recommended_museums:
   - museum_id: 232d4da5-550c-49eb-89e0-042c913657c8
     name: 成都武侯祠博物馆
     reason: 诸葛亮和蜀汉历史专题
-  - museum_id: nanjing
-    name: 南京博物院
+  - name: 南京博物院
     reason: 六朝文物（含东吴）
-  - museum_id: jiangsu
-    name: 六朝博物馆
+  - name: 六朝博物馆
     location: 南京
     reason: 东吴至南朝专题
   - museum_id: guobo

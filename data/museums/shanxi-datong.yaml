@@ -22,15 +22,15 @@ artifacts:
   - name: 司马金龙墓漆画屏风
     period: 北魏，484年
     description: —大同石家寨出土。木板上以漆绘列女、孝子等故事，人物线条流畅，色彩鲜艳，构图源自汉代画像传统。司马金龙是晋朝宗室后裔，娶北魏皇族拓跋氏女。此屏风是北魏绘画遗存中最精美的作品，展示了北魏汉化进程中的文化融合。（为国宝级文物）
-    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e6/Funerary_panels%2C_from_the_tomb_of_Sima_Jinlong%2C_484_CE._Datong%2C_Shanxi_Province.jpg
+    image_url: /img/wikimedia/wikipedia/commons/e/e6/Funerary_panels%2C_from_the_tomb_of_Sima_Jinlong%2C_484_CE._Datong%2C_Shanxi_Province.jpg
     image_license: PD
     image_attribution: "Artist: 5th century artist in China. Photographer: unknown"
   - name: 北魏石雕柱础
     period: 北魏，5世纪
     description: —大同城内出土，浮雕忍冬纹、莲花纹等装饰，风格兼具中原和西域特色。是北魏宫殿建筑构件的重要实物。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/a/a4/Northern_Wei_Stone_Pillar_Base%2C_Tomb_of_Sima_Jinlong%2C_484_AD_%2810100504063%29.jpg
-    image_license: CC0
-    image_attribution: Gary Todd from Xinzheng, China
+    image_url: /img/978d8095ba6b8c9b.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/650623.htm
   - name: 封和突墓出土品
     period: 北魏，504年
     description: —封和突为鲜卑贵族，墓中出土陶俑、铜器等。陶俑面部特征和服饰反映了鲜卑族的形象特点，部分俑已穿汉式服装，体现了孝文帝改革后的文化变化。
@@ -40,16 +40,19 @@ artifacts:
   - name: 琅琊王司马金龙墓志
     period: 北魏
     description: —墓志铭文书法工整，是北魏书法的重要遗存，对研究北碑书法有重要意义。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/2/2c/Northern_Wei_Epitaph%2C_Tomb_of_Sima_Jinlong%2C_484_AD_%2810100505915%29.jpg
+    image_url: /img/wikimedia/wikipedia/commons/2/2c/Northern_Wei_Epitaph%2C_Tomb_of_Sima_Jinlong%2C_484_AD_%2810100505915%29.jpg
     image_license: CC0
     image_attribution: Gary Todd from Xinzheng, China
   - name: 辽代壁画墓壁画
     period: 辽代，10-11世纪
     description: —大同地区发现多座辽代壁画墓，绘有宴饮、出行、侍奉等场面，人物服饰兼具契丹和汉族特征，是辽代社会生活的生动写照。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/8/83/Preparing_for_hunting%2C_mural_from_Tomb_in_Aohan%2C_Liao_Dynasty.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: PD
+    image_attribution: Unknown author
   - name: 北魏彩绘人物陶俑群
     period: 北魏
     description: —成组出土的彩绘陶俑，包括武士俑、文官俑、侍女俑、胡人俑等，面部特征多样，反映了平城时期多民族杂居的社会面貌。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/4/42/Pottery_Tomb_Figurines%2C_Northern_Wei_%28tomb_of_Sima_Jinlong%29.jpg
+    image_url: /img/wikimedia/wikipedia/commons/4/42/Pottery_Tomb_Figurines%2C_Northern_Wei_%28tomb_of_Sima_Jinlong%29.jpg
     image_license: CC-BY-SA-2.0
     image_attribution: BY Chu
 sources:

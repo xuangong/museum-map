@@ -27,9 +27,9 @@ artifacts:
   - name: 越王勾践剑
     period: 春秋，约前5世纪
     description: 剑长55.7cm，锡青铜铸造，剑身菱形暗纹，千年不锈
-    image_url: https://upload.wikimedia.org/wikipedia/commons/2/25/20230208_Bronze_sword_used_by_King_Goujian_of_Yue_01.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: Windmemories
+    image_url: /img/2fbae3eaae83c3fd.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E6%98%A5%E7%A7%8B%E8%B6%8A%E7%8E%8B%E5%8B%BE%E8%B7%B5%E5%89%91
   - name: 曾侯乙尊盘
     period: 前433年
     description: 尊与盘套合，镂空附饰用失蜡法铸造，铜器铸造工艺的极限

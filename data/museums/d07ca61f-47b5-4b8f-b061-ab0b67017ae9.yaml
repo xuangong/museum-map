@@ -33,40 +33,43 @@ artifacts:
   - name: 摩尼殿
     period: 北宋
     description: 平面造型和建筑形式在中国古代殿堂建筑中独树一帜，为中国宋代建筑孤例
-    image_url: https://upload.wikimedia.org/wikipedia/commons/d/dc/%E6%AD%A3%E5%AE%9A%E9%9A%86%E5%85%B4%E5%AF%BA%E6%91%A9%E5%B0%BC%E6%AE%BF%E6%97%A7%E5%BD%B1.jpg
-    image_license: CC-BY-4.0
-    image_attribution: Unknown author
+    image_url: /img/c1c7c68efc7f4626.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/1732580.htm
   - name: 摩尼殿壁画
     period: 宋代
     description: 包含檐墙、扇面墙壁画，2016年4月至2017年10月由敦煌研究院对颜料层起甲、污染、裂缝等病害进行专业保护修复
-    image_url: https://upload.wikimedia.org/wikipedia/commons/8/8f/%E6%AD%A3%E5%AE%9A%E9%9A%86%E5%85%B4%E5%AF%BA%E6%91%A9%E5%B0%BC%E6%AE%BF%E5%A3%81%E7%94%BB%E6%97%A7%E5%BD%B1_02.jpg
+    image_url: /img/wikimedia/wikipedia/commons/8/8f/%E6%AD%A3%E5%AE%9A%E9%9A%86%E5%85%B4%E5%AF%BA%E6%91%A9%E5%B0%BC%E6%AE%BF%E5%A3%81%E7%94%BB%E6%97%A7%E5%BD%B1_02.jpg
     image_license: CC-BY-4.0
     image_attribution: Unknown author
   - name: 五彩悬塑倒坐观音
     period: 宋代
     description: 摩尼殿内塑像，被誉为'东方美神'，为佛教美学艺术的上乘之作，2016—2017年保护修复期间进行了加固
-    image_url: https://upload.wikimedia.org/wikipedia/commons/f/f5/%E9%9A%86%E5%85%B4%E5%AF%BA%E5%80%92%E5%9D%90%E8%A7%82%E9%9F%B3_-_panoramio.jpg
+    image_url: /img/wikimedia/wikipedia/commons/f/f5/%E9%9A%86%E5%85%B4%E5%AF%BA%E5%80%92%E5%9D%90%E8%A7%82%E9%9F%B3_-_panoramio.jpg
     image_license: CC-BY-SA-3.0
     image_attribution: FoxyGrace
   - name: 转轮藏阁内宋代转轮藏
     period: 宋代
     description: 现存时代最早者，是宋代小木作稀有遗物
-    image_url: https://upload.wikimedia.org/wikipedia/commons/d/dd/%E6%AD%A3%E5%AE%9A%E9%9A%86%E5%85%B4%E5%AF%BA%E8%BD%AC%E8%BD%AE%E8%97%8F%E6%97%A7%E5%BD%B1.jpg
+    image_url: /img/wikimedia/wikipedia/commons/d/dd/%E6%AD%A3%E5%AE%9A%E9%9A%86%E5%85%B4%E5%AF%BA%E8%BD%AC%E8%BD%AE%E8%97%8F%E6%97%A7%E5%BD%B1.jpg
     image_license: CC-BY-4.0
     image_attribution: Unknown author
   - name: 龙藏寺碑
     period: 隋
     description: 我国现存著名古碑刻之一，碑文书法上承六朝碑石余韵、下开唐楷先风，被推崇为'隋碑第一'，对研究南北朝至隋唐书法艺术演变具有重要价值
+    image_url: https://upload.wikimedia.org/wikipedia/commons/3/32/%E9%BE%99%E8%97%8F%E5%AF%BA-%E5%9B%BD%E4%BF%9D%E7%A2%91_2025-06-09.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36
   - name: 大悲阁内宋代铜铸千手观音
     period: 北宋
     description: 高21.3米，是我国现存古代最高的铜铸立式佛教造像
-    image_url: https://upload.wikimedia.org/wikipedia/commons/7/7a/%E9%9A%86%E5%85%B4%E5%AF%BA%E5%8D%83%E6%89%8B%E8%A7%82%E9%9F%B3_-_panoramio.jpg
+    image_url: /img/wikimedia/wikipedia/commons/7/7a/%E9%9A%86%E5%85%B4%E5%AF%BA%E5%8D%83%E6%89%8B%E8%A7%82%E9%9F%B3_-_panoramio.jpg
     image_license: CC-BY-SA-3.0
     image_attribution: FoxyGrace
   - name: 毗卢殿内铜铸毗卢佛
     period: 宋代
     description: 构思奇巧，制作精美，为海内孤例，是中国古代铜造像中的珍品
-    image_url: https://upload.wikimedia.org/wikipedia/commons/6/67/%E9%9A%86%E5%85%B4%E5%AF%BA%E9%93%9C%E9%93%B8%E6%AF%97%E5%8D%A2%E4%BD%9B_1.jpg
+    image_url: /img/wikimedia/wikipedia/commons/6/67/%E9%9A%86%E5%85%B4%E5%AF%BA%E9%93%9C%E9%93%B8%E6%AF%97%E5%8D%A2%E4%BD%9B_1.jpg
     image_license: CC0
     image_attribution: E2568
 dynasty_connections:

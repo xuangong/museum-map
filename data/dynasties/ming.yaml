@@ -77,19 +77,16 @@ events:
     lat: 39.91
     lng: 116.4
 recommended_museums:
-  - museum_id: gugong
-    name: 故宫博物院
+  - name: 故宫博物院
     location: 北京
     reason: 明代紫禁城本身就是最大的明代文物，加上馆藏的明代瓷器、书画、家具等
-  - museum_id: nanjing
-    name: 南京博物院
+  - name: 南京博物院
     reason: 明初都城所在地，大量明代文物
   - museum_id: jingdezhen
     name: 景德镇中国陶瓷博物馆
     location: 景德镇
     reason: 明代瓷器发展全貌，从永乐甜白到宣德青花到成化斗彩
-  - museum_id: taipei-gugong
-    name: 台北故宫博物院
+  - name: 台北故宫博物院
     reason: 成化斗彩鸡缸杯（2014年拍卖价2.8亿港币的同款）、永乐宣德青花精品
   - museum_id: guobo
     name: 中国国家博物馆
@@ -102,12 +99,10 @@ recommended_museums:
   - museum_id: ebd9f374-6925-48ef-a456-13e0fd61fcd4
     name: 南京明孝陵/明城墙
     reason: 朱元璋陵墓和明代城防，实地感受明初气象
-  - museum_id: c9b31e6a-c677-468d-913e-ce8f400f459a
-    name: 定陵博物馆
+  - name: 定陵博物馆
     location: 北京十三陵
     reason: 唯一被考古发掘的明代帝陵（万历帝），出土金冠、凤冠等
-  - museum_id: shanghai
-    name: 上海博物馆
+  - name: 上海博物馆
     reason: 明代书画和瓷器精品
   - museum_id: suzhou
     name: 苏州博物馆

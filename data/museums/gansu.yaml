@@ -22,9 +22,9 @@ artifacts:
   - name: 铜奔马
     period: 东汉，武威雷台汉墓出土
     description: 通高34.5cm，长45cm，重7.3kg。三足腾空，一足踏飞鸟（鹰），塑造奔马超掠飞鹰的瞬间。着力点集中在踏鸟的一足上，精确掌握力学平衡。1983年被确定为中国旅游标志。集西域马和蒙古马优点于一身，展现河西走马的对侧步特征。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/2/25/Gansu_Museum_2007_257.jpg
-    image_license: CC BY-SA 4.0
-    image_attribution: G41rn8 / Wikimedia Commons
+    image_url: /img/644078fc9c735914.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E4%B8%9C%E6%B1%89%E9%93%9C%E5%A5%94%E9%A9%AC
   - name: 人头形器口彩陶瓶
     period: 仰韶文化，约5000年前
     description: 瓶口塑为人头形，齐刘海发型，耳有耳洞，身上绘三角茎叶纹与飞鸟纹，是新石器时代最具人文气息的彩陶作品之一
@@ -46,6 +46,9 @@ artifacts:
   - name: 彩绘木博戏俑
     period: 西汉，武威磨嘴子汉墓出土
     description: 两位老者对弈博戏，高29cm，生动刻画蓄势待发的对弈场面
+    image_url: /img/ccb8260e33043981.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E5%BD%A9%E7%BB%98%E6%9C%A8%E5%8D%9A%E6%88%8F%E4%BF%91
   - name: 绢底平绣人像
     period: 西汉，武威磨嘴子汉墓
     description: 红色绢底，用多色丝线平绣二人像，是极珍贵的汉代丝绣实物

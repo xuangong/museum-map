@@ -31,6 +31,9 @@ artifacts:
   - name: 铜鎏金凤凰脊兽
     period: 清代
     description: 国家二级文物，2025年6月由厦门市博物馆移交归还
+    image_url: /img/c5b79b8885105f29.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E9%93%9C%E9%8E%8F%E9%87%91%E5%87%A4%E5%87%B0%E8%84%8A%E5%85%BD
   - name: 清代宫廷瓷器
     period: 清代
     description: 避暑山庄藏瓷艺术展核心展品，展现清代御窑瓷器工艺

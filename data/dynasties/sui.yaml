@@ -73,6 +73,5 @@ recommended_museums:
   - museum_id: guobo
     name: 中国国家博物馆
     reason: 隋代通史展
-  - museum_id: mogao
-    name: 敦煌莫高窟
+  - name: 敦煌莫高窟
     reason: 隋代洞窟（过渡风格）

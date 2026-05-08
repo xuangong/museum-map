@@ -1,0 +1,47 @@
+id: 66cdfe53-ec02-4828-8732-358a2a0130c5
+name: 大钟寺古钟博物馆
+lat: 39.9687
+lng: 116.3441
+location: 北京市海淀区北三环西路甲31号
+level: 市级
+core_period: 明永乐年间
+specialty: 古钟类专题性博物馆，收藏、展览、研究历代古钟文化，弘扬民族文化；兼事文物征集、登编、修复、保管及历史知识普及
+dynasty_coverage: 元代至明清各代
+timeline: 1985年正式对外开放
+treasures:
+  - name: 永乐大钟（青铜大佛钟，高6.75米，重46.5吨，通体遍铸经文咒语达23万余字）
+  - name: 朝钟（皇帝上朝所用，周身盘旋二十二条飞龙）
+  - name: 祭坛钟（祭天专用）
+  - name: 更钟（报时用，元代北京城历史见证）
+  - name: 魏忠贤铜钟（俗称歪钟）
+halls:
+  - name: 天王殿——钟韵洪鸣
+  - name: 东路配殿——阅古钟林
+artifacts:
+  - name: 永乐大钟
+    period: 明永乐年间
+    description: 青铜大佛钟，高6.75米，重46.5吨，通体遍铸经文咒语达23万余字，为镇馆之宝
+  - name: 朝钟
+    period: 明代
+    description: 皇帝上朝所用礼钟，周身盘旋二十二条飞龙，造型华贵
+  - name: 祭坛钟
+    period: 明清
+    description: 用于祭天典礼的专用礼钟
+  - name: 更钟
+    period: 元代
+    description: 报时用钟，是元代北京城历史的重要见证
+  - name: 魏忠贤铜钟
+    period: 明代
+    description: 俗称歪钟，与宦官魏忠贤相关的历史文物
+dynasty_connections:
+  - dynasty: 明代
+    description: 永乐大钟等多件重要铸钟均出自明代，尤以明永乐年间铸造的永乐大钟最为著名
+  - dynasty: 元代
+    description: 馆藏更钟为元代北京城报时用钟，见证元大都历史
+  - dynasty: 清代
+    description: 馆内收藏若干清代宫廷及礼制用钟
+sources:
+  - source: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1729028/1729029/index.html
+  - source: https://wwj.beijing.gov.cn/bjww/362690/362698/362703/325735305/index.html
+  - source: https://www.beijing.gov.cn/renwen/zt/2022gjbwgrv/ytsbwg/202205/t20220516_2711464.html
+  - source: http://nb.ncha.gov.cn/museumdetail.html?msg=741f6068919b4bc3adf846e565b30a77&nianfen=2023

@@ -25,15 +25,27 @@ artifacts:
   - name: 何尊
     period: 西周早期
     description: 内底铸有122字铭文，含”中国”二字最早文字记录，国家一级文物，禁止出境展览
+    image_url: /img/wikimedia/wikipedia/commons/d/d0/He_Zun.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: 幽灵巴尼
   - name: 逨盘
     period: 西周晚期
     description: 铭文372字，记载西周12位王的历史，是研究西周史的重要史料
+    image_url: /img/wikimedia/wikipedia/commons/b/ba/Lai_pan_inscription.jpg
+    image_license: PD
+    image_attribution: 宝鸡市青铜博物馆
   - name: 秦公镈
     period: 春秋早期
     description: 铭文记载秦国早期历史，是研究秦文明起源的珍贵实物
+    image_url: /img/wikimedia/wikipedia/commons/3/32/Qingong_Bo%2C_Spring_and_Autumn_period%2C_Baoji_Bronze_Ware_Museum.jpg
+    image_license: CC0
+    image_attribution: Huangdan2060
   - name: 卫鼎
     period: 西周中期
     description: 铭文记录西周土地交换史实，具有极高的历史与文献价值
+    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b0/%E4%BA%94%E7%A5%80%E5%8D%AB%E9%BC%8E.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Antolavoasio
 dynasty_connections:
   - dynasty: 西周
     description: 宝鸡是周王朝发祥地，出土大量西周青铜重器，是研究西周礼乐文明的核心标本地

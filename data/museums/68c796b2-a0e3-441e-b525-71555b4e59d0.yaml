@@ -1,0 +1,69 @@
+id: 68c796b2-a0e3-441e-b525-71555b4e59d0
+name: 北京天文馆
+lat: 39.9375
+lng: 116.3449
+location: 北京市西城区西直门外大街138号（主馆）；北京市东城区建国门内大街东裱褙胡同2号（古观象台）
+level: 国家一级博物馆、国家AAAA级旅游景区（主馆）；全国重点文物保护单位（古观象台）
+core_period: 1957年正式对外开放至今（主馆）；明正统七年（1442年）建立至今（古观象台）
+specialty: 天文科普教育、天文展览与科普剧场；集现代天文馆与历史皇家天文台于一体，是亚洲大陆第一座大型天文馆
+dynasty_coverage: 元、明、清、民国、现代
+timeline: 元至元十六年（1279年）郭守敬于此建司天台；明正统七年（1442年）改筑为观星台；清代增置西方天文仪器；1957年北京天文馆主馆对外开放；2004年在原址扩建新馆（B馆）
+treasures:
+  - name: 嫦娥五号月壤样品（0.6克月球样品）
+  - name: 世界上唯一保存完整、配套齐全的大型天文青铜仪器群（古观象台八架清代仪器）
+  - name: 傅科摆
+  - name: 南丹陨石
+  - name: 月球陨石
+  - name: 天球仪
+halls:
+  - name: A馆展厅
+  - name: B馆展厅
+  - name: 天象厅
+  - name: 宇宙剧场
+  - name: 4D剧场
+  - name: 3D剧场
+  - name: 古观象台·紫微殿
+  - name: 古观象台·东厢房
+  - name: 古观象台·西厢房
+artifacts:
+  - name: 赤道经纬仪
+    period: 清康熙八年（1673年）
+    description: 比利时人南怀仁设计制造，重2720千克，高3.380米，主要功能为测量太阳时及天体赤道坐标
+  - name: 黄道经纬仪
+    period: 清康熙八年（1673年）
+    description: 比利时人南怀仁设计制造，重2752千克，高3.492米，主要功能为测量恒星黄道坐标
+  - name: 天体仪
+    period: 清康熙八年（1673年）
+    description: 比利时人南怀仁设计制造，重3850千克，高2.735米，用于演示天体运动及进行坐标换算
+  - name: 纪限仪
+    period: 清康熙八年（1673年）
+    description: 比利时人南怀仁设计制造，重802千克，高3.274米，用来测量两颗恒星之间的角距离
+  - name: 地平经仪
+    period: 清康熙八年（1673年）
+    description: 比利时人南怀仁设计制造，重1811千克，高3.201米，用来测量天体的方位角
+  - name: 象限仪
+    period: 清康熙八年（1673年）
+    description: 比利时人南怀仁设计制造，重2483千克，高3.611米，用来测量天体的高度角
+  - name: 地平经纬仪
+    period: 清康熙五十四年（1715年）
+    description: 德国人纪理安设计制造，重7368千克，高4.125米，合并地平经仪与象限仪的功能
+  - name: 玑衡抚辰仪
+    period: 清乾隆十九年（1754年）
+    description: 由德国人戴进贤、斯洛文尼亚人刘松龄设计监制，重5145千克，高3.379米，代表清代工艺技术的最高成就
+  - name: 嫦娥五号月球样品
+    period: 2020年（现代）
+    description: 嫦娥五号任务带回的月壤，馆藏0.6克，是重要的现代天文科普展品
+dynasty_connections:
+  - dynasty: 元
+    description: 元至元十六年（1279年），天文学家王恂、郭守敬在此建立司天台，奠定古观象台选址基础
+  - dynasty: 明
+    description: 明正统七年（1442年）改筑为观星台，隶属钦天监；正统十一年增修晷景堂等建筑
+  - dynasty: 清
+    description: 清顺治元年接收钦天监并改称观象台；康熙年间由南怀仁设计增置6架西式铜制天文仪器；乾隆十九年（1754年）铸造玑衡抚辰仪；光绪年间8件仪器被八国联军劫走后陆续归还
+  - dynasty: 民国
+    description: 民国十年仪器复原，民国十八年改为国立天文陈列馆，民国二十年后部分仪器转移至南京
+sources:
+  - source: https://www.bjp.org.cn/twgjj/index.shtml
+  - source: https://www.bjp.org.cn/ggxt/index.shtml
+  - source: https://www.bjp.org.cn/cgzn/ylzn/index.shtml
+  - source: https://www.beijing.gov.cn/renwen/rwzyd/lyjq/3A/bjtwg/202210/t20221020_2840080.html

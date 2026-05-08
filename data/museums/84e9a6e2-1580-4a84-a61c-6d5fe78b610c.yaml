@@ -1,0 +1,48 @@
+id: 84e9a6e2-1580-4a84-a61c-6d5fe78b610c
+name: 北京民俗博物馆（东岳庙）
+lat: 39.9233
+lng: 116.4349
+location: 北京市朝阳区朝外大街141号
+level: 全国重点文物保护单位
+core_period: 元代
+specialty: 以东岳庙古建筑群为依托，集道教正一派宫观文化、北京民俗文化与古建保护于一体的历史文化类博物馆；为道教正一派在华北地区规模最大的庙观
+dynasty_coverage: 元、明、清、民国、当代
+timeline: 元延佑六年（1319年）始建，至治三年（1323年）竣工，赐名"东岳仁圣宫"；明正统十二年（1447年）英宗扩建；清康熙三十七年（1698年）遭火灾，康熙帝敕令重修，康熙四十一年（1702年）完工，建筑规制基本定形；1999年完成大规模修缮；2023年8月全新开放
+treasures:
+  - name: 张公碑（赵孟頫奉诏撰文，元天历二年即1329年立，2001年定为国家一级文物，世称镇庙之宝）
+  - name: 东岳大帝像（岱岳殿主神像，金童玉女侍立，四值功曹与四大元帅拱卫）
+  - name: 育德殿金丝楠木造像（明代造像艺术珍品，雕工精致，彩绘绚丽）
+  - name: 三洞七幢琉璃牌楼（正门前标志性建筑）
+  - name: 碑刻163通（元明清三代石刻，历史文化价值极高）
+  - name: 百余副楹联匾额
+  - name: 明代精美彩塑彩画
+halls:
+  - name: 山门
+  - name: 瞻岱门
+  - name: 岱岳殿
+  - name: 工字廊
+  - name: 育德殿
+  - name: 三茅殿
+  - name: 炳灵殿
+  - name: 岳府七十六司殿
+  - name: 阜财殿
+  - name: 广嗣殿
+  - name: 后罩楼
+  - name: 伏魔大帝殿
+  - name: 江东殿
+  - name: 玉皇阁
+  - name: 三皇殿
+  - name: 药王药圣殿
+  - name: 显化殿
+  - name: 马王殿
+  - name: 妙峰山娘娘殿
+  - name: 鲁班殿
+  - name: 三官殿
+  - name: 瘟神殿
+  - name: 阎罗殿
+  - name: 判官殿
+sources:
+  - source: https://wwj.beijing.gov.cn/bjww/362771/362772/546000/index.html
+  - source: https://www.beijing.gov.cn/renwen/rwzyd/qgzdwwbhdw/bjdym/202210/t20221031_2848722.html
+  - source: https://mzzjw.beijing.gov.cn/bjmz/bjdzj/zjzhjs/dj/djwwls/201903/t20190327_15935.html
+  - source: https://www.beijing.gov.cn/renwen/cshd/202308/t20230802_3212877.html

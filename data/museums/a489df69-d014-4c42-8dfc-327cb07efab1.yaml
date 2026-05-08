@@ -1,0 +1,36 @@
+id: a489df69-d014-4c42-8dfc-327cb07efab1
+name: 八达岭长城
+lat: 40.3539
+lng: 116.0157
+location: 北京市延庆区军都山关沟古道北口（北京西北约60公里）
+level: 国家5A级旅游景区
+core_period: 明代（弘治十八年，公元1505年）
+specialty: 中国古代伟大的防御工程万里长城的重要组成部分，是明长城的精华代表与杰出隘口，世界文化遗产与爱国主义教育基地
+dynasty_coverage: 战国至明清
+timeline: 战国时期始筑长城雏形；明弘治十八年（1505年）正式建成八达岭关城，由抗倭名将戚继光、谭纶督建；1958年正式对游人开放；1961年列为首批全国重点文物保护单位；1991年代表中国万里长城接受联合国颁发的世界人类文化遗产证书
+treasures:
+  - name: 北门锁钥关城碑刻
+  - name: 砖体砌成的城门与城墙
+  - name: 砖雕石刻装饰构件
+  - name: 敌楼烽燧防御系统
+  - name: 中国长城博物馆馆藏长城沿线出土文物与标本
+halls:
+  - name: 中国长城博物馆（馆内设长城历史文化专题展厅）
+dynasty_connections:
+  - dynasty: 战国
+    description: 八达岭一带已筑有长城，至今仍可见残墙、墩台遗址
+  - dynasty: 秦
+    description: 秦始皇是第一位经过八达岭此地的帝王
+  - dynasty: 唐
+    description: 唐代诗人高适游历于此，留下最早吟咏八达岭的诗章
+  - dynasty: 元
+    description: 忽必烈入主中原、成吉思汗挥师南下，元朝皇帝每年两次往返于此
+  - dynasty: 明
+    description: 明弘治十七年建关城，弘治十八年竣工，由戚继光、谭纶督建，为现存长城精华段
+  - dynasty: 清
+    description: 清代天子亲征出关，八达岭仍为京畿北部战略要道
+sources:
+  - source: https://www.badaling.cn/
+  - source: https://www.bjstb.gov.cn/bjtb/hdzt83/jtjcjljd76/yqqjljd/jdjs56/bdlzcglc/1310292/index.html
+  - source: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/546451/index.html
+  - source: https://www.beijing.gov.cn/renwen/rwzyd/qgzdwwbhdw/wlccbdl/202211/t20221101_2849555.html

@@ -26,12 +26,18 @@ artifacts:
   - name: 唐朵花纹蓝地蜡缬绢
     period: 唐代
     description: 长78cm，宽51cm，蜡缬是唐代"三缬"（绞缬/蜡缬/夹缬）之一
+    image_url: /img/89f8f46c3cd3c3ee.png
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E5%94%90%E6%9C%B5%E8%8A%B1%E7%BA%B9%E8%93%9D%E5%9C%B0%E8%9C%A1%E7%BC%AC%E7%BB%A2
   - name: 唐立狮宝花纹锦
     period: 唐代
     description: 典型的"陵阳公样"（联珠环内动物纹与中国花卉纹的结合），反映丝路文化交融
   - name: 元代菱地飞鸟纹绫海青衣
     period: 元代
     description: 衣长119cm，袖长224cm，右衽交领，肩部可伸出手臂，后襟开衩便于骑马。袖肩有钉金高绣，是元代游牧民族服饰与中原丝绸工艺结合的杰作
+    image_url: /img/5394d8729bc3fbdf.png
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E5%85%83%E4%BB%A3%E8%8F%B1%E5%9C%B0%E9%A3%9E%E9%B8%9F%E7%BA%B9%E7%BB%AB%E6%B5%B7%E9%9D%92%E8%A1%A3
   - name: 宋代花罗裙裤
     period: 宋代
     description: 江南出土的宋代丝绸服饰，反映宋代丝织工艺的精细

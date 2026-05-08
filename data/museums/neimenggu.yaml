@@ -26,7 +26,7 @@ artifacts:
   - name: 鄂尔多斯式青铜器群
     period: 春秋至汉代
     description: —以动物纹饰为特征的青铜短剑、带扣、牌饰等，是北方草原游牧文化的典型器物。虎噬羊、盘角羊、奔鹿等造型充满草原生命力，与中原青铜器风格截然不同。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e5/Inner_Mongolia_Museum_bronze_ornamental_plaques.jpg
+    image_url: /img/wikimedia/wikipedia/commons/e/e5/Inner_Mongolia_Museum_bronze_ornamental_plaques.jpg
     image_license: CC-BY-SA-3.0
     image_attribution: BabelStone
   - name: 许季姜青铜簋
@@ -35,7 +35,7 @@ artifacts:
   - name: 契丹贵族墓葬出土文物
     period: 辽代，10-12世纪
     description: —包括金银器、玻璃器、丝织品等，辽代契丹贵族墓葬在内蒙古东部大量发现，出土的鎏金银冠、银靴、金面具等展示了契丹贵族的丧葬习俗。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/2/24/Horse_leading%2C_mural%28part%29_from_Tomb_in_Aohan%2C_Liao_Dynasty.jpg
+    image_url: /img/wikimedia/wikipedia/commons/2/24/Horse_leading%2C_mural%28part%29_from_Tomb_in_Aohan%2C_Liao_Dynasty.jpg
     image_license: PD
     image_attribution: Unknown author
   - name: 辽代契丹女尸
@@ -44,10 +44,13 @@ artifacts:
   - name: 元代铜权
     period: 元代
     description: —元上都遗址出土，体现了蒙古帝国的度量衡制度。元上都（今锡林郭勒盟正蓝旗）是忽必烈的夏都，已列入世界遗产。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9a/Lin%27an_Museum%2C_2020-01-05_25.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Siyuwj
   - name: 查干诺尔龙化石
     period: 白垩纪
     description: —锡林郭勒盟出土，巨型蜥脚类恐龙，是内蒙古恐龙化石的代表。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/6/6a/Nuoerosaurus_chaganensis.JPG
+    image_url: /img/wikimedia/wikipedia/commons/6/6a/Nuoerosaurus_chaganensis.JPG
     image_license: PD
     image_attribution: Giloun at English Wikipedia
   - name: 金银器"胡人牵驼"摆件

@@ -42,24 +42,36 @@ artifacts:
   - name: 木雕
     period: 清代
     description: 岭南七绝之首，陈家祠梁架、屏门、檐板均以通雕、浮雕相结合，题材涵盖历史故事与山水花鸟
-    image_url: https://upload.wikimedia.org/wikipedia/commons/7/7d/%E9%99%88%E5%AE%B6%E7%A5%A0%EF%BC%8C%E5%B1%95%E5%93%81%E6%9C%A8%E9%9B%95%E9%97%A8%E6%9D%BF_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/wikimedia/wikipedia/commons/7/7d/%E9%99%88%E5%AE%B6%E7%A5%A0%EF%BC%8C%E5%B1%95%E5%93%81%E6%9C%A8%E9%9B%95%E9%97%A8%E6%9D%BF_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
     image_license: CC-BY-SA-3.0
     image_attribution: zengsx
   - name: 石雕
     period: 清代
     description: 廊柱、月台栏杆等处大量使用，岭南七绝之一
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/13/Steinmetz.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-2.0-DE
+    image_attribution: The original uploader was Flassig Reiner at German Wikipedia. (Original text:…
   - name: 陶塑脊饰
     period: 清代
     description: 屋脊上大型石湾陶塑，人物故事与花鸟瑞兽交织，色彩鲜艳，为岭南建筑装饰精华
   - name: 灰塑
     period: 清代
     description: 墀头、山墙等处灰塑，以矿物颜料着色，历经百年仍色泽鲜明
+    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e4/Plaster_relief_KOTE-E_2010.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-2.0
+    image_attribution: TANAKA Juuyoh (田中十洋)
   - name: 铜铁铸
     period: 清代
     description: 铁栏杆、铜构件等，将实用与装饰融为一体，岭南七绝之一
+    image_url: https://upload.wikimedia.org/wikipedia/commons/8/87/%E9%84%82%E5%B7%9E%E8%A5%BF%E5%B1%B1%C2%B7%E8%AF%95%E5%89%91%E7%9F%B3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Huangchenhai
   - name: 彩绘
     period: 清代
     description: 门廊、厅堂满布彩绘，题材从商周到明清经典故事一应俱全
+    image_url: https://upload.wikimedia.org/wikipedia/commons/1/18/%E4%BA%91%E5%86%88%E7%9F%B3%E7%AA%9F%E7%AC%AC9%E7%AA%9F%E5%90%8E%E5%AE%A4%E8%A5%BF%E5%A3%81%E8%8F%A9%E8%90%A8%E5%92%8C%E6%B8%85%E4%BB%A3%E5%BD%A9%E7%BB%98.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Patrick20242023
 dynasty_connections:
   - dynasty: 清代（光绪年间）
     description: 由清代广东七十二县陈氏宗族合资兴建，是现存规模最大、保存最完好、装饰最精美的清代岭南祠堂式建筑，集”岭南七绝”建筑装饰工艺之大成

@@ -26,13 +26,16 @@ artifacts:
   - name: 八重宝函
     period: 唐·咸通年间
     description: 供奉佛指舍利的层层嵌套容器，从外到内分别为檀木函、鎏金函、金函等八层，每层均有精美装饰
+    image_url: https://upload.wikimedia.org/wikipedia/commons/4/44/Famen_Si_May_2007_052.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: G41rn8
   - name: 鎏金银茶具套件
     period: 唐·咸通年间
     description: 包括茶碾、茶罗、银风炉、银盐台等，是中国乃至世界上发现最早最完整的宫廷茶具，反映唐代宫廷茶文化
   - name: 秘色瓷
     period: 唐
     description: 13件越窑秘色瓷，地宫《衣物帐》碑上明确记载"瓷秘色"三字，解开了"秘色瓷到底是什么"这一困扰学界千年的谜题。产自浙江慈溪上林湖窑址
-    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b0/%E7%A7%98%E8%89%B2%E7%93%B7.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/wikimedia/wikipedia/commons/b/b0/%E7%A7%98%E8%89%B2%E7%93%B7.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
     image_license: CC-BY-SA-3.0
     image_attribution: Katherineshang
   - name: 鎏金双蛾团花纹银香囊
@@ -41,9 +44,15 @@ artifacts:
   - name: 鎏金四天王盝顶银宝函
     period: 唐
     description: 錾刻四大天王像，工艺精湛
+    image_url: /img/057a0ba19e21063e.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/5642849.htm
   - name: 琉璃器
     period: 东罗马/伊斯兰
     description: 地宫出土的20件琉璃器，来自东罗马帝国和伊斯兰世界，是丝路贸易的实物证据
+    image_url: /img/65ec2d0a2d93155b.png
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E7%90%89%E7%92%83%E5%99%A8
 dynasty_connections:
   - dynasty: 政教关系
     description: 唐代帝王"三十年一开"佛骨的制度，反映了佛教在唐代政治中的特殊地位。韩愈《谏迎佛骨表》与唐宪宗的冲突，是儒佛之争的标志性事件

@@ -1,0 +1,25 @@
+id: 7afef68a-b9d3-48fa-a04e-63c14ee0ec28
+name: 北京古代建筑博物馆（先农坛）
+lat: 39.8862
+lng: 116.3907
+location: 北京市西城区永定门大街西侧先农坛东经路21号
+level: 国家二级博物馆
+core_period: 明清两代
+specialty: 中国古代建筑历史、建筑艺术与建筑技术的研究、文物古建征集保管及展览宣传
+dynasty_coverage: 以明清时期为核心，兼及中国古代各历史时期
+timeline: 馆址先农坛始建于明永乐十八年（1420年）；博物馆于1988年筹备，1991年9月25日正式对外开放
+halls:
+  - name: 中国古代建筑展
+  - name: 北京先农坛历史文化展
+  - name: 北京坛庙文化展
+  - name: 沈阳故宫建筑艺术展
+dynasty_connections:
+  - dynasty: 明朝
+    description: 先农坛始建于明永乐十八年（1420年），是明清两代皇帝祭祀先农神、举行亲耕礼的重要场所
+  - dynasty: 清朝
+    description: 清代沿用并修缮先农坛，延续明代祭农耕礼制度，坛内建筑群保存至今
+sources:
+  - source: https://www.bjxntgjg.cn/introduction.html
+  - source: https://wwj.beijing.gov.cn/bjww/362690/362698/362703/325735314/index.html
+  - source: https://www.beijing.gov.cn/renwen/rwzyd/gdwh/xnt/202107/t20210714_2436543.html
+  - source: https://wwj.beijing.gov.cn/bjww/362771/362772/545787/index.html

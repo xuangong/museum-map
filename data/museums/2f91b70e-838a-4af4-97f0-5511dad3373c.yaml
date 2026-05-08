@@ -1,0 +1,49 @@
+id: 2f91b70e-838a-4af4-97f0-5511dad3373c
+name: 北京文博交流馆（北京市智化寺管理处）
+lat: 39.9143
+lng: 116.4272
+location: 北京市东城区禄米仓胡同5号
+level: 国家三级博物馆 · 全国重点文物保护单位
+core_period: 明代（正统年间）
+specialty: 智化寺京音乐（国家级非物质文化遗产）保护与传承；明代木结构建筑群保护研究
+dynasty_coverage: 明代至清代（明正统—清末，约15世纪至20世纪初）
+timeline: 明正统九年（1444年）建寺；正统十一年（1446年）宫廷音乐移入形成京音乐；1961年列为首批全国重点文物保护单位；1982年成立北京智化寺文物保管所；1992年正式成立北京文博交流馆；2006年智化寺京音乐列入首批国家级非物质文化遗产名录；2024年与中央音乐学院共建中华优秀传统文化传承基地
+treasures:
+  - name: 智化寺京音乐工尺谱（560余年历史，现存明代古谱）
+  - name: 明代黑色琉璃瓦建筑群（北京市内保存最完整的明代木结构建筑群）
+  - name: 如来殿万佛阁壁龛佛像（九千余尊）
+  - name: 北京现存最古老的明代木结构转轮藏
+  - name: 明代宫廷遗风彩画（万佛阁、如来殿、大智殿）
+  - name: 九孔管、十七簧笙、明成化年间云锣等古制乐器
+halls:
+  - name: 智化寺历史沿革展
+  - name: 智化寺钟鼓展
+  - name: 大智殿临时展厅
+  - name: 智化殿（京音乐展演场所）
+  - name: 如来殿（万佛阁）
+  - name: 藏殿（转轮藏）
+artifacts:
+  - name: 明代木结构转轮藏
+    period: 明代
+    description: 现存于藏殿内，为北京现存最古老的明代木结构转轮藏，雕刻精美，具有深厚的佛教涵义。
+  - name: 九孔管
+    period: 明代
+    description: 京音乐核心主奏乐器，前七孔、后两孔，有别于民间通用八孔管，保留唐宋古制。
+  - name: 十七簧笙
+    period: 明代
+    description: 智化寺京音乐专用笙，比民间常见十三簧笙多出四簧，为宫廷遗制古乐器。
+  - name: 云锣（九音锣）
+    period: 明成化年间
+    description: 最早制于明成化年间，演奏时作为指挥乐器使用，音色醇美，本身亦为一件珍贵文物。
+  - name: 智化寺京音乐工尺谱
+    period: 明代
+    description: 现存具有明确纪年的古代工尺谱文献，历史逾560年，是研究中国古代音乐的珍贵史料。
+sources:
+  - source: https://wwj.beijing.gov.cn/bjww/362690/362698/362703/325735344/index.html
+  - source: https://wwj.beijing.gov.cn/bjww/362771/362779/dypqgzdwwbhdw/523238/index.html
+  - source: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742745/545895/index.html
+  - source: https://wwj.beijing.gov.cn/bjww/362760/362767/kycgtg/cbxm/kycgcbxm/368287/index.html
+  - source: https://www.beijing.gov.cn/renwen/lsfm/202105/t20210513_2388359.html
+  - source: https://www.beijing.gov.cn/gate/big5/www.beijing.gov.cn/renwen/rwzyd/gdwh/zhs/202107/t20210706_2430372.html
+  - source: http://www.zhihuatemple.com/
+  - source: https://baike.baidu.com/item/%E5%8C%97%E4%BA%AC%E6%96%87%E5%8D%9A%E4%BA%A4%E6%B5%81%E9%A6%86%EF%BC%88%E5%8C%97%E4%BA%AC%E5%B8%82%E6%99%BA%E5%8C%96%E5%AF%BA%E7%AE%A1%E7%90%86%E5%A4%84%EF%BC%89/60814056

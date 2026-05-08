@@ -20,25 +20,25 @@ artifacts:
   - name: 毛公鼎
     period: 西周晚期
     description: 铭文497字，是现存商周青铜器中铭文最长的一件，记录了周宣王对毛公的册命，是研究西周政治制度的第一手资料
-    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e2/Ding_cauldron_of_Duke_Mao.jpg
+    image_url: /img/wikimedia/wikipedia/commons/e/e2/Ding_cauldron_of_Duke_Mao.jpg
     image_license: CC-BY-4.0
     image_attribution: anonymous
   - name: 翠玉白菜
     period: 清代
     description: 以一块半白半绿的翠玉雕琢成白菜造型，菜叶上伏螽斯和蝗虫，寓意多子多孙。原置于紫禁城永和宫，据传为光绪妃嫔嫁妆
-    image_url: https://upload.wikimedia.org/wikipedia/commons/d/de/Jadeite_Cabbage%2C_National_Palace_Museum.jpg
+    image_url: /img/wikimedia/wikipedia/commons/d/de/Jadeite_Cabbage%2C_National_Palace_Museum.jpg
     image_license: CC-BY-4.0
     image_attribution: Image file retrieved from the Exhibition Packages Download for National Treasures
   - name: 王羲之《快雪时晴帖》
     period: 东晋/唐摹本
     description: 乾隆"三希堂"三件珍宝之首。帖文仅28字，但被乾隆帝视为至宝
-    image_url: https://upload.wikimedia.org/wikipedia/commons/2/2f/%E5%BF%AB%E9%9B%AA%E6%99%82%E6%99%B4%E5%B8%96%28%E5%B1%80%E9%83%A8%29.jpg
+    image_url: /img/wikimedia/wikipedia/commons/2/2f/%E5%BF%AB%E9%9B%AA%E6%99%82%E6%99%B4%E5%B8%96%28%E5%B1%80%E9%83%A8%29.jpg
     image_license: PD
     image_attribution: Wang Xizhi
   - name: 黄公望《富春山居图》（无用师卷）
     period: 元代
     description: 中国十大传世名画之一的后半卷（前半卷"剩山图"藏于浙江省博物馆）
-    image_url: https://upload.wikimedia.org/wikipedia/commons/f/f9/Huang_Gongwang._Dwelling_in_the_Fuchun_Mountains._detail._National_Palace_Museum%2C_Taipei.jpg
+    image_url: /img/wikimedia/wikipedia/commons/f/f9/Huang_Gongwang._Dwelling_in_the_Fuchun_Mountains._detail._National_Palace_Museum%2C_Taipei.jpg
     image_license: PD
     image_attribution: Huang Gongwang
   - name: 汝窑瓷器
@@ -47,18 +47,21 @@ artifacts:
   - name: 怀素《自叙帖》
     period: 唐代
     description: 狂草极致，中国书法史巅峰之作
-    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e6/Huaisu_-_Autobiography.jpg
+    image_url: /img/wikimedia/wikipedia/commons/e/e6/Huaisu_-_Autobiography.jpg
     image_license: PD
     image_attribution: Huaisu
   - name: 苏轼《寒食帖》
     period: 北宋
     description: '"天下第三行书"'
-    image_url: https://upload.wikimedia.org/wikipedia/commons/7/7b/%E5%AF%92%E9%A3%9F%E5%B8%96.jpg
+    image_url: /img/wikimedia/wikipedia/commons/7/7b/%E5%AF%92%E9%A3%9F%E5%B8%96.jpg
     image_license: PD
     image_attribution: Su Shi
   - name: 散氏盘
     period: 西周晚期
     description: 铭文357字，记录西周土地契约
+    image_url: https://upload.wikimedia.org/wikipedia/commons/4/48/%E5%90%B4%E6%98%8C%E7%A1%95%E4%B8%B4%E6%95%A3%E6%B0%8F%E7%9B%98_%E8%BD%B4.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: 陳寅恪
 dynasty_connections:
   - dynasty: 商周青铜器
     description: 毛公鼎、散氏盘等西周重器，是中国金石学的核心实物

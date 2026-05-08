@@ -1,0 +1,45 @@
+id: 8938ea2e-9aac-4f69-a632-63ae2c75c2a9
+name: 中国地质博物馆
+lat: 39.9219
+lng: 116.3653
+location: 北京市西城区西四羊肉胡同15号
+level: 国家一级博物馆
+core_period: 创建于1916年（民国五年），前身为农商部地质研究所标本陈列室；1958年现馆舍建成，1959年正式对外开放，1986年定现馆名
+specialty: 国家级综合性地学博物馆，亚洲同类博物馆中历史最悠久、藏品最丰富、规模最大之一，收藏地质标本逾20万件，涵盖矿物、岩石、宝石、古生物等地学各领域
+dynasty_coverage: 以自然地球史为主，展示跨越数十亿年地球演化历程，不专属于某一历史王朝
+timeline: 1916年创建→1959年正式开放→1986年更名为中国地质博物馆
+treasures:
+  - name: 巨型山东龙
+  - name: 中华龙鸟
+  - name: 巨型萤石方解石晶簇
+  - name: 水晶王（世界最大）
+halls:
+  - name: 地球厅
+  - name: 矿物岩石厅
+  - name: 宝石厅
+  - name: 史前生物厅
+  - name: 国土资源厅
+  - name: 临时展厅
+artifacts:
+  - name: 水晶王
+    period: 地质年代
+    description: 世界最大水晶单体标本，是馆内镇馆之宝之一
+  - name: 中华龙鸟化石
+    period: 中生代
+    description: 珍贵的史前鸟类祖先化石，对研究鸟类起源具有重要科学价值
+  - name: 巨型山东龙骨架
+    period: 白垩纪
+    description: 大型鸭嘴龙类恐龙骨架标本
+  - name: 巨型萤石方解石晶簇
+    period: 地质年代
+    description: 罕见的大型矿物晶簇标本，观赏与科研价值极高
+dynasty_connections:
+  - dynasty: 中华民国
+    description: 1916年由中华民国农商部地质研究所创建，是中国最早的国家级地质标本陈列机构
+  - dynasty: 中华人民共和国
+    description: 1959年正式向公众开放，现隶属中华人民共和国自然资源部管理
+sources:
+  - source: http://www.gmc.org.cn/about/address.html
+  - source: http://www.gmc.org.cn/tour.html
+  - source: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zgdzbwg/202301/t20230112_2897313.html
+  - source: http://www.museumschina.cn/museums/details?id=202208221127261827

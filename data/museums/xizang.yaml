@@ -22,6 +22,9 @@ artifacts:
   - name: 贝叶经
     period: 古代印度传入
     description: 用南亚贝多罗树叶制作的梵文佛经，经特殊药物处理不干裂、不虫蛀、不霉变，是研究早期佛教史和佛教文化的第一手资料
+    image_url: https://upload.wikimedia.org/wikipedia/commons/6/60/Nagarakertagama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: PD
+    image_attribution: Unknown authorUnknown author
   - name: 桦树皮书写经
     period: 吐蕃时代
     description: 世界上唯一完整的桦树皮经，采用桦树内层树皮双面墨书手写，历经千年文字仍清晰可读
@@ -31,7 +34,7 @@ artifacts:
   - name: 历代达赖喇嘛金印金册
     period: 清代
     description: 清帝册封达赖喇嘛时颁布，金印为金或玉质，书写汉、藏、满、蒙四种文字；金册将诏书直接刻于金箔之上
-    image_url: https://upload.wikimedia.org/wikipedia/commons/3/35/Gold_Seal_of_13th_Dalai_Lama%2C_1909.jpg
+    image_url: /img/wikimedia/wikipedia/commons/3/35/Gold_Seal_of_13th_Dalai_Lama%2C_1909.jpg
     image_license: CC0
     image_attribution: Gary Todd
   - name: 唐卡精品

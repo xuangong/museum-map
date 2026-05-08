@@ -26,18 +26,27 @@ artifacts:
   - name: 清乾隆广彩人物纹大碗
     period: 清，约1750年
     description: —广州织金彩瓷的代表，色彩浓艳，满工装饰，是专为欧洲市场定制的外销瓷精品，反映了十八世纪中西贸易的繁荣景象。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/c/cd/%E6%B8%85%E4%B9%BE%E9%9A%86%E5%B9%BF%E5%BD%A9%E4%BA%BA%E7%89%A9%E7%BA%B9%E5%A4%A7%E7%A2%97.JPG
+    image_url: /img/wikimedia/wikipedia/commons/c/cd/%E6%B8%85%E4%B9%BE%E9%9A%86%E5%B9%BF%E5%BD%A9%E4%BA%BA%E7%89%A9%E7%BA%B9%E5%A4%A7%E7%A2%97.JPG
     image_license: CC-BY-SA-4.0
     image_attribution: Siyuwj
   - name: 潮州金漆木雕蟹篓
     period: 清末民初
     description: —整块樟木镂空雕成，螃蟹、篓筐层层透雕，玲珑剔透至极。是潮州木雕多层镂空技艺的巅峰之作，被誉为"木雕之王"。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/9/94/Guangzhou_Tianhe_Guangdong_Sheng_Bowuguan_20230811.183606.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: 古海岸遗址
   - name: 西汉铜提筒
     period: 西汉
     description: —广州出土，筒身刻有羽人划船纹饰，风格与越南东山文化铜鼓相近。是南越国时期海上文化交流的实物证据，体现了环南海文化圈的联系。
+    image_url: https://upload.wikimedia.org/wikipedia/commons/6/62/Bronze_Bucket_with_Boating_Paintings_at_Nanyue_King_Museum_02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_license: CC-BY-SA-4.0
+    image_attribution: Shujianyang
   - name: 北宋木雕罗汉像
     period: 北宋
     description: —南华寺旧藏，造型写实、神态各异，保存状况极佳。是中国现存最早的大型木雕罗汉组像之一，对研究宋代佛教雕塑具有重要价值。
+    image_url: /img/0e99580d1f3383bc.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/7251570.htm
   - name: 明万历端砚
     period: 明，1573-1620年
     description: —取材肇庆端溪老坑，石质细腻如婴儿肌肤，有青花、鱼脑冻等珍贵石品。是文房四宝中端砚的顶级藏品。

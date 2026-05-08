@@ -1,0 +1,56 @@
+id: 0244eaab-d178-4304-9ecc-0ce4ea8b3b63
+name: 中国农业博物馆
+lat: 39.941472
+lng: 116.464613
+location: 北京市朝阳区麦子店街道东三环北路16号
+level: 国家一级博物馆
+core_period: 新石器时代至现代（重点为中国传统农耕文明历史全程）
+specialty: 中国农业历史与农耕文明专题博物馆，中华人民共和国唯一国家级农业博物馆
+dynasty_coverage: 新石器时代、夏商周、秦汉、魏晋南北朝、隋唐、宋元明清至近现代
+timeline: 1958年经国务院批准兴建全国农业展览馆；1959年9月正式落成开放；1983年7月国务院批准在此基础上筹建中国农业博物馆；1986年9月13日正式对外开放；2012年评为国家一级博物馆；2016年牵头申报"二十四节气"成功列入联合国教科文组织人类非物质文化遗产代表作名录
+treasures:
+  - name: 中华农业文明陈列（常设展览，展示中国农业历史全貌）
+  - name: 中国传统农具陈列（150余件文物，400平方米）
+  - name: 中国土壤标本陈列（88个亚类土壤完整剖面，400平方米）
+  - name: 彩韵陶魂——田士利捐赠彩陶展
+  - name: 农业科普馆（青少年主题展）
+  - name: 二十四节气非遗保护传承专项展示
+halls:
+  - name: 2号馆（中华农业文明陈列）
+  - name: 4号馆（中华农业文明陈列）
+  - name: 7号馆（农业科普馆）
+  - name: 8号馆（中国土壤标本陈列）
+  - name: 9号馆（中国传统农具陈列）
+  - name: 10号馆（彩陶专题展）
+  - name: 1号馆（中华农耕文明陈列，待开放）
+  - name: 11号馆及地标馆（农产品展示推介与商业展览）
+artifacts:
+  - name: 马家窑文化彩陶（黑白彩豆）
+    period: 新石器时代·马家窑文化
+    description: 馆藏彩陶精品，体现史前农耕聚落的制陶工艺与审美
+  - name: 羊角纹罐
+    period: 新石器时代·辛店文化
+    description: 馆藏新石器时代陶器，辛店文化代表性器物
+  - name: 绿釉羊圈
+    period: 汉代
+    description: 河南洛阳出土汉代陶明器，反映汉代畜牧农业生活场景
+  - name: 传统农具（铁制农具为代表）
+    period: 历代
+    description: 馆藏150余件传统农具文物，涵盖各历史时期农业生产工具
+  - name: 中国土壤标本
+    period: 现代
+    description: 88个亚类土壤完整剖面标本，系统展示中国土壤资源类型
+dynasty_connections:
+  - dynasty: 新石器时代
+    description: 馆藏以新石器时代为主的石器类文物及马家窑文化彩陶
+  - dynasty: 汉代
+    description: 馆藏绿釉羊圈等汉代陶明器，反映汉代农业生产与畜牧生活
+  - dynasty: 历代
+    description: 收藏传统农具、农业古籍、农业票证、农业宣传画等跨朝代藏品
+sources:
+  - source: https://www.agriculturalmuseum.com/nongzhan/zh/intro.html
+  - source: http://www.agriculturalmuseum.com/page/zh/4535.html
+  - source: https://www.agriculturalmuseum.com/nbg/zh/index_nbg.html
+  - source: https://www.agriculturalmuseum.com/nzg/zh/index_nzg.html
+  - source: https://baike.baidu.com/item/%E4%B8%AD%E5%9B%BD%E5%86%9C%E4%B8%9A%E5%8D%9A%E7%89%A9%E9%A6%86/1751870
+  - source: https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%9B%BD%E5%86%9C%E4%B8%9A%E5%8D%9A%E7%89%A9%E9%A6%86

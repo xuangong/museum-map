@@ -1,0 +1,68 @@
+id: 828726c7-fbc5-475b-b8f1-2a6e8bd0676c
+name: 中国古动物馆
+lat: 39.9375
+lng: 116.3411
+location: 北京市西城区西直门外大街142号
+level: 国家级自然科学类专题博物馆；亚洲最大的古生物博物馆
+core_period: 寒武纪至距今约1万年前的史前时代（跨度约5亿年）
+specialty: 以古生物化石为载体，系统普及古生物学、古生态学、古人类学及进化论知识
+dynasty_coverage: 距今5亿多年前的寒武纪至距今1万年前（涵盖整个史前古生物演化历史，早于中国历史王朝体系）
+timeline: 1995年12月正式对公众开放；展示时间线为距今5亿多年前至1万年前
+treasures:
+  - name: 活化石拉蒂迈鱼标本
+  - name: 马门溪龙骨架
+  - name: 许氏禄丰龙化石
+  - name: 黄河象骨架
+  - name: 北京猿人头盖骨仿真模型
+  - name: 长有羽毛的恐龙化石
+  - name: 具有角质喙的古鸟类化石
+  - name: 翼龙胚胎化石
+  - name: 能吃恐龙的哺乳动物化石
+  - name: 无颌类化石
+  - name: 有颌鱼类化石
+  - name: 古人类化石及旧石器标本
+halls:
+  - name: 古脊椎动物馆
+  - name: 树化古人类馆
+  - name: 古鱼形动物和古两栖动物展厅
+  - name: 古爬行动物与古鸟类展厅
+  - name: 古哺乳动物展厅
+  - name: 古人类与旧石器展厅
+  - name: 特展展厅
+  - name: 东厅
+  - name: 贵宾厅
+artifacts:
+  - name: 马门溪龙骨架
+    period: 侏罗纪
+    description: 中国发现的体型最大的恐龙之一，颈部极长，为镇馆重要展品
+  - name: 许氏禄丰龙化石
+    period: 早侏罗世
+    description: 中国第一具装架展出的恐龙骨骼化石，具有重要历史意义
+  - name: 黄河象骨架
+    period: 上新世
+    description: 世界上出土最完整的古象化石之一，出土于甘肃合水
+  - name: 北京猿人头盖骨仿真模型
+    period: 中更新世（距今约50万年）
+    description: 依据周口店遗址发现的北京猿人头盖骨制作的高精度仿真模型
+  - name: 翼龙胚胎化石
+    period: 白垩纪
+    description: 全球极为罕见的翼龙胚胎化石，揭示翼龙繁殖行为
+  - name: 活化石拉蒂迈鱼标本
+    period: 泥盆纪至今（活化石）
+    description: 肉鳍鱼类的现生代表，是研究鱼类登陆演化的重要实证
+dynasty_connections:
+  - dynasty: 史前（寒武纪—奥陶纪）
+    description: 展示早期无颌类、有颌鱼类等最古老脊椎动物的演化
+  - dynasty: 史前（泥盆纪—石炭纪）
+    description: 两栖动物登陆演化阶段，展示鱼类向四足动物过渡
+  - dynasty: 史前（三叠纪—白垩纪，中生代）
+    description: 恐龙、翼龙、古鸟类繁盛时期，为馆内核心展示内容
+  - dynasty: 史前（古近纪—新近纪，新生代）
+    description: 哺乳动物大爆发阶段，黄河象、三趾马等重要化石均属此期
+  - dynasty: 史前（更新世，旧石器时代）
+    description: 古人类演化阶段，北京猿人、山顶洞人等古人类化石与旧石器文化遗存
+sources:
+  - source: https://paleozoo.cn/
+  - source: https://ivpp.cas.cn/jgsz/zcbm/zggdwg/
+  - source: https://zhuanti.mct.gov.cn/gwfbwg2022_g7yU_1007.html
+  - source: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zggdwg/202301/t20230112_2897344.html

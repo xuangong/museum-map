@@ -1,0 +1,32 @@
+id: ccb305e9-5097-423f-b188-3314412b9ffd
+name: 民族文化宫博物馆
+lat: 39.9054
+lng: 116.3567
+location: 北京市西城区复兴门内大街49号
+level: 国家级
+core_period: 古代至近现代（多民族历史文化）
+specialty: 少数民族文化艺术，涵盖民族文物、少数民族古籍文献及民族美术作品
+dynasty_coverage: 中国56个民族历史文化体系
+timeline: 建于1959年9月，同年10月1日随新中国成立十周年庆典正式对外开放
+treasures:
+  - name: 少数民族古代及近现代藏品50000余件（含生产工具、生活用品、服装服饰、民间乐器、钱币印玺、文书封诰、工艺美术、宗教用品等）
+  - name: 24种少数民族文字文献及汉文图书文献60余万册
+  - name: 著名画家及少数民族美术作品4200多幅
+  - name: 贝叶写本、菩提叶写本
+  - name: 图片资料60000余幅
+  - name: 音像资料500余盘
+halls:
+  - name: 展览馆
+  - name: 图书馆
+  - name: 博物馆
+  - name: 大剧院
+  - name: 民族画院
+  - name: 文化交流中心
+dynasty_connections:
+  - dynasty: 多民族
+    description: 收藏涵盖中国56个民族的历史文化遗存，展现各民族从古代至近现代的生产生活、宗教信仰与艺术创造
+sources:
+  - source: https://www.cpon.cn/cms/p/introduction.html
+  - source: https://wwj.beijing.gov.cn/bjww/wwjzzcslm/1737418/1738088/1742747/325821617/index.html
+  - source: https://www.neac.gov.cn/seac/xwzx/202510/1183571.shtml
+  - source: https://www.neac.gov.cn/seac/xwzx/202405/1173345.shtml
