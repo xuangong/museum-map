@@ -21,6 +21,9 @@ halls:
 artifacts:
   - name: 商代伏鸟双尾青铜虎
     description: 商代晚期（约前13世纪）。新干大洋洲出土，造型独特，虎背伏鸟，双尾上翘，是南方青铜文明区别于中原风格的标志性器物。
+    image_url: /img/08d2aee479d8cb12.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E5%95%86%E4%BC%8F%E9%B8%9F%E5%8F%8C%E5%B0%BE%E9%9D%92%E9%93%9C%E8%99%8E
   - name: 商代双面神人青铜头像
     description: 商代晚期。新干大洋洲出土，一器两面，表情各异，反映了赣江流域独特的宗教信仰，常与三星堆青铜面具比较。
     image_url: https://upload.wikimedia.org/wikipedia/commons/c/c9/%E5%8F%8C%E9%9D%A2%E7%A5%9E%E4%BA%BA%E9%9D%92%E9%93%9C%E5%A4%B4%E5%83%8F.jpg

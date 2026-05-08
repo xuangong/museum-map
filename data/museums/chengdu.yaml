@@ -38,15 +38,15 @@ artifacts:
   - name: 医简
     period: 西汉
     description: 老官山汉墓出土920余支竹简，含多部医书，部分内容与《黄帝内经》相关
-    image_url: /img/wikimedia/wikipedia/commons/d/df/%E6%88%90%E9%83%BD%E8%80%81%E5%AE%98%E5%B1%B1%E5%A2%93%E5%9C%B0%E5%87%BA%E5%9C%9F-%E5%8C%BB%E7%AE%80-%E8%A5%BF%E6%B1%89-%E6%88%90%E9%83%BD%E8%80%83%E5%8F%A4%E4%B8%AD%E5%BF%83_2024-10-17.jpg
+    image_url: /img/5012c472ea3186e2.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Kcx36
+    image_attribution: Kcx36 · CC-BY-SA-4.0 · Commons
   - name: 皮影戏藏品
     period: 东汉
     description: 成都地区出土的画像砖，描绘宴饮、车马出行、农耕等场景，是了解汉代四川社会生活的图像资料
-    image_url: https://upload.wikimedia.org/wikipedia/commons/5/5c/%E5%92%8C%E9%A1%BA%E5%B0%8F%E5%B7%B7-%E8%85%BE%E5%86%B2%E7%9A%AE%E5%BD%B1%E6%88%8F_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/5d704dde4516f294.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: 瑞丽江的河水
+    image_attribution: 瑞丽江的河水 · CC-BY-SA-4.0 · Commons
 sources:
   - source: 核心信息基于AI知识库
   - source: "老官山汉墓织机: 2013年考古发掘报道"

@@ -22,9 +22,9 @@ halls:
 artifacts:
   - name: 楚大鼎（铸客大鼎）
     description: 战国（约前4世纪）。中国现存最大的先秦圆鼎之一，重约400公斤，出土于寿县楚王墓，铸有"铸客"铭文，是楚国国力与青铜铸造技术的象征。
-    image_url: /img/wikimedia/wikipedia/commons/8/81/Warring_States_Bronze_ZHU_KE_Ding_1a.jpg
+    image_url: /img/27e3204df872e50c.jpg
     image_license: CC0
-    image_attribution: Gary Lee Todd, Ph.D.
+    image_attribution: Gary Lee Todd, Ph.D. · CC0 · Commons
   - name: 凌家滩玉鹰
     description: 新石器时代（约前3500年）。玉雕展翅飞鹰，造型抽象而有力，是凌家滩文化的标志性文物，反映了史前先民的精神信仰和高超玉作工艺。
     image_url: /img/bf56147364243d6a.jpg
@@ -44,6 +44,9 @@ artifacts:
     description: 北宋（11世纪）。出土于寿县报恩寺，工艺精湛，是宋代佛教舍利瘗埋制度的重要实物。
   - name: 吴王光剑
     description: 春秋（约前5世纪）。安徽南陵出土，铸有铭文"吴王光自作用剑"，证明了安徽在吴楚争霸中的前线地位。
+    image_url: /img/84c240a1345ce1b1.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 怪怪～鱼 · CC-BY-SA-4.0 · Commons
   - name: 明代徽州三雕（砖雕、木雕、石雕）
     description: 明清。精美的建筑装饰构件，展现徽派建筑的艺术成就和徽商的文化品位。
 dynasty_connections:

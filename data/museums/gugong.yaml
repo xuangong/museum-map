@@ -37,6 +37,9 @@ artifacts:
   - name: 金瓯永固杯
     period: 清乾隆
     description: 皇帝元旦开笔仪式用杯
+    image_url: /img/b930052db91858c0.png
+    image_license: CC-BY-4.0
+    image_attribution: anonymous · CC-BY-4.0 · Commons
   - name: 大禹治水图玉山
     period: 清乾隆
     description: 重5吨，中国最大玉雕

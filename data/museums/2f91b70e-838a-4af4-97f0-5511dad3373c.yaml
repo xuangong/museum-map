@@ -35,6 +35,9 @@ artifacts:
   - name: 云锣（九音锣）
     period: 明成化年间
     description: 最早制于明成化年间，演奏时作为指挥乐器使用，音色醇美，本身亦为一件珍贵文物。
+    image_url: /img/029e1b56917de583.jpg
+    image_license: CC-BY-4.0
+    image_attribution: Huang Zhen · CC-BY-4.0 · Commons
   - name: 智化寺京音乐工尺谱
     period: 明代
     description: 现存具有明确纪年的古代工尺谱文献，历史逾560年，是研究中国古代音乐的珍贵史料。

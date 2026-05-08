@@ -27,6 +27,9 @@ artifacts:
   - name: 东汉"宜子孙"玉璧
     period: 西汉，2006年发掘
     description: 2000余件彩绘陶俑和2000余件青铜/铁质武器，是了解汉代仪仗制度的珍贵实物。被评为当年全国重要考古发现
+    image_url: /img/7e7b0649c051f9d0.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/1712918.htm
   - name: 战国玉人
     period: 北齐
     description: 通高165cm，360度圆雕。头戴透雕花蔓冠，璎珞华丽，裙带上装饰九方浅浮雕图案

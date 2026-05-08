@@ -49,15 +49,15 @@ artifacts:
   - name: 鸳鸯莲瓣纹金碗
     period: 唐
     description: 唐代金器工艺巅峰
-    image_url: https://upload.wikimedia.org/wikipedia/commons/0/0b/%E9%B8%B3%E9%B8%AF%E8%8E%B2%E7%93%A3%E7%BA%B9%E9%87%91%E7%A2%97_20091112.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/bb33738c6c51f47e.jpg
     image_license: CC-BY-SA-3.0
-    image_attribution: 颐园新居
+    image_attribution: 颐园新居 · CC-BY-SA-3.0 · Commons
   - name: 杜虎符
     period: 战国·秦
     description: 虎形铜符，调兵凭证，铭文40字
-    image_url: https://upload.wikimedia.org/wikipedia/commons/c/c0/%E6%9D%9C%E8%99%8E%E7%AC%A6.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/ddb20fda260c0fb4.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Antolavoasio
+    image_attribution: Antolavoasio · CC-BY-SA-4.0 · Commons
   - name: 黑釉油滴碗
     period: 宋
     description: 建窑精品

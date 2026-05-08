@@ -29,6 +29,9 @@ artifacts:
   - name: 红星奖章
     period: 土地革命战争时期（1927—1937年）
     description: 中华苏维埃共和国中央革命军事委员会颁发的红星奖章，土地革命战争时期重要文物
+    image_url: /img/8b5a0417dd48c405.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Huanokinhejo · CC-BY-SA-4.0 · Commons
   - name: U-2飞机残骸
     period: 20世纪60年代
     description: 中国击落的美制U-2高空侦察机残骸，陈列于兵器陈列中央大厅，具有重要的军事与历史价值

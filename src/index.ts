@@ -10,6 +10,7 @@ import { profileRoute } from "~/routes/profile"
 import { shareRoute } from "~/routes/share"
 import { plazaRoute } from "~/routes/plaza"
 import { adminImageRoute } from "~/routes/admin-image"
+import { adminWikimediaRoute } from "~/routes/admin-wikimedia"
 import { cdnRoute } from "~/lib/cdn"
 import { homeRoute } from "~/routes/home"
 import { imageProxyRoute } from "~/routes/image-proxy"
@@ -49,6 +50,7 @@ export function createApp(env: Env) {
     .use(shareRoute)
     .use(plazaRoute)
     .use(adminImageRoute)
+    .use(adminWikimediaRoute)
 }
 
 export default {

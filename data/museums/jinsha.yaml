@@ -52,6 +52,9 @@ artifacts:
   - name: 兽面纹玉钺
     period: 商周
     description: 浮雕兽面纹与商代中原青铜器纹饰相似，是中原文化影响古蜀的证据。
+    image_url: /img/a3f4833d504521e0.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Siyuwj · CC-BY-SA-4.0 · Commons
 sources:
   - source: 百度百科·成都金沙遗址博物馆（馆藏玉器详细数据）
   - source: "太阳神鸟金饰数据: 国家文物局2005年公布"

@@ -34,9 +34,9 @@ artifacts:
   - name: 塔形龛
     period: 北齐
     description: 响堂山石窟特有的塔柱式龛形，为研究北朝佛教建筑与石窟形制演变的重要实例
-    image_url: https://upload.wikimedia.org/wikipedia/commons/2/2d/%E5%B8%B8%E4%B9%90%E5%AF%BA%E5%A1%94%E4%B8%9C%E5%A1%94_05.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/f9190c6a432076d6.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: XiangLeshan
+    image_attribution: XiangLeshan · CC-BY-SA-4.0 · Commons
 dynasty_connections:
   - dynasty: 东魏
     description: 武定初年（约543年），北响堂山石窟始凿，奠定石窟开凿之基

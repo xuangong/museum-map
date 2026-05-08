@@ -22,21 +22,21 @@ artifacts:
   - name: 牛虎铜案
     period: 战国·古滇国，晋宁石寨山出土
     description: 一只大牛四足立地，背部为承物的浅盘，牛尾立一猛虎，虎口咬住牛尾，大牛腹下藏一小牛犊。构图大胆，充满生命力，是中国青铜艺术的杰作和云南省博的标志
-    image_url: /img/wikimedia/wikipedia/commons/f/fc/%E7%89%9B%E8%99%8E%E9%93%9C%E6%A1%88.jpg
+    image_url: /img/b62a286671c3e550.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Wikimedia Commons
+    image_attribution: Cangminzho · CC-BY-SA-4.0 · Commons
   - name: 四牛鎏金骑士贮贝器
     period: 西汉·古滇，石寨山出土
     description: 贮贝器是古滇国特有的器型（用于储存海贝货币），器盖上有一鎏金骑士和四牛。古滇国以海贝为货币，贮贝器是滇文化的标识
-    image_url: https://upload.wikimedia.org/wikipedia/commons/3/30/%E4%BA%91%E5%8D%97%E7%9C%81%E5%8D%9A%E7%89%A9%E9%A6%86-%E8%A5%BF%E6%B1%89-%E6%99%8B%E5%AE%81%E7%9F%B3%E5%AF%A8%E5%B1%B1-%E9%8E%8F%E9%87%91%E9%AA%91%E5%A3%AB%E8%B4%AE%E8%B4%9D%E5%99%A8.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: Zhangmoon618
+    image_url: /img/292961346209ded4.jpg
+    image_license: PD
+    image_attribution: Daderot · PD · Commons
   - name: 战争场面叠鼓形贮贝器
     period: 西汉·古滇
     description: 器盖上铸有数十个人物的战争场面群雕，包括骑马的将领、持兵器的步兵、被俘的敌人等，是古滇社会军事生活的微缩场景
-    image_url: https://upload.wikimedia.org/wikipedia/commons/1/17/%E4%BA%91%E5%8D%97%E7%9C%81%E5%8D%9A%E7%89%A9%E9%A6%86-%E8%A5%BF%E6%B1%89-%E6%99%8B%E5%AE%81%E7%9F%B3%E5%AF%A8%E5%B1%B1-%E5%8F%A0%E9%BC%93%E5%BD%A2%E6%88%98%E4%BA%89%E5%9C%BA%E9%9D%A2%E9%93%9C%E8%B4%AE%E8%B4%9D%E5%99%A8.jpg
+    image_url: /img/38704e0f72ee3237.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Zhangmoon618
+    image_attribution: Zhangmoon618 · CC-BY-SA-4.0 · Commons
   - name: 滇王金印
     period: 西汉，复制品/相关文物
     description: 汉武帝元封二年（前109年）赐滇王尝羌金印，原印出土于石寨山，现藏中国国家博物馆。是云南纳入中央版图的里程碑
@@ -46,9 +46,9 @@ artifacts:
   - name: 银鎏金镶珠金翅鸟
     period: 大理国，大理崇圣寺三塔出土
     description: 佛教中的迦楼罗鸟造型，银鎏金工艺，镶嵌宝珠，是大理国佛教艺术的代表
-    image_url: https://upload.wikimedia.org/wikipedia/commons/7/74/%E5%A4%A7%E7%90%86%E5%B4%87%E5%9C%A3%E5%AF%BA%E5%8D%83%E5%AF%BB%E5%A1%94%E5%87%BA%E5%9C%9F-%E9%93%B6%E9%8E%8F%E9%87%91%E9%95%B6%E7%8F%A0%E9%87%91%E7%BF%85%E9%B8%9F-%E5%A4%A7%E7%90%86%E5%9B%BD-%E4%BA%91%E5%8D%97%E7%9C%81%E5%8D%9A%E7%89%A9%E9%A6%86_2025-09-18_02.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: Kcx36
+    image_url: /img/2249ffefa04fc14f.jpg
+    image_license: PD
+    image_attribution: Cangminzho · PD · Commons
   - name: 大理国写经和佛像
     period: 近代
     description: 国歌《义勇军进行曲》曲作者、云南玉溪人聂耳使用的小提琴，近现代革命文物中的珍品

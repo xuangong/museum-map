@@ -24,15 +24,15 @@ artifacts:
   - name: T形帛画
     period: 西汉
     description: 覆盖在棺上的招魂帛画，分天界（日月升龙）、人间（辛追宴饮）、地下（巨人托举大地）三层
-    image_url: https://upload.wikimedia.org/wikipedia/commons/9/95/T%E5%BD%A2%E5%B8%9B%E7%94%BB.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/efc00e3341599797.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: EditQ
+    image_attribution: EditQ · CC-BY-SA-4.0 · Commons
   - name: 素纱襌衣
     period: 西汉
     description: 长128cm，仅重49g，代表汉代丝织技术巅峰
-    image_url: /img/wikimedia/wikipedia/commons/d/dd/%E7%9B%B4%E8%A3%BE%E7%B4%A0%E7%BA%B1%E8%A5%8C%E8%A1%A3%2C_2018-09-28.jpg
+    image_url: /img/3c50106d9180b15f.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Siyuwj
+    image_attribution: Siyuwj · CC-BY-SA-4.0 · Commons
   - name: 马王堆帛书
     period: 西汉
     description: 12万字，包含《老子》乙本（目前最早版本）、《五星占》（最早天文著作之一）
@@ -42,15 +42,15 @@ artifacts:
   - name: 皿方罍
     period: 商晚期
     description: 器盖1919年出土后与器身分离近百年，2014年从纽约拍卖市场回归
-    image_url: /img/wikimedia/wikipedia/commons/8/87/Min_Er_Quan_Bronze_Square_Lei%2C_Shang_dynasty%2C_Hunan_Museum%2C_6_July_2018.jpg
-    image_license: CC-BY-3.0
-    image_attribution: Huangdan2060
+    image_url: /img/9ed99d8a8e44f956.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Zanhe · CC-BY-SA-4.0 · Commons
   - name: 漆棺
     period: 西汉
     description: 四层套棺，漆画精美，外黑内朱
-    image_url: https://upload.wikimedia.org/wikipedia/commons/c/ca/%E9%95%B6%E7%8E%89%E6%BC%86%E6%A3%BA_0144.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/27e847df9e22078d.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Cangminzho
+    image_attribution: Cangminzho · CC-BY-SA-4.0 · Commons
   - name: 导引图
     period: 西汉
     description: 最早的健身运动图谱

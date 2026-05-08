@@ -21,9 +21,9 @@ artifacts:
   - name: 舞蹈纹彩陶盆
     period: 新石器时代·宗日文化，青海同德宗日遗址出土
     description: 泥质红陶，口沿内壁绘两组手拉手群舞人物，分别为11人和13人。是中国史前彩陶中最生动的人物活动场景之一，与青海大通出土的另一件舞蹈纹盆齐名
-    image_url: https://upload.wikimedia.org/wikipedia/commons/1/17/%E8%88%9E%E8%B9%88%E7%BA%B9%E5%BD%A9%E9%99%B6%E7%9B%8608775.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/8652a77f57943a10.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Augusthaiho
+    image_attribution: Augusthaiho · CC-BY-SA-4.0 · Wikidata Q132559093
   - name: 弦纹网纹彩陶壶
     period: 马家窑文化，青海民和核桃庄拱北台遗址出土
     description: 侈口长颈鼓腹平底，从上至下通体绘彩，颈部弦纹，肩腹部网纹、圆圈十字纹和波纹。色彩艳丽，代表马家窑彩陶最高水平
@@ -33,6 +33,9 @@ artifacts:
   - name: 石磬
     period: 约4000年前
     description: 长96cm，宽61cm，厚4cm。打击乐器，也是古代祭祀礼器。"八音"中"石"的代表乐器
+    image_url: /img/e77562d3aa30a22e.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: S099001 · CC-BY-SA-4.0 · Commons
   - name: 唐黄地联珠团窠对马锦
     period: 唐代
     description: 黄地织锦，联珠圈纹内绘蓝彩对马，对马昂首，饰飘带。典型的唐代丝路风格织锦

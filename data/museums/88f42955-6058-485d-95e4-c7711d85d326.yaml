@@ -35,6 +35,9 @@ artifacts:
   - name: 鎏金”鲁王”铜虎符
     period: 西汉
     description: 鎏金铜质虎符，铭文含”鲁王”字样，是研究汉代诸侯封国及军事制度的珍贵文物
+    image_url: /img/1fffcc4362cbc9f2.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Antolavoasio · CC-BY-SA-4.0 · Commons
   - name: 战国错金银鼎
     period: 战国
     description: 战国时期错金银工艺鼎，纹饰繁复精美，体现秦国贵族用器水平

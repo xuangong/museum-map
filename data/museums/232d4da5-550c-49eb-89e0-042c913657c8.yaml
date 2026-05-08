@@ -32,9 +32,9 @@ artifacts:
   - name: 蜀汉铭文青铜弩机
     period: 蜀汉（三国）
     description: 铸有铭文的青铜弩机，为蜀汉军事文物的重要实物证据
-    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9e/%E5%BB%B6%E7%86%99%E5%8D%81%E5%85%AD%E5%B9%B4%E8%9C%80%E6%B1%89%E9%93%AD%E6%96%87%E9%9D%92%E9%93%9C%E5%BC%A9%E6%9C%BA.jpg
+    image_url: /img/50acda1ee0d85a56.jpg
     image_license: CC0
-    image_attribution: Remixia
+    image_attribution: Remixia · CC0 · Commons
   - name: 东汉四耳蹲蛙青铜鼓
     period: 东汉
     description: 四耳造型蹲蛙装饰青铜鼓，反映汉代礼乐文化

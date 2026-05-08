@@ -34,6 +34,9 @@ artifacts:
   - name: 赫氏近鸟龙化石
     period: 侏罗纪晚期
     description: 世界上已知最早的带羽毛恐龙之一，是鸟类起源于恐龙的关键证据
+    image_url: /img/fa9584fa4d3f18dd.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 纳瓦拉的亨利 · CC-BY-SA-4.0 · Commons
   - name: 黄河象化石
     period: 上新世（约300万年前）
     description: 迄今发现的世界上最完整的剑齿象骨架化石，全长约8米，出土于甘肃省

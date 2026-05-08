@@ -50,6 +50,9 @@ artifacts:
   - name: 契丹文铜镜
     period: 辽代
     description: —镜背铸有契丹大字，是研究已基本失传的契丹文字的珍贵实物。辽博收藏的契丹文物在全国最为系统完整。
+    image_url: /img/8e9200bb8d86c6d4.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E5%A5%91%E4%B8%B9%E6%96%87%E9%93%9C%E9%95%9C
   - name: 金代铜坐龙
     period: 金代
     description: —阿城（金上京）出土，龙呈蹲坐状，造型独特，与中原传统龙形有明显区别，体现了女真文化的审美特点。

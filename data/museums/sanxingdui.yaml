@@ -23,9 +23,9 @@ artifacts:
   - name: 青铜大立人像
     period: 商
     description: 全高2.62米,双手呈环形持物(持物已佚),头戴冠,身着三层衣。可能是大祭司或蜀王
-    image_url: /img/wikimedia/wikipedia/commons/2/24/%E4%B8%89%E6%98%9F%E5%A0%86%E5%87%BA%E5%9C%9F%E9%9D%92%E9%93%9C%E5%A4%A7%E7%AB%8B%E4%BA%BA%E5%83%8F%2C_2017-09-17.jpg
+    image_url: /img/f699d636dd0eb165.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Siyuwj
+    image_attribution: Siyuwj · CC-BY-SA-4.0 · Commons
   - name: 青铜神树
     period: 商
     description: 残高3.96米(完整约5米),树上9枝、9鸟(太阳鸟),可能是扶桑树或建木的写照
@@ -53,9 +53,9 @@ artifacts:
   - name: 玉璋
     period: 商
     description: 大量玉璋出土,与中原二里头文化有联系
-    image_url: /img/wikimedia/wikipedia/commons/b/b6/%E4%B8%89%E6%98%9F%E5%A0%86%E9%81%97%E5%9D%80%E5%87%BA%E5%9C%9F%E7%8E%89%E7%92%8B.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: Tyg728
+    image_url: /img/9122b43c7e848470.jpg
+    image_license: PD
+    image_attribution: 中國金融年鑑社 · PD · Commons
   - name: 象牙
     period: 商
     description: 大量象牙出土,说明当时四川盆地有大象

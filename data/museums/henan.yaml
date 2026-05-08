@@ -38,9 +38,9 @@ artifacts:
   - name: 武则天金简
     period: 唐·700年
     description: 武则天在嵩山封禅时投放,祈求除罪消灾
-    image_url: https://upload.wikimedia.org/wikipedia/commons/a/a6/20210220_Wu_Zetian_Gold_Strip%2C_Henan_Museum.jpg
+    image_url: /img/b8baeb55ffc9fc6b.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Windmemories
+    image_attribution: Windmemories · CC-BY-SA-4.0 · Commons
   - name: 汝窑天青釉瓷器
     period: 北宋
     description: 存世极少的汝窑精品
@@ -50,9 +50,9 @@ artifacts:
   - name: 四神云气图
     period: 西汉
     description: 梁国王陵壁画,描绘青龙白虎朱雀玄武
-    image_url: https://upload.wikimedia.org/wikipedia/commons/f/f0/Sishen_Yunqi_Painting_from_Liu_Mai_tomb.jpg
+    image_url: /img/a5f77f50f226cf1e.jpg
     image_license: PD
-    image_attribution: Unknown author
+    image_attribution: Unknown authorUnknown author · PD · Wikidata Q10925227
 dynasty_connections:
   - dynasty: 新石器
     description: 贾湖文化(骨笛、龟甲符号)可能是文字和音乐的源头

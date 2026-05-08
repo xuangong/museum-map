@@ -21,12 +21,21 @@ artifacts:
   - name: 永乐大钟
     period: 明永乐年间
     description: 青铜大佛钟，高6.75米，重46.5吨，通体遍铸经文咒语达23万余字，为镇馆之宝
+    image_url: /img/f6f5e16c93f8d966.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: 颐园新居 · CC-BY-SA-3.0 · Wikidata Q11132313
   - name: 朝钟
     period: 明代
     description: 皇帝上朝所用礼钟，周身盘旋二十二条飞龙，造型华贵
+    image_url: /img/96284c76fff476a8.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Patrick20242023 · CC-BY-SA-4.0 · Commons
   - name: 祭坛钟
     period: 明清
     description: 用于祭天典礼的专用礼钟
+    image_url: /img/e1cadd2019205bfd.jpg
+    image_license: CC-BY-2.0
+    image_attribution: Grand Parc - Bordeaux, France from France · CC-BY-2.0 · Commons
   - name: 更钟
     period: 元代
     description: 报时用钟，是元代北京城历史的重要见证

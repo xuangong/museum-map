@@ -22,6 +22,9 @@ artifacts:
   - name: 《永乐大典》
     period: 明代
     description: 明代编纂的大型类书，是中国古代最大的百科全书式典籍，国家图书馆藏有其中数册，为镇馆之宝之一
+    image_url: /img/1cc15bd545ff4292.jpg
+    image_license: PD
+    image_attribution: Коллектив учёных Академии Хайлинь (翰林院) · PD · Wikidata Q696077
   - name: 甲骨文
     period: 商代
     description: 商代占卜用龟甲兽骨上的文字，是中国现存最古老的成熟文字体系，馆内藏有珍贵甲骨标本

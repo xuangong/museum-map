@@ -22,18 +22,18 @@ halls:
 artifacts:
   - name: 北宋"开封府题名记"碑
     description: 北宋（960-1127年）。碑上刻有历任开封府知府的姓名和任期，包括包拯、欧阳修、范仲淹等名臣。包拯名下石面凹陷，相传是后人仰慕其清廉正直，不断触摸所致。
-    image_url: /img/wikimedia/wikipedia/commons/2/24/20241025_Stele_of_the_Namelist_of_the_Governors_of_Kaifeng_Fu.jpg
+    image_url: /img/35389a9cd22e1f29.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Windmemories
+    image_attribution: Windmemories · CC-BY-SA-4.0 · Commons
   - name: 北宋鎏金铜塔
     description: 北宋（11世纪）。塔身鎏金，做工精细，层次分明，是宋代金属工艺和佛教文化的代表。
   - name: 石守信墓志
     description: 北宋（979年）。石守信是参与陈桥兵变的功臣之一，也是"杯酒释兵权"的当事人。其墓志详细记载了生平，是研究宋初政治的重要实物。
   - name: 宋代陶瓷器
     description: 北宋。开封作为都城，汇集了各大窑口的精品瓷器。虽然宋代开封地层深埋，出土品不多，但每一件都具有重要的断代和审美价值。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/e/ed/%E6%B1%9D%E7%AA%AF_%E9%9D%92%E7%93%B7%E8%93%AE%E8%8A%B1%E5%BC%8F%E6%BA%AB%E7%A2%97_%E7%B4%B0%E7%AF%80.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/e24867d1946c129a.png
     image_license: CC-BY-4.0
-    image_attribution: 國立故宮博物院
+    image_attribution: 國立故宮博物院 · CC-BY-4.0 · Commons
   - name: 繁塔宋代石刻佛像
     description: 北宋（977年）。繁塔是开封现存最古老的建筑，塔壁嵌有大量宋代石刻佛像，风格质朴。
   - name: 明代万历青花五彩大罐

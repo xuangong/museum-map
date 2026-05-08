@@ -25,15 +25,15 @@ artifacts:
   - name: 四羊方尊
     period: 商晚期
     description: 四角各铸一卷角羊头，湖南宁乡出土，商代南方青铜文明证据
-    image_url: https://upload.wikimedia.org/wikipedia/commons/a/ae/Square_zun_with_four_sheep_01.jpg
+    image_url: /img/416419c096249e42.jpg
     image_license: CC-BY-SA-3.0
-    image_attribution: user:smartneddy
+    image_attribution: user:smartneddy · CC-BY-SA-3.0 · Wikidata Q10925255
   - name: 大盂鼎
     period: 西周康王
     description: 铭文详述分封制度，是研究西周政治的一手史料
-    image_url: https://upload.wikimedia.org/wikipedia/commons/2/26/%E5%A4%A7%E7%9B%82%E9%BC%8E_Da_Yu_ding.jpg
+    image_url: /img/b9d4aaf31d9e3b3c.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Baomi
+    image_attribution: Baomi · CC-BY-SA-4.0 · Wikidata Q10936980
   - name: 人面鱼纹彩陶盆
     period: 约6000年前
     description: 仰韶文化代表，可能与原始巫术或图腾崇拜有关
@@ -61,9 +61,9 @@ artifacts:
   - name: 彩绘鹳鱼石斧图缸
     period: 新石器·仰韶
     description: 中国最早的彩绘画之一
-    image_url: https://upload.wikimedia.org/wikipedia/commons/2/2f/%E9%B9%B3%E9%B1%BC%E7%9F%B3%E6%96%A7%E5%9B%BE%E5%BD%A9%E7%BB%98%E9%99%B6%E7%BC%B808765.jpg
+    image_url: /img/b00ad49d3b8d48e3.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Augusthaiho
+    image_attribution: Augusthaiho · CC-BY-SA-4.0 · Commons
 sources:
   - source: "中国国家博物馆官网: https://www.chnmuseum.cn/"
   - source: 后母戊鼎重832.84kg（国博官网核实）

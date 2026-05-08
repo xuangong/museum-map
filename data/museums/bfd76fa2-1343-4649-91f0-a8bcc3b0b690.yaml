@@ -42,9 +42,9 @@ artifacts:
   - name: 汉白玉石柱
     period: 清代
     description: 圆明园西洋楼遗址现存汉白玉石柱共7根，为重要建筑遗迹
-    image_url: https://upload.wikimedia.org/wikipedia/commons/c/c7/%E6%98%9F%E6%B5%B7%E5%B9%BF%E5%9C%BA%E4%BD%8D%E4%BA%8E%E4%B8%AD%E5%9B%BD%E5%A4%A7%E8%BF%9E075973.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/cb115fd04b2f6d89.jpg
     image_license: PD
-    image_attribution: 陳炬燵
+    image_attribution: 陳炬燵 · PD · Commons
 dynasty_connections:
   - dynasty: 清代康熙
     description: 始建于康熙四十六年（1707年），赐予皇四子胤禛

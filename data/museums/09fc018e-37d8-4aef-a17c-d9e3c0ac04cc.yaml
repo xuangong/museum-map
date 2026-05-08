@@ -19,6 +19,9 @@ artifacts:
   - name: 猿人洞
     period: 约50万年前（北京猿人时期）
     description: 遗址核心区，出土大量北京猿人头盖骨化石及用火遗迹，是世界最重要的古人类遗址之一
+    image_url: /img/0f279d769b276ac4.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 长安街上的灯 · CC-BY-SA-4.0 · Commons
   - name: 山顶洞
     period: 约1—3万年前（山顶洞人时期）
     description: 出土山顶洞人化石及骨针、装饰品等，反映晚期智人的生活面貌

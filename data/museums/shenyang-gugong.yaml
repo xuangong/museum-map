@@ -21,9 +21,9 @@ artifacts:
   - name: 大政殿
     period: 1625年始建
     description: 八角重檐攒尖式建筑，殿顶满铺黄琉璃瓦镶绿剪边，正中相轮火焰珠顶，宝顶八条铁链连力士。殿前双金龙盘柱，殿内梵文天花和降龙藻井。这是清太祖举行大典之所，顺治帝在此登基
-    image_url: https://upload.wikimedia.org/wikipedia/commons/8/8d/%E6%B2%88%E9%98%B3%E6%95%85%E5%AE%AB%E5%A4%A7%E6%94%BF%E6%AE%BF.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: KangTyngrwey
+    image_url: /img/624d18ad96dc147b.jpg
+    image_license: CC-BY-4.0
+    image_attribution: Augusthaiho · CC-BY-4.0 · Commons
   - name: 十王亭
     period: 天命年间
     description: 大政殿两侧八字形排列10座亭子，分属八旗和左右翼王。是满族八旗制度在建筑上的直接体现，脱胎于游牧民族的帐殿形制——"帐篷的固化"
@@ -39,9 +39,9 @@ artifacts:
   - name: 文溯阁
     period: 乾隆四十六年/1781年建
     description: 藏《四库全书》的藏书楼。外观两层、内部三层（含暗层），仿宁波天一阁。与北京文渊阁等并列为"北四阁"之一
-    image_url: https://upload.wikimedia.org/wikipedia/commons/0/03/%E6%B2%88%E9%98%B3%E6%95%85%E5%AE%AB%E6%96%87%E6%BA%AF%E9%98%812019.jpg
+    image_url: /img/99711cf8d9332ef4.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: ScareCriterion12
+    image_attribution: Augusthaiho · CC-BY-SA-4.0 · Commons
 dynasty_connections:
   - dynasty: 后金/清初（1625-1644年）
     description: 大政殿+十王亭的布局完美体现了满族八旗制度——一殿统八旗，这是其他任何宫殿都没有的。中路"前低后高"的寝宫区保留了满族筑城居高的传统

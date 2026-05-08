@@ -20,9 +20,9 @@ artifacts:
   - name: 一号坑军阵
     period: 秦
     description: 长230米、宽62米，6000余陶俑排列成前锋、主体、侧翼的实战阵型
-    image_url: /img/wikimedia/wikipedia/commons/b/b8/Terracotta_Army_-09-5-11.jpg
+    image_url: /img/00f69049296aa89f.jpg
     image_license: CC-BY-SA-3.0
-    image_attribution: Kougo
+    image_attribution: Kougo · CC-BY-SA-3.0 · Commons
   - name: 铜车马
     period: 秦
     description: 两乘：立车（高车）和安车（轿车），用3000多个零件组装，最细的金丝直径仅0.5mm
@@ -32,12 +32,15 @@ artifacts:
   - name: 将军俑
     period: 秦
     description: 戴鹖冠、穿彩色铠甲，面部表情沉着威严
+    image_url: /img/00f69049296aa89f.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: Kougo · CC-BY-SA-3.0 · Commons
   - name: 跪射俑
     period: 秦
     description: 单膝跪地持弩射击姿态，鞋底纹路清晰可见
-    image_url: /img/wikimedia/wikipedia/commons/f/fa/2023-10-08_Chin_dynasty_Terracotta_Kneeling_Archer_%E7%A7%A6%E5%A7%8B%E7%9A%87%E5%85%B5%E9%A6%AC%E4%BF%91%E5%8D%9A%E7%89%A9%E9%A4%A8%E6%96%87%E7%89%A9%E9%99%B3%E5%88%97%E5%BB%B3%E8%B7%AA%E5%B0%84%E4%BF%91_02.jpg
+    image_url: /img/f3d2e1e55578bad6.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: 源義信
+    image_attribution: 源義信 · CC-BY-SA-4.0 · Commons
   - name: 青铜剑
     period: 秦
     description: 出土时仍锋利，表面经过铬盐氧化处理（比西方早2000年）
@@ -47,12 +50,15 @@ artifacts:
   - name: 石铠甲
     period: 秦
     description: 用石片穿缀的铠甲，每件由数百片石片组成
-    image_url: https://upload.wikimedia.org/wikipedia/commons/9/92/%E8%A5%BF%E5%AE%89%E7%A7%A6%E7%9F%B3%E9%93%A0%E7%94%B2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/d06eaedcb9d997f6.jpg
     image_license: CC0
-    image_attribution: H2v5o68z
+    image_attribution: H2v5o68z · CC0 · Commons
   - name: 彩绘陶俑
     period: 秦
     description: 原本兵马俑都是彩色的，少数保留了颜料痕迹
+    image_url: /img/f8d8666be6749459.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: 乌拉跨氪 · CC-BY-SA-3.0 · Commons
 sources:
   - source: "秦始皇帝陵博物院官网: https://www.bmy.com.cn/"
   - source: UNESCO世界文化遗产名录（1987年）

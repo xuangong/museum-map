@@ -25,21 +25,21 @@ artifacts:
   - name: 何尊
     period: 西周早期
     description: 内底铸有122字铭文，含”中国”二字最早文字记录，国家一级文物，禁止出境展览
-    image_url: /img/wikimedia/wikipedia/commons/d/d0/He_Zun.jpg
+    image_url: /img/42bea7883fad964c.jpg
     image_license: CC-BY-SA-3.0
-    image_attribution: 幽灵巴尼
+    image_attribution: 幽灵巴尼 · CC-BY-SA-3.0 · Wikidata Q5689054
   - name: 逨盘
     period: 西周晚期
     description: 铭文372字，记载西周12位王的历史，是研究西周史的重要史料
-    image_url: /img/wikimedia/wikipedia/commons/b/ba/Lai_pan_inscription.jpg
+    image_url: /img/9fbd5d497000c06b.jpg
     image_license: PD
-    image_attribution: 宝鸡市青铜博物馆
+    image_attribution: 宝鸡市青铜博物馆 · PD · Commons
   - name: 秦公镈
     period: 春秋早期
     description: 铭文记载秦国早期历史，是研究秦文明起源的珍贵实物
-    image_url: /img/wikimedia/wikipedia/commons/3/32/Qingong_Bo%2C_Spring_and_Autumn_period%2C_Baoji_Bronze_Ware_Museum.jpg
+    image_url: /img/b9e47975348729ed.jpg
     image_license: CC0
-    image_attribution: Huangdan2060
+    image_attribution: Huangdan2060 · CC0 · Commons
   - name: 卫鼎
     period: 西周中期
     description: 铭文记录西周土地交换史实，具有极高的历史与文献价值

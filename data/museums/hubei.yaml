@@ -45,21 +45,21 @@ artifacts:
   - name: 曾侯乙外棺
     period: 战国
     description: 彩绘漆棺，纹饰为神话人物和窗格纹
-    image_url: https://upload.wikimedia.org/wikipedia/commons/1/1f/%E6%9B%BE%E4%BE%AF%E4%B9%99%E5%A2%93%E5%A4%96%E6%A3%BA%EF%BC%8C2014-04-06_01.jpg
+    image_url: /img/fc8ff0875bf19340.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Siyuwj
+    image_attribution: Siyuwj · CC-BY-SA-4.0 · Commons
   - name: 虎座鸟架鼓
     period: 战国·楚
     description: 楚文化标志性器物造型
-    image_url: https://upload.wikimedia.org/wikipedia/commons/1/1f/%E8%99%8E%E5%BA%A7%E9%B8%9F%E6%9E%B6%E9%BC%93%EF%BC%88%E4%B9%9D%E8%BF%9E%E5%A2%A9%EF%BC%89.jpg
+    image_url: /img/ae60e4d759ba9533.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: 三十三画生
+    image_attribution: 三十三画生 · CC-BY-SA-4.0 · Commons
   - name: 元青花四爱图梅瓶
     period: 元
     description: 画面描绘王羲之爱兰、陶渊明爱菊、林和靖爱梅鹤、周敦颐爱莲
-    image_url: https://upload.wikimedia.org/wikipedia/commons/4/40/%E5%85%83%E9%9D%92%E8%8A%B1%E5%9B%9B%E7%88%B1%E5%9B%BE%E6%A2%85%E7%93%B6.jpg
+    image_url: /img/6b65437b8bb2e77c.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: 三十三画生
+    image_attribution: 三十三画生 · CC-BY-SA-4.0 · Commons
 sources:
   - source: "湖北省博物馆官网: https://www.hbww.org/"
   - source: 曾侯乙编钟总重2567kg（多源核实）

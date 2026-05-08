@@ -27,18 +27,18 @@ artifacts:
   - name: 武士俑
     period: 西汉
     description: 披坚执锐、严阵以待，是汉阳陵出土数量最多的陶俑，展现西汉军事风貌
-    image_url: https://upload.wikimedia.org/wikipedia/commons/6/6d/%E5%85%83%E9%AA%91%E9%A9%AC%E6%AD%A6%E5%A3%AB%E4%BF%913.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/f6c5ac9afc1103f0.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: 三猎
+    image_attribution: 三猎 · CC-BY-SA-4.0 · Commons
   - name: 仕女俑（侍女俑）
     period: 西汉
     description: 宽衣博带、美目流盼，体态优雅，反映西汉宫廷女性形象
   - name: 动物俑
     period: 西汉
     description: 种类丰富，累千成万，生动异常，包括猪、羊、狗、鸡等家畜家禽陶塑
-    image_url: https://upload.wikimedia.org/wikipedia/commons/8/85/%E6%9C%9B%E4%B8%9B%E5%8D%9A%E7%89%A9%E9%A6%86-%E5%8A%A8%E7%89%A9%E6%AE%8B%E4%BF%91%EF%BC%88%E4%B8%9C%E6%B1%89%EF%BC%89.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/c117db7a4963e1e6.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Kcx36
+    image_attribution: Kcx36 · CC-BY-SA-4.0 · Commons
   - name: 宗正之印龟钮银印
     period: 西汉
     description: 出土于外藏坑，为西汉官署印章，是研究汉代官制的重要实物

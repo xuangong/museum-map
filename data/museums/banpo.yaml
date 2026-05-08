@@ -29,12 +29,15 @@ artifacts:
   - name: 小口尖底瓶
     period: 约前4800-前4300年
     description: 半坡文化最典型器物。细泥或细砂硬陶，红色，小口短颈鼓腹尖底，腹侧有双耳。最初被认为是汲水器（利用力学原理自动灌水），后经实验考古证明无法自动灌满，功能至今有争议（酒器说、祭器说等）。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/3/3d/20251026_Pottery_Bottle_with_Pointed_Bottom_from_Beishouling.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/8e22eaca2f74ab0c.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Windmemories
+    image_attribution: Windmemories · CC-BY-SA-4.0 · Commons
   - name: 陶器刻划符号
     period: 约前4800年
     description: 出土陶器上发现22种刻划符号，有些学者认为是中国文字的最早萌芽，但也有学者认为只是工匠标记。
+    image_url: /img/ca17851f15c9019e.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Kcx36 · CC-BY-SA-4.0 · Commons
 sources:
   - source: 百度百科·西安半坡博物馆（详细词条，含发掘数据、文物详情、建筑布局）
   - source: 《西安半坡》考古发掘报告

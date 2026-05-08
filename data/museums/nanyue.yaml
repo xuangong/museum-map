@@ -22,18 +22,19 @@ halls:
 artifacts:
   - name: '"文帝行玺"金印'
     description: 西汉（前2世纪）。纯金铸造，龙钮，印文"文帝行玺"，是迄今发现的最大的汉代金印。直接证明墓主为南越文帝赵眜，也是研究南越国政治制度的关键实物——南越王自称"帝"而非"王"，反映了其与汉朝的微妙关系。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/9/99/Gold_Seal_with_Dragon_Knob_at_Nanyue_King_Museum.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: Shujianyang
+    image_url: /img/2d2e86c035db14a1.jpg
+    image_license: PD
+    image_attribution: d/k · PD · Commons
   - name: 丝缕玉衣
     description: 西汉（前2世纪）。以丝线穿缀2291块玉片而成，是目前发现年代最早、保存最完整的丝缕玉衣。比中原的金缕玉衣等级略低，反映了南越国对汉制的模仿和调适。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/e/e3/Si_l%C3%BC_yu_yi.JPG
+    image_url: /img/7dfbb4c1d4926605.jpg
     image_license: CC-BY-SA-2.5
+    image_attribution: Wikimedia Commons · CC-BY-SA-2.5
   - name: 角形玉杯
     description: 西汉。以整块青玉雕成犀角形，杯口沿浮雕一只矫健的夔龙，造型独特，兼具中原玉器和草原风格，是汉代玉器中的孤品。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/5/58/Jade_Drinking_Vessel_in_Rhino_Horn_Shape_at_Nanyue_King_Museum_02.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: Shujianyang
+    image_url: /img/3cbf4e57d7d14ceb.jpg
+    image_license: CC0
+    image_attribution: Shujianyang · CC0 · Wikidata Q16926473
   - name: 铜屏风构件（朱雀、人操蛇等）
     description: 西汉。大型铜铸鎏金屏风的构件，有朱雀衔环、人操蛇等造型，工艺精湛，反映了南越宫廷的审美趣味。
     image_url: https://upload.wikimedia.org/wikipedia/commons/2/28/Bronze_screen_parts_at_Nanyue_King_Museum_01.jpg

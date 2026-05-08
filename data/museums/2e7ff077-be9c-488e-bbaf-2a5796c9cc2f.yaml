@@ -39,9 +39,9 @@ artifacts:
   - name: 北朝石刻佛像
     period: 北朝
     description: 邯郸境内出土，集中展现北朝至宋代石刻造像艺术风格
-    image_url: https://upload.wikimedia.org/wikipedia/commons/e/ea/North_Dynasties_Statues_of_the_Buddha_carvings_in_Handan_08.jpg
+    image_url: /img/7f64051ad6b1f884.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: 我乃野云鹤
+    image_attribution: 我乃野云鹤 · CC-BY-SA-4.0 · Commons
   - name: 夏商周陶鬲组
     period: 夏代、商代、西周
     description: 「甘丹风华」陈列第二单元「夏商周时期·邯郸的兴起」展出多件不同时期陶鬲，可对比观察陶鬲腿部由长到短的演变过程

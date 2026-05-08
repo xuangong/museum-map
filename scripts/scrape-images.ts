@@ -20,6 +20,26 @@ import { searchBaikeEntry, extractBaikeImages } from "~/services/baidu-baike"
 import { findAdapterFor } from "~/services/museum-sites"
 import { compareAndChoose, type ComparatorCandidate } from "~/services/image-comparator"
 
+// Worker-proxied Wikimedia clients (use when local egress is blocked).
+async function proxyWikidata(query: string): Promise<{ url: string; license: string | null; attribution: string | null; qid: string } | null> {
+  const r = await fetch(`${BASE}/api/admin/wikimedia/wikidata?q=${encodeURIComponent(query)}`, {
+    headers: { "x-admin-token": ADMIN_TOKEN! },
+  })
+  if (!r.ok) return null
+  const j: any = await r.json()
+  if (!j?.hit || !j?.image?.url) return null
+  return { url: j.image.url, license: j.image.license, attribution: j.image.attribution, qid: j.hit.qid }
+}
+async function proxyCommons(query: string): Promise<{ url: string; license: string | null; attribution: string | null; title: string } | null> {
+  const r = await fetch(`${BASE}/api/admin/wikimedia/commons?q=${encodeURIComponent(query)}`, {
+    headers: { "x-admin-token": ADMIN_TOKEN! },
+  })
+  if (!r.ok) return null
+  const j: any = await r.json()
+  if (!j?.hit?.url) return null
+  return { url: j.hit.url, license: j.hit.license, attribution: j.hit.attribution, title: j.hit.title }
+}
+
 const BASE = process.env.BASE ?? "https://museum.xianliao.de5.net"
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN
 const GATEWAY_URL = process.env.COPILOT_GATEWAY_URL
@@ -129,7 +149,45 @@ async function huntCandidates(museumId: string, art: Artifact): Promise<Cand[]> 
     })
   }
 
-  await Promise.all([baidu, site])
+  // Source D: Wikidata entity → P18 image (Chinese label match)
+  const wikidata = (async () => {
+    try {
+      const cleanQ = art.name.replace(/[《》〈〉「」『』""''\s（）()]+/g, " ").trim()
+      if (!cleanQ) return
+      const r = await proxyWikidata(cleanQ)
+      if (!r) return
+      push({
+        url: r.url,
+        source: "wikimedia",
+        license: r.license || "CC",
+        attribution: r.attribution
+          ? `${r.attribution} · ${r.license || ""} · Wikidata ${r.qid}`.trim()
+          : `Wikidata ${r.qid} · ${r.license || ""}`.trim(),
+        pageUrl: `https://www.wikidata.org/wiki/${r.qid}`,
+      })
+    } catch (e) { console.warn(`    wikidata err: ${(e as Error).message}`) }
+  })()
+
+  // Source E: Wikimedia Commons file search (fallback for items without a Wikidata entity)
+  const commons = (async () => {
+    try {
+      const cleanQ = art.name.replace(/[《》〈〉「」『』""''（）()]+/g, " ").trim()
+      if (!cleanQ) return
+      const hit = await proxyCommons(cleanQ)
+      if (!hit) return
+      push({
+        url: hit.url,
+        source: "wikimedia",
+        license: hit.license || "CC",
+        attribution: hit.attribution
+          ? `${hit.attribution} · ${hit.license || ""} · Commons`.trim()
+          : `Wikimedia Commons · ${hit.license || ""}`.trim(),
+        pageUrl: `https://commons.wikimedia.org/wiki/${encodeURIComponent(hit.title)}`,
+      })
+    } catch (e) { console.warn(`    commons err: ${(e as Error).message}`) }
+  })()
+
+  await Promise.all([baidu, site, wikidata, commons])
   return out
 }
 
@@ -175,7 +233,14 @@ async function persistImage(museumId: string, art: Artifact, winner: Cand): Prom
   let bytes: Uint8Array
   let contentType: string
   try {
-    const res = await fetch(winner.url, { headers: { "user-agent": "Mozilla/5.0 museum-map/0.1" } })
+    const isWiki = /^https:\/\/(upload\.wikimedia\.org|commons\.wikimedia\.org|.+\.wikipedia\.org)\//.test(winner.url)
+    const fetchUrl = isWiki
+      ? `${BASE}/api/admin/wikimedia/fetch?url=${encodeURIComponent(winner.url)}`
+      : winner.url
+    const fetchHeaders: Record<string, string> = isWiki
+      ? { "x-admin-token": ADMIN_TOKEN! }
+      : { "user-agent": "Mozilla/5.0 museum-map/0.1" }
+    const res = await fetch(fetchUrl, { headers: fetchHeaders })
     if (!res.ok) {
       console.log(`      ✗ download ${winner.url}: ${res.status}`)
       return false

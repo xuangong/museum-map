@@ -37,9 +37,9 @@ artifacts:
   - name: 第5窟大佛
     period: 北魏
     description: -高17米,是云冈最大的佛像。面容慈祥,衣纹流畅,已开始呈现中国化的审美特征(与昙曜五窟的西域风格相比)。前有清代修建的四层木构阁楼保护。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9a/Yungang_Grottoes_Cave_5_1.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: Thebrainchamber1
+    image_url: /img/b3ccd30d59be8d51.jpg
+    image_license: PD
+    image_attribution: Wikimedia Commons · PD
   - name: 第12窟"音乐窟"
     period: 北魏,约471-494年
     description: -前室壁面雕刻了大量伎乐天人,手持各种乐器(琵琶、筚篥、排箫、细腰鼓等),是研究北魏音乐和乐器的珍贵图像资料,也是中国古代音乐图像最集中的石窟。

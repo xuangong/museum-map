@@ -29,30 +29,48 @@ artifacts:
   - name: 赤道经纬仪
     period: 清康熙八年（1673年）
     description: 比利时人南怀仁设计制造，重2720千克，高3.380米，主要功能为测量太阳时及天体赤道坐标
+    image_url: /img/059abd83920d3f57.jpg
+    image_license: CC-BY-SA-2.5
+    image_attribution: me (w:User:pfctdayelise) · CC-BY-SA-2.5 · Commons
   - name: 黄道经纬仪
     period: 清康熙八年（1673年）
     description: 比利时人南怀仁设计制造，重2752千克，高3.492米，主要功能为测量恒星黄道坐标
+    image_url: /img/314519c30bddb415.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/41588.htm
   - name: 天体仪
     period: 清康熙八年（1673年）
     description: 比利时人南怀仁设计制造，重3850千克，高2.735米，用于演示天体运动及进行坐标换算
+    image_url: /img/47eae941017ecfa6.jpg
+    image_license: CC0
+    image_attribution: Gerhard Emmoser · CC0 · Commons
   - name: 纪限仪
     period: 清康熙八年（1673年）
     description: 比利时人南怀仁设计制造，重802千克，高3.274米，用来测量两颗恒星之间的角距离
   - name: 地平经仪
     period: 清康熙八年（1673年）
     description: 比利时人南怀仁设计制造，重1811千克，高3.201米，用来测量天体的方位角
+    image_url: /img/e20d9cbff7e9970b.jpg
+    image_license: CC-BY-SA-2.5
+    image_attribution: me (w:User:pfctdayelise) · CC-BY-SA-2.5 · Commons
   - name: 象限仪
     period: 清康熙八年（1673年）
     description: 比利时人南怀仁设计制造，重2483千克，高3.611米，用来测量天体的高度角
   - name: 地平经纬仪
     period: 清康熙五十四年（1715年）
     description: 德国人纪理安设计制造，重7368千克，高4.125米，合并地平经仪与象限仪的功能
+    image_url: /img/f3480c17839a0106.jpg
+    image_license: CC-BY-SA-2.5
+    image_attribution: me (w:User:pfctdayelise) · CC-BY-SA-2.5 · Commons
   - name: 玑衡抚辰仪
     period: 清乾隆十九年（1754年）
     description: 由德国人戴进贤、斯洛文尼亚人刘松龄设计监制，重5145千克，高3.379米，代表清代工艺技术的最高成就
   - name: 嫦娥五号月球样品
     period: 2020年（现代）
     description: 嫦娥五号任务带回的月壤，馆藏0.6克，是重要的现代天文科普展品
+    image_url: /img/823544fda928234f.jpg
+    image_license: CC-BY-4.0
+    image_attribution: China News Service · CC-BY-4.0 · Commons
 dynasty_connections:
   - dynasty: 元
     description: 元至元十六年（1279年），天文学家王恂、郭守敬在此建立司天台，奠定古观象台选址基础

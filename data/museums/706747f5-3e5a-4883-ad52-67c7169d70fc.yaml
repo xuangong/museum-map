@@ -34,12 +34,18 @@ artifacts:
   - name: 祈年殿
     period: 明嘉靖—清光绪
     description: 由明嘉靖年间大享殿改建而来，清乾隆十六年（1751年）改名祈年殿，三重檐圆形攒尖顶，覆深蓝色琉璃瓦，是皇帝每年正月祈谷的场所，光绪年间毁于雷火后按原制重建
+    image_url: /img/bb6f9f812854558b.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: Cjdsgsy · CC-BY-SA-3.0 · Commons
   - name: 圜丘
     period: 明嘉靖
     description: 明嘉靖九年（1530年）建造，为三层汉白玉圆形石台，皇帝每年冬至日于此举行祭天大典
   - name: 皇穹宇
     period: 明清
     description: 存放祭天神位的单檐圆形殿宇，外围圆形回音壁，1918年随公园开放后向游人开放
+    image_url: /img/5a0d9f44fa254683.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎 · CC-BY-SA-4.0 · Commons
   - name: 古松柏
     period: 明清
     description: 全园占地273公顷，外坛广植树木，现存古松柏逾3500株，为北京城存量最大的古树群之一

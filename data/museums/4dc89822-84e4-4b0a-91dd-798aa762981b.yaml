@@ -32,15 +32,15 @@ artifacts:
   - name: 折觥
     period: 西周
     description: 造型庄重典雅，纹饰精美富丽，整体为绵羊形，盖体呈羊首形，饰以飞燕、饕餮、夔龙纹等纹饰
-    image_url: https://upload.wikimedia.org/wikipedia/commons/1/10/Bronze_Zun%2C_Late_Shang-Early_Western_Zhou%2C_11th_C._BC_1a.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/e53051b2087d6511.jpg
     image_license: CC0
-    image_attribution: Gary Todd
+    image_attribution: Gary Todd · CC0 · Commons
   - name: 史墙盘
     period: 西周
     description: 铭文最长的青铜器，计284字，历述西周文、武、成、康、昭、穆六王的主要业绩，有”青铜史书”之称
-    image_url: /img/wikimedia/wikipedia/commons/d/d7/%E9%99%95%E8%A5%BF%E5%AE%9D%E9%B8%A1%E6%89%B6%E9%A3%8E%E5%8E%BF%E5%BA%84%E7%99%BD%E6%9D%91-%E5%8F%B2%E5%A2%99%E7%9B%98-%E8%A5%BF%E5%91%A8-%E5%AE%9D%E9%B8%A1%E5%91%A8%E5%8E%9F%E5%8D%9A%E7%89%A9%E9%99%A2_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
-    image_license: CC-BY-SA-4.0
-    image_attribution: Kcx36
+    image_url: /img/8c57bfa0dbd910c5.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: 幽灵巴尼, 2014-03-08 15:03:24, Own work · CC-BY-SA-3.0 · Wikidata Q7495914
   - name: 三年疢壶
     period: 西周
     description: 通高65.4厘米，重26公斤，有”壶中之冠”美称，盖内沿有铭文12行60字

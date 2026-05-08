@@ -28,21 +28,21 @@ artifacts:
   - name: 合掌露齿菩萨
     period: 辽代
     description: 薄伽教藏殿内胁侍菩萨，上身微裸，体型丰满，线条流畅，双手合十，嘴露皓齿，神态生动，被誉为「东方维纳斯」，是辽代雕塑艺术的巅峰之作
-    image_url: /img/wikimedia/wikipedia/commons/d/d0/%E5%90%88%E6%8E%8C%E9%9C%B2%E9%BD%BF%E8%8F%A9%E8%90%A8.jpg
+    image_url: /img/7d7aa13ea58d5321.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Bzsgod
+    image_attribution: Bzsgod · CC-BY-SA-4.0 · Commons
   - name: 琉璃鸱吻
     period: 金代（北吻）/ 清代（南吻）
     description: 大雄宝殿屋脊吻兽，高4.5米，由八块琉璃构件组成，为中国现存古建筑中最大的琉璃吻兽，北吻为金代原物
-    image_url: https://upload.wikimedia.org/wikipedia/commons/9/96/Ningxia_Museum_glazed_architectural_ornament_in_the_form_of_a_chiwen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/b3f72169f009ce6d.jpg
     image_license: CC-BY-SA-3.0
-    image_attribution: BabelStone
+    image_attribution: BabelStone · CC-BY-SA-3.0 · Commons
   - name: 大雄宝殿壁画
     period: 清代
     description: 四壁满绘佛教题材壁画，面积887.25平方米，内容涵盖佛本行经变、善财童子五十三参、千手千眼观世音菩萨等，1997年发现底层金代遗风壁画
-    image_url: /img/wikimedia/wikipedia/commons/c/c2/%E5%AE%9C%E5%85%B4%E5%B8%82%E5%A4%A7%E8%A7%89%E5%AF%BA%E5%A4%A7%E9%9B%84%E5%AE%9D%E6%AE%BF%E5%A3%81%E7%94%BB_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/8f48f1b80e7393a0.jpg
     image_license: CC-BY-3.0
-    image_attribution: helkonig
+    image_attribution: helkonig · CC-BY-3.0 · Commons
 dynasty_connections:
   - dynasty: 辽朝（916—1125）
     description: 辽重熙七年（1038年）始建，兼具辽国皇室宗庙性质，薄伽教藏殿为现存辽代建筑精品，殿内保存辽代彩塑31尊

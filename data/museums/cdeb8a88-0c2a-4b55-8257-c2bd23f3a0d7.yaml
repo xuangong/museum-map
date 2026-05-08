@@ -21,9 +21,15 @@ artifacts:
   - name: 鲁迅旧居（故居）
     period: 1923–1926年（鲁迅居住期）；1949年起对外开放
     description: 全国重点文物保护单位。鲁迅于1923年秋购入，1924年改建完成后入住，是北京保存最完整的鲁迅居所。鲁迅在此生活两年多，写下《华盖集》《华盖集续编》《野草》《彷徨》《朝花夕拾》等重要著作。
+    image_url: /img/eb999a9978aa2d5f.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 維基小霸王 · CC-BY-SA-4.0 · Commons
   - name: 北大红楼
     period: 1916年始建，1918年落成，1961年列为全国重点文物保护单位
     description: 全国重点文物保护单位，原为北京大学第一院。是新文化运动的大本营、五四运动的发源地及中国共产党早期重要活动地，现为新文化运动纪念馆所在地。
+    image_url: /img/0fcc92826e42cc60.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: N509FZ · CC-BY-SA-4.0 · Wikidata Q1621028
 dynasty_connections:
   - dynasty: 民国时期
     description: 鲁迅生活与文学创作的主要时代，博物馆核心收藏与展示均围绕这一时期展开

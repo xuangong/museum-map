@@ -32,9 +32,9 @@ artifacts:
   - name: 神功圣德碑（四方城碑亭）
     period: 明代永乐十一年（1413年）
     description: 记载明太祖朱元璋功德的巨型石碑，碑亭（四方城）为全国重点文物保护单位
-    image_url: https://upload.wikimedia.org/wikipedia/commons/0/0c/Stone_Sifangcheng.jpg
-    image_license: CC-BY-SA-2.0
-    image_attribution: wang leon from Nanjing, China
+    image_url: /img/24701b81a7a20d7e.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: User:Vmenkov · CC-BY-SA-3.0 · Commons
   - name: 石象路石刻
     period: 明代（1381—1413年）
     description: 神道两侧排列的石狮、獬豸、骆驼、象、麒麟、马等六种石兽及石人，是中国现存规模最大的明代帝陵神道石刻群

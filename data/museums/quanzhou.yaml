@@ -23,18 +23,21 @@ artifacts:
   - name: 宋代海船
     period: 南宋，1974年后渚港出土
     description: 残长24.2米，宽9.15米，是当时中国出土的最大古船之一。船体采用水密隔舱技术，是中国古代造船术的实物证据
-    image_url: https://upload.wikimedia.org/wikipedia/commons/8/89/Song_Dynasty_Ancient_Ship_of_Quanzhou_Bay_20061229.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/8becaab097562fdf.jpg
     image_license: CC-BY-2.0
-    image_attribution: meckleychina
+    image_attribution: meckleychina · CC-BY-2.0 · Commons
   - name: 印度教石刻
     period: 宋元
     description: 泉州出土的大量印度教神像石刻（毗湿奴、湿婆等），证明宋元时期印度商人社区在泉州的存在
-    image_url: https://upload.wikimedia.org/wikipedia/commons/2/20/%E5%BC%80%E5%85%83%E5%AF%BA%E5%AD%98%E5%8D%B0%E5%BA%A6%E6%95%99%E7%9F%B3%E5%88%BB.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/b1eccf2b2ffe1211.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: 陳寅恪
+    image_attribution: 陳寅恪 · CC-BY-SA-4.0 · Commons
   - name: 伊斯兰教碑刻
     period: 宋元
     description: 阿拉伯文、波斯文墓碑和清真寺碑刻，反映泉州穆斯林社区的规模和影响力
+    image_url: /img/210af8d5fd28b522.png
+    image_license: PD
+    image_attribution: Bogaevskii, Nikolai V., 1843-1912 · PD · Commons
   - name: 基督教（景教）石刻
     period: 元代
     description: 十字架石刻，证明元代泉州存在景教/天主教社区
@@ -44,9 +47,9 @@ artifacts:
   - name: 摩尼教石刻
     period: 宋元
     description: 泉州是中国摩尼教（明教）保存最完整的地区
-    image_url: https://upload.wikimedia.org/wikipedia/commons/b/b5/Jinjiang_Cao%27an_20120229-05.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/b1938d315200ac92.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Zhangzhugang
+    image_attribution: Zhangzhugang · CC-BY-SA-4.0 · Commons
 sources:
   - source: "泉州海交馆官网: http://www.qzhjg.cn/"
   - source: "泉州海交馆简介: http://www.qzhjg.cn/html/hjgjj.html"

@@ -28,21 +28,21 @@ artifacts:
   - name: 人头形器口彩陶瓶
     period: 仰韶文化，约5000年前
     description: 瓶口塑为人头形，齐刘海发型，耳有耳洞，身上绘三角茎叶纹与飞鸟纹，是新石器时代最具人文气息的彩陶作品之一
-    image_url: https://upload.wikimedia.org/wikipedia/commons/3/35/%E4%BB%B0%E9%9F%B6%E6%96%87%E5%8C%96%E4%BA%BA%E5%A4%B4%E5%BD%A2%E5%99%A8%E5%8F%A3%E5%BD%A9%E9%99%B6%E7%93%B6.jpg
+    image_url: /img/d891eca4c1264252.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: 三猎
+    image_attribution: 三猎 · CC-BY-SA-4.0 · Wikidata Q133224545
   - name: 铜车马仪仗队
     period: 东汉，武威雷台汉墓
     description: 含铜奔马在内的成组铜车马群，是了解汉代车马制度和军事仪仗的实物资料
-    image_url: https://upload.wikimedia.org/wikipedia/commons/c/cc/%E9%9B%B7%E5%8F%B0%E6%B1%89%E5%A2%93%E9%93%9C%E8%BD%A6%E9%A9%AC%E4%BB%AA%E4%BB%97%E9%98%9F.jpg
+    image_url: /img/49afb842f6b59a32.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: 三猎
+    image_attribution: 三猎 · CC-BY-SA-4.0 · Commons
   - name: 莲花形玻璃托盏
     period: 元代，漳县汪世显家族墓出土
     description: 普蓝色半透明玻璃，盏为七瓣莲花形，托为八瓣莲花形，迄今出土最完整的元代玻璃器
-    image_url: https://upload.wikimedia.org/wikipedia/commons/6/67/Yuan_Lotus-shaped_Glass_Calix_%2810096176946%29.jpg
+    image_url: /img/2ba6511778c10df5.jpg
     image_license: CC0
-    image_attribution: Gary Todd from Xinzheng, China
+    image_attribution: Gary Todd from Xinzheng, China · CC0 · Wikidata Q133109456
   - name: 彩绘木博戏俑
     period: 西汉，武威磨嘴子汉墓出土
     description: 两位老者对弈博戏，高29cm，生动刻画蓄势待发的对弈场面

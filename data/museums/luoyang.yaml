@@ -31,9 +31,9 @@ artifacts:
     description: 唐代（8世纪）。唐三彩以黄、绿、白三色为主，黑釉极为罕见。此马造型雄健，黑釉光亮如漆，是唐三彩中的极品。
   - name: 北魏泥塑人面像
     description: 北魏（5-6世纪）。永宁寺塔基遗址出土，面容温和慈祥，彩绘保存良好，是北魏佛教塑像的代表。永宁寺塔高约百米，是古代中国最高的建筑之一。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/1/11/Clay_Head_ofa_Female_Donor_Excavated_at_Yongning_Temple.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/3d0e95928669e393.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Baomi
+    image_attribution: Baomi · CC-BY-SA-4.0 · Commons
   - name: 清代金丝楠木塔
     description: 清代（18世纪）。高约1.8米，以金丝楠木精工雕刻，层层飞檐，密布佛像，是清代木雕工艺的巅峰。
   - name: 东周错金银铜鼎

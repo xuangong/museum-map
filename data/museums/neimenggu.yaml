@@ -44,9 +44,9 @@ artifacts:
   - name: 元代铜权
     period: 元代
     description: —元上都遗址出土，体现了蒙古帝国的度量衡制度。元上都（今锡林郭勒盟正蓝旗）是忽必烈的夏都，已列入世界遗产。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/9/9a/Lin%27an_Museum%2C_2020-01-05_25.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/2a3dcd8059b83d31.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Siyuwj
+    image_attribution: Siyuwj · CC-BY-SA-4.0 · Commons
   - name: 查干诺尔龙化石
     period: 白垩纪
     description: —锡林郭勒盟出土，巨型蜥脚类恐龙，是内蒙古恐龙化石的代表。

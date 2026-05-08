@@ -26,15 +26,15 @@ artifacts:
   - name: 第220窟壁画
     period: 初唐，642年
     description: 药师经变、维摩诘经变，色彩鲜艳，人物生动
-    image_url: https://upload.wikimedia.org/wikipedia/commons/a/a9/Western_Pure_Land_Illustration%2C_Cave_220%2C_Mogao_Caves.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/b44bb375ebcb8413.jpg
     image_license: PD
-    image_attribution: Unknown author
+    image_attribution: Unknown authorUnknown author · PD · Commons
   - name: 第257窟九色鹿本生
     period: 北魏
     description: 连环画式叙事，从右向左展开故事
-    image_url: /img/wikimedia/wikipedia/commons/0/07/2021.12.24-12.26_800pcs_%E7%92%80%E7%92%A8%E6%95%A6%E7%85%8C%E7%B3%BB%E5%88%97%EF%BC%9A%E7%AC%AC257%E7%AA%9F-%E9%B9%BF%E7%8E%8B%E6%9C%AC%E7%94%9F%E5%B1%80%E9%83%A8%E5%9C%96_Mogao_Grottoes_Cave_257_Main_Chamber_West_Wall_%281%29_%2851776320643%29.jpg
+    image_url: /img/d80eadf5830e8c00.jpg
     image_license: CC-BY-2.0
-    image_attribution: Grace Hwu from Taiwan
+    image_attribution: Grace Hwu from Taiwan · CC-BY-2.0 · Commons
   - name: 第158窟涅槃像
     period: 中唐
     description: 卧佛长15.8米，表情安详
@@ -44,9 +44,9 @@ artifacts:
   - name: 飞天形象
     period: 历代
     description: 莫高窟共有4500余身飞天，风格随朝代演变
-    image_url: https://upload.wikimedia.org/wikipedia/commons/c/c6/2021.07.16-07.18_800pcs_%E7%92%80%E7%92%A8%E6%95%A6%E7%85%8C%E7%B3%BB%E5%88%97%EF%BC%9A%E7%AC%AC57%E7%AA%9F-%E8%A7%80%E9%9F%B3%E8%8F%A9%E8%96%A9%E5%83%8F_Mogao_Grottoes_Cave_057_Main_Chamber_South_Wall_%281%29_%2851320058790%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/76845c704b8a2938.jpg
     image_license: CC-BY-2.0
-    image_attribution: Grace Hwu from Taiwan
+    image_attribution: Grace Hwu from Taiwan · CC-BY-2.0 · Commons
 dynasty_connections:
   - dynasty: |-
       北朝**（十六国、北魏、西魏、北周）：早期洞窟，印度和中亚风格明显，人物面相丰圆，有犍陀罗痕迹

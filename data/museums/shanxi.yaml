@@ -23,9 +23,9 @@ artifacts:
   - name: 晋侯鸟尊
     period: 西周，约前9世纪
     description: —曲沃天马-曲村晋侯墓地114号墓出土，凤鸟回首造型，背上有盖，尾部有象鼻形鋬。是晋侯燮父时期的青铜礼器，造型独特，已成为山西博物院的标志。
-    image_url: /img/wikimedia/wikipedia/commons/4/41/%E6%99%8B%E4%BE%AF%E9%B8%9F%E5%B0%8A.jpg
+    image_url: /img/d4982ce7d9015504.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: 蓦然回首已千年
+    image_attribution: 蓦然回首已千年 · CC-BY-SA-4.0 · Wikidata Q134199280
   - name: 侯马盟书
     period: 春秋晚期，约前497-前489年
     description: —侯马晋国遗址出土，用毛笔写在玉石片上的盟誓文书，共5000余片。记载了晋国赵氏内部及赵氏与其他卿族的盟誓活动，是研究春秋晚期政治斗争的第一手资料，也是目前所见最早的毛笔书写文字实物之一。
@@ -35,15 +35,21 @@ artifacts:
   - name: 龙形觥
     period: 商代晚期
     description: —山西石楼出土，整器为龙形，龙首张口为流，通体饰鼍纹、夔龙纹。造型在商代青铜器中极为罕见，体现了晋陕高原青铜文化的独特面貌。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/d/d1/Shang_Bronze_Guang_01c.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/229a05577c423c4e.jpg
     image_license: CC0
-    image_attribution: Gary Lee Todd, Ph.D.
+    image_attribution: Gary Lee Todd, Ph.D. · CC0 · Commons
   - name: 兽形觥
     period: 商代晚期
     description: —灵石旌介出土，整体呈四足兽形，兽背上有盖，造型浑厚生动。是商代晚期青铜酒器的杰出代表。
+    image_url: /img/db52017526546b00.jpg
+    image_license: CC0
+    image_attribution: Gary Todd from Xinzheng, China · CC0 · Commons
   - name: 庙底沟彩陶
     period: 新石器时代，约前4000年
     description: —以花瓣纹、旋涡纹为典型装饰，代表了仰韶文化庙底沟类型，这一文化类型从山西、陕西扩展至黄河中游广大地区，被认为是华夏文化早期扩张的考古学证据。
+    image_url: /img/d891eca4c1264252.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎 · CC-BY-SA-4.0 · Commons
   - name: 虞弘墓汉白玉石椁
     period: 北齐-隋，592年
     description: —太原出土，石椁浮雕表现了大量中亚祆教风格的宴饮、狩猎、乐舞场面，墓主虞弘为鱼国（中亚）人。是丝绸之路文化交融的重要实物。

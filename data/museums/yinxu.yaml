@@ -23,9 +23,9 @@ halls:
 artifacts:
   - name: 甲骨文卜辞
     description: 商代晚期（前13-前11世纪）。1899年被发现，是中国已知最早的成熟文字系统。殷墟出土甲骨约15万片，内容涉及祭祀、战争、农业、天象等，是研究商代社会的第一手资料。甲骨文的发现改变了世界对中国古代文明的认识。
-    image_url: /img/wikimedia/wikipedia/commons/2/22/Yinxu_Oracle_Bone_Inscriptions_for_Divination_%2810185440455%29_cropped.jpg
-    image_license: CC0
-    image_attribution: photograph by Gary Todd, cropped by Kanguole
+    image_url: /img/c0c753daa701ef0e.png
+    image_license: PD
+    image_attribution: "https://dl.wdl.org/290.png Gallery: http://www.wdl.org/en/item/290/ (World Di… · PD · Commons"
   - name: 司母辛鼎（后母辛鼎）
     description: 商代晚期。妇好墓出土，与中国国家博物馆的后母戊鼎形制相近但略小，铭文"司母辛"（或"后母辛"），是妇好之子为其所铸的祭器。
   - name: 妇好鸮尊

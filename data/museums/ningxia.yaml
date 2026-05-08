@@ -32,9 +32,9 @@ artifacts:
   - name: 力士志文支座
     period: 西夏，西夏王陵出土
     description: 国宝级文物，男性力士形象的石刻建筑构件，身刻西夏文字，是西夏陵寝建筑制度的重要证据
-    image_url: https://upload.wikimedia.org/wikipedia/commons/3/31/%E7%9F%B3%E9%9B%95%E5%8A%9B%E5%A3%AB%E5%BF%97%E6%96%87%E6%94%AF%E5%BA%A701.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original
+    image_url: /img/aaa98420e85e345d.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: Baomi
+    image_attribution: Baomi · CC-BY-SA-4.0 · Commons
   - name: 贺兰山岩画
     period: 旧石器至青铜时代
     description: 贺兰山东麓发现大量岩画，以人面像和动物形象为主，时间跨度数千年，是北方游牧民族精神生活的直接记录
@@ -56,5 +56,8 @@ artifacts:
   - name: 竹雕
     period: 西夏
     description: 细浅阴刻中原人物生活场景，说明西夏与中原文化的交流互鉴
+    image_url: /img/0e85247db7d19831.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 白色瑰宝 · CC-BY-SA-4.0 · Commons
 sources:
   - source: 百度百科·宁夏回族自治区博物馆（详细词条，含建筑数据、展厅描述、馆藏信息）

@@ -31,9 +31,15 @@ artifacts:
   - name: 羊角纹罐
     period: 新石器时代·辛店文化
     description: 馆藏新石器时代陶器，辛店文化代表性器物
+    image_url: /img/cae948059b8ba3b2.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎 · CC-BY-SA-4.0 · Commons
   - name: 绿釉羊圈
     period: 汉代
     description: 河南洛阳出土汉代陶明器，反映汉代畜牧农业生活场景
+    image_url: /img/56878a6825c2c14f.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 三猎 · CC-BY-SA-4.0 · Commons
   - name: 传统农具（铁制农具为代表）
     period: 历代
     description: 馆藏150余件传统农具文物，涵盖各历史时期农业生产工具

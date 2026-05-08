@@ -35,12 +35,21 @@ artifacts:
   - name: 马门溪龙骨架
     period: 侏罗纪
     description: 中国发现的体型最大的恐龙之一，颈部极长，为镇馆重要展品
+    image_url: /img/1a3fcb45c9ad8fd5.jpg
+    image_license: CC0
+    image_attribution: MspreilsCN · CC0 · Commons
   - name: 许氏禄丰龙化石
     period: 早侏罗世
     description: 中国第一具装架展出的恐龙骨骼化石，具有重要历史意义
+    image_url: /img/d8daac96e4408918.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 瑞丽江的河水 · CC-BY-SA-4.0 · Commons
   - name: 黄河象骨架
     period: 上新世
     description: 世界上出土最完整的古象化石之一，出土于甘肃合水
+    image_url: /img/d2ba8519f20d4729.jpg
+    image_license: CC-BY-SA-3.0
+    image_attribution: 幽灵巴尼 · CC-BY-SA-3.0 · Commons
   - name: 北京猿人头盖骨仿真模型
     period: 中更新世（距今约50万年）
     description: 依据周口店遗址发现的北京猿人头盖骨制作的高精度仿真模型

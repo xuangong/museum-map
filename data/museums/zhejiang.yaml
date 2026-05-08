@@ -31,9 +31,9 @@ artifacts:
     description: 五代（10世纪）。雷峰塔地宫出土，纯银鎏金，工艺极精，是吴越国佛教文化的顶级遗物。
   - name: 元·黄公望《富春山居图》（剩山图卷）
     description: 元代（约1350年）。中国山水画史上的巅峰之作，现存前半卷"剩山图"藏于浙博，后半卷在台北故宫。
-    image_url: https://upload.wikimedia.org/wikipedia/commons/a/af/%E5%AF%8C%E6%98%A5%E5%B1%B1%E5%B1%85%E5%9C%96%28%E5%89%A9%E5%B1%B1%E5%9C%96%29.jpg
+    image_url: /img/3eb318e71131d576.jpg
     image_license: PD
-    image_attribution: Huang Gongwang
+    image_attribution: Huang Gongwang · PD · Commons
   - name: 宁波万工轿（花轿）
     description: 清末民初。耗时万工制作的朱金木雕花轿，代表浙东民间工艺的极致，是民俗文物的经典。
   - name: 越窑青瓷莲花碗

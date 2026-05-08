@@ -24,9 +24,15 @@ artifacts:
   - name: 水晶王
     period: 地质年代
     description: 世界最大水晶单体标本，是馆内镇馆之宝之一
+    image_url: /img/fa6ce46a223d098b.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 章彦博 · CC-BY-SA-4.0 · Commons
   - name: 中华龙鸟化石
     period: 中生代
     description: 珍贵的史前鸟类祖先化石，对研究鸟类起源具有重要科学价值
+    image_url: /img/703b61bb691ad68e.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 纳瓦拉的亨利 · CC-BY-SA-4.0 · Commons
   - name: 巨型山东龙骨架
     period: 白垩纪
     description: 大型鸭嘴龙类恐龙骨架标本
