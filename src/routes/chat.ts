@@ -1,6 +1,8 @@
 import { Elysia } from "elysia"
 import type { Env } from "~/index"
-import { ChatGuardError, forwardChat, runRateLimits } from "~/services/chat"
+import { ChatGuardError, forwardChat, runRateLimits, sanitizeChatRequest, MODEL, MAX_TOKENS } from "~/services/chat"
+import { runToolLoop } from "~/services/agent-loop"
+import { CHAT_TOOLS, CHAT_AGENT_SYSTEM, executeChatTool } from "~/services/chat-tools"
 import { getClientIp } from "~/lib/getClientIp"
 
 interface RouteContext {
@@ -31,6 +33,44 @@ export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
     set.status = rl.reason === "global_day" ? 503 : 429
     return { error: rl.reason }
   }
+
+  // Tool-augmented path: AI can query our DB before answering.
+  if (body && body.useTools !== false) {
+    try {
+      const sanitized = sanitizeChatRequest({ ...body, stream: false })
+      const messages = sanitized.messages.map((m) => ({ role: m.role, content: m.content }))
+      const result = await runToolLoop({
+        gatewayUrl: env.COPILOT_GATEWAY_URL,
+        gatewayKey: env.COPILOT_GATEWAY_KEY,
+        model: MODEL,
+        maxTokens: MAX_TOKENS,
+        system: CHAT_AGENT_SYSTEM + (sanitized.system ? "\n\n" + sanitized.system : ""),
+        tools: CHAT_TOOLS as any,
+        messages,
+        executeTool: (call) => executeChatTool(env.DB, call),
+        maxIters: 6,
+        wallMs: 45_000,
+      })
+      if (result.stopReason === "gateway_error") {
+        set.status = 502
+        return { error: "upstream_error", detail: result.lastError }
+      }
+      // Return Anthropic-style envelope so the existing client renders the text.
+      return {
+        content: [{ type: "text", text: result.text || "（无回复）" }],
+        stop_reason: result.stopReason,
+        iterations: result.iterations,
+      }
+    } catch (e) {
+      if (e instanceof ChatGuardError) {
+        set.status = e.status
+        return { error: e.message }
+      }
+      set.status = 500
+      return { error: "internal_error" }
+    }
+  }
+
   try {
     const upstream = await forwardChat(body, {
       gatewayUrl: env.COPILOT_GATEWAY_URL,
