@@ -50,18 +50,18 @@ function renderMd(s: string): string {
   const out: string[] = []
   let i = 0
   while (i < lines.length) {
-    const line = lines[i]
+    const line = lines[i]!
     if (/^\s*[-*]\s+/.test(line)) {
       const items: string[] = []
-      while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
-        items.push(`<li>${lines[i].replace(/^\s*[-*]\s+/, "")}</li>`)
+      while (i < lines.length && /^\s*[-*]\s+/.test(lines[i]!)) {
+        items.push(`<li>${lines[i]!.replace(/^\s*[-*]\s+/, "")}</li>`)
         i++
       }
       out.push(`<ul>${items.join("")}</ul>`)
     } else if (/^\s*\d+\.\s+/.test(line)) {
       const items: string[] = []
-      while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i])) {
-        items.push(`<li>${lines[i].replace(/^\s*\d+\.\s+/, "")}</li>`)
+      while (i < lines.length && /^\s*\d+\.\s+/.test(lines[i]!)) {
+        items.push(`<li>${lines[i]!.replace(/^\s*\d+\.\s+/, "")}</li>`)
         i++
       }
       out.push(`<ol>${items.join("")}</ol>`)
@@ -450,6 +450,7 @@ export function ProfilePage(opts: {
       <div class="cta-row">
         <a class="cta-primary" href="/u/${encodeURIComponent(handle)}/map">在地图上查看 →</a>
         <a class="cta-secondary" href="/u/${encodeURIComponent(handle)}/share">生成分享海报</a>
+        <a class="cta-secondary" href="/plaza">← 回广场</a>
         ${isOwn ? `<a class="cta-secondary" href="/">← 我的地图</a>` : `<a class="cta-secondary" href="/">访问中国博物馆地图</a>`}
       </div>
 

@@ -5,7 +5,7 @@ export const CHAT_TOOLS = [
   {
     name: "search_museums",
     description:
-      "搜索本系统数据库中的博物馆/古迹。可按地点（含省/市/区，模糊匹配）、朝代（在 corePeriod 或 dynastyCoverage 中模糊匹配）、等级（如 '一级'/'二级'）、或自由关键词（匹配馆名 / 简介 / 朝代覆盖）筛选。**默认只返回 id/name/location/level**——这对"列出 X 地有哪些馆"这类问题已足够。仅当用户明确问到朝代/时间跨度时，传 fields=['period','coverage'] 取额外字段。可重复调用以缩小范围。",
+      "搜索本系统数据库中的博物馆/古迹。可按地点（含省/市/区，模糊匹配）、朝代（在 corePeriod 或 dynastyCoverage 中模糊匹配）、等级（如 '一级'/'二级'）、或自由关键词（匹配馆名 / 简介 / 朝代覆盖）筛选。**默认只返回 id/name/location/level**——这对「列出 X 地有哪些馆」这类问题已足够。仅当用户明确问到朝代/时间跨度时，传 fields=['period','coverage'] 取额外字段。可重复调用以缩小范围。",
     input_schema: {
       type: "object",
       properties: {

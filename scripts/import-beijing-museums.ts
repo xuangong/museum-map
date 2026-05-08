@@ -7,6 +7,8 @@
  *   ADMIN_TOKEN=... bun run scripts/import-beijing-museums.ts -- --confirm
  */
 
+export {}
+
 const BASE = "https://museum.xianliao.de5.net"
 const TOKEN = process.env.ADMIN_TOKEN || ""
 const DRY = !process.argv.includes("--confirm")

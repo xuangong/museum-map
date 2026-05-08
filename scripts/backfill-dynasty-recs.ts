@@ -59,7 +59,7 @@ function indexName(rawName: string, id: string) {
   // Also pull out any parenthetical aliases as their own keys
   const parenMatches = rawName.matchAll(/[（(]([^)）]+)[)）]/g)
   for (const m of parenMatches) {
-    const aliasNorm = normalize(m[1])
+    const aliasNorm = normalize(m[1]!)
     if (aliasNorm && !lookup.has(aliasNorm)) lookup.set(aliasNorm, id)
   }
 }
@@ -87,7 +87,7 @@ function resolve(name: string): { id: string | null; match: Resolution["match"] 
   if (MANUAL[name]) return { id: MANUAL[name]!, match: "exact" }
   // Try main name + each parenthetical alias
   const candidates: string[] = [name]
-  for (const m of name.matchAll(/[（(]([^)）]+)[)）]/g)) candidates.push(m[1])
+  for (const m of name.matchAll(/[（(]([^)）]+)[)）]/g)) candidates.push(m[1]!)
 
   for (const cand of candidates) {
     const n = normalize(cand)

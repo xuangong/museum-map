@@ -21,7 +21,7 @@ async function makeEnv(extra: Record<string, string> = {}) {
 
 async function seedInvite(env: any): Promise<string> {
   const svc = new AuthService(env.DB)
-  let adminId = (await env.DB.prepare("SELECT id FROM users WHERE is_admin = 1 LIMIT 1").first<{ id: string }>())?.id
+  let adminId = ((await env.DB.prepare("SELECT id FROM users WHERE is_admin = 1 LIMIT 1").first()) as { id: string } | null)?.id
   if (!adminId) {
     const r = await svc.register({ email: `admin-${Date.now()}@example.com`, password: "hunter2hunter" })
     adminId = r.user.id

@@ -6,6 +6,8 @@
  *   ADMIN_TOKEN=... bun run scripts/import-missing-museums.ts -- --dry-run
  */
 
+export {}
+
 const BASE = "https://museummap.xianliao.de5.net"
 const TOKEN = process.env.ADMIN_TOKEN || ""
 const DRY = process.argv.includes("--dry-run")
