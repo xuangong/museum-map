@@ -25,6 +25,9 @@ artifacts:
   - name: 新洞
     period: 约10—20万年前（新洞人时期）
     description: 出土新洞人牙齿化石及动物化石，填补北京猿人与山顶洞人之间的演化空白
+    image_url: /img/0f2c93c337499925.png
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E6%96%B0%E6%B4%9E
 dynasty_connections:
   - dynasty: 史前旧石器时代
     description: 北京猿人、新洞人、山顶洞人先后在此生活，是中国乃至东亚地区人类起源与演化的重要实证地

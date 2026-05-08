@@ -30,6 +30,9 @@ artifacts:
   - name: 更钟
     period: 元代
     description: 报时用钟，是元代北京城历史的重要见证
+    image_url: /img/e477010683abd3b3.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/item/%E6%9B%B4%E9%92%9F
   - name: 魏忠贤铜钟
     period: 明代
     description: 俗称歪钟，与宦官魏忠贤相关的历史文物

@@ -156,6 +156,9 @@
   - field_path: artifacts[2].description
     source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
     authority: government
+  - field_path: artifacts[2].image
+    source_url: https://baike.baidu.com/item/%E6%96%B0%E6%B4%9E
+    authority: encyclopedia
   - field_path: artifacts[2].name
     source_url: https://www.beijing.gov.cn/renwen/rwzyd/bwg/zkdbjryzbwg/202301/t20230112_2897804.html
     authority: government
@@ -1660,6 +1663,9 @@
   - field_path: artifacts[2].name
   - field_path: artifacts[2].period
   - field_path: artifacts[3].description
+  - field_path: artifacts[3].image
+    source_url: https://baike.baidu.com/item/%E6%9B%B4%E9%92%9F
+    authority: encyclopedia
   - field_path: artifacts[3].name
   - field_path: artifacts[3].period
   - field_path: artifacts[4].description
@@ -4865,6 +4871,9 @@ ef6658c6-03b4-4edb-98ca-e19523bdaaa7:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:Pagoda_of_Fogong_Temple_at_Dust.jpg
     authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://baike.baidu.com/view/1195986.htm
+    authority: encyclopedia
   - field_path: artifacts[2].image
     source_url: https://commons.wikimedia.org/wiki/File%3AMoGokSayaDawGyi%20Relics%20from%20Bone%20and%20blood.jpg
     authority: encyclopedia
@@ -5251,6 +5260,9 @@ gansu:
   - field_path: artifacts[4].image
     source_url: https://baike.baidu.com/item/%E5%BD%A9%E7%BB%98%E6%9C%A8%E5%8D%9A%E6%88%8F%E4%BF%91
     authority: encyclopedia
+  - field_path: artifacts[7].image
+    source_url: https://baike.baidu.com/view/6053207.htm
+    authority: encyclopedia
 guangdong:
   - field_path: artifacts[1].image
     source_url: https://commons.wikimedia.org/wiki/File:清乾隆广彩人物纹大碗.JPG
@@ -5533,6 +5545,9 @@ longmen:
   - field_path: artifacts[3].image
     source_url: https://commons.wikimedia.org/wiki/File:%E9%BE%99%E9%97%A8%E7%9F%B3%E7%AA%9F-%E8%8E%B2%E8%8A%B1%E6%B4%9E_-_panoramio.jpg
     authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://baike.baidu.com/subview/348546/17883479.htm
+    authority: encyclopedia
 luoyang:
   - field_path: artifacts[4].image
     source_url: https://commons.wikimedia.org/wiki/File%3AClay%20Head%20ofa%20Female%20Donor%20Excavated%20at%20Yongning%20Temple.jpg
@@ -5770,10 +5785,10 @@ taipei-gugong:
     source_url: https://commons.wikimedia.org/wiki/File:Ding_cauldron_of_Duke_Mao.jpg
     authority: encyclopedia
   - field_path: artifacts[1].image
-    source_url: https://commons.wikimedia.org/wiki/File:Jadeite_Cabbage,_National_Palace_Museum.jpg
+    source_url: https://baike.baidu.com/subview/402663/16187779.htm
     authority: encyclopedia
   - field_path: artifacts[2].image
-    source_url: https://commons.wikimedia.org/wiki/File:快雪時晴帖(局部).jpg
+    source_url: https://baike.baidu.com/subview/15488317/16229546.htm
     authority: encyclopedia
   - field_path: artifacts[3].image
     source_url: https://commons.wikimedia.org/wiki/File:Huang_Gongwang._Dwelling_in_the_Fuchun_Mountains._detail._National_Palace_Museum,_Taipei.jpg

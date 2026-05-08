@@ -43,6 +43,9 @@ artifacts:
     description: 唐代(约7世纪)。洞口两壁刻有140余个药方,涉及内科、外科、小儿科等,是中国现存最早的石刻药方,具有重要的医学史价值。
   - name: 万佛洞
     description: 唐代(680年)。南北两壁密布一万五千尊小佛像,主佛阿弥陀佛端坐莲台,洞口力士像肌肉刚健,是唐代石窟造像的代表。
+    image_url: /img/954dc2ba2178ac29.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/subview/348546/17883479.htm
   - name: 宾阳南洞阿弥陀佛像
     description: 唐代。面相丰满,衣纹流畅,是唐代佛教雕塑的典范之作。
 dynasty_connections:

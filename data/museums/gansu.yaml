@@ -58,6 +58,9 @@ artifacts:
   - name: 葫芦形网纹彩陶壶
     period: 马家窑文化半山类型，约4500年前
     description: 高46.7cm，红黑彩绘葫芦形网纹，马家窑彩陶代表作
+    image_url: /img/6b717be88d9f06f6.jpg
+    image_license: fair-use
+    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/6053207.htm
 sources:
   - source: 百度百科·甘肃省博物馆（含馆藏数据、文物尺寸、展厅信息）
   - source: "甘肃省博物馆官网: http://www.gansumuseum.com/"
