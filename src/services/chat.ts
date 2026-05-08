@@ -1,9 +1,9 @@
 import { bucketKey, checkAndIncrement, type KVLike } from "~/lib/rateLimit"
 
-export const MODEL = "claude-haiku-4.5"
-export const MAX_TOKENS = 2048
-export const MAX_MESSAGES_BYTES = 32 * 1024
-export const MAX_SYSTEM_BYTES = 8 * 1024
+export const MODEL = "claude-opus-4-6"
+export const MAX_TOKENS = 8192
+export const MAX_MESSAGES_BYTES = 64 * 1024
+export const MAX_SYSTEM_BYTES = 16 * 1024
 export const MAX_MESSAGES_LEN = 12
 
 export interface ChatMessage {

@@ -5,7 +5,7 @@ export const CHAT_TOOLS = [
   {
     name: "search_museums",
     description:
-      "搜索本系统数据库中的博物馆/古迹。可按地点（含省/市/区，模糊匹配）、朝代（在 corePeriod 或 dynastyCoverage 中模糊匹配）、等级（如 '一级'/'二级'）、或自由关键词（匹配馆名 / 简介 / 朝代覆盖）筛选。返回轻量条目列表。可重复调用以缩小范围。如果一次返回过多，提示用户细化条件。",
+      "搜索本系统数据库中的博物馆/古迹。可按地点（含省/市/区，模糊匹配）、朝代（在 corePeriod 或 dynastyCoverage 中模糊匹配）、等级（如 '一级'/'二级'）、或自由关键词（匹配馆名 / 简介 / 朝代覆盖）筛选。**默认只返回 id/name/location/level**——这对"列出 X 地有哪些馆"这类问题已足够。仅当用户明确问到朝代/时间跨度时，传 fields=['period','coverage'] 取额外字段。可重复调用以缩小范围。",
     input_schema: {
       type: "object",
       properties: {
@@ -13,7 +13,12 @@ export const CHAT_TOOLS = [
         dynasty: { type: "string", description: "朝代/时期关键词，如 '商' '唐' '明清' '良渚' '红山'。" },
         level: { type: "string", description: "国家级别，如 '一级' '二级' '三级'。" },
         keyword: { type: "string", description: "自由关键词（匹配馆名 / 朝代覆盖 / 时间线）。" },
-        limit: { type: "number", description: "返回上限，默认 30，最大 100。" },
+        limit: { type: "number", description: "返回上限，默认 100，最大 200。" },
+        fields: {
+          type: "array",
+          items: { type: "string", enum: ["period", "coverage"] },
+          description: "可选附加字段。默认不返回 period/coverage 以节省 tokens。",
+        },
       },
     },
   },
@@ -52,7 +57,7 @@ interface ConnRow {
 
 interface NameRow { name: string }
 
-const MAX_TOOL_BYTES = 4 * 1024
+const MAX_TOOL_BYTES = 128 * 1024
 
 function clip(s: string): string {
   if (new TextEncoder().encode(s).length <= MAX_TOOL_BYTES) return s
@@ -81,22 +86,37 @@ async function searchMuseums(db: D1Database, input: any): Promise<string> {
     where.push("(name LIKE ? OR dynasty_coverage LIKE ? OR specialty LIKE ?)")
     binds.push(`%${kw}%`, `%${kw}%`, `%${kw}%`)
   }
-  const limit = Math.max(1, Math.min(100, Number(input?.limit) || 30))
+  const limit = Math.max(1, Math.min(200, Number(input?.limit) || 100))
+  const wantPeriod = Array.isArray(input?.fields) && input.fields.includes("period")
+  const wantCoverage = Array.isArray(input?.fields) && input.fields.includes("coverage")
+  const cols = ["id", "name", "location", "level"]
+  if (wantPeriod) cols.push("core_period")
+  if (wantCoverage) cols.push("dynasty_coverage")
   const sql =
-    "SELECT id, name, location, level, core_period, dynasty_coverage, timeline FROM museums" +
+    `SELECT ${cols.join(", ")} FROM museums` +
     (where.length ? ` WHERE ${where.join(" AND ")}` : "") +
-    ` ORDER BY name LIMIT ${limit}`
-  const { results } = await db.prepare(sql).bind(...binds).all<MuseumRow>()
-  if (!results.length) return JSON.stringify({ count: 0, items: [], note: "no matches" })
-  const items = results.map((r) => ({
-    id: r.id,
-    name: r.name,
-    location: r.location,
-    level: r.level,
-    period: r.core_period,
-    coverage: r.dynasty_coverage,
+    ` ORDER BY name LIMIT ${limit + 1}`
+  const rows = (await db.prepare(sql).bind(...binds).all<MuseumRow>()).results
+  const truncated = rows.length > limit
+  const results = truncated ? rows.slice(0, limit) : rows
+  if (!results.length) return JSON.stringify({ count: 0, items: [], note: "本系统暂未收录任何匹配条目；请如实告知用户，不要编造。" })
+  const items = results.map((r) => {
+    const o: any = { id: r.id, name: r.name, location: r.location, level: r.level }
+    if (wantPeriod) o.period = r.core_period
+    if (wantCoverage) o.coverage = r.dynasty_coverage
+    return o
+  })
+  return clip(JSON.stringify({
+    count: items.length,
+    truncated,
+    note: truncated
+      ? `已截取前 ${limit} 条，还有更多。请请用户细化筛选条件。**严禁**在回答中列出 items 之外的任何馆名。`
+      : `本次查询命中 ${items.length} 条，**这就是数据库的全部结果**——不存在「还有别的」。\n` +
+        `回答前请逐条核对：你将要写的每一个馆名/景点名，必须能在上面 items[].name 里**完全字面**找到（不允许同义词、别名、'(主馆/分馆)' 变体）。\n` +
+        `如果数字看起来不"圆"（比如 28 / 17），那就是真实的 28 / 17，**绝不能凑成 30 / 20**。\n` +
+        `如果用户问的某个著名地标（如长城分段、某陵墓、某寺）不在 items 里，必须明说「本系统暂未收录」，绝不能补上去。`,
+    items,
   }))
-  return clip(JSON.stringify({ count: items.length, items }))
 }
 
 async function getMuseum(db: D1Database, input: any): Promise<string> {
@@ -165,8 +185,25 @@ export async function executeChatTool(db: D1Database, call: ToolCall): Promise<T
 }
 
 export const CHAT_AGENT_SYSTEM = [
-  "你是「中国博物馆地图」站内 AI 助手。回答必须基于本系统数据库（用 search_museums / get_museum 工具查询），不要凭训练记忆罗列馆名。",
-  "工作流：① 用 search_museums 找到符合用户问题的条目；② 必要时再用 get_museum 拿细节；③ 综合后用中文简短作答。",
-  "如果数据库结果为空，明确告诉用户「本系统暂未收录」，不要编造。",
-  "回答格式：用项目列表 (- )，每条最多一行。**禁止使用 Markdown 表格**。每条注明地点+等级（如有）。",
+  "你是「中国博物馆地图」站内 AI 助手。本系统只收录了**部分**博物馆/古迹，远不是中国所有著名地标的完整目录。",
+  "回答必须**完全基于 search_museums / get_museum 工具返回的内容**——你的训练数据只是参考背景，**不能作为答案来源**。",
+  "",
+  "工作流：",
+  "① 用 search_museums 查询；",
+  "② 收到结果后，**逐条**只复述 items[].name 里出现过的条目；",
+  "③ 需要细节再调用 get_museum；",
+  "④ 不要补充任何工具未返回的项。",
+  "",
+  "**反幻觉硬规则（违反即严重错误）**：",
+  "- 在写出每个馆名/景点名之前，**先在脑内确认它就在最近一次 search_museums 返回的 items[] 里**。如果不确定，宁可省略。",
+  "- 工具返回 N 条 = 答案就是 N 条。不要凑整数——28 就是 28，不能补成 30；17 就是 17，不能补成 20。",
+  "- 禁止使用「其他还包括」「等」「及…」「另有…」等开放式收尾。",
+  "- 用户问「北京有哪些X」≠「中国有哪些X」。如果用户期待某个著名地标（八达岭/居庸关/慕田峪/十三陵/恭王府……）但 items[] 里没有，**直接说「本系统暂未收录」**，不要把它列上去。",
+  "- 当 items[] 与你印象中应该有的不一致时，**永远以 items[] 为准**。本系统是策展数据库，不是百科全书。",
+  "",
+  "格式：",
+  "- 用 - 项目列表，每条一行：**馆名** · 地点 · 等级。",
+  "- 禁止 Markdown 表格。",
+  "- 列完后写一句「以上为本系统当前收录的全部 N 条」，N 必须等于 items.length。",
+  "- 如返回 >40 条，提示用户按朝代/区/等级细化。",
 ].join("\n")
