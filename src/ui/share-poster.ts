@@ -511,12 +511,12 @@ function renderArchive(input: PosterInput): string {
   const fieldRows = rows
     .map((r, i) => {
       const y = fieldsTop + i * fieldGap
-      const labelEl = `<text x="${innerX + 10}" y="${y}" font-family="${SANS}" font-size="9" letter-spacing="0.32em" fill="${VERMILION}">${esc(r.label)}</text>`
+      const labelEl = `<text x="${innerX + 10}" y="${y + 12}" font-family="${SANS}" font-size="9" letter-spacing="0.32em" fill="${VERMILION}">${esc(r.label)}</text>`
       const valFont = r.mono ? MONO : SERIF
       const valStyle = r.italic ? `font-style="italic" ` : ""
       const valColor = r.vermilion ? VERMILION : INK
       const valSize = r.italic ? 17 : (r.vermilion ? 21 : 16)
-      const valEl = `<text x="${innerX + 10}" y="${y + 26}" font-family="${valFont}" ${valStyle}font-size="${valSize}" fill="${valColor}" letter-spacing="0.05em">${esc(truncate(r.value, VAL_MAX))}</text>`
+      const valEl = `<text x="${innerX + 10}" y="${y + 38}" font-family="${valFont}" ${valStyle}font-size="${valSize}" fill="${valColor}" letter-spacing="0.05em">${esc(truncate(r.value, VAL_MAX))}</text>`
       const rule = `<line x1="${innerX + 10}" y1="${y + fieldGap - 8}" x2="${W - innerX - 10}" y2="${y + fieldGap - 8}" stroke="${RULE}" stroke-width="0.3"/>`
       return labelEl + valEl + rule
     })
