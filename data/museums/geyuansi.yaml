@@ -1,0 +1,46 @@
+id: geyuansi
+name: 涞源阁院寺
+lat: 39.3556
+lng: 114.6883
+location: 河北省保定市涞源县城内开元东街
+level: 第五批全国重点文物保护单位（2001年）
+core_period: 辽应历十六年（966年）
+specialty: 八大辽构之一。文殊殿建于辽应历十六年（966年），是现存有明确纪年的最早辽代木构建筑（早于独乐寺 18 年）。
+dynasty_coverage: 辽（主体）、明、清
+timeline: 辽应历十六年文殊殿建成（966年）→ 辽寿昌五年铸大铁钟（1099年）→ 明成化年间塑像与壁画 → 清代修缮 → 2001年第五批国保
+treasures:
+  - name: 文殊殿（辽，966年，现存最早辽构）
+  - name: 辽代铁钟（1099年，重约 1500 公斤）
+  - name: 辽代柏木门窗
+  - name: 明代壁画与塑像
+halls:
+  - name: 文殊殿（辽）
+  - name: 钟亭（辽钟）
+  - name: 观音殿（明清）
+  - name: 天王殿（明清）
+artifacts:
+  - name: 文殊殿
+    period: 辽，应历十六年（966年）
+    description: —面阔三间、进深三间，平面近方形，单檐歇山顶。是中国现存有确切纪年的最早辽代木构建筑，比独乐寺早 18 年、比应县木塔早 90 年。斗栱用材硕大，整体气韵直追唐代风范。门窗格扇为辽代柏木原物，国内罕见。
+    image_url: /img/1b1d5c643b891680.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Patrick20242023 · CC-BY-SA-4.0 · Commons
+  - name: 辽代铁钟
+    period: 辽寿昌五年（1099年）
+    description: —高约 1.6 米，重约 1500 公斤，钟身铸有飞天图像与汉文、契丹文铭文，是研究辽代金属铸造与契丹文字的重要实物。
+    image_url: /img/fe24ad8107bf7c2a.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: 陳寅恪 · CC-BY-SA-4.0 · Commons
+  - name: 殿内辽代彩塑残件
+    period: 辽
+    description: —文殊殿原供文殊菩萨与胁侍像，现存辽代塑像基础与少量残件，明代曾在原基础上重塑。
+  - name: 明代壁画
+    period: 明，成化年间
+    description: —文殊殿四壁绘佛教题材壁画，构图严整，色彩仍存原貌，是研究明代北方寺观壁画的重要遗存。
+    image_url: /img/66e88553b8ef001b.jpg
+    image_license: PD
+    image_attribution: Unknown authorUnknown author · PD · Commons
+sources:
+  - source: 国家文物局：全国重点文物保护单位（第五批，2001年）
+  - source: 河北省文物局：阁院寺文殊殿调查报告
+  - source: https://zh.wikipedia.org/wiki/%E9%98%81%E9%99%A2%E5%AF%BA

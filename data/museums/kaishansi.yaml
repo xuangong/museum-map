@@ -1,0 +1,40 @@
+id: kaishansi
+name: 高碑店开善寺
+lat: 39.3268
+lng: 115.8718
+location: 河北省保定市高碑店市旧城村（原新城县）
+level: 第五批全国重点文物保护单位（2001年）
+core_period: 辽代（约 1033 年）
+specialty: 八大辽构之一。大雄宝殿单檐庑殿顶，面阔五间、进深三间，斗栱形制及梁架结构均典型辽代风格，是河北平原少有的辽代木构遗存。
+dynasty_coverage: 辽（主体）、明、清
+timeline: 辽代始建（约 1033 年）→ 明清屡修 → 1980 年代大修 → 2001年第五批国保
+treasures:
+  - name: 大雄宝殿（辽，单檐庑殿顶）
+  - name: 殿内辽代梁架斗栱
+  - name: 明代彩绘
+halls:
+  - name: 大雄宝殿（辽）
+  - name: 配殿（明清）
+artifacts:
+  - name: 大雄宝殿
+    period: 辽，约 1033 年
+    description: —面阔五间、进深三间，单檐庑殿顶。柱网整齐，斗栱用材壮实，七铺作双杪双下昂，是辽代官式建筑在华北平原的代表实例。明清虽有修缮，主体梁架与斗栱基本保留辽代原构。
+    image_url: /img/7b7e0314f2555fc2.jpg
+    image_license: CC-BY-3.0
+    image_attribution: Huangdan2060 · CC-BY-3.0 · Commons
+  - name: 殿内梁架
+    period: 辽
+    description: —采用"彻上明造"做法，梁栿、驼峰、合㭼等构件均为辽代原物，是研究辽代木构技术的重要实物。
+    image_url: /img/3ecc4641ba090bb7.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Patrick20242023 · CC-BY-SA-4.0 · Commons
+  - name: 明代彩绘
+    period: 明
+    description: —梁枋之上保留明代旋子彩画，色彩沉稳，与辽代构件形成时间叠加层次。
+    image_url: /img/b59b7d21731a8784.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Patrick20242023 · CC-BY-SA-4.0 · Commons
+sources:
+  - source: 国家文物局：全国重点文物保护单位（第五批，2001年）
+  - source: 河北省文物局：开善寺大雄宝殿勘察报告
+  - source: https://zh.wikipedia.org/wiki/%E5%BC%80%E5%96%84%E5%AF%BA_(%E9%AB%98%E7%A2%91%E5%BA%97%E5%B8%82)

@@ -71,3 +71,31 @@ recommended_museums:
     name: 应县木塔
     location: 山西朔州
     reason: 辽代建筑巅峰（可远观不可登临）
+  - museum_id: dulesi
+    name: 蓟州独乐寺
+    location: 天津蓟州
+    reason: 八大辽构之最早测绘者：山门+观音阁皆建于984年，梁思成在此完成中国营造学社首次大型测绘
+  - museum_id: fengguosi
+    name: 义县奉国寺
+    location: 辽宁锦州义县
+    reason: 八大辽构之雄：辽1020年大雄殿，中国现存最大单层木构佛殿，殿内辽代过去七佛彩塑（高约8米）
+  - museum_id: shanhuasi
+    name: 大同善化寺
+    location: 山西大同
+    reason: 八大辽构之"南寺"：辽代大雄宝殿+金代三圣殿+二十四诸天彩塑（梁思成赞"金塑之冠"）
+  - museum_id: 9b3cf4df-a9f9-42b7-9418-adc2560c13c5
+    name: 大同华严寺
+    location: 山西大同
+    reason: 八大辽构之西京双绝：辽代薄伽教藏殿+殿内31尊辽塑（含合掌露齿菩萨"东方维纳斯"）
+  - museum_id: geyuansi
+    name: 涞源阁院寺
+    location: 河北保定涞源
+    reason: 八大辽构之最早纪年：辽应历十六年（966年）文殊殿，比独乐寺早18年，唐风浓厚
+  - museum_id: kaishansi
+    name: 高碑店开善寺
+    location: 河北保定高碑店
+    reason: 八大辽构之华北辽构：辽1033年大雄宝殿，单檐庑殿顶，河北平原稀有辽代木构
+  - museum_id: guangjisi-baodi
+    name: 宝坻广济寺
+    location: 天津宝坻
+    reason: 原八大辽构（1947年三大士殿被毁，2005年按梁思成1932年测绘图仿古复建）

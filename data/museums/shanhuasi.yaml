@@ -1,0 +1,51 @@
+id: shanhuasi
+name: 大同善化寺
+lat: 40.0793
+lng: 113.2929
+location: 山西省大同市平城区南寺街6号
+level: 第一批全国重点文物保护单位（1961年）
+core_period: 辽—金（11—12 世纪）
+specialty: 八大辽构之一，俗称"南寺"。大雄宝殿建于辽代，面阔七间、单檐庑殿顶。寺内保存辽金原塑 24 尊（含金代二十四诸天彩塑，被梁思成赞为"金塑之冠"）。
+dynasty_coverage: 辽（主体）、金、明、清
+timeline: 辽末始建 → 金天会—皇统年间大规模重修（1128—1143年）→ 明清屡修 → 1961年第一批国保
+treasures:
+  - name: 大雄宝殿（辽，七间庑殿顶）
+  - name: 三圣殿（金，1128—1143年）
+  - name: 普贤阁（金）
+  - name: 金代二十四诸天彩塑
+  - name: 金《大金西京大普恩寺重修大殿记》碑（朱弁撰）
+halls:
+  - name: 山门（金）
+  - name: 三圣殿（金）
+  - name: 大雄宝殿（辽）
+  - name: 普贤阁（金）
+  - name: 文殊阁（毁，2008年复建）
+artifacts:
+  - name: 大雄宝殿
+    period: 辽，11世纪
+    description: —面阔七间（40.7米）、进深五间，单檐庑殿顶，正中佛坛上塑五方佛及胁侍二十四诸天。是大同现存规模最大的辽金佛殿，与华严寺大雄宝殿并称"大同辽金双绝"。
+  - name: 二十四诸天彩塑
+    period: 金，12世纪
+    description: —大雄宝殿内沿东西两壁陈列，每尊高约 2.5 米，神态各异、服饰华美，造型既保留唐风又融入金代写实趣味，被梁思成称为"金塑之冠"。是中国现存最完整、最精美的金代寺观彩塑群。
+  - name: 三圣殿
+    period: 金天会—皇统年间（1128—1143年）
+    description: —面阔五间、单檐庑殿顶，殿内供奉华严三圣金代彩塑。结构上采用"减柱造"，殿内仅四根金柱，是金代建筑技法上的重要创新。
+    image_url: /img/f361689ed5b6a97f.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Patrick20242023 · CC-BY-SA-4.0 · Commons
+  - name: 普贤阁
+    period: 金，12世纪
+    description: —面阔三间、二层歇山顶楼阁，仿辽代独乐寺观音阁形制，2008年大修时发现金代营造题记，从而退出"八大辽构"梁思成原列名单。
+    image_url: /img/0f27b89776540c9a.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Patrick20242023 · CC-BY-SA-4.0 · Commons
+  - name: 朱弁碑
+    period: 金，皇统三年（1143年）
+    description: —南宋使臣朱弁出使金国被扣留期间撰文，详细记录了金初重修善化寺的经过，是研究辽金寺院兴废史的珍贵碑刻。
+    image_url: /img/3ba93151379c9a56.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Patrick20242023 · CC-BY-SA-4.0 · Commons
+sources:
+  - source: 国家文物局：全国重点文物保护单位（第一批，1961年）
+  - source: 梁思成、刘敦桢《大同古建筑调查报告》，1933年
+  - source: https://zh.wikipedia.org/wiki/%E5%96%84%E5%8C%96%E5%AF%BA
