@@ -67,13 +67,18 @@ events:
     lat: 45.7
     lng: 126.6
 recommended_museums:
-  - name: 黑龙江省博物馆
+  - museum_id: heilongjiang
+    name: 黑龙江省博物馆
     reason: 金代铜坐龙，金上京（阿城）出土文物
-  - name: 吉林省博物院
+  - museum_id: jilin
+    name: 吉林省博物院
     reason: 女真/金代文物
-  - name: 故宫博物院
+  - museum_id: gugong
+    name: 故宫博物院
     reason: 金中都相关文物
-  - name: 开封博物馆
+  - museum_id: kaifeng
+    name: 开封博物馆
     reason: 金代开封（汴京陷落后金曾短暂以此为都，1214年金宣宗迁都于此）
-  - name: 内蒙古博物院
+  - museum_id: neimenggu
+    name: 内蒙古博物院
     reason: 金代草原区域文物

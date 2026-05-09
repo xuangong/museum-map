@@ -36,9 +36,6 @@ artifacts:
   - name: 一级文物
     period: 西汉
     description: 馆藏一级文物70件，包括马踏匈奴、鎏金铜马、鎏金银竹节薰炉等珍品
-    image_url: /img/1d5e52007ae1749c.jpg
-    image_license: fair-use
-    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/2951369.htm
   - name: 二级文物
     period: 西汉
     description: 馆藏二级文物54件
@@ -48,9 +45,6 @@ artifacts:
   - name: 三级文物
     period: 西汉
     description: 馆藏三级文物578件
-    image_url: /img/74f9c7e50cead2e6.jpg
-    image_license: fair-use
-    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/2951389.htm
   - name: 马踏匈奴
     period: 西汉
     description: 霍去病墓前大型石刻，以战马踏踩匈奴俘虏为题材，是西汉石雕艺术的巅峰之作

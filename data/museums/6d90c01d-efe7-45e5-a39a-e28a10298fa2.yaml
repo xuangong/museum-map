@@ -54,9 +54,6 @@ artifacts:
   - name: 释迦牟尼佛舍利
     period: 东汉
     description: 白马寺供奉的释迦牟尼佛真身舍利，共2颗，极为珍贵
-    image_url: /img/0110494890080544.jpg
-    image_license: fair-use
-    image_attribution: 来源：百度百科 · https://baike.baidu.com/view/6749039.htm
   - name: 缅甸卧玉佛
     period: 现代
     description: 由缅甸赠送，供奉于卧佛殿，身长5米，重约8吨，以整块白玉雕成

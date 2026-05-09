@@ -37,7 +37,8 @@ events:
     lat: 34.6
     lng: 112.5
 recommended_museums:
-  - name: 二里头夏都遗址博物馆
+  - museum_id: erlitou
+    name: 二里头夏都遗址博物馆
     location: 洛阳偃师
     reason: 唯一系统展示夏文化的专题博物馆，绿松石龙形器、乳钉纹青铜爵为镇馆之宝
   - museum_id: henan

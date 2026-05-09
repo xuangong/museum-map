@@ -61,9 +61,11 @@ events:
     lat: 39.91
     lng: 116.4
 recommended_museums:
-  - name: 故宫博物院
+  - museum_id: gugong
+    name: 故宫博物院
     reason: 元代书画（赵孟頫等），宫廷收藏
-  - name: 台北故宫
+  - museum_id: taipei-gugong
+    name: 台北故宫
     reason: 黄公望《富春山居图》（无用师卷）、元代书画精品
   - museum_id: hubei
     name: 湖北省博物馆
@@ -74,9 +76,12 @@ recommended_museums:
   - museum_id: yangzhou
     name: 扬州博物馆
     reason: 霁蓝釉白龙纹梅瓶
-  - name: 内蒙古博物院
+  - museum_id: neimenggu
+    name: 内蒙古博物院
     reason: 元上都遗址相关文物
-  - name: 西藏博物馆
+  - museum_id: xizang
+    name: 西藏博物馆
     reason: 元代藏传佛教（帝师八思巴）
-  - name: 敦煌莫高窟
+  - museum_id: mogao
+    name: 敦煌莫高窟
     reason: 元代洞窟

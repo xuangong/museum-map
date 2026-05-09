@@ -69,10 +69,12 @@ recommended_museums:
     name: 浙江省博物馆
     location: 杭州
     reason: 良渚文化玉器收藏丰富，"玉魂国魄"展是了解良渚的必看展览
-  - name: 良渚博物院
+  - museum_id: liangzhu
+    name: 良渚博物院
     location: 杭州余杭
     reason: 良渚遗址现场博物馆，完整展示良渚古城和水利系统，沉浸感极强
-  - name: 西安半坡博物馆
+  - museum_id: banpo
+    name: 西安半坡博物馆
     location: 西安
     reason: 中国第一座史前遗址博物馆，原址保护仰韶文化半坡聚落
   - museum_id: henan
@@ -83,12 +85,15 @@ recommended_museums:
     name: 辽宁省博物馆
     location: 沈阳
     reason: 红山文化玉器重要藏馆，包括C形玉龙
-  - name: 南京博物院
+  - museum_id: nanjing
+    name: 南京博物院
     location: 南京
     reason: 收藏江苏地区新石器遗址出土文物
-  - name: 山东博物馆
+  - museum_id: shandong
+    name: 山东博物馆
     location: 济南
     reason: 蛋壳黑陶杯等龙山文化和大汶口文化精品
-  - name: 湖南省博物馆
+  - museum_id: hunan
+    name: 湖南省博物馆
     location: 长沙
     reason: 高庙文化、彭头山文化等长江中游新石器遗存

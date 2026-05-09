@@ -79,19 +79,25 @@ recommended_museums:
     name: 龙门石窟
     location: 洛阳
     reason: 北魏至唐代连续营造
-  - name: 南京博物院
+  - museum_id: nanjing
+    name: 南京博物院
     reason: 竹林七贤砖画等六朝文物
-  - name: 六朝博物馆
+  - museum_id: jiangsu
+    name: 六朝博物馆
     location: 南京
     reason: 六朝专题
-  - name: 大同市博物馆
+  - museum_id: shanxi-datong
+    name: 大同市博物馆
     reason: 北魏平城时代，司马金龙墓漆画屏风
-  - name: 山西博物院
+  - museum_id: shanxi
+    name: 山西博物院
     reason: 虞弘墓石椁（北齐-隋）
   - museum_id: qingzhou
     name: 青州博物馆
     reason: 龙兴寺佛教造像（"青州微笑"）
-  - name: 敦煌莫高窟
+  - museum_id: mogao
+    name: 敦煌莫高窟
     reason: 北朝早期洞窟
-  - name: 山东博物馆
+  - museum_id: shandong
+    name: 山东博物馆
     reason: 青州北朝佛像

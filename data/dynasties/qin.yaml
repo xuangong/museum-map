@@ -59,10 +59,12 @@ events:
     lat: 34.3
     lng: 108.9
 recommended_museums:
-  - name: 秦始皇帝陵博物院（兵马俑）
+  - museum_id: bingmayong
+    name: 秦始皇帝陵博物院（兵马俑）
     location: 西安临潼
     reason: 世界第八大奇迹，三个俑坑展示约8000个真人大小的陶俑，是理解秦帝国军事力量的最直观方式
-  - name: 陕西历史博物馆
+  - museum_id: shaanxi
+    name: 陕西历史博物馆
     location: 西安
     reason: 秦代文物丰富，包括青铜器、兵器、建筑构件等
   - museum_id: guobo
@@ -73,7 +75,8 @@ recommended_museums:
     name: 湖北省博物馆
     location: 武汉
     reason: 睡虎地秦简（1155枚竹简，记录秦律），是了解秦代法律制度的第一手资料
-  - name: 湖南省博物馆
+  - museum_id: hunan
+    name: 湖南省博物馆
     location: 长沙
     reason: 里耶秦简（36000余枚），展示秦代基层行政运作
   - museum_id: 88f42955-6058-485d-95e4-c7711d85d326
@@ -84,5 +87,6 @@ recommended_museums:
     name: 甘肃省博物馆
     location: 兰州
     reason: 秦代在西北的扩展相关文物
-  - name: 宝鸡青铜器博物院
+  - museum_id: 054543c3-1850-471d-be28-e611f77ba9c4
+    name: 宝鸡青铜器博物院
     reason: 早期秦文化（秦公大墓出土品）

@@ -83,30 +83,35 @@ events:
     lat: 22.08
     lng: 113.08
 recommended_museums:
-  - name: 故宫博物院
+  - museum_id: gugong
+    name: 故宫博物院
     location: 北京
     reason: 宋代书画珍品收藏最丰富：范宽《溪山行旅图》在台北故宫，但北京故宫有大量宋画和宋瓷精品
-  - name: 台北故宫博物院
+  - museum_id: taipei-gugong
+    name: 台北故宫博物院
     reason: 范宽《溪山行旅图》、郭熙《早春图》、宋徽宗书画等，宋代书画的最高殿堂；汝窑藏品全球最多（21件）
   - museum_id: henan
     name: 河南博物院
     location: 郑州
     reason: 北宋都城河南，收藏汝窑、钧窑精品
-  - name: 开封博物馆
+  - museum_id: kaifeng
+    name: 开封博物馆
     location: 开封
     reason: 北宋都城所在地，虽文物因历史散失但有丰富的宋代文化展示
   - museum_id: guobo
     name: 中国国家博物馆
     location: 北京
     reason: 宋代文物综合展示
-  - name: 杭州博物馆/南宋官窑博物馆
+  - museum_id: 1f59db8a-b242-494f-aba4-7f02ed14f48c
+    name: 杭州博物馆/南宋官窑博物馆
     location: 杭州
     reason: 南宋都城，官窑遗址博物馆可参观窑址
   - museum_id: zhejiang
     name: 浙江省博物馆
     location: 杭州
     reason: 宋代文物特别是南宋文物丰富
-  - name: 上海博物馆
+  - museum_id: shanghai
+    name: 上海博物馆
     reason: 宋代瓷器收藏精良，汝窑、哥窑等均有
   - name: 大英博物馆
     location: 伦敦

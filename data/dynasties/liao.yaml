@@ -58,13 +58,16 @@ recommended_museums:
   - museum_id: liaoning
     name: 辽宁省博物馆
     reason: 辽代文物系统收藏，契丹文铜镜
-  - name: 内蒙古博物院
+  - museum_id: neimenggu
+    name: 内蒙古博物院
     reason: 契丹/辽代文物
   - museum_id: tianjin
     name: 天津博物馆
     reason: 辽代瓷器
-  - name: 大同市博物馆
+  - museum_id: shanxi-datong
+    name: 大同市博物馆
     reason: 辽金时期的大同（辽西京）
-  - name: 应县木塔
+  - museum_id: ef6658c6-03b4-4edb-98ca-e19523bdaaa7
+    name: 应县木塔
     location: 山西朔州
     reason: 辽代建筑巅峰（可远观不可登临）

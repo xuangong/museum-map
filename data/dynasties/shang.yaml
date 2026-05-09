@@ -49,7 +49,8 @@ events:
     lat: 35.31
     lng: 114.07
 recommended_museums:
-  - name: 殷墟博物馆
+  - museum_id: yinxu
+    name: 殷墟博物馆
     location: 安阳
     reason: 2024年新馆开放，殷墟遗址现场博物馆，收藏甲骨文、青铜器、玉器等近4000件文物，体验感最强
   - museum_id: guobo
@@ -62,14 +63,17 @@ recommended_museums:
     reason: 妇好墓出土文物重要展出地，杜岭方鼎等商代早期青铜器
   - name: 中国社会科学院考古研究所安阳工作站
     reason: 可参观殷墟发掘现场
-  - name: 上海博物馆
+  - museum_id: shanghai
+    name: 上海博物馆
     reason: 青铜馆收藏多件商代精品，展陈设计一流
-  - name: 山东博物馆
+  - museum_id: shandong
+    name: 山东博物馆
     location: 济南
     reason: 苏埠屯大墓出土的商代青铜器，展示商文化向东扩展
   - museum_id: hubei
     name: 湖北省博物馆
     location: 武汉
     reason: 盘龙城遗址出土商代青铜器，展示商文化南渐
-  - name: 四川广汉三星堆博物馆
+  - museum_id: sanxingdui
+    name: 四川广汉三星堆博物馆
     reason: 与商同时的三星堆文化，青铜面具等揭示商代中国的文化多样性

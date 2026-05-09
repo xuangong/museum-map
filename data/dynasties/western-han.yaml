@@ -77,31 +77,38 @@ events:
     lat: 34.3
     lng: 108.9
 recommended_museums:
-  - name: 陕西历史博物馆
+  - museum_id: shaanxi
+    name: 陕西历史博物馆
     location: 西安
     reason: 西汉都城所在地，馆藏大量汉代金银器、玉器、壁画，皇后之玺等重要文物
   - museum_id: guobo
     name: 中国国家博物馆
     location: 北京
     reason: '"古代中国"展中汉代部分，金缕玉衣、错金银博山炉等'
-  - name: 河北博物院
+  - museum_id: hebei
+    name: 河北博物院
     location: 石家庄
     reason: 满城汉墓出土文物：刘胜金缕玉衣、长信宫灯、错金银博山炉，件件国宝
-  - name: 南京博物院
+  - museum_id: nanjing
+    name: 南京博物院
     reason: 汉代漆器、铜器精品
-  - name: 徐州博物馆/狮子山楚王陵
+  - museum_id: xuzhou
+    name: 徐州博物馆/狮子山楚王陵
     location: 徐州
     reason: 楚王陵出土金缕玉衣、兵马俑等
-  - name: 湖南省博物馆
+  - museum_id: hunan
+    name: 湖南省博物馆
     location: 长沙
     reason: 马王堆汉墓：辛追夫人（西汉女尸）、T形帛画、素纱单衣（仅49克）
   - museum_id: gansu
     name: 甘肃省博物馆
     location: 兰州
     reason: 铜奔马（马踏飞燕，虽出土于东汉墓但常与汉代整体关联）、丝路文物
-  - name: 汉阳陵博物馆
+  - museum_id: 8d05e910-ec8f-4d99-8cba-140f10bd9ef2
+    name: 汉阳陵博物馆
     location: 西安
     reason: 景帝阳陵，地下遗址厅可近距离观看陪葬坑
-  - name: 茂陵博物馆
+  - museum_id: b27bc4cc-0ca1-4cf9-a934-9370b40c0732
+    name: 茂陵博物馆
     location: 咸阳兴平
     reason: 汉武帝茂陵，霍去病墓石刻（马踏匈奴等）

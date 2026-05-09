@@ -642,7 +642,7 @@ body.toc-resizing * { cursor: col-resize !important; user-select: none !importan
   margin-top: 12px; letter-spacing: 0.02em;
 }
 
-.drawer-section { padding: 24px var(--margin); border-bottom: 0.5px solid var(--rule-hair); }
+.drawer-section { padding: 24px var(--margin); border-bottom: 0.5px solid var(--rule-hair); min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
 .drawer-section h3 {
   font-family: var(--sans); font-weight: 500;
   font-size: 11px; letter-spacing: 0.22em;
@@ -702,6 +702,8 @@ body.toc-resizing * { cursor: col-resize !important; user-select: none !importan
 .artifact-image-caption {
   font-size: 11px; color: var(--ink-mute);
   margin-top: 4px; font-family: var(--mono);
+  overflow-wrap: anywhere; word-break: break-word;
+  max-width: 100%;
 }
 
 /* Lightbox — full-screen image viewer */

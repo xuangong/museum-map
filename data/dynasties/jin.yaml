@@ -67,9 +67,11 @@ events:
     lat: 32
     lng: 118.8
 recommended_museums:
-  - name: 南京博物院
+  - museum_id: nanjing
+    name: 南京博物院
     reason: 竹林七贤与荣启期砖画（南朝），六朝文物核心
-  - name: 六朝博物馆
+  - museum_id: jiangsu
+    name: 六朝博物馆
     location: 南京
     reason: 东晋至南朝专题展
   - museum_id: luoyang
@@ -78,7 +80,9 @@ recommended_museums:
   - museum_id: liaoning
     name: 辽宁省博物馆
     reason: 《万岁通天帖》（王羲之家族书法唐摹本）
-  - name: 故宫博物院
+  - museum_id: gugong
+    name: 故宫博物院
     reason: 王羲之书法相关藏品
-  - name: 大同市博物馆
+  - museum_id: shanxi-datong
+    name: 大同市博物馆
     reason: 北方十六国至北魏文物
