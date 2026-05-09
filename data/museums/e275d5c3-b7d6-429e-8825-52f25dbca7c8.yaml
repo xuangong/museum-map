@@ -63,9 +63,6 @@ artifacts:
   - name: 铜铁铸
     period: 清代
     description: 铁栏杆、铜构件等，将实用与装饰融为一体，岭南七绝之一
-    image_url: /img/1fb5860d85bf0384.jpg
-    image_license: CC-BY-SA-4.0
-    image_attribution: Huangchenhai · CC-BY-SA-4.0 · Commons
   - name: 彩绘
     period: 清代
     description: 门廊、厅堂满布彩绘，题材从商周到明清经典故事一应俱全

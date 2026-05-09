@@ -44,9 +44,6 @@ artifacts:
   - name: 飞天形象
     period: 历代
     description: 莫高窟共有4500余身飞天，风格随朝代演变
-    image_url: /img/76845c704b8a2938.jpg
-    image_license: CC-BY-2.0
-    image_attribution: Grace Hwu from Taiwan · CC-BY-2.0 · Commons
 dynasty_connections:
   - dynasty: |-
       北朝**（十六国、北魏、西魏、北周）：早期洞窟，印度和中亚风格明显，人物面相丰圆，有犍陀罗痕迹
