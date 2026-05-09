@@ -23,9 +23,15 @@ artifacts:
   - name: 观音阁
     period: 辽，984年
     description: —面阔五间，进深四间，外观二层而内部实为三层（含暗层），通高约23米，全木榫卯。歇山顶，斗栱雄浑，整体造型与雕饰直承唐风。1976年唐山地震中虽距震中近，结构仍完好——梁思成称其"独高古之美，在国内现存木建筑中无与伦比"。
+    image_url: /img/f7728cfb5aa1ee0b.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Xin
   - name: 山门
     period: 辽，984年
     description: —面阔三间，进深两间，单檐庑殿顶，是中国现存最早的庑殿顶山门，也是现存唐辽样式之最完整者。门内塑哼哈二将，为辽代原作。
+    image_url: /img/962a29f5cfb225fc.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Xin
   - name: 十一面观音立像
     period: 辽，984年
     description: —观音阁主像，高16.08米，是中国现存最高的辽代彩塑立像。头顶十一面（象征观音的十一种化身），通过观音阁三层贯通的中空结构容纳。

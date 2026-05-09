@@ -26,6 +26,9 @@ artifacts:
   - name: 复建三大士殿
     period: 当代，2005年
     description: —按梁思成 1932 年测绘图纸在原址仿古复建，材料与工艺尽量贴近辽代原制。
+    image_url: /img/14311a54d50ec6f3.jpg
+    image_license: CC-BY-SA-4.0
+    image_attribution: Nianhuoshao
 sources:
   - source: 梁思成、刘敦桢《宝坻广济寺三大士殿》，《中国营造学社汇刊》1932年
   - source: 天津市文物局：广济寺三大士殿历史与复建资料

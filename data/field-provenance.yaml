@@ -4610,6 +4610,13 @@ dingzhou:
   - field_path: artifacts[6].image
     source_url: https://commons.wikimedia.org/wiki/File%3A%E5%8C%97%E9%BD%8A%E5%9B%9B%E9%9D%A2%E4%BD%9B%E9%BE%95%E5%83%8F%E7%A2%91.jpg
     authority: encyclopedia
+dulesi:
+  - field_path: artifacts[0].image
+    source_url: https://commons.wikimedia.org/wiki/File:Guanyin_Pavilion_of_Dule_Temple.JPG
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File:The_Shan_Gate_of_Dule_Temple.JPG
+    authority: encyclopedia
 e275d5c3-b7d6-429e-8825-52f25dbca7c8:
   - field_path: artifacts[0].description
     source_url: https://www.gz.gov.cn/zlgz/gzly/wzgz/wbcg/content/post_9587900.html
@@ -5333,6 +5340,10 @@ feac3814-25d3-43ad-ad5b-95535773304e:
   - field_path: treasures[3]
     source_url: https://www.capitalmuseum.org.cn/article/e51d02b1bb844e60a14b06d6c12f12a0
     authority: official
+fengguosi:
+  - field_path: artifacts[0].image
+    source_url: https://commons.wikimedia.org/wiki/File:Fengguo_Temple_1.JPG
+    authority: encyclopedia
 fujian:
   - field_path: artifacts[1].image
     source_url: https://commons.wikimedia.org/wiki/File:建窑兔毫盏_CM.jpg
@@ -5381,6 +5392,10 @@ guangdong:
     authority: encyclopedia
   - field_path: artifacts[4].image
     source_url: https://baike.baidu.com/view/7251570.htm
+    authority: encyclopedia
+guangjisi-baodi:
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File:Guangji_Temple_%28Baodi%29.jpg
     authority: encyclopedia
 guangxi:
   - field_path: artifacts[0].image
