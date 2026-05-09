@@ -40,10 +40,9 @@ export const POSTER_H = 1200
 
 export function pickStyle(handle: string, override?: string): PosterStyle {
   if (override && (POSTER_STYLES as string[]).includes(override)) return override as PosterStyle
-  // Stable hash → style index.
-  let h = 0
-  for (let i = 0; i < handle.length; i++) h = (h * 31 + handle.charCodeAt(i)) >>> 0
-  return POSTER_STYLES[h % POSTER_STYLES.length]!
+  // Random — each visit gets a different style (handle kept for API compat).
+  void handle
+  return POSTER_STYLES[Math.floor(Math.random() * POSTER_STYLES.length)]!
 }
 
 export function renderPosterSvg(input: PosterInput, style: PosterStyle): string {
