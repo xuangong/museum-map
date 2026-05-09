@@ -4969,7 +4969,7 @@ ebd9f374-6925-48ef-a456-13e0fd61fcd4:
   - field_path: treasures[4]
 ef6658c6-03b4-4edb-98ca-e19523bdaaa7:
   - field_path: artifacts[0].image
-    source_url: https://commons.wikimedia.org/wiki/File%3A%E6%98%86%E6%98%8E%E5%9F%BA%E7%9D%A3%E6%95%99%E9%9D%92%E5%B9%B4%E4%BC%9A-%E7%AE%80%E4%BB%8B.jpg
+    source_url: https://commons.wikimedia.org/wiki/File:Pagoda_of_Fogong_Temple_at_Dust.jpg
     authority: encyclopedia
   - field_path: artifacts[1].image
     source_url: https://baike.baidu.com/view/1195986.htm

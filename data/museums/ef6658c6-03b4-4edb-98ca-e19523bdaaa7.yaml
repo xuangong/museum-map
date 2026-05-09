@@ -17,9 +17,9 @@ halls:
 artifacts:
   - name: 木塔主体建筑
     description: 八角五层六檐楼阁式木塔，内部实为九层（五明层四暗层）；全高65.84米，底层总面阔30.27米，相当于23层普通住宅楼高度；除砖石塔基、屋面瓦作、一层墙体和铁制塔刹外，全部为木构件榫卯搭建，不用一根铁钉
-    image_url: /img/0d10c62acfb4f99e.jpg
+    image_url: /img/d19599e6a35155e5.jpg
     image_license: CC-BY-SA-4.0
-    image_attribution: 瑞丽江的河水 · CC-BY-SA-4.0 · Commons
+    image_attribution: Charlie fong
   - name: 结构体系
     description: 刚柔相济的分层结构：明层为开敞佛殿（柔性层），暗层满布斜撑（刚性层），刚柔相间叠置；上下层柱采用「叉柱造」；全塔使用54种斗栱，被誉为「斗栱博物馆」
   - name: 佛牙舍利
