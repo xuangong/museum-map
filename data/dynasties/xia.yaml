@@ -52,3 +52,7 @@ recommended_museums:
     name: 中国国家博物馆
     location: 北京
     reason: 通史视角下的夏代文物
+  - museum_id: zhongguo-kaogu
+    name: 中国考古博物馆
+    location: 北京
+    reason: 镇馆之宝绿松石龙形器（二里头出土）+ 二里头青铜爵/铜牌饰，是夏文化最完整实物集合

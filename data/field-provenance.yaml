@@ -6097,6 +6097,19 @@ zhejiang:
   - field_path: artifacts[5].image
     source_url: https://baike.baidu.com/view/1164422.htm
     authority: encyclopedia
+zhongguo-kaogu:
+  - field_path: artifacts[0].image
+    source_url: https://commons.wikimedia.org/wiki/File:%E7%BB%BF%E6%9D%BE%E7%9F%B3%E9%BE%99%E5%BD%A2%E5%99%A8%E5%8F%8A%E9%93%9C%E9%93%83,_2024-06-23.jpg
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File:Shang_Bronze_Gu_%26_Ivory_Cups_(45902280771).jpg
+    authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File:Painted_Pottery_Plate_with_Dragon_Design_Taosi_Culture,_Early_Period_(2,300%E2%80%942,100_BCE)_Excavated_at_the_Taosi_Site,_Xiangfen_County,_Shanxi._Capital_Museum,_Beijing.jpg
+    authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://commons.wikimedia.org/wiki/File:Yuchisi_Culture_Pottery_Zun_(9974488534).jpg
+    authority: encyclopedia
 zhongshanguo:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:20250118_Bronze_Square_Table_Stand_Decorated_with_Dragon-and-phoenix.jpg

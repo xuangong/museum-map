@@ -97,3 +97,7 @@ recommended_museums:
     name: 湖南省博物馆
     location: 长沙
     reason: 高庙文化、彭头山文化等长江中游新石器遗存
+  - museum_id: zhongguo-kaogu
+    name: 中国考古博物馆
+    location: 北京
+    reason: 陶寺彩绘龙盘 + 大汶口大口陶尊 + 良渚玉器，是中华文明起源研究的核心展品

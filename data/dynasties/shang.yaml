@@ -77,3 +77,7 @@ recommended_museums:
   - museum_id: sanxingdui
     name: 四川广汉三星堆博物馆
     reason: 与商同时的三星堆文化，青铜面具等揭示商代中国的文化多样性
+  - museum_id: zhongguo-kaogu
+    name: 中国考古博物馆
+    location: 北京
+    reason: 殷墟妇好墓嵌绿松石象牙杯（首批禁出境）+ 司母辛铜方鼎，集中呈现商代王室祭祀礼制

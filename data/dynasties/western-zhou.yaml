@@ -87,3 +87,7 @@ recommended_museums:
   - museum_id: shanghai
     name: 上海博物馆
     reason: 大克鼎等西周青铜精品
+  - museum_id: zhongguo-kaogu
+    name: 中国考古博物馆
+    location: 北京
+    reason: 张家坡井叔墓地铜牺尊 + 周原甲骨，构成西周礼乐文明物证主线
