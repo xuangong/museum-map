@@ -1061,6 +1061,42 @@ body.chat-locked .chat-body { touch-action: pan-y; }
 }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
+/* Confetti celebration overlay */
+.confetti-overlay {
+  position: fixed; inset: 0; pointer-events: none; z-index: 10000;
+  overflow: hidden;
+}
+.confetti-piece {
+  position: absolute; display: block; border-radius: 1px;
+  will-change: transform, opacity;
+}
+@keyframes confettiFall {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translate(var(--sway), 110vh) rotate(var(--spin)); opacity: 0; }
+}
+.confetti-banner {
+  position: absolute; left: 50%; top: 38%;
+  transform: translate(-50%, -50%);
+  background: var(--paper); color: var(--ink);
+  border: 1.5px solid var(--ink);
+  box-shadow: 6px 6px 0 var(--vermilion);
+  padding: 18px 26px;
+  font-family: var(--display); font-size: 16px; font-weight: 500;
+  letter-spacing: 0.04em; text-align: center;
+  max-width: min(86vw, 480px); line-height: 1.5;
+  animation: confettiBannerIn 360ms cubic-bezier(.2,.8,.3,1.2) both,
+             confettiBannerOut 400ms ease-in 2800ms both;
+}
+@keyframes confettiBannerIn {
+  0%   { transform: translate(-50%, -50%) scale(0.6); opacity: 0; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+@keyframes confettiBannerOut {
+  0%   { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -70%) scale(0.92); opacity: 0; }
+}
+
 /* App shell — fills viewport, accounts for iOS safe areas */
 .app-shell {
   display: flex; flex-direction: column;

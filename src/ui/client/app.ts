@@ -1170,10 +1170,28 @@ window.museumApp = function() {
         this._enableMotion();
         this._motionNeedsPermission = false;
       }
-      var unvisited = this.museums.filter(function(m){ return m && m.lat && m.lng; })
-        .filter(function(m){ return !this.visits.byId[m.id]; }.bind(this));
+      // Scope: if a dynasty is selected, only that dynasty's recommended/related museums.
+      // Otherwise, all museums with coords.
+      var d = this.currentDynasty();
+      var pool;
+      if (d) {
+        pool = this.recommendedMuseums(d).filter(function(m){ return m && m.lat && m.lng; });
+      } else {
+        pool = this.museums.filter(function(m){ return m && m.lat && m.lng; });
+      }
+      if (pool.length === 0) {
+        alert(d ? ('「' + (d.name || '该朝代') + '」暂无推荐博物馆。') : '暂无可选博物馆。');
+        return;
+      }
+      var unvisited = pool.filter(function(m){ return !this.visits.byId[m.id]; }.bind(this));
       if (unvisited.length === 0) {
-        alert('🎉 你已经打卡了所有博物馆！');
+        // All museums in scope are visited — celebrate!
+        var msg = d
+          ? '🎉 你已经打卡「' + (d.name || '该朝代') + '」全部 ' + pool.length + ' 个推荐博物馆！'
+          : '🎉 你已经打卡了全部 ' + pool.length + ' 个博物馆！';
+        this.triggerConfetti(msg);
+        if (!this.visits.muted) this.playRevealSound();
+        if (navigator.vibrate) { try { navigator.vibrate([60, 40, 60, 40, 120]); } catch(_) {} }
         return;
       }
       this.visits.shaking = true;
@@ -1191,6 +1209,44 @@ window.museumApp = function() {
         self.openMuseum(pick.id);
         if (navigator.vibrate) { try { navigator.vibrate([30, 40, 30]); } catch(_) {} }
       }, dur);
+    },
+
+    triggerConfetti(message) {
+      if (typeof document === 'undefined') return;
+      var overlay = document.createElement('div');
+      overlay.className = 'confetti-overlay';
+      var COLORS = ['#B73E18', '#E8B14A', '#3F6D4E', '#1F1A17', '#F4EFE3'];
+      var N = 80;
+      var W = window.innerWidth, H = window.innerHeight;
+      var pieces = [];
+      for (var i = 0; i < N; i++) {
+        var p = document.createElement('span');
+        p.className = 'confetti-piece';
+        var x = Math.random() * W;
+        var size = 6 + Math.random() * 8;
+        var rot = Math.random() * 360;
+        var dur = 1800 + Math.random() * 1400;
+        var delay = Math.random() * 200;
+        var swayX = (Math.random() - 0.5) * 200;
+        p.style.cssText =
+          'left:' + x + 'px; top:-20px; width:' + size + 'px; height:' + (size * 1.4) + 'px;' +
+          'background:' + COLORS[i % COLORS.length] + ';' +
+          'transform: rotate(' + rot + 'deg);' +
+          'animation: confettiFall ' + dur + 'ms cubic-bezier(.2,.6,.4,1) ' + delay + 'ms forwards;' +
+          '--sway:' + swayX + 'px; --spin:' + (rot + 720) + 'deg;';
+        overlay.appendChild(p);
+        pieces.push(p);
+      }
+      if (message) {
+        var banner = document.createElement('div');
+        banner.className = 'confetti-banner';
+        banner.textContent = message;
+        overlay.appendChild(banner);
+      }
+      document.body.appendChild(overlay);
+      setTimeout(function(){
+        if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      }, 3600);
     },
 
     _audioCtx() {
