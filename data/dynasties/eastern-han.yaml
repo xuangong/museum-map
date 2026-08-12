@@ -104,3 +104,7 @@ recommended_museums:
     name: 白马寺
     location: 洛阳
     reason: 中国第一座佛寺
+  - museum_id: hk-history
+    name: 香港历史博物馆
+    location: 香港尖沙咀
+    reason: 李郑屋汉墓——香港唯一汉代墓葬，「大吉番禺」墓砖实证两千年前香港已属南海郡番禺县

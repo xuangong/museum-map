@@ -119,3 +119,7 @@ recommended_museums:
   - name: 日本正仓院
     location: 奈良
     reason: 虽在日本，但收藏大量唐代文物（每年秋季限时展出），是理解唐代国际影响力的关键
+  - museum_id: poly-mgm
+    name: 保利美高梅博物馆
+    location: 澳门
+    reason: 《丝路》大展借展的唐人物纹八棱金杯（陕历博藏），粟特工艺东传与盛唐胡风的实证

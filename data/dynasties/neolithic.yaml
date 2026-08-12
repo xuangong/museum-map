@@ -101,3 +101,7 @@ recommended_museums:
     name: 中国考古博物馆
     location: 北京
     reason: 陶寺彩绘龙盘 + 大汶口大口陶尊 + 良渚玉器，是中华文明起源研究的核心展品
+  - museum_id: macau-museum
+    name: 澳门博物馆
+    location: 澳门大炮台
+    reason: 路环黑沙遗址出土彩陶、石英环玦与水晶饰物作坊遗存，把澳门人类活动上溯至四千余年前

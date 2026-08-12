@@ -124,3 +124,7 @@ recommended_museums:
     name: 广东省博物馆
     location: 广州
     reason: 清代外销瓷（广彩）和十三行贸易相关文物
+  - museum_id: macau-museum
+    name: 澳门博物馆
+    location: 澳门大炮台
+    reason: 清代外销瓷与中西宗教并存，看鸦片战争后澳门贸易地位的变迁

@@ -5526,6 +5526,16 @@ henan:
   - field_path: artifacts[6].image
     source_url: https://www.wikidata.org/wiki/Q10925227
     authority: encyclopedia
+hk-history:
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File:HK_LeiChengUkHanTombMuseum_GranaryPotteryModel.jpg
+    authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://commons.wikimedia.org/wiki/File:Hong_Kong_Museum_of_History-Folk_Culture_in_Hong_Kong.JPG
+    authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://commons.wikimedia.org/wiki/File:HK_Museum_of_History_The_Opium_Wars_%26_the_Cession_of_Hong_Kong_2020.jpg
+    authority: encyclopedia
 hubei:
   - field_path: artifacts[0].image
     source_url: https://commons.wikimedia.org/wiki/File:曾侯乙编钟钟簨6.jpg
@@ -5694,6 +5704,16 @@ longmen:
 luoyang:
   - field_path: artifacts[4].image
     source_url: https://commons.wikimedia.org/wiki/File%3AClay%20Head%20ofa%20Female%20Donor%20Excavated%20at%20Yongning%20Temple.jpg
+    authority: encyclopedia
+macau-museum:
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File:Cannons_in_Fortaleza_do_Monte.jpg
+    authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://commons.wikimedia.org/wiki/File:Historic_streets%2C_Museum_of_Macau_1.JPG
+    authority: encyclopedia
+  - field_path: artifacts[5].image
+    source_url: https://commons.wikimedia.org/wiki/File:Cuisine_of_Macau_IMG_5404.JPG
     authority: encyclopedia
 mogao:
   - field_path: artifacts[2].image

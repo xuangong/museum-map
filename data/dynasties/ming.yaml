@@ -112,3 +112,7 @@ recommended_museums:
   - museum_id: suzhou
     name: 苏州博物馆
     reason: 明代文人文化中心，文徵明手植紫藤（苏博新馆由贝聿铭设计）
+  - museum_id: macau-museum
+    name: 澳门博物馆
+    location: 澳门大炮台
+    reason: 16世纪中葡贸易与1617年大炮台防御体系，明代海上丝路西端的通商口岸现场
