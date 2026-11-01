@@ -8,6 +8,8 @@ eastern-han:
   - museum_id: guobo
     reason: 这家馆能看到东汉时期的陶制击鼓说唱俑，展现了当时民间娱乐和手工艺水平
     evidence_json: '{"museumId":"guobo","museumName":"中国国家博物馆","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"击鼓说唱俑","period":"东汉"}]}'
+  - museum_id: hanwei-luoyang
+    reason: 就建在东汉都城遗址上：熹平石经残石还原当年太学的校经盛况，昭君出塞镜七十字长铭里两次写下「中国」
   - museum_id: henan
     reason: 永城芒砀山梁王金缕玉衣+四神云气图壁画都是河南汉墓代表，东汉绕不开
   - museum_id: luoyang
@@ -44,6 +46,8 @@ eastern-zhou:
     reason: 国博藏战国虎钮錞于、郑王陵青铜器组，春秋战国线索完整不该缺
   - museum_id: hainan
     reason: 战国"越王亓北古"错金复合剑全球仅3柄、海博开馆爆款，战国不能漏
+  - museum_id: hanwei-luoyang
+    reason: 东周敬王迁居成周并扩建，城址北垣夯土就筑于春秋时期；展厅里的「东周」「三川釿」铜布币，是这座都城的早期印记
   - museum_id: henan
     reason: 看春秋时期青铜器工艺的精妙，莲鹤方壶上莲花与仙鹤的造型设计令人叹为观止
     evidence_json: '{"museumId":"henan","museumName":"河南博物院","signals":[{"type":"dynasty_coverage","text":"新石器(裴李岗、仰韶)、夏、商、西周、春秋为核心,唐宋亦有亮点"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"莲鹤方壶","period":"春秋,约前6世纪"}]}'
@@ -82,6 +86,8 @@ jin:
   - museum_id: gansu
     reason: 观看嘉峪关墓出土的魏晋壁画砖，了解两晋时期的墓葬文化和艺术风格
     evidence_json: '{"museumId":"gansu","museumName":"甘肃省博物馆","signals":[{"type":"dynasty_coverage","text":"新石器时代（大地湾/仰韶/马家窑/齐家）→ 先秦 → 秦汉（丝路/简牍）→ 魏晋（壁画砖）→ 十六国至隋唐（佛教艺术）→ 宋元明清"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"魏晋壁画砖","period":"魏晋，嘉峪关墓出土"}]}'
+  - museum_id: hanwei-luoyang
+    reason: 西晋辟雍碑（复原件）记下太学「万有余人」的盛况，荀岳墓志与晋墓鎏金铜牛、金马，让西晋洛阳的士族生活变得具体
   - museum_id: jiangxi
     reason: 江西省博物馆藏有洪州窑两晋南朝青瓷，是陆羽《茶经》列名的六大名窑之一
     evidence_json: '{"museumId":"jiangxi","museumName":"江西省博物馆","signals":[{"type":"dynasty_coverage","text":"商代（新干大洋洲）→ 西汉（海昏侯）→ 东晋南朝 → 唐宋（洪州窑、景德镇）→ 元明清（景德镇御窑）"}],"artifactHits":[]}'
@@ -187,6 +193,10 @@ nanbeichao:
   - museum_id: 88f42955-6058-485d-95e4-c7711d85d326
     reason: 咸阳博物院藏南北朝彩绘男立俑与北周贺兰祥夫妇墓志，记录关中胡汉融合
     evidence_json: '{"museumId":"88f42955-6058-485d-95e4-c7711d85d326","museumName":"咸阳博物院","signals":[{"type":"dynasty_coverage","text":"战国至明清（核心为秦汉，兼及北魏、北周、隋唐）"}],"artifactHits":[]}'
+  - museum_id: cixian-beichao
+    reason: 东魏北齐皇室墓群专题馆：茹茹公主墓陶骆驼与两枚拜占庭金币，走进1:1复原的湾漳高洋墓，看53人仪仗列队而行
+  - museum_id: hanwei-luoyang
+    reason: 孝文帝迁洛后的北魏都城：永宁寺塔基泥塑、洛阳首次出土的围屏石棺床，还有从君士坦丁堡来的拜占庭金币
   - museum_id: henan
     reason: 洛阳永宁寺北魏泥塑佛面残件惊艳，北朝石窟造像群体量极大
   - museum_id: jiangxi
@@ -517,6 +527,8 @@ three-kingdoms:
   - museum_id: 232d4da5-550c-49eb-89e0-042c913657c8
     reason: 成都武侯祠博物馆能看到蜀汉铭文青铜弩机等三国时期的精良武器工艺
     evidence_json: '{"museumId":"232d4da5-550c-49eb-89e0-042c913657c8","museumName":"成都武侯祠博物馆","signals":[{"type":"core_period","text":"汉末三国（公元2世纪末—3世纪中）"},{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"蜀汉铭文青铜弩机","period":"蜀汉（三国）"}]}'
+  - museum_id: hanwei-luoyang
+    reason: 曹魏都城的考古现场——西朱村曹魏大墓出土的刻铭石牌，一枚一枚记下皇室随葬品，与曹操高陵的石牌互相印证
   - museum_id: luoyang
     reason: 看曹魏西晋时期的青瓷器、陶俑、铜镜等生活用品和墓葬遗物
     evidence_json: '{"museumId":"luoyang","museumName":"洛阳博物馆","signals":[{"type":"dynasty_coverage","text":"夏代（二里头）→ 商代 → 西周（成周）→ 东周（王城）→ 东汉 → 曹魏西晋 → 北魏 → 隋唐（东都）→ 五代"}],"artifactHits":[]}'
@@ -536,6 +548,8 @@ western-han:
     reason: 国博藏击鼓说唱俑(东汉)同序列还有西汉金缕玉衣残片与错金银云纹犀尊，西汉重器不该缺
   - museum_id: hainan
     reason: 汉代弦纹双耳铜釜（十大镇馆之宝）见证伏波将军开琼，西汉是海南纳入版图节点
+  - museum_id: hanwei-luoyang
+    reason: 精品厅的西汉高浮雕鹿头彩绘人物空心砖，鹿头引魂、门吏守天门，一块砖写尽汉人对仙界的想象
   - museum_id: henan
     reason: 可以看到西汉时期精美的四神云气图漆画艺术
     evidence_json: '{"museumId":"henan","museumName":"河南博物院","signals":[{"type":"artifact_period","text":"1 件文物"}],"artifactHits":[{"name":"四神云气图","period":"西汉"}]}'
@@ -574,6 +588,8 @@ western-zhou:
   - museum_id: guobo
     reason: 可以看到西周康王的青铜重器大盂鼎和虢季子白盘等精美铜器
     evidence_json: '{"museumId":"guobo","museumName":"中国国家博物馆","signals":[{"type":"artifact_period","text":"2 件文物"}],"artifactHits":[{"name":"大盂鼎","period":"西周康王"},{"name":"虢季子白盘","period":"西周"}]}'
+  - museum_id: hanwei-luoyang
+    reason: 周公在这里营建成周城，何尊上那句「宅兹中国」说的正是脚下这片土地——展厅从「择中立国」讲起，考古探沟已证实西周城墙遗址
   - museum_id: henan
     reason: 能看到西周时期的青铜礼器、陶器生活用具和列国分封的诸侯国文物遗存
     evidence_json: '{"museumId":"henan","museumName":"河南博物院","signals":[{"type":"dynasty_coverage","text":"新石器(裴李岗、仰韶)、夏、商、西周、春秋为核心,唐宋亦有亮点"}],"artifactHits":[]}'

@@ -4225,6 +4225,10 @@ chongqing:
   - field_path: artifacts[7].image
     source_url: https://commons.wikimedia.org/wiki/File:漢巴郡朐忍令景雲碑.jpg
     authority: encyclopedia
+cixian-beichao:
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File:Murals_in_the_Tomb_of_Princess_Linhe.jpg
+    authority: encyclopedia
 d07ca61f-47b5-4b8f-b061-ab0b67017ae9:
   - field_path: artifacts[0].description
     source_url: http://www.ncha.gov.cn/art/2018/12/4/art_723_152961.html
@@ -5480,6 +5484,28 @@ hainan:
     authority: encyclopedia
   - field_path: artifacts[5].image
     source_url: https://baike.baidu.com/item/%E5%94%90%E4%B8%89%E5%BD%A9%E9%99%B6%E9%A9%AC
+    authority: encyclopedia
+hanwei-luoyang:
+  - field_path: artifacts[10].image
+    source_url: https://commons.wikimedia.org/wiki/File:20251018_Gilded_Bronze_Ox_and_Gold_Horse.jpg
+    authority: encyclopedia
+  - field_path: artifacts[1].image
+    source_url: https://commons.wikimedia.org/wiki/File:20251018_Pi_Yong_Stele_(Replica).jpg
+    authority: encyclopedia
+  - field_path: artifacts[2].image
+    source_url: https://commons.wikimedia.org/wiki/File:20251018_Stone_Labels_01.jpg
+    authority: encyclopedia
+  - field_path: artifacts[3].image
+    source_url: https://commons.wikimedia.org/wiki/File:20251018_Epitaph_of_Xun_Yue.jpg
+    authority: encyclopedia
+  - field_path: artifacts[4].image
+    source_url: https://commons.wikimedia.org/wiki/File:20251018_Bronze_Mirror_with_Scene_of_Wang_Zhaojun's_Journey_to_the_Frontier.jpg
+    authority: encyclopedia
+  - field_path: artifacts[8].image
+    source_url: https://commons.wikimedia.org/wiki/File:20251018_Stone_Carving_of_Seated_Buddha.jpg
+    authority: encyclopedia
+  - field_path: artifacts[9].image
+    source_url: https://commons.wikimedia.org/wiki/File:20251018_High-relief_Hollow_Brick_with_Deer_Head_and_Painted_Figures.jpg
     authority: encyclopedia
 hebei:
   - field_path: artifacts[0].image

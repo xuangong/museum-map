@@ -101,3 +101,11 @@ recommended_museums:
   - museum_id: shandong
     name: 山东博物馆
     reason: 青州北朝佛像
+  - museum_id: hanwei-luoyang
+    name: 汉魏洛阳故城遗址博物馆
+    location: 洛阳
+    reason: 孝文帝迁洛后的北魏都城——永宁寺塔基泥塑、围屏石棺床与帝陵出土的拜占庭金币
+  - museum_id: cixian-beichao
+    name: 北朝考古博物馆
+    location: 邯郸磁县
+    reason: 东魏北齐皇室墓群专题馆，茹茹公主墓陶骆驼与拜占庭金币，湾漳高洋墓壁画1:1复原

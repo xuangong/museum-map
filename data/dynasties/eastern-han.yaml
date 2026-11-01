@@ -108,3 +108,7 @@ recommended_museums:
     name: 香港历史博物馆
     location: 香港尖沙咀
     reason: 李郑屋汉墓——香港唯一汉代墓葬，「大吉番禺」墓砖实证两千年前香港已属南海郡番禺县
+  - museum_id: hanwei-luoyang
+    name: 汉魏洛阳故城遗址博物馆
+    location: 洛阳
+    reason: 就建在东汉都城遗址上——熹平石经残石还原太学盛况，昭君出塞镜的七十字长铭两次写下「中国」

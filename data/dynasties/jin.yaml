@@ -86,3 +86,7 @@ recommended_museums:
   - museum_id: shanxi-datong
     name: 大同市博物馆
     reason: 北方十六国至北魏文物
+  - museum_id: hanwei-luoyang
+    name: 汉魏洛阳故城遗址博物馆
+    location: 洛阳
+    reason: 西晋都城所在，辟雍碑（复原）记太学「万有余人」，荀岳墓志见颍川士族家风

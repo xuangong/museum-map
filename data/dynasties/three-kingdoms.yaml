@@ -81,3 +81,7 @@ recommended_museums:
   - museum_id: guobo
     name: 中国国家博物馆
     reason: 通史视角
+  - museum_id: hanwei-luoyang
+    name: 汉魏洛阳故城遗址博物馆
+    location: 洛阳
+    reason: 曹魏都城的考古现场，西朱村曹魏大墓的刻铭石牌逐件记下皇室随葬品
