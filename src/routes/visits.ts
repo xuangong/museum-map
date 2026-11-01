@@ -172,7 +172,7 @@ ${chatHistory.length ? "- 如果对话中暴露了城市/朝代/类别约束，�
           "anthropic-version": "2023-06-01",
         },
         body: JSON.stringify({
-          model: "claude-haiku-4-5",
+          model: "claude-haiku-5.5",
           max_tokens: 1800,
           stream: false,
           system: sys,

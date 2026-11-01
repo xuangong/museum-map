@@ -1,6 +1,6 @@
 import type { MatchEvidence } from "./dynasty-museum-match"
 
-export const REASON_MODEL = "claude-haiku-4-5"
+export const REASON_MODEL = "claude-haiku-5.5"
 export const REASON_MAX_TOKENS = 200
 
 export interface ReasonOpts {

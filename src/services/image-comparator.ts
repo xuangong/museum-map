@@ -1,6 +1,6 @@
 import { runToolLoop } from "./agent-loop"
 
-export const COMPARATOR_MODEL = "claude-haiku-4-5"
+export const COMPARATOR_MODEL = "claude-haiku-5.5"
 export const COMPARATOR_MAX_TOKENS = 1024
 export const COMPARATOR_MAX_ITERS = 5
 export const COMPARATOR_WALL_MS = 30_000

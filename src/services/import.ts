@@ -9,7 +9,7 @@ import {
 } from "./import-schema"
 import { runExtractor, type ExtractorResult } from "./extractor"
 
-export const ORCHESTRATOR_MODEL = "claude-sonnet-4-6"
+export const ORCHESTRATOR_MODEL = "claude-sonnet-5.5"
 export const ORCHESTRATOR_MAX_TOKENS = 4096
 export const ORCHESTRATOR_MAX_ITERS = 8
 export const ORCHESTRATOR_WALL_MS = 90_000

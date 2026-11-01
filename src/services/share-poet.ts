@@ -2,7 +2,7 @@
 // magazine-style headline + a real classical Chinese poem line for the user's
 // share poster. No fallback — caller decides what to do on failure.
 
-export const POET_MODEL = "claude-sonnet-4-6"
+export const POET_MODEL = "claude-sonnet-5.5"
 export const POET_MAX_TOKENS = 768
 
 export interface PoetInput {

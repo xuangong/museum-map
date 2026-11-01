@@ -4,7 +4,7 @@ import { MuseumsRepo } from "~/repo/museums"
 import { FieldProvenanceRepo } from "~/repo/field-provenance"
 import type { MuseumPayload } from "./import-schema"
 
-export const ENRICHER_MODEL = "claude-haiku-4-5"
+export const ENRICHER_MODEL = "claude-haiku-5.5"
 export const ENRICHER_MAX_TOKENS = 2048
 export const ENRICHER_MAX_ITERS = 24
 export const ENRICHER_WALL_MS = 180_000

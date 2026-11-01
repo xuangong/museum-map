@@ -1,7 +1,7 @@
 import { runToolLoop } from "./agent-loop"
 import { MUSEUM_FRAGMENT_SCHEMA, type MuseumPayload } from "./import-schema"
 
-export const EXTRACTOR_MODEL = "claude-haiku-4-5"
+export const EXTRACTOR_MODEL = "claude-haiku-5.5"
 export const EXTRACTOR_MAX_TOKENS = 2048
 export const EXTRACTOR_MAX_ITERS = 3
 export const EXTRACTOR_WALL_MS = 20_000

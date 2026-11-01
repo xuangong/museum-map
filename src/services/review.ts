@@ -1,6 +1,6 @@
 import type { MuseumPayload, Provenance } from "./import-schema"
 
-export const REVIEW_MODEL = "claude-haiku-4-5"
+export const REVIEW_MODEL = "claude-haiku-5.5"
 export const REVIEW_MAX_TOKENS = 1024
 
 export interface ReviewScore {

@@ -1,15 +1,15 @@
 import { describe, it, expect } from "bun:test"
-import { sanitizeChatRequest, ChatGuardError, MAX_MESSAGES_BYTES, MAX_SYSTEM_BYTES, MAX_MESSAGES_LEN, forwardChat } from "~/services/chat"
+import { sanitizeChatRequest, ChatGuardError, MODEL, MAX_TOKENS, MAX_MESSAGES_BYTES, MAX_SYSTEM_BYTES, MAX_MESSAGES_LEN, forwardChat } from "~/services/chat"
 
 describe("sanitizeChatRequest", () => {
-  it("forces model to claude-haiku-4.5 regardless of input", () => {
+  it("forces model to MODEL regardless of input", () => {
     const out = sanitizeChatRequest({ model: "claude-opus-4", messages: [{ role: "user", content: "hi" }] })
-    expect(out.model).toBe("claude-haiku-4.5")
+    expect(out.model).toBe(MODEL)
   })
 
-  it("forces max_tokens to 2048", () => {
+  it("forces max_tokens to MAX_TOKENS", () => {
     const out = sanitizeChatRequest({ max_tokens: 99999, messages: [{ role: "user", content: "hi" }] })
-    expect(out.max_tokens).toBe(2048)
+    expect(out.max_tokens).toBe(MAX_TOKENS)
   })
 
   it("defaults stream to false when not provided", () => {
