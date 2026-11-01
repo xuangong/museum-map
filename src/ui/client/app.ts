@@ -1195,7 +1195,10 @@ window.museumApp = function() {
         return;
       }
       this.visits.shaking = true;
-      var pick = unvisited[Math.floor(Math.random() * unvisited.length)];
+      // Re-shaking with a result open: don't land on the same museum again.
+      var openId = this.drawer.open && this.drawer.kind === 'museum' ? this.selectedMuseumId : null;
+      var candidates = unvisited.length > 1 ? unvisited.filter(function(m){ return m.id !== openId; }) : unvisited;
+      var pick = candidates[Math.floor(Math.random() * candidates.length)];
       var self = this;
       var fast = !!(opts && opts.fast);
       var dur = fast ? 100 : 600;
@@ -1207,6 +1210,9 @@ window.museumApp = function() {
           window.MuseumMap.flyTo(pick.lat, pick.lng, 7);
         }
         self.openMuseum(pick.id);
+        self.drawer.fromShake = true;
+        var drawerEl = document.querySelector('.drawer');
+        if (drawerEl) drawerEl.scrollTop = 0;
         if (navigator.vibrate) { try { navigator.vibrate([30, 40, 30]); } catch(_) {} }
       }, dur);
     },
@@ -1324,7 +1330,10 @@ window.museumApp = function() {
           var dz = Math.abs(a.z - lastZ);
           if (dx + dy + dz > THRESHOLD) {
             var now = Date.now();
-            if (now - lastShake > 1500 && !self.visits.shaking && !self.drawer.open) {
+            // Keep shaking through results: a drawer opened by a previous shake can be
+            // replaced; any drawer the user opened themselves is protected from stray shakes.
+            var drawerBusy = self.drawer.open && !self.drawer.fromShake;
+            if (now - lastShake > 1500 && !self.visits.shaking && !drawerBusy) {
               lastShake = now;
               self.shakeForMuseum({ fast: true });
             }

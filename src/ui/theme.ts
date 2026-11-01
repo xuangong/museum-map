@@ -609,6 +609,10 @@ body.toc-resizing * { cursor: col-resize !important; user-select: none !importan
 .folio-share:hover { color: var(--ink); }
 .folio-share:hover .arr { transform: translate(2px, -2px); }
 .folio-share:active .arr { color: var(--ink); }
+.folio-reshake .arr { font-family: inherit; font-size: 13px; }
+.folio-reshake:hover .arr { transform: rotate(-20deg); }
+.folio-reshake .arr.spinning { display: inline-block; animation: shakeSpin 0.6s linear infinite; }
+.folio-reshake:disabled { cursor: default; }
 
 .toast {
   position: fixed; left: 50%; bottom: calc(40px + env(safe-area-inset-bottom));

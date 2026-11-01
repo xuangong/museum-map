@@ -3,6 +3,10 @@ export function Drawer(): string {
   <div class="drawer-folio">
     <div class="label" x-text="drawer.kind === 'dynasty' ? 'Dynasty Profile' : 'Museum File'"></div>
     <div class="folio-actions">
+      <button class="folio-share folio-reshake" x-show="drawer.fromShake" x-cloak @click="shakeForMuseum()" :disabled="visits.shaking" title="再摇一个" aria-label="Shake again">
+        <span class="lbl">再摇</span><span class="arr" :class="visits.shaking ? 'spinning' : ''">🎲</span>
+      </button>
+      <span class="folio-divider" x-show="drawer.fromShake" x-cloak aria-hidden="true"></span>
       <button class="folio-share" @click="shareCurrent()" title="分享链接" aria-label="Share">
         <span class="lbl">Share</span><span class="arr">↗</span>
       </button>
