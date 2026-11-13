@@ -150,18 +150,21 @@ describe("GET /", () => {
     expect(data.dynasties).toHaveLength(20)
   })
 
-  it("includes Google Fonts link for Source Serif 4", async () => {
+  it("loads fonts through the same-origin proxy (Google Fonts is unreachable from mainland China)", async () => {
     const env = await makeEnv()
     const app = createApp(env)
     const html = await (await app.handle(new Request("http://localhost/"))).text()
-    expect(html).toContain("fonts.googleapis.com/css2?family=Source+Serif+4")
+    expect(html).toContain("/fonts/css2?family=Noto+Serif+SC")
+    expect(html).toContain("family=Source+Serif+4")
+    expect(html).not.toContain("fonts.googleapis.com")
   })
 
-  it("includes editorial palette tokens", async () => {
+  it("includes night-gallery palette tokens", async () => {
     const env = await makeEnv()
     const app = createApp(env)
     const html = await (await app.handle(new Request("http://localhost/"))).text()
-    expect(html).toContain("#F4EFE3") // --paper
-    expect(html).toContain("#B73E18") // --vermilion
+    expect(html).toContain("#0D0C0B") // --bg
+    expect(html).toContain("#D4B072") // --gilt
+    expect(html).toContain("#E0492F") // --seal
   })
 })

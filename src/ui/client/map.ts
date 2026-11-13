@@ -4,6 +4,10 @@ window.MuseumMap = {
   tileLayer: null,
   markersLayer: null,
   eventMarkersLayer: null,
+  routeLayer: null,
+  userLayer: null,
+  _markerById: {},
+  _selectedId: null,
   init: function(centerLat, centerLng) {
     this.map = L.map('map', {
       center: window.toMapCoord(centerLat, centerLng),
@@ -14,11 +18,14 @@ window.MuseumMap = {
       attribution: '© 高德地图', maxZoom: 18, subdomains: '1234',
       crossOrigin: 'anonymous'
     }).addTo(this.map);
+    this.routeLayer = L.layerGroup().addTo(this.map);
     this.markersLayer = L.layerGroup().addTo(this.map);
     this.eventMarkersLayer = L.layerGroup().addTo(this.map);
+    this.userLayer = L.layerGroup().addTo(this.map);
   },
   setMarkers: function(museums, onClick, opts) {
     this.markersLayer.clearLayers();
+    this._markerById = {};
     var self = this;
     var baseRecommended = !!(opts && opts.recommended);
     var isVisited = (opts && typeof opts.isVisited === 'function') ? opts.isVisited : null;
@@ -30,16 +37,60 @@ window.MuseumMap = {
       var cls = 'museum-marker';
       if (baseRecommended) cls += ' recommended';
       if (visited) cls += ' visited';
+      if (m.id === self._selectedId) cls += ' selected';
       var size = 14;
       if (weightById && weightById[m.id]) {
         var w = weightById[m.id];
         cls += w >= 5 ? ' w-curated' : (w >= 2 ? ' w-tier1' : ' w-other');
         size = w >= 5 ? 18 : (w >= 2 ? 14 : 10);
       }
-      var icon = L.divIcon({ className: '', html: '<div class="' + cls + '"></div>', iconSize: [size, size] });
+      var icon = L.divIcon({ className: '', html: '<div class="' + cls + '" title="' + String(m.name || '').replace(/"/g, '&quot;') + '"></div>', iconSize: [size, size] });
       var marker = L.marker(coord, { icon: icon }).addTo(self.markersLayer);
       marker.on('click', function(){ onClick(m.id); });
+      self._markerById[m.id] = marker;
     });
+  },
+  setSelected: function(id) {
+    var prev = this._selectedId && this._markerById[this._selectedId];
+    if (prev && prev.getElement()) {
+      var pe = prev.getElement().querySelector('.museum-marker');
+      if (pe) pe.classList.remove('selected');
+      prev.setZIndexOffset(0);
+    }
+    this._selectedId = id || null;
+    var cur = id && this._markerById[id];
+    if (cur && cur.getElement()) {
+      var ce = cur.getElement().querySelector('.museum-marker');
+      if (ce) ce.classList.add('selected');
+      cur.setZIndexOffset(1000);
+    }
+  },
+  /** Trip route: stops in order, joined by a dashed gilt line, numbered. */
+  setRoute: function(stops) {
+    this.routeLayer.clearLayers();
+    var pts = (stops || []).filter(function(m){ return m.lat && m.lng; }).map(function(m){ return window.toMapCoord(m.lat, m.lng); });
+    if (!pts.length) return;
+    if (pts.length > 1) {
+      L.polyline(pts, { color: '#D4B072', weight: 6, opacity: 0.12, interactive: false }).addTo(this.routeLayer);
+      L.polyline(pts, { color: '#E9C98D', weight: 2, opacity: 0.95, dashArray: '2 7', lineCap: 'round', interactive: false }).addTo(this.routeLayer);
+    }
+    var self = this;
+    pts.forEach(function(p, i){
+      L.marker(p, {
+        icon: L.divIcon({ className: '', html: '<div class="route-stop">' + (i + 1) + '</div>', iconSize: [22, 22], iconAnchor: [11, 30] }),
+        interactive: false, zIndexOffset: 500,
+      }).addTo(self.routeLayer);
+    });
+    try { this.map.flyToBounds(L.latLngBounds(pts).pad(0.3), { duration: 0.8, maxZoom: 9 }); } catch(_) {}
+  },
+  clearRoute: function() {
+    if (this.routeLayer) this.routeLayer.clearLayers();
+  },
+  setUser: function(lat, lng) {
+    this.userLayer.clearLayers();
+    var c = window.toMapCoord(lat, lng);
+    L.marker(c, { icon: L.divIcon({ className: '', html: '<div class="user-dot"></div>', iconSize: [16, 16] }), interactive: false, zIndexOffset: 900 }).addTo(this.userLayer);
+    this.map.flyTo(c, 9, { duration: 0.8 });
   },
   clearEvents: function(){
     if (this.eventMarkersLayer) this.eventMarkersLayer.clearLayers();
@@ -61,12 +112,12 @@ window.MuseumMap = {
       var related = (relatedMuseumsByDate && relatedMuseumsByDate(evt)) || [];
       var relatedHtml = '';
       if (related.length > 0) {
-        relatedHtml = '<div style="margin-top:6px;font-size:11px;color:var(--ink-mute);">相关博物馆：</div>';
+        relatedHtml = '<div class="ev-rel-label">相关博物馆</div>';
         related.forEach(function(r){
-          relatedHtml += '<div data-museum-id="' + escapeHtml(r.museumId) + '" class="popup-museum" style="margin-top:4px;cursor:pointer;color:var(--accent);font-size:12px;">📍 ' + escapeHtml(r.name) + '</div>';
+          relatedHtml += '<div data-museum-id="' + escapeHtml(r.museumId) + '" class="popup-museum">' + (window.ICONS ? window.ICONS.pin : '') + escapeHtml(r.name) + '</div>';
         });
       }
-      var popup = '<div style="min-width:200px;font-family:var(--font-cn);"><div style="font-weight:600;color:var(--accent);">' + escapeHtml(evt.date || '') + '</div><div style="font-size:13px;margin-top:4px;">' + escapeHtml(evt.event || '') + '</div>' + relatedHtml + '</div>';
+      var popup = '<div class="ev-pop"><div class="ev-date">' + escapeHtml(evt.date || '') + '</div><div class="ev-text">' + escapeHtml(evt.event || '') + '</div>' + relatedHtml + '</div>';
       marker.bindPopup(popup);
       marker.on('popupopen', function(e){
         var node = e.popup.getElement();

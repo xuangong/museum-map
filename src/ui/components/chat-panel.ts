@@ -1,75 +1,67 @@
+import { icon } from "../icons"
+
 export const QUICK_QUESTIONS = [
+  "沿着都城迁徙，推荐一条时间之旅",
+  "我在西安有两天，怎么逛博物馆？",
   "推荐看青铜器的博物馆",
-  "唐代有哪些重要事件？",
-  "北京有哪些值得去的博物馆？",
-  "讲讲宋代的文化",
+  "唐代的长安有多大？",
 ]
 
 export function ChatPanel(): string {
   return `<div class="chat-overlay" :class="chat.open ? 'open' : ''" @click="chat.open = false"></div>
-<div class="chat-panel" :class="(chat.open ? 'open ' : '') + (chat.fullscreen ? 'fullscreen' : '')">
-  <div class="chat-head">
-    <div>
-      <span class="title">历史顾问</span>
-      <span class="subtitle">A historian, on call.</span>
+<div class="chat-panel" :class="(chat.open ? 'open ' : '') + (chat.fullscreen ? 'fullscreen' : '')" role="dialog" aria-label="AI 讲解员">
+  <div class="chat-grabber" aria-hidden="true"></div>
+  <header class="chat-head">
+    <div class="chat-id">
+      <span class="chat-avatar">${icon("sparkle", 20)}</span>
+      <div>
+        <div class="chat-title">AI 讲解员</div>
+        <div class="chat-sub">历史 · 馆藏 · 时间之旅与路线之旅</div>
+      </div>
     </div>
-    <div style="display:flex;gap:6px;align-items:center;">
-      <button @click="chat.fullscreen = !chat.fullscreen" :title="chat.fullscreen ? '退出全屏' : '全屏阅读'" style="border:none;background:transparent;line-height:1;cursor:pointer;color:var(--ink);padding:4px 8px;display:inline-flex;align-items:center;justify-content:center;">
-        <svg x-show="!chat.fullscreen" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/>
-        </svg>
-        <svg x-show="chat.fullscreen" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M6 2v4H2M10 2v4h4M6 14v-4H2M10 14v-4h4"/>
-        </svg>
+    <div class="chat-tools">
+      <button class="icon-btn" @click="chat.fullscreen = !chat.fullscreen" :title="chat.fullscreen ? '退出全屏' : '全屏阅读'">
+        <span x-show="!chat.fullscreen">${icon("expand", 17)}</span><span x-show="chat.fullscreen">${icon("collapse", 17)}</span>
       </button>
-      <button @click="chat.open = false" style="border:none;background:transparent;font-family:var(--display);font-size:24px;line-height:1;cursor:pointer;color:var(--ink);">×</button>
+      <button class="icon-btn" @click="chat.open = false" aria-label="关闭">${icon("close", 18)}</button>
     </div>
-  </div>
+  </header>
   <div class="chat-body" @click="onChatBodyClick($event)">
-    <div x-show="chat.messages.length === 0" style="font-family:var(--display);font-style:italic;color:var(--ink-mute);text-align:center;padding:40px 0;">
-      Ask anything about Chinese history, dynasties, or museums.
+    <div class="chat-empty" x-show="chat.messages.length === 0">
+      ${icon("sparkle", 30)}
+      <div>问我任何关于朝代、文物与博物馆的问题。<br>也可以让我帮你排一条时间之旅或路线之旅。</div>
     </div>
     <template x-for="(msg, i) in chat.messages" :key="i">
       <div class="chat-msg" :class="msg.role">
-        <div class="who" x-text="msg.role === 'user' ? 'You · 你' : 'Consultant · 顾问'"></div>
+        <div class="who" x-text="msg.role === 'user' ? '你' : '讲解员'"></div>
         <div class="text" x-show="msg.role === 'user'" x-text="msg.content"></div>
-        <div class="text md" x-show="msg.role !== 'user'" x-html="window.MuseumChat.renderMarkdown(msg.content)"></div>
+        <div class="text md-rich" x-show="msg.role !== 'user'" x-html="window.MuseumChat.renderMarkdown(msg.content)"></div>
       </div>
     </template>
-    <div x-show="chat.loading" class="chat-loading">…thinking</div>
+    <div x-show="chat.loading" class="chat-loading"><span class="dots"><i></i><i></i><i></i></span>讲解员正在思考</div>
   </div>
   <div class="chat-chips">
-    ${QUICK_QUESTIONS.map((q) => `<span class="chip" @click="chat.input='${q.replace(/'/g, "\\'")}'">${q}</span>`).join("")}
+    ${QUICK_QUESTIONS.map((q) => `<button class="chip" @click="chat.input='${q.replace(/'/g, "\\'")}'">${q}</button>`).join("")}
   </div>
-  <div class="chat-input-row" style="position:relative;">
-    <div class="cmd-palette" x-show="chat.palette.open" @click.outside="chat.palette.open = false" style="position:absolute;left:12px;right:12px;bottom:calc(100% + 6px);background:var(--paper);border:1px solid var(--rule);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.08);max-height:240px;overflow-y:auto;z-index:10;">
+  <div class="chat-input-row">
+    <div class="cmd-palette" x-show="chat.palette.open" x-cloak @click.outside="chat.palette.open = false">
       <template x-for="(c, i) in filteredCommands" :key="i">
-        <div @click="pickCommand(c)" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--rule-soft);">
-          <div style="font-family:var(--mono);font-weight:600;color:var(--vermilion);" x-text="c.label"></div>
-          <div style="font-size:12px;color:var(--ink-mute);" x-text="c.desc"></div>
+        <div class="cmd-item" @click="pickCommand(c)">
+          <div class="cmd-label" x-text="c.label"></div>
+          <div class="cmd-desc" x-text="c.desc"></div>
         </div>
       </template>
-      <div x-show="filteredCommands.length === 0" style="padding:10px 12px;color:var(--ink-mute);font-size:13px;">无匹配命令</div>
+      <div class="cmd-empty" x-show="filteredCommands.length === 0">无匹配命令</div>
     </div>
-    <input class="chat-input" data-chat-input x-model="chat.input" @input="onChatInput()" @keydown.enter="chat.palette.open = false; sendChat()" @keydown.escape="chat.palette.open = false" placeholder="问我任何问题，或输入 / 唤起命令…" />
-    <button class="chat-send" @click="sendChat()" :disabled="chat.loading">Send</button>
+    <input class="chat-input" data-chat-input x-model="chat.input" @input="onChatInput()" @keydown.enter="chat.palette.open = false; sendChat()" @keydown.escape="chat.palette.open = false" placeholder="问讲解员任何问题…" />
+    <button class="chat-send" @click="sendChat()" :disabled="chat.loading" aria-label="发送">${icon("arrowUp", 20)}</button>
   </div>
 </div>
-<div class="shake-orb" :class="shakeOpen ? 'open' : ''" x-show="!drawer.open" @click.outside="shakeOpen = false">
-  <button class="shake-orb-toggle" @click="shakeOpen = !shakeOpen" :title="shakeOpen ? '收起' : '摇一摇 / 静音'">
-    <span class="shake-icon" :class="visits.shaking ? 'spinning' : ''">🎲</span>
+<nav class="dock" x-show="!drawer.open" aria-label="快捷操作">
+  <button class="dock-btn dock-index" @click="tocOpen = true">${icon("index", 18)}<span>索引</span></button>
+  <button class="dock-btn dock-shake" @click="shakeForMuseum()" :disabled="visits.shaking" title="随机去一座博物馆（手机可直接摇一摇）">
+    <span :class="visits.shaking ? 'spin-wrap spinning' : 'spin-wrap'">${icon("dice", 18)}</span><span>摇一摇</span>
   </button>
-  <div class="shake-orb-actions" x-show="shakeOpen" x-transition x-cloak>
-    <button class="shake-orb-action" @click="shakeForMuseum(); shakeOpen = false" :disabled="visits.shaking">
-      <span x-show="!visits.shaking">摇一摇</span>
-      <span x-show="visits.shaking">…</span>
-    </button>
-    <button class="shake-orb-action" @click="toggleShakeMute()" :title="visits.muted ? '点击开启音效' : '点击静音'">
-      <span x-text="visits.muted ? '🔇 静音' : '🔊 有声'"></span>
-    </button>
-  </div>
-</div>
-<button class="chat-fab" x-show="!drawer.open" @click="chat.open = true">
-  <span class="icon"></span>问 AI
-</button>`
+  <button class="dock-btn dock-ai" @click="chat.open = true">${icon("sparkle", 18)}<span>AI 讲解</span></button>
+</nav>`
 }

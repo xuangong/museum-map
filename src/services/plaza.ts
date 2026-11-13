@@ -1,4 +1,12 @@
 import type { Env } from "~/index"
+import { deriveCity, sealSpec, type SealSpec } from "~/services/museum-meta"
+
+const RECENT_SEALS = 6
+
+export interface PlazaSeal extends SealSpec {
+  id: string
+  name: string
+}
 
 export interface PlazaEntry {
   handle: string
@@ -8,6 +16,8 @@ export interface PlazaEntry {
   reviewCount: number          // number of dynasty reviews + 1 if total review exists
   lastVisitAt: number | null
   joinedAt: number
+  /** Latest seals collected, newest first (up to RECENT_SEALS). */
+  recentSeals?: PlazaSeal[]
 }
 
 // One D1 query that aggregates everything we need; only includes users that
@@ -80,6 +90,29 @@ export async function listPlaza(
     lastVisitAt: row.last_visit_at || null,
     joinedAt: row.joined_at,
   }))
+
+  // Each card shows the person's latest few seals — one more round-trip, capped per user.
+  if (entries.length) {
+    const handles = entries.map((e) => e.handle)
+    const seals = await env.DB.prepare(`
+      SELECT handle, museum_id, name, location FROM (
+        SELECT u.handle AS handle, v.museum_id AS museum_id, m.name AS name, m.location AS location,
+               ROW_NUMBER() OVER (PARTITION BY v.user_id ORDER BY v.visited_at DESC) AS rn
+          FROM visits v
+          JOIN users u ON u.id = v.user_id
+          JOIN museums m ON m.id = v.museum_id
+         WHERE u.handle IN (${handles.map(() => "?").join(",")})
+      ) WHERE rn <= ${RECENT_SEALS}
+      ORDER BY handle, rn
+    `).bind(...handles).all<{ handle: string; museum_id: string; name: string; location: string | null }>()
+    const byHandle = new Map<string, PlazaSeal[]>()
+    for (const r of seals.results ?? []) {
+      const list = byHandle.get(r.handle) ?? []
+      list.push({ id: r.museum_id, name: r.name, ...sealSpec(r.museum_id, r.name, deriveCity(r.location)) })
+      byHandle.set(r.handle, list)
+    }
+    for (const e of entries) e.recentSeals = byHandle.get(e.handle) ?? []
+  }
 
   // Total count for pagination footer.
   const totalRow = await env.DB.prepare(`

@@ -29,12 +29,14 @@ export function DynastyTimeline(dynasties: DynastyFull[] = []): string {
     )
     .join("")
 
-  return `<nav class="timeline" data-timeline>
+  // Wrapper carries the edge fades as pseudo-elements — never mask-image on the
+  // nav itself (iOS Safari dropped the labels when a mask sat on this layer).
+  return `<div class="timeline-wrap"><nav class="timeline" data-timeline>
   <div class="timeline-item all"
        data-mm-click="dyn:__all__">
-    <div class="name" data-tl-all-name>All / 全</div>
-    <div class="period" data-tl-all-period>${dynasties.length} museums</div>
+    <div class="name" data-tl-all-name>全部</div>
+    <div class="period" data-tl-all-period>${dynasties.length} 个地层</div>
   </div>
   ${items}
-</nav>`
+</nav></div>`
 }

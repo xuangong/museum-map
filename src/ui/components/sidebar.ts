@@ -1,218 +1,259 @@
+import { icon } from "../icons"
+
+// The index panel: desktop sidebar / mobile slide-in sheet. Four heads share it —
+// 全部 (the history book), 朝代地层 (a dynasty), 集章册 (check-in collection) and
+// 行程 (route planning) — above one museum list.
 export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
   const googleBlock = opts.googleEnabled
-    ? `<div style="margin-top:10px;">
-        <button @click="doGoogleLogin()"
-          style="width:100%;border:0.5px solid var(--ink);background:var(--paper);color:var(--ink);padding:8px 12px;font-family:var(--sans);font-size:12px;cursor:pointer;">使用 Google 登录</button>
-      </div>`
+    ? `<button class="btn btn-ghost btn-block" @click="doGoogleLogin()">使用 Google 登录</button>`
     : ``
-  const authBar = `<div style="margin-bottom:14px;border-bottom:0.5px solid var(--rule);padding-bottom:14px;">
+
+  const account = `<div class="toc-account">
   <template x-if="!me">
     <div>
-      <a href="#" @click.prevent="authOpen = !authOpen"
-        style="display:flex;align-items:center;justify-content:space-between;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-mid);text-decoration:none;cursor:pointer;">
-        <span>登录后保存到云端</span>
-        <span x-text="authOpen ? '−' : '+'" style="font-family:var(--mono);font-size:14px;color:var(--vermilion);"></span>
-      </a>
-      <div x-show="authOpen" x-cloak style="margin-top:8px;">
-        <input x-model="authForm.email" type="email" placeholder="Email" autocomplete="email"
-          style="width:100%;padding:8px 10px;font-size:16px;border:0.5px solid var(--rule);background:var(--paper);font-family:var(--sans);margin-bottom:6px;box-sizing:border-box;" />
-        <input x-model="authForm.password" type="password" placeholder="密码（≥8 位）" autocomplete="current-password"
-          style="width:100%;padding:8px 10px;font-size:16px;border:0.5px solid var(--rule);background:var(--paper);font-family:var(--sans);margin-bottom:8px;box-sizing:border-box;" />
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-          <button @click="submitLogin()" :disabled="authForm.loading"
-            style="border:none;background:var(--vermilion);color:var(--paper);padding:8px 14px;font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;">登录</button>
-          <button x-show="inviteCode" @click="submitRegister()" :disabled="authForm.loading"
-            style="border:0.5px solid var(--vermilion);background:transparent;color:var(--vermilion);padding:8px 14px;font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;">注册</button>
-          <span x-show="!inviteCode" style="font-size:11px;color:var(--ink-mid);font-style:italic;">注册需邀请码</span>
-          <span x-show="authForm.loading" style="font-size:11px;color:var(--ink-mid);">…</span>
+      <button class="acct-toggle" @click="authOpen = !authOpen">
+        <span class="acct-avatar ghost">${icon("seal", 18)}</span>
+        <span class="acct-cta"><b>登录</b> · 让集章册跟着你走</span>
+        <span class="acct-plus" x-text="authOpen ? '−' : '+'"></span>
+      </button>
+      <div class="auth-form" x-show="authOpen" x-cloak>
+        <input class="field" x-model="authForm.email" type="email" placeholder="Email" autocomplete="email" />
+        <input class="field" x-model="authForm.password" type="password" placeholder="密码（≥8 位）" autocomplete="current-password" />
+        <div class="auth-actions">
+          <button class="btn btn-primary" @click="submitLogin()" :disabled="authForm.loading">登录</button>
+          <button class="btn btn-ghost" x-show="inviteCode" @click="submitRegister()" :disabled="authForm.loading">注册</button>
+          <span class="auth-note" x-show="!inviteCode">注册需邀请码</span>
+          <span class="auth-note" x-show="authForm.loading">…</span>
         </div>
-        <div x-show="inviteCode" x-cloak style="margin-top:6px;font-size:11px;color:var(--ink-mid);">
-          已识别邀请码 <span x-text="inviteCode.slice(0,8)+'…'" style="font-family:var(--mono);"></span>
-        </div>
+        <div class="auth-note" x-show="inviteCode" x-cloak>已识别邀请码 <code x-text="inviteCode.slice(0,8)+'…'"></code></div>
         ${googleBlock}
-        <div x-show="authForm.error" x-text="authForm.error"
-          style="margin-top:8px;font-size:12px;color:var(--vermilion);"></div>
+        <div class="auth-error" x-show="authForm.error" x-text="authForm.error"></div>
       </div>
     </div>
   </template>
   <template x-if="me">
     <div>
-      <div x-show="!nameForm.editing" style="display:flex;align-items:baseline;gap:6px;width:100%;overflow:hidden;font-family:var(--sans);font-size:12px;color:var(--ink-mid);">
-        <span style="white-space:nowrap;">你好</span>
-        <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 0;min-width:0;color:var(--ink);" x-text="(me && me.displayName) || me.email"></span>
-        <button @click="startEditName()" title="编辑昵称"
-          style="border:none;background:transparent;font-family:var(--sans);font-size:11px;color:var(--vermilion);cursor:pointer;padding:0;flex:0 0 auto;">✎</button>
-        <a x-show="me && me.isAdmin" href="#" @click.prevent="createInvite()" title="生成邀请链接"
-          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:none;flex:0 0 auto;white-space:nowrap;">邀请</a>
-        <a x-show="me && me.handle" href="#" @click.prevent="copyShareLink()" title="复制公开主页链接"
-          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:none;flex:0 0 auto;white-space:nowrap;">分享</a>
-        <a x-show="me && me.handle && !me.handleChangedAt" href="#" @click.prevent="editHandle()" title="自定义分享链接（仅可改一次，旧链接将失效）"
-          style="font-family:var(--sans);font-size:11px;color:var(--ink-mid);text-decoration:none;flex:0 0 auto;white-space:nowrap;">✎链接</a>
-        <a x-show="me && me.handle" href="#" @click.prevent="togglePlazaVisibility()"
-          :title="me && me.showOnPlaza ? '当前公开在广场，点击隐藏' : '当前不在广场，点击公开'"
-          :style="(me && me.showOnPlaza) ? 'font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:none;flex:0 0 auto;white-space:nowrap;' : 'font-family:var(--sans);font-size:11px;color:var(--ink-mid);text-decoration:none;flex:0 0 auto;white-space:nowrap;'">
-          <span x-text="(me && me.showOnPlaza) ? '✦广场' : '✧广场'"></span>
-        </a>
-        <a href="#" @click.prevent="doLogout()"
-          style="font-family:var(--sans);font-size:11px;color:var(--vermilion);text-decoration:none;flex:0 0 auto;white-space:nowrap;">退出</a>
+      <div class="acct-row" x-show="!nameForm.editing">
+        <span class="acct-avatar" x-text="((me && (me.displayName || me.email)) || '·').trim().charAt(0)"></span>
+        <div class="acct-id">
+          <div class="acct-name" x-text="(me && me.displayName) || me.email"></div>
+          <div class="acct-handle" x-show="me && me.handle" x-text="'@' + (me && me.handle)"></div>
+        </div>
+        <button class="icon-btn" @click="startEditName()" title="编辑昵称">${icon("edit", 16)}</button>
       </div>
-      <div x-show="nameForm.editing" x-cloak>
-        <input x-model="nameForm.value" type="text" maxlength="80" placeholder="昵称（留空则显示邮箱）"
-          @keydown.enter="submitDisplayName()" @keydown.escape="cancelEditName()"
-          style="width:100%;padding:8px 10px;font-size:16px;border:0.5px solid var(--rule);background:var(--paper);font-family:var(--sans);margin-bottom:8px;box-sizing:border-box;" />
-        <div style="display:flex;gap:8px;align-items:center;">
-          <button @click="submitDisplayName()" :disabled="nameForm.loading"
-            style="border:none;background:var(--vermilion);color:var(--paper);padding:6px 12px;font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;cursor:pointer;">保存</button>
-          <button @click="cancelEditName()" :disabled="nameForm.loading"
-            style="border:none;background:transparent;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-mid);cursor:pointer;">取消</button>
-          <span x-show="nameForm.error" x-text="nameForm.error" style="font-size:11px;color:var(--vermilion);"></span>
+      <div class="acct-actions" x-show="!nameForm.editing">
+        <button class="pill" x-show="me && me.handle" @click="copyShareLink()" title="复制公开主页链接">${icon("link", 14)}分享主页</button>
+        <button class="pill" x-show="me && me.handle" :class="(me && me.showOnPlaza) ? 'on' : ''" @click="togglePlazaVisibility()"
+          :title="me && me.showOnPlaza ? '当前公开在广场，点击隐藏' : '当前不在广场，点击公开'">
+          <span x-show="me && me.showOnPlaza">${icon("eye", 14)}</span><span x-show="!(me && me.showOnPlaza)">${icon("eyeOff", 14)}</span>
+          <span x-text="(me && me.showOnPlaza) ? '广场可见' : '广场隐藏'"></span>
+        </button>
+        <button class="pill" x-show="me && me.handle && !me.handleChangedAt" @click="editHandle()" title="自定义分享链接（仅可改一次，旧链接将失效）">${icon("edit", 14)}改链接</button>
+        <button class="pill" x-show="me && me.isAdmin" @click="createInvite()" title="生成邀请链接">${icon("ticket", 14)}邀请</button>
+        <button class="pill" @click="doLogout()">${icon("logout", 14)}退出</button>
+      </div>
+      <div class="name-form" x-show="nameForm.editing" x-cloak>
+        <input class="field" x-model="nameForm.value" type="text" maxlength="80" placeholder="昵称（留空则显示邮箱）"
+          @keydown.enter="submitDisplayName()" @keydown.escape="cancelEditName()" />
+        <div class="row">
+          <button class="btn btn-primary" @click="submitDisplayName()" :disabled="nameForm.loading">保存</button>
+          <button class="btn btn-text" @click="cancelEditName()" :disabled="nameForm.loading">取消</button>
+          <span class="auth-error" x-show="nameForm.error" x-text="nameForm.error"></span>
         </div>
       </div>
     </div>
   </template>
 </div>`
-  return `<aside class="toc">
-  <!-- Footprint hero -->
-  <div x-show="visits.footprintMode" x-cloak>
-    <div class="toc-head">
-      ${authBar}
-      <div class="vol">
-        Vol. <span class="num">FP</span>
-        <span style="margin-left:8px;">·</span>
-        <span style="margin-left:8px;font-style:italic;">My Footprints</span>
-      </div>
-      <h1 class="dynasty-name">我的足迹</h1>
-      <div class="dynasty-period"><span style="font-variant-numeric:lining-nums;" x-text="visits.ids.length"></span> museums visited</div>
-      <p class="dynasty-overview" style="margin-top:14px;" x-show="!visits.review && !visits.reviewLoading">点击下方按钮，让 AI 根据你的足迹生成一段品味画像和下一步推荐。</p>
-      <p class="dynasty-overview" style="margin-top:14px;font-style:italic;color:var(--ink-mid);" x-show="visits.reviewLoading">…AI 正在阅读你的足迹</p>
-      <div class="footprint-review md" style="margin-top:14px;" x-show="visits.review && !visits.reviewLoading" x-html="window.MuseumChat.renderMarkdown(visits.review)"></div>
-      <p class="dynasty-overview" style="margin-top:10px;font-size:12px;color:var(--vermilion);" x-show="visits.chatDirty && visits.review && !visits.reviewLoading">
-        💬 你刚和顾问聊过——可以根据这段对话更新评价与建议。
-      </p>
-      <p class="dynasty-overview" style="margin-top:10px;font-size:13px;font-weight:600;color:var(--paper);background:var(--vermilion);padding:8px 12px;border-radius:2px;" x-show="visits.reviewStale && !visits.chatDirty && visits.review && !visits.reviewLoading">
-        ⚠️ 你又打卡了新博物馆——评价已过时，建议立即重新生成。
-      </p>
-      <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;">
-        <button @click="loadFootprintReview()" :disabled="visits.reviewLoading || visits.ids.length === 0"
-          :style="(visits.reviewStale || visits.chatDirty) && visits.review ? 'border:none;background:var(--vermilion);font-family:var(--sans);font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--paper);padding:8px 14px;cursor:pointer;border-radius:2px;font-weight:600;' : 'border:none;background:transparent;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--vermilion);padding:0;cursor:pointer;border-bottom:0.5px solid var(--vermilion);padding-bottom:2px;'">
-          <span x-show="!visits.review">✨ 生成 AI 评价</span>
-          <span x-show="visits.review && !visits.chatDirty && !visits.reviewStale">↻ 重新生成</span>
-          <span x-show="visits.review && visits.reviewStale && !visits.chatDirty">↻ 立即更新评价</span>
-          <span x-show="visits.review && visits.chatDirty">↻ 根据对话更新</span>
-        </button>
-        <button x-show="visits.review && !visits.reviewLoading" @click="exportFootprint()" :disabled="visits.exporting"
-          style="border:none;background:transparent;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--vermilion);padding:0;cursor:pointer;border-bottom:0.5px solid var(--vermilion);padding-bottom:2px;">
-          <span x-show="!visits.exporting">📥 导出长图</span>
-          <span x-show="visits.exporting">…生成中</span>
-        </button>
-        <button x-show="visits.review && !visits.reviewLoading" @click="continueChatFromFootprint()"
-          style="border:none;background:transparent;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--vermilion);padding:0;cursor:pointer;border-bottom:0.5px solid var(--vermilion);padding-bottom:2px;">
-          💬 继续聊
-        </button>
-        <button @click="toggleFootprint()"
-          style="border:none;background:transparent;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--ink-mid);padding:0;cursor:pointer;border-bottom:0.5px solid var(--ink-mid);padding-bottom:2px;">
-          ← 退出足迹
-        </button>
-      </div>
-    </div>
+
+  // ── 集章册: the collection ──
+  const stamps = `<section class="toc-hero is-stamps" x-show="visits.footprintMode && !tripMode" x-cloak>
+  <div class="hero-kicker">${icon("seal", 15)}<span x-text="isReadOnly ? 'TA 的集章册' : '我的集章册'"></span><span class="mono">PASSPORT</span></div>
+  <h1 class="hero-title">已集 <span class="big-num" x-text="visits.ids.length"></span> 枚馆印</h1>
+  <div class="rank-line">
+    <span class="rank-badge" x-text="collectorRank().title"></span>
+    <span class="rank-next" x-text="collectorRank().next"></span>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><b x-text="visits.ids.length"></b><span>座博物馆</span></div>
+    <div class="stat"><b x-text="visitedDynasties().length + '/' + dynasties.length"></b><span>朝代地层</span></div>
+    <div class="stat"><b x-text="visitedCityCount()"></b><span>座城市</span></div>
   </div>
 
-  <!-- Dynasty hero (only when filtered) -->
-  <div x-show="!visits.footprintMode && currentDynastyId" x-cloak>
-    <div class="toc-head">
-      ${authBar}
-      <div class="vol">
-        Vol. <span class="num" x-text="(currentDynasty() ? (dynasties.findIndex(function(x){return x.id===currentDynasty().id})+1) : 0).toString().padStart(2,'0')"></span>
-        <span style="margin-left:8px;">·</span>
-        <span style="margin-left:8px;font-style:italic;">Dynasty Edition</span>
-      </div>
-      <h1 class="dynasty-name" x-text="dynastyTitle()"></h1>
-      <div class="dynasty-period" x-show="showDynastyPeriod()" x-text="(currentDynasty() || {}).period || ''"></div>
-      <div class="dynasty-overview md" x-html="window.MuseumChat.renderMarkdown((currentDynasty() || {}).overview || '')" x-show="(currentDynasty() || {}).overview"></div>
-      <div class="stats">
-        <div class="stat">
-          <div class="num" x-text="filteredMuseums.length.toString().padStart(2,'0')"></div>
-          <div class="label">Museums</div>
-        </div>
-        <div class="stat">
-          <div class="num" x-text="(((currentDynasty()||{}).events) || []).length.toString().padStart(2,'0')"></div>
-          <div class="label">Events</div>
-        </div>
-        <div class="stat">
-          <div class="num" x-text="(((currentDynasty()||{}).culture) || []).length.toString().padStart(2,'0')"></div>
-          <div class="label">Culture</div>
-        </div>
-      </div>
-      <button @click="clearDynastyFilter()"
-        style="margin-top:18px;border:none;background:transparent;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--vermilion);padding:0;cursor:pointer;border-bottom:0.5px solid var(--vermilion);padding-bottom:2px;">
-        ← Show all <span x-text="museums.length"></span> museums
-      </button>
-    </div>
-  </div>
-
-  <!-- All-museums hero (default) -->
-  <div x-show="!visits.footprintMode && !currentDynastyId" x-cloak>
-    <div class="toc-head">
-      ${authBar}
-      <div class="vol">
-        Vol. <span class="num">00</span>
-        <span style="margin-left:8px;">·</span>
-        <span style="margin-left:8px;font-style:italic;">Complete Index</span>
-      </div>
-      <h1 class="dynasty-name">中国博物馆</h1>
-      <div class="dynasty-period"><span style="font-style:normal;font-variant-numeric:lining-nums;" x-text="museums.length"></span> institutions across <span style="font-style:normal;font-variant-numeric:lining-nums;" x-text="dynasties.length"></span> dynasties</div>
-      <p class="dynasty-overview" style="margin-top:18px;">从仰韶到清，由四面至八方。本卷收录全国 <span style="font-variant-numeric:lining-nums;" x-text="museums.length"></span> 座国家级与省级博物馆，按朝代脉络重新编排，以呈现中华文明在地理与时间双轴上的连续展开。</p>
-      <button @click="toggleFootprint()" :disabled="visits.ids.length === 0"
-        style="margin-top:18px;border:none;background:transparent;font-family:var(--sans);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--vermilion);padding:0;cursor:pointer;border-bottom:0.5px solid var(--vermilion);padding-bottom:2px;"
-        :style="visits.ids.length === 0 ? 'color:var(--ink-mute);border-bottom-color:var(--rule);cursor:not-allowed;' : ''">
-        ✦ 我的足迹（<span x-text="visits.ids.length"></span>）
-      </button>
-    </div>
-  </div>
-
-  <!-- Level filter chips -->
-  <div class="toc-tier-chips">
-    <template x-for="t in levelTiers" :key="t.id">
-      <button class="tier-chip"
-              :class="levelFilter === t.id ? 'active' : ''"
-              @click="levelFilter = t.id">
-        <span x-text="t.label"></span>
-        <span class="tier-chip-count" x-text="tierCount(t.id)"></span>
+  <div class="seal-wall" x-show="visits.ids.length">
+    <template x-for="m in stampMuseums()" :key="m.id">
+      <button class="seal-cell" @click="openMuseum(m.id)" :title="m.name">
+        <span class="seal-cell-art" x-html="sealHtml(m)"></span>
+        <span class="seal-cell-name" x-text="m.name"></span>
+        <span class="seal-cell-date" x-text="visitDate(m.id)"></span>
       </button>
     </template>
   </div>
+  <p class="hero-note" x-show="!visits.ids.length">集章册还是空的。打开任意一座博物馆，点「盖章打卡」——每座馆都有自己的一枚印。</p>
 
-  <!-- Search -->
-  <div class="toc-search">
-    <input x-model="search" placeholder="Search museums…" />
+  <div class="review-block" x-show="visits.ids.length">
+    <div class="block-head">${icon("sparkle", 15)}<span>讲解员的读后感</span></div>
+    <p class="hero-note" x-show="!visits.review && !visits.reviewLoading">让 AI 讲解员读一读你的集章册：你偏爱哪段历史、走的是哪条线、下一站该去哪。</p>
+    <p class="hero-note loading" x-show="visits.reviewLoading"><span class="dots"><i></i><i></i><i></i></span>讲解员正在翻阅你的集章册</p>
+    <div class="guide-card md-rich" x-show="visits.review && !visits.reviewLoading" x-html="window.MuseumChat.renderMarkdown(visits.review)"></div>
+    <div class="notice notice--chat" x-show="visits.chatDirty && visits.review && !visits.reviewLoading">你刚和讲解员聊过——可以据此更新读后感。</div>
+    <div class="notice notice--stale" x-show="visits.reviewStale && !visits.chatDirty && visits.review && !visits.reviewLoading">又集了新印——读后感已经过时，更新一下吧。</div>
+    <div class="hero-actions" x-show="!isReadOnly">
+      <button class="btn" :class="(visits.reviewStale || visits.chatDirty || !visits.review) ? 'btn-seal' : 'btn-ghost'"
+        @click="loadFootprintReview()" :disabled="visits.reviewLoading || visits.ids.length === 0">
+        ${icon("sparkle", 16)}
+        <span x-show="!visits.review">生成读后感</span>
+        <span x-show="visits.review && !visits.chatDirty && !visits.reviewStale">重新生成</span>
+        <span x-show="visits.review && visits.reviewStale && !visits.chatDirty">立即更新</span>
+        <span x-show="visits.review && visits.chatDirty">根据对话更新</span>
+      </button>
+      <button class="btn btn-ghost" x-show="visits.review && !visits.reviewLoading" @click="exportFootprint()" :disabled="visits.exporting">
+        ${icon("download", 16)}<span x-text="visits.exporting ? '生成中…' : '导出长图'"></span>
+      </button>
+      <button class="btn btn-ghost" x-show="visits.review && !visits.reviewLoading" @click="continueChatFromFootprint()">${icon("chat", 16)}继续聊</button>
+    </div>
   </div>
 
-  <!-- Section label -->
-  <div class="toc-section-label">
-    <span x-text="visits.footprintMode ? 'Footprints' : (currentDynastyId ? 'Featured Museums' : 'Index')"></span>
-    <span class="count" x-text="filteredMuseums.length"></span>
+  <div class="strata-progress" x-show="visits.ids.length">
+    <div class="block-head">${icon("layers", 15)}<span>朝代地层 · 你读到了哪里</span></div>
+    <template x-for="row in dynastyProgress()" :key="row.id">
+      <button class="sp-row" :class="row.hit ? 'hit' : ''" @click="selectDynasty(row.id)">
+        <span class="sp-name" x-text="row.name"></span>
+        <span class="sp-bar"><i :style="'width:' + row.pct + '%'"></i></span>
+        <span class="sp-num" x-text="row.hit + '/' + row.total"></span>
+      </button>
+    </template>
   </div>
+  <div class="hero-actions">
+    <button class="btn btn-text" @click="toggleFootprint()">${icon("arrowLeft", 16)}合上集章册</button>
+  </div>
+</section>`
 
-  <!-- List -->
-  <ul class="toc-list">
-    <template x-for="(m, i) in filteredMuseums" :key="m.id">
-      <li class="toc-item"
-          :class="selectedMuseumId === m.id ? 'selected' : ''"
-          @click="openMuseum(m.id)">
-        <span class="toc-item-num" x-text="(i+1).toString().padStart(2,'0')"></span>
-        <div>
-          <div class="toc-item-name">
-            <span x-text="m.name"></span>
-            <span x-show="isVisited(m.id)" style="margin-left:6px;color:var(--vermilion);font-size:11px;">✓</span>
+  // ── 行程: route planning ──
+  const trip = `<section class="toc-hero is-trip" x-show="tripMode" x-cloak>
+  <div class="hero-kicker">${icon("route", 15)}<span>我的行程</span><span class="mono">ROUTE</span></div>
+  <h1 class="hero-title"><span class="big-num" x-text="trip.ids.length"></span> 站</h1>
+  <p class="hero-lede" x-show="!trip.ids.length">在任意一座博物馆点「加入行程」，把想去的馆串成一条路。旅行有两种走法：按地理顺路，或者按朝代先后，把一段历史从头走一遍。</p>
+  <div class="hero-stats" x-show="trip.ids.length">
+    <div class="stat"><b x-text="trip.ids.length"></b><span>站博物馆</span></div>
+    <div class="stat"><b x-text="tripCities().length"></b><span>座城市</span></div>
+    <div class="stat"><b x-text="tripTotalKm()"></b><span>公里（直线）</span></div>
+  </div>
+  <div class="trip-sort" x-show="trip.ids.length > 1">
+    <button class="seg-btn" :class="trip.order === 'route' ? 'active' : ''" @click="sortTripByRoute()">${icon("route", 14)}按地理顺路</button>
+    <button class="seg-btn" :class="trip.order === 'time' ? 'active' : ''" @click="sortTripByTime()">${icon("clock", 14)}按朝代先后</button>
+  </div>
+  <ol class="trip-list" x-show="trip.ids.length">
+    <template x-for="(m, i) in tripMuseums()" :key="m.id">
+      <li class="trip-stop">
+        <div class="trip-leg" x-show="i > 0"><span x-text="tripLegKm(i) + ' km'"></span><span class="trip-leg-era" x-show="trip.order === 'time'" x-text="tripEraLabel(m)"></span></div>
+        <div class="trip-row">
+          <span class="trip-no" x-text="i + 1"></span>
+          <button class="trip-main" @click="openMuseum(m.id)">
+            <span class="trip-name" x-text="m.name"></span>
+            <span class="trip-city" x-text="[m.city, m.corePeriod].filter(Boolean).join(' · ')"></span>
+          </button>
+          <div class="trip-ops">
+            <button class="icon-btn" @click="moveTrip(i, -1)" :disabled="i === 0" title="上移">${icon("arrowUp", 15)}</button>
+            <button class="icon-btn" @click="moveTrip(i, 1)" :disabled="i === trip.ids.length - 1" title="下移">${icon("arrowDown", 15)}</button>
+            <button class="icon-btn" @click="toggleTrip(m.id)" title="移出行程">${icon("close", 15)}</button>
           </div>
-          <div class="toc-item-meta" x-text="m.corePeriod || ''"></div>
         </div>
       </li>
     </template>
-    <li x-show="filteredMuseums.length === 0" class="toc-empty">
-      <span x-show="visits.footprintMode">还没有足迹。打开博物馆点「打卡」。</span>
-      <span x-show="!visits.footprintMode">No museums match this filter.</span>
+  </ol>
+  <div class="hero-actions">
+    <button class="btn btn-primary" x-show="trip.ids.length" @click="planTripWithAI()">${icon("sparkle", 16)}让讲解员排行程</button>
+    <button class="btn btn-text" x-show="trip.ids.length" @click="clearTrip()">清空</button>
+    <button class="btn btn-text" @click="toggleTripMode()">${icon("arrowLeft", 16)}收起行程</button>
+  </div>
+</section>`
+
+  // ── 朝代地层 ──
+  const dynasty = `<section class="toc-hero is-dynasty" x-show="!visits.footprintMode && !tripMode && currentDynastyId" x-cloak>
+  <div class="hero-glyph" aria-hidden="true" x-text="dynastyGlyph(currentDynasty())"></div>
+  <div class="hero-kicker">${icon("layers", 15)}<span>朝代地层</span><span class="mono" x-text="'NO.' + String(layerNo(currentDynastyId)).padStart(2, '0')"></span></div>
+  <h1 class="hero-title" x-text="dynastyTitle()"></h1>
+  <div class="hero-period" x-show="showDynastyPeriod()" x-text="(currentDynasty() || {}).period || ''"></div>
+  <div class="capital-line" x-show="capitalsText(currentDynastyId)">${icon("pin", 14)}<span x-text="capitalsText(currentDynastyId)"></span></div>
+  <div class="hero-overview md-rich" x-html="window.MuseumChat.renderMarkdown((currentDynasty() || {}).overview || '')" x-show="(currentDynasty() || {}).overview"></div>
+  <div class="hero-stats">
+    <div class="stat"><b x-text="filteredMuseums.length"></b><span>座相关馆</span></div>
+    <div class="stat"><b x-text="(((currentDynasty()||{}).events) || []).length"></b><span>件大事</span></div>
+    <div class="stat"><b x-text="dynastyVisitCount(currentDynastyId)"></b><span>枚已集</span></div>
+  </div>
+  <div class="dyn-nav">
+    <button class="btn btn-ghost" @click="stepDynasty(-1)" x-show="neighborDynasty(-1)">${icon("arrowLeft", 15)}<span x-text="dynastyShortName(neighborDynasty(-1))"></span></button>
+    <span class="dyn-nav-gap"></span>
+    <button class="btn btn-ghost" @click="stepDynasty(1)" x-show="neighborDynasty(1)"><span x-text="dynastyShortName(neighborDynasty(1))"></span>${icon("arrowRight", 15)}</button>
+  </div>
+  <div class="hero-actions">
+    <button class="btn btn-text" @click="clearDynastyFilter()">${icon("arrowLeft", 16)}回到全部地层</button>
+  </div>
+</section>`
+
+  // ── 全部 ──
+  const all = `<section class="toc-hero is-all" x-show="!visits.footprintMode && !tripMode && !currentDynastyId" x-cloak>
+  <div class="hero-kicker">${icon("book", 15)}<span>今天的历史书</span><span class="mono">INDEX</span></div>
+  <h1 class="hero-title"><span class="big-num" x-text="museums.length"></span> 座博物馆<br>叠成 <span class="big-num" x-text="dynasties.length"></span> 层时间</h1>
+  <p class="hero-lede">博物馆是今天的历史书。每一座，都站在时间与地点的交汇处——沿时间，看一个朝代的中心如何迁徙；按地理，把想去的馆串成一条路。</p>
+  <div class="hero-actions">
+    <button class="btn btn-seal" @click="toggleFootprint()">${icon("seal", 16)}集章册 · <span x-text="visits.ids.length"></span></button>
+    <button class="btn btn-ghost" @click="toggleTripMode()">${icon("route", 16)}行程 · <span x-text="trip.ids.length"></span></button>
+  </div>
+</section>`
+
+  const list = `<div class="toc-controls" x-show="!visits.footprintMode && !tripMode">
+  <div class="seg">
+    <template x-for="t in levelTiers" :key="t.id">
+      <button class="seg-btn" :class="levelFilter === t.id ? 'active' : ''" @click="levelFilter = t.id">
+        <span x-text="t.label"></span><span class="seg-count" x-text="tierCount(t.id)"></span>
+      </button>
+    </template>
+  </div>
+  <div class="search-row">
+    <label class="search">${icon("search", 16)}<input x-model="search" placeholder="馆名、朝代或拼音" /></label>
+    <button class="sort-btn" @click="cycleListSort()" :title="'排序：' + listSortLabel()">
+      <span x-text="listSortLabel()"></span>
+    </button>
+  </div>
+</div>
+<div class="toc-section-label" x-show="!visits.footprintMode && !tripMode">
+  <span x-text="currentDynastyId ? '本朝相关博物馆' : '全部博物馆'"></span>
+  <span class="count" x-text="filteredMuseums.length"></span>
+</div>
+<ul class="toc-list" x-show="!visits.footprintMode && !tripMode">
+  <template x-for="row in listRows()" :key="row.key">
+    <li :class="row.type === 'h' ? 'toc-group' : 'toc-item'"
+        :data-selected="row.type === 'm' && selectedMuseumId === row.m.id ? '1' : null"
+        @click="row.type === 'm' && openMuseum(row.m.id)">
+      <template x-if="row.type === 'h'">
+        <div class="toc-group-inner"><span x-text="row.label"></span><span class="count" x-text="row.count"></span></div>
+      </template>
+      <template x-if="row.type === 'm'">
+        <div class="toc-item-inner" :class="selectedMuseumId === row.m.id ? 'selected' : ''">
+          <div class="toc-thumb" :class="isVisited(row.m.id) ? 'is-collected' : ''" x-html="sealHtml(row.m, isVisited(row.m.id) ? 'seal-sm' : 'seal-sm seal-ghost')"></div>
+          <div class="toc-item-main">
+            <div class="toc-item-name" x-text="row.m.name"></div>
+            <div class="toc-item-meta" x-text="[row.m.city, row.m.corePeriod].filter(Boolean).join(' · ')"></div>
+          </div>
+          <div class="toc-item-side">
+            <span class="tier-badge" :class="tierBadge(row.m).cls" x-show="tierBadge(row.m).label" x-text="tierBadge(row.m).label"></span>
+            <span class="toc-dist" x-show="geo.lat != null" x-text="distanceLabel(row.m)"></span>
+            <span class="trip-dot" x-show="inTrip(row.m.id)" title="在行程中">${icon("route", 12)}</span>
+          </div>
+        </div>
+      </template>
     </li>
-  </ul>
+  </template>
+  <li class="toc-empty" x-show="filteredMuseums.length === 0">没有符合条件的博物馆。</li>
+</ul>`
+
+  return `<aside class="toc">
+  ${account}
+  ${stamps}
+  ${trip}
+  ${dynasty}
+  ${all}
+  ${list}
 </aside>`
 }

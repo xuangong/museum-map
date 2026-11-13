@@ -155,20 +155,24 @@ export const shareRoute = new Elysia()
 function SharePage(opts: { displayName: string; handle: string; currentStyle: PosterStyle }): string {
   const { displayName, handle, currentStyle } = opts
   const css = `
-    body { background: #2A2724; margin: 0; min-height: 100dvh;
+    body { margin: 0; min-height: 100dvh;
       display: flex; flex-direction: column; align-items: center;
-      padding: 36px 18px 56px; color: #E8E2D2; font-family: var(--display); }
-    .share-header { width: 100%; max-width: 720px; display: flex;
-      justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
-    .share-header h1 { font-size: 22px; font-weight: 400; margin: 0; letter-spacing: 0.02em; }
-    .share-header a { color: #B73E18; text-decoration: none; font-family: var(--mono);
-      font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; }
+      padding: calc(28px + env(safe-area-inset-top)) 18px calc(56px + env(safe-area-inset-bottom));
+      color: var(--text); font-family: var(--sans); }
+    .share-header { width: 100%; max-width: 720px; display: flex; gap: 12px;
+      justify-content: space-between; align-items: center; margin-bottom: 20px; }
+    .share-header h1 { font-family: var(--serif); font-size: 21px; font-weight: 700; margin: 0; letter-spacing: 0.04em; }
+    .share-header a { flex: none; display: inline-flex; align-items: center; height: 32px; padding: 0 13px;
+      border-radius: 999px; border: 1px solid var(--line-strong); color: var(--text-2);
+      font-size: 12.5px; text-decoration: none; transition: color 0.2s, border-color 0.2s; }
+    .share-header a:hover { color: var(--gilt-hi); border-color: rgba(212,176,114,0.5); }
     .poster-frame {
       max-width: min(720px, calc(100vw - 36px));
       width: 100%;
       aspect-ratio: ${POSTER_W} / ${POSTER_H};
       background: #F4EFE3;
-      box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6), 0 8px 20px rgba(0,0,0,0.3);
+      border-radius: 6px;
+      box-shadow: 0 40px 90px -30px rgba(0,0,0,0.95), 0 0 0 1px rgba(212,176,114,0.18), 0 0 80px -30px rgba(212,176,114,0.35);
       position: relative;
       overflow: hidden;
     }
@@ -177,51 +181,56 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
       align-items: center; justify-content: center; gap: 18px; color: #6B6760;
       font-family: var(--mono); font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase; }
     .loading .ring { width: 38px; height: 38px; border: 1px solid #D9D2C2;
-      border-top-color: #B73E18; border-radius: 50%; animation: spin 0.9s linear infinite; }
+      border-top-color: #B7351F; border-radius: 50%; animation: spin 0.9s linear infinite; }
     .loading .step { color: #8A857B; font-size: 12px; letter-spacing: 0.18em;
-      font-family: var(--display); transition: opacity 0.3s; min-height: 18px; }
-    .loading .quip { color: #B73E18; font-family: var(--display); font-size: 13px;
+      font-family: var(--serif); transition: opacity 0.3s; min-height: 18px; }
+    .loading .quip { color: #B7351F; font-family: var(--serif); font-size: 13px;
       letter-spacing: 0.06em; text-transform: none; max-width: 260px; text-align: center;
       line-height: 1.6; opacity: 0.85; }
     .loading .bar { width: 180px; height: 2px; background: #E8E2D2; overflow: hidden; }
-    .loading .bar i { display: block; width: 30%; height: 100%; background: #B73E18;
+    .loading .bar i { display: block; width: 30%; height: 100%; background: #B7351F;
       animation: slide 1.6s ease-in-out infinite; }
-    .loading.error { color: #B73E18; }
+    .loading.error { color: #B7351F; }
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(430%); } }
-    .actions { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; justify-content: center; }
-    .btn { font-family: var(--display); font-size: 14px;
-      padding: 12px 22px; border: 0.5px solid #B73E18; background: #B73E18; color: #F4EFE3;
-      border-radius: 0; cursor: pointer; letter-spacing: 0.06em; }
+    .actions { display: flex; gap: 10px; margin-top: 26px; flex-wrap: wrap; justify-content: center; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; height: 44px; padding: 0 24px;
+      border-radius: 999px; border: 1px solid var(--seal); background: var(--seal); color: #FFF4EC;
+      font-family: var(--sans); font-size: 14px; font-weight: 500; letter-spacing: 0.04em; cursor: pointer;
+      box-shadow: 0 0 26px -8px rgba(224,73,47,0.9); transition: filter 0.2s, transform 0.15s; }
+    .btn:hover:not(:disabled) { filter: brightness(1.08); }
+    .btn:active { transform: scale(0.97); }
     .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn.ghost { background: transparent; color: #E8E2D2; border-color: #6B6760; }
-    .hint { margin-top: 18px; font-family: var(--mono); font-size: 11px;
-      letter-spacing: 0.2em; color: #6B6760; text-align: center; }
-    .styles { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
-    .styles a { font-family: var(--display); font-size: 12px; padding: 8px 14px;
-      border: 1px solid #6B6760; color: #E8E2D2; text-decoration: none;
-      letter-spacing: 0.12em; transition: all 0.15s; }
-    .styles a:hover { border-color: #B73E18; color: #F4EFE3; }
-    .styles a.active { background: #B73E18; border-color: #B73E18; color: #F4EFE3; }
-    .post-share { margin-top: 22px; max-width: 420px; padding: 18px 20px;
-      border: 1px solid #4a443c; background: rgba(247,239,221,0.04);
-      font-family: var(--display); color: #E8E2D2; }
-    .post-share .ps-title { font-size: 14px; color: #B73E18; letter-spacing: 0.06em; margin-bottom: 8px; }
-    .post-share .ps-step { font-size: 13px; line-height: 1.7; color: #C8C2B2; margin-bottom: 12px; }
-    .post-share .ps-step b { color: #F4EFE3; font-weight: 500; }
-    .post-share .ps-link { font-size: 12px; color: #8A857B; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    .post-share .ps-link code { font-family: var(--mono); color: #E8E2D2; word-break: break-all; }
-    .post-share .ps-copy { font-family: var(--display); font-size: 11px; padding: 4px 10px;
-      border: 1px solid #6B6760; background: transparent; color: #E8E2D2; cursor: pointer; letter-spacing: 0.08em; }
-    .post-share .ps-copy:hover { border-color: #B73E18; }
-    .longpress { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 999;
+    .btn.ghost { background: rgba(239,232,218,0.03); color: var(--text); border-color: var(--line-strong); box-shadow: none; }
+    .btn.ghost:hover:not(:disabled) { color: var(--gilt-hi); border-color: rgba(212,176,114,0.5); }
+    .hint { margin-top: 16px; font-size: 12px; letter-spacing: 0.06em; color: var(--text-3); text-align: center; }
+    .styles { display: inline-flex; gap: 2px; margin-bottom: 18px; flex-wrap: wrap; justify-content: center;
+      padding: 3px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg-2); }
+    .styles a { font-size: 12.5px; padding: 6px 14px; border-radius: 999px;
+      color: var(--text-3); text-decoration: none; transition: color 0.2s, background 0.2s; }
+    .styles a:hover { color: var(--text); }
+    .styles a.active { background: var(--surface-3); color: var(--gilt-hi);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 8px -2px rgba(0,0,0,0.6); }
+    .post-share { margin-top: 22px; max-width: 440px; padding: 18px 20px; border-radius: 18px;
+      border: 1px solid rgba(212,176,114,0.26);
+      background: linear-gradient(180deg, rgba(212,176,114,0.09), rgba(212,176,114,0.02));
+      color: var(--text); }
+    .post-share .ps-title { font-family: var(--serif); font-weight: 700; font-size: 15px; color: var(--gilt-hi); letter-spacing: 0.04em; margin-bottom: 8px; }
+    .post-share .ps-step { font-size: 13px; line-height: 1.75; color: var(--text-2); margin-bottom: 12px; }
+    .post-share .ps-step b { color: var(--text); font-weight: 600; }
+    .post-share .ps-link { font-size: 12px; color: var(--text-3); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .post-share .ps-link code { font-family: var(--mono); color: var(--text); word-break: break-all; overflow-wrap: anywhere; }
+    .post-share .ps-copy { font-size: 12px; height: 28px; padding: 0 12px; border-radius: 999px;
+      border: 1px solid var(--line-strong); background: transparent; color: var(--text); cursor: pointer; }
+    .post-share .ps-copy:hover { border-color: rgba(212,176,114,0.5); color: var(--gilt-hi); }
+    .longpress { position: fixed; inset: 0; background: rgba(5,5,4,0.94); z-index: 999;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       padding: 20px; gap: 14px; }
     .longpress img { max-width: 92vw; max-height: 70vh; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    .longpress .lp-tip { color: #F4EFE3; font-family: var(--display); font-size: 14px;
-      text-align: center; max-width: 320px; line-height: 1.6; }
-    .longpress .lp-close { font-family: var(--display); font-size: 13px; color: #E8E2D2;
-      background: transparent; border: 1px solid #6B6760; padding: 8px 18px; cursor: pointer; }
+    .longpress .lp-tip { color: var(--text); font-family: var(--serif); font-size: 14px;
+      text-align: center; max-width: 320px; line-height: 1.7; }
+    .longpress .lp-close { font-size: 13px; color: var(--text); border-radius: 999px;
+      background: transparent; border: 1px solid var(--line-strong); padding: 8px 18px; cursor: pointer; }
   `
   const safeName = `museum-atlas-${handle}.png`
   const styleParam = currentStyle
@@ -467,7 +476,7 @@ function SharePage(opts: { displayName: string; handle: string; currentStyle: Po
     children: `
       <div class="share-header">
         <h1>${esc(displayName)} · 足迹海报</h1>
-        <a href="/u/${esc(handle)}">← 返回主页</a>
+        <a href="/u/${esc(handle)}">← 回到集章册</a>
       </div>
       <div class="styles">${styleChips}</div>
       <div class="poster-frame">

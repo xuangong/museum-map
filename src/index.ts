@@ -14,6 +14,7 @@ import { adminWikimediaRoute } from "~/routes/admin-wikimedia"
 import { cdnRoute } from "~/lib/cdn"
 import { homeRoute } from "~/routes/home"
 import { imageProxyRoute } from "~/routes/image-proxy"
+import { assetsRoute } from "~/routes/assets"
 
 export interface Env {
   DB: D1Database
@@ -38,6 +39,7 @@ export function createApp(env: Env) {
     .decorate("env", env)
     .get("/health", () => ({ status: "ok" }))
     .use(cdnRoute)
+    .use(assetsRoute)
     .use(imageProxyRoute)
     .use(homeRoute)
     .use(museumsRoute)

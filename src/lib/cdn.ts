@@ -8,6 +8,16 @@ const CDN_MAP: Record<string, string> = {
   "html2canvas.js": "https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js",
   "leaflet-image.js": "https://unpkg.com/leaflet-image@0.4.0/leaflet-image.js",
   "qrcode.js": "https://unpkg.com/qrcode-generator@1.4.4/qrcode.js",
+  // r170 is the last single-file module build (r171+ splits out three.core.js).
+  "three.module.js": "https://unpkg.com/three@0.170.0/build/three.module.min.js",
+}
+
+// Google serves woff2 + unicode-range subsets only to modern browser UAs.
+const FONT_CSS_UA =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+
+export function rewriteFontCss(css: string): string {
+  return css.replaceAll("https://fonts.gstatic.com/", "/fonts/g/")
 }
 
 // Wrap a (req → upstream Response) function with Cloudflare edge caching.
@@ -44,15 +54,51 @@ async function withEdgeCache(
 }
 
 export const cdnRoute = new Elysia()
-  .get("/cdn/:file", async ({ params }) => {
+  .get("/cdn/:file", async ({ params, request }) => {
     const url = CDN_MAP[params.file]
     if (!url) return new Response("Not found", { status: 404 })
     const ct = params.file.endsWith(".css") ? "text/css" : "application/javascript"
-    const upstream = await fetch(url)
-    return new Response(upstream.body, {
-      headers: { "Content-Type": ct, "Cache-Control": "public, max-age=604800" },
+    return withEdgeCache(request, async () => {
+      const upstream = await fetch(url)
+      if (!upstream.ok) return new Response("upstream error", { status: upstream.status })
+      return new Response(upstream.body, {
+        headers: { "Content-Type": ct, "Cache-Control": "public, max-age=604800" },
+      })
     })
   })
+  // Proxy Google Fonts. fonts.googleapis.com / fonts.gstatic.com are unreachable from
+  // mainland China, so the stylesheet is fetched server-side (modern UA → woff2 with
+  // unicode-range slices) and its gstatic URLs are rewritten to /fonts/g/*.
+  // Path: /fonts/css2?<same query as Google's css2 API>
+  .get("/fonts/css2", async ({ request }) => withEdgeCache(request, async () => {
+    const url = new URL(request.url)
+    const upstream = await fetch(`https://fonts.googleapis.com/css2${url.search}`, {
+      headers: { "User-Agent": FONT_CSS_UA },
+    })
+    if (!upstream.ok) return new Response("font css unavailable", { status: upstream.status })
+    const css = rewriteFontCss(await upstream.text())
+    return new Response(css, {
+      headers: {
+        "Content-Type": "text/css; charset=utf-8",
+        "Cache-Control": "public, max-age=86400",
+      },
+    })
+  }))
+  // Path: /fonts/g/<path after https://fonts.gstatic.com/>
+  .get("/fonts/g/*", async ({ request }) => withEdgeCache(request, async () => {
+    const url = new URL(request.url)
+    const rest = url.pathname.replace(/^\/fonts\/g\//, "")
+    if (!rest || !/^[A-Za-z0-9/_.-]+$/.test(rest)) return new Response("bad path", { status: 400 })
+    const upstream = await fetch(`https://fonts.gstatic.com/${rest}`)
+    if (!upstream.ok) return new Response("upstream error", { status: upstream.status })
+    return new Response(upstream.body, {
+      headers: {
+        "Content-Type": upstream.headers.get("content-type") || "font/woff2",
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "Access-Control-Allow-Origin": "*",
+      },
+    })
+  }))
   // Proxy AutoNavi map tiles with permissive CORS so canvas/leaflet-image can read them.
   // Path: /tile/{s}/{z}/{x}/{y}
   .get("/tile/:s/:z/:x/:y", async ({ params }) => {

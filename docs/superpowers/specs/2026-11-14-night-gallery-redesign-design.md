@@ -1,95 +1,198 @@
-# 「夜展」视觉改版 · Night Gallery Redesign
+# 「夜展」改版 · Night Gallery Redesign
 
-> 2026-11-14 · worktree `redesign` · 用户授权「发挥你的审美」，方向由我定。
+> 2026-11-14 · worktree `redesign`. The user handed over the direction ("发挥你的审美", "大胆设计", "发挥一些 3D 效果能力") and added the brief below.
 
-## 为什么改
+## The brief, in the user's words
 
-现状是「纸本杂志」调性（米黄纸 + 朱红 + 衬线 + 英文小型大写 eyebrow + 硬投影）。问题：
+- Museums relate to dynasties and to places. Each dynasty's change of place is its evolution. Today's museums revisit where time and place meet: 「现代和古代的相逢」.
+- There are two ways to travel, by route and by time. Neither dimension should be dropped. Where they cross, 「别有一番历史的宿命感」.
+- 「博物馆实际上就是现在的历史书载体」.
+- Some museums stand where the ancient place itself stood.
+- 「打卡收集也是乐趣」. The site should feel tasteful: 「更显品味」.
 
-- 读起来像一本旧杂志，不像「看展」。年轻博物馆爱好者熟悉的是暗场展厅、聚光灯下的文物、集章盖印、镇馆之宝——这些在现有界面里几乎没有被视觉化。
-- 文物图（大多是馆内暗背景实拍）在米黄底上以小缩略图出现，最有冲击力的素材被埋没。
-- 英文装饰文案（`Vol. 00 · Complete Index`、`Opening dossier…`、`ESTABLISHED · MMXXVI`）对中文年轻用户是噪音。
-- 三个散落的 FAB（目录 / 🎲 / 问 AI）各自带硬投影，移动端底部拥挤。
-- 字体走 `fonts.googleapis.com`，大陆用户大概率加载不到，设计里的衬线字体实际上没出现。
+## Why the old site needed more than a reskin
 
-## 概念
+- It read like a paper magazine (cream paper, vermilion, small-caps English eyebrows, hard drop shadows), not like visiting an exhibition.
+- Time and place were two separate controls: a dynasty filter, and a flat map. Nothing showed a dynasty's centre *moving*, or a museum standing on a dynasty's ground.
+- Check-ins were a list. Nothing about them made collecting a pleasure.
+- Fonts loaded from `fonts.googleapis.com`, which is unreachable from mainland China, so the serif design never actually appeared.
+- Index thumbnails loaded 5–25 MB R2 originals and starved the bandwidth.
 
-**夜展**：把网站做成一间熄了顶灯、只亮展柜灯的展厅。
+## Concept
 
-- **暗场**：暖黑底（不是纯黑），内容像被射灯照亮。
-- **鎏金**：金色用于「被照亮的信息」——数字、编号、当前朝代、镇馆之宝。
-- **朱砂**：印泥红只用于「你」——打卡印章、已到访、你的足迹。
-- **展签**：等宽字体做馆藏编号式元信息（`NO.042 · 国家一级 · 北京`），中文名用粗衬线。
-- **印章**：打卡 = 盖章（带落印动画）；足迹 = 集章册。
+**夜展 (Night Gallery)**: a hall with the ceiling lights off and only the vitrines lit.
 
-## 视觉系统
+- **暗场 (dark hall):** warm black, never pure black.
+- **鎏金 (gilt):** marks lit information — numbers, the current dynasty, capitals, the stack of time.
+- **朱砂 (cinnabar):** belongs to *you* — your seals, your visited places, your footprint.
+- **展签 (exhibit labels):** mono metadata, bold serif Chinese names.
 
-### 色板（`theme.ts` 新 token）
+## The 时空 (3D strata) view — the new home
 
-| token | 值 | 用途 |
+`src/ui/client/strata.ts` is a Three.js module, served at `/assets/strata.js?v=<hash>` and exposed as `window.MuseumStrata`.
+
+- **Layers:**
+  - 20 dynasties are stacked as translucent map layers: China outline, Yellow River, Yangtze.
+  - Oldest is at the bottom; today's layer is on top, with the South China Sea inset drawn only on that layer.
+  - Layer heights are uniform (ordering, not a time scale).
+- **The trail of the centre (都城迁徙):**
+  - A glowing tube follows each dynasty's capital(s) layer by layer and rises into today's layer.
+  - Capitals that coexisted (南北朝, 五代十国, 宋/辽/金) get thinner side threads.
+  - The Neolithic layer shows six cultures converging.
+  - Data: hand-curated `src/data/dynasty-geo.ts`.
+- **Museum beams:**
+  - Every museum is a light point on today's layer.
+  - Its beam drops through every dynasty layer it relates to (recommended/related lists), with a dot where it pierces each layer.
+  - Museums that stand on a dynasty's ground (see 此地即彼时) glow brighter.
+- **Recolouring by mode:**
+  - all;
+  - dynasty (layer lifted, its capitals labelled, unrelated beams dimmed);
+  - footprint (cinnabar: your seals light their beams).
+- **Interaction:**
+  - drag to rotate, pinch or wheel to zoom;
+  - tap a layer label or the ruler to open that dynasty;
+  - tap a light point to open the museum.
+  - When idle, the camera drifts slowly.
+- **Camera:**
+  - Frames the stack to the viewport; portrait screens stretch the stack vertically.
+  - `setInset()` keeps the subject centred in whatever the drawer leaves visible.
+- **Labels:**
+  - A fixed time ruler on the left, with collision culling.
+  - Capital labels try 16 slots around their point, capitals first; when there's no room they hide and the point stays lit.
+  - The selected museum's tag is clamped clear of the view switch.
+- **Fallback:**
+  - If WebGL or the module fails, the app stays on the 2D map.
+  - `时空 / 地图` is a view switch, remembered in `localStorage`.
+
+## Two journeys
+
+- **By time:** pick a dynasty and the layer lifts.
+  - Its capitals move.
+  - The drawer shows 都城迁徙 (from → to), 此地即彼时, culture, the chronicle, related museums and the AI guide's notes.
+  - Previous/next steps walk through history.
+- **By route:** a 行程 (trip) planner.
+  - Add or remove from any museum.
+  - Sort by geography (nearest-neighbour route) or by dynasty (chronological).
+  - Shows legs in km, cities and the total distance.
+  - On the map it draws a numbered gilt dashed route.
+  - "让讲解员排行程" hands the trip to the AI guide.
+- **此地即彼时 (crossings):** computed server-side in `src/services/crossings.ts` with haversine distance.
+  - A museum within 5 km of a capital or site, or 3 km of an event, is **on-site** (原址) for any dynasty.
+  - Within 30 km / 12 km counts only for dynasties already linked to the museum, so Beijing's 30 museums don't all claim every dynasty.
+  - Shown in both the museum drawer and the dynasty drawer.
+
+## Collecting: 馆印 (museum seals)
+
+- Every museum has its own seal: `sealSpec()` in `src/services/museum-meta.ts`.
+  - The text is the abbreviation people actually use (国博, 故宫, 陕历博, 兵马俑…), from overrides or rules.
+  - Shape (square / rounded / circle / oval), 阴文/阳文 carving and tilt are derived from an FNV hash of the id. They are stable, and four-character seals are never round.
+- 「盖章打卡」 plays a stamp-in animation, vibrates and plays a sound.
+- **集章册 (passport):**
+  - a seal wall;
+  - collector titles (初入展厅 → 镇馆之宝级, `COLLECTOR_RANKS`, shared by app, profile and plaza);
+  - per-dynasty progress bars;
+  - the AI guide's notes on your collection (读后感).
+- In the index, uncollected museums show their seal as a faint ghost and collected ones in cinnabar. Seals replaced the photo thumbnails.
+- **Plaza:** passport cards (title + latest 6 seals). **Public profile:** the full seal wall, notes and per-dynasty notes.
+
+## Visual system
+
+| token | value | use |
 |---|---|---|
-| `--bg` | `#0D0C0B` | 展厅底 |
-| `--bg-2` | `#131210` | 侧栏/顶栏 |
-| `--surface` | `#1A1815` | 卡片/抽屉 |
-| `--surface-2` | `#23201C` | 悬停/凸起 |
-| `--surface-3` | `#2C2823` | 输入框/按下 |
-| `--text` | `#EFE8DA` | 主文字（骨白） |
-| `--text-2` | `#C5BCAA` | 次要 |
-| `--text-3` | `#8E8574` | 弱 |
-| `--text-4` | `#5C564B` | 装饰 |
-| `--line` | `rgba(239,232,218,.10)` | 细分隔 |
-| `--line-strong` | `rgba(239,232,218,.20)` | 强分隔 |
-| `--gilt` | `#D4B072` | 鎏金 |
-| `--seal` | `#E0492F` | 朱砂印 |
+| `--bg` / `--bg-2` | `#0D0C0B` / `#131210` | hall / bars |
+| `--surface` / `-2` / `-3` | `#1A1815` / `#23201C` / `#2C2823` | drawers, cards, pressed |
+| `--text` … `--text-4` | `#EFE8DA` → `#5C564B` | bone white, descending |
+| `--gilt` / `-hi` / `-lo` | `#D4B072` / `#E9C98D` / `#B8924F` | lit information |
+| `--seal` / `-deep` | `#E0492F` / `#B7351F` | you |
+| `--patina` | `#8DB8A9` | cultural sites (vs capitals) |
 
-旧变量名（`--paper` `--ink` `--vermilion` `--rule*`）保留为别名映射到新 token，保证没改到的内联样式不崩。
+- The old variable names (`--paper`, `--ink*`, `--vermilion*`, `--rule*`) remain as aliases.
+- **Type:**
+  - Noto Serif SC 400/700/900 for titles and labels;
+  - Inter plus system Chinese for UI;
+  - JetBrains Mono for numbers and metadata.
+- **Font loading:**
+  - Fonts are proxied same-origin: `/fonts/css2` rewrites gstatic URLs to `/fonts/g/*`, both edge-cached.
+  - Loaded with preload + `onload` so the CSS never blocks rendering.
+- Pill buttons, soft glows, no hard offset shadows; spring curve `cubic-bezier(.2,.9,.25,1)`.
+- `prefers-reduced-motion` disables all of it.
+- Three.js r170 is proxied at `/cdn/three.module.js`.
 
-### 字体
+## Screens
 
-- 中文标题：Noto Serif SC 700/900（展牌感）
-- 正文/UI：Inter + 系统中文（PingFang / HarmonyOS Sans / 微软雅黑）
-- 编号/元信息：JetBrains Mono
-- 新增 `/fonts/css2` 与 `/fonts/s/*` 两个 Worker 代理路由（重写 gstatic 链接 + 边缘缓存），大陆可用。
+1. **Top bar:**
+   - cinnabar 「博」 seal;
+   - 「中国博物馆地图 · WHERE TIME MEETS PLACE」;
+   - stats;
+   - 广场, 行程 N, 集章 N.
+2. **Dynasty timeline:**
+   - SSR + imperative `syncTimeline()` as before.
+   - Ruler styling, gilt underline on the current dynasty, cinnabar dot where you have seals.
+   - No `mask-image`; the fades are pseudo-elements.
+3. **Canvas:**
+   - 时空 (3D) / 地图 view switch.
+   - On desktop, floating controls re-centre on the part not covered by the drawer.
+   - Map: night-filtered AutoNavi tiles, glowing markers, 附近 (locate), trip route.
+4. **Dock (mobile):** 索引 / 摇一摇 / AI 讲解 (desktop has no 索引).
+5. **Museum drawer:**
+   - Header and seal:
+     - full-bleed hero (first artifact image) with the name over it;
+     - your seal (盖章打卡 / stamped with date and undo);
+     - 加入行程.
+   - Sections:
+     - 此地即彼时;
+     - 镇馆之宝;
+     - 展柜 (one vitrine per artifact);
+     - 馆史 (the `timeline` field, previously hidden);
+     - labels;
+     - related dynasties (jump into the layer);
+     - sources.
+   - **Mobile bottom-sheet behaviour:**
+     - It opens at **peek** height so the 3D or map stays visible, and expands when you scroll or tap the grabber.
+     - It never goes above the timeline.
+     - A scrim fades scrolled text under the floating buttons.
+     - Hopping museum → museum keeps it expanded.
+6. **Dynasty drawer:**
+   - glyph watermark;
+   - 都城迁徙;
+   - 此地即彼时;
+   - culture cards;
+   - chronicle;
+   - recommended/related museums (with seals);
+   - previous/next;
+   - AI notes (guide card).
+7. **Index (desktop sidebar / mobile sheet):**
+   - Heads: 全部 (今天的历史书), dynasty, 集章册, 行程.
+   - Tier segmented control, search, sort (default / by city / by distance), seal thumbnails.
+8. **AI 讲解员** (formerly 历史顾问): dark panel, gilt-ruled guide cards, quick questions about time journeys and route journeys.
+9. **Plaza / profile / share page:**
+   - All three use the same tokens and components.
+   - The poster SVG and the long-image export are untouched; they are prints, and they look good on a dark wall.
 
-### 形状与动效
+## Data changes (read-only, backward compatible)
 
-- 圆角 10–16px，胶囊按钮；去掉所有硬偏移投影，改为柔光晕 / 内描边。
-- 抽屉弹簧曲线 `cubic-bezier(.2,.9,.25,1)`；分节依次淡入；打卡落印动画；选中标记呼吸光。
-- `prefers-reduced-motion` 全部关闭。
+- `MuseumListItem` gains `city` (from `deriveCity(location)`) and `seal` (`SealSpec`). `cover` was removed again: the index shows seals.
+- Bootstrap JSON gains `dynastyGeo` (curated capitals/trails) and `crossings` (computed per request).
+- `PlazaEntry.recentSeals`: one extra query (window function, ≤ 6 per user).
+- No migrations, no writes, and no change to any API contract that other clients use.
 
-## 各界面
+## Constraints (from past incidents)
 
-1. **顶栏**：朱砂方印 logo + 「中国博物馆地图」+ 右侧「广场」「集章 N」。去掉日期、英文刊头。
-2. **朝代时间轴**：保留 SSR + `syncTimeline()` 命令式同步（不碰 Alpine 反应式）。样式改为刻度尺：名称衬线 + 年份等宽，当前朝代鎏金下划线，有足迹的朝代朱砂点。**不使用 `mask-image`**（iOS 曾因此丢失文字），渐隐用伪元素。
-3. **地图**：高德瓦片 CSS 反相成夜色；标记为发光点（未到访骨白、到访朱砂、朝代推荐鎏金、选中鎏金呼吸环）；事件为鎏金菱形；弹窗/图例/缩放控件暗色化，移动端隐藏缩放按钮。
-4. **底部 Dock**：合并「索引 / 摇一摇 / AI 讲解员」为一条胶囊 Dock；桌面端无「索引」。摇一摇一键直达（静音开关移到摇出结果的抽屉里）。
-5. **博物馆抽屉**：
-   - 首件有图文物做全幅 hero，渐变压暗，馆名压在图上；无图时用馆名首字做巨型水印。
-   - 打卡印章按钮（未打卡：「盖章打卡」；已打卡：倾斜朱砂印 + 日期 + 撤销）。
-   - 展签式信息块：等级 / 所在 / 核心年代。
-   - 镇馆之宝：鎏金编号榜单。
-   - 文物：逐件「展柜」卡——暗底聚光、整图 contain、名称 + 年代 + 说明。
-   - 新增「馆史」：把 `timeline` 字段（之前没显示）按 `→` 拆成竖向时间线；「年代覆盖」同理。
-   - 展厅为标签；朝代关联、信源保持，换样式。
-6. **朝代抽屉**：巨型朝代字水印 hero + 年份 + 统计；文化为卡片网格；大事记为竖向时间线；推荐馆为编号卡片（已打卡盖小印）；AI 朝代评价为鎏金描边「导览词」卡。
-7. **索引（桌面侧栏 / 移动端抽屉）**：账号行重做为头像 + 胶囊操作；三种头部（全部 / 朝代 / 集章册）；等级筛选为分段控件；搜索框带图标；列表行加 44px 封面缩略图、等级徽标、已打卡小印。
-8. **AI 讲解员（原历史顾问）**：暗色底部面板，讲解员消息为鎏金左线卡片，用户消息右对齐朱砂淡底；快捷问题为胶囊；输入框圆角 + 鎏金发送钮。
-9. **广场 / 个人主页 / 分享页**：同一套 token 与组件重写 CSS；广场前三名鎏金/银/铜名次。海报 SVG 本体与导出长图不改（它们是「印刷品」，挂在暗墙上反而好看）。
+- The timeline stays pure SSR + imperative sync; no `mask-image` or `backdrop-filter` near it.
+- Long strings in drawers keep `overflow-wrap: anywhere`.
+- Inputs stay at 16px; safe-area insets apply.
+- The long-image and poster generation logic is untouched (it carries the WeChat/HarmonyOS fixes).
+- `x-data` placement is unchanged; no `x-init="init()"`.
 
-## 数据改动
+## Verification
 
-- `MuseumListItem` 增加可选 `cover`：`MuseumsRepo.list()` 取每馆第一件有图文物的 `image_url`（经 `proxyImageUrl`）。用于索引缩略图。只读、向后兼容。
+- `bun run typecheck`.
+- `bun test`: the baseline was 163 pass with 2 old image-enricher failures. Now 173 pass and the same 2 fail; the new tests cover meta, crossings and font rewriting.
+- Local `wrangler dev` plus Playwright with GPU-backed WebGL:
+  - phone 390×844 and desktop 1440×900;
+  - home, dynasty (open and closed), museum (peek, expanded, vitrines), stamp, 集章册, map, trip, index, AI, plaza, profile.
+- Merge and deploy wait for the user's go-ahead.
 
-## 约束（来自踩坑记录）
+## Follow-ups (not in this change)
 
-- 时间轴保持纯 SSR + 命令式同步；不加 `mask-image`、`backdrop-filter` 到时间轴/顶栏附近。
-- 抽屉内一切长串仍需 `overflow-wrap:anywhere`。
-- 输入框 `font-size:16px` 防 iOS 缩放；安全区 `env(safe-area-inset-*)`。
-- 不碰导出长图 / 海报生成逻辑（微信/鸿蒙兼容补丁都在里面）。
-- `x-data` 位置不动，不加 `x-init="init()"`。
-
-## 验证
-
-- `bun run typecheck`、`bun test`（基线：仅 image-enricher 2 个旧失败）。
-- 本地 wrangler dev + Playwright 截图：手机 390×844、桌面 1440×900，覆盖首页 / 博物馆 / 朝代 / 集章册 / 索引 / AI / 广场。
-- 在 worktree 分支完成；合并与上线前由用户确认。
+- Many R2 originals are 5–25 MB, and the drawer hero and vitrines use them at full size. They need resized derivatives (e.g. generated on upload, or Cloudflare Image Resizing).

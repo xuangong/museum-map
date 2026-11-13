@@ -7,6 +7,10 @@ export interface MuseumListItem {
   tiers: string[]
   corePeriod: string | null
   dynastyCoverage: string | null
+  /** City derived from the address — trip planning groups by it. */
+  city?: string | null
+  /** The museum's own seal (馆印), collected on check-in. */
+  seal?: { t: string; s: number; y: number; r: number }
   pinyin?: string
   pinyinInitials?: string
 }

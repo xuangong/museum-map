@@ -1,4 +1,9 @@
+import { iconTable } from "../icons"
+import { COLLECTOR_RANKS } from "~/services/museum-meta"
+
 export const APP_SCRIPT = `
+var ICONS = ${JSON.stringify(iconTable(16))};
+var RANKS = ${JSON.stringify(COLLECTOR_RANKS)};
 // Module-scope cache for visitedDynasties — outside Alpine reactive proxy.
 // Putting these on \`this\` makes Alpine track every read inside x-for/:class,
 // and writing them inside the same effect blanks the timeline ("自循环失效").
@@ -17,7 +22,7 @@ window.museumApp = function() {
     ],
     currentDynastyId: null,
     selectedMuseumId: null,
-    drawer: { open: false, loading: false, error: false, title: '', subtitle: '', sections: [], _loadFn: null },
+    drawer: { open: false, expanded: false, scrolled: false, loading: false, error: false, title: '', subtitle: '', sections: [], _loadFn: null },
     chat: { open: false, messages: [], input: '', loading: false, fullscreen: false, palette: { open: false, query: '' } },
     tocOpen: false,
     shakeOpen: false,
@@ -36,6 +41,17 @@ window.museumApp = function() {
     _toastTimer: null,
     _suppressHashChange: false,
     _scrollByHash: {},
+    // 时空 (3D strata) or 地图 (2D map) — the time axis and the place axis.
+    view: 'strata',
+    tripMode: false,
+    trip: { ids: [], order: '' },
+    geo: { lat: null, lng: null, locating: false },
+    listSort: 'default',
+    dynastyGeo: {},
+    crossings: {},
+    _strataOk: false,
+    _justStamped: null,
+    _drawerMuseum: null,
 
     init() {
       var bs = document.getElementById('bootstrap-data');
@@ -43,6 +59,18 @@ window.museumApp = function() {
       var data = JSON.parse(bs.textContent);
       this.museums = data.museums;
       this.dynasties = data.dynasties;
+      this.dynastyGeo = data.dynastyGeo || {};
+      this.crossings = data.crossings || {};
+      try {
+        var savedView = window.localStorage.getItem('mmView');
+        if (savedView === 'map' || savedView === 'strata') this.view = savedView;
+        var savedTrip = JSON.parse(window.localStorage.getItem('mmTrip') || 'null');
+        if (savedTrip && Array.isArray(savedTrip.ids)) {
+          var known = {};
+          this.museums.forEach(function(m){ known[m.id] = true; });
+          this.trip = { ids: savedTrip.ids.filter(function(id){ return known[id]; }), order: savedTrip.order || '' };
+        }
+      } catch(_) {}
       if (data.viewingProfile) {
         this.viewingProfile = data.viewingProfile;
         this.isReadOnly = true;
@@ -71,6 +99,7 @@ window.museumApp = function() {
 
       window.MuseumMap.init(35.0, 105.0);
       var self = this;
+      this.initStrataWhenReady();
 
       // Capture invite code from URL (?invite=xxx) and strip from address bar
       try {
@@ -180,12 +209,12 @@ window.museumApp = function() {
           var allEl = nav.querySelector('.timeline-item.all');
           if (allEl) allEl.className = 'timeline-item all' + (self3.currentDynastyId ? '' : ' active');
           var aName = nav.querySelector('[data-tl-all-name]');
-          if (aName) aName.textContent = self3.visits.footprintMode ? '足迹朝代' : 'All / 全';
+          if (aName) aName.textContent = self3.visits.footprintMode ? '集章朝代' : '全部';
           var aPeriod = nav.querySelector('[data-tl-all-period]');
           if (aPeriod) {
             aPeriod.textContent = self3.visits.footprintMode
-              ? (self3.visitedDynasties().length + ' dynasties')
-              : (self3.museums.length + ' museums');
+              ? (self3.visitedDynasties().length + ' 个朝代')
+              : (self3.dynasties.length + ' 个地层');
           }
         } catch(e) { console.warn('[museum-map] syncTimeline', e); }
       };
@@ -197,6 +226,447 @@ window.museumApp = function() {
       this.$watch && this.$watch('museums', syncTimeline);
       // Belt-and-braces: re-sync after any drawer close or hash route change.
       window.addEventListener('hashchange', function(){ setTimeout(syncTimeline, 0); });
+
+      // Keep the 3D strata in step with the same state the map and index use.
+      var syncStrata = function(){ self3.syncStrata(); };
+      this.$watch && this.$watch('currentDynastyId', syncStrata);
+      this.$watch && this.$watch('visits.ids', syncStrata);
+      this.$watch && this.$watch('visits.footprintMode', syncStrata);
+      this.$watch && this.$watch('selectedMuseumId', function(id){
+        self3.syncStrata();
+        if (window.MuseumMap && window.MuseumMap.setSelected) window.MuseumMap.setSelected(id);
+      });
+      // The drawer covers part of the 3D view — shift the scene into what stays visible.
+      var syncInsets = function(){ self3.syncInsets(); };
+      this.$watch && this.$watch('drawer.open', syncInsets);
+      this.$watch && this.$watch('drawer.expanded', syncInsets);
+      window.addEventListener('resize', syncInsets);
+      syncInsets();
+    },
+
+    syncInsets() {
+      // The mobile sheet tops out just under the dynasty timeline, so the timeline stays
+      // whole and tappable above an expanded sheet.
+      var tl = document.querySelector('.timeline-wrap');
+      var sheetTop = tl ? Math.round(tl.getBoundingClientRect().bottom) : Math.round(window.innerHeight * 0.1);
+      document.documentElement.style.setProperty('--sheet-top', sheetTop + 'px');
+      if (!this._strataOk || !window.MuseumStrata) return;
+      var mobile = window.matchMedia && window.matchMedia('(max-width: 920px)').matches;
+      var b = 0, r = 0;
+      if (this.drawer.open) {
+        if (mobile) {
+          var vh = window.innerHeight, sheetH = vh - sheetTop;
+          b = Math.round(this.drawer.expanded ? sheetH : sheetH - vh * 0.34);
+        } else { var el = document.querySelector('.drawer'); r = el ? el.offsetWidth : 0; }
+      }
+      window.MuseumStrata.setInset(b, r);
+    },
+
+    /** A newly opened museum / dynasty starts at its hero, not wherever the last one was. */
+    resetDrawerScroll() {
+      var el = document.querySelector('.drawer');
+      if (el) el.scrollTop = 0;
+      this.drawer.scrolled = false;
+    },
+
+    /** Mobile sheets open half-height; reading further expands them. Past the hero, the
+     *  floating buttons get a scrim so scrolled text doesn't run under them. */
+    onDrawerScroll(e) {
+      var top = e.target ? e.target.scrollTop : 0;
+      if (!this.drawer.expanded && top > 24) this.drawer.expanded = true;
+      var scrolled = top > 56;
+      if (this.drawer.scrolled !== scrolled) this.drawer.scrolled = scrolled;
+    },
+
+    // ─── 时空 (3D strata) ───
+    initStrataWhenReady() {
+      var self = this;
+      if (window.MuseumStrata) { this.initStrata(); return; }
+      window.addEventListener('strata-ready', function(){ self.initStrata(); }, { once: true });
+    },
+
+    initStrata() {
+      var el = document.getElementById('strata');
+      if (!el || !window.MuseumStrata || this._strataOk) return;
+      var self = this;
+      var ok = window.MuseumStrata.init(el, {
+        museums: this.museums, dynasties: this.dynasties, geo: this.dynastyGeo, crossings: this.crossings,
+      }, {
+        onMuseum: function(id){ self.openMuseum(id); },
+        onDynasty: function(id){ if (id) self.selectDynasty(id); else self.clearDynastyFilter(); },
+      });
+      this._strataOk = !!ok;
+      if (!ok) { this.view = 'map'; return; }
+      window.MuseumStrata.setActive(this.view === 'strata');
+      this.syncStrata();
+    },
+
+    syncStrata() {
+      if (!this._strataOk || !window.MuseumStrata) return;
+      window.MuseumStrata.update({
+        mode: this.currentDynastyId ? 'dynasty' : (this.visits.footprintMode ? 'footprint' : 'all'),
+        dynastyId: this.currentDynastyId,
+        visitedIds: this.visits.ids.slice(),
+        selectedId: this.selectedMuseumId,
+      });
+    },
+
+    setView(v) {
+      if (v === 'strata' && !this._strataOk) { this.flashToast('当前设备不支持 3D 视图'); v = 'map'; }
+      this.view = v;
+      try { window.localStorage.setItem('mmView', v); } catch(_) {}
+      if (window.MuseumStrata) window.MuseumStrata.setActive(v === 'strata');
+      if (v === 'map') {
+        setTimeout(function(){ if (window.MuseumMap && window.MuseumMap.map) window.MuseumMap.map.invalidateSize(); }, 60);
+      }
+    },
+
+    // ─── Museum lookups ───
+    museumById(id) {
+      for (var i = 0; i < this.museums.length; i++) if (this.museums[i].id === id) return this.museums[i];
+      return null;
+    },
+
+    /** Dynasty ids linked to a museum (curated + related), oldest first. */
+    linkedDynasties(museumId) {
+      var out = [];
+      this.dynasties.forEach(function(d){
+        var hit = (d.recommendedMuseums || []).some(function(r){ return r.museumId === museumId; })
+          || (d.relatedMuseums || []).some(function(r){ return r.museumId === museumId; });
+        if (hit) out.push(d);
+      });
+      return out;
+    },
+
+    dynastyById(id) {
+      return this.dynasties.find(function(x){ return x.id === id; }) || null;
+    },
+
+    layerNo(id) {
+      var i = this.dynasties.findIndex(function(x){ return x.id === id; });
+      return i + 1;
+    },
+
+    dynastyGlyph(d) {
+      var n = this.dynastyShortName(d).replace(/[：:].*$/, '').replace(/(朝|代)$/, '');
+      return Array.from(n).slice(0, 2).join('');
+    },
+
+    capitalsText(id) {
+      var g = this.dynastyGeo[id];
+      if (!g || !g.sites || !g.sites.length) return '';
+      if (g.converge) return '满天星斗 · ' + g.sites.map(function(s){ return s.name.replace(/（.*?）/, ''); }).join(' · ');
+      var trail = (g.trail || []).map(function(k){ return g.sites[k].name; });
+      var others = g.sites.filter(function(s, k){ return (g.trail || []).indexOf(k) < 0; }).map(function(s){ return s.name; });
+      return '都城 · ' + trail.join(' → ') + (others.length ? '（并立/陪都：' + others.join('、') + '）' : '');
+    },
+
+    neighborDynasty(dir) {
+      var i = this.dynasties.findIndex(function(x){ return x.id === this.currentDynastyId; }.bind(this));
+      if (i < 0) return null;
+      return this.dynasties[i + dir] || null;
+    },
+
+    stepDynasty(dir) {
+      var d = this.neighborDynasty(dir);
+      if (d) this.selectDynasty(d.id);
+    },
+
+    dynastyVisitCount(id) {
+      var d = this.dynastyById(id);
+      if (!d) return 0;
+      var self = this, seen = {}, n = 0;
+      (d.recommendedMuseums || []).concat(d.relatedMuseums || []).forEach(function(r){
+        if (r.museumId && !seen[r.museumId]) { seen[r.museumId] = true; if (self.visits.byId[r.museumId]) n++; }
+      });
+      return n;
+    },
+
+    tierBadge(m) {
+      var t = (m && m.tiers) || [];
+      if (t.indexOf('tier1') >= 0) return { label: '一级', cls: '' };
+      if (t.indexOf('heritage-site') >= 0) return { label: '国保', cls: 'th' };
+      if (t.indexOf('tier2') >= 0) return { label: '二级', cls: 't2' };
+      return { label: '', cls: '' };
+    },
+
+    // ─── Seals (馆印) — every museum carves its own ───
+    sealHtml(m, extraCls) {
+      var s = (m && m.seal) || { t: (m && m.name || '印').slice(0, 2), s: 0, y: 1, r: -6 };
+      var chars = Array.from(s.t);
+      var shape = ['sq', 'rd', 'ci', 'ov'][s.s] || 'sq';
+      var cls = 'seal seal-' + shape + ' seal-n' + Math.min(4, chars.length) + (s.y ? ' seal-yin' : ' seal-yang') + (extraCls ? ' ' + extraCls : '');
+      return '<span class="' + cls + '" style="--r:' + s.r + 'deg"><span class="seal-t">' + this.escape(s.t) + '</span></span>';
+    },
+
+    stampMuseums() {
+      var self = this;
+      return this.visitedMuseums().slice().sort(function(a, b){
+        return ((self.visits.byId[b.id] || {}).visitedAt || 0) - ((self.visits.byId[a.id] || {}).visitedAt || 0);
+      });
+    },
+
+    visitDate(id) {
+      var v = this.visits.byId[id];
+      if (!v || !v.visitedAt) return '';
+      var d = new Date(v.visitedAt);
+      return d.getFullYear() + '.' + String(d.getMonth() + 1).padStart(2, '0') + '.' + String(d.getDate()).padStart(2, '0');
+    },
+
+    visitedCityCount() {
+      var seen = {};
+      this.visitedMuseums().forEach(function(m){ if (m.city) seen[m.city] = true; });
+      return Object.keys(seen).length;
+    },
+
+    collectorRank() {
+      var n = this.visits.ids.length;
+      var ranks = RANKS;
+      var cur = ranks[0], next = null;
+      for (var i = 0; i < ranks.length; i++) { if (n >= ranks[i].at) cur = ranks[i]; else { next = ranks[i]; break; } }
+      return { title: cur.title, next: next ? ('再集 ' + (next.at - n) + ' 枚 → ' + next.title) : '已是最高称号' };
+    },
+
+    dynastyProgress() {
+      var self = this;
+      return this.dynasties.map(function(d){
+        var seen = {}, total = 0, hit = 0;
+        (d.recommendedMuseums || []).concat(d.relatedMuseums || []).forEach(function(r){
+          if (!r.museumId || seen[r.museumId]) return;
+          seen[r.museumId] = true; total++;
+          if (self.visits.byId[r.museumId]) hit++;
+        });
+        return { id: d.id, name: self.dynastyShortName(d).replace(/[：:].*$/, ''), total: total, hit: hit, pct: total ? Math.round(hit / total * 100) : 0 };
+      });
+    },
+
+    // ─── 行程 (route planning) ───
+    saveTrip() {
+      try { window.localStorage.setItem('mmTrip', JSON.stringify(this.trip)); } catch(_) {}
+      if (this.tripMode) this.refreshMarkers();
+    },
+
+    inTrip(id) { return this.trip.ids.indexOf(id) >= 0; },
+
+    toggleTrip(id) {
+      var i = this.trip.ids.indexOf(id);
+      if (i >= 0) { this.trip.ids.splice(i, 1); this.flashToast('已移出行程'); }
+      else { this.trip.ids.push(id); this.trip.order = ''; this.flashToast('已加入行程 · 共 ' + this.trip.ids.length + ' 站'); }
+      this.saveTrip();
+      if (this.drawer.open && this.drawer.kind === 'museum' && this._drawerMuseum && this._drawerMuseum.id === id) {
+        this.drawer.sections = this.buildMuseumSections(this._drawerMuseum);
+      }
+    },
+
+    toggleTripMode() {
+      this.tripMode = !this.tripMode;
+      if (this.tripMode) {
+        this.visits.footprintMode = false;
+        this.tocOpen = true;
+        if (this.view !== 'map') this.setView('map');
+      }
+      this.refreshMarkers();
+    },
+
+    tripMuseums() {
+      var self = this;
+      return this.trip.ids.map(function(id){ return self.museumById(id); }).filter(Boolean);
+    },
+
+    kmBetween(a, b) {
+      if (!a || !b) return 0;
+      var R = 6371, toRad = Math.PI / 180;
+      var dLat = (b.lat - a.lat) * toRad, dLng = (b.lng - a.lng) * toRad;
+      var h = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(a.lat * toRad) * Math.cos(b.lat * toRad) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+      return 2 * R * Math.asin(Math.sqrt(h));
+    },
+
+    tripLegKm(i) {
+      var ms = this.tripMuseums();
+      return Math.round(this.kmBetween(ms[i - 1], ms[i]));
+    },
+
+    tripTotalKm() {
+      var ms = this.tripMuseums(), t = 0;
+      for (var i = 1; i < ms.length; i++) t += this.kmBetween(ms[i - 1], ms[i]);
+      return Math.round(t);
+    },
+
+    tripCities() {
+      var seen = [];
+      this.tripMuseums().forEach(function(m){ if (m.city && seen.indexOf(m.city) < 0) seen.push(m.city); });
+      return seen;
+    },
+
+    moveTrip(i, dir) {
+      var j = i + dir;
+      if (j < 0 || j >= this.trip.ids.length) return;
+      var ids = this.trip.ids.slice();
+      var t = ids[i]; ids[i] = ids[j]; ids[j] = t;
+      this.trip.ids = ids; this.trip.order = '';
+      this.saveTrip();
+    },
+
+    /** 路线之旅: greedy nearest-neighbour from the first stop. */
+    sortTripByRoute() {
+      var ms = this.tripMuseums();
+      if (ms.length < 2) return;
+      var rest = ms.slice(1), out = [ms[0]], self = this;
+      while (rest.length) {
+        var last = out[out.length - 1], bi = 0, bd = Infinity;
+        rest.forEach(function(m, i){ var d = self.kmBetween(last, m); if (d < bd) { bd = d; bi = i; } });
+        out.push(rest.splice(bi, 1)[0]);
+      }
+      this.trip.ids = out.map(function(m){ return m.id; });
+      this.trip.order = 'route';
+      this.saveTrip();
+    },
+
+    /** The earliest dynasty layer a museum holds — used to walk history in order. */
+    eraIndex(m) {
+      var ds = this.linkedDynasties(m.id);
+      if (!ds.length) return 999;
+      var self = this;
+      return Math.min.apply(null, ds.map(function(d){ return self.layerNo(d.id); }));
+    },
+
+    tripEraLabel(m) {
+      var i = this.eraIndex(m);
+      return i < 999 ? this.dynastyShortName(this.dynasties[i - 1]).replace(/[：:].*$/, '') : '';
+    },
+
+    /** 时间之旅: order stops by the oldest era each museum holds. */
+    sortTripByTime() {
+      var self = this;
+      var ms = this.tripMuseums().slice().sort(function(a, b){ return self.eraIndex(a) - self.eraIndex(b); });
+      this.trip.ids = ms.map(function(m){ return m.id; });
+      this.trip.order = 'time';
+      this.saveTrip();
+    },
+
+    clearTrip() {
+      if (!window.confirm('清空行程？')) return;
+      this.trip = { ids: [], order: '' };
+      this.saveTrip();
+    },
+
+    planTripWithAI() {
+      var self = this;
+      var ms = this.tripMuseums();
+      if (!ms.length) return;
+      var lines = ms.map(function(m, i){
+        var eras = self.linkedDynasties(m.id).map(function(d){ return self.dynastyShortName(d).replace(/[：:].*$/, ''); }).slice(0, 4).join('/');
+        return (i + 1) + '. ' + m.name + (m.city ? '（' + m.city + '）' : '') + (eras ? ' · 馆藏朝代：' + eras : '');
+      });
+      var mode = this.trip.order === 'time' ? '按朝代先后（时间之旅）' : '按地理顺路（路线之旅）';
+      var prompt = '我想把这些博物馆串成一次旅行，请' + mode + '帮我排一个按天的行程：每天去哪几座、为什么这样排、每座馆最值得看的镇馆之宝和展厅，以及城市之间怎么走。\\n\\n' + lines.join('\\n');
+      this.askGuide(prompt);
+    },
+
+    planDynastyJourney(id) {
+      var d = this.dynastyById(id);
+      if (!d) return;
+      var name = this.dynastyTitle() || this.dynastyShortName(d);
+      this.askGuide('以「' + name + '」为主线，帮我设计一次时间之旅：按这个朝代的都城迁徙与大事先后，串起最值得去的博物馆和遗址，告诉我每一站能看到这个朝代的什么，以及怎么在地理上顺路。');
+    },
+
+    /** Seed the guide with a question and send it. */
+    askGuide(text) {
+      this.tocOpen = false;
+      this.drawer.open = false;
+      this.chat.open = true;
+      this.chat.input = text;
+      var self = this;
+      setTimeout(function(){ self.sendChat(); }, 80);
+    },
+
+    // ─── 附近 (geolocation) & list ordering ───
+    locateMe() {
+      if (!navigator.geolocation) { this.flashToast('当前浏览器不支持定位'); return; }
+      var self = this;
+      this.geo.locating = true;
+      navigator.geolocation.getCurrentPosition(function(pos){
+        self.geo.lat = pos.coords.latitude;
+        self.geo.lng = pos.coords.longitude;
+        self.geo.locating = false;
+        self.listSort = 'near';
+        if (window.MuseumMap && window.MuseumMap.setUser) window.MuseumMap.setUser(self.geo.lat, self.geo.lng);
+        var near = self.museums.slice().sort(function(a, b){ return self.distanceTo(a) - self.distanceTo(b); })[0];
+        self.flashToast(near ? ('离你最近：' + near.name + ' · ' + self.distanceLabel(near)) : '已定位');
+      }, function(){
+        self.geo.locating = false;
+        self.flashToast('没能获取位置');
+      }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 600000 });
+    },
+
+    distanceTo(m) {
+      if (this.geo.lat == null) return Infinity;
+      return this.kmBetween({ lat: this.geo.lat, lng: this.geo.lng }, m);
+    },
+
+    distanceLabel(m) {
+      var d = this.distanceTo(m);
+      if (!isFinite(d)) return '';
+      return d < 10 ? d.toFixed(1) + ' km' : Math.round(d) + ' km';
+    },
+
+    listSortLabel() {
+      return this.listSort === 'city' ? '按城市' : (this.listSort === 'near' ? '离我近' : '默认');
+    },
+
+    cycleListSort() {
+      var order = ['default', 'city'];
+      if (this.geo.lat != null) order.push('near');
+      var i = order.indexOf(this.listSort);
+      this.listSort = order[(i + 1) % order.length];
+      if (this.listSort === 'city') this.flashToast('按城市分组');
+    },
+
+    /** Index rows, optionally grouped under city headings. */
+    listRows() {
+      var ms = this.filteredMuseums.slice(), self = this;
+      if (this.listSort === 'near' && this.geo.lat != null) {
+        ms.sort(function(a, b){ return self.distanceTo(a) - self.distanceTo(b); });
+        return ms.map(function(m){ return { type: 'm', key: m.id, m: m }; });
+      }
+      if (this.listSort !== 'city') return ms.map(function(m){ return { type: 'm', key: m.id, m: m }; });
+      var groups = {}, order = [];
+      ms.forEach(function(m){
+        var c = m.city || '其他';
+        if (!groups[c]) { groups[c] = []; order.push(c); }
+        groups[c].push(m);
+      });
+      order.sort(function(a, b){ return groups[b].length - groups[a].length || a.localeCompare(b, 'zh'); });
+      var rows = [];
+      order.forEach(function(c){
+        rows.push({ type: 'h', key: 'h:' + c, label: c, count: groups[c].length });
+        groups[c].forEach(function(m){ rows.push({ type: 'm', key: m.id, m: m }); });
+      });
+      return rows;
+    },
+
+    nearbyMuseums(m, maxKm, limit) {
+      var self = this;
+      return this.museums
+        .filter(function(x){ return x.id !== m.id && x.lat && x.lng; })
+        .map(function(x){ return { m: x, km: self.kmBetween(m, x) }; })
+        .filter(function(x){ return x.km <= maxKm; })
+        .sort(function(a, b){ return a.km - b.km; })
+        .slice(0, limit);
+    },
+
+    /** Museums standing on one of this dynasty's own sites (此地即彼时). */
+    onSiteMuseums(dynastyId) {
+      var self = this, out = [];
+      Object.keys(this.crossings).forEach(function(mid){
+        (self.crossings[mid] || []).forEach(function(c){
+          if (c.dynastyId === dynastyId && c.onSite) {
+            var m = self.museumById(mid);
+            if (m) out.push({ m: m, c: c });
+          }
+        });
+      });
+      return out.sort(function(a, b){ return a.c.km - b.c.km; });
     },
 
     commands: [
@@ -245,7 +715,13 @@ window.museumApp = function() {
     refreshMarkers() {
       var self = this;
       var d = this.currentDynasty();
-      if (this.visits.footprintMode) {
+      if (window.MuseumMap.clearRoute) window.MuseumMap.clearRoute();
+      if (this.tripMode) {
+        var stops = this.tripMuseums();
+        window.MuseumMap.setMarkers(stops, function(id){ self.openMuseum(id); }, { recommended: true, isVisited: function(id){ return self.isVisited(id); } });
+        window.MuseumMap.clearEvents();
+        if (window.MuseumMap.setRoute) window.MuseumMap.setRoute(stops);
+      } else if (this.visits.footprintMode) {
         var visited = this.visitedMuseums();
         window.MuseumMap.setMarkers(visited, function(id){ self.openMuseum(id); }, { recommended: true, isVisited: function(){ return true; } });
         window.MuseumMap.clearEvents();
@@ -267,6 +743,7 @@ window.museumApp = function() {
         window.MuseumMap.setMarkers(this.museums, function(id){ self.openMuseum(id); }, { isVisited: function(id){ return self.isVisited(id); }, weightById: weightAll });
         window.MuseumMap.clearEvents();
       }
+      if (window.MuseumMap.setSelected) window.MuseumMap.setSelected(this.selectedMuseumId);
     },
 
     visitedMuseums() {
@@ -479,9 +956,10 @@ window.museumApp = function() {
       var d = this.currentDynasty();
       if (!d) return;
       this.refreshMarkers();
-      if (d.center && d.center.lat && d.center.lng) {
-        window.MuseumMap.flyTo(d.center.lat, d.center.lng, 5);
-      }
+      var g = this.dynastyGeo[d.id];
+      var focus = g && g.sites && g.sites.length ? g.sites[(g.trail && g.trail.length) ? g.trail[0] : 0] : null;
+      if (focus) window.MuseumMap.flyTo(focus.lat, focus.lng, 5);
+      else if (d.center && d.center.lat && d.center.lng) window.MuseumMap.flyTo(d.center.lat, d.center.lng, 5);
       this.openDynastyDrawer(d);
       this.flashCaption();
     },
@@ -510,13 +988,17 @@ window.museumApp = function() {
         ? (name.replace(/[（(][^)）]*[)）]\s*$/, '').trim() || name)
         : name;
       this.drawer = {
-        open: true, loading: false, error: false, kind: 'dynasty',
+        open: true, expanded: false, loading: false, error: false, kind: 'dynasty',
         title: title,
         subtitle: period,
+        kicker: '朝代地层 · NO.' + String(this.layerNo(d.id)).padStart(2, '0'),
+        glyph: this.dynastyGlyph(d),
+        heroImage: '',
         dynastyId: d.id,
         sections: this.buildDynastySections(d),
         _loadFn: () => this.openDynastyDrawer(d),
       };
+      this.resetDrawerScroll();
       this.setHashRoute({ kind: 'dynasty', id: d.id });
       // Auto-fetch cached dynasty review (no LLM call)
       this.fetchDynastyReview(d.id);
@@ -525,64 +1007,143 @@ window.museumApp = function() {
     buildDynastySections(d) {
       var self = this;
       var sections = [];
-      function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-      function md(s){ try { return window.MuseumChat.renderMarkdown(String(s||'')); } catch(e){ return '<p>' + escapeHtml(s) + '</p>'; } }
-      // Sidebar (TOC) is permanently visible on desktop (>= 920px) and shows
-      // dynasty.overview already — skip the duplicate "Overview · 概述" section.
+      var esc = this.escapeAttr;
+      function md(s){ try { return window.MuseumChat.renderMarkdown(String(s||'')); } catch(e){ return '<p>' + esc(s) + '</p>'; } }
+      // Sidebar (TOC) is permanently visible on desktop (>= 920px) and shows the
+      // dynasty head (overview, capitals, stats, prev/next) — don't repeat it here.
       var tocVisible = (typeof window !== 'undefined') && window.matchMedia
         && window.matchMedia('(min-width: 920px)').matches;
-      if (d.overview && !tocVisible) sections.push({ title: 'Overview · 概述', html: '<div class="md">' + md(d.overview) + '</div>' });
+      var g = this.dynastyGeo[d.id];
+      var idx = this.dynasties.indexOf(d);
+      var prev = this.dynasties[idx - 1], next = this.dynasties[idx + 1];
+
+      if (!tocVisible) {
+        var cap = this.capitalsText(d.id);
+        sections.push({ key: 'intro', title: '', cls: 'sec-intro', html:
+          (cap ? '<div class="capital-line">' + ICONS.pin + '<span>' + esc(cap) + '</span></div>' : '')
+          + (d.overview ? '<div class="md-rich intro-overview">' + md(d.overview) + '</div>' : '')
+        });
+      }
+
+      // 都城迁徙 — how the centre moved into, and within, this dynasty.
+      if (g && g.sites && g.sites.length) {
+        var moves = '';
+        var pg = prev && this.dynastyGeo[prev.id];
+        var entry = g.trail && g.trail.length ? g.sites[g.trail[0]] : null;
+        var prevExit = pg && pg.trail && pg.trail.length ? pg.sites[pg.trail[pg.trail.length - 1]] : null;
+        if (prevExit && entry) {
+          var km = Math.round(this.kmBetween(prevExit, entry));
+          moves += '<div class="move-line"><span class="move-from">' + esc(this.dynastyShortName(prev).replace(/[：:].*$/, '')) + ' · ' + esc(prevExit.name) + '</span>'
+            + '<span class="move-arrow">' + ICONS.arrowRight + '</span><span class="move-to">' + esc(entry.name) + '</span>'
+            + '<span class="move-km">' + (km < 15 ? '原地延续' : '迁徙约 ' + km + ' km') + '</span></div>';
+        }
+        var siteRows = g.sites.map(function(s, k){
+          var onTrail = (g.trail || []).indexOf(k) >= 0;
+          var role = s.role === 'culture' ? '文化中心' : (onTrail ? '都城' : '陪都 · 并立');
+          return '<li class="' + (onTrail ? 'on-trail' : '') + '"><span class="site-name">' + esc(s.name) + '</span><span class="site-role">' + role + (s.note ? ' · ' + esc(s.note) : '') + '</span></li>';
+        }).join('');
+        var lead = g.converge
+          ? '<p class="move-note">满天星斗：这一层没有唯一的中心。各地文化各自生长，再汇向下一层的二里头。</p>'
+          : '';
+        sections.push({ key: 'capitals', title: '都城迁徙', en: 'THE MOVING CENTRE', html: moves + lead + '<ol class="site-list">' + siteRows + '</ol>' });
+      }
+
+      // 此地即彼时 — museums standing on this dynasty's own ground.
+      var onSite = this.onSiteMuseums(d.id);
+      if (onSite.length) {
+        sections.push({ key: 'onsite', title: '此地即彼时', en: 'ON SITE', count: onSite.length + ' 座', html:
+          '<p class="move-note">这些博物馆就建在当年的现场——今天走进去，就站在了历史站过的地方。</p><div class="rec-list">'
+          + onSite.map(function(x){
+            return '<div class="rec-card dynasty-rec is-onsite" data-museum-id="' + esc(x.m.id) + '">'
+              + '<span class="rec-seal">' + self.sealHtml(x.m, 'seal-sm') + '</span>'
+              + '<div class="rec-main"><div class="rec-name">' + esc(x.m.name) + (self.isVisited(x.m.id) ? '<span class="mini-seal">印</span>' : '') + '</div>'
+              + '<div class="rec-loc">' + ICONS.pin + esc(x.c.place) + ' · ' + (x.c.km < 1 ? '原址' : x.c.km + ' km') + '</div></div>'
+              + '<span class="rec-go">' + ICONS.arrowRight + '</span></div>';
+          }).join('') + '</div>' });
+      }
+
       if (d.culture && d.culture.length) {
-        sections.push({ title: 'Culture · 文化', html: d.culture.map(function(c){
-          return '<div style="margin-bottom:14px;"><div style="font-family:var(--display-cn);font-weight:600;font-size:15px;margin-bottom:4px;">' + escapeHtml(c.category) + '</div><div class="md" style="font-size:14px;color:var(--ink-mid);">' + md(c.description || '') + '</div></div>';
-        }).join('') });
+        sections.push({ key: 'culture', title: '文化', en: 'CULTURE', html: '<div class="culture-grid">' + d.culture.map(function(c){
+          return '<div class="culture-card"><div class="cc-cat">' + esc(c.category) + '</div><div class="cc-desc">' + md(c.description || '') + '</div></div>';
+        }).join('') + '</div>' });
       }
       if (d.events && d.events.length) {
-        sections.push({ title: 'Chronicle · 大事记', html: d.events.map(function(e){
-          return '<div class="event-row"><div class="date">' + escapeHtml(e.date || '') + '</div><div class="text md">' + md(e.event || '') + '</div></div>';
-        }).join('') });
+        sections.push({ key: 'events', title: '大事记', en: 'CHRONICLE', html: '<ol class="chronicle">' + d.events.map(function(e){
+          return '<li><div class="ch-date">' + esc(e.date || '') + '</div><div class="ch-text">' + md(e.event || '') + '</div></li>';
+        }).join('') + '</ol>' });
+      }
+      function recCard(r, i, cls) {
+        var m = r.museumId ? self.museumById(r.museumId) : null;
+        var visited = r.museumId && self.visits.byId[r.museumId];
+        var loc = r.location || (m && m.city) || '';
+        return '<div class="rec-card ' + (r.museumId ? 'dynasty-rec' : 'static') + (cls ? ' ' + cls : '') + '"' + (r.museumId ? ' data-museum-id="' + esc(r.museumId) + '"' : '') + '>'
+          + '<span class="rec-num">' + String(i + 1).padStart(2, '0') + '</span>'
+          + '<div class="rec-main"><div class="rec-name">' + esc(r.name) + (visited ? '<span class="mini-seal" title="已集章">印</span>' : '') + '</div>'
+          + (loc ? '<div class="rec-loc">' + ICONS.pin + esc(loc) + '</div>' : '')
+          + (r.reason ? '<div class="rec-reason">' + md(r.reason) + '</div>' : '') + '</div>'
+          + (r.museumId ? '<span class="rec-go">' + ICONS.arrowRight + '</span>' : '<span></span>') + '</div>';
       }
       if (d.recommendedMuseums && d.recommendedMuseums.length) {
-        var visitedMap = this.visits.byId || {};
-        sections.push({ title: 'Featured Museums · 推荐博物馆', html: d.recommendedMuseums.map(function(r, i){
-          var attrs = r.museumId ? ' data-museum-id="' + escapeHtml(r.museumId) + '" class="rec-card dynasty-rec"' : ' class="rec-card" style="cursor:default;"';
-          var check = (r.museumId && visitedMap[r.museumId]) ? '<span class="rec-visited" title="已打卡">✓</span>' : '';
-          return '<div' + attrs + '><span class="num">' + (i+1).toString().padStart(2,'0') + '</span><div><div class="name">' + escapeHtml(r.name) + check + '</div><div class="loc">' + escapeHtml(r.location || '') + '</div><div class="reason md">' + md(r.reason || '') + '</div></div></div>';
-        }).join('') });
+        sections.push({ key: 'rec', title: '推荐博物馆', en: 'CURATED', count: d.recommendedMuseums.length + ' 座', html: '<div class="rec-list">' + d.recommendedMuseums.map(function(r, i){ return recCard(r, i); }).join('') + '</div>' });
       }
       if (d.relatedMuseums && d.relatedMuseums.length) {
-        var visitedMap2 = this.visits.byId || {};
-        sections.push({ title: 'Also Relevant · 也有相关展品', html: d.relatedMuseums.map(function(r, i){
-          var check = visitedMap2[r.museumId] ? '<span class="rec-visited" title="已打卡">✓</span>' : '';
-          return '<div data-museum-id="' + escapeHtml(r.museumId) + '" class="rec-card dynasty-rec"><span class="num">' + (i+1).toString().padStart(2,'0') + '</span><div><div class="name">' + escapeHtml(r.name) + check + '</div><div class="loc">' + escapeHtml(r.location || '') + '</div><div class="reason md">' + md(r.reason || '') + '</div></div></div>';
-        }).join('') });
+        sections.push({ key: 'related', title: '也有相关展品', en: 'ALSO HOLDS', count: d.relatedMuseums.length + ' 座', html: '<div class="rec-list">' + d.relatedMuseums.map(function(r, i){ return recCard(r, i, 'is-related'); }).join('') + '</div>' });
       }
+      sections.push({ key: 'journey', title: '', cls: 'sec-journey', html:
+        '<button class="journey-btn" data-ask-dynasty="' + esc(d.id) + '"><span class="journey-ic">' + ICONS.sparkle + '</span><span><b>沿这一层，走一次时间之旅</b><small>让讲解员按都城与大事先后，帮你串起博物馆与遗址</small></span></button>'
+        + '<div class="dyn-step-row">'
+        + (prev ? '<button class="dyn-step" data-dyn-go="' + esc(prev.id) + '">' + ICONS.arrowLeft + '<span><small>上一层</small>' + esc(this.dynastyShortName(prev).replace(/[：:].*$/, '')) + '</span></button>' : '<span></span>')
+        + (next ? '<button class="dyn-step is-next" data-dyn-go="' + esc(next.id) + '"><span><small>下一层</small>' + esc(this.dynastyShortName(next).replace(/[：:].*$/, '')) + '</span>' + ICONS.arrowRight + '</button>' : '<span></span>')
+        + '</div>' });
       return sections;
     },
 
     async openMuseum(id) {
       this.selectedMuseumId = id;
       this.tocOpen = false;
-      this.drawer = { open: true, loading: true, error: false, kind: 'museum', title: '', subtitle: '', sections: [], _loadFn: () => this.openMuseum(id) };
+      var head = this.museumById(id);
+      var token = this._openToken = (this._openToken || 0) + 1;
+      // Hopping museum → museum from inside an expanded sheet keeps it expanded.
+      var keepExpanded = !!(this.drawer.open && this.drawer.expanded);
+      this.drawer = {
+        open: true, expanded: keepExpanded, loading: true, error: false, kind: 'museum',
+        title: head ? head.name : '', subtitle: head ? (head.corePeriod || '') : '',
+        kicker: head ? this.museumKicker(head) : '', glyph: head && head.seal ? head.seal.t : '',
+        heroImage: '', heroAlt: '', heroCredit: '',
+        sections: [], _loadFn: () => this.openMuseum(id),
+      };
+      this.resetDrawerScroll();
       this.setHashRoute({ kind: 'museum', id: id });
-      var head = this.museums.find(function(x){ return x.id === id; });
-      if (head) {
-        this.drawer.title = head.name;
-        this.drawer.subtitle = head.corePeriod || '';
-      }
       try {
         var res = await fetch('/api/museums/' + encodeURIComponent(id));
         if (!res.ok) throw new Error('http ' + res.status);
         var m = await res.json();
+        if (token !== this._openToken) return; // a newer museum was opened meanwhile
+        this._drawerMuseum = m;
+        var hero = (m.artifacts || []).filter(function(a){ return a.image; })[0];
         this.drawer.title = m.name;
-        this.drawer.subtitle = (m.location || '') + (m.level ? ' · ' + m.level : '');
+        this.drawer.subtitle = m.corePeriod || '';
+        if (hero) {
+          this.drawer.heroImage = hero.image;
+          this.drawer.heroAlt = hero.name;
+          this.drawer.heroCredit = [hero.imageAttribution, hero.imageLicense === 'fair-use' ? '' : hero.imageLicense].filter(Boolean).join(' · ');
+        }
         this.drawer.sections = this.buildMuseumSections(m);
         this.drawer.loading = false;
       } catch (e) {
+        if (token !== this._openToken) return;
         this.drawer.loading = false;
         this.drawer.error = true;
       }
     },
+
+    museumKicker(m) {
+      var t = (m && m.tiers) || [];
+      var tier = t.indexOf('tier1') >= 0 ? '国家一级博物馆' : (t.indexOf('tier2') >= 0 ? '国家二级博物馆' : (t.indexOf('heritage-site') >= 0 ? '世遗 · 国保' : '博物馆'));
+      return tier + (m && m.city ? ' · ' + m.city : '');
+    },
+
+    escapeAttr(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); },
 
     reloadDrawer() {
       if (this.drawer._loadFn) this.drawer._loadFn();
@@ -594,6 +1155,7 @@ window.museumApp = function() {
       // that can leave the timeline in a weird state on certain machines.
       this.drawer.open = false;
       this.selectedMuseumId = null;
+      this._openToken = (this._openToken || 0) + 1;
       this.setHashRoute(null);
       // Defensive re-sync of timeline DOM after drawer close.
       var nav = document.querySelector('[data-timeline]');
@@ -989,9 +1551,15 @@ window.museumApp = function() {
         if (this.drawer.open && this.drawer.kind === 'dynasty' && this.drawer.dynastyId) {
           this.fetchDynastyReview(this.drawer.dynastyId);
         }
-        // Refresh drawer so the toggle button label updates
+        // Stamped just now → let the seal land with its animation, without reloading the drawer.
+        if (!visited && this.isVisited(id)) {
+          this._justStamped = id;
+          if (navigator.vibrate) { try { navigator.vibrate([18, 40, 70]); } catch(_) {} }
+          if (!this.visits.muted) this.playRevealSound();
+        }
         if (this.drawer.open && this.drawer.kind === 'museum' && this.selectedMuseumId === id) {
-          this.openMuseum(id);
+          if (this._drawerMuseum && this._drawerMuseum.id === id) this.drawer.sections = this.buildMuseumSections(this._drawerMuseum);
+          else this.openMuseum(id);
         }
       } catch(_) {}
     },
@@ -1152,6 +1720,8 @@ window.museumApp = function() {
       this.visits.footprintMode = !this.visits.footprintMode;
       if (this.visits.footprintMode) {
         this.currentDynastyId = null;
+        this.tripMode = false;
+        this.tocOpen = true;
       }
       this.refreshMarkers();
     },
@@ -1221,7 +1791,7 @@ window.museumApp = function() {
       if (typeof document === 'undefined') return;
       var overlay = document.createElement('div');
       overlay.className = 'confetti-overlay';
-      var COLORS = ['#B73E18', '#E8B14A', '#3F6D4E', '#1F1A17', '#F4EFE3'];
+      var COLORS = ['#E0492F', '#D4B072', '#EFE8DA', '#8DB8A9', '#F2D79E'];
       var N = 80;
       var W = window.innerWidth, H = window.innerHeight;
       var pieces = [];
@@ -1798,58 +2368,159 @@ window.museumApp = function() {
     },
 
     onDrawerClick(e) {
-      var visitBtn = e.target.closest && e.target.closest('.visit-toggle');
+      if (!e.target.closest) return;
+      var visitBtn = e.target.closest('.visit-toggle');
       if (visitBtn) {
         var vid = visitBtn.getAttribute('data-museum-id');
         if (vid) this.toggleVisit(vid);
         return;
       }
-      var el = e.target.closest && e.target.closest('.dynasty-rec');
+      var tripBtn = e.target.closest('.trip-toggle');
+      if (tripBtn) {
+        var tid = tripBtn.getAttribute('data-museum-id');
+        if (tid) this.toggleTrip(tid);
+        return;
+      }
+      var go = e.target.closest('[data-dyn-go]');
+      if (go) { this.selectDynasty(go.getAttribute('data-dyn-go')); return; }
+      var ask = e.target.closest('[data-ask-dynasty]');
+      if (ask) { this.planDynastyJourney(ask.getAttribute('data-ask-dynasty')); return; }
+      var el = e.target.closest('.dynasty-rec');
       if (!el) return;
       var id = el.getAttribute('data-museum-id');
       if (id) this.openMuseum(id);
     },
 
     buildMuseumSections(m) {
+      var self = this;
       var sections = [];
-      function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-      var visited = !!this.visits.byId[m.id];
-      var when = visited && this.visits.byId[m.id].visitedAt ? new Date(this.visits.byId[m.id].visitedAt).toLocaleDateString() : '';
-      var label = visited ? '✓ 已打卡 · ' + when + '（点击撤销）' : '＋ 打卡 · 我去过';
-      sections.push({
-        title: 'Visit · 足迹',
-        html: '<button class="visit-toggle" data-museum-id="' + escapeHtml(m.id) + '" style="font-family:var(--sans);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;padding:10px 16px;border:0.5px solid ' + (visited ? 'var(--ink)' : 'var(--vermilion)') + ';background:' + (visited ? 'var(--ink)' : 'transparent') + ';color:' + (visited ? 'var(--paper)' : 'var(--vermilion)') + ';cursor:pointer;">' + label + '</button>',
-      });
-      if (m.specialty) sections.push({ title: 'Specialty · 特色', html: '<p>' + escapeHtml(m.specialty) + '</p>' });
-      if (m.dynastyCoverage) sections.push({ title: 'Coverage · 年代覆盖', html: '<p>' + escapeHtml(m.dynastyCoverage) + '</p>' });
+      var esc = this.escapeAttr;
+      var head = this.museumById(m.id) || m;
+      var visit = this.visits.byId[m.id];
+      var justStamped = this._justStamped === m.id;
+      this._justStamped = null;
+
+      // ── 馆印: stamp + trip ──
+      var stamp;
+      if (visit) {
+        var when = this.visitDate(m.id);
+        var nth = this.stampMuseums().slice().reverse().findIndex(function(x){ return x.id === m.id; }) + 1;
+        stamp = '<div class="stamp-row is-stamped' + (justStamped ? ' just-stamped' : '') + '">'
+          + '<span class="seal-mark">' + this.sealHtml(head, 'seal-lg') + '</span>'
+          + '<div class="stamp-meta"><div class="stamp-title">已集章' + (when ? ' · ' + when : '') + '</div>'
+          + '<div class="stamp-sub">' + (justStamped ? '这是你的第 ' + this.visits.ids.length + ' 枚馆印' : (this.isReadOnly ? 'TA 集章册里的第 ' : '你集章册里的第 ') + (nth || this.visits.ids.length) + ' 枚') + '</div>'
+          + (this.isReadOnly ? '' : '<button class="visit-toggle stamp-undo" data-museum-id="' + esc(m.id) + '">撤销这枚印</button>') + '</div></div>';
+      } else {
+        stamp = '<div class="stamp-row">'
+          + (this.isReadOnly ? '<div class="stamp-sub">TA 还没来过这里</div>' : '<button class="visit-toggle stamp-btn" data-museum-id="' + esc(m.id) + '"><span class="stamp-btn-seal">' + ICONS.seal + '</span>'
+          + '<span class="stamp-btn-text"><b>盖章打卡</b><small>来过这里，就收下这枚「' + esc((head.seal && head.seal.t) || '馆') + '」印</small></span></button>')
+          + '<div class="stamp-count"><b>' + this.visits.ids.length + '</b>枚已集</div></div>';
+      }
+      var inTrip = this.inTrip(m.id);
+      stamp += '<button class="trip-toggle trip-line' + (inTrip ? ' on' : '') + '" data-museum-id="' + esc(m.id) + '">' + ICONS.route
+        + '<span>' + (inTrip ? '已在行程中 · 第 ' + (this.trip.ids.indexOf(m.id) + 1) + ' 站（点击移出）' : '加入行程 · 把它串进你的路线') + '</span></button>';
+      sections.push({ key: 'stamp', title: '', cls: 'sec-visit', html: stamp });
+
+      // ── 展签 ──
+      var labelRows = [];
+      if (m.level) labelRows.push(['等级', m.level]);
+      if (m.location) labelRows.push(['所在', m.location]);
+      if (m.corePeriod) labelRows.push(['核心年代', m.corePeriod]);
+      if (labelRows.length) {
+        sections.push({ key: 'label', title: '展签', en: 'LABEL', html: '<dl class="label-card">' + labelRows.map(function(r){
+          return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd></div>';
+        }).join('') + '</dl>' });
+      }
+      if (m.specialty) sections.push({ key: 'specialty', title: '看点', en: 'HIGHLIGHTS', html: '<p class="lead">' + esc(m.specialty) + '</p>' });
+
+      // ── 此地即彼时 ──
+      var cross = this.crossings[m.id] || [];
+      if (cross.length) {
+        var onSite = cross.filter(function(c){ return c.onSite; });
+        var intro = onSite.length
+          ? '这座馆就站在历史的现场：今天的地址，曾是下面这些朝代的舞台。'
+          : '这座馆所在的城市，曾是下面这些朝代的舞台。';
+        sections.push({ key: 'cross', title: '此地即彼时', en: 'WHERE TIME MEETS PLACE', html: '<p class="move-note">' + intro + '</p><ul class="cross-list">' + cross.map(function(c){
+          var d = self.dynastyById(c.dynastyId);
+          var dn = d ? self.dynastyShortName(d).replace(/[：:].*$/, '') : c.dynastyId;
+          var place = c.kind === 'event' ? ((c.date ? c.date + ' · ' : '') + c.place) : c.place;
+          var tag = c.onSite ? '<span class="cross-tag on">原址' + (c.km >= 1 ? ' · ' + c.km + ' km' : '') + '</span>' : '<span class="cross-tag">同城 · ' + c.km + ' km</span>';
+          return '<li><button class="cross-dyn" data-dyn-go="' + esc(c.dynastyId) + '">' + esc(dn) + '</button><span class="cross-place">' + esc(place) + '</span>' + tag + '</li>';
+        }).join('') + '</ul>' });
+      }
+
       if (m.treasures && m.treasures.length) {
-        sections.push({ title: 'Treasures · 镇馆之宝', html: '<ul>' + m.treasures.map(function(t){ return '<li>' + escapeHtml(t) + '</li>'; }).join('') + '</ul>' });
+        sections.push({ key: 'treasures', title: '镇馆之宝', en: 'TREASURES', html: '<ol class="treasure-list">' + m.treasures.map(function(t, i){
+          return '<li><span class="t-num">' + String(i + 1).padStart(2, '0') + '</span><span class="t-name">' + esc(String(t).replace(/^\\s*\\d+[.、．]\\s*/, '')) + '</span></li>';
+        }).join('') + '</ol>' });
       }
-      if (m.halls && m.halls.length) {
-        sections.push({ title: 'Halls · 展厅', html: '<p>' + m.halls.map(escapeHtml).join('、') + '</p>' });
-      }
+
       if (m.artifacts && m.artifacts.length) {
-        sections.push({ title: 'Artifacts · 文物', html: m.artifacts.map(function(a){
-          var imgBlock = '';
+        var withImg = m.artifacts.filter(function(a){ return a.image; }).length;
+        sections.push({ key: 'artifacts', title: '展柜', en: 'COLLECTION', count: m.artifacts.length + ' 件' + (withImg ? ' · ' + withImg + ' 图' : ''), html: '<div class="vitrines">' + m.artifacts.map(function(a, i){
+          var stage = '';
           if (a.image) {
-            var att = a.imageAttribution ? escapeHtml(a.imageAttribution) : '';
-            var lic = a.imageLicense ? escapeHtml(a.imageLicense) : '';
-            var caption = lic === 'fair-use' ? att : [att, lic].filter(Boolean).join(' · ');
-            imgBlock = '<div class="artifact-image"><img src="' + escapeHtml(a.image) + '" alt="' + escapeHtml(a.name) + '" loading="lazy">' + (caption ? '<div class="artifact-image-caption">' + caption + '</div>' : '') + '</div>';
+            var lic = a.imageLicense || '';
+            var caption = [a.imageAttribution || '', lic === 'fair-use' ? '' : lic].filter(Boolean).join(' · ');
+            stage = '<figure class="vitrine-stage artifact-image"><img src="' + esc(a.image) + '" alt="' + esc(a.name) + '" loading="lazy">' + (caption ? '<figcaption class="artifact-image-caption">' + esc(caption) + '</figcaption>' : '') + '</figure>';
           }
-          return '<div class="artifact">' + imgBlock + '<div><span class="artifact-name">' + escapeHtml(a.name) + '</span>' + (a.period ? '<span class="artifact-period">' + escapeHtml(a.period) + '</span>' : '') + '</div><div class="artifact-desc">' + escapeHtml(a.description || '') + '</div></div>';
-        }).join('') });
+          var desc = String(a.description || '').replace(/^\\s*[—–-]+\\s*/, '');
+          return '<article class="vitrine' + (a.image ? '' : ' no-image') + '">' + stage
+            + '<div class="vitrine-label"><div class="vitrine-no">NO.' + String(i + 1).padStart(2, '0') + '</div>'
+            + '<h4 class="vitrine-name">' + esc(a.name) + '</h4>'
+            + (a.period ? '<span class="vitrine-period">' + esc(a.period) + '</span>' : '')
+            + (desc ? '<p class="vitrine-desc">' + esc(desc) + '</p>' : '') + '</div></article>';
+        }).join('') + '</div>' });
       }
-      if (m.dynastyConnections && m.dynastyConnections.length) {
-        sections.push({ title: 'Dynastic Ties · 朝代关联', html: m.dynastyConnections.map(function(c){
-          return '<div style="margin-bottom:10px;"><span style="font-family:var(--display-cn);font-weight:600;color:var(--vermilion);">' + escapeHtml(c.dynasty) + '</span> · <span style="color:var(--ink-mid);">' + escapeHtml(c.description || '') + '</span></div>';
-        }).join('') });
+
+      if (m.halls && m.halls.length) {
+        sections.push({ key: 'halls', title: '展厅', en: 'GALLERIES', html: '<div class="tag-list">' + m.halls.map(function(h){ return '<span class="tag">' + esc(h) + '</span>'; }).join('') + '</div>' });
       }
+
+      // ── 朝代: the strata this museum reaches ──
+      var linked = this.linkedDynasties(m.id);
+      var ties = (m.dynastyConnections || []);
+      if (linked.length || ties.length) {
+        var chips = linked.length ? '<div class="layer-chips">' + linked.map(function(d){
+          return '<button class="layer-chip" data-dyn-go="' + esc(d.id) + '">' + ICONS.layers + esc(self.dynastyShortName(d).replace(/[：:].*$/, '')) + '</button>';
+        }).join('') + '</div>' : '';
+        var tieHtml = ties.length ? '<div class="ties">' + ties.map(function(c){
+          return '<div class="tie"><span class="tie-dyn">' + esc(c.dynasty) + '</span><p>' + esc(c.description || '') + '</p></div>';
+        }).join('') + '</div>' : '';
+        sections.push({ key: 'ties', title: '它连着的朝代', en: 'STRATA', html: chips + tieHtml });
+      }
+
+      function chain(text) {
+        var parts = String(text || '').split(/\\s*(?:→|->|⟶)\\s*/).filter(Boolean);
+        if (parts.length < 3) return '<p>' + esc(text) + '</p>';
+        return '<ol class="chain">' + parts.map(function(p){ return '<li>' + esc(p) + '</li>'; }).join('') + '</ol>';
+      }
+      if (m.timeline) sections.push({ key: 'timeline', title: '馆史', en: 'HISTORY', html: chain(m.timeline) });
+      if (m.dynastyCoverage) sections.push({ key: 'coverage', title: '年代覆盖', en: 'COVERAGE', html: chain(m.dynastyCoverage) });
+
+      // ── 附近 · 路线之旅 ──
+      if (head.lat && head.lng) {
+        var near = this.nearbyMuseums(head, 120, 5);
+        if (near.length) {
+          sections.push({ key: 'nearby', title: '顺路还能去', en: 'NEARBY', html: '<div class="rec-list">' + near.map(function(x){
+            return '<div class="rec-card dynasty-rec is-near" data-museum-id="' + esc(x.m.id) + '">'
+              + '<span class="rec-seal">' + self.sealHtml(x.m, 'seal-sm') + '</span>'
+              + '<div class="rec-main"><div class="rec-name">' + esc(x.m.name) + (self.isVisited(x.m.id) ? '<span class="mini-seal">印</span>' : '') + '</div>'
+              + '<div class="rec-loc">' + ICONS.pin + esc([x.m.city, (x.km < 10 ? x.km.toFixed(1) : Math.round(x.km)) + ' km'].filter(Boolean).join(' · ')) + '</div></div>'
+              + '<span class="rec-go">' + ICONS.arrowRight + '</span></div>';
+          }).join('') + '</div>' });
+        }
+      }
+
       if (m.sources && m.sources.length) {
-        sections.push({ title: 'Sources · 信源', html: m.sources.map(function(s){
-          var url = /^https?:\\/\\//.test(s) ? s : null;
-          return url ? '<a href="' + url + '" target="_blank" rel="noopener" class="source-link">' + escapeHtml(url) + '</a>' : '<div class="source-link" style="cursor:default;color:var(--ink-mid);border-bottom-color:var(--rule-soft);">' + escapeHtml(s) + '</div>';
-        }).join('') });
+        sections.push({ key: 'sources', title: '信源', en: 'SOURCES', html: '<ul class="sources">' + m.sources.map(function(s){
+          var hit = String(s).match(/https?:\\/\\/[^\\s）)]+/);
+          if (!hit) return '<li><div class="source-link">' + esc(s) + '</div></li>';
+          var url = hit[0];
+          var label = String(s).replace(url, '').replace(/[\\s·:：]+$/, '').trim() || url;
+          var host = url.replace(/^https?:\\/\\//, '').split('/')[0];
+          return '<li><a class="source-link" href="' + esc(url) + '" target="_blank" rel="noopener"><span>' + esc(label) + '</span><span class="src-host">' + esc(host) + '</span></a></li>';
+        }).join('') + '</ul>' });
       }
       return sections;
     },
