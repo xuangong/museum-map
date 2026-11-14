@@ -210,7 +210,7 @@ function stringSound(deg, vel, pan, when, vk, o) {
   if (!ac || !dest) return [];
   const V = VOICES[vk] || VOICES.ks, srcs = [];
   try {
-    const t = Math.max(when || 0, ac.currentTime), f = (o.freq || degFreq(deg)) * (V.oct || 1), dur = o.dur || 0.5;
+    const t = Math.max(when || 0, ac.currentTime), f = (o.freq || degFreq(deg)) * (V.oct || 1) * (o.mul || 1), dur = o.dur || 0.5;
     const out = ac.createGain(); out.gain.value = 0.34 * V.g * Math.max(0.15, Math.min(1.3, vel));
     if (ac.createStereoPanner) { const pn = ac.createStereoPanner(); pn.pan.value = Math.max(-0.7, Math.min(0.7, pan || 0)); out.connect(pn); pn.connect(dest); }
     else out.connect(dest);
@@ -652,7 +652,37 @@ function init(container, data, cb) {
   // ensemble, and all twenty never exceed about six voices. Sound runs on the audio clock;
   // each frame plucks the strings whose notes have started on that clock.
   let play = null, playLayer = -1, playRest = false, playAct = new Set();
-  const BEAT = 0.36;
+  // Every performance is a new reading of the same score (see vary()); BEAT and rnd belong to it.
+  let BEAT = 0.36, rnd = Math.random, perf = { heads: [], lift: [], bow: [], dyn: [], plk: 0, mul: 1, semis: 0 };
+  function seeded(a) { return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  const pick = (xs) => xs[Math.floor(rnd() * xs.length)];
+  // Alternative openings (换头) for each phrase's first bar, checked against that bar's chord
+  // and leading by step into the bar after; the rest of each phrase and every cadence stay.
+  const HEADS = [
+    [[[5, 1], [7, 1], [8, 2]], [[10, 1], [9, 1], [8, 2]]],
+    [[[12, 1], [11, 1], [10, 1], [9, 1]], [[9, 2], [10, 1], [11, 1]]],
+    [[[9, 1], [8, 1], [7, 2]], [[6, 1], [7, 1], [8, 1], [9, 1]]],
+    [[[13, 2], [12, 1], [11, 1]], [[10, 1.5], [11, 0.5], [12, 2]]],
+    [[[11, 1], [10, 1], [9, 1], [8, 1]], [[12, 2], [10, 1], [9, 1]]],
+  ];
+  const PLUCK_PATS = [[0, 1, 2, 1, 3, 1, 2, 1], [0, 2, 1, 2, 3, 2, 1, 2], [0, 1, 2, 3, 2, 1, 2, 1]];
+  // Decide this performance: key (whole-tone moves only, so the scale stays the scale), tempo,
+  // openings, which phrases lift an octave, the 弹拨 figure, the 拉弦 interval, the dynamics.
+  function vary(seed) {
+    rnd = seeded(seed);
+    const semis = pick([-2, 0, 0, 2, 3, 5]);
+    BEAT = 0.33 + rnd() * 0.06;
+    perf = { semis, mul: Math.pow(2, semis / 12), heads: [], lift: [], bow: [], dyn: [], plk: Math.floor(rnd() * PLUCK_PATS.length), seed };
+    for (let ph = 0; ph < 5; ph++) {
+      perf.heads[ph] = Math.floor(rnd() * 3);
+      const top = Math.max(...MELODY.slice(ph * 4, ph * 4 + 4).flat().map((n) => n[0]), ...HEADS[ph].flat().map((n) => n[0]));
+      perf.lift[ph] = ph < 4 && semis < 3 && top + 5 <= MAX_DEG && rnd() < 0.22;
+      perf.bow[ph] = rnd() < 0.6 ? 2 : 3;
+    }
+    perf.dyn = [0.88, 0.94, 1, 1.06, 0.98, 1.04].map((d) => d + (rnd() - 0.5) * 0.06);
+  }
+  // Bar b as this performance plays it (its opening may be swapped).
+  function barMel(b) { const ph = Math.floor(b / 4); return b % 4 === 0 && perf.heads[ph] ? HEADS[ph][perf.heads[ph] - 1] : MELODY[b]; }
   // [degree, beats]; degree 5 = G3 … 13 = D5.
   const MELODY = [
     [[8, 2], [9, 1], [10, 1]], [[9, 1.5], [8, 0.5], [7, 1], [8, 1]], [[10, 2], [11, 1], [12, 1]], [[11, 1], [10, 1], [9, 2]],
@@ -675,7 +705,7 @@ function init(container, data, cb) {
   function panOf(st) { if (!st) return 0; const m = museums[st.m], p = screenOf(m.x, st.y0, m.z); return (p.x / Math.max(1, canvas.clientWidth)) * 2 - 1; }
   // Chord tones of bar b between degrees lo..hi, low to high.
   function tones(b, lo, hi) { const set = CHORD[HARM[b]][1], out = []; for (let d = lo; d <= hi; d++) if (set.indexOf(d % 5) >= 0) out.push(d); return out; }
-  function melodyAt(b, beat) { let p0 = 0; for (const [deg, beats] of MELODY[b]) { if (beat < p0 + beats) return deg; p0 += beats; } return MELODY[b][0][0]; }
+  function melodyAt(b, beat) { const m = barMel(b); let p0 = 0; for (const [deg, beats] of m) { if (beat < p0 + beats) return deg; p0 += beats; } return m[0][0]; }
   // A string of era 'li' to pluck with a note (each era's strings take its notes in turn).
   function stringFor(li, k) { const here = li >= 0 ? stringsAt(li) : strings; return here.length ? here[k % here.length] : null; }
   // ── The score grows with what you have collected ──
@@ -688,15 +718,19 @@ function init(container, data, cb) {
   function formFor(n) { return FORMS[n === 0 ? 0 : n <= 2 ? 1 : n <= 5 ? 2 : n <= 10 ? 3 : n <= 15 ? 4 : 5]; }
   // The melody of bar b at ornament level lv: [{deg, beats, at, grace}].
   function ornament(b, lv) {
-    const src = MELODY[b], out = [];
+    const src = barMel(b), out = [], last = b === MELODY.length - 1, up = perf.lift[Math.floor(b / 4)] ? 5 : 0;
     let pos = 0;
     src.forEach(([deg, beats], i) => {
-      const next = i + 1 < src.length ? src[i + 1][0] : b + 1 < MELODY.length ? MELODY[b + 1][0][0] : deg, gap = next - deg;
-      if (lv >= 3 && i > 0 && beats >= 1 && pos % 1 === 0) out.push({ deg: deg + 1, at: pos, grace: true });
-      if (lv >= 2 && beats >= 1 && Math.abs(gap) >= 2) {
-        out.push({ deg, beats: beats - 0.5, at: pos });
-        out.push({ deg: deg + Math.sign(gap), beats: 0.5, at: pos + beats - 0.5 });
-      } else out.push({ deg, beats, at: pos });
+      const next = i + 1 < src.length ? src[i + 1][0] : b + 1 < MELODY.length ? barMel(b + 1)[0][0] : deg, gap = next - deg;
+      if (!last && lv >= 3 && i > 0 && beats >= 1 && pos % 1 === 0 && rnd() < 0.55) out.push({ deg: deg + 1 + up, at: pos, grace: true });
+      if (!last && lv >= 2 && beats >= 1 && Math.abs(gap) >= 2 && rnd() < 0.75) {
+        out.push({ deg: deg + up, beats: beats - 0.5, at: pos });
+        out.push({ deg: deg + Math.sign(gap) + up, beats: 0.5, at: pos + beats - 0.5 });
+      } else if (!last && beats >= 2 && gap !== 0 && rnd() < 0.12 * lv) {
+        // A dotted figure leaning into the next note.
+        out.push({ deg: deg + up, beats: beats - 0.5, at: pos });
+        out.push({ deg: deg + Math.sign(gap) + up, beats: 0.5, at: pos + beats - 0.5 });
+      } else out.push({ deg: deg + up, beats, at: pos });
       pos += beats;
     });
     return out;
@@ -725,7 +759,7 @@ function init(container, data, cb) {
         const r = tones(b, 5, 9)[0], hits = L >= 3 ? [[0, 0.55], [2, 0.4], [3.5, 0.22]] : L >= 2 ? [[0, 0.55], [2, 0.38]] : [[0, 0.5]];
         hits.forEach(([beat, v]) => ev.push({ t: t + beat * BEAT, dur: 0.5 * BEAT, deg: r, vel: v, voice: vk, st: beat === 0 ? st() : null, li }));
       } else if (fam === 'pluck') {
-        const tt = tones(b, 5, 10), step = L >= 2 ? 0.5 : 1, pat = L >= 2 ? [0, 1, 2, 1, 3, 1, 2, 1] : [0, 1, 2, 1];
+        const tt = tones(b, 5, 10), step = L >= 2 ? 0.5 : 1, full = PLUCK_PATS[perf.plk], pat = L >= 2 ? full : full.slice(0, 4);
         pat.forEach((ix, n) => {
           const deg = tt[Math.min(tt.length - 1, L >= 3 && n % 4 === 2 ? ix + 2 : ix)];
           ev.push({ t: t + n * step * BEAT, dur: step * BEAT, deg, vel: n % (L >= 2 ? 4 : 2) === 0 ? 0.36 : 0.26, voice: vk, st: n % 4 === 0 ? st() : null, li });
@@ -736,7 +770,8 @@ function init(container, data, cb) {
         else ev.push({ t, dur: 4 * BEAT, deg: avoid(melodyAt(b, 0))[0] || tt[0], vel: 0.3, voice: vk, st: st(), li });
       } else if (fam === 'bow') {
         const beats = L >= 3 ? [0, 1, 2, 3] : L >= 2 ? [0, 2] : [0], len = 4 / beats.length;
-        beats.forEach((beat) => ev.push({ t: t + beat * BEAT, dur: len * BEAT, deg: Math.max(4, melodyAt(b, beat) - 2), vel: beat ? 0.26 : 0.32, voice: vk, st: beat ? null : st(), li }));
+        const below = perf.bow[Math.floor(b / 4)] || 2;
+        beats.forEach((beat) => ev.push({ t: t + beat * BEAT, dur: len * BEAT, deg: Math.max(4, melodyAt(b, beat) - below), vel: beat ? 0.26 : 0.32, voice: vk, st: beat ? null : st(), li }));
       } else if (fam === 'qin') {
         const tt = tones(b, 10, 13), beats = L >= 2 ? [0, 2] : [0];
         beats.forEach((beat) => ev.push({ t: t + beat * BEAT, dur: (4 / beats.length) * BEAT, deg: tt[beat ? tt.length - 1 : 0], vel: 0.28, voice: vk, st: beat ? null : st(), li }));
@@ -750,7 +785,7 @@ function init(container, data, cb) {
   // newest to join); the lead is the newest 吹/弹/拉/琴 voice, else the 钟磬 (编钟 and 编磬 were
   // melodic instruments), never the drum — with only the drum, your own strings take the tune.
   // 'reprise' (the coda of a full collection): everyone, the oldest melodic voice leads again.
-  function lineup(col, p, P, reprise) {
+  function lineup(col, p, P, reprise, prevLead) {
     const n = col.length, act = reprise ? col.slice() : col.slice(0, Math.max(1, Math.ceil((p + 1) * n / P)));
     const byFam = {}, famN = {};
     act.forEach((li) => { const f = famOf(li); byFam[f] = li; famN[f] = (famN[f] || 0) + 1; });
@@ -760,6 +795,8 @@ function init(container, data, cb) {
     const oldestLead = col.filter((li) => LEADS.indexOf(famOf(li)) >= 0)[0];
     const bells = voices.filter((li) => famOf(li) === 'bell');
     let lead = leadCands.length ? newest(leadCands) : bells.length ? newest(bells) : -1;
+    const others = leadCands.filter((li) => li !== prevLead);
+    if (leadCands.length > 1 && (lead === prevLead || rnd() < 0.45) && others.length) lead = pick(others);
     if (reprise && oldestLead != null) lead = oldestLead;
     // 加花 level: eras sharing this family + a second museum in this era.
     const lv = {};
@@ -775,6 +812,7 @@ function init(container, data, cb) {
   function compose(F, o) {
     o = o || {};
     o_eras = o.eras || null;
+    vary(o.seed != null ? o.seed : Math.floor(Math.random() * 2147483647));
     const ev = [], lay = [];
     let t = 0, k = 0;
     if (F < 0) {
@@ -785,14 +823,15 @@ function init(container, data, cb) {
         lay.push({ t: 0, li: -1, rest: true, act: [] });
         for (let b = form[0] * 4; b < form[0] * 4 + 4; b++) { k = ensembleBar(ev, b, t, -1, [], k, null); t += 4 * BEAT; }
         ev.forEach((e) => { if (e.voice === 'ks') e.vel *= 0.6; });
-        return { ev, lay, dur: t + 2.4 };
+        return { ev, lay, dur: t + 2.4, mul: perf.mul };
       }
       let L = null;
       form.forEach((ph, p) => {
-        const reprise = p === P - 1 && P === 6;
-        L = lineup(col, Math.min(p, P - 1), reprise ? P : P, reprise);
+        const reprise = p === P - 1 && P === 6, from = ev.length;
+        L = lineup(col, Math.min(p, P - 1), P, reprise, L ? L.lead : null);
         lay.push({ t, li: L.show, act: L.act });
         for (let b = ph * 4; b < ph * 4 + 4; b++) { k = ensembleBar(ev, b, t, L.lead, L.parts, k, L.lv); t += 4 * BEAT; }
+        for (let j = from; j < ev.length; j++) ev[j].vel *= perf.dyn[p] || 1;
       });
       // 今: every voice on the home chord together, your strings strummed over it.
       lay.push({ t, li: N, act: L.act });
@@ -805,7 +844,7 @@ function init(container, data, cb) {
       for (let j = 0; j < n; j++) ev.push({ t: t + 0.12 + j * 0.07, dur: 2.5, deg: chord[j], vel: 0.75, voice: 'ks', st: order.length ? order[j % order.length] : null, li: -1 });
       ev.push({ t, dur: 3, freq: G2, vel: 0.5, voice: 'bass', st: null, li: -1 });
       ev.sort((a, b) => a.t - b.t);
-      return { ev, lay, dur: t + 3.6 };
+      return { ev, lay, dur: t + 3.6, mul: perf.mul };
     }
     // One era: its phrase, its instrument leading, the same instrument answering in its family part.
     const here = stringsAt(F), b0 = Math.floor(barOf(F) / 4) * 4;
@@ -814,7 +853,7 @@ function init(container, data, cb) {
     const lvF = { [F]: Math.max(1, Math.min(3, here.length)) };
     for (let b = b0; b < b0 + 4 && b < MELODY.length; b++) { k = ensembleBar(ev, b, t, drum ? -1 : F, drum || (b > b0 && famOf(F) !== 'wind') ? [F] : [], k, lvF); t += 4 * BEAT; }
     ev.sort((a, b) => a.t - b.t);
-    return { ev, lay, dur: t + 2.4 };
+    return { ev, lay, dur: t + 2.4, mul: perf.mul };
   }
   // The same performance rendered offline, as WAV bytes (F: era index, or -1 for all strata).
   // o.noBass leaves out the bass line (for comparing by ear).
@@ -823,10 +862,10 @@ function init(container, data, cb) {
     const c = compose(F == null ? state.focus : F, o), sr = 44100;
     if (o.noBass) c.ev = c.ev.filter((e) => e.voice !== 'bass');
     // o.stats: just describe the score (notes, distinct instruments, seconds).
-    if (o.stats) return { notes: c.ev.filter((e) => e.voice !== 'bass').length, voices: new Set(c.ev.map((e) => e.voice)).size - 1, seconds: Math.round(c.dur) };
+    if (o.stats) return { notes: c.ev.filter((e) => e.voice !== 'bass').length, voices: new Set(c.ev.map((e) => e.voice)).size - 1, seconds: Math.round(c.dur), semis: perf.semis, beat: Math.round(BEAT * 1000) / 1000, heads: perf.heads.join(''), lift: perf.lift.map((x) => (x ? 1 : 0)).join(''), pluck: perf.plk };
     const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
     const oc = new OAC(2, Math.ceil((c.dur + 1) * sr), sr), dest = makeGraph(oc);
-    c.ev.forEach((e) => stringSound(e.deg, e.vel, panOf(e.st), 0.1 + e.t, e.voice, { dur: e.dur, freq: e.freq, ac: oc, dest }));
+    c.ev.forEach((e) => stringSound(e.deg, e.vel, panOf(e.st), 0.1 + e.t, e.voice, { dur: e.dur, freq: e.freq, mul: c.mul, ac: oc, dest }));
     return wavBytes(await oc.startRendering());
   }
   // li: the era leading now (N = 今); act: every era playing with it.
@@ -849,7 +888,7 @@ function init(container, data, cb) {
     const ac = audioCtx(), audio = !!(ac && master);
     const t0 = (audio ? ac.currentTime : performance.now() / 1000) + 0.15;
     const srcs = [];
-    c.ev.forEach((e) => { e.at = t0 + e.t; if (audio) srcs.push(...stringSound(e.deg, e.vel, panOf(e.st), e.at, e.voice, { dur: e.dur, freq: e.freq })); });
+    c.ev.forEach((e) => { e.at = t0 + e.t; if (audio) srcs.push(...stringSound(e.deg, e.vel, panOf(e.st), e.at, e.voice, { dur: e.dur, freq: e.freq, mul: c.mul })); });
     c.lay.forEach((l) => { l.at = t0 + l.t; });
     play = { audio, ev: c.ev, lay: c.lay, i: 0, j: 0, end: t0 + c.dur, srcs, focus: F };
     hint.classList.add('is-gone');
