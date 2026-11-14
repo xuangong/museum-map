@@ -68,10 +68,36 @@ function ringTexture() {
 }
 
 // ── 琴弦 sound: a warm plucked string (Karplus–Strong), tuned to 宫商角徵羽 ──
-// Longer strings reach deeper into history and sound lower, as a real string would.
-const PENTA = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24, 26, 28];
-let actx = null, master = null;
+// Pitches are degrees of a pentatonic ladder (5 per octave) above G2. Longer strings reach
+// deeper into history and sound lower; stopping a string at an era (its 徽) shortens it.
+const PENTA = [0, 2, 4, 7, 9];
+const MAX_DEG = 17;
+const degFreq = (d) => { d = Math.max(0, Math.min(MAX_DEG, d)); return 98 * Math.pow(2, (12 * Math.floor(d / 5) + PENTA[d % 5]) / 12); };
+let actx = null, master = null, audioUnlocked = false;
 const ksCache = {};
+// iOS: let page audio play with the ring/silent switch on (Safari 17+: Audio Session API;
+// older: a looping silent <audio> moves the session to playback), and start the context
+// inside a real gesture (touchend / click — touchstart does not count).
+function silentWavUrl() {
+  const n = 800, b = new Uint8Array(44 + n), v = new DataView(b.buffer);
+  const w = (o, str) => { for (let i = 0; i < str.length; i++) b[o + i] = str.charCodeAt(i); };
+  w(0, 'RIFF'); v.setUint32(4, 36 + n, true); w(8, 'WAVE'); w(12, 'fmt ');
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 8000, true);
+  v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true); w(36, 'data'); v.setUint32(40, n, true);
+  for (let i = 0; i < n; i++) b[44 + i] = 128;
+  let bin = ''; for (let i = 0; i < b.length; i++) bin += String.fromCharCode(b[i]);
+  return 'data:audio/wav;base64,' + btoa(bin);
+}
+function unlockAudio() {
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+  const ac = audioCtx();
+  if (!ac || audioUnlocked) return;
+  audioUnlocked = true;
+  try { const b = ac.createBuffer(1, 1, 22050), src = ac.createBufferSource(); src.buffer = b; src.connect(ac.destination); src.start(0); } catch (e) {}
+  if (!navigator.audioSession && /iP(hone|ad|od)/.test(navigator.userAgent)) {
+    try { const a = new Audio(silentWavUrl()); a.loop = true; a.setAttribute('playsinline', ''); a.play().catch(() => {}); } catch (e) {}
+  }
+}
 function audioCtx() {
   if (!actx) {
     const AC = window.AudioContext || window.webkitAudioContext;
@@ -106,18 +132,20 @@ function ksBuffer(ac, freq) {
   ksCache[key] = buf;
   return buf;
 }
-function stringSound(note, vel, pan) {
+// One plucked note at pentatonic degree 'deg'; 'when' is an AudioContext time (0 = now).
+function stringSound(deg, vel, pan, when) {
   const ac = audioCtx();
-  if (!ac || !master) return;
+  if (!ac || !master) return null;
   try {
     const src = ac.createBufferSource();
-    src.buffer = ksBuffer(ac, 98 * Math.pow(2, PENTA[Math.max(0, Math.min(PENTA.length - 1, note))] / 12));
+    src.buffer = ksBuffer(ac, degFreq(deg));
     const g = ac.createGain(); g.gain.value = 0.34 * Math.max(0.3, Math.min(1.3, vel));
     src.connect(g);
-    if (ac.createStereoPanner) { const pn = ac.createStereoPanner(); pn.pan.value = Math.max(-0.8, Math.min(0.8, pan)); g.connect(pn); pn.connect(master); }
+    if (ac.createStereoPanner) { const pn = ac.createStereoPanner(); pn.pan.value = Math.max(-0.8, Math.min(0.8, pan || 0)); g.connect(pn); pn.connect(master); }
     else g.connect(master);
-    src.start();
-  } catch (e) {}
+    src.start(when || 0);
+    return src;
+  } catch (e) { return null; }
 }
 
 // tint = colour, kk = intensity. Light halls: colour × intensity, added. Ink hall: a
@@ -424,24 +452,39 @@ function init(container, data, cb) {
     stringByM = {};
     strings = list.map((i, slot) => {
       const len = lens[slot], p = prev[i];
-      const note = Math.round((1 - len / maxLen) * (PENTA.length - 1));
-      const st = { m: i, slot, y0: yTop, len, note, f: 2.4 + note * 0.3, amp: p ? p.amp : 0, t: p ? p.t : 0, col: COL.seal, k: 0, dirty: true, live: false, last: 0 };
+      const note = Math.round((1 - len / maxLen) * 7);   // open string: the longest sounds lowest
+      const st = { m: i, slot, y0: yTop, len, note, f: 2.4 + note * 0.3, amp: p ? p.amp : 0, t: p ? p.t : 0, col: COL.seal, k: 0, dirty: true, live: false, last: 0, stop: 1, stopLi: -1 };
       stringByM[i] = st;
       return st;
     });
     sGeom.setDrawRange(0, strings.length * (SP - 1) * 2);
     overlay.classList.toggle('has-strings', strings.length > 0);
+    if (play) stopPlay();
+    paintPlay();
     hint.textContent = strings.length ? '拨动红色琴弦，听你走过的朝代' : '拖动旋转 · 双指缩放 · 点地层看朝代 · 点光点看博物馆';
   }
-  // One string at time 'now': a damped standing wave, ends fixed at today and at its oldest era.
+  // The note a string gives when stopped at era 'li' (its 徽): the shorter the sounding part,
+  // the higher. Open (li < 0) is the whole string.
+  function noteAt(st, li) {
+    if (li == null || li < 0) return st.note;
+    const eff = Math.max(st.len * 0.06, st.y0 - yOf(li));
+    return Math.min(MAX_DEG, st.note + Math.round(5 * Math.log2(st.len / eff) * 0.55));
+  }
+  // One string at time 'now': a damped standing wave between today and where it is stopped
+  // (its oldest era when open). Below the stop the string is still.
   function writeString(st, now) {
     const m = museums[st.m], base = st.slot * (SP - 1);
     const age = Math.max(0, (now - st.t) / 1000);
-    const a = reduceMotion ? 0 : st.amp * Math.exp(-age / 1.5);
+    const a = reduceMotion || state.focus >= 0 ? 0 : st.amp * Math.exp(-age / 1.5);
     const glow = st.amp > 0 ? Math.exp(-age / 0.55) : 0;
     st.live = a > 0.0006 || glow > 0.02;
-    const rx = Math.cos(cam.az), rz = -Math.sin(cam.az), w = 2 * Math.PI * st.f;
-    const disp = (u) => a > 0.0006 ? a * (Math.sin(Math.PI * u) * Math.cos(w * age) + 0.3 * Math.sin(2 * Math.PI * u) * Math.cos(2 * w * age + 1.1)) : 0;
+    const stop = Math.max(0.05, st.stop || 1);
+    const rx = Math.cos(cam.az), rz = -Math.sin(cam.az), w = 2 * Math.PI * Math.min(9, st.f / Math.sqrt(stop));
+    const disp = (u) => {
+      if (a <= 0.0006 || u > stop) return 0;
+      const v = u / stop;
+      return a * Math.sqrt(stop) * (Math.sin(Math.PI * v) * Math.cos(w * age) + 0.3 * Math.sin(2 * Math.PI * v) * Math.cos(2 * w * age + 1.1));
+    };
     let x0 = 0, y0 = 0, z0 = 0;
     const kk = st.k * (1 + 1.3 * glow);
     for (let j = 0; j < SP; j++) {
@@ -456,21 +499,115 @@ function init(container, data, cb) {
       x0 = x; y0 = y; z0 = z;
     }
     // The era dots are the notes on the string: they ride with it and flare when it sounds.
+    // Stopped at an era, that era's dot is the note that sounds; open, every dot answers.
     dotsOf[st.m].forEach((di) => {
       const u = (st.y0 - yOf(dots[di].layer)) / st.len, dd = disp(u);
       dPos[di * 3] = m.x + rx * dd; dPos[di * 3 + 2] = m.z + rz * dd;
-      dK[di] = dKBase[di] + (dKBase[di] > 0 ? 1.1 * glow : 0);
-      dSize[di] = dSizeBase[di] + (dKBase[di] > 0 ? 9 * glow : 0);
+      const g = st.stopLi < 0 ? glow : dots[di].layer === st.stopLi ? glow * 1.4 : 0;
+      dK[di] = dKBase[di] + (dKBase[di] > 0 ? 1.1 * g : 0);
+      dSize[di] = dSizeBase[di] + (dKBase[di] > 0 ? 10 * g : 0);
     });
   }
-  function pluck(st, strength, sx) {
+  // opts.li: stop at that era (melody); opts.scheduled: the sound is already on the audio clock.
+  function pluck(st, strength, sx, opts) {
+    opts = opts || {};
     const now = performance.now();
-    if (now - st.last < 110) return;
+    if (!opts.scheduled && now - st.last < 110) return;
     st.last = now; st.t = now; st.amp = 0.11 * Math.max(0.35, Math.min(1.4, strength)); st.dirty = true;
-    if (soundOn) stringSound(st.note, strength, (sx / Math.max(1, canvas.clientWidth)) * 2 - 1);
-    if (strength > 0.7 && navigator.vibrate) { try { navigator.vibrate(6); } catch (e) {} }
-    hoverIdx = st.m; tagHoldUntil = now + 1500;
+    st.stopLi = opts.li != null ? opts.li : -1;
+    st.stop = st.stopLi >= 0 ? Math.max(0.06, (st.y0 - yOf(st.stopLi)) / st.len) : 1;
+    if (soundOn && !opts.scheduled) stringSound(st.note, strength, (sx / Math.max(1, canvas.clientWidth)) * 2 - 1, 0);
+    if (!opts.scheduled) {
+      if (strength > 0.7 && navigator.vibrate) { try { navigator.vibrate(6); } catch (e) {} }
+      hoverIdx = st.m; tagHoldUntil = now + 1500;
+    }
+    // Reading one era: its seal label rings with the note.
+    const t = state.focus >= 0 ? mTags[st.m] : null;
+    if (t) { t.el.classList.remove('is-sounding'); void t.el.offsetWidth; t.el.classList.add('is-sounding'); }
     lastInteract = now; S.needs = true;
+  }
+
+  // ── 奏一曲: the strings write their own tune ──
+  // All strata: history plays upward, 远古 → 今. On each era, the strings through it sound,
+  // stopped at that era; 今 closes with every string open. One era (reading view): a short
+  // phrase on that era's notes. Sound is scheduled on the audio clock; each frame plucks the
+  // strings whose notes have started on that same clock, so what you see is what you hear.
+  let play = null, playLayer = -1;
+  function stringsAt(li) { return strings.filter((st) => museums[st.m].links.indexOf(li) >= 0); }
+  function panOf(st) { const m = museums[st.m], p = screenOf(m.x, st.y0, m.z); return (p.x / Math.max(1, canvas.clientWidth)) * 2 - 1; }
+  function compose(F) {
+    const ev = [], lay = [];
+    let t = 0;
+    if (F < 0) {
+      for (let li = 0; li < N; li++) {
+        const here = stringsAt(li).map((st) => ({ st, deg: noteAt(st, li) })).sort((a, b) => a.deg - b.deg || museums[a.st.m].x - museums[b.st.m].x).slice(0, 6);
+        if (!here.length) continue;
+        lay.push({ t, li });
+        here.forEach((x, k) => {
+          ev.push({ t, st: x.st, li, deg: x.deg, vel: k === 0 ? 1.05 : 0.8 });
+          t += k === here.length - 1 ? 0.34 : 0.19;
+        });
+        t += 0.08;
+      }
+      // 今: every string open, a slow strum.
+      lay.push({ t, li: N });
+      strings.slice().sort((a, b) => a.note - b.note).forEach((st, k) => { ev.push({ t: t + k * 0.06, st, li: -1, deg: st.note, vel: 0.9 }); });
+      return { ev, lay, dur: t + strings.length * 0.06 + 2.4 };
+    }
+    const here = stringsAt(F).map((st) => ({ st, deg: noteAt(st, F) })).sort((a, b) => a.deg - b.deg);
+    if (!here.length) return { ev, lay, dur: 0 };
+    // The era's notes and their octave, played to a fixed rhythm (beats of 0.24 s).
+    const ladder = here.concat(here.map((x) => ({ st: x.st, deg: Math.min(MAX_DEG, x.deg + 5) })));
+    const L = ladder.length;
+    const shape = [0, 1, 2, 3, 2, 1, 0, 2, 1, 3, 4, 3, 2, 1, 0];
+    const beats = [1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 3];
+    lay.push({ t: 0, li: F });
+    shape.forEach((idx, k) => {
+      const x = ladder[Math.min(L - 1, Math.round(idx * (L - 1) / 4))];
+      ev.push({ t, st: x.st, li: F, deg: x.deg, vel: beats[k] > 1 ? 1.05 : 0.8 });
+      t += beats[k] * 0.24;
+    });
+    // Close on the era's chord.
+    here.forEach((x, k) => { ev.push({ t: t + k * 0.05, st: x.st, li: F, deg: x.deg, vel: 0.85 }); });
+    return { ev, lay, dur: t + 2.2 };
+  }
+  function markPlayLayer(li) {
+    playLayer = li;
+    layerLabels.forEach((l) => { l.el.classList.toggle('is-playing', l.layer === li); });
+    todayLabel.classList.toggle('is-playing', li === N);
+  }
+  function startPlay() {
+    if (!strings.length) return;
+    const F = state.focus;
+    const c = compose(F);
+    if (!c.ev.length) return;
+    if (!soundOn) { soundOn = true; try { localStorage.setItem('mmStringSound', '1'); } catch (e) {} paintSound(); }
+    unlockAudio();
+    const ac = audioCtx(), audio = !!(ac && master);
+    const t0 = (audio ? ac.currentTime : performance.now() / 1000) + 0.15;
+    const srcs = [];
+    c.ev.forEach((e) => { e.at = t0 + e.t; if (audio) { const s0 = stringSound(e.deg, e.vel, panOf(e.st), e.at); if (s0) srcs.push(s0); } });
+    c.lay.forEach((l) => { l.at = t0 + l.t; });
+    play = { audio, ev: c.ev, lay: c.lay, i: 0, j: 0, end: t0 + c.dur, srcs, focus: F };
+    hint.classList.add('is-gone');
+    paintPlay();
+  }
+  function stopPlay() {
+    if (!play) return;
+    play.srcs.forEach((s0) => { try { s0.stop(); } catch (e) {} });
+    play = null;
+    markPlayLayer(-1);
+    paintPlay();
+  }
+  function tickPlay() {
+    if (!play) return;
+    const c = play.audio ? actx.currentTime : performance.now() / 1000;
+    while (play.j < play.lay.length && play.lay[play.j].at <= c + 0.01) markPlayLayer(play.lay[play.j++].li);
+    while (play.i < play.ev.length && play.ev[play.i].at <= c + 0.01) {
+      const e = play.ev[play.i++];
+      pluck(e.st, e.vel, 0, { li: e.li, scheduled: true });
+    }
+    if (c > play.end) stopPlay();
   }
   function segCross(p, q, a, b) {
     const d = (q.x - p.x) * (b.y - a.y) - (q.y - p.y) * (b.x - a.x);
@@ -575,9 +712,29 @@ function init(container, data, cb) {
     soundOn = !soundOn;
     try { localStorage.setItem('mmStringSound', soundOn ? '1' : '0'); } catch (err) {}
     paintSound();
-    if (soundOn) { audioCtx(); const st = strings[Math.floor(strings.length / 2)]; if (st) pluck(st, 0.8, canvas.clientWidth / 2); }
+    if (soundOn) { unlockAudio(); const st = strings[Math.floor(strings.length / 2)]; if (st) pluck(st, 0.8, canvas.clientWidth / 2); }
+    else stopPlay();
   });
   overlay.appendChild(soundBtn);
+  const playBtn = el('button', 'strata-play');
+  playBtn.type = 'button';
+  function paintPlay() {
+    const F = state.focus, n = F >= 0 ? stringsAt(F).length : strings.length;
+    overlay.classList.toggle('can-play', n > 0);
+    playBtn.classList.toggle('is-playing', !!play);
+    const icon = play
+      ? '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>'
+      : '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>';
+    const label = play ? '停' : F >= 0 ? '奏 · ' + layers[F].name : '奏一曲';
+    playBtn.innerHTML = icon + '<span>' + label + '</span>';
+    playBtn.setAttribute('aria-label', play ? '停止演奏' : F >= 0 ? '用这一层的琴弦奏一段' : '用你的琴弦，从远古奏到今天');
+  }
+  playBtn.addEventListener('click', (e) => { e.stopPropagation(); if (play) stopPlay(); else startPlay(); });
+  overlay.appendChild(playBtn);
+  // A real gesture anywhere unlocks audio for later strums (iOS needs touchend/click).
+  const onGesture = () => { if (strings.length) { unlockAudio(); document.removeEventListener('touchend', onGesture); document.removeEventListener('click', onGesture); } };
+  document.addEventListener('touchend', onGesture, { passive: true });
+  document.addEventListener('click', onGesture);
 
   // ── Territories: each stratum shows its own dynasty's extent ──
   // Fetched (shared with the 2D map, cached forever); until then strata show today's outline.
@@ -795,7 +952,6 @@ function init(container, data, cb) {
     stringMesh.visible = F < 0;
     if (F >= 0) {
       // Reading one era: strings rest, dots go back to their places.
-      strings.forEach((st) => { st.amp = 0; st.live = false; });
       dPos.set(dPosBase); dGeom.attributes.position.needsUpdate = true;
     }
 
@@ -887,6 +1043,7 @@ function init(container, data, cb) {
     state.sel = state.selectedId != null && museumIdx[state.selectedId] != null ? museumIdx[state.selectedId] : -1;
     buildStrings();
     if (prevFocus !== state.focus) {
+      stopPlay(); paintPlay();
       buildFocusPath(state.focus); showCredit();
       overlay.classList.toggle('is-focus', state.focus >= 0);
       if (state.focus >= 0) hint.classList.add('is-gone');
@@ -930,6 +1087,7 @@ function init(container, data, cb) {
   });
   let lastPtr = null;
   canvas.addEventListener('pointerdown', () => { if (soundOn && strings.length) audioCtx(); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stopPlay(); });
   canvas.addEventListener('pointermove', (e) => {
     const p = localXY(e);
     if (pointers.has(e.pointerId)) pointers.set(e.pointerId, p);
@@ -1133,8 +1291,10 @@ function init(container, data, cb) {
     const ka = 1 - Math.pow(0.002, dt);
     layers.forEach((L) => {
       const appear = Math.max(0, Math.min(1, intro * 1.6 - (L.i / N) * 0.75));
-      lerpMat(L.outline.material, L.to.outline * appear, ka); lerpMat(L.fill.material, L.to.fill * appear, ka); lerpMat(L.river.material, L.to.river * appear, ka);
-      if (L.tLine) { lerpMat(L.tLine.material, L.to.tLine * appear, ka); lerpMat(L.tFill.material, L.to.tFill * appear, ka); }
+      // The era being played lights up.
+      const pf = play && playLayer === L.i ? 2.6 : 1;
+      lerpMat(L.outline.material, Math.min(1, L.to.outline * appear * pf), ka); lerpMat(L.fill.material, Math.min(1, L.to.fill * appear * pf), ka); lerpMat(L.river.material, L.to.river * appear, ka);
+      if (L.tLine) { lerpMat(L.tLine.material, Math.min(1, L.to.tLine * appear * pf), ka); lerpMat(L.tFill.material, Math.min(1, L.to.tFill * appear * pf), ka); }
     });
     const ta = Math.max(0, intro * 1.6 - 0.6);
     lerpMat(top.outline.material, top.to.outline * Math.min(1, ta), ka); lerpMat(top.fill.material, top.to.fill * Math.min(1, ta), ka); lerpMat(top.river.material, top.to.river * Math.min(1, ta), ka);
@@ -1150,7 +1310,8 @@ function init(container, data, cb) {
       sp.scale.set(s, s, s);
     });
 
-    if (strings.length && stringMesh.visible) {
+    tickPlay();
+    if (strings.length) {
       let moved = false;
       strings.forEach((st) => { if (st.dirty || st.live) { writeString(st, now); st.dirty = false; moved = true; } });
       if (moved) {
@@ -1190,7 +1351,7 @@ function init(container, data, cb) {
     recolor();
   }
 
-  paintSound();
+  paintSound(); paintPlay();
   const ro = new ResizeObserver(() => fit(true));
   ro.observe(container);
   fit(true);
@@ -1200,7 +1361,7 @@ function init(container, data, cb) {
   Object.assign(S, {
     ready: true,
     update,
-    setActive(on) { active = !!on; if (on) { last = performance.now(); fit(true); } },
+    setActive(on) { active = !!on; if (on) { last = performance.now(); fit(true); } else stopPlay(); },
     resize: () => fit(true),
     setTheme: applyTheme,
     // Preview one museum's beam through its strata (ledger hover); null clears.

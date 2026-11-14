@@ -1413,10 +1413,31 @@ body.chat-locked .chat-body { touch-action: pan-y; }
   transition: color 0.2s, border-color 0.2s, opacity 0.3s;
 }
 .strata-overlay.has-strings .strata-sound { display: grid; }
-.strata-overlay.is-focus .strata-sound { opacity: 0; pointer-events: none; }
 .strata-sound.is-off { color: var(--text-4); }
 .strata-sound:hover { border-color: rgba(var(--seal-rgb),0.5); }
 .canvas.has-drawer .strata-sound { right: calc(var(--drawer-w) + 14px); }
+/* 奏一曲 — under the sound switch, so it never meets the view switch on a phone */
+.strata-play {
+  position: absolute; right: 14px; top: 60px;
+  display: none; align-items: center; gap: 6px; height: 34px; padding: 0 13px 0 11px;
+  border-radius: 999px; border: 1px solid rgba(var(--seal-rgb),0.45); background: rgba(var(--bg2-rgb),0.9);
+  color: var(--seal-ink-strong); font-family: var(--serif); font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
+  white-space: nowrap; cursor: pointer; pointer-events: auto; box-shadow: 0 10px 26px -14px var(--sh-90);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.strata-overlay.has-strings.can-play .strata-play { display: inline-flex; }
+.strata-play:hover { border-color: var(--seal); }
+.strata-play.is-playing { background: var(--seal); border-color: var(--seal); color: #FFF2E8; }
+.canvas.has-drawer .strata-play { right: calc(var(--drawer-w) + 14px); }
+/* The era being played */
+.strata-label.is-playing { color: var(--seal-ink-strong); background: rgba(var(--seal-rgb),0.14); box-shadow: inset 0 0 0 1px rgba(var(--seal-rgb),0.45); transform-origin: left center; }
+/* A seal label rings with its note in the reading view */
+.strata-mtag.is-sounding { animation: mtag-ring 0.55s ease-out; }
+@keyframes mtag-ring {
+  0% { box-shadow: 0 0 0 0 rgba(var(--seal-rgb),0.75), 0 0 18px -2px rgba(var(--seal-rgb),0.9); filter: brightness(1.25); }
+  100% { box-shadow: 0 0 0 10px rgba(var(--seal-rgb),0), 0 0 14px -2px rgba(var(--seal-rgb),0.6); filter: none; }
+}
+@media (prefers-reduced-motion: reduce) { .strata-mtag.is-sounding { animation: none; } }
 /* Desktop: with the side drawer open, floating controls re-centre on what stays visible. */
 .canvas { --drawer-w: 0px; }
 .canvas.has-drawer { --drawer-w: min(580px, 94%); }
