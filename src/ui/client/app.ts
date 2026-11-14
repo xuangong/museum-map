@@ -23,6 +23,7 @@ var __vdCache = null, __vdCacheKey = '', __vdCacheIds = {}, __vdDepth = {};
 var __territoryP = null;
 // 地层账本 (ledger) cache — same reason as __vdCache: computed from reactive state, stored outside it.
 var __ledger = null, __ledgerKey = '';
+var __ach = null, __achKey = '';
 var __tripView = null, __tripViewKey = '', __tripCities = null, __tripReq = 0;
 window.museumApp = function() {
   return {
@@ -58,6 +59,8 @@ window.museumApp = function() {
     nameForm: { editing: false, value: '', loading: false, error: '' },
     viewingProfile: null,
     isReadOnly: false,
+    achCatalog: [],
+    ach: { stored: {}, queue: [], sheetId: null, ready: false },
     toast: '',
     _toastTimer: null,
     _suppressHashChange: false,
@@ -93,6 +96,7 @@ window.museumApp = function() {
       this.dynastyGeo = data.dynastyGeo || {};
       this.crossings = data.crossings || {};
       this.aiCatalog = data.ai || this.aiCatalog;
+      this.achCatalog = data.achievements || [];
       this.museumAliases = data.aliases || {};
       this.initAi();
       this.territoryUrl = data.territoryUrl || '';
@@ -168,6 +172,8 @@ window.museumApp = function() {
       (window.MuseumAuth ? window.MuseumAuth.syncMe() : Promise.resolve(null)).then(function(){
         self.me = window.MuseumAuth ? window.MuseumAuth.user : null;
         return self.loadVisits();
+      }).then(function(){
+        if (!self.ach.ready) return self.loadAchievements();
       }).then(function(){
         self.refreshMarkers();
         if (!self.isReadOnly) self.loadCachedReview();
@@ -1205,6 +1211,143 @@ window.museumApp = function() {
       this.aiSave();
     },
 
+    // ─── 打卡成就 ─── (docs/superpowers/specs/打卡成就.md)
+    achCtx() {
+      var self = this, eras = {};
+      this.museums.forEach(function(m){ eras[m.id] = self.linkedDynasties(m.id).map(function(d){ return self.layerNo(d.id); }); });
+      return { visited: this.visits.ids.slice(), museums: this.museums, eras: eras, layers: this.dynasties.length };
+    },
+
+    /** Progress for every achievement, memoized on visits. */
+    achResults() {
+      var key = this.visits.ids.join(',') + '|' + this.museums.length + '|' + this.dynasties.length;
+      if (__ach && __achKey === key) return __ach;
+      __ach = window.AchCore.evaluate(this.achCatalog, this.achCtx());
+      __achKey = key;
+      return __ach;
+    },
+
+    achById(id) { return this.achCatalog.find(function(a){ return a.id === id; }) || null; },
+    achResult(id) { return this.achResults().find(function(r){ return r.id === id; }) || null; },
+    achLevel(id) { var r = this.achResult(id); return r ? window.AchCore.levelOf(this.isReadOnly ? {} : this.ach.stored, r) : 0; },
+
+    /** Load what's been unlocked before (local or server), then record anything new. */
+    async loadAchievements() {
+      if (this.isReadOnly) return;
+      var local = {};
+      try { local = JSON.parse(window.localStorage.getItem('mmAch') || '{}') || {}; } catch(_) {}
+      if (window.MuseumAuth && window.MuseumAuth.isAuthenticated()) {
+        try {
+          var res = await fetch('/api/achievements', { credentials: 'same-origin' });
+          var j = res.ok ? await res.json() : { items: {} };
+          var merged = j.items || {}, carry = [];
+          // Bring anonymous unlocks along on first login (and push them to the account).
+          Object.keys(local).forEach(function(k){ if (!merged[k]) { merged[k] = local[k]; carry.push({ id: k, r: local[k].r || 0, c: local[k].c || 0 }); } });
+          this.ach.stored = merged;
+          if (carry.length) fetch('/api/achievements', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: carry }) }).catch(function(){});
+        } catch(_) { this.ach.stored = local; }
+      } else this.ach.stored = local;
+      this.ach.ready = true;
+      this.syncAchievements(false);
+    },
+
+    /** Record new unlocks. With ceremony=true (just stamped), queue the 落印 for each. */
+    syncAchievements(ceremony) {
+      if (!this.ach.ready || this.isReadOnly) return;
+      var out = window.AchCore.merge(this.ach.stored, this.achResults(), Date.now());
+      if (!out.fresh.length) return;
+      this.ach.stored = out.next;
+      var authed = !!(window.MuseumAuth && window.MuseumAuth.isAuthenticated());
+      // Account unlocks live on the server; keep the device copy for anonymous use only.
+      if (!authed) { try { window.localStorage.setItem('mmAch', JSON.stringify(out.next)); } catch(_) {} }
+      if (authed) {
+        var items = out.fresh.map(function(f){ var s = out.next[f.id]; return { id: f.id, r: s.r, c: s.c }; });
+        fetch('/api/achievements', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: items }) }).catch(function(){});
+      }
+      if (ceremony) this.ach.queue = this.ach.queue.concat(out.fresh);
+    },
+
+    achCeremony() { return this.ach.queue[0] || null; },
+    achDismiss() { this.ach.queue = this.ach.queue.slice(1); },
+
+    /** Rows for the 成就 page: [{ line, title, items: [{ a, r, level }] }], unlocked and nearly-there first. */
+    achGroups() {
+      var self = this, lines = [['theme', '专题收集'], ['region', '区域'], ['era', '朝代']];
+      return lines.map(function(l){
+        var items = self.achCatalog.filter(function(a){ return a.line === l[0]; }).map(function(a){
+          var r = self.achResult(a.id); return { a: a, r: r, level: self.achLevel(a.id) };
+        });
+        items.sort(function(x, y){
+          return (y.level - x.level) || ((y.r.have / (y.r.reach || 1)) - (x.r.have / (x.r.reach || 1)));
+        });
+        return { line: l[0], title: l[1], items: items, done: items.filter(function(i){ return i.level > 0; }).length };
+      });
+    },
+
+    achStatus(id) {
+      var r = this.achResult(id), lv = this.achLevel(id);
+      if (!r) return '';
+      if (lv === 2) return r.reach < r.total ? '圆满' : '已达成';
+      if (lv === 1) return '已达成 · 再集 ' + (r.total - r.have) + ' 处就圆满';
+      var left = r.reach - r.have;
+      if (r.have === 0) return '还没开始 · 需要 ' + r.reach + ' 处';
+      return left === 1 ? '只差一处' : '还差 ' + left + ' 处';
+    },
+
+    /** Missing pieces as display rows, nearest first when we know where you are. */
+    achMissing(id) {
+      var r = this.achResult(id), self = this; if (!r) return [];
+      var here = this.geo && this.geo.lat != null ? { lat: this.geo.lat, lng: this.geo.lng } : null;
+      var rows = r.missing.map(function(x){
+        if (x.museum) { var m = self.museumById(x.museum); return m ? { kind: 'museum', id: m.id, name: m.name, sub: m.city || '', km: here ? self.kmBetween(here, m) : null } : null; }
+        if (x.city) return { kind: 'city', name: x.city, sub: '城里任意一座收录馆' };
+        if (x.province) return { kind: 'province', name: x.province, sub: '' };
+        if (x.layer) { var d = self.dynasties[x.layer - 1]; return d ? { kind: 'layer', id: d.id, name: self.dynastyShortName(d).replace(/[：:].*$/, ''), sub: '这一层还空着' } : null; }
+        return null;
+      }).filter(Boolean);
+      if (here) rows.sort(function(a, b){ return (a.km == null ? 1e9 : a.km) - (b.km == null ? 1e9 : b.km); });
+      return rows;
+    },
+
+    achDone(id) {
+      var a = this.achById(id), self = this; if (!a || !a.members) return [];
+      var vis = {}; this.visits.ids.forEach(function(v){ vis[v] = true; });
+      return a.members.filter(function(mem){
+        if (mem.museum) return vis[mem.museum];
+        return self.visitedMuseums().some(function(m){ return m.city === mem.city; });
+      }).map(function(mem){ return mem.museum ? self.museumById(mem.museum) : { id: '', name: mem.city }; }).filter(Boolean);
+    },
+
+    /** 展签: full when unlocked, first sentence as a teaser otherwise. */
+    achLabel(id) {
+      var a = this.achById(id); if (!a || !a.label) return '';
+      if (this.achLevel(id) > 0) return a.label;
+      var cut = a.label.search(/[。！？]/);
+      return cut > 0 ? a.label.slice(0, cut + 1) : a.label.slice(0, 40);
+    },
+
+    achDate(id) {
+      var s = this.ach.stored[id]; if (!s) return '';
+      var t = s.c || s.r, d = new Date(t);
+      return d.getFullYear() + '.' + (d.getMonth() + 1) + '.' + d.getDate();
+    },
+
+    openAch(id) { this.ach.sheetId = id; },
+    closeAch() { this.ach.sheetId = null; },
+
+    /** Recommendation chips from achievements for one museum (max 2, completing ones first). */
+    achChips(m) {
+      if (!m || !this.achCatalog.length) return [];
+      var self = this, eras = {}; eras[m.id] = this.linkedDynasties(m.id).map(function(d){ return self.layerNo(d.id); });
+      return window.AchCore.nudges(this.achCatalog, this.achResults(), m, eras).slice(0, 2).map(function(n){
+        var a = self.achById(n.id), r = self.achResult(n.id);
+        var t = n.kind === 'last' ? (n.next === 2 && r.level === 1 ? '「' + a.name + '」就圆满' : '「' + a.name + '」就达成')
+          : n.kind === 'first' ? '第一次来' + (a.provinces ? '这一片 · 「' + a.name + '」' : '')
+          : '「' + a.name + '」第 ' + (r.have + 1) + ' 处';
+        return { k: n.kind === 'last' ? 'ach-last' : 'ach', t: t, w: n.kind === 'last' ? 3 : n.kind === 'first' ? 1.5 : 0.5 };
+      });
+    },
+
     /** One line for the guide: museums the reader has already been to. */
     visitedLine() {
       var names = this.visitedMuseums().map(function(m){ return String(m.name || '').slice(0, 30); }).filter(Boolean);
@@ -2211,6 +2354,7 @@ window.museumApp = function() {
           this._justStamped = id;
           if (navigator.vibrate) { try { navigator.vibrate([18, 40, 70]); } catch(_) {} }
           if (!this.visits.muted) this.playRevealSound();
+          this.syncAchievements(true);
         }
         if (this.drawer.open && this.drawer.kind === 'museum' && this.selectedMuseumId === id) {
           if (this._drawerMuseum && this._drawerMuseum.id === id) this.drawer.sections = this.buildMuseumSections(this._drawerMuseum);
@@ -2227,6 +2371,7 @@ window.museumApp = function() {
         this.me = window.MuseumAuth.user;
         this.authForm.email = ''; this.authForm.password = '';
         await this.loadVisits(); this.refreshMarkers();
+        this.ach.ready = false; await this.loadAchievements();
         this.flashToast('已登录');
       } catch(e) {
         this.authForm.error = (e && e.message) || '登录失败';
@@ -2242,6 +2387,7 @@ window.museumApp = function() {
         this.authForm.email = ''; this.authForm.password = '';
         this.inviteCode = '';
         await this.loadVisits(); this.refreshMarkers();
+        this.ach.ready = false; await this.loadAchievements();
         this.flashToast('已注册并登录');
       } catch(e) {
         var msg = (e && e.message) || '注册失败';
@@ -2342,6 +2488,7 @@ window.museumApp = function() {
       await window.MuseumAuth.logout();
       this.me = null;
       await this.loadVisits(); this.refreshMarkers();
+      this.ach.ready = false; this.ach.queue = []; await this.loadAchievements();
       this.flashToast('已退出');
     },
 

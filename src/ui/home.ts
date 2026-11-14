@@ -16,6 +16,9 @@ import { DYNASTY_GEO } from "~/data/dynasty-geo"
 import { computeCrossings } from "~/services/crossings"
 import { AI_MODELS, DEFAULT_AI_MODEL, DEFAULT_AI_EFFORT } from "~/services/ai-models"
 import { MUSEUM_ALIASES } from "~/data/museum-aliases"
+import { ACHIEVEMENTS } from "~/data/achievements"
+import { ACHIEVEMENT_LABELS } from "~/data/achievement-labels"
+import { ACH_CORE_SCRIPT } from "./client/achievements-core"
 
 export interface ViewingProfile {
   user: { handle: string | null; displayName: string | null }
@@ -39,6 +42,7 @@ export function HomePage(data: HomeData): string {
     territoryUrl: TERRITORY_SRC,
     ai: { models: AI_MODELS, defaultModel: DEFAULT_AI_MODEL, defaultEffort: DEFAULT_AI_EFFORT },
     aliases: MUSEUM_ALIASES,
+    achievements: ACHIEVEMENTS.map((a) => ({ ...a, label: ACHIEVEMENT_LABELS[a.id] })),
   })
     .replace(/</g, "\\u003c") // safe inline in <script>
     .replace(/-->/g, "--\\u003e")
@@ -139,6 +143,7 @@ export function HomePage(data: HomeData): string {
 <script src="/cdn/qrcode.js"></script>
 <script>${COORDS_SCRIPT}</script>
 <script>${TRIP_CORE_SCRIPT}</script>
+<script>${ACH_CORE_SCRIPT}</script>
 <script>${MAP_SCRIPT}</script>
 <script>${CHAT_SCRIPT}</script>
 <script>${AUTH_SCRIPT}</script>
