@@ -31,6 +31,17 @@ export const COORDS_SCRIPT = `
     dLng = (dLng * 180.0) / (a / sqrtMagic * Math.cos(radLat) * PI);
     return [wgsLat + dLat, wgsLng + dLng];
   }
+  // Inverse by fixed-point iteration: find w with wgs84ToGcj02(w) = g.
+  function gcj02ToWgs84(gLat, gLng) {
+    if (outOfChina(gLat, gLng)) return [gLat, gLng];
+    var w = [gLat, gLng];
+    for (var i = 0; i < 6; i++) {
+      var g = wgs84ToGcj02(w[0], w[1]);
+      w = [w[0] + (gLat - g[0]), w[1] + (gLng - g[1])];
+    }
+    return w;
+  }
+  global.fromMapCoord = gcj02ToWgs84;
   global.outOfChina = outOfChina;
   global.wgs84ToGcj02 = wgs84ToGcj02;
   global.toMapCoord = wgs84ToGcj02;
@@ -64,4 +75,15 @@ export function toMapCoord(lat: number, lng: number): [number, number] {
   dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * PI)
   dLng = (dLng * 180.0) / ((a / sqrtMagic) * Math.cos(radLat) * PI)
   return [lat + dLat, lng + dLng]
+}
+
+/** Server-side mirror of the client's gcj02ToWgs84 (tests). */
+export function fromMapCoord(gLat: number, gLng: number): [number, number] {
+  if (gLng < 72.004 || gLng > 137.8347 || gLat < 0.8293 || gLat > 55.8271) return [gLat, gLng]
+  let w: [number, number] = [gLat, gLng]
+  for (let i = 0; i < 6; i++) {
+    const g = toMapCoord(w[0], w[1])
+    w = [w[0] + (gLat - g[0]), w[1] + (gLng - g[1])]
+  }
+  return w
 }

@@ -29,3 +29,16 @@ describe("WGS-84 → GCJ-02", () => {
     expect(toMapCoord(55.9, 100.0)).toEqual([55.9, 100.0])    // > 55.8271
   })
 })
+
+import { fromMapCoord } from "~/ui/client/coords"
+
+describe("GCJ-02 → WGS-84", () => {
+  it("round-trips within 1e-6 degrees", () => {
+    for (const [lat, lng] of [[39.9042, 116.4074], [34.3416, 108.9398], [30.2741, 120.1551]] as [number, number][]) {
+      const [gLat, gLng] = toMapCoord(lat, lng)
+      const [wLat, wLng] = fromMapCoord(gLat, gLng)
+      expect(wLat).toBeCloseTo(lat, 6)
+      expect(wLng).toBeCloseTo(lng, 6)
+    }
+  })
+})
