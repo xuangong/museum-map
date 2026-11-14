@@ -91,6 +91,50 @@ window.MuseumMap = {
   clearRoute: function() {
     if (this.routeLayer) this.routeLayer.clearLayers();
   },
+  /** 行程: the line we travel (WGS [[lat,lng]]), a soft corridor when driving, numbered city stops. */
+  setTripLine: function(line, cities, opts) {
+    opts = opts || {};
+    this.routeLayer.clearLayers();
+    var pts = (line || []).map(function(p){ return window.toMapCoord(p[0], p[1]); });
+    if (pts.length > 1) {
+      if (opts.corridor) L.polyline(pts, { className: 'route-corridor', weight: 26, opacity: 0.16, lineCap: 'round', lineJoin: 'round', interactive: false }).addTo(this.routeLayer);
+      L.polyline(pts, { className: 'route-glow', weight: 6, opacity: 0.12, interactive: false }).addTo(this.routeLayer);
+      L.polyline(pts, opts.real
+        ? { className: 'route-line', weight: 2.6, opacity: 0.95, lineCap: 'round', interactive: false }
+        : { className: 'route-line', weight: 2, opacity: 0.95, dashArray: '2 7', lineCap: 'round', interactive: false }).addTo(this.routeLayer);
+    }
+    var self = this, cs = [];
+    (cities || []).forEach(function(c, i){
+      var p = window.toMapCoord(c.lat, c.lng); cs.push(p);
+      L.marker(p, {
+        icon: L.divIcon({ className: '', html: '<div class="route-city"><b>' + (i + 1) + '</b><span>' + String(c.name).replace(/[<&]/g, '') + '</span></div>', iconSize: [0, 0], iconAnchor: [11, 11] }),
+        interactive: false, zIndexOffset: 600,
+      }).addTo(self.routeLayer);
+    });
+    var all = pts.length ? pts : cs;
+    var key = all.length + ':' + (all[0] || []).join(',') + ':' + (all[all.length - 1] || []).join(',');
+    if (all.length && key !== this._tripKey) {
+      this._tripKey = key;
+      try { this.map.flyToBounds(L.latLngBounds(all).pad(0.25), { duration: 0.8, maxZoom: 10 }); } catch(_) {}
+    }
+  },
+  /** A small popup at a place (WGS) with one action button. */
+  askCity: function(p, label, onAdd) {
+    var c = window.toMapCoord(p.lat, p.lng), self = this;
+    var el = document.createElement('button');
+    el.className = 'ask-city'; el.type = 'button'; el.textContent = label;
+    el.addEventListener('click', function(){ self.map.closePopup(); onAdd(); });
+    L.popup({ closeButton: false, className: 'ask-city-pop', offset: [0, -4] }).setLatLng(c).setContent(el).openOn(this.map);
+  },
+  /** Map taps (GCJ latlng) while a mode wants them; null to stop. */
+  onMapClick: function(cb) {
+    this._mapClick = cb;
+    if (!this._mapClickBound && this.map) {
+      this._mapClickBound = true;
+      var self = this;
+      this.map.on('click', function(e){ if (self._mapClick) self._mapClick(e.latlng); });
+    }
+  },
   setUser: function(lat, lng) {
     this.userLayer.clearLayers();
     var c = window.toMapCoord(lat, lng);
@@ -98,7 +142,7 @@ window.MuseumMap = {
     this.map.flyTo(c, 9, { duration: 0.8 });
   },
   /** 附近可补: the range around each anchor ({ lat, lng }), radius in km; styled by .range-ring. */
-  setRange: function(anchors, km) {
+  setRange: function(anchors, km, noFly) {
     this.clearRange();
     var self = this, pts = [];
     (anchors || []).forEach(function(a){
@@ -110,6 +154,7 @@ window.MuseumMap = {
     var key = km + ':' + pts.map(function(p){ return p[0].toFixed(3) + ',' + p[1].toFixed(3); }).join(';');
     if (pts.length && key !== this._rangeKey) {
       this._rangeKey = key;
+      if (noFly) return;
       try {
         var b = L.latLngBounds(pts);
         var pad = km / 111;

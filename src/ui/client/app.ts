@@ -746,6 +746,7 @@ window.museumApp = function() {
         this.tocOpen = true;
         if (this.view !== 'map') this.setView('map');
       }
+      if (window.MuseumMap.onMapClick) window.MuseumMap.onMapClick(this.tripMode ? this.tripMapClick.bind(this) : null);
       this.refreshMarkers();
     },
 
@@ -1146,10 +1147,18 @@ window.museumApp = function() {
       if (window.MuseumMap.clearRoute) window.MuseumMap.clearRoute();
       if (window.MuseumMap.resetRange && !this.visits.footprintMode) window.MuseumMap.resetRange();
       if (this.tripMode) {
-        var tv = this.tripAlong(), shown0 = [];
-        tv.groups.forEach(function(g){ g.shown.forEach(function(s){ shown0.push(s.m); }); });
-        window.MuseumMap.setMarkers(shown0, function(id){ self.openMuseum(id); }, { recommended: true, isVisited: function(id){ return self.isVisited(id); } });
+        var tv = this.tripAlong(), shownIds = {}, shown = [];
+        tv.groups.forEach(function(g){ g.shown.forEach(function(s){ if (!shownIds[s.m.id]) { shownIds[s.m.id] = true; shown.push(s.m); } }); });
+        this.trip.picks.forEach(function(id){ var m = self.museumById(id); if (m && !shownIds[id]) { shownIds[id] = true; shown.push(m); } });
+        window.MuseumMap.setMarkers(shown, function(id){ self.openMuseum(id); }, {
+          recommended: true,
+          isVisited: function(id){ return self.isVisited(id) || self.inTrip(id); },
+          isCandidate: function(id){ return !self.inTrip(id); },
+        });
         window.MuseumMap.clearEvents();
+        var r = this.trip.route, real = this.trip.mode === 'drive' && r && r.key === this.tripRouteKey() && r.provider === 'osrm';
+        window.MuseumMap.setTripLine(this.tripLine(), this.trip.cities, { real: real, corridor: this.trip.mode === 'drive' });
+        if (this.trip.mode === 'transit' && this.trip.cities.length && window.MuseumMap.setRange) window.MuseumMap.setRange(this.trip.cities, this.trip.radius, true);
       } else if (this.visits.footprintMode) {
         var lv = this.ledgerView();
         var candSet = {};
@@ -2176,6 +2185,7 @@ window.museumApp = function() {
       if (this.visits.footprintMode) {
         this.currentDynastyId = null;
         this.tripMode = false;
+        if (window.MuseumMap.onMapClick) window.MuseumMap.onMapClick(null);
         this.tocOpen = true;
       }
       this.refreshMarkers();
