@@ -194,7 +194,7 @@ window.museumApp = function() {
       if (!window.localStorage.getItem('museumChatWelcomed')) {
         this.chat.messages.push({
           role: 'assistant',
-          content: '👋 你好！这里可以问中国历史与博物馆，也支持斜杠命令：\\n\\n- \`/import <博物馆名>\` 派 agent 抓数据并暂存\\n- \`/pending\` 查看暂存列表\\n- \`/review <id>\` AI 评分并预览\\n- \`/approve|reject|delete <id>\` 处理暂存\\n\\n💡 输入 \`/\` 唤出命令面板。',
+          content: '你好，我是这里的讲解员。\\n\\n想看哪个朝代、去哪座城、哪件文物背后的故事，都可以问我；也可以告诉我你这几天在哪儿，我帮你把值得去的馆串成一条路。\\n\\n我提到的博物馆，会直接亮在地图上。',
         });
         window.localStorage.setItem('museumChatWelcomed', '1');
       }

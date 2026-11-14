@@ -419,6 +419,8 @@ body { margin: 0; background: var(--surface-3); color: var(--text); font-family:
   .own { margin: 0; font-size: 16px; }
   .own::before, .own::after { content: none; }
 }
+@media (max-width: 899px) { .juan-top { position: relative; padding-top: 220px; } .juan-slip { position: absolute; top: 36px; right: 4px; margin: 0; } }
+.colo, .own, .juan-note p { text-wrap: pretty; }
 @media (max-width: 520px) { .juan-strata .strata-hint { display: none; } .colo { font-size: 16px; letter-spacing: .05em; } .juan-yinshou { letter-spacing: .02em; } .juan-strata { height: 42vh; } .juan-notes { max-height: 30vh; } }
 @media (prefers-reduced-motion: reduce) {
   .juan-sealmark .seal.is-in, .juan-seals .seal.is-in, .guan-seal.is-fresh { animation: none; }

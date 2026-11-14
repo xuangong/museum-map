@@ -558,7 +558,7 @@ function init(container, data, cb) {
     overlay.classList.toggle('has-strings', strings.length > 0);
     if (play) stopPlay();
     paintPlay();
-    hint.textContent = strings.length ? '按住红色琴弦拨动 · 拖动旋转 · 右键或双指平移' : '拖动旋转 · 右键或双指平移 · 滚轮缩放 · 点地层看朝代 · 点光点看博物馆';
+    hint.textContent = hintText();
   }
   // The note a string gives when stopped at era 'li' (its 徽): the shorter the sounding part,
   // the higher. Open (li < 0) is the whole string.
@@ -1141,7 +1141,15 @@ function init(container, data, cb) {
       S.needs = true;
     });
   }
-  const hint = el('div', 'strata-hint', '拖动旋转 · 右键或双指平移 · 滚轮缩放 · 点地层看朝代 · 点光点看博物馆'); overlay.appendChild(hint);
+  // Touch screens have no right button or wheel; say what fingers do, and let the hint go on its own.
+  const touchy = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+  function hintText() {
+    const s0 = typeof strings !== 'undefined' && strings.length;
+    if (touchy) return s0 ? '按住红弦拨动 · 拖动旋转 · 双指缩放平移' : '拖动旋转 · 双指缩放平移 · 点地层看朝代';
+    return s0 ? '按住红色琴弦拨动 · 拖动旋转 · 右键或双指平移' : '拖动旋转 · 右键或双指平移 · 滚轮缩放 · 点地层看朝代 · 点光点看博物馆';
+  }
+  const hint = el('div', 'strata-hint', hintText()); overlay.appendChild(hint);
+  if (touchy) setTimeout(() => hint.classList.add('is-gone'), 6000);
   const soundBtn = el('button', 'strata-sound');
   soundBtn.type = 'button';
   const paintSound = () => {

@@ -1454,6 +1454,8 @@ body.chat-locked .chat-body { touch-action: pan-y; }
   transition: opacity 0.8s ease;
 }
 .strata-hint.is-gone { opacity: 0; }
+/* Phones: the time ruler runs down the left edge to the dock — keep the hint up top, under 溯洄 / 奏一曲. */
+@media (max-width: 640px) { .strata-hint { bottom: auto; top: 106px; left: auto; right: 14px; transform: none; font-size: 11px; white-space: normal; max-width: min(220px, 56vw); text-align: right; text-wrap: balance; border-radius: 12px; line-height: 1.6; } }
 /* 琴弦 sound on/off — only once you have strings to pluck */
 .strata-sound {
   position: absolute; right: 14px; top: 14px;
@@ -2125,11 +2127,17 @@ path.route-corridor { stroke: var(--gilt); }
 @media (max-width: 480px) {
   .culture-grid { grid-template-columns: 1fr; }
 }
+/* Phones (all current iPhones are 375–440 wide): brand + three labelled buttons don't fit. */
+@media (max-width: 480px) {
+  .brand-sub { display: none; }
+  .tb-btn:not(.tb-stamp) .tb-label { display: none; }
+  .tb-btn:not(.tb-stamp) { padding: 0; width: 32px; justify-content: center; }
+  .brand-text { overflow: hidden; }
+}
 @media (max-width: 400px) {
   .strata-back .sb-more { display: none; }
-  .brand-sub { display: none; }
   .tb-btn .tb-label { display: none; }
-  .tb-btn { padding: 0 9px; }
+  .tb-btn.tb-stamp { padding: 0 9px; }
   .dock-btn { padding: 0 12px; gap: 6px; }
   .dock-ai { padding: 0 14px; }
 }
