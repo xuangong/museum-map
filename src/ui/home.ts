@@ -90,8 +90,10 @@ export function HomePage(data: HomeData): string {
       </button>
       <div class="map-legend" x-show="view === 'map'" x-cloak>
         <template x-if="tripMode">
-          <div class="row"><span class="dot g"></span><span x-text="trip.mode === 'drive' ? '路线与沿途' : '城市与周边'"></span></div>
-          <div class="row"><span class="dot c"></span><span>推荐 · 点开可加入</span></div>
+          <div style="display:contents">
+            <div class="row"><span class="dot g"></span><span x-text="trip.mode === 'drive' ? '路线与沿途' : '城市与周边'"></span></div>
+            <div class="row"><span class="dot c"></span><span>推荐 · 点开可加入</span></div>
+          </div>
         </template>
         <template x-if="!tripMode && visits.footprintMode">
           <div class="row"><span class="dot r"></span><span>已集章</span></div>

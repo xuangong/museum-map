@@ -23,7 +23,7 @@ var __vdCache = null, __vdCacheKey = '', __vdCacheIds = {}, __vdDepth = {};
 var __territoryP = null;
 // 地层账本 (ledger) cache — same reason as __vdCache: computed from reactive state, stored outside it.
 var __ledger = null, __ledgerKey = '';
-var __tripView = null, __tripViewKey = '', __tripCities = null;
+var __tripView = null, __tripViewKey = '', __tripCities = null, __tripReq = 0;
 window.museumApp = function() {
   return {
     museums: [],
@@ -727,10 +727,22 @@ window.museumApp = function() {
       var i = this.trip.picks.indexOf(id), m = this.museumById(id);
       if (i >= 0) { this.trip.picks.splice(i, 1); this.flashToast('已从这一趟移出'); }
       else {
+        var self = this, addedCity = '';
+        if (m && m.lat != null) {
+          var inView = this.tripAlong().groups.some(function(g){ return g.stops.some(function(s){ return s.m.id === id; }); });
+          var far;
+          if (this.trip.mode === 'drive' && this.trip.cities.length > 1) far = window.TripCore.along(m, this.tripLine()).km > this.trip.radius;
+          else far = !this.trip.cities.some(function(c){ return self.kmBetween(c, m) <= Math.max(self.trip.radius, 60); });
+          if (!inView && far) {
+            var cn = String(m.city || m.name || '').replace(/市$/, '');
+            if (cn && !this.trip.cities.some(function(c){ return c.name === cn; })) {
+              this.trip.cities.push({ name: cn, lat: m.lat, lng: m.lng, days: 1 });
+              addedCity = cn;
+            }
+          }
+        }
         this.trip.picks.push(id);
-        var self = this, near = m && this.trip.cities.some(function(c){ return self.kmBetween(c, m) <= Math.max(self.trip.radius, 60); });
-        if (m && m.lat != null && !near) this.trip.cities.push({ name: m.city || m.name, lat: m.lat, lng: m.lng, days: 1 });
-        this.flashToast('已加入这一趟 · 共 ' + this.trip.picks.length + ' 座');
+        this.flashToast(addedCity ? '已加入这一趟，并把「' + addedCity + '」加进行程' : '已加入这一趟 · 共 ' + this.trip.picks.length + ' 座');
       }
       this.saveTrip();
       if (this.trip.mode === 'drive') this.tripFetchRoute();
@@ -745,6 +757,7 @@ window.museumApp = function() {
         this.visits.footprintMode = false;
         this.tocOpen = true;
         if (this.view !== 'map') this.setView('map');
+        window.MuseumMap._tripKey = null;
       }
       if (window.MuseumMap.onMapClick) window.MuseumMap.onMapClick(this.tripMode ? this.tripMapClick.bind(this) : null);
       this.refreshMarkers();
@@ -781,7 +794,7 @@ window.museumApp = function() {
       if (!q) { this.tripResults = []; return; }
       var local = this.tripKnownCities().filter(function(c){ return c.name.indexOf(q) >= 0 || q.indexOf(c.name) >= 0; }).slice(0, 4)
         .map(function(c){ return { name: c.name, lat: c.lat, lng: c.lng, note: c.n + ' 座馆' }; });
-      this.tripResults = local;
+      this.tripResults = local; this._tripResultsQ = q;
       try {
         var res = await fetch('/api/geocode?q=' + encodeURIComponent(q));
         if (!res.ok || (this.tripQ || '').trim() !== q) return;
@@ -789,11 +802,15 @@ window.museumApp = function() {
         local.forEach(function(r){ seen[r.name.replace(/市$/, '')] = true; });
         var more = (remote || []).filter(function(r){ var k = r.name.replace(/市$/, ''); if (seen[k]) return false; seen[k] = true; return true; })
           .map(function(r){ return { name: r.name, lat: r.lat, lng: r.lng, note: r.province || '' }; });
-        this.tripResults = local.concat(more).slice(0, 6);
+        this.tripResults = local.concat(more).slice(0, 6); this._tripResultsQ = q;
       } catch(_) {}
     },
 
-    tripAddFirst() { if (this.tripResults.length) this.tripAddCity(this.tripResults[0]); },
+    async tripAddFirst() {
+      var q = (this.tripQ || '').trim();
+      if (q && this._tripResultsQ !== q) await this.tripSearch();
+      if (this.tripResults.length) this.tripAddCity(this.tripResults[0]);
+    },
 
     tripAddCity(p) {
       var name = String(p.name || '').replace(/市$/, '');
@@ -837,12 +854,13 @@ window.museumApp = function() {
       var key = this.tripRouteKey();
       if (this.trip.mode !== 'drive' || this.trip.cities.length < 2) { this.trip.route = null; return; }
       if (this.trip.route && this.trip.route.key === key) return;
+      var req = ++__tripReq;
       this.tripBusy = true;
       try {
         var res = await fetch('/api/route?pts=' + encodeURIComponent(key));
         if (res.ok && this.tripRouteKey() === key) { var r = await res.json(); r.key = key; this.trip.route = r; __tripView = null; this.refreshMarkers(); }
       } catch(_) {}
-      this.tripBusy = false;
+      if (req === __tripReq) this.tripBusy = false;
     },
 
     /** The line we search along: the real route if we have it, else city to city. */
@@ -896,10 +914,10 @@ window.museumApp = function() {
 
     /** Recommended museums grouped by city (transit) or by leg (drive), best first in each. */
     tripAlong() {
-      var t = this.trip, key = [t.mode, this.tripRouteKey(), t.radius, t.picks.join(','), this.visits.ids.join(','), t.route ? t.route.key : ''].join('|');
+      var t = this.trip, key = [t.mode, this.tripRouteKey(), t.radius, t.picks.join(','), this.visits.ids.join(','), t.route ? t.route.key : '', t.cities.map(function(c){ return c.name + ':' + (c.days || 1); }).join(';')].join('|');
       if (__tripView && __tripViewKey === key) return __tripView;
       var self = this, held = this.tripHeldEras(), groups = [];
-      var ms = this.museums.filter(function(m){ return m.lat != null && !self.isVisited(m.id); });
+      var ms = this.museums.filter(function(m){ return m.lat != null && (!self.isVisited(m.id) || self.inTrip(m.id)); });
       var cities = t.cities;
       var mk = function(s){ var g = self.tripTags(s.m, s.km, held); return { m: s.m, km: Math.round(s.km), chips: g.chips, score: g.score, eras: g.eras, picked: self.inTrip(s.m.id) }; };
       if (t.mode === 'drive' && cities.length > 1) {
