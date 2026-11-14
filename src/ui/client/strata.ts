@@ -1547,17 +1547,28 @@ function init(container, data, cb) {
     return best;
   }
   function localXY(e) { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
-  // Which era layer is under a point: cast a ray and take the first stratum it meets — the one
-  // you see on top there. Uses the dynasty's own territory when loaded, else the China outline.
+  // Which era a point in the model means. The strata are stacked bands: once the point is on the
+  // model at all (the ray meets some layer), take the layer whose centre sits at that height on
+  // screen — like the ruler on the left, but anywhere across the model.
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
-  function pickLayer(p) {
+  function onModel(p) {
     ndc.set(p.x / canvas.clientWidth * 2 - 1, -(p.y / canvas.clientHeight) * 2 + 1);
     ray.setFromCamera(ndc, camera);
-    const meshes = layers.map((L) => L.tFill || L.fill);
-    const hits = ray.intersectObjects(meshes, false);
-    if (!hits.length) return null;
-    const i = meshes.indexOf(hits[0].object);
-    return i >= 0 ? layers[i] : null;
+    return ray.intersectObjects(layers.map((L) => L.tFill || L.fill), false).length > 0;
+  }
+  function pickLayer(p) {
+    if (!onModel(p)) return null;
+    let best = null, bd = Infinity;
+    layers.forEach((L) => { const s = screenOf(0, L.y, 0); if (s.z > 1) return; const d = Math.abs(s.y - p.y); if (d < bd) { bd = d; best = L; } });
+    return best;
+  }
+  let pickHover = -1;
+  function showPick(L) {
+    const i = L ? L.i : -1;
+    if (i === pickHover) return;
+    if (pickHover >= 0) layerLabels[pickHover].el.classList.remove('is-pick');
+    pickHover = i;
+    if (i >= 0) layerLabels[i].el.classList.add('is-pick');
   }
   // Pan: slide the view (screen right/left moves across the map, up/down moves through time).
   function panBy(dx, dy) {
@@ -1635,7 +1646,9 @@ function init(container, data, cb) {
       // A just-plucked string keeps its name up for a moment.
       if (i !== hoverIdx && (i >= 0 || nowP > tagHoldUntil)) { hoverIdx = i; S.needs = true; }
       const onString = i < 0 && state.focus < 0 && strings.length && nearestString(p, 10);
-      canvas.style.cursor = i >= 0 || onString ? 'pointer' : 'grab';
+      const L = i < 0 && !onString ? pickLayer(p) : null;
+      showPick(L && L.i !== state.focus ? L : null);
+      canvas.style.cursor = i >= 0 || onString || L ? 'pointer' : 'grab';
     }
   });
   function end(e) {
@@ -1656,7 +1669,7 @@ function init(container, data, cb) {
   }
   canvas.addEventListener('pointerup', end);
   canvas.addEventListener('pointercancel', end);
-  canvas.addEventListener('pointerleave', () => { lastPtr = null; if (hoverIdx >= 0 && performance.now() > tagHoldUntil) { hoverIdx = -1; S.needs = true; } });
+  canvas.addEventListener('pointerleave', () => { lastPtr = null; showPick(null); if (hoverIdx >= 0 && performance.now() > tagHoldUntil) { hoverIdx = -1; S.needs = true; } });
   canvas.addEventListener('wheel', (e) => {
     e.preventDefault();
     // Trackpad two-finger scroll (no ctrl) pans; pinch (ctrlKey) and mouse wheels zoom.

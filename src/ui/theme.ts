@@ -1366,7 +1366,9 @@ body.chat-locked .chat-body { touch-action: pan-y; }
   transition: color 0.2s, background 0.2s, opacity 0.3s;
 }
 .strata-label .sl-period { font-family: var(--mono); font-weight: 400; font-size: 9.5px; color: var(--text-4); }
-.strata-label:hover { color: var(--text); background: rgba(var(--bg2-rgb),0.75); }
+.strata-label:hover, .strata-label.is-pick { color: var(--text); background: rgba(var(--bg2-rgb),0.75); }
+/* The era a click on the model would open (hover over the model). */
+.strata-label.is-pick { box-shadow: inset 0 0 0 1px rgba(var(--gilt-rgb),0.45); opacity: 1; }
 .strata-label.is-active { color: var(--gilt-hi); background: rgba(var(--gilt-rgb),0.13); box-shadow: inset 0 0 0 1px rgba(var(--gilt-rgb),0.5); font-size: 14px; }
 .strata-label.is-active .sl-period { color: var(--gilt); font-size: 10.5px; }
 .strata-label.is-dim { opacity: 0.4; }

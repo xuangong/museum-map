@@ -1273,7 +1273,8 @@ window.museumApp = function() {
       if (ceremony) this.ach.queue = this.ach.queue.concat(out.fresh);
     },
 
-    achCeremony() { return this.ach.queue[0] || null; },
+    // While you're reading a 展签, the next unlock waits until the sheet closes.
+    achCeremony() { return this.ach.sheetId ? null : (this.ach.queue[0] || null); },
     achDismiss() { this.ach.queue = this.ach.queue.slice(1); },
 
     /** Rows for the 成就 page: [{ line, title, items: [{ a, r, level }] }], unlocked and nearly-there first. */
@@ -1296,7 +1297,7 @@ window.museumApp = function() {
       if (lv === 2) return r.reach < r.total ? '圆满' : '已达成';
       if (lv === 1) return '已达成 · 再集 ' + (r.total - r.have) + ' 处就圆满';
       var left = r.reach - r.have;
-      if (r.have === 0) return '还没开始 · 需要 ' + r.reach + ' 处';
+      if (r.have === 0) return '需要 ' + r.reach + ' 处';
       return left === 1 ? '只差一处' : '还差 ' + left + ' 处';
     },
 
@@ -1351,7 +1352,11 @@ window.museumApp = function() {
     achChips(m) {
       if (!m || !this.achCatalog.length) return [];
       var self = this, eras = {}; eras[m.id] = this.linkedDynasties(m.id).map(function(d){ return self.layerNo(d.id); });
-      return window.AchCore.nudges(this.achCatalog, this.achResults(), m, eras).slice(0, 2).map(function(n){
+      // Nudges come from current visits; drop the ones you've already unlocked (unlocks are never revoked).
+      return window.AchCore.nudges(this.achCatalog, this.achResults(), m, eras).filter(function(n){
+        var lv = self.achLevel(n.id);
+        return lv < 2 && !(n.kind === 'first' && lv >= 1) && !(n.kind === 'last' && lv >= n.next);
+      }).slice(0, 2).map(function(n){
         var a = self.achById(n.id), r = self.achResult(n.id);
         var t = n.kind === 'last' ? (n.next === 2 && r.level === 1 ? '「' + a.name + '」就圆满' : '「' + a.name + '」就达成')
           : n.kind === 'first' ? '第一次来' + (a.provinces ? '这一片 · 「' + a.name + '」' : '')
