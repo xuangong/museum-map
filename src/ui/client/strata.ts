@@ -557,7 +557,7 @@ function init(container, data, cb) {
     overlay.classList.toggle('has-strings', strings.length > 0);
     if (play) stopPlay();
     paintPlay();
-    hint.textContent = strings.length ? '按住红色琴弦拨动 · 拖动旋转 · 右键或双指平移' : '拖动旋转 · 右键或双指平移 · 滚轮缩放 · 点光点看博物馆';
+    hint.textContent = strings.length ? '按住红色琴弦拨动 · 拖动旋转 · 右键或双指平移' : '拖动旋转 · 右键或双指平移 · 滚轮缩放 · 点地层看朝代 · 点光点看博物馆';
   }
   // The note a string gives when stopped at era 'li' (its 徽): the shorter the sounding part,
   // the higher. Open (li < 0) is the whole string.
@@ -1131,7 +1131,7 @@ function init(container, data, cb) {
       S.needs = true;
     });
   }
-  const hint = el('div', 'strata-hint', '拖动旋转 · 右键或双指平移 · 滚轮缩放 · 点光点看博物馆'); overlay.appendChild(hint);
+  const hint = el('div', 'strata-hint', '拖动旋转 · 右键或双指平移 · 滚轮缩放 · 点地层看朝代 · 点光点看博物馆'); overlay.appendChild(hint);
   const soundBtn = el('button', 'strata-sound');
   soundBtn.type = 'button';
   const paintSound = () => {
@@ -1547,6 +1547,18 @@ function init(container, data, cb) {
     return best;
   }
   function localXY(e) { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+  // Which era layer is under a point: cast a ray and take the first stratum it meets — the one
+  // you see on top there. Uses the dynasty's own territory when loaded, else the China outline.
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  function pickLayer(p) {
+    ndc.set(p.x / canvas.clientWidth * 2 - 1, -(p.y / canvas.clientHeight) * 2 + 1);
+    ray.setFromCamera(ndc, camera);
+    const meshes = layers.map((L) => L.tFill || L.fill);
+    const hits = ray.intersectObjects(meshes, false);
+    if (!hits.length) return null;
+    const i = meshes.indexOf(hits[0].object);
+    return i >= 0 ? layers[i] : null;
+  }
   // Pan: slide the view (screen right/left moves across the map, up/down moves through time).
   function panBy(dx, dy) {
     const k = 2 * cam.dist * halfTan / Math.max(1, canvas.clientHeight);
@@ -1635,6 +1647,11 @@ function init(container, data, cb) {
       const p = localXY(e);
       const i = pickMuseum(p.x, p.y, e.pointerType === 'mouse' ? 16 : 28);
       if (i >= 0 && cb.onMuseum) cb.onMuseum(museums[i].id);
+      else if (i < 0 && cb.onDynasty) {
+        // Tap a stratum in the model to read that era (tapping the one you're reading keeps it).
+        const L = pickLayer(p);
+        if (L && L.i !== state.focus) cb.onDynasty(L.id);
+      }
     }
   }
   canvas.addEventListener('pointerup', end);
