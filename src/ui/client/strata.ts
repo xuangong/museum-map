@@ -99,31 +99,38 @@ function unlockAudio() {
     try { const a = new Audio(silentWavUrl()); a.loop = true; a.setAttribute('playsinline', ''); a.play().catch(() => {}); } catch (e) {}
   }
 }
+// The room every note plays into: a soft top-end roll-off, a dark hall, a gentle limiter.
+// Built per context so a performance can also be rendered offline (renderTune).
+function makeGraph(ac) {
+  const m = ac.createGain(); m.gain.value = 1.1;
+  const tone = ac.createBiquadFilter(); tone.type = 'lowpass'; tone.frequency.value = 6500; tone.Q.value = 0.5;
+  const comp = ac.createDynamicsCompressor();
+  comp.threshold.value = -16; comp.ratio.value = 3; comp.attack.value = 0.01; comp.release.value = 0.25;
+  m.connect(tone); tone.connect(comp); comp.connect(ac.destination);
+  try {
+    const sr = ac.sampleRate, n = Math.floor(sr * 2.6), ir = ac.createBuffer(2, n, sr);
+    for (let c = 0; c < 2; c++) {
+      const d = ir.getChannelData(c); let lp = 0;
+      for (let i = 0; i < n; i++) { lp = lp * 0.55 + (Math.random() * 2 - 1) * 0.45; d[i] = lp * Math.pow(1 - i / n, 2.6); }
+    }
+    const conv = ac.createConvolver(); conv.buffer = ir;
+    const wet = ac.createGain(); wet.gain.value = 0.3;
+    tone.connect(conv); conv.connect(wet); wet.connect(comp);
+  } catch (e) {}
+  return m;
+}
 function audioCtx() {
   if (!actx) {
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return null;
-    try {
-      actx = new AC();
-      master = actx.createGain(); master.gain.value = 0.55;
-      const comp = actx.createDynamicsCompressor();
-      master.connect(comp); comp.connect(actx.destination);
-      // A quiet hall: generated impulse, about two seconds of tail.
-      try {
-        const sr = actx.sampleRate, n = Math.floor(sr * 2.2), ir = actx.createBuffer(2, n, sr);
-        for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 3.2); }
-        const conv = actx.createConvolver(); conv.buffer = ir;
-        const wet = actx.createGain(); wet.gain.value = 0.2;
-        master.connect(conv); conv.connect(wet); wet.connect(comp);
-      } catch (e) {}
-    } catch (e) { actx = null; return null; }
+    try { actx = new AC(); master = makeGraph(actx); } catch (e) { actx = null; return null; }
   }
   if (actx.state === 'suspended') { try { actx.resume(); } catch (e) {} }
   return actx;
 }
 function ksBuffer(ac, freq, lpk, decay) {
   lpk = lpk == null ? 0.4 : lpk; decay = decay || 2.4;
-  const key = Math.round(freq * 10) + ':' + lpk + ':' + decay;
+  const key = Math.round(freq * 10) + ':' + lpk + ':' + decay + ':' + ac.sampleRate;
   if (ksCache[key]) return ksCache[key];
   const sr = ac.sampleRate, n = Math.floor(sr * 3), buf = ac.createBuffer(1, n, sr), d = buf.getChannelData(0);
   const P = Math.max(2, Math.round(sr / freq)), ring = new Float32Array(P);
@@ -143,32 +150,35 @@ function ksBuffer(ac, freq, lpk, decay) {
   return buf;
 }
 // ── Era voices: every stratum has its own instrument, whether or not you have strings there;
-// 今 is your own strings. All synthesized: plucks are Karplus–Strong buffers, struck stone,
-// bronze and the qin are decaying partials, winds and the huqin are shaped oscillators.
+// 今 is your own strings. All synthesized and kept in a warm middle register:
+//   pluck: Karplus–Strong [brightness, seconds to fade]
+//   bell:  struck partials [ratio, level, seconds] — near-harmonic, so a melody stays clear
+//   h:     blown/bowed tone (harmonic levels), shaped to the note's length, through a low-pass
+//          at lp × pitch, with a little breath and a late vibrato [rate, depth, delay]
 // Era → instrument and the museum object it is drawn from (src/data/era-voices.ts).
 const ERA = ${JSON.stringify(ERA_VOICES)};
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const VOICES = {
-  ks: { name: '你的琴弦', oct: 1, g: 1.2, pluck: [0.4, 2.4] },
-  // Plucked strings
-  zhu: { oct: 1, g: 1.45, pluck: [0.12, 0.7], click: 0.45 },
-  se: { oct: 1, g: 1.2, pluck: [0.28, 2.0] },
-  pipa: { oct: 2, g: 1.25, pluck: [0.06, 0.9] },
-  // Struck stone, bronze, drum; the qin rings like a struck string with a slow 吟
-  qing: { oct: 2, g: 0.6, bell: [[1, 1, 1.4], [2.32, 0.45, 0.6], [3.86, 0.28, 0.4], [5.33, 0.14, 0.25]], click: 0.35 },
-  tongqing: { oct: 2, g: 0.55, bell: [[1, 1, 2.2], [2.4, 0.42, 1], [3.9, 0.25, 0.6], [5.4, 0.12, 0.35]], click: 0.22 },
-  nao: { oct: 2, g: 0.55, bell: [[1, 1, 0.9], [1.53, 0.6, 0.6], [2.3, 0.4, 0.4], [3.2, 0.25, 0.25], [4.4, 0.12, 0.15]], click: 0.4 },
-  zhong: { oct: 2, g: 0.5, bell: [[0.5, 0.3, 2.6], [1, 1, 2], [1.19, 0.5, 1.3], [1.5, 0.2, 0.9], [2, 0.38, 0.8], [2.74, 0.14, 0.4]], click: 0.25 },
-  tonggu: { oct: 1, g: 0.85, bell: [[1, 1, 0.6], [1.59, 0.5, 0.35], [2.14, 0.35, 0.25], [2.65, 0.2, 0.2]], click: 0.6 },
-  qin: { oct: 1, g: 0.46, bell: [[1, 1, 3.2], [2, 0.5, 2.2], [3, 0.28, 1.6], [4, 0.14, 1.1], [5, 0.08, 0.8]], click: 0.08, vib: [5, 0.006, 0.5] },
-  // Blown and bowed
-  gudi: { oct: 2, g: 0.42, h: [1, 0.08, 0.05], env: [0.05, 0.34, 0.35], breath: 0.3, vib: [5, 0.003, 0.3] },
-  paixiao: { oct: 2, g: 0.44, h: [1, 0.05, 0.1, 0.02], env: [0.06, 0.34, 0.4], breath: 0.34 },
-  di: { oct: 2, g: 0.44, h: [1, 0.4, 0.18, 0.07, 0.04, 0.03, 0.025, 0.02], env: [0.035, 0.3, 0.3], breath: 0.14, vib: [5.8, 0.006, 0.22] },
-  guan: { oct: 2, g: 0.28, h: [1, 0.8, 0.65, 0.5, 0.4, 0.3, 0.22, 0.15, 0.1, 0.07], env: [0.05, 0.38, 0.3], breath: 0.05, vib: [5.2, 0.01, 0.2] },
-  huqin: { oct: 2, g: 0.44, h: [1, 0.55, 0.36, 0.24, 0.16, 0.11, 0.07, 0.05, 0.03], env: [0.12, 0.42, 0.35], breath: 0.03, vib: [5.5, 0.009, 0.15] },
+  ks: { name: '你的琴弦', g: 1.15, pluck: [0.4, 2.4] },
+  zhu: { g: 1.25, pluck: [0.22, 0.9], click: 0.08 },
+  se: { g: 1.15, pluck: [0.38, 2.2] },
+  pipa: { g: 1.15, pluck: [0.16, 1.2] },
+  qing: { g: 0.62, bell: [[1, 1, 1.2], [2.76, 0.18, 0.4], [5.4, 0.05, 0.2]], click: 0.05 },
+  tongqing: { g: 0.6, bell: [[1, 1, 1.6], [2, 0.28, 0.8], [3, 0.1, 0.5]], click: 0.04 },
+  nao: { g: 0.6, bell: [[1, 1, 0.9], [2, 0.32, 0.5], [3.01, 0.12, 0.3]], click: 0.06 },
+  zhong: { g: 0.58, bell: [[0.5, 0.22, 1.8], [1, 1, 1.5], [2, 0.28, 0.8], [3, 0.1, 0.5]], click: 0.04 },
+  tonggu: { g: 0.8, oct: 0.5, bell: [[1, 1, 0.55], [1.5, 0.25, 0.3], [2, 0.15, 0.2]], click: 0.1 },
+  qin: { g: 0.62, bell: [[1, 1, 2.4], [2, 0.32, 1.6], [3, 0.13, 1], [4, 0.05, 0.7]], click: 0.03, vib: [5, 0.004, 0.45] },
+  gudi: { g: 0.5, h: [1, 0.12, 0.04], a: 0.05, rel: 0.25, lp: 5, breath: 0.07, vib: [5, 0.004, 0.35] },
+  paixiao: { g: 0.5, h: [1, 0.06, 0.12, 0.02], a: 0.06, rel: 0.3, lp: 4, breath: 0.09 },
+  di: { g: 0.46, h: [1, 0.3, 0.12, 0.05], a: 0.04, rel: 0.22, lp: 6, breath: 0.05, vib: [5.6, 0.005, 0.25] },
+  guan: { g: 0.36, h: [1, 0.6, 0.45, 0.3, 0.2, 0.12], a: 0.05, rel: 0.2, lp: 3, breath: 0.02, vib: [5, 0.007, 0.25] },
+  huqin: { g: 0.4, h: [1, 0.5, 0.33, 0.25, 0.18, 0.12, 0.08], a: 0.1, rel: 0.25, lp: 3.5, vib: [5.5, 0.007, 0.18] },
+  // Underneath: a held drone and a soft bass, so twenty instruments still make one piece.
+  pad: { g: 0.5, h: [1, 0.25, 0.06], a: 1.4, rel: 1.6, lp: 2.5 },
+  bass: { g: 0.62, h: [1, 0.35, 0.1], a: 0.08, rel: 0.5, lp: 2.5 },
 };
-const waveCache = {};
+const waveCache = new WeakMap();
 let noiseBuf = null;
 function noise(ac) {
   if (noiseBuf) return noiseBuf;
@@ -184,57 +194,73 @@ function vibrato(ac, param, f, vib, when, end, srcs) {
   dg.gain.setValueAtTime(0, when); dg.gain.linearRampToValueAtTime(f * vib[1], when + vib[2] + 0.3);
   lfo.connect(dg); dg.connect(param); lfo.start(when); lfo.stop(end); srcs.push(lfo);
 }
-function burst(ac, out, amp, freq, when, len, srcs, envFn) {
+function burst(ac, out, freq, when, len, srcs, envFn) {
   const n = ac.createBufferSource(); n.buffer = noise(ac); n.loop = true;
-  const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = Math.min(9000, freq); bp.Q.value = 1.2;
+  const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = Math.min(8000, freq); bp.Q.value = 1.4;
   const g = ac.createGain();
-  envFn ? envFn(g.gain) : (g.gain.setValueAtTime(amp, when), g.gain.exponentialRampToValueAtTime(0.0001, when + len));
+  envFn(g.gain);
   n.connect(bp); bp.connect(g); g.connect(out);
   n.start(when, Math.random() * 0.5); n.stop(when + len + 0.05); srcs.push(n);
 }
-// One note at pentatonic degree 'deg' on voice 'vk'; 'when' is an AudioContext time (0 = now).
+// One note at pentatonic degree 'deg' (or o.freq Hz) on voice 'vk', starting at AudioContext
+// time 'when'. o.dur shapes held notes; o.ac / o.dest render somewhere other than the live room.
 // Returns the sources it started, so a performance can be cut short.
-function stringSound(deg, vel, pan, when, vk) {
-  const ac = audioCtx();
-  if (!ac || !master) return [];
+function stringSound(deg, vel, pan, when, vk, o) {
+  o = o || {};
+  const ac = o.ac || audioCtx(), dest = o.dest || master;
+  if (!ac || !dest) return [];
   const V = VOICES[vk] || VOICES.ks, srcs = [];
   try {
-    const t = Math.max(when || 0, ac.currentTime), f = degFreq(deg) * V.oct;
-    const out = ac.createGain(); out.gain.value = 0.34 * V.g * Math.max(0.3, Math.min(1.3, vel));
-    if (ac.createStereoPanner) { const pn = ac.createStereoPanner(); pn.pan.value = Math.max(-0.8, Math.min(0.8, pan || 0)); out.connect(pn); pn.connect(master); }
-    else out.connect(master);
+    const t = Math.max(when || 0, ac.currentTime), f = (o.freq || degFreq(deg)) * (V.oct || 1), dur = o.dur || 0.5;
+    const out = ac.createGain(); out.gain.value = 0.34 * V.g * Math.max(0.15, Math.min(1.3, vel));
+    if (ac.createStereoPanner) { const pn = ac.createStereoPanner(); pn.pan.value = Math.max(-0.7, Math.min(0.7, pan || 0)); out.connect(pn); pn.connect(dest); }
+    else out.connect(dest);
     if (V.pluck) {
       const src = ac.createBufferSource();
       src.buffer = ksBuffer(ac, f, V.pluck[0], V.pluck[1]);
       src.connect(out); src.start(t); srcs.push(src);
     } else if (V.bell) {
-      // Struck: each partial rings and dies on its own.
+      // Struck: each partial rings and dies on its own; quick notes ring shorter.
       V.bell.forEach(([r, a, dec]) => {
-        const fr = f * r; if (fr > 9000) return;
-        const o = ac.createOscillator(), g = ac.createGain();
-        o.frequency.value = fr;
-        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(a, t + 0.004); g.gain.setTargetAtTime(0, t + 0.004, dec / 4);
-        o.connect(g); g.connect(out); o.start(t); o.stop(t + dec * 1.4 + 0.1); srcs.push(o);
-        vibrato(ac, o.frequency, fr, V.vib, t, t + dec * 1.4 + 0.1, srcs);
+        const fr = f * r; if (fr > 8000) return;
+        const d = Math.min(dec, 0.35 + dur * 1.6);
+        const osc = ac.createOscillator(), g = ac.createGain();
+        osc.frequency.value = fr;
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(a, t + 0.006); g.gain.setTargetAtTime(0, t + 0.006, d / 4);
+        osc.connect(g); g.connect(out); osc.start(t); osc.stop(t + d * 1.5 + 0.1); srcs.push(osc);
+        vibrato(ac, osc.frequency, fr, V.vib, t, t + d * 1.5 + 0.1, srcs);
       });
+      if (V.click) burst(ac, out, f * 5, t, 0.03, srcs, (gp) => { gp.setValueAtTime(V.click, t); gp.exponentialRampToValueAtTime(0.0001, t + 0.03); });
     } else {
-      // Blown or bowed: a shaped tone with breath around it.
-      const [a, hold, rel] = V.env, end = t + a + hold + rel * 2.2;
-      const key = vk;
-      if (!waveCache[key]) { const im = new Float32Array([0].concat(V.h)), re = new Float32Array(im.length); waveCache[key] = ac.createPeriodicWave(re, im); }
-      const o = ac.createOscillator(), g = ac.createGain();
-      o.setPeriodicWave(waveCache[key]); o.frequency.value = f;
-      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(1, t + a); g.gain.setValueAtTime(1, t + a + hold * 0.4);
-      g.gain.linearRampToValueAtTime(0.82, t + a + hold); g.gain.setTargetAtTime(0, t + a + hold, rel / 3);
-      o.connect(g); g.connect(out); o.start(t); o.stop(end); srcs.push(o);
-      vibrato(ac, o.frequency, f, V.vib, t, end, srcs);
-      if (V.breath) burst(ac, out, V.breath, f * 2, t, a + hold + rel, srcs, (gp) => {
-        gp.setValueAtTime(0, t); gp.linearRampToValueAtTime(V.breath, t + a * 0.6); gp.setTargetAtTime(V.breath * 0.35, t + a, 0.08); gp.setTargetAtTime(0, t + a + hold, rel / 3);
+      // Blown or bowed: rises, holds for the note's length, lets go — legato, never piling up.
+      const a = Math.min(V.a, dur * 0.5), hold = Math.max(0.04, dur - a - 0.02), rel = V.rel, end = t + a + hold + rel * 3;
+      let cache = waveCache.get(ac); if (!cache) { cache = {}; waveCache.set(ac, cache); }
+      if (!cache[vk]) { const im = new Float32Array([0].concat(V.h)), re = new Float32Array(im.length); cache[vk] = ac.createPeriodicWave(re, im); }
+      const osc = ac.createOscillator(), lpf = ac.createBiquadFilter(), g = ac.createGain();
+      osc.setPeriodicWave(cache[vk]); osc.frequency.value = f;
+      lpf.type = 'lowpass'; lpf.frequency.value = Math.min(9000, f * V.lp); lpf.Q.value = 0.4;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(1, t + a);
+      g.gain.linearRampToValueAtTime(0.85, t + a + hold); g.gain.setTargetAtTime(0, t + a + hold, rel / 3);
+      osc.connect(lpf); lpf.connect(g); g.connect(out); osc.start(t); osc.stop(end); srcs.push(osc);
+      vibrato(ac, osc.frequency, f, V.vib, t, end, srcs);
+      if (V.breath) burst(ac, out, f * 2, t, a + hold + rel, srcs, (gp) => {
+        gp.setValueAtTime(0, t); gp.linearRampToValueAtTime(V.breath, t + a * 0.7); gp.setTargetAtTime(V.breath * 0.3, t + a, 0.06); gp.setTargetAtTime(0, t + a + hold, rel / 3);
       });
     }
-    if (V.click) burst(ac, out, V.click, f * 6, t, 0.035, srcs);
   } catch (e) {}
   return srcs;
+}
+// 16-bit PCM WAV of a rendered buffer (for listening to a performance outside the page).
+function wavBytes(buf) {
+  const ch = buf.numberOfChannels, n = buf.length, sr = buf.sampleRate, out = new DataView(new ArrayBuffer(44 + n * ch * 2));
+  const w = (o, str) => { for (let i = 0; i < str.length; i++) out.setUint8(o + i, str.charCodeAt(i)); };
+  w(0, 'RIFF'); out.setUint32(4, 36 + n * ch * 2, true); w(8, 'WAVE'); w(12, 'fmt ');
+  out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, ch, true); out.setUint32(24, sr, true);
+  out.setUint32(28, sr * ch * 2, true); out.setUint16(32, ch * 2, true); out.setUint16(34, 16, true); w(36, 'data'); out.setUint32(40, n * ch * 2, true);
+  const data = []; for (let c = 0; c < ch; c++) data.push(buf.getChannelData(c));
+  let o = 44;
+  for (let i = 0; i < n; i++) for (let c = 0; c < ch; c++) { const v = Math.max(-1, Math.min(1, data[c][i])); out.setInt16(o, v < 0 ? v * 0x8000 : v * 0x7fff, true); o += 2; }
+  return new Uint8Array(out.buffer);
 }
 
 // tint = colour, kk = intensity. Light halls: colour × intensity, added. Ink hall: a
@@ -616,67 +642,80 @@ function init(container, data, cb) {
     lastInteract = now; S.needs = true;
   }
 
-  // ── 奏一曲: the strings write their own tune ──
-  // All strata: history plays upward, 远古 → 今. On each era, the strings through it sound,
-  // stopped at that era; 今 closes with every string open. One era (reading view): a short
-  // phrase on that era's notes. Sound is scheduled on the audio clock; each frame plucks the
-  // strings whose notes have started on that same clock, so what you see is what you hear.
+  // ── 奏一曲: a written tune, one bar per era ──
+  // A pentatonic melody (宫调, G) in five phrases of four bars, 远古 → 清, resolving home; 今
+  // closes on a chord strummed across your own strings. Each bar is played by its era's
+  // instrument: at full voice where you have strings (they pluck with the notes), softly where
+  // you have none yet (留白) — every stamp fills in more of the same tune. A held drone and a
+  // bass line run underneath. Sound is scheduled on the audio clock; each frame plucks the
+  // strings whose notes have started on that clock, so what you see is what you hear.
   let play = null, playLayer = -1, playRest = false;
+  const BEAT = 0.36;
+  // [degree, beats]; degree 5 = G3 … 13 = D5.
+  const MELODY = [
+    [[8, 2], [9, 1], [10, 1]], [[9, 1.5], [8, 0.5], [7, 1], [8, 1]], [[10, 2], [11, 1], [12, 1]], [[11, 1], [10, 1], [9, 2]],
+    [[9, 1], [10, 1], [11, 1.5], [10, 0.5]], [[9, 2], [8, 2]], [[8, 1], [9, 1], [10, 1], [12, 1]], [[11, 3], [10, 1]],
+    [[7, 2], [8, 1], [9, 1]], [[8, 1], [7, 1], [6, 2]], [[7, 1], [8, 1], [9, 1], [11, 1]], [[10, 4]],
+    [[10, 1], [11, 1], [12, 1], [13, 1]], [[12, 1.5], [11, 0.5], [10, 2]], [[11, 1], [12, 1], [13, 1.5], [12, 0.5]], [[11, 2], [9, 2]],
+    [[10, 1], [9, 1], [8, 2]], [[9, 1], [8, 1], [7, 1], [6, 1]], [[7, 1.5], [8, 0.5], [9, 1], [7, 1]], [[5, 4]],
+  ];
+  // Bass root of each bar (Hz): G2 E2 A2 D2.
+  const G2 = 98, E2 = 82.41, A2 = 110, D2 = 73.42;
+  const BASS = [G2, E2, G2, D2, E2, A2, G2, D2, E2, D2, A2, G2, G2, E2, A2, D2, E2, A2, D2, G2];
   function stringsAt(li) { return strings.filter((st) => museums[st.m].links.indexOf(li) >= 0); }
   function eraOf(li) { return li >= 0 && li < N ? ERA[layers[li].id] || null : null; }
   function voiceOf(li) { const e = eraOf(li); return e && VOICES[e.voice] ? e.voice : 'ks'; }
-  // An empty era's own note: a gentle rise through history, so the rests still make a line.
-  function homeOf(li) { return 3 + Math.round(li * 4 / Math.max(1, N - 1)); }
+  function barOf(li) { return Math.round(li * (MELODY.length - 1) / Math.max(1, N - 1)); }
   function panOf(st) { if (!st) return 0; const m = museums[st.m], p = screenOf(m.x, st.y0, m.z); return (p.x / Math.max(1, canvas.clientWidth)) * 2 - 1; }
+  // One bar: melody notes on 'vk', strings (if any) taking the notes in turn, plus its bass.
+  function playBar(ev, b, t, li, vk, here, vel) {
+    let pos = 0;
+    MELODY[b].forEach(([deg, beats], k) => {
+      ev.push({ t: t + pos * BEAT, dur: beats * BEAT, deg, vel: vel * (k === 0 ? 1 : 0.85), voice: vk, st: here.length ? here[k % here.length] : null, li });
+      pos += beats;
+    });
+    ev.push({ t, dur: 4 * BEAT, freq: BASS[b], vel: 0.5, voice: 'bass', st: null, li });
+  }
+  function drone(ev, t, dur) {
+    ev.push({ t, dur, freq: G2, vel: 0.6, voice: 'pad', st: null, li: -1 });
+    ev.push({ t, dur, freq: G2 * 1.5, vel: 0.42, voice: 'pad', st: null, li: -1 });
+  }
   function compose(F) {
     const ev = [], lay = [];
     let t = 0;
+    const byPitch = (li) => stringsAt(li).sort((a, b) => noteAt(a, li) - noteAt(b, li));
     if (F < 0) {
       for (let li = 0; li < N; li++) {
-        const vk = voiceOf(li);
-        const here = stringsAt(li).map((st) => ({ st, deg: noteAt(st, li) })).sort((a, b) => a.deg - b.deg || museums[a.st.m].x - museums[b.st.m].x).slice(0, 6);
-        if (!here.length) {
-          // 留白: one soft note in the era's instrument, and the layer stays dim.
-          lay.push({ t, li, rest: true });
-          ev.push({ t, st: null, li, deg: homeOf(li), vel: VOICES[vk].pluck ? 0.62 : 0.42, voice: vk });
-          t += 0.62;
-          continue;
-        }
-        lay.push({ t, li });
-        here.forEach((x, k) => {
-          ev.push({ t, st: x.st, li, deg: x.deg, vel: k === 0 ? 1.05 : 0.8, voice: vk });
-          t += k === here.length - 1 ? 0.4 : 0.21;
-        });
-        t += 0.08;
+        const here = byPitch(li);
+        lay.push({ t, li, rest: !here.length });
+        playBar(ev, barOf(li), t, li, voiceOf(li), here, here.length ? 1 : 0.32);
+        t += 4 * BEAT;
       }
-      // 今: every string open, a slow strum on your own strings.
+      // 今: home chord, strummed across your strings (or simply sounded if you have none yet).
       lay.push({ t, li: N });
-      strings.slice().sort((a, b) => a.note - b.note).forEach((st, k) => { ev.push({ t: t + k * 0.06, st, li: -1, deg: st.note, vel: 0.9, voice: 'ks' }); });
-      return { ev, lay, dur: t + (strings.length ? strings.length * 0.06 + 2.6 : 1.6) };
+      const chord = [5, 7, 8, 10, 12, 13], order = strings.slice().sort((a, b) => a.note - b.note);
+      const n = Math.max(3, Math.min(chord.length, order.length || 3));
+      for (let k = 0; k < n; k++) ev.push({ t: t + k * 0.07, dur: 2.5, deg: chord[k], vel: 0.85, voice: 'ks', st: order.length ? order[k % order.length] : null, li: -1 });
+      ev.push({ t, dur: 3, freq: G2, vel: 0.55, voice: 'bass', st: null, li: -1 });
+      drone(ev, 0, t + 2.6);
+      ev.sort((a, b) => a.t - b.t);
+      return { ev, lay, dur: t + 3.6 };
     }
-    const vk = voiceOf(F);
-    const here = stringsAt(F).map((st) => ({ st, deg: noteAt(st, F) })).sort((a, b) => a.deg - b.deg);
-    if (!here.length) {
-      // No string here yet: the era's instrument plays a short motif alone.
-      const h = homeOf(F), motif = [0, 1, 2, 1, 3, 2, 0], beats = [1, 1, 2, 1, 1, 1, 3];
-      lay.push({ t: 0, li: F, rest: true });
-      motif.forEach((d, k) => { ev.push({ t, st: null, li: F, deg: h + d, vel: 0.55, voice: vk }); t += beats[k] * 0.3; });
-      return { ev, lay, dur: t + 2 };
-    }
-    // The era's notes and their octave, played to a fixed rhythm (beats of 0.26 s).
-    const ladder = here.concat(here.map((x) => ({ st: x.st, deg: Math.min(MAX_DEG, x.deg + 5) })));
-    const L = ladder.length;
-    const shape = [0, 1, 2, 3, 2, 1, 0, 2, 1, 3, 4, 3, 2, 1, 0];
-    const beats = [1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 3];
-    lay.push({ t: 0, li: F });
-    shape.forEach((idx, k) => {
-      const x = ladder[Math.min(L - 1, Math.round(idx * (L - 1) / 4))];
-      ev.push({ t, st: x.st, li: F, deg: x.deg, vel: beats[k] > 1 ? 1.05 : 0.8, voice: vk });
-      t += beats[k] * 0.26;
-    });
-    // Close on the era's chord.
-    here.forEach((x, k) => { ev.push({ t: t + k * 0.05, st: x.st, li: F, deg: x.deg, vel: 0.85, voice: vk }); });
+    // One era: the phrase its bar belongs to, all on that era's instrument.
+    const vk = voiceOf(F), here = byPitch(F), b0 = Math.floor(barOf(F) / 4) * 4;
+    lay.push({ t: 0, li: F, rest: !here.length });
+    for (let b = b0; b < b0 + 4 && b < MELODY.length; b++) { playBar(ev, b, t, F, vk, here, here.length ? 1 : 0.6); t += 4 * BEAT; }
+    drone(ev, 0, t + 0.6);
+    ev.sort((a, b) => a.t - b.t);
     return { ev, lay, dur: t + 2.4 };
+  }
+  // The same performance rendered offline, as WAV bytes (F: era index, or -1 for all strata).
+  async function renderTune(F) {
+    const c = compose(F == null ? state.focus : F), sr = 44100;
+    const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    const oc = new OAC(2, Math.ceil((c.dur + 1) * sr), sr), dest = makeGraph(oc);
+    c.ev.forEach((e) => stringSound(e.deg, e.vel, panOf(e.st), 0.1 + e.t, e.voice, { dur: e.dur, freq: e.freq, ac: oc, dest }));
+    return wavBytes(await oc.startRendering());
   }
   function markPlayLayer(li, rest) {
     playLayer = li; playRest = !!rest;
@@ -693,7 +732,7 @@ function init(container, data, cb) {
     const ac = audioCtx(), audio = !!(ac && master);
     const t0 = (audio ? ac.currentTime : performance.now() / 1000) + 0.15;
     const srcs = [];
-    c.ev.forEach((e) => { e.at = t0 + e.t; if (audio) srcs.push(...stringSound(e.deg, e.vel, panOf(e.st), e.at, e.voice)); });
+    c.ev.forEach((e) => { e.at = t0 + e.t; if (audio) srcs.push(...stringSound(e.deg, e.vel, panOf(e.st), e.at, e.voice, { dur: e.dur, freq: e.freq })); });
     c.lay.forEach((l) => { l.at = t0 + l.t; });
     play = { audio, ev: c.ev, lay: c.lay, i: 0, j: 0, end: t0 + c.dur, srcs, focus: F };
     hint.classList.add('is-gone');
@@ -1501,6 +1540,7 @@ function init(container, data, cb) {
     ready: true,
     update,
     setActive(on) { active = !!on; if (on) { last = performance.now(); fit(true); } else stopPlay(); },
+    renderTune,
     resize: () => fit(true),
     setTheme: applyTheme,
     // Preview one museum's beam through its strata (ledger hover); null clears.
@@ -1531,6 +1571,8 @@ window.MuseumStrata = {
   setInset(bottom, right) { if (S.ready) S.setInset(bottom, right); },
   /** Preview one museum's beam (id) or clear (null). */
   highlight(id) { if (S.ready) S.highlight(id); },
+  /** WAV bytes of 奏一曲 (F: era index, -1 all strata, omitted: what the view would play). */
+  renderTune(F) { return S.ready ? S.renderTune(F) : Promise.resolve(null); },
   /** 'night' | 'paper' | 'qinglu' */
   setTheme(name) { if (S.ready) S.setTheme(name); },
 };
