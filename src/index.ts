@@ -5,6 +5,7 @@ import { dynastiesRoute } from "~/routes/dynasties"
 import { chatRoute } from "~/routes/chat"
 import { importRoute } from "~/routes/import"
 import { visitsRoute } from "~/routes/visits"
+import { achievementsRoute } from "~/routes/achievements"
 import { authRoute } from "~/routes/auth"
 import { profileRoute } from "~/routes/profile"
 import { shareRoute } from "~/routes/share"
@@ -48,6 +49,7 @@ export function createApp(env: Env) {
     .use(chatRoute)
     .use(importRoute)
     .use(visitsRoute)
+    .use(achievementsRoute)
     .use(authRoute)
     .use(profileRoute)
     .use(shareRoute)
