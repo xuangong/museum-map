@@ -26,10 +26,13 @@ export const ERA_TUNES: Record<string, EraTune[]> = {
   "eastern-han": [{ name: "胡笳十八拍", story: "蔡文姬归汉，与二子诀别", from: "明代琴谱" }],
   "three-kingdoms": [{ name: "广陵散", story: "嵇康临刑索琴：「广陵散于今绝矣」（《晋书》）", from: "明《神奇秘谱》" }],
   jin: [{ name: "梅花三弄", story: "桓伊为王徽之吹笛三调，客主不交一言（《晋书》）", from: "明《神奇秘谱》" }],
+  nanbeichao: [{ name: "敕勒歌", story: "「敕勒川，阴山下」，斛律金唱敕勒，高欢自和之（曲调已失传）", from: "仅存歌词" }],
   tang: [
+    { name: "霓裳羽衣曲", story: "唐玄宗时的宫廷大曲；今存南宋姜夔所记一段", from: "南宋《白石道人歌曲》" },
     { name: "阳关三叠", story: "王维「劝君更尽一杯酒，西出阳关无故人」谱成琴歌", from: "清《琴学入门》" },
     { name: "夕阳箫鼓", story: "又名《春江花月夜》，意境出自张若虚同名诗", from: "清代琵琶谱" },
   ],
+  song: [{ name: "潇湘水云", story: "南宋郭楚望泛舟潇湘，借云水寄怀故国", from: "明《神奇秘谱》" }],
   ming: [
     { name: "平沙落雁", story: "借鸿鹄之远志，写逸士之心胸", from: "明代琴谱" },
     { name: "渔樵问答", story: "渔樵江渚，看淡古今", from: "明代琴谱" },

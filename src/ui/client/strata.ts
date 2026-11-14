@@ -213,7 +213,7 @@ function stringSound(deg, vel, pan, when, vk, o) {
   if (!ac || !dest) return [];
   const V = VOICES[vk] || VOICES.ks, srcs = [];
   try {
-    const t = Math.max(when || 0, ac.currentTime), f = (o.freq || degFreq(deg)) * (V.oct || 1) * (o.mul || 1), dur = o.dur || 0.5;
+    const t = Math.max(when || 0, ac.currentTime), f = (o.freq || degFreq(deg)) * (V.oct || 1) * (o.mul || 1) * (o.semi ? Math.pow(2, o.semi / 12) : 1), dur = o.dur || 0.5;
     const out = ac.createGain(); out.gain.value = 0.34 * V.g * Math.max(0.15, Math.min(1.3, vel));
     if (ac.createStereoPanner) { const pn = ac.createStereoPanner(); pn.pan.value = Math.max(-0.7, Math.min(0.7, pan || 0)); out.connect(pn); pn.connect(dest); }
     else out.connect(dest);
@@ -705,16 +705,53 @@ function init(container, data, cb) {
   //   File:Maturika.mid, D major → G): 3 35 6 i6 | 5. 6 5 - (sung twice).
   //   阳关三叠 — 琴歌 on 王维's poem, score 据《琴学入门》(1867) as engraved by 国琴网 (1=♭B, ♩=50):
   //   「渭城朝雨浥轻尘，客舍」 6̣. 1 3 2 | 1 2 ↗2 – | 5 6 5; note values doubled to keep its slowness.
+  //   霓裳羽衣曲 — the only surviving strain: 姜夔 (1186) found 商调霓裳曲 in an old music book and
+  //   noted 中序第一 in 俗字谱 (《白石道人歌曲》卷四); 简谱 as engraved at jianpujia.com (1=F, 4/4,
+  //   transcriber not credited). Museum "复原" versions (叶栋 etc.) are modern and not used.
+  //   广陵散 — 据《神奇秘谱》(1425) 管平湖打谱 (国琴网 pu/292); 梅花三弄 — 溥雪斋演奏谱 (pu/790);
+  //   流水 — 据《天闻阁琴谱》 管平湖演奏谱 (pu/776); all read from engraved 简谱 and checked by eye.
+  //   胡笳十八拍 — 据《五知斋谱》吴景略打谱 (国琴网 pu/283); 渔樵问答 — 据《琴学入门》吴景略打谱
+  //   许健记谱 (pu/791); 潇湘水云 — 郭楚望曲 查阜西传谱 龚一整理 (爱曲谱 2qupu.com).
+  //   阳春白雪 — 琵琶, 卫仲乐演奏谱 (裘春尧、叶绪然整理; cnjpw.net scan), section 一「独占鳌头」, 1=D 2/4.
   //   平沙落雁 — 管平湖演奏谱, 王迪记谱, 据《琴学丛书》 (国琴网, 1=F, ♩=34), section 三:
   //   6 6 5 35 | 656 i | 6i i6 5 35 | 656 i; note values doubled.
   // Each era may hold several; one is chosen per performance.
   const QUOTES = {
+    'eastern-han': [{ name: '胡笳十八拍', note: '琴曲 · 据《五知斋谱》（1722），吴景略打谱', bars: [
+      // 第一段, 1=♭B ♩=40: 3̇·5̇ | 5̇ 6̇ 6̇5̇ 3̇ | 3̇ 2̇3̇2̇ 1̇·2̇
+      [[12, 3], [13, 1]], [[13, 2], [14, 2]], [[14, 1], [13, 1], [12, 2]], [[12, 2], [11, 0.5], [12, 0.5], [11, 1]], [[10, 3], [11, 1]],
+    ] }],
+    song: [{ name: '潇湘水云', note: '琴曲 · 南宋郭楚望作，查阜西传谱、龚一整理', bars: [
+      // 第二段入拍, 1=♭B ♩=42: 5̇·6̇ 5̇6̇5̇6̇ 5̇6̇5̇ 3— | 1̇·2̇ 1̇ (the 3 is the upper note of a 3/3̣ dyad, middle octave)
+      [[13, 1.5], [14, 0.5], [13, 0.5], [14, 0.5], [13, 0.5], [14, 0.5]], [[13, 1], [14, 0.5], [13, 0.5], [7, 2]], [[7, 2], [10, 1.5], [11, 0.5]], [[10, 4]],
+    ] }],
+    'three-kingdoms': [{ name: '广陵散', note: '琴曲 · 据《神奇秘谱》（1425），管平湖打谱', bars: [
+      // 开指, 1=C ♩=39, 泛音: 1̇·6 1̇616 | 1̇·2̇ 5·2̇ | 1̇ 1̇ (three bars as engraved, not padded).
+      [[10, 1.5], [9, 0.5], [10, 0.5], [9, 0.5], [10, 0.5], [9, 0.5]], [[10, 1.5], [11, 0.5], [8, 1.5], [11, 0.5]], [[10, 2], [10, 2]],
+    ] }],
+    jin: [{ name: '梅花三弄', note: '琴曲 · 溥雪斋演奏谱，泛音「梅花」主题', bars: [
+      // 第二段, 1=F ♩=76, 泛音: 1̇5̇ 5̇ | 5̇. 3̇2̇ | 1̇5̇ 5̇ | 5̇. 3̇2̇
+      [[10, 1], [13, 1], [13, 2]], [[13, 3], [12, 0.5], [11, 0.5]], [[10, 1], [13, 1], [13, 2]], [[13, 3], [12, 0.5], [11, 0.5]],
+    ] }],
+    'eastern-zhou': [{ name: '流水', note: '琴曲（高山流水）· 据《天闻阁琴谱》，管平湖演奏谱', bars: [
+      // 第二段, 1=F ♩=72, 泛音: 5̇ 1̇·2̇ 3̇3̇ | 6̇6̇ 6̇5̇⌒| 5̇ 3̇2̇ 1̇ (final 1̇ held to close the bar)
+      [[13, 2], [10, 1.5], [11, 0.5]], [[12, 1], [12, 1], [14, 1], [14, 1]], [[14, 1], [13, 2], [12, 0.5], [11, 0.5]], [[10, 4]],
+    ] }, { name: '阳春白雪', note: '琵琶曲 · 卫仲乐演奏谱「独占鳌头」', bars: [
+      // 1=D 2/4 ♩≈100, eighth notes: 6̣ 3 6̣ 2 | 1 2 1 1 | 5̣ 6̣ 1 3 | 2 2 3 3 (one app beat per ♪).
+      [[9, 1], [12, 1], [9, 1], [11, 1]], [[10, 1], [11, 1], [10, 1], [10, 1]], [[8, 1], [9, 1], [10, 1], [12, 1]], [[11, 1], [11, 1], [12, 1], [12, 1]],
+    ] }],
     tang: [{ name: '阳关三叠', note: '王维诗谱成的琴歌 · 谱据《琴学入门》', bars: [
       [[9, 1.5], [10, 0.5], [12, 1], [11, 1]], [[10, 2], [11, 2]], [[11, 4]], [[13, 1], [14, 1], [13, 2]],
+    ] }, { name: '霓裳羽衣曲', note: '唐大曲残段 · 南宋姜夔记《霓裳中序第一》', bars: [
+      // 1=F, 「一帘淡月，仿佛照颜」 3 2 3 5 | 3 4·3 5·6 — the 4 (清角) kept as B + 1 semitone.
+      [[7, 2], [6, 2]], [[7, 2], [8, 2]], [[7, 2], [7, 1.5, 1], [7, 0.5]], [[8, 3], [9, 1]],
     ] }],
     ming: [{ name: '平沙落雁', note: '琴曲 · 管平湖演奏谱（王迪记谱）', bars: [
       [[9, 1], [9, 1], [8, 1], [7, 0.5], [8, 0.5]], [[9, 0.5], [8, 0.5], [9, 1], [10, 2]],
       [[9, 0.5], [10, 0.5], [10, 0.5], [9, 0.5], [8, 1], [7, 0.5], [8, 0.5]], [[9, 0.5], [8, 0.5], [9, 1], [10, 2]],
+    ] }, { name: '渔樵问答', note: '琴曲 · 据《琴学入门》，吴景略打谱、许健记谱', bars: [
+      // 第一段, 1=F 3/4: 3̣ 3̣ 5̣6̣ | 5̣ 6̣ — (low octave; three bars as engraved)
+      [[7, 2], [7, 2]], [[8, 1], [9, 1], [8, 2]], [[9, 4]],
     ] }],
     qing: [{ name: '茉莉花', note: '清代江南民歌（鲜花调）', bars: [
       [[7, 1], [7, 0.5], [8, 0.5], [9, 1], [10, 0.5], [9, 0.5]], [[8, 1.5], [9, 0.5], [8, 2]],
@@ -753,17 +790,17 @@ function init(container, data, cb) {
   function ornament(b, lv) {
     const src = barMel(b), out = [], last = b === MELODY.length - 1, up = perf.lift[Math.floor(b / 4)] ? 5 : 0;
     let pos = 0;
-    src.forEach(([deg, beats], i) => {
+    src.forEach(([deg, beats, semi], i) => {
       const next = i + 1 < src.length ? src[i + 1][0] : b + 1 < MELODY.length ? barMel(b + 1)[0][0] : deg, gap = next - deg;
-      if (!last && lv >= 3 && i > 0 && beats >= 1 && pos % 1 === 0 && rnd() < 0.55) out.push({ deg: deg + 1 + up, at: pos, grace: true });
+      if (!last && !semi && lv >= 3 && i > 0 && beats >= 1 && pos % 1 === 0 && rnd() < 0.55) out.push({ deg: deg + 1 + up, at: pos, grace: true });
       if (!last && lv >= 2 && beats >= 1 && Math.abs(gap) >= 2 && rnd() < 0.75) {
-        out.push({ deg: deg + up, beats: beats - 0.5, at: pos });
+        out.push({ deg: deg + up, beats: beats - 0.5, at: pos, semi });
         out.push({ deg: deg + Math.sign(gap) + up, beats: 0.5, at: pos + beats - 0.5 });
       } else if (!last && beats >= 2 && gap !== 0 && rnd() < 0.12 * lv) {
         // A dotted figure leaning into the next note.
-        out.push({ deg: deg + up, beats: beats - 0.5, at: pos });
+        out.push({ deg: deg + up, beats: beats - 0.5, at: pos, semi });
         out.push({ deg: deg + Math.sign(gap) + up, beats: 0.5, at: pos + beats - 0.5 });
-      } else out.push({ deg: deg + up, beats, at: pos });
+      } else out.push({ deg: deg + up, beats, at: pos, semi });
       pos += beats;
     });
     return out;
@@ -777,17 +814,20 @@ function init(container, data, cb) {
     // The bar's bones: [deg, beats, at].
     const skel = [];
     let p0 = 0;
-    barMel(b).forEach(([deg, beats]) => { skel.push([deg, beats, p0]); p0 += beats; });
+    barMel(b).forEach(([deg, beats, semi]) => { skel.push([deg, beats, p0, semi || 0]); p0 += beats; });
+    // A 名曲 may use 偏音 (4, 7): written as a pentatonic degree plus semitones. Any voice doubling
+    // that note (same step, any octave) takes the same inflection, so nothing rubs against it.
+    const semiAt = (at, deg) => { const n = skel.find(([d, bt, a0]) => at >= a0 && at < a0 + bt); return n && n[3] && (((deg - n[0]) % 5) + 5) % 5 === 0 ? n[3] : 0; };
     const nextOf = (i) => (i + 1 < skel.length ? skel[i + 1][0] : b + 1 < MELODY.length ? barMel(b + 1)[0][0] : skel[i][0]);
     const vk0 = lead >= 0 ? voiceOf(lead) : 'ks';
     ornament(b, lead >= 0 ? lvl(lead) : 1).forEach((n, i) => {
       if (n.grace) { ev.push({ t: t + n.at * BEAT - 0.07, dur: 0.07, deg: n.deg, vel: 0.4, voice: vk0, st: null, li: lead }); return; }
-      ev.push({ t: t + n.at * BEAT, dur: n.beats * BEAT, deg: n.deg, vel: i === 0 ? 0.95 : 0.85, voice: vk0, st: stringFor(lead, k++), li: lead });
+      ev.push({ t: t + n.at * BEAT, dur: n.beats * BEAT, deg: n.deg, semi: n.semi || 0, vel: i === 0 ? 0.95 : 0.85, voice: vk0, st: stringFor(lead, k++), li: lead });
     });
     let filled = false;
     parts.forEach((li) => {
       const vk = voiceOf(li), fam = famOf(li), L = lvl(li);
-      const put = (at, beats, deg, vel, pl) => ev.push({ t: t + at * BEAT, dur: beats * BEAT, deg: Math.max(0, Math.min(MAX_DEG, deg)), vel, voice: vk, st: pl ? stringFor(li, k++) : null, li });
+      const put = (at, beats, deg, vel, pl) => ev.push({ t: t + at * BEAT, dur: beats * BEAT, deg: Math.max(0, Math.min(MAX_DEG, deg)), semi: semiAt(at, deg), vel, voice: vk, st: pl ? stringFor(li, k++) : null, li });
       if (fam === 'pluck') {
         // The bones an octave down — strong beats only at first, every note when richer — and,
         // while the lead holds a long note, a short step toward the next one (嵌挡).
@@ -828,7 +868,7 @@ function init(container, data, cb) {
       }
     });
     // The lowest voice follows the bones too (strong beats, an octave below 弹拨).
-    skel.forEach(([deg, beats, at]) => { if (at === 0 || at === 2) ev.push({ t: t + at * BEAT, dur: Math.max(1, beats) * BEAT, freq: degFreq(deg) / 2, vel: 0.32, voice: 'bass', st: null, li: -1 }); });
+    skel.forEach(([deg, beats, at, semi]) => { if (at === 0 || at === 2) ev.push({ t: t + at * BEAT, dur: Math.max(1, beats) * BEAT, freq: degFreq(deg) / 2 * Math.pow(2, semi / 12), vel: 0.32, voice: 'bass', st: null, li: -1 }); });
     return k;
   }
   // Who plays in phrase p of P: collected eras join in time order; one voice per family (the
@@ -863,6 +903,7 @@ function init(container, data, cb) {
     o = o || {};
     o_eras = o.eras || null;
     vary(o.seed != null ? o.seed : Math.floor(Math.random() * 2147483647));
+    if (o.qpick) Object.assign(perf.qpick, o.qpick);   // render a chosen 名曲 (era index → which one)
     const ev = [], lay = [];
     let t = 0, k = 0;
     if (F < 0) {
@@ -879,7 +920,10 @@ function init(container, data, cb) {
       // The form, with each collected era's 名曲 placed after the phrases of its time (never
       // after the closing phrase — those go just before it).
       const items = form.map((ph, p) => ({ ph, p }));
-      col.filter((li) => quoteOf(li)).forEach((q) => {
+      // At most four 名曲 per performance — a different handful each time, kept in era order.
+      let withQuote = col.filter((li) => QUOTES[layers[li].id]);
+      while (withQuote.length > 4) withQuote.splice(Math.floor(rnd() * withQuote.length), 1);
+      withQuote.forEach((q) => {
         const band = Math.floor(barOf(q) / 4);
         let at = items.length - 1;
         for (let i = 0; i < items.length - 1; i++) if (items[i].ph != null && items[i].ph <= band) at = i + 1;
@@ -901,7 +945,7 @@ function init(container, data, cb) {
           L = { act, lead, parts: parts.filter((li) => li !== lead), lv: base.lv, show: q };
           if (L.lv[q] == null) L.lv[q] = 1;
           lay.push({ t, li: q, act, quote: quoteOf(q) });
-          for (let b = quoteOf(q).at; b < quoteOf(q).at + 4; b++) { k = ensembleBar(ev, b, t, L.lead, L.parts, k, L.lv); t += 4 * BEAT; }
+          for (let b = quoteOf(q).at; b < quoteOf(q).at + quoteOf(q).bars.length; b++) { k = ensembleBar(ev, b, t, L.lead, L.parts, k, L.lv); t += 4 * BEAT; }
           for (let j = from; j < ev.length; j++) ev[j].vel *= perf.dyn[lastP] || 1;
           return;
         }
@@ -933,7 +977,7 @@ function init(container, data, cb) {
     const lvF = { [F]: Math.max(1, Math.min(3, here.length)) };
     // A 名曲 on a struck instrument: your strings sing it, the era's bronze or stone marks it.
     const tuneOnStrings = drum || (qF && LEADS.indexOf(famOf(F)) < 0);
-    for (let b = b0; b < b0 + 4 && (b < MELODY.length || b >= 100); b++) { k = ensembleBar(ev, b, t, tuneOnStrings ? -1 : F, tuneOnStrings || (b > b0 && famOf(F) !== 'wind') ? [F] : [], k, lvF); t += 4 * BEAT; }
+    for (let b = b0; b < b0 + (qF ? qF.bars.length : 4) && (b < MELODY.length || b >= 100); b++) { k = ensembleBar(ev, b, t, tuneOnStrings ? -1 : F, tuneOnStrings || (b > b0 && famOf(F) !== 'wind') ? [F] : [], k, lvF); t += 4 * BEAT; }
     ev.sort((a, b) => a.t - b.t);
     return { ev, lay, dur: t + 2.4, mul: perf.mul };
   }
@@ -954,7 +998,7 @@ function init(container, data, cb) {
     if (o.stats) return { notes: c.ev.filter((e) => e.voice !== 'bass').length, voices: new Set(c.ev.map((e) => e.voice)).size - 1, seconds: Math.round(c.dur), semis: perf.semis, beat: Math.round(BEAT * 1000) / 1000, heads: perf.heads.join(''), lift: perf.lift.map((x) => (x ? 1 : 0)).join('') };
     const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
     const oc = new OAC(2, Math.ceil((c.dur + 1) * sr), sr), dest = makeGraph(oc);
-    c.ev.forEach((e) => stringSound(e.deg, e.vel, panOf(e.st), 0.1 + e.t, e.voice, { dur: e.dur, freq: e.freq, mul: c.mul, ac: oc, dest }));
+    c.ev.forEach((e) => stringSound(e.deg, e.vel, panOf(e.st), 0.1 + e.t, e.voice, { dur: e.dur, freq: e.freq, semi: e.semi, mul: c.mul, ac: oc, dest }));
     return wavBytes(await oc.startRendering());
   }
   // li: the era leading now (N = 今); act: every era playing with it.
@@ -977,7 +1021,7 @@ function init(container, data, cb) {
     const ac = audioCtx(), audio = !!(ac && master);
     const t0 = (audio ? ac.currentTime : performance.now() / 1000) + 0.15;
     const srcs = [];
-    c.ev.forEach((e) => { e.at = t0 + e.t; if (audio) srcs.push(...stringSound(e.deg, e.vel, panOf(e.st), e.at, e.voice, { dur: e.dur, freq: e.freq, mul: c.mul })); });
+    c.ev.forEach((e) => { e.at = t0 + e.t; if (audio) srcs.push(...stringSound(e.deg, e.vel, panOf(e.st), e.at, e.voice, { dur: e.dur, freq: e.freq, semi: e.semi, mul: c.mul })); });
     c.lay.forEach((l) => { l.at = t0 + l.t; });
     play = { audio, ev: c.ev, lay: c.lay, i: 0, j: 0, end: t0 + c.dur, srcs, focus: F };
     playTunes = {};
