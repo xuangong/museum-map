@@ -154,3 +154,26 @@ export function sealSpec(id: string, name: string, city?: string | null): SealSp
     r: ((h >>> 6) % 15) - 9,
   }
 }
+
+const PROVINCES = [
+  "北京", "天津", "上海", "重庆", "河北", "山西", "辽宁", "吉林", "黑龙江", "江苏", "浙江", "安徽", "福建", "江西",
+  "山东", "河南", "湖北", "湖南", "广东", "海南", "四川", "贵州", "云南", "陕西", "甘肃", "青海", "台湾",
+  "内蒙古", "广西", "西藏", "宁夏", "新疆", "香港", "澳门",
+]
+/** Addresses that start with a city instead of a province. Extend when a new museum fails the data test. */
+const CITY_PROVINCE: Record<string, string> = {
+  南京: "江苏", 苏州: "江苏", 扬州: "江苏", 徐州: "江苏", 杭州: "浙江", 广州: "广东", 佛山: "广东",
+  西安: "陕西", 洛阳: "河南", 成都: "四川", 武汉: "湖北", 长沙: "湖南", 济南: "山东", 太原: "山西",
+  大同: "山西", 沈阳: "辽宁", 兰州: "甘肃", 福州: "福建", 泉州: "福建",
+}
+
+/** "河南省洛阳市…" → "河南"; "南京市玄武区…" → "江苏"; "香港九龙…" → "香港". */
+export function deriveProvince(location: string | null | undefined): string | null {
+  if (!location) return null
+  const loc = location.replace(/^中国/, "").replace(/^[^：:]{2,12}[：:]/, "").trim()
+  for (const p of PROVINCES) if (loc.startsWith(p)) return p
+  const city = deriveCity(loc)
+  if (city && CITY_PROVINCE[city]) return CITY_PROVINCE[city]
+  for (const [c, p] of Object.entries(CITY_PROVINCE)) if (loc.startsWith(c)) return p
+  return null
+}

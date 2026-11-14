@@ -9,6 +9,8 @@ export interface MuseumListItem {
   dynastyCoverage: string | null
   /** City derived from the address — trip planning groups by it. */
   city?: string | null
+  /** Province derived from the address — regional achievements group by it. */
+  province?: string | null
   /** The museum's own seal (馆印), collected on check-in. */
   seal?: { t: string; s: number; y: number; r: number }
   pinyin?: string

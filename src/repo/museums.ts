@@ -1,7 +1,7 @@
 import type { MuseumFull, MuseumListItem } from "./types"
 import type { MuseumPayload } from "~/services/import-schema"
 import { normalizeLevel } from "~/services/level-tiers"
-import { deriveCity, sealSpec } from "~/services/museum-meta"
+import { deriveCity, deriveProvince, sealSpec } from "~/services/museum-meta"
 
 /** Rewrite Wikimedia image URLs to go through our /img/* proxy.
  * - upload.wikimedia.org/<path>          → /img/wikimedia/<path>   (direct file)
@@ -58,10 +58,10 @@ export class MuseumsRepo {
                 core_period AS corePeriod, dynasty_coverage AS dynastyCoverage
            FROM museums ORDER BY id`,
       )
-      .all<Omit<MuseumListItem, "tiers" | "city" | "seal"> & { location: string | null }>()
+      .all<Omit<MuseumListItem, "tiers" | "city" | "province" | "seal"> & { location: string | null }>()
     return results.map(({ location, ...r }) => {
       const city = deriveCity(location)
-      return { ...r, tiers: normalizeLevel(r.level), city, seal: sealSpec(r.id, r.name, city) }
+      return { ...r, tiers: normalizeLevel(r.level), city, province: deriveProvince(location), seal: sealSpec(r.id, r.name, city) }
     })
   }
 

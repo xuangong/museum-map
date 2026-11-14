@@ -92,3 +92,31 @@ describe("rewriteFontCss", () => {
     expect(rewriteFontCss(css)).toBe("src: url(/fonts/g/s/notoserifsc/v36/a.woff2) format('woff2');")
   })
 })
+
+import { readdirSync, readFileSync } from "node:fs"
+import { deriveProvince } from "~/services/museum-meta"
+
+describe("deriveProvince", () => {
+  it("reads the province from common address shapes", () => {
+    expect(deriveProvince("河南省洛阳市偃师区翟镇镇")).toBe("河南")
+    expect(deriveProvince("北京市东城区景山前街4号")).toBe("北京")
+    expect(deriveProvince("广西壮族自治区南宁市青秀区")).toBe("广西")
+    expect(deriveProvince("内蒙古自治区呼和浩特市")).toBe("内蒙古")
+    expect(deriveProvince("中国河北省承德市双桥区")).toBe("河北")
+    expect(deriveProvince("香港九龙尖沙咀漆咸道南100号")).toBe("香港")
+    expect(deriveProvince("澳门特别行政区花王堂区")).toBe("澳门")
+    expect(deriveProvince("台湾省台北市士林区")).toBe("台湾")
+    expect(deriveProvince("南京市玄武区中山东路")).toBe("江苏")
+    expect(deriveProvince("扬州博物馆：江苏省扬州市邗江区")).toBe("江苏")
+    expect(deriveProvince(null)).toBeNull()
+  })
+
+  it("resolves every museum in data/museums", () => {
+    const missing: string[] = []
+    for (const f of readdirSync("data/museums")) {
+      const loc = readFileSync("data/museums/" + f, "utf8").match(/^location: (.*)$/m)?.[1] ?? null
+      if (!deriveProvince(loc)) missing.push(f + " → " + loc)
+    }
+    expect(missing).toEqual([])
+  })
+})
