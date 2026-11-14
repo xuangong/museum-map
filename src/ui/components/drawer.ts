@@ -4,7 +4,7 @@ import { icon } from "../icons"
 // buildDynastySections) as static HTML; clicks inside them are delegated through
 // onDrawerClick via data-* attributes.
 export function Drawer(): string {
-  return `<aside class="drawer" :class="(drawer.open ? 'open' : '') + (drawer.open && !drawer.expanded ? ' peek' : '') + (drawer.scrolled ? ' scrolled' : '')"
+  return `<aside class="drawer" :class="(drawer.open ? 'open' : '') + (drawer.open && !drawer.expanded ? ' peek' : '') + (drawer.kind === 'dynasty' ? ' is-dynasty' : '') + (drawer.scrolled ? ' scrolled' : '')"
   @click="onDrawerClick($event)" @scroll.passive="onDrawerScroll($event)" aria-label="详情">
   <div class="drawer-bar">
     <div class="drawer-bar-inner">
@@ -31,7 +31,7 @@ export function Drawer(): string {
     <header class="drawer-hero" :class="drawer.heroImage ? 'has-image' : 'no-image'" x-show="!(drawer.kind === 'dynasty' && tocVisible)">
       <template x-if="drawer.heroImage">
         <figure class="hero-media artifact-image">
-          <img :src="drawer.heroImage" :alt="drawer.heroAlt || drawer.title" />
+          <img :src="drawer.heroImage" :alt="drawer.heroAlt || drawer.title" @error="drawer.heroImage = ''" />
           <figcaption class="artifact-image-caption" x-text="drawer.heroCredit || ''"></figcaption>
         </figure>
       </template>

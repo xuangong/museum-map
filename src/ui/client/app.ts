@@ -1,13 +1,26 @@
 import { iconTable } from "../icons"
 import { COLLECTOR_RANKS } from "~/services/museum-meta"
+import { THEME_BAR } from "../layout"
+
+// 展厅灯光 — the halls a visitor can choose. 'auto' follows the system (light → 宣纸, dark → 夜展).
+const THEMES = [
+  { id: "auto", label: "跟随系统", short: "自动" },
+  { id: "night", label: "夜展", short: "夜展" },
+  { id: "paper", label: "宣纸", short: "宣纸" },
+  { id: "qinglu", label: "只此青绿", short: "青绿" },
+]
 
 export const APP_SCRIPT = `
 var ICONS = ${JSON.stringify(iconTable(16))};
 var RANKS = ${JSON.stringify(COLLECTOR_RANKS)};
+var THEMES = ${JSON.stringify(THEMES)};
+var THEME_BAR = ${JSON.stringify(THEME_BAR)};
 // Module-scope cache for visitedDynasties — outside Alpine reactive proxy.
 // Putting these on \`this\` makes Alpine track every read inside x-for/:class,
 // and writing them inside the same effect blanks the timeline ("自循环失效").
 var __vdCache = null, __vdCacheKey = '', __vdCacheIds = {}, __vdDepth = {};
+// Territory JSON (fetched once, shared by map syncs) — module scope, outside Alpine's proxy.
+var __territoryP = null;
 window.museumApp = function() {
   return {
     museums: [],
@@ -49,9 +62,14 @@ window.museumApp = function() {
     listSort: 'default',
     dynastyGeo: {},
     crossings: {},
+    territoryUrl: '',
     _strataOk: false,
     _justStamped: null,
     _drawerMuseum: null,
+    // 展厅灯光: the stored choice ('auto' follows the system) and the hall actually shown.
+    themePref: 'auto',
+    theme: 'night',
+    themes: THEMES,
 
     init() {
       var bs = document.getElementById('bootstrap-data');
@@ -61,6 +79,8 @@ window.museumApp = function() {
       this.dynasties = data.dynasties;
       this.dynastyGeo = data.dynastyGeo || {};
       this.crossings = data.crossings || {};
+      this.territoryUrl = data.territoryUrl || '';
+      this.initTheme();
       try {
         var savedView = window.localStorage.getItem('mmView');
         if (savedView === 'map' || savedView === 'strata') this.view = savedView;
@@ -208,6 +228,15 @@ window.museumApp = function() {
           }
           var allEl = nav.querySelector('.timeline-item.all');
           if (allEl) allEl.className = 'timeline-item all' + (self3.currentDynastyId ? '' : ' active');
+          // An era chosen elsewhere (3D ruler, hash route, index) scrolls into view here.
+          var act = self3.currentDynastyId ? nav.querySelector('.timeline-item.active') : null;
+          if (act) {
+            var nr = nav.getBoundingClientRect(), ar = act.getBoundingClientRect();
+            if (ar.left < nr.left + 24 || ar.right > nr.right - 24) {
+              var dx = (ar.left + ar.width / 2) - (nr.left + nr.width / 2);
+              if (nav.scrollBy) nav.scrollBy({ left: dx, behavior: 'smooth' }); else nav.scrollLeft += dx;
+            }
+          }
           var aName = nav.querySelector('[data-tl-all-name]');
           if (aName) aName.textContent = self3.visits.footprintMode ? '集章朝代' : '全部';
           var aPeriod = nav.querySelector('[data-tl-all-period]');
@@ -240,6 +269,7 @@ window.museumApp = function() {
       var syncInsets = function(){ self3.syncInsets(); };
       this.$watch && this.$watch('drawer.open', syncInsets);
       this.$watch && this.$watch('drawer.expanded', syncInsets);
+      this.$watch && this.$watch('drawer.kind', syncInsets);
       window.addEventListener('resize', syncInsets);
       syncInsets();
     },
@@ -256,10 +286,50 @@ window.museumApp = function() {
       if (this.drawer.open) {
         if (mobile) {
           var vh = window.innerHeight, sheetH = vh - sheetTop;
-          b = Math.round(this.drawer.expanded ? sheetH : sheetH - vh * 0.34);
+          // Peek heights mirror .drawer.open.peek(.is-dynasty) in theme.ts.
+          b = Math.round(this.drawer.expanded ? sheetH : sheetH - vh * (this.drawer.kind === 'dynasty' ? 0.42 : 0.34));
         } else { var el = document.querySelector('.drawer'); r = el ? el.offsetWidth : 0; }
       }
       window.MuseumStrata.setInset(b, r);
+    },
+
+    // ─── 展厅灯光 (theme) ───
+    // THEME_BOOT in layout.ts already set data-theme before first paint; this keeps the
+    // choice, follows system light/dark changes while on 'auto', and repaints the 3D hall.
+    initTheme() {
+      var self = this;
+      try { this.themePref = window.localStorage.getItem('mmTheme') || 'auto'; } catch(_) { this.themePref = 'auto'; }
+      this.theme = document.documentElement.getAttribute('data-theme') || 'night';
+      if (window.matchMedia) {
+        var mq = window.matchMedia('(prefers-color-scheme: light)');
+        var onChange = function(){ if (self.themePref === 'auto') self.applyTheme(); };
+        if (mq.addEventListener) mq.addEventListener('change', onChange); else if (mq.addListener) mq.addListener(onChange);
+      }
+    },
+
+    resolveTheme(pref) {
+      if (pref === 'night' || pref === 'paper' || pref === 'qinglu') return pref;
+      return (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'paper' : 'night';
+    },
+
+    setThemePref(pref) {
+      this.themePref = pref;
+      try { window.localStorage.setItem('mmTheme', pref); } catch(_) {}
+      this.applyTheme();
+    },
+
+    applyTheme() {
+      var t = this.resolveTheme(this.themePref);
+      this.theme = t;
+      document.documentElement.setAttribute('data-theme', t);
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta && THEME_BAR[t]) meta.setAttribute('content', THEME_BAR[t]);
+      if (this._strataOk && window.MuseumStrata && window.MuseumStrata.setTheme) window.MuseumStrata.setTheme(t);
+    },
+
+    themeLabel() {
+      for (var i = 0; i < THEMES.length; i++) if (THEMES[i].id === this.themePref) return THEMES[i].label;
+      return '跟随系统';
     },
 
     /** A newly opened museum / dynasty starts at its hero, not wherever the last one was. */
@@ -290,7 +360,8 @@ window.museumApp = function() {
       if (!el || !window.MuseumStrata || this._strataOk) return;
       var self = this;
       var ok = window.MuseumStrata.init(el, {
-        museums: this.museums, dynasties: this.dynasties, geo: this.dynastyGeo, crossings: this.crossings,
+        museums: this.museums, dynasties: this.dynasties, geo: this.dynastyGeo, crossings: this.crossings, theme: this.theme,
+        territoryUrl: this.territoryUrl,
       }, {
         onMuseum: function(id){ self.openMuseum(id); },
         onDynasty: function(id){ if (id) self.selectDynasty(id); else self.clearDynastyFilter(); },
@@ -744,6 +815,22 @@ window.museumApp = function() {
         window.MuseumMap.clearEvents();
       }
       if (window.MuseumMap.setSelected) window.MuseumMap.setSelected(this.selectedMuseumId);
+      this.syncTerritory(d && !this.tripMode && !this.visits.footprintMode ? d.id : null);
+    },
+
+    /** The selected dynasty's approximate extent on the 2D map (same data as the 3D strata). */
+    syncTerritory(dynastyId) {
+      if (!window.MuseumMap || !window.MuseumMap.setTerritory) return;
+      if (!dynastyId || !this.territoryUrl) { window.MuseumMap.clearTerritory(); return; }
+      var self = this;
+      if (!__territoryP) {
+        __territoryP = fetch(this.territoryUrl).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; });
+      }
+      __territoryP.then(function(T){
+        if (self.currentDynastyId !== dynastyId || self.tripMode || self.visits.footprintMode) return;
+        var t = T && T[dynastyId];
+        if (t && t.p && t.p.length) window.MuseumMap.setTerritory(t.p); else window.MuseumMap.clearTerritory();
+      });
     },
 
     visitedMuseums() {
@@ -1791,7 +1878,11 @@ window.museumApp = function() {
       if (typeof document === 'undefined') return;
       var overlay = document.createElement('div');
       overlay.className = 'confetti-overlay';
-      var COLORS = ['#E0492F', '#D4B072', '#EFE8DA', '#8DB8A9', '#F2D79E'];
+      // The current hall's own colours (cinnabar, gilt, text, patina).
+      var cs = getComputedStyle(document.documentElement);
+      var COLORS = ['--seal', '--gilt', '--text', '--patina', '--gilt-hi']
+        .map(function(v){ return cs.getPropertyValue(v).trim(); }).filter(Boolean);
+      if (!COLORS.length) COLORS = ['#E0492F', '#D4B072', '#EFE8DA', '#8DB8A9', '#F2D79E'];
       var N = 80;
       var W = window.innerWidth, H = window.innerHeight;
       var pieces = [];

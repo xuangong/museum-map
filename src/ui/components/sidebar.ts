@@ -65,6 +65,19 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
   </template>
 </div>`
 
+  // ── 展厅灯光: which hall you visit in (theme) ──
+  const hall = `<div class="hall-row">
+  <span class="hall-label">${icon("lamp", 15)}<span>展厅灯光</span></span>
+  <div class="hall-opts" role="radiogroup" aria-label="展厅灯光">
+    <template x-for="t in themes" :key="t.id">
+      <button class="hall-opt" :class="themePref === t.id ? 'active' : ''" role="radio" :aria-checked="themePref === t.id ? 'true' : 'false'"
+        @click="setThemePref(t.id)" :title="t.label">
+        <span class="hall-swatch" :class="'sw-' + t.id" aria-hidden="true"></span><span x-text="t.short"></span>
+      </button>
+    </template>
+  </div>
+</div>`
+
   // ── 集章册: the collection ──
   const stamps = `<section class="toc-hero is-stamps" x-show="visits.footprintMode && !tripMode" x-cloak>
   <div class="hero-kicker">${icon("seal", 15)}<span x-text="isReadOnly ? 'TA 的集章册' : '我的集章册'"></span><span class="mono">PASSPORT</span></div>
@@ -250,6 +263,7 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
 
   return `<aside class="toc">
   ${account}
+  ${hall}
   ${stamps}
   ${trip}
   ${dynasty}

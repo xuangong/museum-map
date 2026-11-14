@@ -18,6 +18,7 @@ window.MuseumMap = {
       attribution: '© 高德地图', maxZoom: 18, subdomains: '1234',
       crossOrigin: 'anonymous'
     }).addTo(this.map);
+    this.territoryLayer = L.layerGroup().addTo(this.map);
     this.routeLayer = L.layerGroup().addTo(this.map);
     this.markersLayer = L.layerGroup().addTo(this.map);
     this.eventMarkersLayer = L.layerGroup().addTo(this.map);
@@ -71,8 +72,9 @@ window.MuseumMap = {
     var pts = (stops || []).filter(function(m){ return m.lat && m.lng; }).map(function(m){ return window.toMapCoord(m.lat, m.lng); });
     if (!pts.length) return;
     if (pts.length > 1) {
-      L.polyline(pts, { color: '#D4B072', weight: 6, opacity: 0.12, interactive: false }).addTo(this.routeLayer);
-      L.polyline(pts, { color: '#E9C98D', weight: 2, opacity: 0.95, dashArray: '2 7', lineCap: 'round', interactive: false }).addTo(this.routeLayer);
+      // Stroke colours come from the theme (.route-glow / .route-line in theme.ts).
+      L.polyline(pts, { className: 'route-glow', weight: 6, opacity: 0.12, interactive: false }).addTo(this.routeLayer);
+      L.polyline(pts, { className: 'route-line', weight: 2, opacity: 0.95, dashArray: '2 7', lineCap: 'round', interactive: false }).addTo(this.routeLayer);
     }
     var self = this;
     pts.forEach(function(p, i){
@@ -94,6 +96,23 @@ window.MuseumMap = {
   },
   clearEvents: function(){
     if (this.eventMarkersLayer) this.eventMarkersLayer.clearLayers();
+  },
+  /** A dynasty's approximate extent (parts = [{ n, r: [[[lng, lat]…]…] }]); styled by .territory in theme.ts. */
+  setTerritory: function(parts) {
+    this.clearTerritory();
+    var self = this;
+    (parts || []).forEach(function(part){
+      var rings = part.r.map(function(ring){ return ring.map(function(p){ return window.toMapCoord(p[1], p[0]); }); });
+      L.polygon(rings, { className: 'territory', weight: 1.4, interactive: false, smoothFactor: 1.5 }).addTo(self.territoryLayer);
+    });
+    if (parts && parts.length && !this._territoryCredit) {
+      this._territoryCredit = '疆域示意：Cliopatria (Seshat) CC BY 4.0';
+      this.map.attributionControl.addAttribution(this._territoryCredit);
+    }
+  },
+  clearTerritory: function(){
+    if (this.territoryLayer) this.territoryLayer.clearLayers();
+    if (this._territoryCredit) { this.map.attributionControl.removeAttribution(this._territoryCredit); this._territoryCredit = null; }
   },
   setEventMarkers: function(events, onClickRelatedMuseum, relatedMuseumsByDate) {
     this.eventMarkersLayer.clearLayers();

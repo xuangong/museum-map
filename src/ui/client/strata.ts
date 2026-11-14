@@ -23,14 +23,22 @@ const GAP = 0.2, TOP_GAP = 0.46;
 const px = (lng) => (lng - LNG0) * KX * SCALE;
 const pz = (lat) => -(lat - LAT0) * SCALE;
 
-const COL = {
-  bone: new THREE.Color(0xEFE8DA),
-  gilt: new THREE.Color(0xD4B072),
-  giltHi: new THREE.Color(0xF2D79E),
-  seal: new THREE.Color(0xEC5A3D),
-  river: new THREE.Color(0x6FA3B8),
-  patina: new THREE.Color(0x8DB8A9),
+// One palette per hall (theme). Dark halls draw with light (additive glow); the paper
+// hall draws with ink (normal blending, intensity carried by alpha instead of brightness).
+// lineK / fillK scale layer outline / fill opacity for that hall.
+const PALETTES = {
+  night:  { ink: false, line: 0xEFE8DA, bone: 0xEFE8DA, fill: 0xD4B072, gilt: 0xD4B072, giltHi: 0xF2D79E, seal: 0xEC5A3D, river: 0x6FA3B8, patina: 0x8DB8A9, lineK: 1, fillK: 1 },
+  qinglu: { ink: false, line: 0xCFE8DE, bone: 0xE4F0EA, fill: 0x4FBF9F, gilt: 0xE6C276, giltHi: 0xF8E2AA, seal: 0xF2694A, river: 0x7FC8E2, patina: 0x8AD8BC, lineK: 1.05, fillK: 1.6 },
+  paper:  { ink: true,  line: 0x3A2F22, bone: 0x2B231A, fill: 0x9A7A48, gilt: 0x9C6F25, giltHi: 0x6E4510, seal: 0xC8371E, river: 0x3C7592, patina: 0x2F7461, lineK: 1.25, fillK: 2.2 },
 };
+const COL = {};
+['line', 'bone', 'fill', 'gilt', 'giltHi', 'seal', 'river', 'patina'].forEach((k) => { COL[k] = new THREE.Color(); });
+let PAL = PALETTES.night;
+function loadPalette(name) {
+  PAL = PALETTES[name] || PALETTES.night;
+  Object.keys(COL).forEach((k) => COL[k].setHex(PAL[k]));
+}
+loadPalette('night');
 
 function glowTexture() {
   const c = document.createElement('canvas'); c.width = c.height = 64;
@@ -46,16 +54,20 @@ function glowTexture() {
   return t;
 }
 
+// tint = colour, kk = intensity. Light halls: colour × intensity, added. Ink hall: a
+// crisper dot whose opacity is the intensity.
 function pointsMaterial(tex) {
   return new THREE.ShaderMaterial({
-    uniforms: { map: { value: tex }, pr: { value: Math.min(window.devicePixelRatio || 1, 2) }, k: { value: 9.0 } },
+    uniforms: { map: { value: tex }, pr: { value: Math.min(window.devicePixelRatio || 1, 2) }, k: { value: 9.0 }, ink: { value: 0 } },
     vertexShader:
-      'attribute float size; attribute vec3 tint; varying vec3 vTint; uniform float pr; uniform float k;' +
-      'void main(){ vTint = tint; vec4 mv = modelViewMatrix * vec4(position, 1.0);' +
+      'attribute float size; attribute vec3 tint; attribute float kk; varying vec3 vTint; varying float vK; uniform float pr; uniform float k;' +
+      'void main(){ vTint = tint; vK = kk; vec4 mv = modelViewMatrix * vec4(position, 1.0);' +
       ' gl_PointSize = size * pr * (k / -mv.z); gl_Position = projectionMatrix * mv; }',
     fragmentShader:
-      'uniform sampler2D map; varying vec3 vTint;' +
-      'void main(){ vec4 t = texture2D(map, gl_PointCoord); if (t.a < 0.01) discard; gl_FragColor = vec4(vTint, t.a); }',
+      'uniform sampler2D map; uniform float ink; varying vec3 vTint; varying float vK;' +
+      'void main(){ vec4 t = texture2D(map, gl_PointCoord); if (t.a < 0.01) discard;' +
+      ' if (ink > 0.5) { gl_FragColor = vec4(vTint, smoothstep(0.12, 0.55, t.a) * clamp(vK, 0.0, 1.0)); }' +
+      ' else { gl_FragColor = vec4(vTint * vK, t.a); } }',
     transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
   });
 }
@@ -79,25 +91,44 @@ function ringArea(r) {
   return Math.abs(a) / 2;
 }
 
-function fillGeometry() {
-  const geoms = [];
-  for (const r of GEO.main) {
-    if (ringArea(r) < 1) continue;
+// Flat filled area (y = 0) from lng/lat rings, merged into one non-indexed geometry.
+function mergedFill(rings, minArea) {
+  const pos = [];
+  for (const r of rings) {
+    if (ringArea(r) < minArea) continue;
     const shape = new THREE.Shape(r.map((p) => new THREE.Vector2(px(p[0]), -pz(p[1]))));
     const g = new THREE.ShapeGeometry(shape);
     g.rotateX(-Math.PI / 2);
-    geoms.push(g);
-  }
-  // merge
-  let count = 0; geoms.forEach((g) => { count += g.index ? g.index.count : g.attributes.position.count; });
-  const pos = [];
-  geoms.forEach((g) => {
     const p = g.attributes.position.array;
     if (g.index) { const idx = g.index.array; for (let i = 0; i < idx.length; i++) pos.push(p[idx[i] * 3], p[idx[i] * 3 + 1], p[idx[i] * 3 + 2]); }
     else for (let i = 0; i < p.length; i++) pos.push(p[i]);
-  });
+    g.dispose();
+  }
   const out = new THREE.BufferGeometry();
   out.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pos), 3));
+  return out;
+}
+function bboxOf(rings) {
+  let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+  rings.forEach((r) => r.forEach((p) => {
+    const x = px(p[0]), z = pz(p[1]);
+    if (x < x0) x0 = x; if (x > x1) x1 = x; if (z < z0) z0 = z; if (z > z1) z1 = z;
+  }));
+  return { x0, x1, z0, z1 };
+}
+function ringCentroid(r) {
+  let a = 0, cx = 0, cy = 0;
+  for (let i = 0; i < r.length - 1; i++) {
+    const f = r[i][0] * r[i + 1][1] - r[i + 1][0] * r[i][1];
+    a += f; cx += (r[i][0] + r[i + 1][0]) * f; cy += (r[i][1] + r[i + 1][1]) * f;
+  }
+  if (Math.abs(a) < 1e-9) return r[0];
+  return [cx / (3 * a), cy / (3 * a)];
+}
+// A small ring (lng/lat) — 文化圈 around a Neolithic culture site.
+function circleRing(lng, lat, rDeg) {
+  const out = [], k = 1 / Math.cos(lat * DEG);
+  for (let i = 0; i <= 28; i++) { const t = (i / 28) * Math.PI * 2; out.push([lng + Math.cos(t) * rDeg * k, lat + Math.sin(t) * rDeg]); }
   return out;
 }
 
@@ -141,8 +172,11 @@ function init(container, data, cb) {
   const riverLines = [];
   Object.keys(GEO.rivers).forEach((k) => GEO.rivers[k].forEach((l) => riverLines.push(l)));
   const riverGeom = segmentsFromLines(riverLines);
-  const fillGeom = fillGeometry();
+  const fillGeom = mergedFill(GEO.main, 1);
+  const chinaBox = bboxOf(GEO.main);
 
+  // Each stratum: today's outline (fill/outline — the ghost reference once the dynasty's own
+  // territory arrives), rivers, and tFill/tLine — that dynasty's territory.
   function makeLayer(y, isTop) {
     const g = new THREE.Group(); g.position.y = y;
     const fill = new THREE.Mesh(fillGeom, new THREE.MeshBasicMaterial({ color: isTop ? COL.bone : COL.gilt, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide }));
@@ -155,7 +189,7 @@ function init(container, data, cb) {
       inset.renderOrder = 2; g.add(inset);
     }
     world.add(g);
-    return { group: g, fill, outline, river, to: { fill: 0, outline: 0, river: 0 } };
+    return { group: g, fill, outline, river, tFill: null, tLine: null, terr: null, to: { fill: 0, outline: 0, river: 0, tFill: 0, tLine: 0 } };
   }
   const layers = layersData.map((L, i) => Object.assign(L, { i, y: yOf(i) }, makeLayer(yOf(i), false)));
   const top = makeLayer(yTop, true);
@@ -166,11 +200,12 @@ function init(container, data, cb) {
     const g = data.geo[L.id]; if (!g) return;
     g.sites.forEach((s, k) => sites.push({ layer: L.i, k, s, x: px(s.lng), z: pz(s.lat), trail: g.trail.indexOf(k) >= 0 }));
   });
-  const sitePos = new Float32Array(sites.length * 3), siteTint = new Float32Array(sites.length * 3), siteSize = new Float32Array(sites.length);
+  const sitePos = new Float32Array(sites.length * 3), siteTint = new Float32Array(sites.length * 3), siteK = new Float32Array(sites.length), siteSize = new Float32Array(sites.length);
   sites.forEach((s, i) => { sitePos[i * 3] = s.x; sitePos[i * 3 + 1] = yOf(s.layer); sitePos[i * 3 + 2] = s.z; });
   const siteGeom = new THREE.BufferGeometry();
   siteGeom.setAttribute('position', new THREE.BufferAttribute(sitePos, 3));
   siteGeom.setAttribute('tint', new THREE.BufferAttribute(siteTint, 3));
+  siteGeom.setAttribute('kk', new THREE.BufferAttribute(siteK, 1));
   siteGeom.setAttribute('size', new THREE.BufferAttribute(siteSize, 1));
   const sitePoints = new THREE.Points(siteGeom, pointsMaterial(tex)); sitePoints.renderOrder = 6; world.add(sitePoints);
 
@@ -244,11 +279,12 @@ function init(container, data, cb) {
   });
   const museumIdx = {}; museums.forEach((m, i) => { museumIdx[m.id] = i; });
 
-  const mPos = new Float32Array(museums.length * 3), mTint = new Float32Array(museums.length * 3), mSize = new Float32Array(museums.length);
+  const mPos = new Float32Array(museums.length * 3), mTint = new Float32Array(museums.length * 3), mK = new Float32Array(museums.length), mSize = new Float32Array(museums.length);
   museums.forEach((m, i) => { mPos[i * 3] = m.x; mPos[i * 3 + 1] = yTop; mPos[i * 3 + 2] = m.z; });
   const mGeom = new THREE.BufferGeometry();
   mGeom.setAttribute('position', new THREE.BufferAttribute(mPos, 3));
   mGeom.setAttribute('tint', new THREE.BufferAttribute(mTint, 3));
+  mGeom.setAttribute('kk', new THREE.BufferAttribute(mK, 1));
   mGeom.setAttribute('size', new THREE.BufferAttribute(mSize, 1));
   const mPoints = new THREE.Points(mGeom, pointsMaterial(tex)); mPoints.renderOrder = 9; world.add(mPoints);
 
@@ -258,7 +294,8 @@ function init(container, data, cb) {
     let upper = N;
     m.links.forEach((li) => { segs.push({ m: mi, lo: li, hi: upper }); dots.push({ m: mi, layer: li, onSite: !!m.onSite[li] }); upper = li; });
   });
-  const bPos = new Float32Array(segs.length * 6), bCol = new Float32Array(segs.length * 6);
+  // RGBA per vertex: light halls fold intensity into RGB, the ink hall into alpha.
+  const bPos = new Float32Array(segs.length * 6), bCol = new Float32Array(segs.length * 8);
   const yAt = (li) => (li >= N ? yTop : yOf(li));
   segs.forEach((s, i) => {
     const m = museums[s.m];
@@ -266,15 +303,16 @@ function init(container, data, cb) {
   });
   const bGeom = new THREE.BufferGeometry();
   bGeom.setAttribute('position', new THREE.BufferAttribute(bPos, 3));
-  bGeom.setAttribute('color', new THREE.BufferAttribute(bCol, 3));
+  bGeom.setAttribute('color', new THREE.BufferAttribute(bCol, 4));
   const beams = new THREE.LineSegments(bGeom, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
   beams.renderOrder = 5; world.add(beams);
 
-  const dPos = new Float32Array(dots.length * 3), dTint = new Float32Array(dots.length * 3), dSize = new Float32Array(dots.length);
+  const dPos = new Float32Array(dots.length * 3), dTint = new Float32Array(dots.length * 3), dK = new Float32Array(dots.length), dSize = new Float32Array(dots.length);
   dots.forEach((d, i) => { const m = museums[d.m]; dPos.set([m.x, yOf(d.layer), m.z], i * 3); });
   const dGeom = new THREE.BufferGeometry();
   dGeom.setAttribute('position', new THREE.BufferAttribute(dPos, 3));
   dGeom.setAttribute('tint', new THREE.BufferAttribute(dTint, 3));
+  dGeom.setAttribute('kk', new THREE.BufferAttribute(dK, 1));
   dGeom.setAttribute('size', new THREE.BufferAttribute(dSize, 1));
   const dPoints = new THREE.Points(dGeom, pointsMaterial(tex)); dPoints.renderOrder = 8; world.add(dPoints);
 
@@ -317,70 +355,205 @@ function init(container, data, cb) {
   }
   const hint = el('div', 'strata-hint', '拖动旋转 · 双指缩放 · 点地层看朝代 · 点光点看博物馆'); overlay.appendChild(hint);
 
+  // ── Territories: each stratum shows its own dynasty's extent ──
+  // Fetched (shared with the 2D map, cached forever); until then strata show today's outline.
+  const partLabels = [];   // { el, v, layer }
+  // Reading view's title block (bottom-left, above the dock / sheet): era, year shown, source.
+  const credit = el('div', 'strata-credit'); overlay.appendChild(credit);
+  // The time ruler hides while reading one era; this leads back to the whole stack.
+  const back = el('button', 'strata-back');
+  back.type = 'button';
+  back.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z"/><path d="m3 13 9 5 9-5"/></svg><span>全部<span class="sb-more">地层</span></span>';
+  back.addEventListener('click', (e) => { e.stopPropagation(); cb.onDynasty && cb.onDynasty(null); });
+  overlay.appendChild(back);
+  let themeName = data.theme || 'night';
+  function addTerritory(L, parts, meta) {
+    const rings = [];
+    parts.forEach((p) => p.r.forEach((r) => rings.push(r)));
+    if (!rings.length) return;
+    const segs = [];
+    rings.forEach((r) => { for (let i = 0; i < r.length - 1; i++) segs.push(px(r[i][0]), 0, pz(r[i][1]), px(r[i + 1][0]), 0, pz(r[i + 1][1])); });
+    const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(segs), 3));
+    L.tFill = new THREE.Mesh(mergedFill(rings, 0), new THREE.MeshBasicMaterial({ color: COL.fill, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide }));
+    L.tLine = new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: COL.line, transparent: true, opacity: 0, depthWrite: false }));
+    L.tFill.renderOrder = 1; L.tLine.renderOrder = 2;
+    L.group.add(L.tFill, L.tLine);
+    L.terr = Object.assign({ box: bboxOf(rings) }, meta);
+    // Divided eras name each regime (曹魏 / 蜀汉 / 孙吴 …) at its largest ring.
+    if (parts.length > 1 && meta.label) {
+      parts.forEach((p) => {
+        let best = null, ba = 0;
+        p.r.forEach((r) => { const a = ringArea(r); if (a > ba) { ba = a; best = r; } });
+        if (!best) return;
+        const c = ringCentroid(best);
+        const t = el('div', 'strata-part', p.n); t.style.visibility = 'hidden';
+        overlay.insertBefore(t, overlay.firstChild);
+        partLabels.push({ el: t, v: new THREE.Vector3(px(c[0]), L.y, pz(c[1])), layer: L.i });
+      });
+    }
+  }
+  function buildTerritories(T) {
+    layers.forEach((L) => {
+      const t = T && T[L.id];
+      if (t && t.p && t.p.length) { addTerritory(L, t.p, { year: t.y, sketch: !!t.sketch, label: true }); return; }
+      // No polity (远古): culture circles around the Neolithic sites — 满天星斗.
+      const g = data.geo[L.id];
+      const cult = g ? g.sites.filter((s) => s.role === 'culture') : [];
+      if (cult.length) addTerritory(L, cult.map((s) => ({ n: s.name, r: [circleRing(s.lng, s.lat, 1.15)] })), { culture: true, label: false });
+    });
+    applyTheme(themeName);
+    if (state.focus >= 0) { showCredit(); applyFocus(false); }
+  }
+  if (data.territoryUrl && window.fetch) {
+    fetch(data.territoryUrl).then((r) => r.ok ? r.json() : null).then((T) => { if (T) buildTerritories(T); }).catch(() => {});
+  }
+  function yearText(y) { return y < 0 ? '公元前' + (-y) + '年' : '公元' + y + '年'; }
+  function showCredit() {
+    const L = state.focus >= 0 ? layers[state.focus] : null;
+    if (!L) { credit.classList.remove('is-on'); return; }
+    const t = L.terr;
+    credit.innerHTML = '';
+    const name = el('div', 'sc-name');
+    name.appendChild(el('span', null, L.name));
+    name.appendChild(el('small', null, L.period));
+    credit.appendChild(name);
+    if (t) {
+      credit.appendChild(el('b', null, t.culture ? '新石器文化分布 · 示意' : t.sketch ? '二里头文化核心区 · 示意' : '约' + yearText(t.year) + '的疆域 · 示意'));
+      if (!t.culture && !t.sketch) credit.appendChild(el('span', null, '据 Cliopatria（Seshat）· CC BY 4.0'));
+    }
+    credit.classList.add('is-on');
+  }
+  // Top of the title block, in canvas pixels — the reading view frames the map above it.
+  function titleTop() { return credit.classList.contains('is-on') ? credit.offsetTop : ch; }
+
+  // The focused stratum's own capital moves (汴梁 → 临安 …), drawn on the layer itself.
+  const focusMat = new THREE.MeshBasicMaterial({ color: COL.giltHi, transparent: true, opacity: 0, depthWrite: false });
+  const focusDash = new THREE.LineDashedMaterial({ color: COL.gilt, transparent: true, opacity: 0, dashSize: 0.04, gapSize: 0.03, depthWrite: false });
+  const focusGroup = new THREE.Group(); world.add(focusGroup);
+  function buildFocusPath(F) {
+    focusGroup.children.slice().forEach((c) => { focusGroup.remove(c); if (c.geometry) c.geometry.dispose(); });
+    if (F < 0) return;
+    const g = data.geo[layers[F].id]; if (!g) return;
+    const y = yOf(F) + 0.004;
+    const pt = (s) => new THREE.Vector3(px(s.lng), y, pz(s.lat));
+    if (g.trail.length > 1) {
+      const path = new THREE.CurvePath();
+      for (let j = 0; j < g.trail.length - 1; j++) path.add(new THREE.LineCurve3(pt(g.sites[g.trail[j]]), pt(g.sites[g.trail[j + 1]])));
+      const tube = new THREE.Mesh(new THREE.TubeGeometry(path, 24 * (g.trail.length - 1), 0.013, 6, false), focusMat);
+      tube.renderOrder = 9; focusGroup.add(tube);
+      // Arrowhead at the last capital, pointing along the move.
+      const a = pt(g.sites[g.trail[g.trail.length - 2]]), b = pt(g.sites[g.trail[g.trail.length - 1]]);
+      const dir = b.clone().sub(a).normalize();
+      const cone = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.09, 12), focusMat);
+      cone.position.copy(b).addScaledVector(dir, -0.05);
+      cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+      cone.renderOrder = 9; focusGroup.add(cone);
+    }
+    const dash = [];
+    (g.chains || []).forEach((ch) => { for (let j = 0; j < ch.length - 1; j++) { const a = pt(g.sites[ch[j]]), b = pt(g.sites[ch[j + 1]]); dash.push(a.x, a.y, a.z, b.x, b.y, b.z); } });
+    if (dash.length) {
+      const dg = new THREE.BufferGeometry(); dg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(dash), 3));
+      const dl = new THREE.LineSegments(dg, focusDash); dl.computeLineDistances(); dl.renderOrder = 9; focusGroup.add(dl);
+    }
+  }
+
   // ── Camera ──
-  const cam = { az: -0.5, el: 0.52, dist: 12, tx: 0, ty: H * 0.46, tz: 0 };
+  // ox / oy shift the projection (px) so the scene centres in what stays visible; they ease
+  // like the rest of the camera, so opening a sheet or entering a reading view glides.
+  const cam = { az: -0.5, el: 0.52, dist: 12, tx: 0, ty: H * 0.46, tz: 0, ox: 0, oy: 0 };
   const to = Object.assign({}, cam);
-  let baseDist = 12, insetBottom = 0, insetRight = 0, ys = 1;
+  let baseDist = 12, insetBottom = 0, insetRight = 0, ys = 1, fovV = 0.3, fovH = 0.3, halfTan = 0.3, cw = 1, ch = 1;
+  let viewOX = NaN, viewOY = NaN;
+  function setOffset(x, y) {
+    if (Math.abs(x - viewOX) < 0.05 && Math.abs(y - viewOY) < 0.05) return;
+    viewOX = x; viewOY = y;
+    if (Math.abs(x) < 0.05 && Math.abs(y) < 0.05) camera.clearViewOffset();
+    else camera.setViewOffset(cw, ch, x, y, cw, ch);
+    camera.updateProjectionMatrix();
+  }
   function fit(snap) {
     const w = container.clientWidth || 1, h = container.clientHeight || 1;
+    cw = w; ch = h;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    // Shift the projection so the scene centres in the part not covered by a sheet / drawer.
-    if (insetBottom > 0 || insetRight > 0) camera.setViewOffset(w, h, insetRight / 2, insetBottom / 2, w, h);
-    else camera.clearViewOffset();
-    camera.updateProjectionMatrix();
-    const half = Math.tan(camera.fov * DEG / 2);
+    halfTan = Math.tan(camera.fov * DEG / 2);
     const vh = Math.max(1, h - insetBottom), vw = Math.max(1, w - insetRight);
     // Tall phone screens get taller strata: time takes the vertical room the map can't use.
     ys = vw / vh < 0.8 ? 1.55 : 1;
     world.scale.y = ys;
-    const vf = Math.atan(half * vh / h), hf = Math.atan(half * vw / h);
-    baseDist = Math.max(3.0 / Math.sin(vf), 3.0 / Math.sin(hf)) * 0.84;
+    const vf = Math.atan(halfTan * vh / h), hf = Math.atan(halfTan * vw / h);
+    fovV = vf; fovH = hf;
+    // Wide screens frame the stack height-first; a touch further back keeps today's surface
+    // clear of the view switch.
+    baseDist = Math.max(3.0 / Math.sin(vf), 3.0 / Math.sin(hf)) * (ys > 1 ? 0.84 : 0.9);
     applyFocus(snap !== false);
+    viewOX = NaN; setOffset(cam.ox, cam.oy);
   }
 
   const state = { mode: 'all', dynastyId: null, visited: {}, selectedId: null, focus: -1, sel: -1 };
   function applyFocus(instant) {
     const sel = state.sel >= 0 ? museums[state.sel] : null;
     const covered = insetBottom > 0 || insetRight > 0;
+    to.ox = insetRight / 2; to.oy = insetBottom / 2;
     if (state.focus >= 0) {
-      to.ty = layers[state.focus].y * ys; to.tx = 0; to.tz = 0.15;
-      to.dist = baseDist * (covered ? 0.9 : 0.76); to.el = 0.82;
+      // Read the era like a map: north up, nearly top-down, framed on that dynasty's extent
+      // in the band between the view switch and the title block (itself above dock / sheet).
+      const L = layers[state.focus];
+      const b = (L.terr && L.terr.box) || chinaBox;
+      const bandTop = 52, bandBottom = Math.max(insetBottom, ch - titleTop()) + 4;
+      const fV = Math.atan(halfTan * Math.max(90, ch - bandTop - bandBottom) / ch);
+      to.oy = (bandBottom - bandTop) / 2;
+      const halfW = Math.max(0.85, (b.x1 - b.x0) / 2), halfD = Math.max(0.65, (b.z1 - b.z0) / 2);
+      const elv = 1.16;
+      const dW = halfW / Math.tan(fovH), dD = (halfD * Math.sin(elv) + 0.1) / Math.tan(fV);
+      to.tx = (b.x0 + b.x1) / 2; to.tz = (b.z0 + b.z1) / 2; to.ty = L.y * ys;
+      to.el = elv; to.dist = Math.max(dW, dD) * 1.1;
+      to.az = Math.round(cam.az / (Math.PI * 2)) * Math.PI * 2;
     } else if (sel) {
       const lowest = sel.links.length ? yOf(sel.links[sel.links.length - 1]) : yTop;
       to.tx = sel.x * 0.6; to.tz = sel.z * 0.6; to.ty = (yTop + lowest) / 2 * ys;
       to.dist = baseDist * (covered ? 0.92 : 0.82); to.el = 0.46;
     } else {
-      to.tx = 0; to.tz = 0; to.ty = H * 0.46 * ys; to.dist = baseDist; to.el = ys > 1 ? 0.42 : 0.52;
+      to.tx = 0; to.tz = 0; to.ty = H * (ys > 1 ? 0.46 : 0.5) * ys; to.dist = baseDist; to.el = ys > 1 ? 0.42 : 0.52;
     }
-    if (instant) Object.assign(cam, { dist: to.dist, tx: to.tx, ty: to.ty, tz: to.tz, el: to.el });
+    if (instant) Object.assign(cam, { dist: to.dist, tx: to.tx, ty: to.ty, tz: to.tz, el: to.el, ox: to.ox, oy: to.oy });
     S.needs = true;
   }
 
   // ── Colour state ──
-  function setTint(arr, i, c, k) { arr[i * 3] = c.r * k; arr[i * 3 + 1] = c.g * k; arr[i * 3 + 2] = c.b * k; }
+  function setTint(arr, karr, i, c, k) { arr[i * 3] = c.r; arr[i * 3 + 1] = c.g; arr[i * 3 + 2] = c.b; karr[i] = k; }
+  function setBeam(i, c, k) {
+    const o = i * 4;
+    if (PAL.ink) { bCol[o] = c.r; bCol[o + 1] = c.g; bCol[o + 2] = c.b; bCol[o + 3] = Math.min(1, k * 1.5); }
+    else { bCol[o] = c.r * k; bCol[o + 1] = c.g * k; bCol[o + 2] = c.b * k; bCol[o + 3] = 1; }
+  }
   function recolor() {
     const F = state.focus, mode = state.mode, visited = state.visited, selId = state.selectedId;
     const linkedToFocus = (m) => F >= 0 && m.links.indexOf(F) >= 0;
+    // In a dynasty's reading view the camera looks down onto its stratum, so museums are
+    // shown where their beams land on it (dots) — points up on today's surface would
+    // parallax away from the map underneath.
     museums.forEach((m, i) => {
       const v = !!visited[m.id], sel = m.id === selId;
       let c = COL.bone, k = m.major ? 0.85 : 0.6, size = m.major ? 15 : 11;
+      if (PAL.ink) k *= 0.7;
       if (mode === 'footprint') { if (v) { c = COL.seal; k = 1.15; size = 17; } else { k = 0.1; } }
-      else if (F >= 0) { if (linkedToFocus(m)) { c = v ? COL.seal : COL.gilt; k = 1.15; size = 16; } else { k = 0.16; } }
+      else if (F >= 0) { k = sel && !linkedToFocus(m) ? 1.2 : 0; }
       else if (v) { c = COL.seal; k = 1.1; size = m.major ? 17 : 14; }
-      if (sel) { c = COL.giltHi; k = 1.5; size = 26; }
-      setTint(mTint, i, c, k); mSize[i] = size;
+      if (sel && F < 0) { c = COL.giltHi; k = 1.5; size = 26; }
+      else if (sel) { c = COL.giltHi; size = 22; }
+      setTint(mTint, mK, i, c, k); mSize[i] = size;
     });
-    mGeom.attributes.tint.needsUpdate = true; mGeom.attributes.size.needsUpdate = true;
+    mGeom.attributes.tint.needsUpdate = true; mGeom.attributes.kk.needsUpdate = true; mGeom.attributes.size.needsUpdate = true;
 
     segs.forEach((s, i) => {
       const m = museums[s.m], v = !!visited[m.id], sel = m.id === selId;
       let c = COL.bone, k = 0.075;
       if (mode === 'footprint') { if (v) { c = COL.seal; k = 0.6; } else k = 0; }
-      else if (F >= 0) { if (m.links.indexOf(F) >= 0 && s.lo >= F) { c = v ? COL.seal : COL.gilt; k = 0.62; } else k = 0.025; }
+      else if (F >= 0) { if (m.links.indexOf(F) >= 0 && s.lo >= F) { c = v ? COL.seal : COL.gilt; k = PAL.ink ? 0.07 : 0.16; } else k = 0; }
       else if (v) { c = COL.seal; k = 0.42; }
-      if (sel) { c = COL.giltHi; k = 0.95; }
-      setTint(bCol, i * 2, c, k); setTint(bCol, i * 2 + 1, c, k * 0.55);
+      if (sel && F < 0) { c = COL.giltHi; k = 0.95; }
+      setBeam(i * 2, c, k); setBeam(i * 2 + 1, c, k * 0.55);
     });
     bGeom.attributes.color.needsUpdate = true;
 
@@ -390,41 +563,55 @@ function init(container, data, cb) {
       if (d.onSite) c = COL.giltHi;
       if (mode === 'footprint') { if (v) { c = COL.seal; k = 0.9; size = d.onSite ? 15 : 9; } else { k = 0; } }
       else if (F >= 0) {
-        if (d.layer === F && m.links.indexOf(F) >= 0) { c = d.onSite ? COL.giltHi : (v ? COL.seal : COL.gilt); k = d.onSite ? 1.4 : 0.95; size = d.onSite ? 20 : 11; }
-        else k *= 0.25;
+        if (d.layer === F && m.links.indexOf(F) >= 0) { c = d.onSite ? COL.giltHi : (v ? COL.seal : COL.gilt); k = d.onSite ? 1.4 : 1.05; size = d.onSite ? 22 : 14; }
+        else k = 0;
       } else if (v) { c = COL.seal; k = 0.7; }
-      if (sel) { c = COL.giltHi; k = d.onSite ? 1.6 : 1.1; size = d.onSite ? 22 : 13; }
-      setTint(dTint, i, c, k); dSize[i] = size;
+      if (sel && (F < 0 || d.layer === F)) { c = COL.giltHi; k = d.onSite ? 1.6 : 1.3; size = d.onSite ? 24 : 18; }
+      setTint(dTint, dK, i, c, k); dSize[i] = size;
     });
-    dGeom.attributes.tint.needsUpdate = true; dGeom.attributes.size.needsUpdate = true;
+    dGeom.attributes.tint.needsUpdate = true; dGeom.attributes.kk.needsUpdate = true; dGeom.attributes.size.needsUpdate = true;
 
     sites.forEach((s, i) => {
       let c = s.s.role === 'culture' ? COL.patina : COL.gilt;
       let k = s.trail || s.s.role === 'culture' ? 0.75 : 0.45, size = s.s.role === 'capital' ? 14 : 10;
-      if (F >= 0) { if (s.layer === F) { c = s.s.role === 'culture' ? COL.patina : COL.giltHi; k = 1.35; size = 22; } else k *= 0.3; }
+      if (F >= 0) { if (s.layer === F) { c = s.s.role === 'culture' ? COL.patina : COL.giltHi; k = 1.35; size = 22; } else k *= 0.12; }
       if (mode === 'footprint') k *= 0.5;
-      setTint(siteTint, i, c, k); siteSize[i] = size;
+      setTint(siteTint, siteK, i, c, k); siteSize[i] = size;
     });
-    siteGeom.attributes.tint.needsUpdate = true; siteGeom.attributes.size.needsUpdate = true;
+    siteGeom.attributes.tint.needsUpdate = true; siteGeom.attributes.kk.needsUpdate = true; siteGeom.attributes.size.needsUpdate = true;
 
     // Layer opacities
     const depth = {};
     if (mode === 'footprint') {
       museums.forEach((m) => { if (visited[m.id]) m.links.forEach((li) => { depth[li] = (depth[li] || 0) + 1; }); });
     }
+    // A stratum with its own territory draws that (o/f); today's outline (g = ghost) only
+    // returns, faintly, under the stratum you are reading. Strata without one fall back to
+    // today's outline.
+    const lk = (x) => Math.min(1, x * PAL.lineK), fk = (x) => Math.min(1, x * PAL.fillK);
     layers.forEach((L) => {
-      let o = 0.11, f = 0.022, r = 0.07;
-      if (F >= 0) { if (L.i === F) { o = 0.62; f = 0.11; r = 0.6; } else { o = 0.045; f = 0.008; r = 0.02; } }
-      if (mode === 'footprint') { const d = Math.min(1, (depth[L.i] || 0) / 4); o = 0.05 + d * 0.4; f = 0.008 + d * 0.07; r = 0.03 + d * 0.15; }
-      L.to = { outline: o, fill: f, river: r };
-      L.fill.material.color.copy(mode === 'footprint' && depth[L.i] ? COL.seal : COL.gilt);
+      const own = !!L.tLine;
+      let o = own ? 0.2 : 0.11, f = own ? 0.035 : 0.022, r = 0.06, g = 0;
+      if (F >= 0) {
+        if (L.i === F) { o = own ? 0.85 : 0.62; f = own ? 0.13 : 0.11; r = 0.55; g = own ? 0.16 : 0; }
+        else { o = 0.025; f = 0.004; r = 0; }
+      }
+      if (mode === 'footprint') { const d = Math.min(1, (depth[L.i] || 0) / 4); o = 0.05 + d * 0.45; f = 0.008 + d * 0.08; r = 0.03 + d * 0.12; g = 0; }
+      if (own) L.to = { tLine: lk(o), tFill: fk(f), outline: lk(g), fill: 0, river: lk(r) };
+      else L.to = { tLine: 0, tFill: 0, outline: lk(o), fill: fk(f), river: lk(r) };
+      const fc = mode === 'footprint' && depth[L.i] ? COL.seal : COL.fill;
+      (L.tFill || L.fill).material.color.copy(fc);
       layerLabels[L.i].el.classList.toggle('is-active', L.i === F);
       layerLabels[L.i].el.classList.toggle('is-dim', F >= 0 && L.i !== F);
       layerLabels[L.i].el.classList.toggle('has-visit', !!depth[L.i]);
     });
-    top.to = { outline: F >= 0 ? 0.24 : 0.5, fill: F >= 0 ? 0.02 : 0.045, river: F >= 0 ? 0.1 : 0.28 };
-    tube.material.opacity = mode === 'footprint' ? 0.35 : 0.95;
-    tubeGlow.material.opacity = mode === 'footprint' ? 0.05 : 0.13;
+    top.to = { outline: lk(F >= 0 ? 0.05 : 0.5), fill: fk(F >= 0 ? 0.006 : 0.045), river: lk(F >= 0 ? 0.03 : 0.28), tLine: 0, tFill: 0 };
+    // Seen from above, the other eras' trail would lie across the map being read.
+    tube.material.opacity = mode === 'footprint' ? 0.35 : F >= 0 ? (PAL.ink ? 0.035 : 0.07) : 0.95;
+    tubeGlow.material.opacity = mode === 'footprint' ? 0.05 : F >= 0 ? 0.015 : 0.13;
+    chains.material.opacity = F >= 0 ? 0.04 : 0.32;
+    focusMat.opacity = F >= 0 ? 0.95 : 0;
+    focusDash.opacity = F >= 0 ? 0.7 : 0;
     S.needs = true;
   }
 
@@ -436,8 +623,18 @@ function init(container, data, cb) {
     state.selectedId = next.selectedId || null;
     state.focus = state.mode === 'dynasty' && state.dynastyId != null && layerIndexById[state.dynastyId] != null ? layerIndexById[state.dynastyId] : -1;
     state.sel = state.selectedId != null && museumIdx[state.selectedId] != null ? museumIdx[state.selectedId] : -1;
+    if (prevFocus !== state.focus) {
+      buildFocusPath(state.focus); showCredit();
+      overlay.classList.toggle('is-focus', state.focus >= 0);
+      if (state.focus >= 0) hint.classList.add('is-gone');
+    }
     recolor();
     if (prevFocus !== state.focus || prevSel !== state.sel) applyFocus(false);
+  }
+  // Where a museum sits in the current view: on the stratum being read, else on today's surface.
+  function museumY(i) {
+    const F = state.focus;
+    return F >= 0 && museums[i].links.indexOf(F) >= 0 ? yOf(F) : yTop;
   }
 
   // ── Interaction ──
@@ -454,7 +651,7 @@ function init(container, data, cb) {
     museums.forEach((m, i) => {
       if (state.mode === 'footprint' && !state.visited[m.id]) return;
       if (state.focus >= 0 && m.links.indexOf(state.focus) < 0 && m.id !== state.selectedId) return;
-      const p = screenOf(m.x, yTop, m.z); if (p.z > 1) return;
+      const p = screenOf(m.x, museumY(i), m.z); if (p.z > 1) return;
       const dx = p.x - cx, dy = p.y - cy, d = dx * dx + dy * dy;
       if (d < bd) { bd = d; best = i; }
     });
@@ -515,6 +712,8 @@ function init(container, data, cb) {
     const h = canvas.clientHeight;
     const RX = 10;
     const order = layerLabels.slice().sort((a, b) => b.layer - a.layer);
+    // Reading one era, the ruler fades out (CSS .is-focus) and the title block names the era;
+    // labels keep tracking their strata so they fade back in place.
     const tp = screenOf(todayAnchor.x, todayAnchor.y, todayAnchor.z);
     todayLabel.style.transform = 'translate3d(' + RX + 'px,' + tp.y.toFixed(1) + 'px,0) translate(0,-50%)';
     let lastY = tp.y;
@@ -538,6 +737,12 @@ function init(container, data, cb) {
       else s.el.style.visibility = 'hidden';
     });
     focusSites.sort((a, b) => a.rank - b.rank);
+    // Regime names (曹魏 / 蜀汉 / 孙吴 …) sit under everything else, centred on their land.
+    partLabels.forEach((t) => {
+      const show = state.focus >= 0 && t.layer === state.focus;
+      t.el.style.visibility = show ? 'visible' : 'hidden';
+      if (show) { const p = screenOf(t.v.x, t.v.y, t.v.z); t.el.style.transform = 'translate3d(' + p.x.toFixed(1) + 'px,' + p.y.toFixed(1) + 'px,0) translate(-50%,-50%)'; }
+    });
     focusSites.forEach((s) => {
       if (!s.w) { s.w = s.el.offsetWidth; s.h = s.el.offsetHeight; }
       const p = screenOf(s.v.x, s.v.y, s.v.z);
@@ -562,7 +767,7 @@ function init(container, data, cb) {
     });
     function tag(node, idx) {
       if (idx < 0) { node.style.visibility = 'hidden'; return; }
-      const m = museums[idx], p = screenOf(m.x, yTop, m.z);
+      const m = museums[idx], p = screenOf(m.x, museumY(idx), m.z);
       if (node._idx !== idx) {
         node._idx = idx; node.textContent = m.name;
         node._w = node.offsetWidth; node._h = node.offsetHeight;
@@ -587,11 +792,12 @@ function init(container, data, cb) {
     S.raf = requestAnimationFrame(frame);
     if (!active || document.hidden) { last = now; return; }
     const dt = Math.min(0.1, (now - last) / 1000); last = now;
-    const idle = now - lastInteract > 5000 && state.sel < 0;
+    const idle = now - lastInteract > 5000 && state.sel < 0 && state.focus < 0;
     if (idle) to.az += dt * 0.035 * Math.cos(now / 9000);
     const k = 1 - Math.pow(0.0015, dt);
     cam.az = lerp(cam.az, to.az, k); cam.el = lerp(cam.el, to.el, k); cam.dist = lerp(cam.dist, to.dist, k);
     cam.tx = lerp(cam.tx, to.tx, k); cam.ty = lerp(cam.ty, to.ty, k); cam.tz = lerp(cam.tz, to.tz, k);
+    cam.ox = lerp(cam.ox, to.ox, k); cam.oy = lerp(cam.oy, to.oy, k); setOffset(cam.ox, cam.oy);
     camera.position.set(cam.tx + cam.dist * Math.cos(cam.el) * Math.sin(cam.az), cam.ty + cam.dist * Math.sin(cam.el), cam.tz + cam.dist * Math.cos(cam.el) * Math.cos(cam.az));
     camera.lookAt(cam.tx, cam.ty, cam.tz);
 
@@ -600,6 +806,7 @@ function init(container, data, cb) {
     layers.forEach((L) => {
       const appear = Math.max(0, Math.min(1, intro * 1.6 - (L.i / N) * 0.75));
       lerpMat(L.outline.material, L.to.outline * appear, ka); lerpMat(L.fill.material, L.to.fill * appear, ka); lerpMat(L.river.material, L.to.river * appear, ka);
+      if (L.tLine) { lerpMat(L.tLine.material, L.to.tLine * appear, ka); lerpMat(L.tFill.material, L.to.tFill * appear, ka); }
     });
     const ta = Math.max(0, intro * 1.6 - 0.6);
     lerpMat(top.outline.material, top.to.outline * Math.min(1, ta), ka); lerpMat(top.fill.material, top.to.fill * Math.min(1, ta), ka); lerpMat(top.river.material, top.to.river * Math.min(1, ta), ka);
@@ -609,7 +816,7 @@ function init(container, data, cb) {
     pulses.forEach((sp, i) => {
       const t = ((now / 1000) * 0.045 + i / pulses.length) % 1;
       if (t > grow) { sp.visible = false; return; }
-      sp.visible = state.mode !== 'footprint';
+      sp.visible = state.mode !== 'footprint' && state.focus < 0;
       sp.position.copy(curve.getPointAt(t));
       const s = 0.12 + 0.05 * Math.sin(now / 300 + i);
       sp.scale.set(s, s, s);
@@ -619,10 +826,37 @@ function init(container, data, cb) {
     placeLabels();
   }
 
+  // ── Hall (theme): palette + light-vs-ink blending ──
+  function applyTheme(name) {
+    themeName = name || 'night';
+    loadPalette(themeName);
+    // Dark halls add light to the colour only, leaving the canvas alpha alone. Plain additive
+    // blending also adds alpha, so on this transparent canvas a switched-off (black) beam or
+    // point would composite as an opaque black line over the hall's background (青绿 showed it).
+    [sitePoints, mPoints, dPoints, tube, tubeGlow, chains, beams].concat(pulses).forEach((o) => {
+      const m = o.material;
+      if (PAL.ink) { m.blending = THREE.NormalBlending; return; }
+      m.blending = THREE.CustomBlending;
+      m.blendEquation = THREE.AddEquation; m.blendEquationAlpha = THREE.AddEquation;
+      m.blendSrc = THREE.SrcAlphaFactor; m.blendDst = THREE.OneFactor;
+      m.blendSrcAlpha = THREE.ZeroFactor; m.blendDstAlpha = THREE.OneFactor;
+    });
+    [sitePoints, mPoints, dPoints].forEach((p) => { p.material.uniforms.ink.value = PAL.ink ? 1 : 0; });
+    layers.concat([top]).forEach((L) => {
+      L.outline.material.color.copy(COL.line); L.river.material.color.copy(COL.river);
+      if (L.tLine) L.tLine.material.color.copy(COL.line);
+    });
+    top.fill.material.color.copy(COL.line);
+    tube.material.color.copy(COL.gilt); tubeGlow.material.color.copy(COL.gilt); chains.material.color.copy(COL.gilt);
+    pulses.forEach((p) => p.material.color.copy(COL.giltHi));
+    focusMat.color.copy(COL.giltHi); focusDash.color.copy(COL.gilt);
+    recolor();
+  }
+
   const ro = new ResizeObserver(() => fit(true));
   ro.observe(container);
   fit(true);
-  recolor();
+  applyTheme(data.theme || 'night');
   S.raf = requestAnimationFrame(frame);
 
   Object.assign(S, {
@@ -630,10 +864,15 @@ function init(container, data, cb) {
     update,
     setActive(on) { active = !!on; if (on) { last = performance.now(); fit(true); } },
     resize: () => fit(true),
+    setTheme: applyTheme,
     setInset(bottom, right) {
       const b = Math.max(0, Math.round(bottom || 0)), r = Math.max(0, Math.round(right || 0));
       if (b === insetBottom && r === insetRight) return;
-      insetBottom = b; insetRight = r; fit(false);
+      insetBottom = b; insetRight = r;
+      // A bottom sheet already names the era — the title block keeps only year + source, above it.
+      credit.style.bottom = b > 0 ? (b + 10) + 'px' : '';
+      credit.classList.toggle('is-sheet', b > 0);
+      fit(false);
     },
   });
   return true;
@@ -646,6 +885,8 @@ window.MuseumStrata = {
   resize() { if (S.ready) S.resize(); },
   /** Pixels of the view covered by a sheet (bottom) or side drawer (right). */
   setInset(bottom, right) { if (S.ready) S.setInset(bottom, right); },
+  /** 'night' | 'paper' | 'qinglu' */
+  setTheme(name) { if (S.ready) S.setTheme(name); },
 };
 window.dispatchEvent(new Event('strata-ready'));
 `

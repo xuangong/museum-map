@@ -10,7 +10,7 @@ import { MAP_SCRIPT } from "./client/map"
 import { CHAT_SCRIPT } from "./client/chat"
 import { AUTH_SCRIPT } from "./client/auth"
 import { APP_SCRIPT } from "./client/app"
-import { STRATA_SRC } from "~/routes/assets"
+import { STRATA_SRC, TERRITORY_SRC } from "~/routes/assets"
 import { DYNASTY_GEO } from "~/data/dynasty-geo"
 import { computeCrossings } from "~/services/crossings"
 
@@ -33,6 +33,7 @@ export function HomePage(data: HomeData): string {
     ...data,
     dynastyGeo: DYNASTY_GEO,
     crossings: computeCrossings(data.museums, data.dynasties),
+    territoryUrl: TERRITORY_SRC,
   })
     .replace(/</g, "\\u003c") // safe inline in <script>
     .replace(/-->/g, "--\\u003e")

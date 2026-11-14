@@ -36,6 +36,8 @@ const PATHS: Record<string, string> = {
   arrowDown: '<path d="M12 5v14M6 13l6 6 6-6"/>',
   book: '<path d="M12 6.5C10.5 5.2 8.2 4.5 5 4.5v14c3.2 0 5.5.7 7 2 1.5-1.3 3.8-2 7-2v-14c-3.2 0-5.5.7-7 2Z"/><path d="M12 6.5v14"/>',
   clock: '<circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3 2"/>',
+  // pendant gallery lamp — 展厅灯光 (theme)
+  lamp: '<path d="M12 3v4"/><path d="M6 14.5a6 6 0 0 1 12 0Z"/><path d="M10 17.5a2 2 0 0 0 4 0"/><path d="M4.5 20.5l1.5-1.5M19.5 20.5 18 19"/>',
 }
 
 export type IconName = keyof typeof PATHS
