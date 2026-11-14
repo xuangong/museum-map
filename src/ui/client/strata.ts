@@ -677,12 +677,13 @@ function init(container, data, cb) {
   function tones(b, lo, hi) { const set = CHORD[HARM[b]][1], out = []; for (let d = lo; d <= hi; d++) if (set.indexOf(d % 5) >= 0) out.push(d); return out; }
   function melodyAt(b, beat) { let p0 = 0; for (const [deg, beats] of MELODY[b]) { if (beat < p0 + beats) return deg; p0 += beats; } return MELODY[b][0][0]; }
   // A string of era 'li' to pluck with a note (each era's strings take its notes in turn).
-  function stringFor(li, k) { const here = stringsAt(li); return here.length ? here[k % here.length] : null; }
+  function stringFor(li, k) { const here = li >= 0 ? stringsAt(li) : strings; return here.length ? here[k % here.length] : null; }
   // Bar b: the lead plays the tune; every other active family plays its part.
+  // lead < 0: the tune is on your own strings (when only 钟磬/鼓 have been collected).
   function ensembleBar(ev, b, t, lead, parts, k0) {
     let pos = 0, k = k0;
     MELODY[b].forEach(([deg, beats], n) => {
-      ev.push({ t: t + pos * BEAT, dur: beats * BEAT, deg, vel: n === 0 ? 0.95 : 0.85, voice: voiceOf(lead), st: stringFor(lead, k++), li: lead });
+      ev.push({ t: t + pos * BEAT, dur: beats * BEAT, deg, vel: n === 0 ? 0.95 : 0.85, voice: lead >= 0 ? voiceOf(lead) : 'ks', st: stringFor(lead, k++), li: lead });
       pos += beats;
     });
     parts.forEach((li) => {
@@ -712,15 +713,18 @@ function init(container, data, cb) {
     return k;
   }
   // Who plays in phrase p: collected eras join in time order; one voice per family (the newest
-  // to join); the lead is the newest 吹/弹/拉/琴 voice (or the newest of any if none).
+  // to join); the lead is the newest 吹/弹/拉/琴 voice, else the 钟磬 (编钟 and 编磬 were melodic
+  // instruments), never the drum — with only the drum, your own strings take the tune (lead -1).
   function lineup(col, p) {
     const n = col.length, act = col.slice(0, Math.max(1, Math.ceil((p + 1) * n / 5)));
     const byFam = {};
     act.forEach((li) => { byFam[famOf(li)] = li; });
     const voices = Object.values(byFam).sort((a, b) => a - b);
     const leadCands = voices.filter((li) => LEADS.indexOf(famOf(li)) >= 0);
-    const lead = leadCands.length ? leadCands.reduce((a, b) => (act.indexOf(b) > act.indexOf(a) ? b : a)) : voices[voices.length - 1];
-    return { act, lead, parts: voices.filter((li) => li !== lead) };
+    const newest = (xs) => xs.reduce((a, b) => (act.indexOf(b) > act.indexOf(a) ? b : a));
+    const bells = voices.filter((li) => famOf(li) === 'bell');
+    const lead = leadCands.length ? newest(leadCands) : bells.length ? newest(bells) : -1;
+    return { act, lead, show: lead >= 0 ? lead : act[act.length - 1], parts: voices.filter((li) => li !== lead) };
   }
   // F: era index (reading one era) or -1 (all strata). o.eras: treat these eras as collected
   // (for rendering what other passports would hear).
@@ -743,15 +747,15 @@ function init(container, data, cb) {
       }
       for (let p = 0; p < 5; p++) {
         const L = lineup(col, p);
-        lay.push({ t, li: L.lead, act: L.act });
+        lay.push({ t, li: L.show, act: L.act });
         for (let b = p * 4; b < p * 4 + 4; b++) { k = ensembleBar(ev, b, t, L.lead, L.parts, k); t += 4 * BEAT; }
       }
       // 今: every voice on the home chord together, your strings strummed over it.
       const L = lineup(col, 4);
       lay.push({ t, li: N, act: L.act });
-      [L.lead].concat(L.parts).forEach((li, n) => {
+      (L.lead >= 0 ? [L.lead] : []).concat(L.parts).forEach((li, n) => {
         const d = [10, 8, 7, 5, 12, 13][n % 6];
-        ev.push({ t: t + n * 0.03, dur: 2.6, deg: d, vel: 0.5, voice: voiceOf(li), st: null, li });
+        ev.push({ t: t + n * 0.03, dur: 2.6, deg: d, vel: famOf(li) === 'drum' ? 0.35 : 0.5, voice: voiceOf(li), st: null, li });
       });
       const order = strings.slice().sort((a, b) => a.note - b.note), chord = [5, 7, 8, 10, 12, 13];
       const n = Math.max(3, Math.min(chord.length, order.length || 3));
@@ -763,7 +767,8 @@ function init(container, data, cb) {
     // One era: its phrase, its instrument leading, the same instrument answering in its family part.
     const here = stringsAt(F), b0 = Math.floor(barOf(F) / 4) * 4;
     lay.push({ t: 0, li: F, rest: !here.length, act: [F] });
-    for (let b = b0; b < b0 + 4 && b < MELODY.length; b++) { k = ensembleBar(ev, b, t, F, b > b0 && famOf(F) !== 'wind' ? [F] : [], k); t += 4 * BEAT; }
+    const drum = famOf(F) === 'drum';
+    for (let b = b0; b < b0 + 4 && b < MELODY.length; b++) { k = ensembleBar(ev, b, t, drum ? -1 : F, drum || (b > b0 && famOf(F) !== 'wind') ? [F] : [], k); t += 4 * BEAT; }
     ev.sort((a, b) => a.t - b.t);
     return { ev, lay, dur: t + 2.4 };
   }
