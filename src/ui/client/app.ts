@@ -3212,6 +3212,8 @@ window.museumApp = function() {
         if (tid) this.toggleTrip(tid);
         return;
       }
+      var achBtn = e.target.closest('[data-ach]');
+      if (achBtn) { this.openAch(achBtn.getAttribute('data-ach')); return; }
       var go = e.target.closest('[data-dyn-go]');
       if (go) { this.selectDynasty(go.getAttribute('data-dyn-go')); return; }
       var ask = e.target.closest('[data-ask-dynasty]');
@@ -3328,6 +3330,20 @@ window.museumApp = function() {
       }
       if (m.timeline) sections.push({ key: 'timeline', title: '馆史', en: 'HISTORY', html: chain(m.timeline) });
       if (m.dynastyCoverage) sections.push({ key: 'coverage', title: '年代覆盖', en: 'COVERAGE', html: chain(m.dynastyCoverage) });
+
+      // ── 属于这些成就 ──
+      var belongs = this.achCatalog.filter(function(a){
+        return a.line === 'theme' && (a.members || []).some(function(mem){ return mem.museum ? mem.museum === m.id : (m.city && mem.city === m.city); });
+      });
+      if (belongs.length) {
+        sections.push({ key: 'ach', title: '属于这些成就', en: 'ACHIEVEMENTS', html: '<div class="ach-refs">' + belongs.map(function(a){
+          var r = self.achResult(a.id), lv = self.achLevel(a.id);
+          return '<button class="ach-ref" data-ach="' + esc(a.id) + '">'
+            + '<span class="ach-seal lv' + lv + ' line-' + esc(a.line) + '">' + esc(a.seal) + '</span>'
+            + '<span class="ach-ref-text"><b>' + esc(a.name) + '</b><small>' + (r ? r.have + ' / ' + r.total + ' · ' : '') + esc(self.achStatus(a.id)) + '</small></span>'
+            + '<span class="rec-go">' + ICONS.arrowRight + '</span></button>';
+        }).join('') + '</div>' });
+      }
 
       // ── 附近 · 路线之旅 ──
       if (head.lat && head.lng) {

@@ -2129,4 +2129,11 @@ path.route-corridor { stroke: var(--gilt); }
 .lg-rec-why .why { font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--text-2); overflow-wrap: anywhere; }
 .trip-why .why-ach-last, .why.why-ach-last { color: #FFF2E8; background: var(--seal); border-color: var(--seal); }
 .trip-why .why-ach, .why.why-ach { color: var(--seal-ink-strong); border-color: rgba(var(--seal-rgb), 0.45); border-style: dashed; }
+
+.ach-refs { display: flex; flex-direction: column; gap: 8px; }
+.ach-ref { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; width: 100%; padding: 9px 12px; border-radius: 12px; border: 1px solid var(--line); background: rgba(var(--fg-rgb),0.03); color: var(--text); text-align: left; cursor: pointer; overflow-wrap: anywhere; }
+.ach-ref:hover { border-color: rgba(var(--gilt-rgb),0.5); }
+.ach-ref-text { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.ach-ref-text b { font-family: var(--serif); font-size: 14px; }
+.ach-ref-text small { font-size: 11.5px; color: var(--text-3); }
 `
