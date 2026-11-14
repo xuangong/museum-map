@@ -634,6 +634,7 @@ function init(container, data, cb) {
   // per family at a time (≤ 6 voices). Sound runs on the audio clock; each frame plucks the
   // strings whose notes have started on that clock.
   let play = null, playLayer = -1, playRest = false, playAct = new Set();
+  let voy = null;   // 溯洄 in progress (see the 溯洄 section below)
   // Every performance is a new reading of the same score (see vary()); BEAT and rnd belong to it.
   let BEAT = 0.36, rnd = Math.random, perf = { heads: [], lift: [], dyn: [], qpick: {}, mul: 1, semis: 0 };
   function seeded(a) { return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -1008,6 +1009,7 @@ function init(container, data, cb) {
     todayLabel.classList.toggle('is-playing', li === N);
   }
   function startPlay() {
+    voyStop();
     const F = state.focus;
     const c = balance(compose(F));
     if (!c.ev.length) return;
@@ -1053,7 +1055,7 @@ function init(container, data, cb) {
   }
   // A pointer moving from p0 to p1 plucks every string it crosses (a strum).
   function strum(p0, p1, strength) {
-    if (state.focus >= 0 || !strings.length || !stringMesh.visible) return;
+    if (state.focus >= 0 || voy || !strings.length || !stringMesh.visible) return;
     strings.forEach((st) => {
       if (st.k <= 0.01) return;
       const e = stringEnds(st);
@@ -1089,7 +1091,7 @@ function init(container, data, cb) {
     const count = el('span', 'sl-count'); b.appendChild(count);
     const era = ERA[L.id];
     b.appendChild(el('span', 'sl-inst', era ? era.inst : VOICES.ks.name));
-    b.addEventListener('click', (e) => { e.stopPropagation(); cb.onDynasty && cb.onDynasty(L.id); });
+    b.addEventListener('click', (e) => { e.stopPropagation(); if (voy) { voyJump(L.i); return; } cb.onDynasty && cb.onDynasty(L.id); });
     overlay.appendChild(b);
     return { el: b, count, v: new THREE.Vector3(anchorX, L.y, anchorZ), layer: L.i };
   });
@@ -1098,7 +1100,7 @@ function init(container, data, cb) {
   todayLabel.appendChild(el('span', 'sl-name', '今'));
   todayLabel.appendChild(el('span', 'sl-period', museums.length + ' 座博物馆'));
   todayLabel.appendChild(el('span', 'sl-inst', VOICES.ks.name));
-  todayLabel.addEventListener('click', (e) => { e.stopPropagation(); cb.onDynasty && cb.onDynasty(null); });
+  todayLabel.addEventListener('click', (e) => { e.stopPropagation(); if (voy) { voyJumpTo(0); return; } cb.onDynasty && cb.onDynasty(null); });
   overlay.appendChild(todayLabel);
   const todayAnchor = new THREE.Vector3(anchorX, yTop, anchorZ);
   const siteLabels = sites.map((s) => {
@@ -1147,7 +1149,7 @@ function init(container, data, cb) {
     try { localStorage.setItem('mmStringSound', soundOn ? '1' : '0'); } catch (err) {}
     paintSound();
     if (soundOn) { unlockAudio(); const st = strings[Math.floor(strings.length / 2)]; if (st) pluck(st, 0.8, canvas.clientWidth / 2); }
-    else stopPlay();
+    else { stopPlay(); voyStopSound(); }
   });
   overlay.appendChild(soundBtn);
   const playBtn = el('button', 'strata-play');
@@ -1167,7 +1169,9 @@ function init(container, data, cb) {
       : (n > 0 ? '用你的琴弦，从远古奏到今天' : '听二十个朝代的乐器；集章之后，你的琴弦会加入'));
   }
   playBtn.addEventListener('click', (e) => { e.stopPropagation(); if (play) stopPlay(); else startPlay(); });
-  overlay.appendChild(playBtn);
+  // 奏一曲 and 溯洄 sit side by side under the sound switch.
+  const actions = el('div', 'strata-actions');
+  actions.appendChild(playBtn); overlay.appendChild(actions);
   // 此声取自: the object behind this era's sound, one tap from its museum.
   const nowCap = el('button', 'strata-now');
   nowCap.type = 'button';
@@ -1204,6 +1208,255 @@ function init(container, data, cb) {
   }
   nowCap.addEventListener('click', (e) => { e.stopPropagation(); if (nowMuseum && cb.onMuseum) cb.onMuseum(nowMuseum); });
   overlay.appendChild(nowCap);
+  // ── 溯洄: from 今 sink through the strata, one layer at a time, down to 新石器 ──
+  // A timeline of [{ kind, layer, dwell }]: an opening at 今, one entry per layer (清 → 新石器),
+  // and an ending. Each layer lights up and the one above lingers as a ghost; the camera sinks to
+  // it and drifts along that dynasty's capital trail; your stamped museums are the anchors (their
+  // strings stay, their dot flashes where they pass a layer they link to); the era's instrument
+  // plays a short phrase. Weighted dwell, ~72 s in all. Reduced motion: no camera flight, fades only.
+  const VOY_BIG = { qin: 1, 'western-han': 1, 'eastern-han': 1, tang: 1, song: 1, ming: 1, qing: 1 };
+  const VOY_MINOR = { wudai: 1, 'jin-jurchen': 1, sui: 1 };
+  const voyDwell = (id) => VOY_BIG[id] ? 4.5 : VOY_MINOR[id] ? 2.5 : id === 'neolithic' ? 3.5 : 3;
+  let voyTL = [];
+  function voyBuild() {
+    voyTL = [{ kind: 'open', layer: N, dwell: 3 }];
+    for (let i = N - 1; i >= 0; i--) voyTL.push({ kind: 'layer', layer: i, dwell: voyDwell(layers[i].id) });
+    voyTL.push({ kind: 'end', layer: 0, dwell: 0 });
+  }
+  const voyCap = el('div', 'strata-voy-cap'); voyCap.setAttribute('aria-live', 'polite'); overlay.appendChild(voyCap);
+  const voyBtn = el('button', 'strata-voy-btn');
+  voyBtn.type = 'button';
+  voyBtn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v13"/><path d="m6.5 12 5.5 5.5 5.5-5.5"/><path d="M5 21h14"/></svg><span>溯洄</span>';
+  voyBtn.setAttribute('aria-label', '溯洄：从今天一层层沉到新石器');
+  voyBtn.addEventListener('click', (e) => { e.stopPropagation(); voyStart(); });
+  const voyCtl = el('div', 'strata-voy-ctl');
+  const voyPauseBtn = el('button', 'sv-btn'); voyPauseBtn.type = 'button';
+  const voyNextBtn = el('button', 'sv-btn'); voyNextBtn.type = 'button';
+  voyNextBtn.innerHTML = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v13"/><path d="m6.5 12 5.5 5.5 5.5-5.5"/></svg><span>下一层</span>';
+  voyNextBtn.setAttribute('aria-label', '跳到下一层');
+  const voyCloseBtn = el('button', 'sv-btn sv-close'); voyCloseBtn.type = 'button';
+  voyCloseBtn.innerHTML = '<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12"/><path d="m18 6-12 12"/></svg>';
+  voyCloseBtn.setAttribute('aria-label', '退出溯洄');
+  voyPauseBtn.addEventListener('click', (e) => { e.stopPropagation(); if (!voy) return; if (voy.paused) voyResume(); else voyPause(); });
+  voyNextBtn.addEventListener('click', (e) => { e.stopPropagation(); if (!voy) return; voy.paused = false; voyEnterIdx(voy.i + 1); });
+  voyCloseBtn.addEventListener('click', (e) => { e.stopPropagation(); voyStop(); });
+  voyCtl.appendChild(voyPauseBtn); voyCtl.appendChild(voyNextBtn); voyCtl.appendChild(voyCloseBtn);
+  actions.insertBefore(voyBtn, playBtn); actions.appendChild(voyCtl);
+  document.addEventListener('keydown', (e) => { if (voy && e.key === 'Escape') voyStop(); });
+
+  function voyPaint() {
+    overlay.classList.toggle('is-voyage', !!voy);
+    const last = !!voy && voyTL[voy.i].kind === 'end';
+    overlay.classList.toggle('is-voy-end', last);
+    const paused = !!voy && voy.paused;
+    voyPauseBtn.innerHTML = (paused
+      ? '<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>'
+      : '<svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor"/></svg>') + '<span>' + (paused ? '继续' : '暂停') + '</span>';
+    voyPauseBtn.setAttribute('aria-label', paused ? '继续溯洄' : '暂停溯洄');
+    voyPauseBtn.classList.toggle('is-paused', paused);
+  }
+  function stampedAt(li) { return museums.filter((m) => state.visited[m.id] && m.links.indexOf(li) >= 0); }
+  // 都城 · 长安 → 洛阳 (or the scattered centres of the Neolithic).
+  function voyWhere(li) {
+    const g = data.geo[layers[li].id];
+    if (!g || !g.sites.length) return '';
+    if (g.sites.every((s) => s.role === 'culture')) return '满天星斗 · ' + g.sites.slice(0, 4).map((s) => shortName(s.name)).join('、') + (g.sites.length > 4 ? ' 等' : '');
+    const names = [];
+    g.trail.forEach((k) => { const n = g.sites[k] && shortName(g.sites[k].name); if (n && names.indexOf(n) < 0) names.push(n); });
+    return names.length ? '都城 · ' + names.join(' → ') : '';
+  }
+  function voyCaption(e) {
+    voyCap.innerHTML = '';
+    voyCap.classList.remove('is-on'); void voyCap.offsetWidth;
+    const head = el('div', 'vc-head');
+    if (e.kind === 'open') {
+      head.appendChild(el('span', 'vc-name', '今'));
+      head.appendChild(el('small', null, '溯洄 · 从这里往下'));
+      voyCap.appendChild(head);
+      voyCap.appendChild(el('div', 'vc-line is-quote', '光阴者，百代之过客'));
+      voyCap.appendChild(el('div', 'vc-sub', '—— 李白'));
+    } else if (e.kind === 'end') {
+      const seen = new Set();
+      museums.forEach((m) => { if (state.visited[m.id]) m.links.forEach((li) => seen.add(li)); });
+      head.appendChild(el('span', 'vc-name', '新石器'));
+      head.appendChild(el('small', null, layers[0].period));
+      voyCap.appendChild(head);
+      voyCap.appendChild(el('div', 'vc-line is-quote', seen.size ? '百代过客，你走过其中 ' + seen.size + ' 层' : '每一层都还空着——去集第一枚印吧'));
+      const row = el('div', 'vc-actions');
+      const again = el('button', 'vc-btn', '再溯一次'); again.type = 'button';
+      again.addEventListener('click', (ev) => { ev.stopPropagation(); if (voy) { voy.paused = false; voyEnterIdx(0); } });
+      const home = el('button', 'vc-btn is-main', '回到今天'); home.type = 'button';
+      home.addEventListener('click', (ev) => { ev.stopPropagation(); voyStop(); });
+      row.appendChild(again); row.appendChild(home); voyCap.appendChild(row);
+    } else {
+      const L = layers[e.layer];
+      head.appendChild(el('span', 'vc-name', L.name));
+      head.appendChild(el('small', null, L.period));
+      voyCap.appendChild(head);
+      const where = voyWhere(e.layer);
+      if (where) voyCap.appendChild(el('div', 'vc-line', where));
+      const mine = stampedAt(e.layer);
+      if (mine.length) {
+        const names = mine.slice(0, 2).map((m) => m.name).join('、');
+        voyCap.appendChild(el('div', 'vc-mine', '你在 ' + names + (mine.length > 2 ? ' 等 ' + mine.length + ' 座馆' : '') + ' 见过这一层'));
+      }
+    }
+    voyCap.classList.add('is-on');
+  }
+
+  // The capital(s) the camera follows in layer li: its trail, or the middle of the scattered sites.
+  function voyTrail(li) {
+    const g = data.geo[layers[li].id];
+    if (!g || !g.sites.length) return [{ x: 0, z: 0 }];
+    if (g.converge || !g.trail.length) {
+      let x = 0, z = 0;
+      g.sites.forEach((s) => { x += px(s.lng); z += pz(s.lat); });
+      return [{ x: x / g.sites.length, z: z / g.sites.length }];
+    }
+    return g.trail.map((k) => ({ x: px(g.sites[k].lng), z: pz(g.sites[k].lat) }));
+  }
+  const voyEase = (u) => { u = Math.max(0, Math.min(1, u)); return u * u * (3 - 2 * u); };
+  function voyCam() {
+    if (!voy || reduceMotion) return;
+    const e = voyTL[voy.i];
+    if (e.kind === 'open') { to.tx = 0; to.tz = 0; to.ty = yTop * ys; to.dist = baseDist * 0.78; to.el = 0.5; to.az = voy.az; return; }
+    const pts = voyTrail(e.layer), p = e.dwell ? voy.t / e.dwell : 1;
+    let x = pts[0].x, z = pts[0].z;
+    if (pts.length > 1) {
+      // Glide along the capital moves (迁都) through the middle of the dwell.
+      const f = voyEase((p - 0.12) / 0.76) * (pts.length - 1), k = Math.min(pts.length - 2, Math.floor(f)), r = f - k;
+      x = pts[k].x + (pts[k + 1].x - pts[k].x) * r; z = pts[k].z + (pts[k + 1].z - pts[k].z) * r;
+    }
+    const end = e.kind === 'end';
+    to.tx = x * 0.85; to.tz = z * 0.85; to.ty = layers[e.layer].y * ys;
+    to.dist = baseDist * (end ? 0.8 : 0.56); to.el = end ? 0.6 : 0.62; to.az = voy.az;
+  }
+  function voyTick(dt) {
+    if (!voy || voy.paused) return;
+    const e = voyTL[voy.i];
+    voy.az += dt * 0.03;
+    if (e.kind !== 'end') {
+      voy.t += dt;
+      if (voy.t >= e.dwell) { voyEnterIdx(voy.i + 1); return; }
+    }
+    voyCam();
+    S.needs = true;
+  }
+  function voyPause() {
+    if (!voy || voy.paused) return;
+    voy.paused = true; voyPaint();
+  }
+  function voyResume() {
+    if (!voy || !voy.paused) return;
+    voy.paused = false; voy.az = to.az; voyPaint();
+    voyCam();
+  }
+
+  // Your seals flash where they pass a layer they link to (opening: all of them, softly).
+  function voyFlashSet(e) {
+    const list = [];
+    dots.forEach((d, i) => {
+      if (!state.visited[museums[d.m].id]) return;
+      if (e.kind === 'open' || (e.kind === 'layer' && d.layer === e.layer)) list.push(i);
+    });
+    voy.flash = list.length ? { list, t0: performance.now(), soft: e.kind === 'open' } : null;
+  }
+  function voyFlash(now) {
+    if (!voy || !voy.flash) return;
+    const f = voy.flash, age = (now - f.t0) / 1000, g = Math.exp(-age / 0.9) * (f.soft ? 0.5 : 1) * (1 + 0.5 * Math.cos(age * 7));
+    const done = age > 3.2;
+    f.list.forEach((di) => { dK[di] = dKBase[di] + (done ? 0 : 1.7 * g); dSize[di] = dSizeBase[di] + (done ? 0 : 14 * g); });
+    dGeom.attributes.kk.needsUpdate = true; dGeom.attributes.size.needsUpdate = true;
+    if (done) voy.flash = null;
+  }
+
+  // ── Sound: the era's instrument, a short phrase on the audio clock ──
+  function voyStopSound() {
+    if (!voy) return;
+    voy.srcs.forEach((s0) => { try { s0.stop(); } catch (e) {} });
+    voy.srcs = [];
+  }
+  function voySound(e) {
+    if (!soundOn || !voy) return;
+    unlockAudio();
+    const ac = audioCtx();
+    if (!ac || !master) return;
+    const t0 = ac.currentTime + 0.06, B = 0.34, put = (xs) => { voy.srcs.push(...xs); if (voy.srcs.length > 160) voy.srcs.splice(0, 80); };
+    if (e.kind === 'open') { put(stringSound(10, 0.45, 0, t0, 'ks', { dur: 1.2 })); return; }
+    if (e.kind === 'end') { put(stringSound(5, 0.5, 0, t0, 'ks', { dur: 2 })); put(stringSound(10, 0.4, 0, t0 + 0.12, 'ks', { dur: 2 })); put(stringSound(12, 0.32, 0, t0 + 0.26, 'ks', { dur: 2 })); return; }
+    const id = layers[e.layer].id, fam = famOf(e.layer);
+    let vk = voiceOf(e.layer);
+    // A drum cannot carry a tune: it marks the start, the 琴 sings.
+    if (fam === 'drum') { put(stringSound(5, 0.55, 0, t0, vk, { dur: 0.4 })); vk = 'qin'; }
+    const qs = QUOTES[id], maxBeats = Math.max(3, (e.dwell - 0.9) / B);
+    // The era's 名曲 (verified notation only) — else a bar of the shared melody, in the era's voice.
+    const bars = qs && qs.length ? qs[0].bars : [MELODY[e.layer], MELODY[(e.layer + 1) % MELODY.length]];
+    const hi = fam === 'wind' ? 99 : 12;
+    let pos = 0;
+    outer: for (const bar of bars) {
+      for (const n of bar) {
+        if (pos > 0 && pos + n[1] > maxBeats) break outer;
+        const deg = n[0] > hi ? n[0] - 5 : n[0];
+        put(stringSound(deg, 0.62, 0, t0 + pos * B, vk, { dur: n[1] * B, semi: n[2] || 0 }));
+        pos += n[1];
+      }
+    }
+  }
+
+  // ── Entering an entry of the timeline ──
+  function voyEnterIdx(i) {
+    if (!voy) return;
+    i = Math.max(0, Math.min(voyTL.length - 1, i));
+    const e = voyTL[i];
+    voy.i = i; voy.t = 0; voy.cur = e.layer;
+    buildFocusPath(e.kind === 'open' ? -1 : e.layer);
+    layerLabels.forEach((l) => l.el.classList.toggle('is-voy', e.kind !== 'open' && l.layer === e.layer));
+    todayLabel.classList.toggle('is-voy', e.kind === 'open');
+    recolor();
+    voyFlashSet(e);
+    voyCaption(e);
+    voySound(e);
+    voyCam();
+    voyPaint();
+    S.needs = true;
+  }
+  function voyJump(li) {
+    if (!voy) return;
+    const i = voyTL.findIndex((e) => e.kind === 'layer' && e.layer === li);
+    voyJumpTo(i);
+  }
+  function voyJumpTo(i) {
+    if (!voy || i < 0) return;
+    voy.paused = false; voy.az = to.az;
+    voyEnterIdx(i);
+  }
+  function voyStart() {
+    if (state.focus >= 0 || !layers.length) return;
+    stopPlay();
+    if (voy) voyStopSound();
+    voyBuild();
+    voy = { i: 0, t: 0, paused: false, cur: N, srcs: [], flash: null, az: to.az };
+    hint.classList.add('is-gone');
+    if (reduceMotion) applyFocus(false);
+    voyEnterIdx(0);
+  }
+  function voyStop(reset) {
+    if (!voy) return;
+    voyStopSound();
+    voy = null;
+    voyCap.classList.remove('is-on');
+    layerLabels.forEach((l) => l.el.classList.remove('is-voy'));
+    todayLabel.classList.remove('is-voy');
+    dK.set(dKBase); dSize.set(dSizeBase);
+    dGeom.attributes.kk.needsUpdate = true; dGeom.attributes.size.needsUpdate = true;
+    buildFocusPath(state.focus);
+    recolor();
+    voyPaint();
+    if (reset !== false) applyFocus(false);
+    S.needs = true;
+  }
+  voyPaint();
+
   // A real gesture anywhere unlocks audio for later strums (iOS needs touchend/click).
   const onGesture = () => { if (strings.length) { unlockAudio(); document.removeEventListener('touchend', onGesture); document.removeEventListener('click', onGesture); } };
   document.addEventListener('touchend', onGesture, { passive: true });
@@ -1422,6 +1675,7 @@ function init(container, data, cb) {
       else if (v) { col = COL.seal; k = 0.5; }
       if (H >= 0) { if (s.m === H) { k = Math.max(k, 0.9); if (!v && !c) col = COL.giltHi; } else k *= 0.2; }
       if (sel && F < 0) { col = COL.giltHi; k = 0.95; }
+      if (voy && !v) k = 0;
       // Outside the reading view your beams are drawn as strings instead.
       const st = F < 0 && v ? stringByM[s.m] : null;
       if (st) { st.col = col; st.k = k; st.dirty = true; k = 0; }
@@ -1449,6 +1703,7 @@ function init(container, data, cb) {
           k = v ? 1.3 : d.onSite ? 1.4 : 1.05; size = d.onSite ? (v ? 20 : 22) : (v ? 16 : 14);
         } else k = 0;
       } else if (v) { col = COL.seal; k = 1.0; size = 10; }
+      if (voy && !v) k *= 0.3;
       if (H >= 0) {
         if (d.m === H) { k = Math.max(k, 1.4); size = Math.max(size, 17); if (!v && !c) col = COL.giltHi; }
         else k *= 0.2;
@@ -1463,7 +1718,8 @@ function init(container, data, cb) {
       let c = s.s.role === 'culture' ? COL.patina : COL.gilt;
       let k = s.trail || s.s.role === 'culture' ? 0.75 : 0.45, size = s.s.role === 'capital' ? 14 : 10;
       if (F >= 0) { if (s.layer === F) { c = s.s.role === 'culture' ? COL.patina : COL.giltHi; k = 1.35; size = 22; } else k *= 0.12; }
-      if (fp) k *= 0.3; else if (mine) k *= 0.6;
+      else if (voy) { if (s.layer === voy.cur) { c = s.s.role === 'culture' ? COL.patina : COL.giltHi; k = 1.35; size = 22; } else k *= s.layer === voy.cur + 1 ? 0.3 : 0.06; }
+      if (fp) k *= 0.3; else if (mine && !voy) k *= 0.6;
       setTint(siteTint, siteK, i, c, k); siteSize[i] = size;
     });
     siteGeom.attributes.tint.needsUpdate = true; siteGeom.attributes.kk.needsUpdate = true; siteGeom.attributes.size.needsUpdate = true;
@@ -1484,6 +1740,12 @@ function init(container, data, cb) {
       }
       // 集章: strata you have reached stay drawn, the rest recede (no red wash — 20/20 said nothing).
       if (fp) { o = dep ? (own ? 0.34 : 0.22) : 0.05; f = dep ? (own ? 0.05 : 0.035) : 0.006; r = dep ? 0.1 : 0.02; g = 0; }
+      // 溯洄: the layer being passed is lit; the one just above lingers as a ghost; the rest all but vanish.
+      if (voy) {
+        if (L.i === voy.cur) { o = own ? 0.85 : 0.62; f = own ? 0.13 : 0.11; r = 0.55; g = own ? 0.16 : 0; }
+        else if (L.i === voy.cur + 1) { o = own ? 0.15 : 0.1; f = own ? 0.025 : 0.018; r = 0.05; g = 0; }
+        else { o = 0.012; f = 0.002; r = 0; g = 0; }
+      }
       if (own) L.to = { tLine: lk(o), tFill: fk(f), outline: lk(g), fill: 0, river: lk(r) };
       else L.to = { tLine: 0, tFill: 0, outline: lk(o), fill: fk(f), river: lk(r) };
       (L.tFill || L.fill).material.color.copy(COL.fill);
@@ -1498,12 +1760,15 @@ function init(container, data, cb) {
       lab.count.textContent = dep ? String(dep) : '';
     });
     top.to = { outline: lk(F >= 0 ? 0.05 : 0.5), fill: fk(F >= 0 ? 0.006 : 0.045), river: lk(F >= 0 ? 0.03 : 0.28), tLine: 0, tFill: 0 };
+    if (voy) top.to = voy.cur === N ? { outline: lk(0.5), fill: fk(0.045), river: lk(0.28), tLine: 0, tFill: 0 } : voy.cur === N - 1 ? { outline: lk(0.14), fill: fk(0.016), river: lk(0.05), tLine: 0, tFill: 0 } : { outline: 0, fill: 0, river: 0, tLine: 0, tFill: 0 };
+    const quiet = F >= 0 || !!voy;
     // Seen from above, the other eras' trail would lie across the map being read.
-    tube.material.opacity = fp ? 0.1 : F >= 0 ? (PAL.ink ? 0.035 : 0.07) : mine ? (PAL.ink ? 0.24 : 0.3) : 0.95;
-    tubeGlow.material.opacity = fp ? 0 : F >= 0 ? 0.015 : mine ? 0.03 : 0.13;
-    chains.material.opacity = F >= 0 ? 0.04 : fp ? 0.05 : mine ? 0.12 : 0.32;
-    focusMat.opacity = F >= 0 ? 0.95 : 0;
-    focusDash.opacity = F >= 0 ? 0.7 : 0;
+    tube.material.opacity = fp ? 0.1 : quiet ? (PAL.ink ? 0.035 : 0.07) : mine ? (PAL.ink ? 0.24 : 0.3) : 0.95;
+    tubeGlow.material.opacity = fp ? 0 : quiet ? 0.015 : mine ? 0.03 : 0.13;
+    chains.material.opacity = quiet ? 0.04 : fp ? 0.05 : mine ? 0.12 : 0.32;
+    const showPath = F >= 0 || (voy && voy.cur < N);
+    focusMat.opacity = showPath ? 0.95 : 0;
+    focusDash.opacity = showPath ? 0.7 : 0;
     S.needs = true;
   }
 
@@ -1518,6 +1783,7 @@ function init(container, data, cb) {
     state.sel = state.selectedId != null && museumIdx[state.selectedId] != null ? museumIdx[state.selectedId] : -1;
     buildStrings();
     if (prevFocus !== state.focus) {
+      if (voy) voyStop(false);
       stopPlay(); paintPlay();
       buildFocusPath(state.focus); showCredit();
       overlay.classList.toggle('is-focus', state.focus >= 0);
@@ -1564,7 +1830,7 @@ function init(container, data, cb) {
   }
   function pickLayer(p) {
     // Reading one era, the other strata are faded ghosts: clicking the model shouldn't jump to them.
-    if (state.focus >= 0 || !onModel(p)) return null;
+    if (state.focus >= 0 || voy || !onModel(p)) return null;
     let best = null, bd = Infinity;
     layers.forEach((L) => { const s = screenOf(0, L.y, 0); if (s.z > 1) return; const d = Math.abs(s.y - p.y); if (d < bd) { bd = d; best = L; } });
     return best;
@@ -1592,7 +1858,7 @@ function init(container, data, cb) {
   canvas.addEventListener('contextmenu', (e) => e.preventDefault());
   // Lost after panning and zooming? Double-click (double-tap) returns to the framed view.
   let tapTimer = 0;
-  canvas.addEventListener('dblclick', (e) => { e.preventDefault(); clearTimeout(tapTimer); applyFocus(false); lastInteract = performance.now(); S.needs = true; });
+  canvas.addEventListener('dblclick', (e) => { e.preventDefault(); clearTimeout(tapTimer); if (!voy) applyFocus(false); lastInteract = performance.now(); S.needs = true; });
   canvas.addEventListener('pointerdown', (e) => {
     canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId, localXY(e));
@@ -1603,7 +1869,7 @@ function init(container, data, cb) {
       // A museum dot wins over a string: tapping it opens the museum.
       let mode = 'turn';
       if (mouse && (e.button === 2 || e.shiftKey)) mode = 'pan';
-      else if (state.focus < 0 && strings.length && pickMuseum(p.x, p.y, mouse ? 16 : 28) < 0) {
+      else if (state.focus < 0 && !voy && strings.length && pickMuseum(p.x, p.y, mouse ? 16 : 28) < 0) {
         const st = nearestString(p, mouse ? 10 : 20);
         if (st) { mode = 'strum'; if (soundOn) audioCtx(); pluck(st, 1.1, p.x); }
       }
@@ -1624,6 +1890,7 @@ function init(container, data, cb) {
     const nowP = performance.now(), lp = lastPtr;
     lastPtr = { x: p.x, y: p.y, t: nowP };
     if (pinch && pointers.size === 2) {
+      if (voy && !voy.paused) voyPause();
       // Two fingers: spread to zoom, move together to pan.
       const ps = Array.from(pointers.values());
       const d = Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y);
@@ -1636,6 +1903,7 @@ function init(container, data, cb) {
     if (drag) {
       const dx = p.x - drag.x, dy = p.y - drag.y;
       if (Math.abs(p.x - drag.sx) + Math.abs(p.y - drag.sy) > 6) drag.moved = true;
+      if (drag.moved && voy && !voy.paused) voyPause();
       if (drag.mode === 'strum') {
         if (lp && nowP - lp.t < 120) {
           const speed = Math.hypot(p.x - lp.x, p.y - lp.y) / Math.max(8, nowP - lp.t);
@@ -1674,8 +1942,8 @@ function init(container, data, cb) {
       clearTimeout(tapTimer);
       tapTimer = setTimeout(() => {
         const i = pickMuseum(p.x, p.y, mouse ? 16 : 28);
-        if (i >= 0 && cb.onMuseum) cb.onMuseum(museums[i].id);
-        else if (i < 0 && cb.onDynasty) {
+        if (i >= 0 && cb.onMuseum) { if (voy) voyPause(); cb.onMuseum(museums[i].id); }
+        else if (i < 0 && cb.onDynasty && !voy) {
           // Tap a stratum in the model to read that era.
           const L = pickLayer(p);
           if (L) cb.onDynasty(L.id);
@@ -1688,6 +1956,7 @@ function init(container, data, cb) {
   canvas.addEventListener('pointerleave', () => { lastPtr = null; showPick(null); if (hoverIdx >= 0 && performance.now() > tagHoldUntil) { hoverIdx = -1; S.needs = true; } });
   canvas.addEventListener('wheel', (e) => {
     e.preventDefault();
+    if (voy && !voy.paused) voyPause();
     // Trackpad two-finger scroll (no ctrl) pans; pinch (ctrlKey) and mouse wheels zoom.
     if (!e.ctrlKey && e.deltaMode === 0 && Math.abs(e.deltaX) > Math.abs(e.deltaY) * 0.5 && Math.abs(e.deltaX) > 1) { panBy(-e.deltaX, -e.deltaY); return; }
     to.dist = Math.max(baseDist * MIN_ZOOM, Math.min(baseDist * MAX_ZOOM, to.dist * Math.exp(e.deltaY * (e.ctrlKey ? 0.01 : 0.0012))));
@@ -1719,14 +1988,16 @@ function init(container, data, cb) {
     // point still glows). Trying last frame's spot first keeps them from flickering.
     const placed = [];
     const focusSites = [];
+    // The layer whose capitals are named: the one read, or the one 溯洄 is passing.
+    const LL = state.focus >= 0 ? state.focus : voy && voy.cur < N ? voy.cur : -1;
     siteLabels.forEach((s) => {
-      if (state.focus >= 0 && s.layer === state.focus) focusSites.push(s);
+      if (LL >= 0 && s.layer === LL) focusSites.push(s);
       else s.el.style.visibility = 'hidden';
     });
     focusSites.sort((a, b) => a.rank - b.rank);
     // Regime names (曹魏 / 蜀汉 / 孙吴 …) sit under everything else, centred on their land.
     partLabels.forEach((t) => {
-      const show = state.focus >= 0 && t.layer === state.focus;
+      const show = LL >= 0 && t.layer === LL;
       t.el.style.visibility = show ? 'visible' : 'hidden';
       if (show) { const p = screenOf(t.v.x, t.v.y, t.v.z); t.el.style.transform = 'translate3d(' + p.x.toFixed(1) + 'px,' + p.y.toFixed(1) + 'px,0) translate(-50%,-50%)'; }
     });
@@ -1831,9 +2102,10 @@ function init(container, data, cb) {
     S.raf = requestAnimationFrame(frame);
     if (!active || document.hidden) { last = now; return; }
     const dt = Math.min(0.1, (now - last) / 1000); last = now;
-    const idle = now - lastInteract > 5000 && state.sel < 0 && state.focus < 0;
+    voyTick(dt);
+    const idle = now - lastInteract > 5000 && state.sel < 0 && state.focus < 0 && !voy;
     if (idle) to.az += dt * 0.035 * Math.cos(now / 9000);
-    const k = 1 - Math.pow(0.0015, dt);
+    const k = 1 - Math.pow(voy && !voy.paused && !reduceMotion ? 0.08 : 0.0015, dt);
     cam.az = lerp(cam.az, to.az, k); cam.el = lerp(cam.el, to.el, k); cam.dist = lerp(cam.dist, to.dist, k);
     cam.tx = lerp(cam.tx, to.tx, k); cam.ty = lerp(cam.ty, to.ty, k); cam.tz = lerp(cam.tz, to.tz, k);
     cam.ox = lerp(cam.ox, to.ox, k); cam.oy = lerp(cam.oy, to.oy, k); setOffset(cam.ox, cam.oy);
@@ -1841,7 +2113,7 @@ function init(container, data, cb) {
     camera.lookAt(cam.tx, cam.ty, cam.tz);
 
     intro = Math.min(1, intro + dt / 2.2);
-    const ka = 1 - Math.pow(0.002, dt);
+    const ka = 1 - Math.pow(voy ? 0.015 : 0.002, dt);
     layers.forEach((L) => {
       const appear = Math.max(0, Math.min(1, intro * 1.6 - (L.i / N) * 0.75));
       // The era being played lights up.
@@ -1857,7 +2129,7 @@ function init(container, data, cb) {
     pulses.forEach((sp, i) => {
       const t = ((now / 1000) * 0.045 + i / pulses.length) % 1;
       if (t > grow) { sp.visible = false; return; }
-      sp.visible = state.mode !== 'footprint' && state.focus < 0 && !state.mine;
+      sp.visible = state.mode !== 'footprint' && state.focus < 0 && !state.mine && !voy;
       sp.position.copy(curve.getPointAt(t));
       const s = 0.12 + 0.05 * Math.sin(now / 300 + i);
       sp.scale.set(s, s, s);
@@ -1873,6 +2145,7 @@ function init(container, data, cb) {
       }
       if (hoverIdx >= 0 && now > tagHoldUntil && tagHoldUntil > 0 && !pointers.size) { tagHoldUntil = 0; if (!lastPtr) hoverIdx = -1; }
     }
+    voyFlash(now);
     renderer.render(scene, camera);
     placeLabels();
   }
@@ -1914,7 +2187,7 @@ function init(container, data, cb) {
   Object.assign(S, {
     ready: true,
     update,
-    setActive(on) { active = !!on; if (on) { last = performance.now(); fit(true); } else stopPlay(); },
+    setActive(on) { active = !!on; if (on) { last = performance.now(); fit(true); } else { stopPlay(); voyStop(false); } },
     renderTune,
     resize: () => fit(true),
     setTheme: applyTheme,
@@ -1930,6 +2203,7 @@ function init(container, data, cb) {
       insetBottom = b; insetRight = r;
       // A bottom sheet already names the era — the title block keeps only year + source, above it.
       credit.style.bottom = b > 0 ? (b + 10) + 'px' : '';
+      voyCap.style.bottom = b > 0 ? (b + 10) + 'px' : '';
       credit.classList.toggle('is-sheet', b > 0);
       fit(false);
     },

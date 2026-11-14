@@ -1466,19 +1466,72 @@ body.chat-locked .chat-body { touch-action: pan-y; }
 .strata-sound.is-off { color: var(--text-4); }
 .strata-sound:hover { border-color: rgba(var(--seal-rgb),0.5); }
 .canvas.has-drawer .strata-sound { right: calc(var(--drawer-w) + 14px); }
-/* 奏一曲 — under the sound switch, so it never meets the view switch on a phone */
-.strata-play {
-  position: absolute; right: 14px; top: 60px;
+/* 奏一曲 and 溯洄 — under the sound switch, so they never meet the view switch on a phone */
+.strata-actions { position: absolute; right: 14px; top: 60px; display: flex; gap: 8px; pointer-events: none; }
+.canvas.has-drawer .strata-actions { right: calc(var(--drawer-w) + 14px); }
+.strata-play, .strata-voy-btn {
   display: none; align-items: center; gap: 6px; height: 34px; padding: 0 13px 0 11px;
   border-radius: 999px; border: 1px solid rgba(var(--seal-rgb),0.45); background: rgba(var(--bg2-rgb),0.9);
   color: var(--seal-ink-strong); font-family: var(--serif); font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
   white-space: nowrap; cursor: pointer; pointer-events: auto; box-shadow: 0 10px 26px -14px var(--sh-90);
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
-.strata-overlay.can-play .strata-play { display: inline-flex; }
-.strata-play:hover { border-color: var(--seal); }
+.strata-overlay.can-play .strata-play, .strata-overlay.can-play .strata-voy-btn { display: inline-flex; }
+.strata-play:hover, .strata-voy-btn:hover { border-color: var(--seal); }
 .strata-play.is-playing { background: var(--seal); border-color: var(--seal); color: #FFF2E8; }
-.canvas.has-drawer .strata-play { right: calc(var(--drawer-w) + 14px); }
+/* 溯洄 — sink from today to the Neolithic, a layer at a time */
+.strata-overlay.is-focus .strata-voy-btn { display: none; }
+.strata-overlay.is-voyage .strata-play, .strata-overlay.is-voyage .strata-voy-btn { display: none; }
+.strata-overlay.is-voyage .strata-sound { display: grid; }
+.strata-voy-ctl { display: none; gap: 6px; pointer-events: auto; }
+.strata-overlay.is-voyage .strata-voy-ctl { display: inline-flex; }
+.strata-voy-ctl .sv-btn {
+  display: inline-flex; align-items: center; gap: 5px; height: 32px; padding: 0 11px;
+  border-radius: 999px; border: 1px solid var(--line-strong); background: rgba(var(--bg2-rgb),0.9);
+  color: var(--text-2); font-family: var(--serif); font-size: 12.5px; font-weight: 600; letter-spacing: 0.04em;
+  white-space: nowrap; cursor: pointer; box-shadow: 0 10px 26px -14px var(--sh-90);
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.strata-voy-ctl .sv-btn:hover { color: var(--gilt-hi); border-color: rgba(var(--gilt-rgb),0.5); }
+.strata-voy-ctl .sv-btn.is-paused { background: var(--seal); border-color: var(--seal); color: #FFF2E8; }
+.strata-voy-ctl .sv-close { padding: 0; width: 32px; justify-content: center; }
+.strata-overlay.is-voy-end .strata-voy-ctl .sv-btn:not(.sv-close) { display: none; }
+.strata-label.is-voy { color: var(--gilt-hi); background: rgba(var(--gilt-rgb),0.13); box-shadow: inset 0 0 0 1px rgba(var(--gilt-rgb),0.5); }
+.strata-label.is-voy .sl-period { color: var(--gilt); }
+.strata-voy-cap {
+  position: absolute; left: 50%; bottom: calc(94px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+  width: min(460px, calc(100% - 28px)); box-sizing: border-box; z-index: 6;
+  display: none; flex-direction: column; align-items: flex-start; gap: 4px;
+  padding: 11px 16px 12px; border-radius: 14px; pointer-events: none; text-align: left;
+  background: rgba(var(--bg-rgb),0.82); border: 1px solid var(--line); color: var(--text-2);
+  box-shadow: 0 14px 34px -18px var(--sh-90); overflow-wrap: anywhere; word-break: break-word;
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.canvas.has-drawer .strata-voy-cap { left: calc((100% - var(--drawer-w)) / 2); width: min(460px, calc(100% - var(--drawer-w) - 28px)); }
+.strata-voy-cap.is-on { display: flex; animation: voy-in 0.5s ease-out; }
+.strata-voy-cap .vc-head { display: flex; align-items: baseline; gap: 9px; min-width: 0; flex-wrap: wrap; }
+.strata-voy-cap .vc-name { font-family: var(--serif); font-weight: 900; font-size: 24px; letter-spacing: 0.08em; color: var(--text); }
+.strata-voy-cap .vc-head small { font-family: var(--mono); font-size: 11px; color: var(--gilt); }
+.strata-voy-cap .vc-line { font-family: var(--serif); font-size: 13px; line-height: 1.5; color: var(--text-2); }
+.strata-voy-cap .vc-line.is-quote { font-size: 19px; font-weight: 700; letter-spacing: 0.1em; color: var(--text); margin-top: 2px; }
+.strata-voy-cap .vc-sub { font-family: var(--mono); font-size: 11px; color: var(--text-4); }
+.strata-voy-cap .vc-mine { font-size: 12px; line-height: 1.45; color: var(--seal-ink-strong); }
+.strata-voy-cap .vc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; pointer-events: auto; }
+.strata-voy-cap .vc-btn {
+  height: 34px; padding: 0 15px; border-radius: 999px; border: 1px solid var(--line-strong); background: rgba(var(--bg2-rgb),0.92);
+  color: var(--text-2); font-family: var(--serif); font-size: 13px; font-weight: 700; letter-spacing: 0.06em; cursor: pointer;
+}
+.strata-voy-cap .vc-btn:hover { border-color: var(--seal); }
+.strata-voy-cap .vc-btn.is-main { background: var(--seal); border-color: var(--seal); color: #FFF2E8; }
+@keyframes voy-in { from { opacity: 0; transform: translateX(-50%) translateY(8px); } to { opacity: 1; transform: translateX(-50%); } }
+@media (max-width: 640px) {
+  .strata-voy-cap { padding: 9px 13px 10px; }
+  .strata-voy-cap .vc-name { font-size: 20px; }
+  .strata-voy-cap .vc-line.is-quote { font-size: 17px; }
+  .strata-voy-ctl .sv-btn { padding: 0 9px; font-size: 12px; }
+  .strata-voy-ctl .sv-close { padding: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .strata-voy-cap.is-on { animation: none; } }
 /* 此声取自: the object behind the era now sounding */
 .strata-now {
   position: absolute; top: 108px; right: 14px; max-width: min(300px, 62vw);
