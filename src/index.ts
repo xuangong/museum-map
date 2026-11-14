@@ -9,6 +9,7 @@ import { achievementsRoute } from "~/routes/achievements"
 import { authRoute } from "~/routes/auth"
 import { profileRoute } from "~/routes/profile"
 import { shareRoute } from "~/routes/share"
+import { scrollsRoute } from "~/routes/scrolls"
 import { plazaRoute } from "~/routes/plaza"
 import { tripRoute } from "~/routes/trip"
 import { adminImageRoute } from "~/routes/admin-image"
@@ -52,7 +53,7 @@ export function createApp(env: Env) {
     .use(achievementsRoute)
     .use(authRoute)
     .use(profileRoute)
-    .use(shareRoute)
+    .use(scrollsRoute)
     .use(plazaRoute)
     .use(tripRoute)
     .use(adminImageRoute)
