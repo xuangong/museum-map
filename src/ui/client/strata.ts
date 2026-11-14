@@ -174,8 +174,7 @@ const VOICES = {
   di: { g: 0.46, h: [1, 0.3, 0.12, 0.05], a: 0.04, rel: 0.22, lp: 6, breath: 0.05, vib: [5.6, 0.005, 0.25] },
   guan: { g: 0.36, h: [1, 0.6, 0.45, 0.3, 0.2, 0.12], a: 0.05, rel: 0.2, lp: 3, breath: 0.02, vib: [5, 0.007, 0.25] },
   huqin: { g: 0.4, h: [1, 0.5, 0.33, 0.25, 0.18, 0.12, 0.08], a: 0.1, rel: 0.25, lp: 3.5, vib: [5.5, 0.007, 0.18] },
-  // Underneath: a held drone and a soft bass, so twenty instruments still make one piece.
-  pad: { g: 0.5, h: [1, 0.25, 0.06], a: 1.4, rel: 1.6, lp: 2.5 },
+  // Underneath: a soft bass line, one root per bar.
   bass: { g: 0.62, h: [1, 0.35, 0.1], a: 0.08, rel: 0.5, lp: 2.5 },
 };
 const waveCache = new WeakMap();
@@ -646,8 +645,8 @@ function init(container, data, cb) {
   // A pentatonic melody (宫调, G) in five phrases of four bars, 远古 → 清, resolving home; 今
   // closes on a chord strummed across your own strings. Each bar is played by its era's
   // instrument: at full voice where you have strings (they pluck with the notes), softly where
-  // you have none yet (留白) — every stamp fills in more of the same tune. A held drone and a
-  // bass line run underneath. Sound is scheduled on the audio clock; each frame plucks the
+  // you have none yet (留白) — every stamp fills in more of the same tune. The instrument that
+  // just played stays on as a quiet second voice, and a bass line runs underneath. Sound is scheduled on the audio clock; each frame plucks the
   // strings whose notes have started on that clock, so what you see is what you hear.
   let play = null, playLayer = -1, playRest = false;
   const BEAT = 0.36;
@@ -668,27 +667,31 @@ function init(container, data, cb) {
   function barOf(li) { return Math.round(li * (MELODY.length - 1) / Math.max(1, N - 1)); }
   function panOf(st) { if (!st) return 0; const m = museums[st.m], p = screenOf(m.x, st.y0, m.z); return (p.x / Math.max(1, canvas.clientWidth)) * 2 - 1; }
   // One bar: melody notes on 'vk', strings (if any) taking the notes in turn, plus its bass.
-  function playBar(ev, b, t, li, vk, here, vel) {
+  // 'acc' is the instrument that just had the melody: it stays on as a soft second voice on the
+  // strong beats (a third/fourth below the tune), so each era is handed over, not cut to.
+  function playBar(ev, b, t, li, vk, here, vel, acc, accVel) {
     let pos = 0;
+    const at = (beat) => { let p0 = 0; for (const [deg, beats] of MELODY[b]) { if (beat < p0 + beats) return deg; p0 += beats; } return MELODY[b][0][0]; };
     MELODY[b].forEach(([deg, beats], k) => {
       ev.push({ t: t + pos * BEAT, dur: beats * BEAT, deg, vel: vel * (k === 0 ? 1 : 0.85), voice: vk, st: here.length ? here[k % here.length] : null, li });
       pos += beats;
     });
+    if (acc) [0, 2].forEach((beat) => {
+      ev.push({ t: t + beat * BEAT, dur: 2 * BEAT, deg: Math.max(3, at(beat) - 2), vel: accVel * (beat ? 0.8 : 1), voice: acc, st: null, li });
+    });
     ev.push({ t, dur: 4 * BEAT, freq: BASS[b], vel: 0.5, voice: 'bass', st: null, li });
-  }
-  function drone(ev, t, dur) {
-    ev.push({ t, dur, freq: G2, vel: 0.6, voice: 'pad', st: null, li: -1 });
-    ev.push({ t, dur, freq: G2 * 1.5, vel: 0.42, voice: 'pad', st: null, li: -1 });
   }
   function compose(F) {
     const ev = [], lay = [];
     let t = 0;
     const byPitch = (li) => stringsAt(li).sort((a, b) => noteAt(a, li) - noteAt(b, li));
     if (F < 0) {
+      let prevFilled = false;
       for (let li = 0; li < N; li++) {
         const here = byPitch(li);
         lay.push({ t, li, rest: !here.length });
-        playBar(ev, barOf(li), t, li, voiceOf(li), here, here.length ? 1 : 0.32);
+        playBar(ev, barOf(li), t, li, voiceOf(li), here, here.length ? 1 : 0.32, li > 0 ? voiceOf(li - 1) : null, prevFilled ? 0.36 : 0.22);
+        prevFilled = here.length > 0;
         t += 4 * BEAT;
       }
       // 今: home chord, strummed across your strings (or simply sounded if you have none yet).
@@ -697,21 +700,22 @@ function init(container, data, cb) {
       const n = Math.max(3, Math.min(chord.length, order.length || 3));
       for (let k = 0; k < n; k++) ev.push({ t: t + k * 0.07, dur: 2.5, deg: chord[k], vel: 0.85, voice: 'ks', st: order.length ? order[k % order.length] : null, li: -1 });
       ev.push({ t, dur: 3, freq: G2, vel: 0.55, voice: 'bass', st: null, li: -1 });
-      drone(ev, 0, t + 2.6);
       ev.sort((a, b) => a.t - b.t);
       return { ev, lay, dur: t + 3.6 };
     }
     // One era: the phrase its bar belongs to, all on that era's instrument.
     const vk = voiceOf(F), here = byPitch(F), b0 = Math.floor(barOf(F) / 4) * 4;
     lay.push({ t: 0, li: F, rest: !here.length });
-    for (let b = b0; b < b0 + 4 && b < MELODY.length; b++) { playBar(ev, b, t, F, vk, here, here.length ? 1 : 0.6); t += 4 * BEAT; }
-    drone(ev, 0, t + 0.6);
+    for (let b = b0; b < b0 + 4 && b < MELODY.length; b++) { playBar(ev, b, t, F, vk, here, here.length ? 1 : 0.6, b > b0 ? vk : null, 0.3); t += 4 * BEAT; }
     ev.sort((a, b) => a.t - b.t);
     return { ev, lay, dur: t + 2.4 };
   }
   // The same performance rendered offline, as WAV bytes (F: era index, or -1 for all strata).
-  async function renderTune(F) {
+  // o.noBass leaves out the bass line (for comparing by ear).
+  async function renderTune(F, o) {
+    o = o || {};
     const c = compose(F == null ? state.focus : F), sr = 44100;
+    if (o.noBass) c.ev = c.ev.filter((e) => e.voice !== 'bass');
     const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
     const oc = new OAC(2, Math.ceil((c.dur + 1) * sr), sr), dest = makeGraph(oc);
     c.ev.forEach((e) => stringSound(e.deg, e.vel, panOf(e.st), 0.1 + e.t, e.voice, { dur: e.dur, freq: e.freq, ac: oc, dest }));
@@ -1572,7 +1576,7 @@ window.MuseumStrata = {
   /** Preview one museum's beam (id) or clear (null). */
   highlight(id) { if (S.ready) S.highlight(id); },
   /** WAV bytes of 奏一曲 (F: era index, -1 all strata, omitted: what the view would play). */
-  renderTune(F) { return S.ready ? S.renderTune(F) : Promise.resolve(null); },
+  renderTune(F, o) { return S.ready ? S.renderTune(F, o) : Promise.resolve(null); },
   /** 'night' | 'paper' | 'qinglu' */
   setTheme(name) { if (S.ready) S.setTheme(name); },
 };
