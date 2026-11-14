@@ -1,7 +1,9 @@
 import { Elysia } from "elysia"
 import type { Env } from "~/index"
-import { ChatGuardError, forwardChat, runRateLimits, sanitizeChatRequest, MODEL, MAX_TOKENS } from "~/services/chat"
-import { runToolLoop, runToolLoopStream, type ToolCall } from "~/services/agent-loop"
+import { ChatGuardError, runRateLimits, sanitizeChatRequest } from "~/services/chat"
+import type { ToolCall } from "~/services/agent-loop"
+import { runLlmLoop, runLlmLoopStream } from "~/services/llm"
+import { resolveAi } from "~/services/ai-models"
 import { CHAT_TOOLS, CHAT_AGENT_SYSTEM, executeChatTool } from "~/services/chat-tools"
 import { getClientIp } from "~/lib/getClientIp"
 
@@ -11,6 +13,9 @@ interface RouteContext {
   body: any
   set: any
 }
+
+/** Room for reasoning plus the answer. */
+const LLM_MAX_TOKENS = 16_384
 
 const SSE_HEADERS = {
   "content-type": "text/event-stream; charset=utf-8",
@@ -58,21 +63,36 @@ export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
     return { error: rl.reason }
   }
 
-  // Tool-augmented path: AI can query our DB before answering.
-  if (body && body.useTools !== false && body.stream === true) {
-    let sanitized
-    try {
-      sanitized = sanitizeChatRequest({ ...body, stream: false })
-    } catch (e) {
-      if (e instanceof ChatGuardError) {
-        set.status = e.status
-        return { error: e.message }
-      }
-      set.status = 500
-      return { error: "internal_error" }
+  let sanitized
+  try {
+    sanitized = sanitizeChatRequest({ ...body, stream: false })
+  } catch (e) {
+    if (e instanceof ChatGuardError) {
+      set.status = e.status
+      return { error: e.message }
     }
-    const messages: any[] = sanitized.messages.map((m) => ({ role: m.role, content: m.content }))
-    const system = CHAT_AGENT_SYSTEM + (sanitized.system ? "\n\n" + sanitized.system : "")
+    set.status = 500
+    return { error: "internal_error" }
+  }
+  const ai = resolveAi(body?.model, body?.effort)
+  const useTools = body?.useTools !== false
+  const messages: any[] = sanitized.messages.map((m) => ({ role: m.role, content: m.content }))
+  const system = useTools ? CHAT_AGENT_SYSTEM + (sanitized.system ? "\n\n" + sanitized.system : "") : sanitized.system || ""
+  const base = {
+    gatewayUrl: env.COPILOT_GATEWAY_URL,
+    gatewayKey: env.COPILOT_GATEWAY_KEY,
+    model: ai.model,
+    effort: ai.effort,
+    maxTokens: LLM_MAX_TOKENS,
+    system,
+    tools: useTools ? CHAT_TOOLS : [],
+    messages,
+    executeTool: (call: ToolCall) => executeChatTool(env.DB, call),
+    maxIters: 6,
+    wallMs: 45_000,
+  }
+
+  if (body.stream === true) {
     const enc = new TextEncoder()
     // Anthropic-shaped events, so the existing client parser renders them; plus
     // `tool_progress` while the guide looks something up.
@@ -86,23 +106,14 @@ export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
     // Not awaited: the Worker stays alive while the response body is still being written.
     void (async () => {
       try {
-        const result = await runToolLoopStream({
-          gatewayUrl: env.COPILOT_GATEWAY_URL!,
-          gatewayKey: env.COPILOT_GATEWAY_KEY!,
-          model: MODEL,
-          maxTokens: MAX_TOKENS,
-          system,
-          tools: CHAT_TOOLS as any,
-          messages,
-          executeTool: (call) => executeChatTool(env.DB, call),
+        const result = await runLlmLoopStream({
+          ...base,
           onDelta: (t) => {
             text(t)
           },
           onTool: async (call) => {
             await send({ type: "tool_progress", label: await toolLabel(env.DB, call) })
           },
-          maxIters: 6,
-          wallMs: 45_000,
         })
         if (result.stopReason === "gateway_error" && !result.text) await send({ type: "error", error: { message: "upstream_error" } })
         else if (!result.text) await text("（无回复）")
@@ -115,59 +126,19 @@ export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
     return new Response(readable, { status: 200, headers: SSE_HEADERS })
   }
 
-  if (body && body.useTools !== false) {
-    try {
-      const sanitized = sanitizeChatRequest({ ...body, stream: false })
-      const messages = sanitized.messages.map((m) => ({ role: m.role, content: m.content }))
-      const result = await runToolLoop({
-        gatewayUrl: env.COPILOT_GATEWAY_URL,
-        gatewayKey: env.COPILOT_GATEWAY_KEY,
-        model: MODEL,
-        maxTokens: MAX_TOKENS,
-        system: CHAT_AGENT_SYSTEM + (sanitized.system ? "\n\n" + sanitized.system : ""),
-        tools: CHAT_TOOLS as any,
-        messages,
-        executeTool: (call) => executeChatTool(env.DB, call),
-        maxIters: 6,
-        wallMs: 45_000,
-      })
-      if (result.stopReason === "gateway_error") {
-        set.status = 502
-        return { error: "upstream_error", detail: result.lastError }
-      }
-      // Return Anthropic-style envelope so the existing client renders the text.
-      return {
-        content: [{ type: "text", text: result.text || "（无回复）" }],
-        stop_reason: result.stopReason,
-        iterations: result.iterations,
-      }
-    } catch (e) {
-      if (e instanceof ChatGuardError) {
-        set.status = e.status
-        return { error: e.message }
-      }
-      set.status = 500
-      return { error: "internal_error" }
-    }
-  }
-
   try {
-    const upstream = await forwardChat(body, {
-      gatewayUrl: env.COPILOT_GATEWAY_URL,
-      gatewayKey: env.COPILOT_GATEWAY_KEY,
-    })
-    // Stream responses (SSE) must be returned as Response so Elysia doesn't buffer/JSON-parse.
-    const ct = upstream.headers.get("content-type") || ""
-    if (ct.startsWith("text/event-stream")) {
-      return upstream
+    const result = await runLlmLoop(base)
+    if (result.stopReason === "gateway_error") {
+      set.status = 502
+      return { error: "upstream_error", detail: result.lastError }
     }
-    set.status = upstream.status
-    return await upstream.json()
-  } catch (e) {
-    if (e instanceof ChatGuardError) {
-      set.status = e.status
-      return { error: e.message }
+    // Anthropic-style envelope so the existing client renders the text.
+    return {
+      content: [{ type: "text", text: result.text || "（无回复）" }],
+      stop_reason: result.stopReason,
+      iterations: result.iterations,
     }
+  } catch {
     set.status = 500
     return { error: "internal_error" }
   }
