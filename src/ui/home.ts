@@ -121,7 +121,7 @@ export function HomePage(data: HomeData): string {
         </template>
         <div class="row era-chip" x-show="currentDynastyId && !tripMode && !visits.footprintMode" x-cloak>
           <span class="dot g era-dot"></span>
-          <span class="era-chip-txt" x-text="eraOverlay && eraCap ? (eraCap.name + ' · ' + eraCap.text) : '当时的疆域与都城'"></span>
+          <span class="era-chip-txt" x-text="eraOverlay && eraCap ? (String(eraCap.name).replace(/（.*$/, '') + ' · ' + eraCap.text) : '当时的疆域与都城'"></span>
           <span class="sep">·</span><button type="button" @click="toggleEraOverlay()" x-text="eraOverlay ? '隐藏' : '显示'"></button>
         </div>
         <div class="row" x-show="currentDynastyId && !tripMode" x-cloak><span class="dot e"></span><span>历史事件</span></div>

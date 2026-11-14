@@ -325,7 +325,7 @@ window.MuseumMap = {
   },
   _syncEraZoom: function(){
     var c = this.map && this.map.getContainer();
-    if (c) { c.classList.toggle('era-zoom-lo', this.map.getZoom() < 4); c.classList.toggle('era-zoom-far', this.map.getZoom() < 5); }
+    if (c) { c.classList.toggle('era-zoom-lo', this.map.getZoom() < 3); c.classList.toggle('era-zoom-far', this.map.getZoom() < 5); }
   },
   /** Fly to the era; pad = { left, right, top, bottom } px kept clear. Once per era key unless force. */
   fitEra: function(pad, force) {

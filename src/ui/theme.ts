@@ -1582,7 +1582,7 @@ path.era-chain { stroke: var(--gilt); stroke-opacity: 0.7; stroke-dasharray: 3 4
 .era-site.is-secondary span { font-weight: 400; color: var(--text-2); }
 .era-zoom-far .era-site em, .era-zoom-far .era-site.is-secondary span { display: none; }
 .era-arrow { display: block; width: 0; height: 0; margin: -5px 0 0 -4px; border-left: 9px solid var(--gilt-hi); border-top: 5px solid transparent; border-bottom: 5px solid transparent; filter: drop-shadow(0 0 2px rgba(var(--bg-rgb),0.9)); }
-.map-legend .era-chip { flex-wrap: wrap; white-space: normal; max-width: 300px; }
+.map-legend .era-chip { flex-wrap: nowrap; align-items: baseline; white-space: normal; max-width: 320px; }
 .map-legend .era-chip .era-chip-txt { white-space: normal; }
 .map-legend .era-chip .sep { color: var(--text-4); }
 .map-legend .era-chip button { border: none; background: transparent; padding: 0; color: var(--gilt-hi); font-size: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
