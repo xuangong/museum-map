@@ -115,7 +115,17 @@ window.MuseumMap = {
     var key = all.length + ':' + (all[0] || []).join(',') + ':' + (all[all.length - 1] || []).join(',');
     if (all.length && key !== this._tripKey) {
       this._tripKey = key;
-      try { this.map.flyToBounds(L.latLngBounds(all).pad(0.25), { duration: 0.8, maxZoom: 10 }); } catch(_) {}
+      // On phones the trip panel is a bottom sheet over the map: fit the route into what's left above it.
+      var self2 = this, bounds = L.latLngBounds(all);
+      setTimeout(function(){
+      var bottom = 30;
+      try {
+        // Use the sheet's height, not its position: it may still be sliding in.
+        var sheet = document.querySelector('.stage.is-trip .toc-wrap');
+        if (sheet && window.innerWidth <= 920) bottom = sheet.offsetHeight + 20;
+      } catch(_) {}
+      try { self2.map.flyToBounds(bounds, { duration: 0.8, maxZoom: 10, paddingTopLeft: [30, 90], paddingBottomRight: [30, bottom] }); } catch(_) {}
+      }, 0);
     }
   },
   /** A small popup at a place (WGS) with one action button. */

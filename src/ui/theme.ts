@@ -1670,6 +1670,7 @@ path.route-corridor { stroke: var(--gilt); }
   .stage.is-trip .toc-wrap.open { transform: translateY(0); }
   .stage.is-trip .toc-wrap .toc { border-right: 0; border-top: 1px solid var(--line-strong); border-radius: 22px 22px 0 0; padding-top: 6px; box-shadow: 0 -24px 60px -30px var(--sh-95); }
   .stage.is-trip .toc-overlay { display: none; }
+  .stage.is-trip .toc-account, .stage.is-trip .hall-row { display: none; }
 }
 .trip-chips .chip { font: inherit; font-size: 13px; padding: 5px 11px; }
 .tb-btn.active { color: var(--gilt-hi); border-color: rgba(var(--gilt-rgb),0.6); background: rgba(var(--gilt-rgb),0.12); }
