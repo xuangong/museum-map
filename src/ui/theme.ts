@@ -1459,6 +1459,8 @@ body.chat-locked .chat-body { touch-action: pan-y; }
 @media (prefers-reduced-motion: reduce) { .strata-now.is-on { animation: none; } }
 /* The era being played */
 .strata-label.is-playing { color: var(--seal-ink-strong); background: rgba(var(--seal-rgb),0.14); box-shadow: inset 0 0 0 1px rgba(var(--seal-rgb),0.45); transform-origin: left center; }
+/* Eras playing along with the lead */
+.strata-label.is-joined { color: var(--seal-ink-strong); box-shadow: inset 0 0 0 1px rgba(var(--seal-rgb),0.22); background: rgba(var(--seal-rgb),0.05); }
 /* The instrument of the era being played */
 .strata-label .sl-inst { display: none; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--seal-ink-strong); padding: 1px 6px; border-radius: 999px; border: 1px solid rgba(var(--seal-rgb),0.4); white-space: nowrap; }
 .strata-label.is-playing .sl-inst { display: inline-block; }

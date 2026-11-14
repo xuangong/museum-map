@@ -641,14 +641,17 @@ function init(container, data, cb) {
     lastInteract = now; S.needs = true;
   }
 
-  // ── 奏一曲: a written tune, one bar per era ──
-  // A pentatonic melody (宫调, G) in five phrases of four bars, 远古 → 清, resolving home; 今
-  // closes on a chord strummed across your own strings. Each bar is played by its era's
-  // instrument: at full voice where you have strings (they pluck with the notes), softly where
-  // you have none yet (留白) — every stamp fills in more of the same tune. The instrument that
-  // just played stays on as a quiet second voice, and a bass line runs underneath. Sound is scheduled on the audio clock; each frame plucks the
-  // strings whose notes have started on that clock, so what you see is what you hear.
-  let play = null, playLayer = -1, playRest = false;
+  // ── 奏一曲: your eras play the tune together ──
+  // A written pentatonic melody (宫调, G): five phrases of four bars, resolving home. The eras
+  // you have collected form an ensemble that builds up in time order — your oldest era starts,
+  // later ones join phrase by phrase, and by the last phrase everyone plays; 今 ends on one
+  // chord with your strings strummed. Each instrument family has one part (钟磬 strike the
+  // strong beats, 鼓 a soft pulse, 弹拨 broken chords, 吹管 held notes, 拉弦 a counter-line,
+  // 古琴 high touches), one instrument per family at a time (the latest to join), and the lead
+  // melody passes to the newest 吹/弹/拉 voice. So a single era is a solo, a few are a small
+  // ensemble, and all twenty never exceed about six voices. Sound runs on the audio clock;
+  // each frame plucks the strings whose notes have started on that clock.
+  let play = null, playLayer = -1, playRest = false, playAct = new Set();
   const BEAT = 0.36;
   // [degree, beats]; degree 5 = G3 … 13 = D5.
   const MELODY = [
@@ -658,55 +661,109 @@ function init(container, data, cb) {
     [[10, 1], [11, 1], [12, 1], [13, 1]], [[12, 1.5], [11, 0.5], [10, 2]], [[11, 1], [12, 1], [13, 1.5], [12, 0.5]], [[11, 2], [9, 2]],
     [[10, 1], [9, 1], [8, 2]], [[9, 1], [8, 1], [7, 1], [6, 1]], [[7, 1.5], [8, 0.5], [9, 1], [7, 1]], [[5, 4]],
   ];
-  // Bass root of each bar (Hz): G2 E2 A2 D2.
+  // Harmony of each bar: bass root (Hz) and its chord as pentatonic steps (0 G, 1 A, 2 B, 3 D, 4 E).
   const G2 = 98, E2 = 82.41, A2 = 110, D2 = 73.42;
-  const BASS = [G2, E2, G2, D2, E2, A2, G2, D2, E2, D2, A2, G2, G2, E2, A2, D2, E2, A2, D2, G2];
+  const CHORD = { G: [G2, [0, 2, 3]], E: [E2, [4, 0, 2]], A: [A2, [1, 3, 4]], D: [D2, [3, 1, 2]] };
+  const HARM = ['G', 'E', 'G', 'D', 'E', 'A', 'G', 'D', 'E', 'D', 'A', 'G', 'G', 'E', 'A', 'D', 'E', 'A', 'D', 'G'];
+  const FAMILY = { qing: 'bell', tongqing: 'bell', nao: 'bell', zhong: 'bell', tonggu: 'drum', zhu: 'pluck', se: 'pluck', pipa: 'pluck', qin: 'qin', gudi: 'wind', paixiao: 'wind', di: 'wind', guan: 'wind', huqin: 'bow', ks: 'pluck' };
+  const LEADS = ['wind', 'pluck', 'bow', 'qin'];
   function stringsAt(li) { return strings.filter((st) => museums[st.m].links.indexOf(li) >= 0); }
   function eraOf(li) { return li >= 0 && li < N ? ERA[layers[li].id] || null : null; }
   function voiceOf(li) { const e = eraOf(li); return e && VOICES[e.voice] ? e.voice : 'ks'; }
+  function famOf(li) { return FAMILY[voiceOf(li)] || 'pluck'; }
   function barOf(li) { return Math.round(li * (MELODY.length - 1) / Math.max(1, N - 1)); }
   function panOf(st) { if (!st) return 0; const m = museums[st.m], p = screenOf(m.x, st.y0, m.z); return (p.x / Math.max(1, canvas.clientWidth)) * 2 - 1; }
-  // One bar: melody notes on 'vk', strings (if any) taking the notes in turn, plus its bass.
-  // 'acc' is the instrument that just had the melody: it stays on as a soft second voice on the
-  // strong beats (a third/fourth below the tune), so each era is handed over, not cut to.
-  function playBar(ev, b, t, li, vk, here, vel, acc, accVel) {
-    let pos = 0;
-    const at = (beat) => { let p0 = 0; for (const [deg, beats] of MELODY[b]) { if (beat < p0 + beats) return deg; p0 += beats; } return MELODY[b][0][0]; };
-    MELODY[b].forEach(([deg, beats], k) => {
-      ev.push({ t: t + pos * BEAT, dur: beats * BEAT, deg, vel: vel * (k === 0 ? 1 : 0.85), voice: vk, st: here.length ? here[k % here.length] : null, li });
+  // Chord tones of bar b between degrees lo..hi, low to high.
+  function tones(b, lo, hi) { const set = CHORD[HARM[b]][1], out = []; for (let d = lo; d <= hi; d++) if (set.indexOf(d % 5) >= 0) out.push(d); return out; }
+  function melodyAt(b, beat) { let p0 = 0; for (const [deg, beats] of MELODY[b]) { if (beat < p0 + beats) return deg; p0 += beats; } return MELODY[b][0][0]; }
+  // A string of era 'li' to pluck with a note (each era's strings take its notes in turn).
+  function stringFor(li, k) { const here = stringsAt(li); return here.length ? here[k % here.length] : null; }
+  // Bar b: the lead plays the tune; every other active family plays its part.
+  function ensembleBar(ev, b, t, lead, parts, k0) {
+    let pos = 0, k = k0;
+    MELODY[b].forEach(([deg, beats], n) => {
+      ev.push({ t: t + pos * BEAT, dur: beats * BEAT, deg, vel: n === 0 ? 0.95 : 0.85, voice: voiceOf(lead), st: stringFor(lead, k++), li: lead });
       pos += beats;
     });
-    if (acc) [0, 2].forEach((beat) => {
-      ev.push({ t: t + beat * BEAT, dur: 2 * BEAT, deg: Math.max(3, at(beat) - 2), vel: accVel * (beat ? 0.8 : 1), voice: acc, st: null, li });
-    });
-    ev.push({ t, dur: 4 * BEAT, freq: BASS[b], vel: 0.5, voice: 'bass', st: null, li });
-  }
-  function compose(F) {
-    const ev = [], lay = [];
-    let t = 0;
-    const byPitch = (li) => stringsAt(li).sort((a, b) => noteAt(a, li) - noteAt(b, li));
-    if (F < 0) {
-      let prevFilled = false;
-      for (let li = 0; li < N; li++) {
-        const here = byPitch(li);
-        lay.push({ t, li, rest: !here.length });
-        playBar(ev, barOf(li), t, li, voiceOf(li), here, here.length ? 1 : 0.32, li > 0 ? voiceOf(li - 1) : null, prevFilled ? 0.36 : 0.22);
-        prevFilled = here.length > 0;
-        t += 4 * BEAT;
+    parts.forEach((li) => {
+      const vk = voiceOf(li), fam = famOf(li), st = () => stringFor(li, k++);
+      if (fam === 'bell') {
+        const tt = tones(b, 5, 9);
+        ev.push({ t, dur: 2 * BEAT, deg: tt[0], vel: 0.5, voice: vk, st: st(), li });
+        ev.push({ t: t + 2 * BEAT, dur: 2 * BEAT, deg: tt[Math.min(tt.length - 1, 1)], vel: 0.32, voice: vk, st: null, li });
+      } else if (fam === 'drum') {
+        const r = tones(b, 5, 9)[0];
+        [[0, 0.55], [2, 0.4], [3.5, 0.22]].forEach(([beat, v]) => ev.push({ t: t + beat * BEAT, dur: 0.5 * BEAT, deg: r, vel: v, voice: vk, st: beat === 0 ? st() : null, li }));
+      } else if (fam === 'pluck') {
+        const tt = tones(b, 5, 10), pat = [0, 1, 2, 1, 3, 1, 2, 1];
+        pat.forEach((ix, n) => ev.push({ t: t + n * 0.5 * BEAT, dur: 0.5 * BEAT, deg: tt[Math.min(tt.length - 1, ix)], vel: n % 4 === 0 ? 0.36 : 0.26, voice: vk, st: n % 4 === 0 ? st() : null, li }));
+      } else if (fam === 'wind') {
+        const tt = tones(b, 7, 11), m0 = melodyAt(b, 0);
+        const d = tt.filter((x) => x !== m0 && Math.abs(x - m0) !== 1)[0] || tt[0];
+        ev.push({ t, dur: 4 * BEAT, deg: d, vel: 0.3, voice: vk, st: st(), li });
+      } else if (fam === 'bow') {
+        [0, 2].forEach((beat) => ev.push({ t: t + beat * BEAT, dur: 2 * BEAT, deg: Math.max(4, melodyAt(b, beat) - 2), vel: beat ? 0.26 : 0.32, voice: vk, st: beat ? null : st(), li }));
+      } else if (fam === 'qin') {
+        const tt = tones(b, 10, 13);
+        [0, 2].forEach((beat) => ev.push({ t: t + beat * BEAT, dur: 2 * BEAT, deg: tt[beat ? tt.length - 1 : 0], vel: 0.28, voice: vk, st: beat ? null : st(), li }));
       }
-      // 今: home chord, strummed across your strings (or simply sounded if you have none yet).
-      lay.push({ t, li: N });
-      const chord = [5, 7, 8, 10, 12, 13], order = strings.slice().sort((a, b) => a.note - b.note);
+    });
+    ev.push({ t, dur: 4 * BEAT, freq: CHORD[HARM[b]][0], vel: 0.45, voice: 'bass', st: null, li: -1 });
+    return k;
+  }
+  // Who plays in phrase p: collected eras join in time order; one voice per family (the newest
+  // to join); the lead is the newest 吹/弹/拉/琴 voice (or the newest of any if none).
+  function lineup(col, p) {
+    const n = col.length, act = col.slice(0, Math.max(1, Math.ceil((p + 1) * n / 5)));
+    const byFam = {};
+    act.forEach((li) => { byFam[famOf(li)] = li; });
+    const voices = Object.values(byFam).sort((a, b) => a - b);
+    const leadCands = voices.filter((li) => LEADS.indexOf(famOf(li)) >= 0);
+    const lead = leadCands.length ? leadCands.reduce((a, b) => (act.indexOf(b) > act.indexOf(a) ? b : a)) : voices[voices.length - 1];
+    return { act, lead, parts: voices.filter((li) => li !== lead) };
+  }
+  // F: era index (reading one era) or -1 (all strata). o.eras: treat these eras as collected
+  // (for rendering what other passports would hear).
+  function compose(F, o) {
+    o = o || {};
+    const ev = [], lay = [];
+    let t = 0, k = 0;
+    if (F < 0) {
+      const col = o.eras || [...Array(N).keys()].filter((li) => stringsAt(li).length);
+      if (!col.length) {
+        // Nothing collected yet: the tune alone, quietly, on the strings you will have.
+        lay.push({ t: 0, li: -1, rest: true, act: [] });
+        for (let b = 0; b < MELODY.length; b++) {
+          let pos = 0;
+          MELODY[b].forEach(([deg, beats]) => { ev.push({ t: t + pos * BEAT, dur: beats * BEAT, deg, vel: 0.55, voice: 'ks', st: null, li: -1 }); pos += beats; });
+          ev.push({ t, dur: 4 * BEAT, freq: CHORD[HARM[b]][0], vel: 0.35, voice: 'bass', st: null, li: -1 });
+          t += 4 * BEAT;
+        }
+        return { ev, lay, dur: t + 2.4 };
+      }
+      for (let p = 0; p < 5; p++) {
+        const L = lineup(col, p);
+        lay.push({ t, li: L.lead, act: L.act });
+        for (let b = p * 4; b < p * 4 + 4; b++) { k = ensembleBar(ev, b, t, L.lead, L.parts, k); t += 4 * BEAT; }
+      }
+      // 今: every voice on the home chord together, your strings strummed over it.
+      const L = lineup(col, 4);
+      lay.push({ t, li: N, act: L.act });
+      [L.lead].concat(L.parts).forEach((li, n) => {
+        const d = [10, 8, 7, 5, 12, 13][n % 6];
+        ev.push({ t: t + n * 0.03, dur: 2.6, deg: d, vel: 0.5, voice: voiceOf(li), st: null, li });
+      });
+      const order = strings.slice().sort((a, b) => a.note - b.note), chord = [5, 7, 8, 10, 12, 13];
       const n = Math.max(3, Math.min(chord.length, order.length || 3));
-      for (let k = 0; k < n; k++) ev.push({ t: t + k * 0.07, dur: 2.5, deg: chord[k], vel: 0.85, voice: 'ks', st: order.length ? order[k % order.length] : null, li: -1 });
-      ev.push({ t, dur: 3, freq: G2, vel: 0.55, voice: 'bass', st: null, li: -1 });
+      for (let j = 0; j < n; j++) ev.push({ t: t + 0.12 + j * 0.07, dur: 2.5, deg: chord[j], vel: 0.75, voice: 'ks', st: order.length ? order[j % order.length] : null, li: -1 });
+      ev.push({ t, dur: 3, freq: G2, vel: 0.5, voice: 'bass', st: null, li: -1 });
       ev.sort((a, b) => a.t - b.t);
       return { ev, lay, dur: t + 3.6 };
     }
-    // One era: the phrase its bar belongs to, all on that era's instrument.
-    const vk = voiceOf(F), here = byPitch(F), b0 = Math.floor(barOf(F) / 4) * 4;
-    lay.push({ t: 0, li: F, rest: !here.length });
-    for (let b = b0; b < b0 + 4 && b < MELODY.length; b++) { playBar(ev, b, t, F, vk, here, here.length ? 1 : 0.6, b > b0 ? vk : null, 0.3); t += 4 * BEAT; }
+    // One era: its phrase, its instrument leading, the same instrument answering in its family part.
+    const here = stringsAt(F), b0 = Math.floor(barOf(F) / 4) * 4;
+    lay.push({ t: 0, li: F, rest: !here.length, act: [F] });
+    for (let b = b0; b < b0 + 4 && b < MELODY.length; b++) { k = ensembleBar(ev, b, t, F, b > b0 && famOf(F) !== 'wind' ? [F] : [], k); t += 4 * BEAT; }
     ev.sort((a, b) => a.t - b.t);
     return { ev, lay, dur: t + 2.4 };
   }
@@ -714,17 +771,22 @@ function init(container, data, cb) {
   // o.noBass leaves out the bass line (for comparing by ear).
   async function renderTune(F, o) {
     o = o || {};
-    const c = compose(F == null ? state.focus : F), sr = 44100;
+    const c = compose(F == null ? state.focus : F, o), sr = 44100;
     if (o.noBass) c.ev = c.ev.filter((e) => e.voice !== 'bass');
     const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
     const oc = new OAC(2, Math.ceil((c.dur + 1) * sr), sr), dest = makeGraph(oc);
     c.ev.forEach((e) => stringSound(e.deg, e.vel, panOf(e.st), 0.1 + e.t, e.voice, { dur: e.dur, freq: e.freq, ac: oc, dest }));
     return wavBytes(await oc.startRendering());
   }
-  function markPlayLayer(li, rest) {
-    playLayer = li; playRest = !!rest;
+  // li: the era leading now (N = 今); act: every era playing with it.
+  function markPlayLayer(li, rest, act) {
+    playLayer = li; playRest = !!rest; playAct = new Set(act || []);
     paintNow(li);
-    layerLabels.forEach((l) => { const on = l.layer === li; l.el.classList.toggle('is-playing', on); l.el.classList.toggle('is-rest', on && !!rest); });
+    layerLabels.forEach((l) => {
+      const on = l.layer === li;
+      l.el.classList.toggle('is-playing', on); l.el.classList.toggle('is-rest', on && !!rest);
+      l.el.classList.toggle('is-joined', !on && playAct.has(l.layer));
+    });
     todayLabel.classList.toggle('is-playing', li === N);
   }
   function startPlay() {
@@ -752,7 +814,7 @@ function init(container, data, cb) {
   function tickPlay() {
     if (!play) return;
     const c = play.audio ? actx.currentTime : performance.now() / 1000;
-    while (play.j < play.lay.length && play.lay[play.j].at <= c + 0.01) { const l = play.lay[play.j++]; markPlayLayer(l.li, l.rest); }
+    while (play.j < play.lay.length && play.lay[play.j].at <= c + 0.01) { const l = play.lay[play.j++]; markPlayLayer(l.li, l.rest, l.act); }
     while (play.i < play.ev.length && play.ev[play.i].at <= c + 0.01) {
       const e = play.ev[play.i++];
       if (e.st) pluck(e.st, e.vel, 0, { li: e.li, scheduled: true });
@@ -1474,7 +1536,7 @@ function init(container, data, cb) {
     layers.forEach((L) => {
       const appear = Math.max(0, Math.min(1, intro * 1.6 - (L.i / N) * 0.75));
       // The era being played lights up.
-      const pf = play && playLayer === L.i ? (playRest ? 1.5 : 2.6) : 1;
+      const pf = !play ? 1 : playLayer === L.i ? (playRest ? 1.5 : 2.6) : playAct.has(L.i) ? 1.7 : 1;
       lerpMat(L.outline.material, Math.min(1, L.to.outline * appear * pf), ka); lerpMat(L.fill.material, Math.min(1, L.to.fill * appear * pf), ka); lerpMat(L.river.material, L.to.river * appear, ka);
       if (L.tLine) { lerpMat(L.tLine.material, Math.min(1, L.to.tLine * appear * pf), ka); lerpMat(L.tFill.material, Math.min(1, L.to.tFill * appear * pf), ka); }
     });
