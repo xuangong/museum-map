@@ -76,41 +76,43 @@ export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
     const enc = new TextEncoder()
     // Anthropic-shaped events, so the existing client parser renders them; plus
     // `tool_progress` while the guide looks something up.
-    const stream = new ReadableStream<Uint8Array>({
-      async start(controller) {
-        const send = (obj: any) => {
-          try {
-            controller.enqueue(enc.encode("data: " + JSON.stringify(obj) + "\n\n"))
-          } catch {}
-        }
-        const text = (t: string) => send({ type: "content_block_delta", index: 0, delta: { type: "text_delta", text: t } })
-        try {
-          const result = await runToolLoopStream({
-            gatewayUrl: env.COPILOT_GATEWAY_URL!,
-            gatewayKey: env.COPILOT_GATEWAY_KEY!,
-            model: MODEL,
-            maxTokens: MAX_TOKENS,
-            system,
-            tools: CHAT_TOOLS as any,
-            messages,
-            executeTool: (call) => executeChatTool(env.DB, call),
-            onDelta: text,
-            onTool: async (call) => send({ type: "tool_progress", label: await toolLabel(env.DB, call) }),
-            maxIters: 6,
-            wallMs: 45_000,
-          })
-          if (result.stopReason === "gateway_error" && !result.text) send({ type: "error", error: { message: "upstream_error" } })
-          else if (!result.text) text("（无回复）")
-          send({ type: "message_stop" })
-        } catch {
-          send({ type: "error", error: { message: "internal_error" } })
-        }
-        try {
-          controller.close()
-        } catch {}
-      },
-    })
-    return new Response(stream, { status: 200, headers: SSE_HEADERS })
+    // A TransformStream written from a detached task: each write leaves the Worker as
+    // soon as it is made. (Enqueuing from an async ReadableStream start() let the runtime
+    // hold the text and release it in one burst at the end.)
+    const { readable, writable } = new TransformStream<Uint8Array, Uint8Array>()
+    const writer = writable.getWriter()
+    const send = (obj: any) => writer.write(enc.encode("data: " + JSON.stringify(obj) + "\n\n")).catch(() => {})
+    const text = (t: string) => send({ type: "content_block_delta", index: 0, delta: { type: "text_delta", text: t } })
+    // Not awaited: the Worker stays alive while the response body is still being written.
+    void (async () => {
+      try {
+        const result = await runToolLoopStream({
+          gatewayUrl: env.COPILOT_GATEWAY_URL!,
+          gatewayKey: env.COPILOT_GATEWAY_KEY!,
+          model: MODEL,
+          maxTokens: MAX_TOKENS,
+          system,
+          tools: CHAT_TOOLS as any,
+          messages,
+          executeTool: (call) => executeChatTool(env.DB, call),
+          onDelta: (t) => {
+            text(t)
+          },
+          onTool: async (call) => {
+            await send({ type: "tool_progress", label: await toolLabel(env.DB, call) })
+          },
+          maxIters: 6,
+          wallMs: 45_000,
+        })
+        if (result.stopReason === "gateway_error" && !result.text) await send({ type: "error", error: { message: "upstream_error" } })
+        else if (!result.text) await text("（无回复）")
+        await send({ type: "message_stop" })
+      } catch {
+        await send({ type: "error", error: { message: "internal_error" } })
+      }
+      await writer.close().catch(() => {})
+    })()
+    return new Response(readable, { status: 200, headers: SSE_HEADERS })
   }
 
   if (body && body.useTools !== false) {
