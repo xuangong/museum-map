@@ -59,7 +59,7 @@ export async function routeThrough(env: Env, pts: LatLng[], f: Fetch = fetch): P
       legs: r.legs.map((l: any) => ({ km: Math.round(l.distance / 1000), h: round1(l.duration / 3600) })),
       line: thin(r.geometry.coordinates.map(([lng, lat]: [number, number]) => [lat, lng] as [number, number]), 500),
     }
-    await env.RATE.put(key, JSON.stringify(out), { expirationTtl: 30 * 86400 })
+    try { await env.RATE.put(key, JSON.stringify(out), { expirationTtl: 30 * 86400 }) } catch {}
     return out
   } catch {
     return straight(pts)

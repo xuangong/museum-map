@@ -59,7 +59,7 @@ export const TRIP_CORE_SCRIPT = `
     return (t.must ? 3 : 0) + t.fills * 2 + (t.connects ? 2 : 0) + (t.onSite ? 1 : 0) - Math.min(1, (t.km || 0) / 100);
   }
   function transitHint(d) {
-    if (d < 150) return { mode: '高铁或大巴', h: Math.round(d / 100 * 10) / 10 + 0.5 };
+    if (d < 150) return { mode: '高铁或大巴', h: Math.round((d / 100 + 0.5) * 10) / 10 };
     if (d <= 1200) return { mode: '高铁', h: Math.round((d / 250 + 1) * 10) / 10 };
     return { mode: '飞机', h: Math.round((d / 700 + 2.5) * 10) / 10 };
   }
@@ -98,12 +98,21 @@ export const TRIP_CORE_SCRIPT = `
   function migrate(saved, byId) {
     var fresh = { v: 2, mode: 'transit', cities: [], radius: 30, picks: [], route: null };
     if (!saved) return fresh;
+    var has = function(id){ return typeof id === 'string' && Object.prototype.hasOwnProperty.call(byId, id) && byId[id]; };
     if (saved.v === 2) {
-      return { v: 2, mode: saved.mode === 'drive' ? 'drive' : 'transit', cities: (saved.cities || []).filter(function(c){ return c && c.name && c.lat != null && c.lng != null; }),
-        radius: saved.radius || 30, picks: (saved.picks || []).filter(function(id){ return byId[id]; }), route: null };
+      var cities = (Array.isArray(saved.cities) ? saved.cities : []).filter(function(c){
+        return c && typeof c.name === 'string' && c.name && typeof c.lat === 'number' && isFinite(c.lat) && typeof c.lng === 'number' && isFinite(c.lng);
+      }).map(function(c){
+        var o = { name: c.name, lat: c.lat, lng: c.lng };
+        if (c.days != null) { var d = Math.round(Number(c.days)); o.days = isFinite(d) ? Math.max(1, Math.min(9, d)) : 1; }
+        return o;
+      });
+      var rad = typeof saved.radius === 'number' && isFinite(saved.radius) && saved.radius > 0 ? saved.radius : 30;
+      return { v: 2, mode: saved.mode === 'drive' ? 'drive' : 'transit', cities: cities, radius: rad,
+        picks: (Array.isArray(saved.picks) ? saved.picks : []).filter(has), route: null };
     }
     if (!Array.isArray(saved.ids)) return fresh;
-    var picks = saved.ids.filter(function(id){ return byId[id]; }), order = [], acc = {};
+    var picks = saved.ids.filter(has), order = [], acc = Object.create(null);
     picks.forEach(function(id){
       var m = byId[id], c = m.city || m.name;
       if (!acc[c]) { acc[c] = { name: c, lat: 0, lng: 0, n: 0 }; order.push(c); }

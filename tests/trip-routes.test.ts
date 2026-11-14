@@ -42,4 +42,21 @@ describe("trip endpoints", () => {
     expect(r.provider).toBe("line")
     expect(r.line.length).toBe(2)
   })
+
+  it("GET /api/route rejects malformed points", async () => {
+    const app = createApp(await makeEnv())
+    const res = await app.handle(new Request("http://localhost/api/route?pts=39,116,5;34,108"))
+    expect(res.status).toBe(400)
+  })
+
+  it("rate limits per IP", async () => {
+    const app = createApp(await makeEnv())
+    let last = 0
+    const ip = "10.1." + (Date.now() % 250) + "." + Math.floor(Math.random() * 250)
+    for (let i = 0; i < 61; i++) {
+      const res = await app.handle(new Request("http://localhost/api/geocode?q=", { headers: { "x-forwarded-for": ip } }))
+      last = res.status
+    }
+    expect(last).toBe(429)
+  })
 })

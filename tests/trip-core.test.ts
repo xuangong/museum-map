@@ -90,4 +90,18 @@ describe("TripCore planning", () => {
     const t = T.migrate({ v: 2, mode: "drive", cities: [{ name: "北京", lat: 1, lng: 2, days: 1 }], radius: 80, picks: ["x"] }, {})
     expect(t).toEqual({ v: 2, mode: "drive", cities: [{ name: "北京", lat: 1, lng: 2, days: 1 }], radius: 80, picks: [], route: null })
   })
+
+  it("migrate(): survives garbage input", () => {
+    const t = T.migrate({ v: 2, mode: "x", cities: "x", picks: {}, radius: "80" }, {})
+    expect(t).toEqual({ v: 2, mode: "transit", cities: [], radius: 30, picks: [], route: null })
+    const u = T.migrate({ v: 2, cities: [{ name: "A", lat: "x", lng: 1 }, { name: "B", lat: 1, lng: 2, days: 1e9 }, { name: "C", lat: 1, lng: 2, days: -5 }], picks: ["__proto__", "ok"], radius: -1 }, { ok: { id: "ok" } })
+    expect(u.cities).toEqual([{ name: "B", lat: 1, lng: 2, days: 9 }, { name: "C", lat: 1, lng: 2, days: 1 }])
+    expect(u.picks).toEqual(["ok"])
+    expect(u.radius).toBe(30)
+    expect(T.migrate({ ids: "x" }, {}).cities).toEqual([])
+  })
+
+  it("transitHint() short hop adds half an hour", () => {
+    expect(T.transitHint(100).h).toBe(1.5)
+  })
 })

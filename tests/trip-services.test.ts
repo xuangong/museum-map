@@ -98,3 +98,17 @@ describe("route", () => {
     expect(r.line).toEqual([[39.909, 116.397], [34.341, 108.94]])
   })
 })
+
+describe("best-effort cache", () => {
+  const badKV = () => ({ async get() { return null }, async put() { throw new Error("kv down") } }) as any
+  it("searchCity still returns when KV put throws", async () => {
+    const f = (async () => jsonRes([{ name: "西安市", lat: "34.3", lon: "108.9", addresstype: "city", address: {} }])) as any
+    const r = await searchCity({ RATE: badKV() } as any, "西安", f)
+    expect(r.length).toBe(1)
+  })
+  it("routeThrough still returns osrm when KV put throws", async () => {
+    const f = (async () => jsonRes({ code: "Ok", routes: [{ distance: 1000, duration: 60, geometry: { coordinates: [[1, 2], [3, 4]] }, legs: [{ distance: 1000, duration: 60 }] }] })) as any
+    const r = await routeThrough({ RATE: badKV() } as any, [{ lat: 2, lng: 1 }, { lat: 4, lng: 3 }], f)
+    expect(r.provider).toBe("osrm")
+  })
+})
