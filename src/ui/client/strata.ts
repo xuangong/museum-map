@@ -641,60 +641,56 @@ function init(container, data, cb) {
     lastInteract = now; S.needs = true;
   }
 
-  // ── 奏一曲: your eras play the tune together ──
-  // A written pentatonic melody (宫调, G): five phrases of four bars, resolving home. The eras
-  // you have collected form an ensemble that builds up in time order — your oldest era starts,
-  // later ones join phrase by phrase, and by the last phrase everyone plays; 今 ends on one
-  // chord with your strings strummed. Each instrument family has one part (钟磬 strike the
-  // strong beats, 鼓 a soft pulse, 弹拨 broken chords, 吹管 held notes, 拉弦 a counter-line,
-  // 古琴 high touches), one instrument per family at a time (the latest to join), and the lead
-  // melody passes to the newest 吹/弹/拉 voice. So a single era is a solo, a few are a small
-  // ensemble, and all twenty never exceed about six voices. Sound runs on the audio clock;
-  // each frame plucks the strings whose notes have started on that clock.
+  // ── 奏一曲: your eras play the tune together, the way a 丝竹 ensemble does ──
+  // One written pentatonic melody (宫调, G) in five phrases, each starting on the note the last
+  // one ended on (鱼咬尾), closing 商 → 宫. The eras you have collected join in time order and
+  // play it 支声复调: everyone plays the same tune, each in its own way — the lead ornaments it,
+  // 弹拨 picks out its bones an octave down, 拉弦 carries it low and smooth, 吹管 floats a few
+  // long notes above (你繁我简，你高我低), 古琴 touches the strong beats, 钟磬 and 鼓 mark where
+  // phrases begin and end; when the lead holds a long note a plucked voice slips a short fill
+  // in (嵌挡让路). No chords: the ending is everyone landing on 宫 in octaves. One instrument
+  // per family at a time (≤ 6 voices). Sound runs on the audio clock; each frame plucks the
+  // strings whose notes have started on that clock.
   let play = null, playLayer = -1, playRest = false, playAct = new Set();
   // Every performance is a new reading of the same score (see vary()); BEAT and rnd belong to it.
-  let BEAT = 0.36, rnd = Math.random, perf = { heads: [], lift: [], bow: [], dyn: [], plk: 0, mul: 1, semis: 0 };
+  let BEAT = 0.36, rnd = Math.random, perf = { heads: [], lift: [], dyn: [], mul: 1, semis: 0 };
   function seeded(a) { return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
   const pick = (xs) => xs[Math.floor(rnd() * xs.length)];
-  // Alternative openings (换头) for each phrase's first bar, checked against that bar's chord
-  // and leading by step into the bar after; the rest of each phrase and every cadence stay.
+  // Alternative openings (换头) for each phrase's first bar: same first note (so the phrase still
+  // bites the last one's tail), leading by step into the bar after; the rest of the phrase stays.
   const HEADS = [
-    [[[5, 1], [7, 1], [8, 2]], [[10, 1], [9, 1], [8, 2]]],
-    [[[12, 1], [11, 1], [10, 1], [9, 1]], [[9, 2], [10, 1], [11, 1]]],
-    [[[9, 1], [8, 1], [7, 2]], [[6, 1], [7, 1], [8, 1], [9, 1]]],
-    [[[13, 2], [12, 1], [11, 1]], [[10, 1.5], [11, 0.5], [12, 2]]],
-    [[[11, 1], [10, 1], [9, 1], [8, 1]], [[12, 2], [10, 1], [9, 1]]],
+    [[[8, 1], [7, 1], [8, 1], [10, 1]], [[8, 1.5], [9, 0.5], [10, 2]]],
+    [[[9, 1], [11, 1], [10, 1], [9, 1]], [[9, 2], [10, 1], [11, 1]]],
+    [[[10, 1], [9, 1], [8, 1], [7, 1]], [[10, 1.5], [8, 0.5], [9, 1], [7, 1]]],
+    [[[10, 2], [12, 1], [13, 1]], [[10, 1.5], [11, 0.5], [12, 2]]],
+    [[[9, 1], [10, 1], [9, 1], [8, 1]], [[9, 1.5], [10, 0.5], [9, 1], [8, 1]]],
   ];
-  const PLUCK_PATS = [[0, 1, 2, 1, 3, 1, 2, 1], [0, 2, 1, 2, 3, 2, 1, 2], [0, 1, 2, 3, 2, 1, 2, 1]];
   // Decide this performance: key (whole-tone moves only, so the scale stays the scale), tempo,
-  // openings, which phrases lift an octave, the 弹拨 figure, the 拉弦 interval, the dynamics.
+  // openings, which phrases lift an octave, the dynamics.
   function vary(seed) {
     rnd = seeded(seed);
     const semis = pick([-2, 0, 0, 2, 3, 5]);
     BEAT = 0.33 + rnd() * 0.06;
-    perf = { semis, mul: Math.pow(2, semis / 12), heads: [], lift: [], bow: [], dyn: [], plk: Math.floor(rnd() * PLUCK_PATS.length), seed };
+    perf = { semis, mul: Math.pow(2, semis / 12), heads: [], lift: [], dyn: [], seed };
     for (let ph = 0; ph < 5; ph++) {
       perf.heads[ph] = Math.floor(rnd() * 3);
       const top = Math.max(...MELODY.slice(ph * 4, ph * 4 + 4).flat().map((n) => n[0]), ...HEADS[ph].flat().map((n) => n[0]));
       perf.lift[ph] = ph < 4 && semis < 3 && top + 5 <= MAX_DEG && rnd() < 0.22;
-      perf.bow[ph] = rnd() < 0.6 ? 2 : 3;
     }
     perf.dyn = [0.88, 0.94, 1, 1.06, 0.98, 1.04].map((d) => d + (rnd() - 0.5) * 0.06);
   }
   // Bar b as this performance plays it (its opening may be swapped).
   function barMel(b) { const ph = Math.floor(b / 4); return b % 4 === 0 && perf.heads[ph] ? HEADS[ph][perf.heads[ph] - 1] : MELODY[b]; }
-  // [degree, beats]; degree 5 = G3 … 13 = D5.
+  // [degree, beats]; degree 5 = G3 (宫) … 13 = D5. Phrase ends → next phrase starts:
+  // 9→9, 10→10, 10→10, 9→9 (鱼咬尾); the tune closes A → G (商 → 宫).
   const MELODY = [
     [[8, 2], [9, 1], [10, 1]], [[9, 1.5], [8, 0.5], [7, 1], [8, 1]], [[10, 2], [11, 1], [12, 1]], [[11, 1], [10, 1], [9, 2]],
     [[9, 1], [10, 1], [11, 1.5], [10, 0.5]], [[9, 2], [8, 2]], [[8, 1], [9, 1], [10, 1], [12, 1]], [[11, 3], [10, 1]],
-    [[7, 2], [8, 1], [9, 1]], [[8, 1], [7, 1], [6, 2]], [[7, 1], [8, 1], [9, 1], [11, 1]], [[10, 4]],
+    [[10, 2], [9, 1], [7, 1]], [[8, 1], [7, 1], [6, 2]], [[7, 1], [8, 1], [9, 1], [11, 1]], [[10, 4]],
     [[10, 1], [11, 1], [12, 1], [13, 1]], [[12, 1.5], [11, 0.5], [10, 2]], [[11, 1], [12, 1], [13, 1.5], [12, 0.5]], [[11, 2], [9, 2]],
-    [[10, 1], [9, 1], [8, 2]], [[9, 1], [8, 1], [7, 1], [6, 1]], [[7, 1.5], [8, 0.5], [9, 1], [7, 1]], [[5, 4]],
+    [[9, 2], [10, 1], [8, 1]], [[9, 1], [8, 1], [7, 1], [6, 1]], [[7, 1], [8, 1], [7, 1], [6, 1]], [[5, 4]],
   ];
-  // Harmony of each bar: bass root (Hz) and its chord as pentatonic steps (0 G, 1 A, 2 B, 3 D, 4 E).
-  const G2 = 98, E2 = 82.41, A2 = 110, D2 = 73.42;
-  const CHORD = { G: [G2, [0, 2, 3]], E: [E2, [4, 0, 2]], A: [A2, [1, 3, 4]], D: [D2, [3, 1, 2]] };
-  const HARM = ['G', 'E', 'G', 'D', 'E', 'A', 'G', 'D', 'E', 'D', 'A', 'G', 'G', 'E', 'A', 'D', 'E', 'A', 'D', 'G'];
+  const G2 = 98;
   const FAMILY = { qing: 'bell', tongqing: 'bell', nao: 'bell', zhong: 'bell', tonggu: 'drum', zhu: 'pluck', se: 'pluck', pipa: 'pluck', qin: 'qin', gudi: 'wind', paixiao: 'wind', di: 'wind', guan: 'wind', huqin: 'bow', ks: 'pluck' };
   const LEADS = ['wind', 'pluck', 'bow', 'qin'];
   function stringsAt(li) { return strings.filter((st) => museums[st.m].links.indexOf(li) >= 0); }
@@ -703,8 +699,6 @@ function init(container, data, cb) {
   function famOf(li) { return FAMILY[voiceOf(li)] || 'pluck'; }
   function barOf(li) { return Math.round(li * (MELODY.length - 1) / Math.max(1, N - 1)); }
   function panOf(st) { if (!st) return 0; const m = museums[st.m], p = screenOf(m.x, st.y0, m.z); return (p.x / Math.max(1, canvas.clientWidth)) * 2 - 1; }
-  // Chord tones of bar b between degrees lo..hi, low to high.
-  function tones(b, lo, hi) { const set = CHORD[HARM[b]][1], out = []; for (let d = lo; d <= hi; d++) if (set.indexOf(d % 5) >= 0) out.push(d); return out; }
   function melodyAt(b, beat) { const m = barMel(b); let p0 = 0; for (const [deg, beats] of m) { if (beat < p0 + beats) return deg; p0 += beats; } return m[0][0]; }
   // A string of era 'li' to pluck with a note (each era's strings take its notes in turn).
   function stringFor(li, k) { const here = li >= 0 ? stringsAt(li) : strings; return here.length ? here[k % here.length] : null; }
@@ -735,50 +729,67 @@ function init(container, data, cb) {
     });
     return out;
   }
-  // Bar b: the lead plays the tune at its level; every other active family plays its part at its
-  // level (lv: era → 1..3). lead < 0: the tune is on your own strings (only a drum has joined).
+  // Bar b: the lead plays the tune at its 加花 level; every other active family plays the same
+  // tune its own way at its level (lv: era → 1..3). lead < 0: the tune is on your own strings.
   function ensembleBar(ev, b, t, lead, parts, k0, lv) {
     let k = k0;
     const lvl = (li) => (lv && lv[li]) || 1;
+    const ph = Math.floor(b / 4), inPh = b % 4, cad = inPh === 3, last = b === MELODY.length - 1;
+    // The bar's bones: [deg, beats, at].
+    const skel = [];
+    let p0 = 0;
+    barMel(b).forEach(([deg, beats]) => { skel.push([deg, beats, p0]); p0 += beats; });
+    const nextOf = (i) => (i + 1 < skel.length ? skel[i + 1][0] : b + 1 < MELODY.length ? barMel(b + 1)[0][0] : skel[i][0]);
+    const vk0 = lead >= 0 ? voiceOf(lead) : 'ks';
     ornament(b, lead >= 0 ? lvl(lead) : 1).forEach((n, i) => {
-      const vk = lead >= 0 ? voiceOf(lead) : 'ks';
-      if (n.grace) { ev.push({ t: t + n.at * BEAT - 0.07, dur: 0.07, deg: n.deg, vel: 0.4, voice: vk, st: null, li: lead }); return; }
-      ev.push({ t: t + n.at * BEAT, dur: n.beats * BEAT, deg: n.deg, vel: i === 0 ? 0.95 : 0.85, voice: vk, st: stringFor(lead, k++), li: lead });
+      if (n.grace) { ev.push({ t: t + n.at * BEAT - 0.07, dur: 0.07, deg: n.deg, vel: 0.4, voice: vk0, st: null, li: lead }); return; }
+      ev.push({ t: t + n.at * BEAT, dur: n.beats * BEAT, deg: n.deg, vel: i === 0 ? 0.95 : 0.85, voice: vk0, st: stringFor(lead, k++), li: lead });
     });
-    const crowded = parts.length >= 4;
+    let filled = false;
     parts.forEach((li) => {
-      const vk = voiceOf(li), fam = famOf(li), st = () => stringFor(li, k++);
-      let L = lvl(li);
-      if (crowded && (fam === 'pluck' || fam === 'bow')) L = Math.min(L, 2);
-      if (fam === 'bell') {
-        const tt = tones(b, 5, 9);
-        ev.push({ t, dur: 2 * BEAT, deg: tt[0], vel: 0.5, voice: vk, st: st(), li });
-        if (L >= 2) ev.push({ t: t + 2 * BEAT, dur: 2 * BEAT, deg: tt[Math.min(tt.length - 1, 1)], vel: 0.32, voice: vk, st: null, li });
-        if (L >= 3) ev.push({ t: t + 3.5 * BEAT, dur: 0.5 * BEAT, deg: tt[tt.length - 1], vel: 0.22, voice: vk, st: null, li });
-      } else if (fam === 'drum') {
-        const r = tones(b, 5, 9)[0], hits = L >= 3 ? [[0, 0.55], [2, 0.4], [3.5, 0.22]] : L >= 2 ? [[0, 0.55], [2, 0.38]] : [[0, 0.5]];
-        hits.forEach(([beat, v]) => ev.push({ t: t + beat * BEAT, dur: 0.5 * BEAT, deg: r, vel: v, voice: vk, st: beat === 0 ? st() : null, li }));
-      } else if (fam === 'pluck') {
-        const tt = tones(b, 5, 10), step = L >= 2 ? 0.5 : 1, full = PLUCK_PATS[perf.plk], pat = L >= 2 ? full : full.slice(0, 4);
-        pat.forEach((ix, n) => {
-          const deg = tt[Math.min(tt.length - 1, L >= 3 && n % 4 === 2 ? ix + 2 : ix)];
-          ev.push({ t: t + n * step * BEAT, dur: step * BEAT, deg, vel: n % (L >= 2 ? 4 : 2) === 0 ? 0.36 : 0.26, voice: vk, st: n % 4 === 0 ? st() : null, li });
+      const vk = voiceOf(li), fam = famOf(li), L = lvl(li);
+      const put = (at, beats, deg, vel, pl) => ev.push({ t: t + at * BEAT, dur: beats * BEAT, deg: Math.max(0, Math.min(MAX_DEG, deg)), vel, voice: vk, st: pl ? stringFor(li, k++) : null, li });
+      if (fam === 'pluck') {
+        // The bones an octave down — strong beats only at first, every note when richer — and,
+        // while the lead holds a long note, a short step toward the next one (嵌挡).
+        skel.forEach(([deg, beats, at], i) => {
+          if (L < 2 && at % 2 !== 0) return;
+          put(at, Math.min(beats, 2), deg - 5, i === 0 ? 0.42 : 0.34, i === 0);
+          if (L >= 3 && beats >= 2 && !filled && !last) {
+            const nx = nextOf(i), dir = Math.sign(nx - deg) || -1;
+            put(at + beats - 0.5, 0.5, deg - 5 + dir, 0.26, false);
+            filled = true;
+          }
+        });
+      } else if (fam === 'bow') {
+        // Low and smooth: the tune an octave down, with passing notes once there is more of it.
+        skel.forEach(([deg, beats, at], i) => {
+          const nx = nextOf(i), gap = nx - deg;
+          if (L >= 2 && beats >= 1 && Math.abs(gap) >= 2 && !last) { put(at, beats - 0.5, deg - 5, 0.3, i === 0); put(at + beats - 0.5, 0.5, deg - 5 + Math.sign(gap), 0.24, false); }
+          else put(at, beats, deg - 5, 0.3, i === 0);
         });
       } else if (fam === 'wind') {
-        const tt = tones(b, 7, 11), avoid = (m) => tt.filter((x) => x !== m && Math.abs(x - m) !== 1);
-        if (L >= 2) [0, 2].forEach((beat) => { const c = avoid(melodyAt(b, beat)); ev.push({ t: t + beat * BEAT, dur: 2 * BEAT, deg: c[beat ? c.length - 1 : 0] || tt[0], vel: 0.3, voice: vk, st: beat ? null : st(), li }); });
-        else ev.push({ t, dur: 4 * BEAT, deg: avoid(melodyAt(b, 0))[0] || tt[0], vel: 0.3, voice: vk, st: st(), li });
-      } else if (fam === 'bow') {
-        const beats = L >= 3 ? [0, 1, 2, 3] : L >= 2 ? [0, 2] : [0], len = 4 / beats.length;
-        const below = perf.bow[Math.floor(b / 4)] || 2;
-        beats.forEach((beat) => ev.push({ t: t + beat * BEAT, dur: len * BEAT, deg: Math.max(4, melodyAt(b, beat) - below), vel: beat ? 0.26 : 0.32, voice: vk, st: beat ? null : st(), li }));
+        // Above, few and long: the held notes of the tune an octave up (or in place if too high).
+        skel.forEach(([deg, beats, at], i) => {
+          if (beats < 1 || (L < 2 && i > 0)) return;
+          put(at, beats, deg + 5 <= MAX_DEG ? deg + 5 : deg, 0.2, i === 0);
+        });
       } else if (fam === 'qin') {
-        const tt = tones(b, 10, 13), beats = L >= 2 ? [0, 2] : [0];
-        beats.forEach((beat) => ev.push({ t: t + beat * BEAT, dur: (4 / beats.length) * BEAT, deg: tt[beat ? tt.length - 1 : 0], vel: 0.28, voice: vk, st: beat ? null : st(), li }));
-        if (L >= 3) ev.push({ t: t + 3 * BEAT, dur: BEAT, deg: Math.min(MAX_DEG, tt[0] + 5), vel: 0.2, voice: vk, st: null, li });
+        // Strong beats, low; a harmonic (泛音) where the phrase closes.
+        skel.forEach(([deg, beats, at], i) => { if (at === 0 || at === 2 || (L >= 2 && at % 1 === 0)) put(at, Math.max(1, beats), deg - 5, 0.32, at === 0); });
+        if (cad) put(2, 2, Math.min(MAX_DEG, skel[skel.length - 1][0] + 5), 0.16, false);
+      } else if (fam === 'bell') {
+        // Where phrases begin and end.
+        if (inPh === 0 || cad || (L >= 2 && inPh === 2)) put(0, 2, skel[0][0], inPh === 0 ? 0.45 : 0.36, true);
+      } else if (fam === 'drum') {
+        if (inPh === 0) put(0, 0.5, 5, 0.5, true);
+        else if (cad) put(0, 0.5, 5, 0.38, true);
+        else if (L >= 2) put(0, 0.5, 5, 0.26, false);
+        if (L >= 3 && (inPh === 0 || cad)) put(2, 0.5, 5, 0.18, false);
       }
     });
-    ev.push({ t, dur: 4 * BEAT, freq: CHORD[HARM[b]][0], vel: 0.45, voice: 'bass', st: null, li: -1 });
+    // The lowest voice follows the bones too (strong beats, an octave below 弹拨).
+    skel.forEach(([deg, beats, at]) => { if (at === 0 || at === 2) ev.push({ t: t + at * BEAT, dur: Math.max(1, beats) * BEAT, freq: degFreq(deg) / 2, vel: 0.32, voice: 'bass', st: null, li: -1 }); });
     return k;
   }
   // Who plays in phrase p of P: collected eras join in time order; one voice per family (the
@@ -833,16 +844,17 @@ function init(container, data, cb) {
         for (let b = ph * 4; b < ph * 4 + 4; b++) { k = ensembleBar(ev, b, t, L.lead, L.parts, k, L.lv); t += 4 * BEAT; }
         for (let j = from; j < ev.length; j++) ev[j].vel *= perf.dyn[p] || 1;
       });
-      // 今: every voice on the home chord together, your strings strummed over it.
+      // 今: everyone lands on 宫 together, in octaves; your strings answer with 宫 and 徵.
       lay.push({ t, li: N, act: L.act });
+      const FINAL = { pluck: 5, bow: 5, qin: 5, wind: 10, bell: 10, drum: 5 };
       (L.lead >= 0 ? [L.lead] : []).concat(L.parts).forEach((li, n) => {
-        const d = [10, 8, 7, 5, 12, 13][n % 6];
-        ev.push({ t: t + n * 0.03, dur: 2.6, deg: d, vel: famOf(li) === 'drum' ? 0.35 : 0.5, voice: voiceOf(li), st: null, li });
+        ev.push({ t: t + n * 0.02, dur: 2.6, deg: li === L.lead ? 10 : FINAL[famOf(li)], vel: famOf(li) === 'drum' ? 0.35 : 0.5, voice: voiceOf(li), st: null, li });
+        if (famOf(li) === 'qin') ev.push({ t: t + 0.4, dur: 2.2, deg: 15, vel: 0.16, voice: 'qin', st: null, li });
       });
-      const order = strings.slice().sort((a, b) => a.note - b.note), chord = [5, 7, 8, 10, 12, 13];
-      const n = Math.max(3, Math.min(chord.length, order.length || 3));
-      for (let j = 0; j < n; j++) ev.push({ t: t + 0.12 + j * 0.07, dur: 2.5, deg: chord[j], vel: 0.75, voice: 'ks', st: order.length ? order[j % order.length] : null, li: -1 });
-      ev.push({ t, dur: 3, freq: G2, vel: 0.5, voice: 'bass', st: null, li: -1 });
+      const order = strings.slice().sort((a, b) => a.note - b.note), close = [5, 8, 10, 13, 15];
+      const n = Math.max(3, Math.min(close.length, order.length || 3));
+      for (let j = 0; j < n; j++) ev.push({ t: t + 0.14 + j * 0.08, dur: 2.5, deg: close[j], vel: 0.7, voice: 'ks', st: order.length ? order[j % order.length] : null, li: -1 });
+      ev.push({ t, dur: 3, freq: G2 / 2, vel: 0.4, voice: 'bass', st: null, li: -1 });
       ev.sort((a, b) => a.t - b.t);
       return { ev, lay, dur: t + 3.6, mul: perf.mul };
     }
@@ -862,7 +874,7 @@ function init(container, data, cb) {
     const c = compose(F == null ? state.focus : F, o), sr = 44100;
     if (o.noBass) c.ev = c.ev.filter((e) => e.voice !== 'bass');
     // o.stats: just describe the score (notes, distinct instruments, seconds).
-    if (o.stats) return { notes: c.ev.filter((e) => e.voice !== 'bass').length, voices: new Set(c.ev.map((e) => e.voice)).size - 1, seconds: Math.round(c.dur), semis: perf.semis, beat: Math.round(BEAT * 1000) / 1000, heads: perf.heads.join(''), lift: perf.lift.map((x) => (x ? 1 : 0)).join(''), pluck: perf.plk };
+    if (o.stats) return { notes: c.ev.filter((e) => e.voice !== 'bass').length, voices: new Set(c.ev.map((e) => e.voice)).size - 1, seconds: Math.round(c.dur), semis: perf.semis, beat: Math.round(BEAT * 1000) / 1000, heads: perf.heads.join(''), lift: perf.lift.map((x) => (x ? 1 : 0)).join('') };
     const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
     const oc = new OAC(2, Math.ceil((c.dur + 1) * sr), sr), dest = makeGraph(oc);
     c.ev.forEach((e) => stringSound(e.deg, e.vel, panOf(e.st), 0.1 + e.t, e.voice, { dur: e.dur, freq: e.freq, mul: c.mul, ac: oc, dest }));
