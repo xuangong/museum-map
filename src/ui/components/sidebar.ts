@@ -101,6 +101,24 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
       </button>
     </template>
   </div>
+  <div class="ach-wrap">
+    <div class="ach-head"><span>成就</span><small x-text="achGroups().reduce(function(s, g){ return s + g.done; }, 0) + ' / ' + achCatalog.length"></small></div>
+    <template x-for="g in achGroups()" :key="g.line">
+      <div class="ach-group">
+        <div class="ach-group-title"><span x-text="g.title"></span><small x-text="g.done + ' / ' + g.items.length"></small></div>
+        <div class="ach-grid">
+          <template x-for="it in g.items" :key="it.a.id">
+            <button class="ach-card" :class="'lv' + it.level + ' line-' + it.a.line" @click="openAch(it.a.id)">
+              <span class="ach-seal" :class="'lv' + it.level + ' line-' + it.a.line" x-text="it.a.seal"></span>
+              <span class="ach-name" x-text="it.a.name"></span>
+              <span class="ach-bar"><i :style="'width:' + Math.min(100, Math.round(100 * it.r.have / (it.r.total || 1))) + '%'"></i><b x-show="it.r.reach < it.r.total" :style="'left:' + Math.round(100 * it.r.reach / (it.r.total || 1)) + '%'"></b></span>
+              <span class="ach-status" x-text="achStatus(it.a.id)"></span>
+            </button>
+          </template>
+        </div>
+      </div>
+    </template>
+  </div>
   <p class="hero-note" x-show="!visits.ids.length">集章册还是空的。打开任意一座博物馆，点「盖章打卡」——每座馆都有自己的一枚印。</p>
 
   <div class="review-block" x-show="visits.ids.length">

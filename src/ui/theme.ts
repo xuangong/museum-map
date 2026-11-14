@@ -2068,4 +2068,60 @@ path.route-corridor { stroke: var(--gilt); }
     transition-duration: 0.01ms !important;
   }
 }
+
+/* 打卡成就 */
+.ach-wrap { margin-top: 22px; min-width: 0; }
+.ach-head { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--serif); font-weight: 600; font-size: 17px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.ach-head small, .ach-group-title small { font-family: var(--mono); font-weight: 400; font-size: 11.5px; color: var(--text-3); }
+.ach-group { margin-top: 14px; }
+.ach-group-title { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-2); margin-bottom: 8px; }
+.ach-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.ach-card { display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto auto; gap: 3px 9px; align-items: center; text-align: left; padding: 9px 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; min-width: 0; }
+.ach-card .ach-seal { grid-row: 1 / 4; }
+.ach-card .ach-name { font-size: 13.5px; font-weight: 600; overflow-wrap: anywhere; }
+.ach-card .ach-status { font-size: 11px; color: var(--text-3); overflow-wrap: anywhere; }
+.ach-card.lv0 { opacity: 0.82; }
+.ach-seal { flex: none; width: 38px; height: 38px; display: grid; place-items: center; font-family: var(--serif); font-weight: 700; font-size: 12px; line-height: 1.05; letter-spacing: 0.02em; color: var(--text-4); border: 1.5px dashed var(--line-strong); border-radius: 6px; writing-mode: vertical-rl; }
+.ach-seal.line-region { border-radius: 50%; }
+.ach-seal.line-era { width: 30px; height: 46px; border-radius: 5px; }
+.ach-seal.lv1, .ach-seal.lv2 { color: #FFF2E8; background: var(--seal); border: 1.5px solid var(--seal); }
+.ach-seal.lv2 { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--gilt); }
+.ach-seal.big { width: 58px; height: 58px; font-size: 16px; }
+.ach-seal.big.line-era { width: 44px; height: 68px; }
+.ach-bar { position: relative; display: block; height: 4px; border-radius: 4px; background: var(--line); overflow: visible; }
+.ach-bar i { position: absolute; inset: 0 auto 0 0; border-radius: 4px; background: var(--seal); }
+.ach-bar b { position: absolute; top: -3px; width: 1.5px; height: 10px; background: var(--text-3); }
+.ach-bar.big { height: 6px; margin: 14px 0 6px; }
+.ach-overlay { position: fixed; inset: 0; z-index: 2100; background: rgba(0,0,0,0.28); }
+.ach-sheet { position: fixed; z-index: 2110; left: 50%; bottom: 0; transform: translateX(-50%); width: min(560px, 100vw); max-height: 86dvh; overflow-y: auto; box-sizing: border-box; padding: 18px 22px calc(22px + env(safe-area-inset-bottom)); background: var(--bg); color: var(--text); border-radius: 22px 22px 0 0; border: 1px solid var(--line-strong); box-shadow: 0 -24px 60px -30px var(--sh-95); overflow-wrap: anywhere; }
+.ach-sheet-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 14px; align-items: center; }
+.ach-sheet h2 { margin: 2px 0; font-family: var(--serif); font-size: 22px; }
+.ach-sheet h3 { margin: 18px 0 6px; font-size: 13px; color: var(--text-2); font-weight: 600; }
+.ach-sheet .ach-status { font-size: 12px; color: var(--text-3); }
+.ach-kicker { font-family: var(--mono); font-size: 11px; color: var(--text-3); letter-spacing: 0.08em; }
+.ach-hook { margin: 12px 0 0; font-family: var(--serif); font-size: 16px; }
+.ach-count { font-family: var(--mono); font-size: 11.5px; color: var(--text-3); }
+.ach-list { list-style: none; margin: 0; padding: 0; }
+.ach-list li button { display: flex; width: 100%; gap: 8px; align-items: center; justify-content: space-between; padding: 8px 0; border: 0; border-bottom: 1px solid var(--line); background: none; color: var(--text); text-align: left; cursor: pointer; font-size: 14px; overflow-wrap: anywhere; }
+.ach-list li.done button { justify-content: flex-start; color: var(--text-2); }
+.ach-list small { color: var(--text-3); font-size: 11.5px; text-align: right; flex: none; max-width: 45%; }
+.ach-label { font-family: var(--serif); line-height: 1.85; }
+.ach-label.locked { color: var(--text-3); }
+.ach-locked-note { font-size: 11.5px; color: var(--text-4); margin-top: -4px; }
+.ach-ceremony { position: fixed; inset: 0; z-index: 2200; display: grid; place-items: center; background: rgba(0,0,0,0.42); padding: 24px; box-sizing: border-box; }
+.ach-ceremony-card { box-sizing: border-box; width: min(360px, 100%); max-height: 100%; overflow-y: auto; text-align: center; padding: 28px 24px 22px; background: var(--bg); color: var(--text); border-radius: 22px; border: 1px solid var(--line-strong); overflow-wrap: anywhere; }
+.ach-ceremony-kicker { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.18em; color: var(--seal-ink-strong); }
+.ach-ceremony-card h2 { font-family: var(--serif); margin: 14px 0 6px; }
+.ach-ceremony-card p { color: var(--text-2); margin: 0 0 18px; }
+.ach-ceremony-card .ach-seal { margin: 18px auto 0; width: 84px; height: 84px; font-size: 22px; }
+.ach-ceremony-card .ach-seal.line-era { width: 62px; height: 96px; }
+.ach-seal.stamp { animation: ach-stamp 0.7s cubic-bezier(.2,1.6,.4,1) both; }
+@keyframes ach-stamp { 0% { transform: scale(2.4) rotate(-14deg); opacity: 0; } 55% { transform: scale(0.92) rotate(3deg); opacity: 1; } 100% { transform: scale(1) rotate(-4deg); } }
+.ach-ceremony-actions { display: flex; gap: 10px; justify-content: center; }
+@media (max-width: 640px) {
+  .ach-sheet { padding: 16px 16px calc(20px + env(safe-area-inset-bottom)); max-height: 88dvh; }
+  .ach-ceremony { padding: 16px; }
+  .ach-ceremony-card { padding: 24px 18px 18px; }
+}
+@media (prefers-reduced-motion: reduce) { .ach-seal.stamp { animation: none; } }
 `

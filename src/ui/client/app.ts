@@ -1334,6 +1334,12 @@ window.museumApp = function() {
 
     openAch(id) { this.ach.sheetId = id; },
     closeAch() { this.ach.sheetId = null; },
+    /** Jump from the sheet to a museum or a dynasty layer (the sheet sits above the drawer, so close it first). */
+    achGo(x) {
+      if (!x) return;
+      if (x.kind === 'museum' && x.id) { this.closeAch(); this.openMuseum(x.id); }
+      else if (x.kind === 'layer' && x.id) { this.closeAch(); this.selectDynasty(x.id); }
+    },
 
     /** Recommendation chips from achievements for one museum (max 2, completing ones first). */
     achChips(m) {

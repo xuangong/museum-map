@@ -56,19 +56,6 @@ function glowTexture() {
   return t;
 }
 
-// A seal ring around a dot — marks your museums that stand on the era's own ground (原址).
-function ringTexture() {
-  const c = document.createElement('canvas'); c.width = c.height = 64;
-  const g = c.getContext('2d');
-  g.strokeStyle = 'rgba(255,255,255,0.22)'; g.lineWidth = 11;
-  g.beginPath(); g.arc(32, 32, 23, 0, Math.PI * 2); g.stroke();
-  g.strokeStyle = 'rgba(255,255,255,1)'; g.lineWidth = 4.5;
-  g.beginPath(); g.arc(32, 32, 23, 0, Math.PI * 2); g.stroke();
-  const t = new THREE.CanvasTexture(c);
-  t.colorSpace = THREE.SRGBColorSpace;
-  return t;
-}
-
 // ── 琴弦 sound: a warm plucked string (Karplus–Strong), tuned to 宫商角徵羽 ──
 // Pitches are degrees of a pentatonic ladder (5 per octave) above G2. Longer strings reach
 // deeper into history and sound lower; stopping a string at an era (its 徽) shortens it.
@@ -528,14 +515,6 @@ function init(container, data, cb) {
   dGeom.setAttribute('kk', new THREE.BufferAttribute(dK, 1));
   dGeom.setAttribute('size', new THREE.BufferAttribute(dSize, 1));
   const dPoints = new THREE.Points(dGeom, pointsMaterial(tex)); dPoints.renderOrder = 8; world.add(dPoints);
-  // Seal rings share the dots' positions; only your on-site (原址) dots light one.
-  const rTint = new Float32Array(dots.length * 3), rK = new Float32Array(dots.length), rSize = new Float32Array(dots.length);
-  const rGeom = new THREE.BufferGeometry();
-  rGeom.setAttribute('position', dGeom.getAttribute('position'));
-  rGeom.setAttribute('tint', new THREE.BufferAttribute(rTint, 3));
-  rGeom.setAttribute('kk', new THREE.BufferAttribute(rK, 1));
-  rGeom.setAttribute('size', new THREE.BufferAttribute(rSize, 1));
-  const rPoints = new THREE.Points(rGeom, pointsMaterial(ringTexture())); rPoints.renderOrder = 8; world.add(rPoints);
 
   // ── 琴弦: your beams are strings — strum across them, hear the eras they hold ──
   const SP = 36;   // points along a string
@@ -578,7 +557,7 @@ function init(container, data, cb) {
     overlay.classList.toggle('has-strings', strings.length > 0);
     if (play) stopPlay();
     paintPlay();
-    hint.textContent = strings.length ? '拨动红色琴弦，听你走过的朝代' : '拖动旋转 · 双指缩放 · 点地层看朝代 · 点光点看博物馆';
+    hint.textContent = strings.length ? '按住红色琴弦拨动 · 拖动旋转 · 右键或双指平移' : '拖动旋转 · 右键或双指平移 · 滚轮缩放 · 点光点看博物馆';
   }
   // The note a string gives when stopped at era 'li' (its 徽): the shorter the sounding part,
   // the higher. Open (li < 0) is the whole string.
@@ -1152,7 +1131,7 @@ function init(container, data, cb) {
       S.needs = true;
     });
   }
-  const hint = el('div', 'strata-hint', '拖动旋转 · 双指缩放 · 点地层看朝代 · 点光点看博物馆'); overlay.appendChild(hint);
+  const hint = el('div', 'strata-hint', '拖动旋转 · 右键或双指平移 · 滚轮缩放 · 点光点看博物馆'); overlay.appendChild(hint);
   const soundBtn = el('button', 'strata-sound');
   soundBtn.type = 'button';
   const paintSound = () => {
@@ -1463,20 +1442,16 @@ function init(container, data, cb) {
           col = v ? COL.seal : (d.onSite ? COL.giltHi : COL.gilt);
           k = v ? 1.3 : d.onSite ? 1.4 : 1.05; size = d.onSite ? (v ? 20 : 22) : (v ? 16 : 14);
         } else k = 0;
-      } else if (v) { col = COL.seal; k = 1.0; size = d.onSite ? 13 : 10; }
-      // Your on-site dots wear a seal ring.
-      let rk = v && d.onSite && k > 0 ? Math.min(1.1, k) : 0;
+      } else if (v) { col = COL.seal; k = 1.0; size = 10; }
       if (H >= 0) {
-        if (d.m === H) { k = Math.max(k, 1.4); size = Math.max(size, d.onSite ? 20 : 17); if (!v && !c) col = COL.giltHi; }
-        else { k *= 0.2; rk *= 0.2; }
+        if (d.m === H) { k = Math.max(k, 1.4); size = Math.max(size, 17); if (!v && !c) col = COL.giltHi; }
+        else k *= 0.2;
       }
-      if (sel && (F < 0 || d.layer === F)) { col = COL.giltHi; k = d.onSite ? 1.6 : 1.3; size = d.onSite ? 24 : 18; rk = 0; }
+      if (sel && (F < 0 || d.layer === F)) { col = COL.giltHi; k = 1.3; size = 18; }
       setTint(dTint, dK, i, col, k); dSize[i] = size;
-      setTint(rTint, rK, i, COL.seal, rk); rSize[i] = size * 1.7;
     });
     dKBase.set(dK); dSizeBase.set(dSize);
     dGeom.attributes.tint.needsUpdate = true; dGeom.attributes.kk.needsUpdate = true; dGeom.attributes.size.needsUpdate = true;
-    rGeom.attributes.tint.needsUpdate = true; rGeom.attributes.kk.needsUpdate = true; rGeom.attributes.size.needsUpdate = true;
 
     sites.forEach((s, i) => {
       let c = s.s.role === 'culture' ? COL.patina : COL.gilt;
@@ -1572,58 +1547,94 @@ function init(container, data, cb) {
     return best;
   }
   function localXY(e) { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+  // Pan: slide the view (screen right/left moves across the map, up/down moves through time).
+  function panBy(dx, dy) {
+    const k = 2 * cam.dist * halfTan / Math.max(1, canvas.clientHeight);
+    to.tx -= dx * k * Math.cos(cam.az); to.tz += dx * k * Math.sin(cam.az);
+    to.ty += dy * k;
+    const lim = 9;
+    to.tx = Math.max(-lim, Math.min(lim, to.tx)); to.tz = Math.max(-lim, Math.min(lim, to.tz));
+    to.ty = Math.max(-H * ys * 0.2, Math.min(H * ys * 1.3, to.ty));
+    cam.tx = to.tx; cam.ty = to.ty; cam.tz = to.tz;
+    lastInteract = performance.now(); S.needs = true;
+  }
+  const MIN_ZOOM = 0.12, MAX_ZOOM = 1.8;
+  canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+  // Lost after panning and zooming? Double-click (double-tap) returns to the framed view.
+  canvas.addEventListener('dblclick', (e) => { e.preventDefault(); applyFocus(false); lastInteract = performance.now(); S.needs = true; });
   canvas.addEventListener('pointerdown', (e) => {
     canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId, localXY(e));
     lastInteract = performance.now(); hint.classList.add('is-gone');
-    if (pointers.size === 1) { const p = localXY(e); drag = { x: p.x, y: p.y, sx: p.x, sy: p.y, t: performance.now(), moved: false }; }
-    if (pointers.size === 2) { const ps = Array.from(pointers.values()); pinch = { d: Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y), dist: to.dist }; drag = null; }
+    if (pointers.size === 1) {
+      const p = localXY(e), mouse = e.pointerType === 'mouse';
+      // Press a string to play it (drag along to strum); press anywhere else to turn the model.
+      // A museum dot wins over a string: tapping it opens the museum.
+      let mode = 'turn';
+      if (mouse && (e.button === 2 || e.shiftKey)) mode = 'pan';
+      else if (state.focus < 0 && strings.length && pickMuseum(p.x, p.y, mouse ? 16 : 28) < 0) {
+        const st = nearestString(p, mouse ? 10 : 20);
+        if (st) { mode = 'strum'; if (soundOn) audioCtx(); pluck(st, 1.1, p.x); }
+      }
+      drag = { x: p.x, y: p.y, sx: p.x, sy: p.y, t: performance.now(), moved: false, mode: mode };
+      canvas.style.cursor = mode === 'pan' ? 'move' : mode === 'strum' ? 'pointer' : 'grabbing';
+    }
+    if (pointers.size === 2) {
+      const ps = Array.from(pointers.values());
+      pinch = { d: Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y), dist: to.dist, mx: (ps[0].x + ps[1].x) / 2, my: (ps[0].y + ps[1].y) / 2 };
+      drag = null;
+    }
   });
   let lastPtr = null;
-  canvas.addEventListener('pointerdown', () => { if (soundOn && strings.length) audioCtx(); });
   document.addEventListener('visibilitychange', () => { if (document.hidden) stopPlay(); });
   canvas.addEventListener('pointermove', (e) => {
     const p = localXY(e);
     if (pointers.has(e.pointerId)) pointers.set(e.pointerId, p);
     const nowP = performance.now(), lp = lastPtr;
     lastPtr = { x: p.x, y: p.y, t: nowP };
-    if (lp && nowP - lp.t < 120 && pointers.size < 2) {
-      const speed = Math.hypot(p.x - lp.x, p.y - lp.y) / Math.max(8, nowP - lp.t);
-      strum(lp, p, Math.min(1.3, 0.35 + speed * 0.9) * (e.pointerType === 'mouse' && !e.buttons ? 0.6 : 1));
-    }
     if (pinch && pointers.size === 2) {
+      // Two fingers: spread to zoom, move together to pan.
       const ps = Array.from(pointers.values());
       const d = Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y);
-      to.dist = Math.max(baseDist * 0.35, Math.min(baseDist * 1.8, pinch.dist * pinch.d / Math.max(1, d)));
-      lastInteract = performance.now(); S.needs = true; return;
+      const mx = (ps[0].x + ps[1].x) / 2, my = (ps[0].y + ps[1].y) / 2;
+      to.dist = Math.max(baseDist * MIN_ZOOM, Math.min(baseDist * MAX_ZOOM, pinch.dist * pinch.d / Math.max(1, d)));
+      panBy(mx - pinch.mx, my - pinch.my);
+      pinch.mx = mx; pinch.my = my;
+      return;
     }
     if (drag) {
       const dx = p.x - drag.x, dy = p.y - drag.y;
       if (Math.abs(p.x - drag.sx) + Math.abs(p.y - drag.sy) > 6) drag.moved = true;
-      to.az -= dx * 0.0065; to.el = Math.max(0.1, Math.min(1.35, to.el + dy * 0.004));
-      cam.az = to.az;
+      if (drag.mode === 'strum') {
+        if (lp && nowP - lp.t < 120) {
+          const speed = Math.hypot(p.x - lp.x, p.y - lp.y) / Math.max(8, nowP - lp.t);
+          strum(lp, p, Math.min(1.3, 0.35 + speed * 0.9));
+        }
+      } else if (drag.mode === 'pan') panBy(dx, dy);
+      else {
+        to.az -= dx * 0.0065; to.el = Math.max(0.1, Math.min(1.35, to.el + dy * 0.004));
+        cam.az = to.az;
+      }
       drag.x = p.x; drag.y = p.y; lastInteract = performance.now(); S.needs = true;
       return;
     }
     if (e.pointerType === 'mouse') {
       const i = pickMuseum(p.x, p.y, 14);
       // A just-plucked string keeps its name up for a moment.
-      if (i !== hoverIdx && (i >= 0 || nowP > tagHoldUntil)) { hoverIdx = i; canvas.style.cursor = i >= 0 ? 'pointer' : 'grab'; S.needs = true; }
+      if (i !== hoverIdx && (i >= 0 || nowP > tagHoldUntil)) { hoverIdx = i; S.needs = true; }
+      const onString = i < 0 && state.focus < 0 && strings.length && nearestString(p, 10);
+      canvas.style.cursor = i >= 0 || onString ? 'pointer' : 'grab';
     }
   });
   function end(e) {
     const wasDrag = drag;
     pointers.delete(e.pointerId);
     if (pointers.size < 2) pinch = null;
-    if (pointers.size === 0) drag = null;
-    if (wasDrag && !wasDrag.moved && performance.now() - wasDrag.t < 400) {
+    if (pointers.size === 0) { drag = null; canvas.style.cursor = 'grab'; }
+    if (wasDrag && wasDrag.mode === 'turn' && !wasDrag.moved && performance.now() - wasDrag.t < 400) {
       const p = localXY(e);
       const i = pickMuseum(p.x, p.y, e.pointerType === 'mouse' ? 16 : 28);
       if (i >= 0 && cb.onMuseum) cb.onMuseum(museums[i].id);
-      else if (i < 0 && state.focus < 0) {
-        const st = nearestString(p, e.pointerType === 'mouse' ? 12 : 22);
-        if (st) pluck(st, 1.1, p.x);
-      }
     }
   }
   canvas.addEventListener('pointerup', end);
@@ -1631,7 +1642,9 @@ function init(container, data, cb) {
   canvas.addEventListener('pointerleave', () => { lastPtr = null; if (hoverIdx >= 0 && performance.now() > tagHoldUntil) { hoverIdx = -1; S.needs = true; } });
   canvas.addEventListener('wheel', (e) => {
     e.preventDefault();
-    to.dist = Math.max(baseDist * 0.35, Math.min(baseDist * 1.8, to.dist * Math.exp(e.deltaY * 0.0012)));
+    // Trackpad two-finger scroll (no ctrl) pans; pinch (ctrlKey) and mouse wheels zoom.
+    if (!e.ctrlKey && e.deltaMode === 0 && Math.abs(e.deltaX) > Math.abs(e.deltaY) * 0.5 && Math.abs(e.deltaX) > 1) { panBy(-e.deltaX, -e.deltaY); return; }
+    to.dist = Math.max(baseDist * MIN_ZOOM, Math.min(baseDist * MAX_ZOOM, to.dist * Math.exp(e.deltaY * (e.ctrlKey ? 0.01 : 0.0012))));
     lastInteract = performance.now(); S.needs = true;
   }, { passive: false });
 
@@ -1825,7 +1838,7 @@ function init(container, data, cb) {
     // Dark halls add light to the colour only, leaving the canvas alpha alone. Plain additive
     // blending also adds alpha, so on this transparent canvas a switched-off (black) beam or
     // point would composite as an opaque black line over the hall's background (青绿 showed it).
-    [sitePoints, mPoints, dPoints, rPoints, tube, tubeGlow, chains, beams, stringMesh].concat(pulses).forEach((o) => {
+    [sitePoints, mPoints, dPoints, tube, tubeGlow, chains, beams, stringMesh].concat(pulses).forEach((o) => {
       const m = o.material;
       if (PAL.ink) { m.blending = THREE.NormalBlending; return; }
       m.blending = THREE.CustomBlending;
@@ -1833,7 +1846,7 @@ function init(container, data, cb) {
       m.blendSrc = THREE.SrcAlphaFactor; m.blendDst = THREE.OneFactor;
       m.blendSrcAlpha = THREE.ZeroFactor; m.blendDstAlpha = THREE.OneFactor;
     });
-    [sitePoints, mPoints, dPoints, rPoints].forEach((p) => { p.material.uniforms.ink.value = PAL.ink ? 1 : 0; });
+    [sitePoints, mPoints, dPoints].forEach((p) => { p.material.uniforms.ink.value = PAL.ink ? 1 : 0; });
     layers.concat([top]).forEach((L) => {
       L.outline.material.color.copy(COL.line); L.river.material.color.copy(COL.river);
       if (L.tLine) L.tLine.material.color.copy(COL.line);
