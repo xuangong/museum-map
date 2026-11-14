@@ -680,7 +680,11 @@ function init(container, data, cb) {
     perf.dyn = [0.88, 0.94, 1, 1.06, 0.98, 1.04].map((d) => d + (rnd() - 0.5) * 0.06);
   }
   // Bar b as this performance plays it (its opening may be swapped).
-  function barMel(b) { const ph = Math.floor(b / 4); return b % 4 === 0 && perf.heads[ph] ? HEADS[ph][perf.heads[ph] - 1] : MELODY[b]; }
+  function barMel(b) {
+    if (b >= 100) return QUOTE_BARS[b - 100];
+    const ph = Math.floor(b / 4);
+    return b % 4 === 0 && perf.heads[ph] ? HEADS[ph][perf.heads[ph] - 1] : MELODY[b];
+  }
   // [degree, beats]; degree 5 = G3 (宫) … 13 = D5. Phrase ends → next phrase starts:
   // 9→9, 10→10, 10→10, 9→9 (鱼咬尾); the tune closes A → G (商 → 宫).
   const MELODY = [
@@ -691,6 +695,20 @@ function init(container, data, cb) {
     [[9, 2], [10, 1], [8, 1]], [[9, 1], [8, 1], [7, 1], [6, 1]], [[7, 1], [8, 1], [7, 1], [6, 1]], [[5, 4]],
   ];
   const G2 = 98;
+  // 名曲: when you have collected an era that has one, a phrase of its real tune is woven in
+  // (before the closing phrase, in era order), led by that era's instrument where it can carry
+  // a melody. Only tunes whose notation we could verify; written in the same G pentatonic.
+  //   茉莉花 — 19th-c. 鲜花调, from a public-domain transcription (Wikimedia Commons
+  //   File:Maturika.mid, D major → G): 3 35 6 i6 | 5. 6 5 - (sung twice).
+  const QUOTES = {
+    qing: { name: '茉莉花', note: '清代江南民歌（鲜花调）', bars: [
+      [[7, 1], [7, 0.5], [8, 0.5], [9, 1], [10, 0.5], [9, 0.5]], [[8, 1.5], [9, 0.5], [8, 2]],
+      [[7, 1], [7, 0.5], [8, 0.5], [9, 1], [10, 0.5], [9, 0.5]], [[8, 1.5], [9, 0.5], [8, 2]],
+    ] },
+  };
+  const QUOTE_BARS = [], QUOTE_AT = {};
+  Object.keys(QUOTES).forEach((id) => { QUOTE_AT[id] = 100 + QUOTE_BARS.length; QUOTE_BARS.push(...QUOTES[id].bars); });
+  function quoteOf(li) { return li >= 0 && li < N ? QUOTES[layers[li].id] || null : null; }
   const FAMILY = { qing: 'bell', tongqing: 'bell', nao: 'bell', zhong: 'bell', tonggu: 'drum', zhu: 'pluck', se: 'pluck', pipa: 'pluck', qin: 'qin', gudi: 'wind', paixiao: 'wind', di: 'wind', guan: 'wind', huqin: 'bow', ks: 'pluck' };
   const LEADS = ['wind', 'pluck', 'bow', 'qin'];
   function stringsAt(li) { return strings.filter((st) => museums[st.m].links.indexOf(li) >= 0); }
@@ -837,9 +855,38 @@ function init(container, data, cb) {
         return { ev, lay, dur: t + 2.4, mul: perf.mul };
       }
       let L = null;
-      form.forEach((ph, p) => {
-        const reprise = p === P - 1 && P === 6, from = ev.length;
+      // The form, with each collected era's 名曲 placed after the phrases of its time (never
+      // after the closing phrase — those go just before it).
+      const items = form.map((ph, p) => ({ ph, p }));
+      col.filter((li) => quoteOf(li)).forEach((q) => {
+        const band = Math.floor(barOf(q) / 4);
+        let at = items.length - 1;
+        for (let i = 0; i < items.length - 1; i++) if (items[i].ph != null && items[i].ph <= band) at = i + 1;
+        items.splice(Math.min(at, items.length - 1), 0, { q });
+      });
+      let lastP = 0;
+      items.forEach((it) => {
+        const from = ev.length;
+        if (it.q != null) {
+          // The quote: the era's own instrument leads if it carries a tune; otherwise it plays
+          // its part and the current lead sings the tune.
+          const base = lineup(col, lastP, P, false, L ? L.lead : null), q = it.q;
+          const melodic = LEADS.indexOf(famOf(q)) >= 0;
+          const parts = base.parts.filter((li) => famOf(li) !== famOf(q) && li !== q);
+          let lead = base.lead;
+          if (melodic) { if (lead >= 0 && lead !== q) parts.push(lead); lead = q; }
+          else parts.push(q);
+          const act = base.act.indexOf(q) >= 0 ? base.act : base.act.concat([q]);
+          L = { act, lead, parts: parts.filter((li) => li !== lead), lv: base.lv, show: q };
+          if (L.lv[q] == null) L.lv[q] = 1;
+          lay.push({ t, li: q, act, quote: quoteOf(q) });
+          for (let b = QUOTE_AT[layers[q].id]; b < QUOTE_AT[layers[q].id] + 4; b++) { k = ensembleBar(ev, b, t, L.lead, L.parts, k, L.lv); t += 4 * BEAT; }
+          for (let j = from; j < ev.length; j++) ev[j].vel *= perf.dyn[lastP] || 1;
+          return;
+        }
+        const ph = it.ph, p = it.p, reprise = p === P - 1 && P === 6;
         L = lineup(col, Math.min(p, P - 1), P, reprise, L ? L.lead : null);
+        lastP = p;
         lay.push({ t, li: L.show, act: L.act });
         for (let b = ph * 4; b < ph * 4 + 4; b++) { k = ensembleBar(ev, b, t, L.lead, L.parts, k, L.lv); t += 4 * BEAT; }
         for (let j = from; j < ev.length; j++) ev[j].vel *= perf.dyn[p] || 1;
@@ -859,19 +906,28 @@ function init(container, data, cb) {
       return { ev, lay, dur: t + 3.6, mul: perf.mul };
     }
     // One era: its phrase, its instrument leading, the same instrument answering in its family part.
-    const here = stringsAt(F), b0 = Math.floor(barOf(F) / 4) * 4;
-    lay.push({ t: 0, li: F, rest: !here.length, act: [F] });
+    const here = stringsAt(F), qF = quoteOf(F), b0 = qF ? QUOTE_AT[layers[F].id] : Math.floor(barOf(F) / 4) * 4;
+    lay.push({ t: 0, li: F, rest: !here.length, act: [F], quote: qF });
     const drum = famOf(F) === 'drum';
     const lvF = { [F]: Math.max(1, Math.min(3, here.length)) };
-    for (let b = b0; b < b0 + 4 && b < MELODY.length; b++) { k = ensembleBar(ev, b, t, drum ? -1 : F, drum || (b > b0 && famOf(F) !== 'wind') ? [F] : [], k, lvF); t += 4 * BEAT; }
+    // A 名曲 on a struck instrument: your strings sing it, the era's bronze or stone marks it.
+    const tuneOnStrings = drum || (qF && LEADS.indexOf(famOf(F)) < 0);
+    for (let b = b0; b < b0 + 4 && (b < MELODY.length || b >= 100); b++) { k = ensembleBar(ev, b, t, tuneOnStrings ? -1 : F, tuneOnStrings || (b > b0 && famOf(F) !== 'wind') ? [F] : [], k, lvF); t += 4 * BEAT; }
     ev.sort((a, b) => a.t - b.t);
     return { ev, lay, dur: t + 2.4, mul: perf.mul };
   }
   // The same performance rendered offline, as WAV bytes (F: era index, or -1 for all strata).
   // o.noBass leaves out the bass line (for comparing by ear).
+  // A thin ensemble (1–3 instruments) would sound quieter than a full one; even it out.
+  function balance(c) {
+    const n = new Set(c.ev.filter((e) => e.voice !== 'bass').map((e) => e.voice)).size;
+    const g = n <= 2 ? 1.45 : n === 3 ? 1.2 : 1;
+    if (g !== 1) c.ev.forEach((e) => { e.vel *= g; });
+    return c;
+  }
   async function renderTune(F, o) {
     o = o || {};
-    const c = compose(F == null ? state.focus : F, o), sr = 44100;
+    const c = balance(compose(F == null ? state.focus : F, o)), sr = 44100;
     if (o.noBass) c.ev = c.ev.filter((e) => e.voice !== 'bass');
     // o.stats: just describe the score (notes, distinct instruments, seconds).
     if (o.stats) return { notes: c.ev.filter((e) => e.voice !== 'bass').length, voices: new Set(c.ev.map((e) => e.voice)).size - 1, seconds: Math.round(c.dur), semis: perf.semis, beat: Math.round(BEAT * 1000) / 1000, heads: perf.heads.join(''), lift: perf.lift.map((x) => (x ? 1 : 0)).join('') };
@@ -881,9 +937,9 @@ function init(container, data, cb) {
     return wavBytes(await oc.startRendering());
   }
   // li: the era leading now (N = 今); act: every era playing with it.
-  function markPlayLayer(li, rest, act) {
+  function markPlayLayer(li, rest, act, quote) {
     playLayer = li; playRest = !!rest; playAct = new Set(act || []);
-    paintNow(li);
+    paintNow(li, quote);
     layerLabels.forEach((l) => {
       const on = l.layer === li;
       l.el.classList.toggle('is-playing', on); l.el.classList.toggle('is-rest', on && !!rest);
@@ -893,7 +949,7 @@ function init(container, data, cb) {
   }
   function startPlay() {
     const F = state.focus;
-    const c = compose(F);
+    const c = balance(compose(F));
     if (!c.ev.length) return;
     if (!soundOn) { soundOn = true; try { localStorage.setItem('mmStringSound', '1'); } catch (e) {} paintSound(); }
     unlockAudio();
@@ -916,7 +972,7 @@ function init(container, data, cb) {
   function tickPlay() {
     if (!play) return;
     const c = play.audio ? actx.currentTime : performance.now() / 1000;
-    while (play.j < play.lay.length && play.lay[play.j].at <= c + 0.01) { const l = play.lay[play.j++]; markPlayLayer(l.li, l.rest, l.act); }
+    while (play.j < play.lay.length && play.lay[play.j].at <= c + 0.01) { const l = play.lay[play.j++]; markPlayLayer(l.li, l.rest, l.act, l.quote); }
     while (play.i < play.ev.length && play.ev[play.i].at <= c + 0.01) {
       const e = play.ev[play.i++];
       if (e.st) pluck(e.st, e.vel, 0, { li: e.li, scheduled: true });
@@ -1055,11 +1111,12 @@ function init(container, data, cb) {
   const nowCap = el('button', 'strata-now');
   nowCap.type = 'button';
   let nowMuseum = null;
-  function paintNow(li) {
+  function paintNow(li, quote) {
     nowMuseum = null;
     if (li < 0) { nowCap.classList.remove('is-on'); return; }
     let html;
     if (li === N) html = '<b>今</b><span>你的琴弦</span>';
+    else if (quote) html = '<b>《' + esc(quote.name) + '》</b><span>' + esc(quote.note) + ' · ' + esc(layers[li].name) + '</span>';
     else {
       const e = eraOf(li), name = layers[li].name;
       if (!e) html = '<b>' + esc(name) + '</b>';
