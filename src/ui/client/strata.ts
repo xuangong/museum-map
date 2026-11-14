@@ -1557,12 +1557,13 @@ function init(container, data, cb) {
     return ray.intersectObjects(layers.map((L) => L.tFill || L.fill), false).length > 0;
   }
   function pickLayer(p) {
-    if (!onModel(p)) return null;
+    // Reading one era, the other strata are faded ghosts: clicking the model shouldn't jump to them.
+    if (state.focus >= 0 || !onModel(p)) return null;
     let best = null, bd = Infinity;
     layers.forEach((L) => { const s = screenOf(0, L.y, 0); if (s.z > 1) return; const d = Math.abs(s.y - p.y); if (d < bd) { bd = d; best = L; } });
     return best;
   }
-  let pickHover = -1;
+  let pickHover = -1, hoverPickRaf = 0;
   function showPick(L) {
     const i = L ? L.i : -1;
     if (i === pickHover) return;
@@ -1584,7 +1585,8 @@ function init(container, data, cb) {
   const MIN_ZOOM = 0.12, MAX_ZOOM = 1.8;
   canvas.addEventListener('contextmenu', (e) => e.preventDefault());
   // Lost after panning and zooming? Double-click (double-tap) returns to the framed view.
-  canvas.addEventListener('dblclick', (e) => { e.preventDefault(); applyFocus(false); lastInteract = performance.now(); S.needs = true; });
+  let tapTimer = 0;
+  canvas.addEventListener('dblclick', (e) => { e.preventDefault(); clearTimeout(tapTimer); applyFocus(false); lastInteract = performance.now(); S.needs = true; });
   canvas.addEventListener('pointerdown', (e) => {
     canvas.setPointerCapture && canvas.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId, localXY(e));
@@ -1646,8 +1648,12 @@ function init(container, data, cb) {
       // A just-plucked string keeps its name up for a moment.
       if (i !== hoverIdx && (i >= 0 || nowP > tagHoldUntil)) { hoverIdx = i; S.needs = true; }
       const onString = i < 0 && state.focus < 0 && strings.length && nearestString(p, 10);
-      const L = i < 0 && !onString ? pickLayer(p) : null;
-      showPick(L && L.i !== state.focus ? L : null);
+      // Layer hover costs a raycast: at most once per frame.
+      if (i < 0 && !onString && !hoverPickRaf) {
+        hoverPickRaf = requestAnimationFrame(() => { hoverPickRaf = 0; const q = lastPtr; if (q) { const L2 = pickLayer(q); showPick(L2); canvas.style.cursor = L2 ? 'pointer' : canvas.style.cursor; } });
+      }
+      if (i >= 0 || onString) showPick(null);
+      const L = pickHover >= 0 ? layers[pickHover] : null;
       canvas.style.cursor = i >= 0 || onString || L ? 'pointer' : 'grab';
     }
   });
@@ -1657,14 +1663,18 @@ function init(container, data, cb) {
     if (pointers.size < 2) pinch = null;
     if (pointers.size === 0) { drag = null; canvas.style.cursor = 'grab'; }
     if (wasDrag && wasDrag.mode === 'turn' && !wasDrag.moved && performance.now() - wasDrag.t < 400) {
-      const p = localXY(e);
-      const i = pickMuseum(p.x, p.y, e.pointerType === 'mouse' ? 16 : 28);
-      if (i >= 0 && cb.onMuseum) cb.onMuseum(museums[i].id);
-      else if (i < 0 && cb.onDynasty) {
-        // Tap a stratum in the model to read that era (tapping the one you're reading keeps it).
-        const L = pickLayer(p);
-        if (L && L.i !== state.focus) cb.onDynasty(L.id);
-      }
+      const p = localXY(e), mouse = e.pointerType === 'mouse';
+      // Wait a beat: if this turns into a double-click (reset view), the tap does nothing.
+      clearTimeout(tapTimer);
+      tapTimer = setTimeout(() => {
+        const i = pickMuseum(p.x, p.y, mouse ? 16 : 28);
+        if (i >= 0 && cb.onMuseum) cb.onMuseum(museums[i].id);
+        else if (i < 0 && cb.onDynasty) {
+          // Tap a stratum in the model to read that era.
+          const L = pickLayer(p);
+          if (L) cb.onDynasty(L.id);
+        }
+      }, 260);
     }
   }
   canvas.addEventListener('pointerup', end);

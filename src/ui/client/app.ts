@@ -578,7 +578,7 @@ window.museumApp = function() {
       var o = this.ledgerOpt, self = this;
       var near = o.tab === 'near' && !this.isReadOnly;
       var key = [this.visits.ids.join(','), this.museums.length, this.dynasties.length, near ? 1 : 0, o.anchor, o.city, o.radius,
-        this.geo.lat, this.geo.lng, this.tripRouteKey() + '/' + this.trip.radius].join('|');
+        this.geo.lat, this.geo.lng, this.tripRouteKey() + '/' + this.trip.radius, this.achStateKey()].join('|');
       if (__ledger && __ledgerKey === key) return __ledger;
       var visited = {};
       this.visits.ids.forEach(function(id){ visited[id] = true; });
@@ -935,7 +935,7 @@ window.museumApp = function() {
 
     /** Recommended museums grouped by city (transit) or by leg (drive), best first in each. */
     tripAlong() {
-      var t = this.trip, key = [t.mode, this.tripRouteKey(), t.radius, t.picks.join(','), this.visits.ids.join(','), t.route ? t.route.key : '', t.cities.map(function(c){ return c.name + ':' + (c.days || 1); }).join(';')].join('|');
+      var t = this.trip, key = [t.mode, this.tripRouteKey(), t.radius, t.picks.join(','), this.visits.ids.join(','), t.route ? t.route.key : '', t.cities.map(function(c){ return c.name + ':' + (c.days || 1); }).join(';'), this.achStateKey()].join('|');
       if (__tripView && __tripViewKey === key) return __tripView;
       var self = this, held = this.tripHeldEras(), groups = [];
       var ms = this.museums.filter(function(m){ return m.lat != null && (!self.isVisited(m.id) || self.inTrip(m.id)); });
@@ -1240,21 +1240,64 @@ window.museumApp = function() {
     /** Load what's been unlocked before (local or server), then record anything new. */
     async loadAchievements() {
       if (this.isReadOnly) return;
-      var local = {};
-      try { local = JSON.parse(window.localStorage.getItem('mmAch') || '{}') || {}; } catch(_) {}
+      var read = function(k){ try { return JSON.parse(window.localStorage.getItem(k) || '{}') || {}; } catch(_) { return {}; } };
+      var local = read('mmAch');
       if (window.MuseumAuth && window.MuseumAuth.isAuthenticated()) {
+        // Signed in: the account's unlocks come from the server. Anonymous unlocks on this device
+        // move into the account once (then leave the device), and any unlock whose save failed earlier
+        // is retried — so nothing is ever lost and nothing leaks into another account.
+        var pk = this.achPendingKey(), pending = read(pk), merged = {};
         try {
           var res = await fetch('/api/achievements', { credentials: 'same-origin' });
-          var j = res.ok ? await res.json() : { items: {} };
-          var merged = j.items || {}, carry = [];
-          // Bring anonymous unlocks along on first login (and push them to the account).
-          Object.keys(local).forEach(function(k){ if (!merged[k]) { merged[k] = local[k]; carry.push({ id: k, r: local[k].r || 0, c: local[k].c || 0 }); } });
-          this.ach.stored = merged;
-          if (carry.length) fetch('/api/achievements', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: carry }) }).catch(function(){});
-        } catch(_) { this.ach.stored = local; }
+          if (res.ok) merged = (await res.json()).items || {};
+        } catch(_) {}
+        var send = {};
+        [local, pending].forEach(function(src){
+          Object.keys(src).forEach(function(k){
+            var x = src[k] || {}, cur = send[k] || { r: 0, c: 0 };
+            send[k] = { r: cur.r && x.r ? Math.min(cur.r, x.r) : (cur.r || x.r || 0), c: cur.c && x.c ? Math.min(cur.c, x.c) : (cur.c || x.c || 0) };
+          });
+        });
+        Object.keys(send).forEach(function(k){
+          var m = merged[k], x = send[k];
+          if (!m) merged[k] = { r: x.r, c: x.c };
+          else { if (x.r && (!m.r || x.r < m.r)) m.r = x.r; if (x.c && (!m.c || x.c < m.c)) m.c = x.c; }
+        });
+        this.ach.stored = merged;
+        var items = Object.keys(send).filter(function(k){ return send[k].r > 0; }).map(function(k){ return { id: k, r: send[k].r, c: send[k].c }; });
+        if (items.length && await this.achPost(items)) {
+          try { window.localStorage.removeItem('mmAch'); window.localStorage.removeItem(pk); } catch(_) {}
+        }
       } else this.ach.stored = local;
       this.ach.ready = true;
       this.syncAchievements(false);
+    },
+
+    /** Changes whenever stored unlocks change — memo keys of views that show achievement chips. */
+    achStateKey() {
+      var st = this.ach.stored, n = 0;
+      Object.keys(st).forEach(function(k){ n += st[k].c ? 2 : st[k].r ? 1 : 0; });
+      return (this.ach.ready ? 'r' : '-') + n;
+    },
+
+    achPendingKey() {
+      var u = (window.MuseumAuth && window.MuseumAuth.user) || this.me || {};
+      return 'mmAchPending:' + (u.id || 'me');
+    },
+
+    /** Save unlocks to the account; on failure keep them on this device (per account) for a retry. */
+    async achPost(items) {
+      try {
+        var res = await fetch('/api/achievements', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: items }) });
+        var j = res.ok ? await res.json() : null;
+        if (j && j.ok) return true;
+      } catch(_) {}
+      try {
+        var pk = this.achPendingKey(), pending = JSON.parse(window.localStorage.getItem(pk) || '{}') || {};
+        items.forEach(function(i){ var c = pending[i.id] || {}; pending[i.id] = { r: c.r || i.r, c: c.c || i.c }; });
+        window.localStorage.setItem(pk, JSON.stringify(pending));
+      } catch(_) {}
+      return false;
     },
 
     /** Record new unlocks. With ceremony=true (just stamped), queue the 落印 for each. */
@@ -1266,10 +1309,7 @@ window.museumApp = function() {
       var authed = !!(window.MuseumAuth && window.MuseumAuth.isAuthenticated());
       // Account unlocks live on the server; keep the device copy for anonymous use only.
       if (!authed) { try { window.localStorage.setItem('mmAch', JSON.stringify(out.next)); } catch(_) {} }
-      if (authed) {
-        var items = out.fresh.map(function(f){ var s = out.next[f.id]; return { id: f.id, r: s.r, c: s.c }; });
-        fetch('/api/achievements', { method: 'POST', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items: items }) }).catch(function(){});
-      }
+      else this.achPost(out.fresh.map(function(f){ var s = out.next[f.id]; return { id: f.id, r: s.r, c: s.c }; }));
       if (ceremony) this.ach.queue = this.ach.queue.concat(out.fresh);
     },
 
