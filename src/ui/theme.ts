@@ -1150,6 +1150,51 @@ body.chat-locked .chat-body { touch-action: pan-y; }
 .chat-title { font-family: var(--serif); font-weight: 700; font-size: 17px; color: var(--text); letter-spacing: 0.06em; }
 .chat-sub { font-size: 11.5px; color: var(--text-3); margin-top: 1px; }
 .chat-tools { display: flex; gap: 2px; align-items: center; }
+/* model + effort picker: quiet icon, popover kept inside the panel */
+.chat-head { position: relative; }
+.ai-tune { color: var(--text-4); }
+.ai-tune:hover, .ai-tune.on { color: var(--text-2); }
+.ai-pop {
+  position: absolute; z-index: 6; top: calc(100% + 4px); right: 10px;
+  width: min(280px, calc(100% - 20px)); max-height: min(60vh, calc(var(--panel-h, 70vh) - 80px)); overflow-y: auto; overscroll-behavior: contain;
+  padding: 8px; border-radius: 14px; background: var(--surface-2); border: 1px solid var(--line-strong);
+  box-shadow: 0 18px 40px -16px var(--sh-90);
+}
+.ai-fam { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: var(--text-4); text-transform: uppercase; padding: 8px 8px 3px; }
+.ai-group + .ai-group { margin-top: 2px; }
+.ai-row {
+  display: flex; align-items: center; justify-content: space-between; width: 100%;
+  padding: 7px 8px; border: none; border-radius: 8px; background: transparent;
+  color: var(--text-2); font-size: 13px; text-align: left; cursor: pointer;
+}
+.ai-row:hover { background: rgba(var(--fg-rgb),0.06); }
+.ai-row.on { color: var(--gilt-hi); }
+.ai-ck { display: inline-grid; color: var(--gilt); }
+.ai-efforts { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 8px 6px; }
+.ai-eff {
+  padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line-strong); background: transparent;
+  color: var(--text-3); font-family: var(--mono); font-size: 11.5px; cursor: pointer;
+}
+.ai-eff.on { color: var(--gilt-hi); border-color: rgba(var(--gilt-rgb),0.55); background: rgba(var(--gilt-rgb),0.1); }
+/* museums the guide mentions */
+.mus-link { color: var(--gilt-hi); text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; cursor: pointer; }
+.mus-link:hover { text-decoration-style: solid; }
+.mention-btn {
+  align-self: flex-start; margin-top: 8px; display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 11px; border-radius: 999px; border: 1px solid var(--line-strong); background: transparent;
+  color: var(--text-3); font-size: 12px; cursor: pointer;
+}
+.mention-btn:hover { color: var(--seal-ink); border-color: rgba(var(--seal-rgb),0.5); }
+.mention-pin {
+  width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+  background: rgba(var(--bg-rgb),0.92); color: var(--seal-ink); border: 2px solid var(--seal);
+  font-family: var(--mono); font-size: 11.5px; font-weight: 600;
+  box-shadow: 0 0 0 3px rgba(var(--seal-rgb),0.22), 0 0 18px rgba(var(--seal-rgb),0.7);
+}
+.mention-pin.visited { background: var(--seal); color: #fff; box-shadow: inset 0 0 0 2px rgba(255,255,255,0.55), 0 0 16px rgba(var(--seal-rgb),0.85); }
+.map-legend .dot.m { background: transparent; border: 2px solid var(--seal); box-shadow: 0 0 8px rgba(var(--seal-rgb),0.7); }
+.map-legend .mention-chip .sep { color: var(--text-4); }
+.map-legend .mention-chip button { border: none; background: transparent; padding: 0; color: var(--seal-ink); font-size: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
 .chat-body { flex: 1; overflow-y: auto; padding: 18px 18px 8px; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
 .chat-empty { text-align: center; padding: 44px 20px; color: var(--text-3); font-size: 13.5px; line-height: 1.8; }
 .chat-empty .ic { color: var(--gilt); margin-bottom: 12px; }

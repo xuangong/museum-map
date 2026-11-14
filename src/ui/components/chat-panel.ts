@@ -20,6 +20,27 @@ export function ChatPanel(): string {
       </div>
     </div>
     <div class="chat-tools">
+      <div class="ai-pick" @click.outside="ai.open = false">
+        <button class="icon-btn ai-tune" :class="ai.open ? 'on' : ''" @click="ai.open = !ai.open" :title="aiTip()" :aria-label="'模型与思考强度：' + aiTip()" :aria-expanded="ai.open">${icon("tune", 17)}</button>
+        <div class="ai-pop" x-show="ai.open" x-cloak>
+          <template x-for="g in aiFamilies()" :key="g.family">
+            <div class="ai-group">
+              <div class="ai-fam" x-text="g.family"></div>
+              <template x-for="m in g.models" :key="m.id">
+                <button type="button" class="ai-row" :class="ai.model === m.id ? 'on' : ''" @click="aiPick(m.id)">
+                  <span x-text="m.label"></span><span class="ai-ck" x-show="ai.model === m.id">${icon("check", 14)}</span>
+                </button>
+              </template>
+            </div>
+          </template>
+          <div class="ai-fam">思考强度</div>
+          <div class="ai-efforts">
+            <template x-for="e in aiEfforts()" :key="e">
+              <button type="button" class="ai-eff" :class="ai.effort === e ? 'on' : ''" @click="aiSetEffort(e)" x-text="e"></button>
+            </template>
+          </div>
+        </div>
+      </div>
       <button class="icon-btn" @click="chat.fullscreen = !chat.fullscreen" :title="chat.fullscreen ? '退出全屏' : '全屏阅读'">
         <span x-show="!chat.fullscreen">${icon("expand", 17)}</span><span x-show="chat.fullscreen">${icon("collapse", 17)}</span>
       </button>
@@ -35,7 +56,8 @@ export function ChatPanel(): string {
       <div class="chat-msg" :class="msg.role" x-show="msg.role === 'user' || msg.content">
         <div class="who" x-text="msg.role === 'user' ? '你' : '讲解员'"></div>
         <div class="text" x-show="msg.role === 'user'" x-text="msg.content"></div>
-        <div class="text md-rich" x-show="msg.role !== 'user'" x-html="window.MuseumChat.renderMarkdown(msg.content)"></div>
+        <div class="text md-rich" x-show="msg.role !== 'user'" x-html="renderChatMsg(msg.content)"></div>
+        <button type="button" class="mention-btn" x-show="msg.role !== 'user' && msg.mentions && msg.mentions.length" x-cloak @click="showMentionsOnMap(msg.mentions)">${icon("pin", 14)}<span x-text="'在地图上看这 ' + (msg.mentions || []).length + ' 座'"></span></button>
       </div>
     </template>
     <div x-show="chat.loading && (chat.progress || !(chat.messages.length && chat.messages[chat.messages.length - 1].content))" class="chat-loading"><span class="dots"><i></i><i></i><i></i></span><span x-text="chat.progress || '讲解员正在思考'"></span></div>

@@ -17,11 +17,15 @@ window.MuseumChat = {
     return JSON.stringify(data);
   },
 
-  sendStream: async function(messages, onDelta, onProgress) {
+  /** extra: { model, effort, system } — the reader's model choice and anything to add to the system text (e.g. visited museums). */
+  sendStream: async function(messages, onDelta, onProgress, extra) {
+    extra = extra || {};
+    var sys = '你是中国历史顾问，回答简短、引用具体朝代或博物馆。**禁止使用 Markdown 表格**（| --- |），统一用项目列表 (- ) 呈现，避免分享时渲染异常。';
+    if (extra.system) sys += '\\n\\n' + extra.system;
     var res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ messages: messages, system: '你是中国历史顾问，回答简短、引用具体朝代或博物馆。**禁止使用 Markdown 表格**（| --- |），统一用项目列表 (- ) 呈现，避免分享时渲染异常。', stream: true }),
+      body: JSON.stringify({ messages: messages, system: sys, stream: true, model: extra.model, effort: extra.effort }),
     });
     if (!res.ok) {
       var err = await res.json().catch(function(){return {};});

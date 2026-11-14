@@ -40,6 +40,9 @@ window.museumApp = function() {
     selectedMuseumId: null,
     drawer: { open: false, expanded: false, scrolled: false, loading: false, error: false, title: '', subtitle: '', sections: [], _loadFn: null },
     chat: { open: false, messages: [], input: '', loading: false, progress: '', fullscreen: false, palette: { open: false, query: '' } },
+    ai: { model: '', effort: '', open: false },
+    aiCatalog: { models: [], defaultModel: '', defaultEffort: '' },
+    mentions: { ids: [] },
     tocOpen: false,
     shakeOpen: false,
     captionShown: false,
@@ -87,6 +90,8 @@ window.museumApp = function() {
       this.dynasties = data.dynasties;
       this.dynastyGeo = data.dynastyGeo || {};
       this.crossings = data.crossings || {};
+      this.aiCatalog = data.ai || this.aiCatalog;
+      this.initAi();
       this.territoryUrl = data.territoryUrl || '';
       this.initTheme();
       try {
@@ -900,7 +905,8 @@ window.museumApp = function() {
       var ds = this.linkedDynasties(m.id);
       var fills = ds.filter(function(d){ return !held[self.layerNo(d.id)]; });
       var connects = fills.some(function(d){ var n = self.layerNo(d.id); return held[n - 1] || held[n + 1]; });
-      var onSite = ds.some(function(d){ return self.isOnSite(m.id, d.id); });
+      // 原址 = the museum sits on a dynasty's site or event, not merely near its capital.
+      var onSite = (this.crossings[m.id] || []).some(function(c){ return c.onSite && c.kind !== 'capital'; });
       var must = tiers.indexOf('tier1') >= 0 || tiers.indexOf('heritage-site') >= 0;
       var chips = [];
       if (must) chips.push({ k: 'must', t: tiers.indexOf('heritage-site') >= 0 ? '必看 · 世遗/国保' : '必看 · 一级馆' });
@@ -988,7 +994,7 @@ window.museumApp = function() {
       var route = t.cities.map(function(c){ return c.name + (t.mode === 'transit' ? '（' + (c.days || 1) + ' 天）' : ''); }).join(' → ');
       var picks = t.picks.map(function(id){ var m = self.museumById(id); return m ? '· ' + m.name + (m.city ? '（' + m.city + '）' : '') : ''; }).filter(Boolean);
       var prompt = '我准备' + mode + '出行：' + route + '。' + (picks.length ? '想去这些博物馆：\\n' + picks.join('\\n') + '\\n' : '')
-        + '请帮我按天排一个行程：每天去哪几座、为什么这样排、每座馆最值得看的镇馆之宝和展厅；如果沿途还有特别值得去的馆，也一并推荐。';
+        + '请帮我按天排一个行程：每天去哪几座、为什么这样排、每座馆最值得看的镇馆之宝和展厅；如果沿途还有特别值得去的馆，也一并推荐。' + (this.visits.ids.length ? '我已经去过的馆就不用再排了。' : '');
       this.askGuide(prompt);
     },
 
@@ -1150,8 +1156,167 @@ window.museumApp = function() {
       if (el) el.focus();
     },
 
+    // ─── AI model + effort (quiet picker in the chat header) ───
+    initAi() {
+      var c = this.aiCatalog, saved = null;
+      try { saved = JSON.parse(window.localStorage.getItem('mmAi') || 'null'); } catch(_) {}
+      var m = c.models.filter(function(x){ return saved && x.id === saved.model; })[0] || c.models.filter(function(x){ return x.id === c.defaultModel; })[0] || c.models[0];
+      if (!m) return;
+      this.ai.model = m.id;
+      this.ai.effort = saved && m.efforts.indexOf(saved.effort) >= 0 ? saved.effort : this.aiFallbackEffort(m);
+    },
+    aiFallbackEffort(m) {
+      return m.efforts.indexOf(this.aiCatalog.defaultEffort) >= 0 ? this.aiCatalog.defaultEffort : m.efforts[0];
+    },
+    aiCurrent() {
+      var id = this.ai.model;
+      return this.aiCatalog.models.filter(function(x){ return x.id === id; })[0] || null;
+    },
+    aiEfforts() {
+      var m = this.aiCurrent();
+      return m ? m.efforts : [];
+    },
+    aiFamilies() {
+      var out = [], by = {};
+      this.aiCatalog.models.forEach(function(m){
+        if (!by[m.family]) { by[m.family] = { family: m.family, models: [] }; out.push(by[m.family]); }
+        by[m.family].models.push(m);
+      });
+      return out;
+    },
+    aiTip() {
+      var m = this.aiCurrent();
+      return m ? m.label + ' · ' + this.ai.effort : '模型与思考强度';
+    },
+    aiSave() {
+      try { window.localStorage.setItem('mmAi', JSON.stringify({ model: this.ai.model, effort: this.ai.effort })); } catch(_) {}
+    },
+    aiPick(id) {
+      this.ai.model = id;
+      var m = this.aiCurrent();
+      if (m && m.efforts.indexOf(this.ai.effort) < 0) this.ai.effort = this.aiFallbackEffort(m);
+      this.aiSave();
+    },
+    aiSetEffort(e) {
+      this.ai.effort = e;
+      this.aiSave();
+    },
+
+    /** One line for the guide: museums the reader has already been to. */
+    visitedLine() {
+      var names = this.visitedMuseums().map(function(m){ return String(m.name || '').slice(0, 30); }).filter(Boolean);
+      if (!names.length) return '';
+      return '用户已经去过这些馆（不要再推荐，可以当作已知背景提到）：' + names.slice(-80).join('、');
+    },
+
+    // ─── Museums the guide mentions ───
+    /** Every name a museum can be called by, longest first (full name, name without 「（…）」, and the 「（…）」 itself). */
+    mentionIndex() {
+      if (this._mentionIdx && this._mentionIdxN === this.museums.length) return this._mentionIdx;
+      var seen = {}, out = [];
+      var add = function(s, id, min) {
+        s = (s || '').trim();
+        if (s.length < min || seen[s]) return;
+        seen[s] = true;
+        out.push({ s: s, id: id });
+      };
+      this.museums.forEach(function(m){
+        var n = String(m.name || '');
+        add(n, m.id, 2);
+        if (n.search(/[（(]/) < 0) return;
+        add(n.replace(/[（(][^）)]*[）)]/g, ''), m.id, 3);
+        var re = /[（(]([^）)]*)[）)]/g, g;
+        while ((g = re.exec(n))) add(g[1], m.id, 3);
+      });
+      out.sort(function(a, b){ return b.s.length - a.s.length; });
+      this._mentionIdx = out;
+      this._mentionIdxN = this.museums.length;
+      return out;
+    },
+
+    /** Non-overlapping name hits in a text, longest names first: [{ s, e, id }] in text order. */
+    mentionHits(text) {
+      var idx = this.mentionIndex(), taken = new Uint8Array(text.length), hits = [];
+      idx.forEach(function(en){
+        var from = 0;
+        for (;;) {
+          var p = text.indexOf(en.s, from);
+          if (p < 0) break;
+          var q = p + en.s.length, free = true;
+          for (var k = p; k < q; k++) { if (taken[k]) { free = false; break; } }
+          if (free) { for (var k2 = p; k2 < q; k2++) taken[k2] = 1; hits.push({ s: p, e: q, id: en.id }); from = q; }
+          else from = p + 1;
+        }
+      });
+      hits.sort(function(a, b){ return a.s - b.s; });
+      return hits;
+    },
+
+    /** Catalog museum ids a reply mentions, in order of first appearance. */
+    mentionedIds(text) {
+      var seen = {}, ids = [];
+      this.mentionHits(String(text || '')).forEach(function(h){ if (!seen[h.id]) { seen[h.id] = true; ids.push(h.id); } });
+      return ids;
+    },
+
+    /** A reply as HTML, with catalog museum names turned into links (text nodes only). */
+    renderChatMsg(content) {
+      var html = window.MuseumChat.renderMarkdown(content);
+      if (!html) return html;
+      var self = this, skip = 0;
+      return html.split(/(<[^>]*>)/).map(function(part, i){
+        if (i % 2) {
+          if (/^<(a|code|pre)[\\s>]/i.test(part)) skip++;
+          else if (/^<\\/(a|code|pre)>/i.test(part)) skip = Math.max(0, skip - 1);
+          return part;
+        }
+        if (skip || !part) return part;
+        var hits = self.mentionHits(part);
+        if (!hits.length) return part;
+        var out = '', at = 0;
+        hits.forEach(function(h){
+          out += part.slice(at, h.s) + '<a class="mus-link" data-mid="' + h.id + '" title="打开详情">' + part.slice(h.s, h.e) + '</a>';
+          at = h.e;
+        });
+        return out + part.slice(at);
+      }).join('');
+    },
+
+    /** Draw the mentioned museums on the map (extra layer; other markers stay). */
+    drawMentions(fit) {
+      var self = this;
+      var ms = this.mentions.ids.map(function(id){ return self.museumById(id); }).filter(Boolean);
+      if (!window.MuseumMap || !window.MuseumMap.setMentions) return;
+      if (!ms.length) { window.MuseumMap.clearMentions(); return; }
+      window.MuseumMap.setMentions(ms, function(id){ self.openMuseum(id); }, { fit: !!fit && this.view === 'map', isVisited: function(id){ return self.isVisited(id); } });
+    },
+    setMentionIds(ids) {
+      this.mentions.ids = ids.slice();
+      this.drawMentions(true);
+    },
+    clearMentions() {
+      this.mentions.ids = [];
+      if (window.MuseumMap && window.MuseumMap.clearMentions) window.MuseumMap.clearMentions();
+    },
+    /** 「在地图上看这 N 座」: back on the map, chat out of the way. */
+    showMentionsOnMap(ids) {
+      this.mentions.ids = (ids || []).slice();
+      this.chat.open = false;
+      this.chat.fullscreen = false;
+      this.setView('map');
+      this.drawMentions(false);
+      setTimeout(function(){ if (window.MuseumMap && window.MuseumMap.fitMentions) window.MuseumMap.fitMentions(); }, 160);
+    },
+
     onChatBodyClick(e) {
       var t = e.target;
+      if (t && t.classList && t.classList.contains('mus-link') && t.dataset && t.dataset.mid) {
+        // Out of the guide's way, so the museum (and the map behind it) can be seen.
+        this.chat.open = false;
+        this.chat.fullscreen = false;
+        this.openMuseum(t.dataset.mid);
+        return;
+      }
       if (t && t.classList && t.classList.contains('cmd') && t.dataset && t.dataset.cmd) {
         this.chat.input = t.dataset.cmd;
         var el = document.querySelector('[data-chat-input]');
@@ -1210,6 +1375,7 @@ window.museumApp = function() {
         window.MuseumMap.clearEvents();
       }
       if (window.MuseumMap.setSelected) window.MuseumMap.setSelected(this.selectedMuseumId);
+      if (this.mentions.ids.length) this.drawMentions(false);
       this.syncTerritory(d && !this.tripMode && !this.visits.footprintMode ? d.id : null);
     },
 
@@ -3166,7 +3332,13 @@ window.museumApp = function() {
             self2.chat.progress = label;
             var m = self2.chat.messages[streamIdx];
             if (m.content && !/\\n\\n$/.test(m.content)) m.content += '\\n\\n';
-          });
+          }, { model: self2.ai.model, effort: self2.ai.effort, system: self2.visitedLine() });
+          // The reply is complete: draw the museums it named.
+          var ids = self2.mentionedIds(self2.chat.messages[streamIdx].content);
+          if (ids.length) {
+            self2.chat.messages[streamIdx].mentions = ids;
+            self2.setMentionIds(ids);
+          }
         } catch (e) {
           self2.chat.messages[streamIdx].content = (self2.chat.messages[streamIdx].content || '') + '\\n（出错：' + (e.message || 'unknown') + '）';
         } finally {

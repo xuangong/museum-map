@@ -5,6 +5,7 @@ window.MuseumMap = {
   markersLayer: null,
   eventMarkersLayer: null,
   routeLayer: null,
+  mentionLayer: null,
   userLayer: null,
   _markerById: {},
   _selectedId: null,
@@ -23,6 +24,7 @@ window.MuseumMap = {
     this.routeLayer = L.layerGroup().addTo(this.map);
     this.markersLayer = L.layerGroup().addTo(this.map);
     this.eventMarkersLayer = L.layerGroup().addTo(this.map);
+    this.mentionLayer = L.layerGroup().addTo(this.map);
     this.userLayer = L.layerGroup().addTo(this.map);
   },
   setMarkers: function(museums, onClick, opts) {
@@ -127,6 +129,43 @@ window.MuseumMap = {
       try { self2.map.flyToBounds(bounds, { duration: 0.8, maxZoom: 10, paddingTopLeft: [30, 90], paddingBottomRight: [30, bottom] }); } catch(_) {}
       }, 0);
     }
+  },
+  /** Museums the AI guide mentioned: numbered pins in order of appearance, on top of whatever markers are showing. */
+  setMentions: function(museums, onClick, opts) {
+    opts = opts || {};
+    this.mentionLayer.clearLayers();
+    var self = this, pts = [];
+    (museums || []).forEach(function(m, i){
+      if (!m.lat || !m.lng) return;
+      var p = window.toMapCoord(m.lat, m.lng); pts.push(p);
+      var visited = opts.isVisited ? opts.isVisited(m.id) : false;
+      var marker = L.marker(p, {
+        icon: L.divIcon({ className: '', html: '<div class="mention-pin' + (visited ? ' visited' : '') + '" title="' + String(m.name || '').replace(/[<&"]/g, '') + '">' + (i + 1) + '</div>', iconSize: [24, 24], iconAnchor: [12, 12] }),
+        zIndexOffset: 800,
+      }).addTo(self.mentionLayer);
+      marker.on('click', function(){ onClick(m.id); });
+    });
+    this._mentionPts = pts;
+    if (opts.fit !== false) this.fitMentions();
+  },
+  /** Fly to the mentioned pins, leaving room for the chat sheet when it is open. */
+  fitMentions: function() {
+    var pts = this._mentionPts || [], self = this;
+    if (!pts.length) return;
+    var bounds = L.latLngBounds(pts);
+    setTimeout(function(){
+      var bottom = 40;
+      try {
+        // The sheet's height, not its position: it may still be sliding.
+        var sheet = document.querySelector('.chat-panel.open');
+        if (sheet && !sheet.classList.contains('fullscreen')) bottom = sheet.offsetHeight + 24;
+      } catch(_) {}
+      try { self.map.flyToBounds(bounds, { duration: 0.8, maxZoom: pts.length === 1 ? 11 : 12, paddingTopLeft: [40, 90], paddingBottomRight: [40, bottom] }); } catch(_) {}
+    }, 0);
+  },
+  clearMentions: function() {
+    if (this.mentionLayer) this.mentionLayer.clearLayers();
+    this._mentionPts = [];
   },
   /** A small popup at a place (WGS) with one action button. */
   askCity: function(p, label, onAdd) {

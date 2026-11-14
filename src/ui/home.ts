@@ -14,6 +14,7 @@ import { APP_SCRIPT } from "./client/app"
 import { STRATA_SRC, TERRITORY_SRC } from "~/routes/assets"
 import { DYNASTY_GEO } from "~/data/dynasty-geo"
 import { computeCrossings } from "~/services/crossings"
+import { AI_MODELS, DEFAULT_AI_MODEL, DEFAULT_AI_EFFORT } from "~/services/ai-models"
 
 export interface ViewingProfile {
   user: { handle: string | null; displayName: string | null }
@@ -35,6 +36,7 @@ export function HomePage(data: HomeData): string {
     dynastyGeo: DYNASTY_GEO,
     crossings: computeCrossings(data.museums, data.dynasties),
     territoryUrl: TERRITORY_SRC,
+    ai: { models: AI_MODELS, defaultModel: DEFAULT_AI_MODEL, defaultEffort: DEFAULT_AI_EFFORT },
   })
     .replace(/</g, "\\u003c") // safe inline in <script>
     .replace(/-->/g, "--\\u003e")
@@ -111,6 +113,9 @@ export function HomePage(data: HomeData): string {
           <div class="row"><span class="dot k"></span><span>未到访</span></div>
         </template>
         <div class="row" x-show="currentDynastyId && !tripMode" x-cloak><span class="dot e"></span><span>历史事件</span></div>
+        <div class="row mention-chip" x-show="mentions.ids.length" x-cloak>
+          <span class="dot m"></span><span x-text="'讲解员提到的 ' + mentions.ids.length + ' 座馆'"></span><span class="sep">·</span><button type="button" @click="clearMentions()">清除</button>
+        </div>
       </div>
       <div class="map-caption" :class="captionShown ? 'show' : ''" x-cloak>
         <div class="cap-kicker">ENTERING</div>
