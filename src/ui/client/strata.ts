@@ -656,7 +656,7 @@ function init(container, data, cb) {
   // strings whose notes have started on that clock.
   let play = null, playLayer = -1, playRest = false, playAct = new Set();
   // Every performance is a new reading of the same score (see vary()); BEAT and rnd belong to it.
-  let BEAT = 0.36, rnd = Math.random, perf = { heads: [], lift: [], dyn: [], mul: 1, semis: 0 };
+  let BEAT = 0.36, rnd = Math.random, perf = { heads: [], lift: [], dyn: [], qpick: {}, mul: 1, semis: 0 };
   function seeded(a) { return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
   const pick = (xs) => xs[Math.floor(rnd() * xs.length)];
   // Alternative openings (换头) for each phrase's first bar: same first note (so the phrase still
@@ -674,7 +674,7 @@ function init(container, data, cb) {
     rnd = seeded(seed);
     const semis = pick([-2, 0, 0, 2, 3, 5]);
     BEAT = 0.33 + rnd() * 0.06;
-    perf = { semis, mul: Math.pow(2, semis / 12), heads: [], lift: [], dyn: [], seed };
+    perf = { semis, mul: Math.pow(2, semis / 12), heads: [], lift: [], dyn: [], qpick: {}, seed };
     for (let ph = 0; ph < 5; ph++) {
       perf.heads[ph] = Math.floor(rnd() * 3);
       const top = Math.max(...MELODY.slice(ph * 4, ph * 4 + 4).flat().map((n) => n[0]), ...HEADS[ph].flat().map((n) => n[0]));
@@ -707,22 +707,29 @@ function init(container, data, cb) {
   //   「渭城朝雨浥轻尘，客舍」 6̣. 1 3 2 | 1 2 ↗2 – | 5 6 5; note values doubled to keep its slowness.
   //   平沙落雁 — 管平湖演奏谱, 王迪记谱, 据《琴学丛书》 (国琴网, 1=F, ♩=34), section 三:
   //   6 6 5 35 | 656 i | 6i i6 5 35 | 656 i; note values doubled.
+  // Each era may hold several; one is chosen per performance.
   const QUOTES = {
-    tang: { name: '阳关三叠', note: '王维诗谱成的琴歌 · 谱据《琴学入门》', bars: [
+    tang: [{ name: '阳关三叠', note: '王维诗谱成的琴歌 · 谱据《琴学入门》', bars: [
       [[9, 1.5], [10, 0.5], [12, 1], [11, 1]], [[10, 2], [11, 2]], [[11, 4]], [[13, 1], [14, 1], [13, 2]],
-    ] },
-    ming: { name: '平沙落雁', note: '琴曲 · 管平湖演奏谱（王迪记谱）', bars: [
+    ] }],
+    ming: [{ name: '平沙落雁', note: '琴曲 · 管平湖演奏谱（王迪记谱）', bars: [
       [[9, 1], [9, 1], [8, 1], [7, 0.5], [8, 0.5]], [[9, 0.5], [8, 0.5], [9, 1], [10, 2]],
       [[9, 0.5], [10, 0.5], [10, 0.5], [9, 0.5], [8, 1], [7, 0.5], [8, 0.5]], [[9, 0.5], [8, 0.5], [9, 1], [10, 2]],
-    ] },
-    qing: { name: '茉莉花', note: '清代江南民歌（鲜花调）', bars: [
+    ] }],
+    qing: [{ name: '茉莉花', note: '清代江南民歌（鲜花调）', bars: [
       [[7, 1], [7, 0.5], [8, 0.5], [9, 1], [10, 0.5], [9, 0.5]], [[8, 1.5], [9, 0.5], [8, 2]],
       [[7, 1], [7, 0.5], [8, 0.5], [9, 1], [10, 0.5], [9, 0.5]], [[8, 1.5], [9, 0.5], [8, 2]],
-    ] },
+    ] }],
   };
-  const QUOTE_BARS = [], QUOTE_AT = {};
-  Object.keys(QUOTES).forEach((id) => { QUOTE_AT[id] = 100 + QUOTE_BARS.length; QUOTE_BARS.push(...QUOTES[id].bars); });
-  function quoteOf(li) { return li >= 0 && li < N ? QUOTES[layers[li].id] || null : null; }
+  const QUOTE_BARS = [];
+  Object.keys(QUOTES).forEach((id) => QUOTES[id].forEach((q) => { q.at = 100 + QUOTE_BARS.length; QUOTE_BARS.push(...q.bars); }));
+  // This performance's 名曲 for era li (picked on first ask, from the performance's own dice).
+  function quoteOf(li) {
+    const qs = li >= 0 && li < N ? QUOTES[layers[li].id] : null;
+    if (!qs || !qs.length) return null;
+    if (perf.qpick[li] == null) perf.qpick[li] = Math.floor(rnd() * qs.length);
+    return qs[perf.qpick[li]];
+  }
   const FAMILY = { qing: 'bell', tongqing: 'bell', nao: 'bell', zhong: 'bell', tonggu: 'drum', zhu: 'pluck', se: 'pluck', pipa: 'pluck', qin: 'qin', gudi: 'wind', paixiao: 'wind', di: 'wind', guan: 'wind', huqin: 'bow', ks: 'pluck' };
   const LEADS = ['wind', 'pluck', 'bow', 'qin'];
   function stringsAt(li) { return strings.filter((st) => museums[st.m].links.indexOf(li) >= 0); }
@@ -894,7 +901,7 @@ function init(container, data, cb) {
           L = { act, lead, parts: parts.filter((li) => li !== lead), lv: base.lv, show: q };
           if (L.lv[q] == null) L.lv[q] = 1;
           lay.push({ t, li: q, act, quote: quoteOf(q) });
-          for (let b = QUOTE_AT[layers[q].id]; b < QUOTE_AT[layers[q].id] + 4; b++) { k = ensembleBar(ev, b, t, L.lead, L.parts, k, L.lv); t += 4 * BEAT; }
+          for (let b = quoteOf(q).at; b < quoteOf(q).at + 4; b++) { k = ensembleBar(ev, b, t, L.lead, L.parts, k, L.lv); t += 4 * BEAT; }
           for (let j = from; j < ev.length; j++) ev[j].vel *= perf.dyn[lastP] || 1;
           return;
         }
@@ -920,7 +927,7 @@ function init(container, data, cb) {
       return { ev, lay, dur: t + 3.6, mul: perf.mul };
     }
     // One era: its phrase, its instrument leading, the same instrument answering in its family part.
-    const here = stringsAt(F), qF = quoteOf(F), b0 = qF ? QUOTE_AT[layers[F].id] : Math.floor(barOf(F) / 4) * 4;
+    const here = stringsAt(F), qF = quoteOf(F), b0 = qF ? qF.at : Math.floor(barOf(F) / 4) * 4;
     lay.push({ t: 0, li: F, rest: !here.length, act: [F], quote: qF });
     const drum = famOf(F) === 'drum';
     const lvF = { [F]: Math.max(1, Math.min(3, here.length)) };
