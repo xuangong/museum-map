@@ -766,14 +766,14 @@ window.museumApp = function() {
     tripSetMode(mode) {
       if (this.trip.mode === mode) return;
       this.trip.mode = mode;
-      this.trip.radius = mode === 'drive' ? 30 : 30;
+      this.trip.radius = 30;
       this.saveTrip();
       if (mode === 'drive') this.tripFetchRoute();
     },
 
     tripSetRadius(r) { this.trip.radius = r; this.saveTrip(); },
 
-    tripRadii() { return this.trip.mode === 'drive' ? [10, 30, 80] : [15, 30, 60]; },
+    tripRadii() { return this.trip.mode === 'drive' ? [30, 60, 120] : [15, 30, 60]; },
 
     /** Cities that have museums, most first: quick picks and local search. */
     tripKnownCities() {
@@ -964,7 +964,7 @@ window.museumApp = function() {
     tripDays() {
       var self = this, v = this.tripAlong();
       var groups = v.groups.map(function(g){ return { days: self.trip.mode === 'transit' ? g.days : 0, title: g.title, stops: g.stops.filter(function(s){ return s.picked; }).map(function(s){ return s.m.name; }) }; });
-      return window.TripCore.splitDays(groups, 3).map(function(d){ return { day: d.day, title: groups[d.group].title.replace(/ · \d+ 天$/, ''), stops: d.stops, over: d.over }; })
+      return window.TripCore.splitDays(groups, 3).map(function(d){ return { day: d.day, title: groups[d.group].title.replace(/ · [0-9]+ 天$/, ''), stops: d.stops, over: d.over }; })
         .filter(function(d){ return d.stops.length || self.trip.mode === 'transit'; });
     },
 
