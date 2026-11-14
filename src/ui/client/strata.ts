@@ -1275,6 +1275,12 @@ function init(container, data, cb) {
       credit.appendChild(el('b', null, t.culture ? '新石器文化分布 · 示意' : t.sketch ? '二里头文化核心区 · 示意' : '约' + yearText(t.year) + '的疆域 · 示意'));
       if (!t.culture && !t.sketch) credit.appendChild(el('span', null, '据 Cliopatria（Seshat）· CC BY 4.0'));
     }
+    if (state.focus >= 0 && cb.onEraMap) {
+      const go = el('button', 'sc-map', '在地图上看 →');
+      go.type = 'button';
+      go.addEventListener('click', (e) => { e.stopPropagation(); cb.onEraMap(L.id); });
+      credit.appendChild(go);
+    }
     credit.classList.add('is-on');
   }
   // Top of the title block, in canvas pixels — the reading view frames the map above it.

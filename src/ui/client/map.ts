@@ -20,6 +20,7 @@ window.MuseumMap = {
       crossOrigin: 'anonymous'
     }).addTo(this.map);
     this.territoryLayer = L.layerGroup().addTo(this.map);
+    this.eraLayer = L.layerGroup().addTo(this.map);
     this.rangeLayer = L.layerGroup().addTo(this.map);
     this.routeLayer = L.layerGroup().addTo(this.map);
     this.markersLayer = L.layerGroup().addTo(this.map);
@@ -227,21 +228,123 @@ window.MuseumMap = {
   clearEvents: function(){
     if (this.eventMarkersLayer) this.eventMarkersLayer.clearLayers();
   },
-  /** A dynasty's approximate extent (parts = [{ n, r: [[[lng, lat]…]…] }]); styled by .territory in theme.ts. */
-  setTerritory: function(parts) {
-    this.clearTerritory();
+  /** A dynasty on top of today's map. era = { parts, sites, trail, chains, culture, year, sketch, label, key }.
+      parts = [{ n, r: [[[lng, lat]…]…] }]; sites = [{ name, lat, lng, role, note }]; styled by .territory / .era-* in theme.ts. */
+  setEra: function(era) {
+    this.clearEra();
+    if (!era) return;
     var self = this;
-    (parts || []).forEach(function(part){
-      var rings = part.r.map(function(ring){ return ring.map(function(p){ return window.toMapCoord(p[1], p[0]); }); });
-      L.polygon(rings, { className: 'territory', weight: 1.4, interactive: false, smoothFactor: 1.5 }).addTo(self.territoryLayer);
+    var L_ = L;
+    function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    var pts = [];
+    var parts = era.parts || [];
+    var sites = era.sites || [];
+    parts.forEach(function(part){
+      if (!part.r || !part.r.length) return;
+      var rings = part.r.map(function(ring){ return ring.map(function(p){ var c = window.toMapCoord(p[1], p[0]); pts.push(c); return c; }); });
+      L_.polygon(rings, { className: 'territory', weight: 1.4, interactive: false, smoothFactor: 1.5 }).addTo(self.territoryLayer);
+      if (parts.length >= 2 || part.n !== era.label) {
+        var best = null, bestA = -1;
+        part.r.forEach(function(ring){
+          var a = 0;
+          for (var i = 0; i < ring.length; i++) { var q = ring[(i + 1) % ring.length]; a += ring[i][0] * q[1] - q[0] * ring[i][1]; }
+          a = Math.abs(a) / 2;
+          if (a > bestA) { bestA = a; best = ring; }
+        });
+        if (best && best.length) {
+          var sx = 0, sy = 0, sa = 0;
+          for (var j = 0; j < best.length; j++) {
+            var p0 = best[j], p1 = best[(j + 1) % best.length];
+            var cr = p0[0] * p1[1] - p1[0] * p0[1];
+            sa += cr; sx += (p0[0] + p1[0]) * cr; sy += (p0[1] + p1[1]) * cr;
+          }
+          var cx, cy;
+          if (Math.abs(sa) > 1e-9) { cx = sx / (3 * sa); cy = sy / (3 * sa); }
+          else { cx = best[0][0]; cy = best[0][1]; }
+          L_.marker(window.toMapCoord(cy, cx), {
+            icon: L_.divIcon({ className: 'era-label era-region-label', html: '<span>' + esc(part.n) + '</span>', iconSize: [0, 0] }),
+            interactive: false, keyboard: false, zIndexOffset: 100,
+          }).addTo(self.eraLayer);
+        }
+      }
     });
-    if (parts && parts.length && !this._territoryCredit) {
+    // Neolithic: no territory, circles around the culture sites.
+    if (era.culture) {
+      sites.forEach(function(s){
+        if (s.role !== 'culture') return;
+        var c = window.toMapCoord(s.lat, s.lng); pts.push(c);
+        L_.circle(c, { radius: 120000, className: 'territory', weight: 1.4, interactive: false }).addTo(self.territoryLayer);
+        var o = window.toMapCoord(s.lat + 1.1, s.lng); pts.push(o);
+        var o2 = window.toMapCoord(s.lat - 1.1, s.lng); pts.push(o2);
+        L_.marker(c, {
+          icon: L_.divIcon({ className: 'era-label era-region-label', html: '<span>' + esc(s.name) + '</span>', iconSize: [0, 0] }),
+          interactive: false, keyboard: false, zIndexOffset: 100,
+        }).addTo(self.eraLayer);
+      });
+    }
+    // Capital moves.
+    var trail = era.trail || [];
+    if (trail.length > 1) {
+      var line = [];
+      trail.forEach(function(i){ var s = sites[i]; if (s) line.push(window.toMapCoord(s.lat, s.lng)); });
+      L_.polyline(line, { className: 'era-trail', weight: 2, interactive: false }).addTo(self.eraLayer);
+      for (var k = 0; k < line.length - 1; k++) {
+        var a = self.map.project(line[k], 5), b = self.map.project(line[k + 1], 5);
+        var dx = b.x - a.x, dy = b.y - a.y;
+        if (Math.sqrt(dx * dx + dy * dy) < 6) continue;
+        var ang = Math.atan2(dy, dx) * 180 / Math.PI;
+        L_.marker([(line[k][0] + line[k + 1][0]) / 2, (line[k][1] + line[k + 1][1]) / 2], {
+          icon: L_.divIcon({ className: 'era-arrow-wrap', html: '<i class="era-arrow" style="transform:rotate(' + ang.toFixed(1) + 'deg)"></i>', iconSize: [0, 0] }),
+          interactive: false, keyboard: false, zIndexOffset: 300,
+        }).addTo(self.eraLayer);
+      }
+    }
+    (era.chains || []).forEach(function(ch){
+      var line = [];
+      ch.forEach(function(i){ var s = sites[i]; if (s) line.push(window.toMapCoord(s.lat, s.lng)); });
+      if (line.length > 1) L_.polyline(line, { className: 'era-chain', weight: 1.2, interactive: false }).addTo(self.eraLayer);
+    });
+    // Capitals.
+    sites.forEach(function(s){
+      if (s.role !== 'capital' && s.role !== 'secondary') return;
+      var c = window.toMapCoord(s.lat, s.lng); pts.push(c);
+      var txt = esc(s.name) + (s.note ? '<em> · ' + esc(s.note) + '</em>' : '');
+      L_.marker(c, {
+        icon: L_.divIcon({ className: 'era-site-wrap', html: '<div class="era-site ' + (s.role === 'capital' ? 'is-capital' : 'is-secondary') + '"><i></i><span>' + txt + '</span></div>', iconSize: [0, 0] }),
+        interactive: false, keyboard: false, zIndexOffset: 500,
+      }).addTo(self.eraLayer);
+    });
+    this._eraPts = pts;
+    this._eraKey = era.key || null;
+    this._syncEraZoom();
+    if (parts.length && !era.culture && !this._territoryCredit) {
       this._territoryCredit = '疆域示意：Cliopatria (Seshat) CC BY 4.0';
       this.map.attributionControl.addAttribution(this._territoryCredit);
     }
+    if (!this._eraZoomBound) { this._eraZoomBound = true; this.map.on('zoomend', function(){ self._syncEraZoom(); }); }
   },
-  clearTerritory: function(){
+  _syncEraZoom: function(){
+    var c = this.map && this.map.getContainer();
+    if (c) { c.classList.toggle('era-zoom-lo', this.map.getZoom() < 4); c.classList.toggle('era-zoom-far', this.map.getZoom() < 5); }
+  },
+  /** Fly to the era; pad = { left, right, top, bottom } px kept clear. Once per era key unless force. */
+  fitEra: function(pad, force) {
+    if (!this._eraPts || !this._eraPts.length) return;
+    if (!force && this._eraFitted === this._eraKey) return;
+    this._eraFitted = this._eraKey;
+    pad = pad || {};
+    this.map.invalidateSize();
+    var b = L.latLngBounds(this._eraPts);
+    this.map.flyToBounds(b, {
+      paddingTopLeft: [(pad.left || 0) + 24, (pad.top || 0) + 24],
+      paddingBottomRight: [(pad.right || 0) + 24, (pad.bottom || 0) + 24],
+      maxZoom: 7, duration: 0.9,
+    });
+  },
+  clearEra: function(){
     if (this.territoryLayer) this.territoryLayer.clearLayers();
+    if (this.eraLayer) this.eraLayer.clearLayers();
+    this._eraPts = null;
     if (this._territoryCredit) { this.map.attributionControl.removeAttribution(this._territoryCredit); this._territoryCredit = null; }
   },
   setEventMarkers: function(events, onClickRelatedMuseum, relatedMuseumsByDate) {

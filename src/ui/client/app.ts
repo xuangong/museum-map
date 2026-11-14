@@ -79,6 +79,8 @@ window.museumApp = function() {
     dynastyGeo: {},
     crossings: {},
     territoryUrl: '',
+    eraOverlay: true,
+    eraCap: null,
     _strataOk: false,
     _justStamped: null,
     _drawerMuseum: null,
@@ -100,6 +102,7 @@ window.museumApp = function() {
       this.museumAliases = data.aliases || {};
       this.initAi();
       this.territoryUrl = data.territoryUrl || '';
+      try { this.eraOverlay = window.localStorage.getItem('mmEraOverlay') !== '0'; } catch(_) {}
       this.initTheme();
       try {
         var savedView = window.localStorage.getItem('mmView');
@@ -394,6 +397,7 @@ window.museumApp = function() {
       }, {
         onMuseum: function(id){ self.openMuseum(id); },
         onDynasty: function(id){ if (id) self.selectDynasty(id); else self.clearDynastyFilter(); },
+        onEraMap: function(id){ self.showEraOnMap(id); },
       });
       this._strataOk = !!ok;
       if (!ok) { this.view = 'map'; return; }
@@ -418,7 +422,11 @@ window.museumApp = function() {
       try { window.localStorage.setItem('mmView', v); } catch(_) {}
       if (window.MuseumStrata) window.MuseumStrata.setActive(v === 'strata');
       if (v === 'map') {
-        setTimeout(function(){ if (window.MuseumMap && window.MuseumMap.map) window.MuseumMap.map.invalidateSize(); }, 60);
+        var self = this;
+        setTimeout(function(){
+          if (window.MuseumMap && window.MuseumMap.map) window.MuseumMap.map.invalidateSize();
+          if (self.currentDynastyId) { var pend = self._eraFitPending === self.currentDynastyId; self._eraFitPending = null; self.syncEra(self.currentDynastyId, pend ? 'force' : true); }
+        }, 60);
       }
     },
 
@@ -1595,22 +1603,70 @@ window.museumApp = function() {
       }
       if (window.MuseumMap.setSelected) window.MuseumMap.setSelected(this.selectedMuseumId);
       if (this.mentions.ids.length) this.drawMentions(false);
-      this.syncTerritory(d && !this.tripMode && !this.visits.footprintMode ? d.id : null);
+      this.syncEra(d && !this.tripMode && !this.visits.footprintMode ? d.id : null, this.view === 'map');
     },
 
-    /** The selected dynasty's approximate extent on the 2D map (same data as the 3D strata). */
-    syncTerritory(dynastyId) {
-      if (!window.MuseumMap || !window.MuseumMap.setTerritory) return;
-      if (!dynastyId || !this.territoryUrl) { window.MuseumMap.clearTerritory(); return; }
+    /** The selected dynasty laid over today's map: territory, capitals, capital moves (same data as the 3D strata). */
+    syncEra(dynastyId, fit) {
+      if (!window.MuseumMap || !window.MuseumMap.setEra) return;
       var self = this;
+      if (!dynastyId || !this.eraOverlay || this.tripMode || this.visits.footprintMode) {
+        if (!dynastyId) window.MuseumMap._eraFitted = null;
+        window.MuseumMap.clearEra(); this.eraCap = null; return;
+      }
+      var go = function(T){
+        if (self.currentDynastyId !== dynastyId || self.tripMode || self.visits.footprintMode || !self.eraOverlay) return;
+        var t = T && T[dynastyId];
+        var g = self.dynastyGeo[dynastyId];
+        var d = self.dynastyById(dynastyId);
+        var culture = !!(g && !(t && t.p && t.p.length) && g.sites.some(function(s){ return s.role === 'culture'; }));
+        var parts = (t && t.p) || [];
+        if (!parts.length && !culture && !(g && g.sites && g.sites.length)) { window.MuseumMap.clearEra(); self.eraCap = null; return; }
+        var label = d ? d.name : '';
+        var yr = function(y){ return y < 0 ? '公元前' + (-y) + '年' : '公元' + y + '年'; };
+        var text = culture ? '新石器文化分布 · 示意' : (t && t.sketch) ? '二里头文化核心区 · 示意' : (t && t.y != null) ? '约' + yr(t.y) + '的疆域 · 示意' : '都城与迁徙 · 示意';
+        window.MuseumMap.setEra({
+          parts: parts, sites: g ? g.sites : [], trail: g ? g.trail : [], chains: g ? (g.chains || []) : [],
+          culture: culture, year: t ? t.y : null, sketch: !!(t && t.sketch), label: label, key: dynastyId,
+        });
+        self.eraCap = { name: label, text: text };
+        if (fit) self.$nextTick(function(){ window.MuseumMap.fitEra(self.eraPad(), fit === 'force'); });
+      };
+      if (!this.territoryUrl) { go(null); return; }
       if (!__territoryP) {
         __territoryP = fetch(this.territoryUrl).then(function(r){ return r.ok ? r.json() : {}; }).catch(function(){ return {}; });
       }
-      __territoryP.then(function(T){
-        if (self.currentDynastyId !== dynastyId || self.tripMode || self.visits.footprintMode) return;
-        var t = T && T[dynastyId];
-        if (t && t.p && t.p.length) window.MuseumMap.setTerritory(t.p); else window.MuseumMap.clearTerritory();
-      });
+      __territoryP.then(go);
+    },
+
+    /** Pixels the open drawer covers, so the era is framed in what stays visible. */
+    eraPad() {
+      var pad = { left: 0, right: 0, top: 0, bottom: 0 };
+      try {
+        var cv = document.querySelector('.canvas');
+        var dr = document.querySelector('.drawer');
+        if (this.drawer && this.drawer.open && dr && cv) {
+          var w = dr.offsetWidth, cw = cv.clientWidth;
+          if (w < cw * 0.7) pad.right = w; else pad.bottom = Math.round(dr.offsetHeight * 0.5);
+        }
+        if (window.innerWidth <= 640) pad.top = 60;
+      } catch(_) {}
+      return pad;
+    },
+
+    toggleEraOverlay() {
+      this.eraOverlay = !this.eraOverlay;
+      try { window.localStorage.setItem('mmEraOverlay', this.eraOverlay ? '1' : '0'); } catch(_) {}
+      this.syncEra(this.currentDynastyId, this.eraOverlay ? 'force' : false);
+    },
+
+    /** 3D「在地图上看 →」: select the era, switch to the map, frame it. */
+    showEraOnMap(id) {
+      if (!id) return;
+      if (this.currentDynastyId !== id) this.selectDynasty(id);
+      if (!this.eraOverlay) { this.eraOverlay = true; try { window.localStorage.setItem('mmEraOverlay', '1'); } catch(_) {} }
+      this._eraFitPending = id;
+      this.setView('map');
     },
 
     visitedMuseums() {
