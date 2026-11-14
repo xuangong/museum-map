@@ -67,6 +67,59 @@ function ringTexture() {
   return t;
 }
 
+// ── 琴弦 sound: a warm plucked string (Karplus–Strong), tuned to 宫商角徵羽 ──
+// Longer strings reach deeper into history and sound lower, as a real string would.
+const PENTA = [0, 2, 4, 7, 9, 12, 14, 16, 19, 21, 24, 26, 28];
+let actx = null, master = null;
+const ksCache = {};
+function audioCtx() {
+  if (!actx) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return null;
+    try {
+      actx = new AC();
+      master = actx.createGain(); master.gain.value = 0.55;
+      const comp = actx.createDynamicsCompressor();
+      master.connect(comp); comp.connect(actx.destination);
+    } catch (e) { actx = null; return null; }
+  }
+  if (actx.state === 'suspended') { try { actx.resume(); } catch (e) {} }
+  return actx;
+}
+function ksBuffer(ac, freq) {
+  const key = Math.round(freq * 10);
+  if (ksCache[key]) return ksCache[key];
+  const sr = ac.sampleRate, n = Math.floor(sr * 3), buf = ac.createBuffer(1, n, sr), d = buf.getChannelData(0);
+  const P = Math.max(2, Math.round(sr / freq)), ring = new Float32Array(P);
+  // A finger, not a pick: the excitation is softened before it rings.
+  let lp = 0;
+  for (let i = 0; i < P; i++) { lp = lp * 0.4 + (Math.random() * 2 - 1) * 0.6; ring[i] = lp; }
+  const rho = Math.pow(0.001, 1 / (freq * 2.4));   // about 2.4 s to fade, whatever the pitch
+  let idx = 0;
+  for (let i = 0; i < n; i++) {
+    const a = ring[idx], b = ring[(idx + 1) % P];
+    const env = Math.min(1, i / (sr * 0.003)) * Math.min(1, (n - i) / (sr * 0.25));
+    d[i] = a * env * 0.7;
+    ring[idx] = (a + b) * 0.5 * rho;
+    idx = (idx + 1) % P;
+  }
+  ksCache[key] = buf;
+  return buf;
+}
+function stringSound(note, vel, pan) {
+  const ac = audioCtx();
+  if (!ac || !master) return;
+  try {
+    const src = ac.createBufferSource();
+    src.buffer = ksBuffer(ac, 98 * Math.pow(2, PENTA[Math.max(0, Math.min(PENTA.length - 1, note))] / 12));
+    const g = ac.createGain(); g.gain.value = 0.34 * Math.max(0.3, Math.min(1.3, vel));
+    src.connect(g);
+    if (ac.createStereoPanner) { const pn = ac.createStereoPanner(); pn.pan.value = Math.max(-0.8, Math.min(0.8, pan)); g.connect(pn); pn.connect(master); }
+    else g.connect(master);
+    src.start();
+  } catch (e) {}
+}
+
 // tint = colour, kk = intensity. Light halls: colour × intensity, added. Ink hall: a
 // crisper dot whose opacity is the intensity.
 function pointsMaterial(tex) {
@@ -322,6 +375,8 @@ function init(container, data, cb) {
 
   const dPos = new Float32Array(dots.length * 3), dTint = new Float32Array(dots.length * 3), dK = new Float32Array(dots.length), dSize = new Float32Array(dots.length);
   dots.forEach((d, i) => { const m = museums[d.m]; dPos.set([m.x, yOf(d.layer), m.z], i * 3); });
+  const dPosBase = dPos.slice();
+  const dotsOf = museums.map(() => []); dots.forEach((d, i) => { dotsOf[d.m].push(i); });
   const dGeom = new THREE.BufferGeometry();
   dGeom.setAttribute('position', new THREE.BufferAttribute(dPos, 3));
   dGeom.setAttribute('tint', new THREE.BufferAttribute(dTint, 3));
@@ -336,6 +391,122 @@ function init(container, data, cb) {
   rGeom.setAttribute('kk', new THREE.BufferAttribute(rK, 1));
   rGeom.setAttribute('size', new THREE.BufferAttribute(rSize, 1));
   const rPoints = new THREE.Points(rGeom, pointsMaterial(ringTexture())); rPoints.renderOrder = 8; world.add(rPoints);
+
+  // ── 琴弦: your beams are strings — strum across them, hear the eras they hold ──
+  const SP = 36;   // points along a string
+  const sPos = new Float32Array(Math.max(1, museums.length) * (SP - 1) * 6);
+  const sCol = new Float32Array(Math.max(1, museums.length) * (SP - 1) * 8);
+  const sGeom = new THREE.BufferGeometry();
+  sGeom.setAttribute('position', new THREE.BufferAttribute(sPos, 3));
+  sGeom.setAttribute('color', new THREE.BufferAttribute(sCol, 4));
+  sGeom.setDrawRange(0, 0);
+  const stringMesh = new THREE.LineSegments(sGeom, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
+  stringMesh.renderOrder = 6; stringMesh.frustumCulled = false; world.add(stringMesh);
+  const dKBase = new Float32Array(dots.length), dSizeBase = new Float32Array(dots.length);
+  let strings = [], stringByM = {}, stringKey = '', tagHoldUntil = 0;
+  const reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  let soundOn = true;
+  try { soundOn = localStorage.getItem('mmStringSound') !== '0'; } catch (e) {}
+  function setRGBA(arr, v, c, k) {
+    const o = v * 4;
+    if (PAL.ink) { arr[o] = c.r; arr[o + 1] = c.g; arr[o + 2] = c.b; arr[o + 3] = Math.min(1, k * 1.5); }
+    else { arr[o] = c.r * k; arr[o + 1] = c.g * k; arr[o + 2] = c.b * k; arr[o + 3] = 1; }
+  }
+  function buildStrings() {
+    const list = [];
+    museums.forEach((m, i) => { if (state.visited[m.id] && m.links.length) list.push(i); });
+    const key = list.join(',');
+    if (key === stringKey) return;
+    stringKey = key;
+    const lens = list.map((i) => yTop - yOf(museums[i].links[museums[i].links.length - 1]));
+    const maxLen = Math.max(1e-6, Math.max.apply(null, lens.concat([0])));
+    const prev = stringByM;
+    stringByM = {};
+    strings = list.map((i, slot) => {
+      const len = lens[slot], p = prev[i];
+      const note = Math.round((1 - len / maxLen) * (PENTA.length - 1));
+      const st = { m: i, slot, y0: yTop, len, note, f: 2.4 + note * 0.3, amp: p ? p.amp : 0, t: p ? p.t : 0, col: COL.seal, k: 0, dirty: true, live: false, last: 0 };
+      stringByM[i] = st;
+      return st;
+    });
+    sGeom.setDrawRange(0, strings.length * (SP - 1) * 2);
+    overlay.classList.toggle('has-strings', strings.length > 0);
+    hint.textContent = strings.length ? '拨动红色琴弦，听你走过的朝代' : '拖动旋转 · 双指缩放 · 点地层看朝代 · 点光点看博物馆';
+  }
+  // One string at time 'now': a damped standing wave, ends fixed at today and at its oldest era.
+  function writeString(st, now) {
+    const m = museums[st.m], base = st.slot * (SP - 1);
+    const age = Math.max(0, (now - st.t) / 1000);
+    const a = reduceMotion ? 0 : st.amp * Math.exp(-age / 1.5);
+    const glow = st.amp > 0 ? Math.exp(-age / 0.55) : 0;
+    st.live = a > 0.0006 || glow > 0.02;
+    const rx = Math.cos(cam.az), rz = -Math.sin(cam.az), w = 2 * Math.PI * st.f;
+    const disp = (u) => a > 0.0006 ? a * (Math.sin(Math.PI * u) * Math.cos(w * age) + 0.3 * Math.sin(2 * Math.PI * u) * Math.cos(2 * w * age + 1.1)) : 0;
+    let x0 = 0, y0 = 0, z0 = 0;
+    const kk = st.k * (1 + 1.3 * glow);
+    for (let j = 0; j < SP; j++) {
+      const u = j / (SP - 1), y = st.y0 - st.len * u, dd = disp(u);
+      const x = m.x + rx * dd, z = m.z + rz * dd;
+      if (j > 0) {
+        const o = (base + j - 1) * 6;
+        sPos[o] = x0; sPos[o + 1] = y0; sPos[o + 2] = z0; sPos[o + 3] = x; sPos[o + 4] = y; sPos[o + 5] = z;
+        setRGBA(sCol, (base + j - 1) * 2, st.col, kk * (1 - 0.45 * (j - 1) / (SP - 1)));
+        setRGBA(sCol, (base + j - 1) * 2 + 1, st.col, kk * (1 - 0.45 * u));
+      }
+      x0 = x; y0 = y; z0 = z;
+    }
+    // The era dots are the notes on the string: they ride with it and flare when it sounds.
+    dotsOf[st.m].forEach((di) => {
+      const u = (st.y0 - yOf(dots[di].layer)) / st.len, dd = disp(u);
+      dPos[di * 3] = m.x + rx * dd; dPos[di * 3 + 2] = m.z + rz * dd;
+      dK[di] = dKBase[di] + (dKBase[di] > 0 ? 1.1 * glow : 0);
+      dSize[di] = dSizeBase[di] + (dKBase[di] > 0 ? 9 * glow : 0);
+    });
+  }
+  function pluck(st, strength, sx) {
+    const now = performance.now();
+    if (now - st.last < 110) return;
+    st.last = now; st.t = now; st.amp = 0.11 * Math.max(0.35, Math.min(1.4, strength)); st.dirty = true;
+    if (soundOn) stringSound(st.note, strength, (sx / Math.max(1, canvas.clientWidth)) * 2 - 1);
+    if (strength > 0.7 && navigator.vibrate) { try { navigator.vibrate(6); } catch (e) {} }
+    hoverIdx = st.m; tagHoldUntil = now + 1500;
+    lastInteract = now; S.needs = true;
+  }
+  function segCross(p, q, a, b) {
+    const d = (q.x - p.x) * (b.y - a.y) - (q.y - p.y) * (b.x - a.x);
+    if (Math.abs(d) < 1e-9) return false;
+    const t = ((a.x - p.x) * (b.y - a.y) - (a.y - p.y) * (b.x - a.x)) / d;
+    const u = ((a.x - p.x) * (q.y - p.y) - (a.y - p.y) * (q.x - p.x)) / d;
+    return t >= 0 && t <= 1 && u >= 0 && u <= 1;
+  }
+  function stringEnds(st) {
+    const m = museums[st.m];
+    return [screenOf(m.x, st.y0, m.z), screenOf(m.x, st.y0 - st.len, m.z)];
+  }
+  // A pointer moving from p0 to p1 plucks every string it crosses (a strum).
+  function strum(p0, p1, strength) {
+    if (state.focus >= 0 || !strings.length || !stringMesh.visible) return;
+    strings.forEach((st) => {
+      if (st.k <= 0.01) return;
+      const e = stringEnds(st);
+      if (e[0].z > 1 || e[1].z > 1) return;
+      if (segCross(p0, p1, e[0], e[1])) pluck(st, strength, (p0.x + p1.x) / 2);
+    });
+  }
+  // A tap near a string plucks it.
+  function nearestString(p, r) {
+    let best = null, bd = r * r;
+    strings.forEach((st) => {
+      if (st.k <= 0.01) return;
+      const e = stringEnds(st), a = e[0], b = e[1];
+      if (a.z > 1 || b.z > 1) return;
+      const vx = b.x - a.x, vy = b.y - a.y, L = vx * vx + vy * vy || 1;
+      const t = Math.max(0, Math.min(1, ((p.x - a.x) * vx + (p.y - a.y) * vy) / L));
+      const dx = a.x + vx * t - p.x, dy = a.y + vy * t - p.y, d = dx * dx + dy * dy;
+      if (d < bd) { bd = d; best = st; }
+    });
+    return best;
+  }
 
   // ── HTML labels ──
   const overlay = el('div', 'strata-overlay'); container.appendChild(overlay);
@@ -390,6 +561,23 @@ function init(container, data, cb) {
     });
   }
   const hint = el('div', 'strata-hint', '拖动旋转 · 双指缩放 · 点地层看朝代 · 点光点看博物馆'); overlay.appendChild(hint);
+  const soundBtn = el('button', 'strata-sound');
+  soundBtn.type = 'button';
+  const paintSound = () => {
+    soundBtn.classList.toggle('is-off', !soundOn);
+    soundBtn.setAttribute('aria-label', soundOn ? '琴弦声音：开' : '琴弦声音：关');
+    soundBtn.title = soundOn ? '琴弦声音：开' : '琴弦声音：关';
+    soundBtn.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/>' +
+      (soundOn ? '<path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/>' : '<path d="m16 9.5 5 5"/><path d="m21 9.5-5 5"/>') + '</svg>';
+  };
+  soundBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    soundOn = !soundOn;
+    try { localStorage.setItem('mmStringSound', soundOn ? '1' : '0'); } catch (err) {}
+    paintSound();
+    if (soundOn) { audioCtx(); const st = strings[Math.floor(strings.length / 2)]; if (st) pluck(st, 0.8, canvas.clientWidth / 2); }
+  });
+  overlay.appendChild(soundBtn);
 
   // ── Territories: each stratum shows its own dynasty's extent ──
   // Fetched (shared with the 2D map, cached forever); until then strata show today's outline.
@@ -592,15 +780,24 @@ function init(container, data, cb) {
 
     segs.forEach((s, i) => {
       const m = museums[s.m], v = !!visited[m.id], c = cand[m.id] != null, sel = m.id === selId;
-      let col = COL.bone, k = mine ? 0.04 : 0.075;
+      let col = COL.bone, k = mine ? 0.022 : 0.075;
       if (fp) { if (v) { col = COL.seal; k = 0.6; } else if (c) { col = COL.gilt; k = 0.45; } else k = 0; }
       else if (F >= 0) { if (m.links.indexOf(F) >= 0 && s.lo >= F) { col = v ? COL.seal : COL.gilt; k = PAL.ink ? 0.07 : 0.16; } else k = 0; }
       else if (v) { col = COL.seal; k = 0.5; }
       if (H >= 0) { if (s.m === H) { k = Math.max(k, 0.9); if (!v && !c) col = COL.giltHi; } else k *= 0.2; }
       if (sel && F < 0) { col = COL.giltHi; k = 0.95; }
+      // Outside the reading view your beams are drawn as strings instead.
+      const st = F < 0 && v ? stringByM[s.m] : null;
+      if (st) { st.col = col; st.k = k; st.dirty = true; k = 0; }
       setBeam(i * 2, col, k); setBeam(i * 2 + 1, col, k * 0.55);
     });
     bGeom.attributes.color.needsUpdate = true;
+    stringMesh.visible = F < 0;
+    if (F >= 0) {
+      // Reading one era: strings rest, dots go back to their places.
+      strings.forEach((st) => { st.amp = 0; st.live = false; });
+      dPos.set(dPosBase); dGeom.attributes.position.needsUpdate = true;
+    }
 
     dots.forEach((d, i) => {
       const m = museums[d.m], v = !!visited[m.id], c = cand[m.id] != null, sel = m.id === selId;
@@ -627,6 +824,7 @@ function init(container, data, cb) {
       setTint(dTint, dK, i, col, k); dSize[i] = size;
       setTint(rTint, rK, i, COL.seal, rk); rSize[i] = size * 1.7;
     });
+    dKBase.set(dK); dSizeBase.set(dSize);
     dGeom.attributes.tint.needsUpdate = true; dGeom.attributes.kk.needsUpdate = true; dGeom.attributes.size.needsUpdate = true;
     rGeom.attributes.tint.needsUpdate = true; rGeom.attributes.kk.needsUpdate = true; rGeom.attributes.size.needsUpdate = true;
 
@@ -687,6 +885,7 @@ function init(container, data, cb) {
     state.selectedId = next.selectedId || null;
     state.focus = state.mode === 'dynasty' && state.dynastyId != null && layerIndexById[state.dynastyId] != null ? layerIndexById[state.dynastyId] : -1;
     state.sel = state.selectedId != null && museumIdx[state.selectedId] != null ? museumIdx[state.selectedId] : -1;
+    buildStrings();
     if (prevFocus !== state.focus) {
       buildFocusPath(state.focus); showCredit();
       overlay.classList.toggle('is-focus', state.focus >= 0);
@@ -729,9 +928,17 @@ function init(container, data, cb) {
     if (pointers.size === 1) { const p = localXY(e); drag = { x: p.x, y: p.y, sx: p.x, sy: p.y, t: performance.now(), moved: false }; }
     if (pointers.size === 2) { const ps = Array.from(pointers.values()); pinch = { d: Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y), dist: to.dist }; drag = null; }
   });
+  let lastPtr = null;
+  canvas.addEventListener('pointerdown', () => { if (soundOn && strings.length) audioCtx(); });
   canvas.addEventListener('pointermove', (e) => {
     const p = localXY(e);
     if (pointers.has(e.pointerId)) pointers.set(e.pointerId, p);
+    const nowP = performance.now(), lp = lastPtr;
+    lastPtr = { x: p.x, y: p.y, t: nowP };
+    if (lp && nowP - lp.t < 120 && pointers.size < 2) {
+      const speed = Math.hypot(p.x - lp.x, p.y - lp.y) / Math.max(8, nowP - lp.t);
+      strum(lp, p, Math.min(1.3, 0.35 + speed * 0.9) * (e.pointerType === 'mouse' && !e.buttons ? 0.6 : 1));
+    }
     if (pinch && pointers.size === 2) {
       const ps = Array.from(pointers.values());
       const d = Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y);
@@ -748,7 +955,8 @@ function init(container, data, cb) {
     }
     if (e.pointerType === 'mouse') {
       const i = pickMuseum(p.x, p.y, 14);
-      if (i !== hoverIdx) { hoverIdx = i; canvas.style.cursor = i >= 0 ? 'pointer' : 'grab'; S.needs = true; }
+      // A just-plucked string keeps its name up for a moment.
+      if (i !== hoverIdx && (i >= 0 || nowP > tagHoldUntil)) { hoverIdx = i; canvas.style.cursor = i >= 0 ? 'pointer' : 'grab'; S.needs = true; }
     }
   });
   function end(e) {
@@ -760,11 +968,15 @@ function init(container, data, cb) {
       const p = localXY(e);
       const i = pickMuseum(p.x, p.y, e.pointerType === 'mouse' ? 16 : 28);
       if (i >= 0 && cb.onMuseum) cb.onMuseum(museums[i].id);
+      else if (i < 0 && state.focus < 0) {
+        const st = nearestString(p, e.pointerType === 'mouse' ? 12 : 22);
+        if (st) pluck(st, 1.1, p.x);
+      }
     }
   }
   canvas.addEventListener('pointerup', end);
   canvas.addEventListener('pointercancel', end);
-  canvas.addEventListener('pointerleave', () => { if (hoverIdx >= 0) { hoverIdx = -1; S.needs = true; } });
+  canvas.addEventListener('pointerleave', () => { lastPtr = null; if (hoverIdx >= 0 && performance.now() > tagHoldUntil) { hoverIdx = -1; S.needs = true; } });
   canvas.addEventListener('wheel', (e) => {
     e.preventDefault();
     to.dist = Math.max(baseDist * 0.35, Math.min(baseDist * 1.8, to.dist * Math.exp(e.deltaY * 0.0012)));
@@ -938,6 +1150,15 @@ function init(container, data, cb) {
       sp.scale.set(s, s, s);
     });
 
+    if (strings.length && stringMesh.visible) {
+      let moved = false;
+      strings.forEach((st) => { if (st.dirty || st.live) { writeString(st, now); st.dirty = false; moved = true; } });
+      if (moved) {
+        sGeom.attributes.position.needsUpdate = true; sGeom.attributes.color.needsUpdate = true;
+        dGeom.attributes.position.needsUpdate = true; dGeom.attributes.kk.needsUpdate = true; dGeom.attributes.size.needsUpdate = true;
+      }
+      if (hoverIdx >= 0 && now > tagHoldUntil && tagHoldUntil > 0 && !pointers.size) { tagHoldUntil = 0; if (!lastPtr) hoverIdx = -1; }
+    }
     renderer.render(scene, camera);
     placeLabels();
   }
@@ -949,7 +1170,7 @@ function init(container, data, cb) {
     // Dark halls add light to the colour only, leaving the canvas alpha alone. Plain additive
     // blending also adds alpha, so on this transparent canvas a switched-off (black) beam or
     // point would composite as an opaque black line over the hall's background (青绿 showed it).
-    [sitePoints, mPoints, dPoints, rPoints, tube, tubeGlow, chains, beams].concat(pulses).forEach((o) => {
+    [sitePoints, mPoints, dPoints, rPoints, tube, tubeGlow, chains, beams, stringMesh].concat(pulses).forEach((o) => {
       const m = o.material;
       if (PAL.ink) { m.blending = THREE.NormalBlending; return; }
       m.blending = THREE.CustomBlending;
@@ -969,6 +1190,7 @@ function init(container, data, cb) {
     recolor();
   }
 
+  paintSound();
   const ro = new ResizeObserver(() => fit(true));
   ro.observe(container);
   fit(true);

@@ -1404,6 +1404,19 @@ body.chat-locked .chat-body { touch-action: pan-y; }
   transition: opacity 0.8s ease;
 }
 .strata-hint.is-gone { opacity: 0; }
+/* 琴弦 sound on/off — only once you have strings to pluck */
+.strata-sound {
+  position: absolute; right: 14px; top: 14px;
+  display: none; place-items: center; width: 38px; height: 38px; padding: 0;
+  border-radius: 50%; border: 1px solid var(--line-strong); background: rgba(var(--bg2-rgb),0.88);
+  color: var(--seal-ink-strong); cursor: pointer; pointer-events: auto;
+  transition: color 0.2s, border-color 0.2s, opacity 0.3s;
+}
+.strata-overlay.has-strings .strata-sound { display: grid; }
+.strata-overlay.is-focus .strata-sound { opacity: 0; pointer-events: none; }
+.strata-sound.is-off { color: var(--text-4); }
+.strata-sound:hover { border-color: rgba(var(--seal-rgb),0.5); }
+.canvas.has-drawer .strata-sound { right: calc(var(--drawer-w) + 14px); }
 /* Desktop: with the side drawer open, floating controls re-centre on what stays visible. */
 .canvas { --drawer-w: 0px; }
 .canvas.has-drawer { --drawer-w: min(580px, 94%); }
