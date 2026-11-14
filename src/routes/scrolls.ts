@@ -10,6 +10,8 @@ import { cleanLine, cleanName } from "~/lib/sensitive"
 import { chinaNow } from "~/services/scroll-text"
 import { checkAndIncrement } from "~/lib/rateLimit"
 import { getClientIp } from "~/lib/getClientIp"
+import { buildScroll } from "~/services/scroll-narration"
+import { ScrollPage, LostPage } from "~/ui/scroll-page"
 
 interface Ctx { env: Env; body: any; set: any; params: Record<string, string>; request: Request; user: UserRow | null }
 const KINDS = new Set<ScrollKind>(["tune", "voyage", "seal", "scroll"])
@@ -44,6 +46,17 @@ export const scrollsRoute = new Elysia()
     if (kind === "seal") payload.achId = String(b.achId)
     const id = await new ScrollsRepo(c.env.DB).create({ kind, payload, userId: u ? u.id : null })
     return { id, url: "/s/" + id }
+  })
+  .get("/s/:id", async (ctx) => {
+    const c = ctx as unknown as Ctx
+    const html = { "content-type": "text/html; charset=utf-8" }
+    const repo = new ScrollsRepo(c.env.DB)
+    const id = String(c.params.id || "")
+    const row = ID_RE.test(id) ? await repo.get(id) : null
+    if (!row) return new Response(LostPage(), { status: 404, headers: html })
+    const [museums, dynasties, guan] = await Promise.all([new MuseumsRepo(c.env.DB).list(), new DynastiesRepo(c.env.DB).listFull(), repo.listGuan(id, 30)])
+    const built = buildScroll({ kind: row.kind, payload: row.payload }, { museums, dynasties: dynasties as any })
+    return new Response(ScrollPage({ id, built, guan, museums, dynasties }), { headers: { ...html, "cache-control": "no-cache" } })
   })
   .get("/api/s/:id/guan", async (ctx) => {
     const c = ctx as unknown as Ctx
