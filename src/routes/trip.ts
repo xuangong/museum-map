@@ -28,7 +28,7 @@ export const tripRoute = new Elysia()
     const c = ctx as unknown as Ctx
     const pts = String(c.query?.pts || "").split(";").filter(Boolean).map((s) => {
       const [lat, lng] = s.split(",").map(Number)
-      return { lat, lng }
+      return { lat: lat as number, lng: lng as number }
     })
     if (pts.length < 2 || pts.length > 12 || pts.some((p) => !Number.isFinite(p.lat) || !Number.isFinite(p.lng) || !inChina(p))) {
       return bad("pts=lat,lng;lat,lng (2–12 points in China)")

@@ -25,14 +25,15 @@ export function thin<T>(pts: T[], max: number): T[] {
   if (pts.length <= max) return pts
   const k = Math.ceil(pts.length / max)
   const out = pts.filter((_, i) => i % k === 0)
-  if (out[out.length - 1] !== pts[pts.length - 1]) out.push(pts[pts.length - 1])
+  const last = pts[pts.length - 1] as T
+  if (out[out.length - 1] !== last) out.push(last)
   return out
 }
 
 const round1 = (x: number) => Math.round(x * 10) / 10
 
 function straight(pts: LatLng[]): Route {
-  const legs = pts.slice(1).map((p, i) => ({ km: Math.round(kmBetween(pts[i], p)), h: null }))
+  const legs = pts.slice(1).map((p, i) => ({ km: Math.round(kmBetween(pts[i] as LatLng, p)), h: null }))
   return { provider: "line", km: legs.reduce((s, l) => s + l.km, 0), h: null, legs, line: pts.map((p) => [p.lat, p.lng]) }
 }
 
