@@ -6,6 +6,7 @@ import { Drawer } from "./components/drawer"
 import { ChatPanel } from "./components/chat-panel"
 import { icon } from "./icons"
 import { COORDS_SCRIPT } from "./client/coords"
+import { TRIP_CORE_SCRIPT } from "./client/trip-core"
 import { MAP_SCRIPT } from "./client/map"
 import { CHAT_SCRIPT } from "./client/chat"
 import { AUTH_SCRIPT } from "./client/auth"
@@ -62,7 +63,7 @@ export function HomePage(data: HomeData): string {
     <nav class="topbar-actions">
       <a class="tb-btn" href="/plaza" title="同好广场">${icon("users", 16)}<span class="tb-label">广场</span></a>
       <button class="tb-btn tb-trip" :class="tripMode ? 'active' : ''" @click="toggleTripMode()" title="我的行程">
-        ${icon("route", 16)}<span class="tb-label">行程</span><b class="tb-count" x-show="trip.ids.length" x-text="trip.ids.length" x-cloak></b>
+        ${icon("route", 16)}<span class="tb-label">行程</span><b class="tb-count" x-show="trip.picks.length" x-text="trip.picks.length" x-cloak></b>
       </button>
       <button class="tb-btn tb-stamp" :class="visits.footprintMode ? 'active' : ''" @click="toggleFootprint()" title="我的集章册">
         ${icon("seal", 16)}<span>集章</span><b x-text="visits.ids.length"></b>
@@ -70,7 +71,7 @@ export function HomePage(data: HomeData): string {
     </nav>
   </header>
   ${DynastyTimeline(data.dynasties)}
-  <div class="stage">
+  <div class="stage" :class="tripMode ? 'is-trip' : ''">
     <div class="toc-overlay" :class="tocOpen ? 'open' : ''" @click="tocOpen = false" x-cloak></div>
     <div class="toc-wrap" :class="tocOpen ? 'open' : ''">
       ${Sidebar({ googleEnabled: !!data.googleEnabled })}
@@ -89,7 +90,8 @@ export function HomePage(data: HomeData): string {
       </button>
       <div class="map-legend" x-show="view === 'map'" x-cloak>
         <template x-if="tripMode">
-          <div class="row"><span class="dot g"></span><span>行程站点（按顺序连线）</span></div>
+          <div class="row"><span class="dot g"></span><span x-text="trip.mode === 'drive' ? '路线与沿途' : '城市与周边'"></span></div>
+          <div class="row"><span class="dot c"></span><span>推荐 · 点开可加入</span></div>
         </template>
         <template x-if="!tripMode && visits.footprintMode">
           <div class="row"><span class="dot r"></span><span>已集章</span></div>
@@ -127,6 +129,7 @@ export function HomePage(data: HomeData): string {
 <script src="/cdn/leaflet-image.js"></script>
 <script src="/cdn/qrcode.js"></script>
 <script>${COORDS_SCRIPT}</script>
+<script>${TRIP_CORE_SCRIPT}</script>
 <script>${MAP_SCRIPT}</script>
 <script>${CHAT_SCRIPT}</script>
 <script>${AUTH_SCRIPT}</script>
