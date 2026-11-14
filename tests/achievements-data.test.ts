@@ -67,4 +67,11 @@ describe("achievement catalog", () => {
       expect(a.id in ACHIEVEMENT_LABELS).toBe(true)
     }
   })
+
+  it("every 展签 is 120–300 characters", () => {
+    for (const a of ACHIEVEMENTS) {
+      const n = Array.from(ACHIEVEMENT_LABELS[a.id] ?? "").length
+      expect([a.id, n >= 120 && n <= 300]).toEqual([a.id, true])
+    }
+  })
 })
