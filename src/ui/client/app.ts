@@ -35,6 +35,8 @@ window.museumApp = function() {
       { id: 'tier1', label: '一级馆' },
       { id: 'tier2', label: '二级馆' },
       { id: 'heritage-site', label: '世遗/国保' },
+      // Everything not on the three official lists: small, specialist and local museums.
+      { id: 'other', label: '拾遗' },
     ],
     currentDynastyId: null,
     selectedMuseumId: null,
@@ -91,6 +93,7 @@ window.museumApp = function() {
       this.dynastyGeo = data.dynastyGeo || {};
       this.crossings = data.crossings || {};
       this.aiCatalog = data.ai || this.aiCatalog;
+      this.museumAliases = data.aliases || {};
       this.initAi();
       this.territoryUrl = data.territoryUrl || '';
       this.initTheme();
@@ -1220,9 +1223,13 @@ window.museumApp = function() {
         seen[s] = true;
         out.push({ s: s, id: id });
       };
+      var aliases = this.museumAliases || {};
       this.museums.forEach(function(m){
         var n = String(m.name || '');
         add(n, m.id, 2);
+        // 「扬州博物馆 / 中国大运河博物馆」「中山古城遗址·中山国王陵陈列馆」: each part on its own.
+        n.split(/\s*[\/／·]\s*/).forEach(function(part){ if (part !== n) add(part, m.id, 3); });
+        (aliases[m.id] || []).forEach(function(a){ add(a, m.id, 2); });
         if (n.search(/[（(]/) < 0) return;
         add(n.replace(/[（(][^）)]*[）)]/g, ''), m.id, 3);
         var re = /[（(]([^）)]*)[）)]/g, g;

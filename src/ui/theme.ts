@@ -532,6 +532,9 @@ body.toc-resizing, body.toc-resizing * { cursor: col-resize !important; user-sel
 .seg-btn:hover { color: var(--text); }
 .seg-btn.active { background: var(--surface-3); color: var(--text); box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 2px 8px -2px var(--sh-60); }
 .seg-count { font-family: var(--mono); font-size: 10.5px; color: var(--text-4); }
+/* Five level filters must fit the sidebar without hiding 拾遗 off the edge. */
+.toc-controls .seg-btn { padding: 0 6px; gap: 3px; font-size: 12px; }
+.toc-controls .seg-count { font-size: 10px; }
 .seg-btn.active .seg-count { color: var(--gilt); }
 .search {
   display: flex; align-items: center; gap: 8px;
