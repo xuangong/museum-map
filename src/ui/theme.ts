@@ -1439,12 +1439,16 @@ body.chat-locked .chat-body { touch-action: pan-y; }
   z-index: 6; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
 }
 .strata-now em { font-style: normal; }
+.strata-now .nc-tune { margin-top: 3px; color: var(--seal-ink-strong); opacity: 0.85; font-family: var(--serif); font-size: 12px; }
 /* Phones: one compact line under the play button, so the sounding seals stay visible */
 @media (max-width: 640px) {
   .strata-now { flex-direction: row; align-items: baseline; gap: 6px; max-width: 64vw; padding: 5px 22px 5px 10px; border-radius: 999px; }
   .strata-now b { font-size: 13px; flex: none; }
   .strata-now span { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 0; }
   .strata-now .nc-from, .strata-now .nc-museum { display: none; }
+  /* With a 名曲, the phone line names the tune instead of the object */
+  .strata-now.has-tune .nc-src { display: none; }
+  .strata-now .nc-tune { margin-top: 0; font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
   .strata-now i { bottom: auto; top: 50%; transform: translateY(-50%); }
 }
 .strata-now.is-on { display: flex; animation: now-in 0.35s ease-out; }

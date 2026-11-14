@@ -1,5 +1,6 @@
 import { CHINA_GEO_JSON } from "./geo-data"
 import { ERA_VOICES } from "../../data/era-voices"
+import { ERA_TUNES } from "../../data/era-tunes"
 
 // 时空地层 — the 3D time-space view. Served as an ES module at /assets/strata.js.
 //
@@ -157,6 +158,8 @@ function ksBuffer(ac, freq, lpk, decay) {
 //          at lp × pitch, with a little breath and a late vibrato [rate, depth, delay]
 // Era → instrument and the museum object it is drawn from (src/data/era-voices.ts).
 const ERA = ${JSON.stringify(ERA_VOICES)};
+// Era → the famous pieces it is remembered by (src/data/era-tunes.ts), named while it plays.
+const TUNES = ${JSON.stringify(ERA_TUNES)};
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const VOICES = {
   ks: { name: '你的琴弦', g: 1.15, pluck: [0.4, 2.4] },
@@ -959,6 +962,7 @@ function init(container, data, cb) {
     c.ev.forEach((e) => { e.at = t0 + e.t; if (audio) srcs.push(...stringSound(e.deg, e.vel, panOf(e.st), e.at, e.voice, { dur: e.dur, freq: e.freq, mul: c.mul })); });
     c.lay.forEach((l) => { l.at = t0 + l.t; });
     play = { audio, ev: c.ev, lay: c.lay, i: 0, j: 0, end: t0 + c.dur, srcs, focus: F };
+    playTunes = {};
     hint.classList.add('is-gone');
     paintPlay();
   }
@@ -1110,7 +1114,7 @@ function init(container, data, cb) {
   // 此声取自: the object behind this era's sound, one tap from its museum.
   const nowCap = el('button', 'strata-now');
   nowCap.type = 'button';
-  let nowMuseum = null;
+  let nowMuseum = null, playTunes = {};
   function paintNow(li, quote) {
     nowMuseum = null;
     if (li < 0) { nowCap.classList.remove('is-on'); return; }
@@ -1120,15 +1124,24 @@ function init(container, data, cb) {
     else {
       const e = eraOf(li), name = layers[li].name;
       if (!e) html = '<b>' + esc(name) + '</b>';
-      else if (!e.src) html = '<b>' + esc(e.inst) + '</b><span>' + esc(name) + ' · 示意，馆藏里还没找到实物</span>';
+      else if (!e.src) html = '<b>' + esc(e.inst) + '</b><span class="nc-src">' + esc(name) + ' · 示意，馆藏里还没找到实物</span>';
       else {
         const m = museums.find((x) => x.id === e.src.museumId);
         nowMuseum = m ? m.id : null;
-        html = '<b>' + esc(e.inst) + '</b><span><em class="nc-from">此声取自 · </em>' + esc(e.src.artifact) + (m ? '<em class="nc-museum"> · ' + esc(m.name) + '</em>' : '') + '</span>' + (m ? '<i aria-hidden="true">›</i>' : '');
+        html = '<b>' + esc(e.inst) + '</b><span class="nc-src"><em class="nc-from">此声取自 · </em>' + esc(e.src.artifact) + (m ? '<em class="nc-museum"> · ' + esc(m.name) + '</em>' : '') + '</span>' + (m ? '<i aria-hidden="true">›</i>' : '');
         nowCap.setAttribute('aria-label', e.inst + '，此声取自' + e.src.artifact + (m ? '，' + m.name + '，点按查看这座馆' : ''));
       }
     }
+    // The era's 名曲 (one of them, chosen afresh each performance).
+    const tunes = li >= 0 && li < N && !quote ? TUNES[layers[li].id] : null;
+    let tune = null;
+    if (tunes && tunes.length) {
+      if (playTunes[li] == null) playTunes[li] = Math.floor(Math.random() * tunes.length);
+      tune = tunes[playTunes[li]];
+      html += '<span class="nc-tune">♪ 《' + esc(tune.name) + '》 ' + esc(tune.story) + '</span>';
+    }
     nowCap.innerHTML = html;
+    nowCap.classList.toggle('has-tune', !!tune);
     nowCap.classList.toggle('has-link', !!nowMuseum);
     nowCap.classList.add('is-on');
   }

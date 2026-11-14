@@ -2,12 +2,18 @@ import { describe, expect, test } from "bun:test"
 import { readdirSync, readFileSync } from "node:fs"
 import { parse } from "yaml"
 import { ERA_VOICES } from "~/data/era-voices"
+import { ERA_TUNES } from "~/data/era-tunes"
 
 // Each era's instrument in 奏一曲 must point at an object a museum really holds.
 describe("era voices", () => {
   const dynasties = readdirSync("data/dynasties").map((f) => f.replace(/\.yaml$/, ""))
   test("every dynasty has a voice", () => {
     expect(dynasties.filter((d) => !ERA_VOICES[d])).toEqual([])
+  })
+  test("名曲 belong to real dynasties and are complete", () => {
+    const bad = Object.entries(ERA_TUNES).flatMap(([d, ts]) =>
+      [...(dynasties.includes(d) ? [] : [`unknown dynasty ${d}`]), ...ts.filter((t) => !t.name || !t.story || !t.from).map((t) => `${d}: incomplete ${t.name}`)])
+    expect(bad).toEqual([])
   })
   test("every source is a recorded artifact or treasure of that museum", () => {
     const bad: string[] = []
