@@ -1425,12 +1425,19 @@ body.chat-locked .chat-body { touch-action: pan-y; }
   white-space: nowrap; cursor: pointer; pointer-events: auto; box-shadow: 0 10px 26px -14px var(--sh-90);
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
-.strata-overlay.has-strings.can-play .strata-play { display: inline-flex; }
+.strata-overlay.can-play .strata-play { display: inline-flex; }
 .strata-play:hover { border-color: var(--seal); }
 .strata-play.is-playing { background: var(--seal); border-color: var(--seal); color: #FFF2E8; }
 .canvas.has-drawer .strata-play { right: calc(var(--drawer-w) + 14px); }
 /* The era being played */
 .strata-label.is-playing { color: var(--seal-ink-strong); background: rgba(var(--seal-rgb),0.14); box-shadow: inset 0 0 0 1px rgba(var(--seal-rgb),0.45); transform-origin: left center; }
+/* The instrument of the era being played */
+.strata-label .sl-inst { display: none; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--seal-ink-strong); padding: 1px 6px; border-radius: 999px; border: 1px solid rgba(var(--seal-rgb),0.4); white-space: nowrap; }
+.strata-label.is-playing .sl-inst { display: inline-block; }
+.strata-label.is-playing .sl-period { display: none; }
+/* 留白: an era without your strings still sounds, quieter */
+.strata-label.is-playing.is-rest { color: var(--text-3); background: rgba(var(--seal-rgb),0.05); box-shadow: inset 0 0 0 1px rgba(var(--seal-rgb),0.2); }
+.strata-label.is-rest .sl-inst { color: var(--text-3); border-style: dashed; border-color: var(--line-2, rgba(var(--seal-rgb),0.25)); }
 /* A seal label rings with its note in the reading view */
 .strata-mtag.is-sounding { animation: mtag-ring 0.55s ease-out; }
 @keyframes mtag-ring {

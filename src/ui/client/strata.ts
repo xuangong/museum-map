@@ -107,20 +107,29 @@ function audioCtx() {
       master = actx.createGain(); master.gain.value = 0.55;
       const comp = actx.createDynamicsCompressor();
       master.connect(comp); comp.connect(actx.destination);
+      // A quiet hall: generated impulse, about two seconds of tail.
+      try {
+        const sr = actx.sampleRate, n = Math.floor(sr * 2.2), ir = actx.createBuffer(2, n, sr);
+        for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 3.2); }
+        const conv = actx.createConvolver(); conv.buffer = ir;
+        const wet = actx.createGain(); wet.gain.value = 0.2;
+        master.connect(conv); conv.connect(wet); wet.connect(comp);
+      } catch (e) {}
     } catch (e) { actx = null; return null; }
   }
   if (actx.state === 'suspended') { try { actx.resume(); } catch (e) {} }
   return actx;
 }
-function ksBuffer(ac, freq) {
-  const key = Math.round(freq * 10);
+function ksBuffer(ac, freq, lpk, decay) {
+  lpk = lpk == null ? 0.4 : lpk; decay = decay || 2.4;
+  const key = Math.round(freq * 10) + ':' + lpk + ':' + decay;
   if (ksCache[key]) return ksCache[key];
   const sr = ac.sampleRate, n = Math.floor(sr * 3), buf = ac.createBuffer(1, n, sr), d = buf.getChannelData(0);
   const P = Math.max(2, Math.round(sr / freq)), ring = new Float32Array(P);
   // A finger, not a pick: the excitation is softened before it rings.
   let lp = 0;
-  for (let i = 0; i < P; i++) { lp = lp * 0.4 + (Math.random() * 2 - 1) * 0.6; ring[i] = lp; }
-  const rho = Math.pow(0.001, 1 / (freq * 2.4));   // about 2.4 s to fade, whatever the pitch
+  for (let i = 0; i < P; i++) { lp = lp * lpk + (Math.random() * 2 - 1) * (1 - lpk); ring[i] = lp; }
+  const rho = Math.pow(0.001, 1 / (freq * decay));   // 'decay' seconds to fade, whatever the pitch
   let idx = 0;
   for (let i = 0; i < n; i++) {
     const a = ring[idx], b = ring[(idx + 1) % P];
@@ -132,20 +141,93 @@ function ksBuffer(ac, freq) {
   ksCache[key] = buf;
   return buf;
 }
-// One plucked note at pentatonic degree 'deg'; 'when' is an AudioContext time (0 = now).
-function stringSound(deg, vel, pan, when) {
+// ── Era voices: every stratum has its own instrument, whether or not you have strings there;
+// 今 is your own strings. All synthesized: plucks are Karplus–Strong buffers, struck stone,
+// bronze and the qin are decaying partials, winds and the huqin are shaped oscillators.
+const VOICE_OF = {
+  neolithic: 'xun', xia: 'qing', shang: 'qing', 'western-zhou': 'zhong', 'eastern-zhou': 'zhong',
+  qin: 'zhu', 'western-han': 'zhu', 'eastern-han': 'zhu', 'three-kingdoms': 'qin', jin: 'qin', nanbeichao: 'qin',
+  sui: 'pipa', tang: 'pipa', wudai: 'pipa', song: 'xiao', liao: 'huqin', 'jin-jurchen': 'huqin', yuan: 'huqin', ming: 'di', qing: 'di',
+};
+const VOICES = {
+  ks: { name: '你的琴弦', oct: 1, g: 1, pluck: [0.4, 2.4] },
+  pipa: { name: '琵琶', oct: 2, g: 1.25, pluck: [0.06, 0.9] },
+  zhu: { name: '筑', oct: 1, g: 1.45, pluck: [0.12, 0.7], click: 0.45 },
+  xun: { name: '陶埙', oct: 2, g: 0.4, h: [1, 0.04, 0.12], env: [0.1, 0.42, 0.5], breath: 0.22, vib: [4, 0.004, 0.35] },
+  xiao: { name: '洞箫', oct: 2, g: 0.46, h: [1, 0.12, 0.05, 0.02], env: [0.09, 0.4, 0.5], breath: 0.28, vib: [4.8, 0.005, 0.3] },
+  di: { name: '竹笛', oct: 2, g: 0.44, h: [1, 0.4, 0.18, 0.07, 0.04, 0.03, 0.025, 0.02], env: [0.035, 0.3, 0.3], breath: 0.14, vib: [5.8, 0.006, 0.22] },
+  huqin: { name: '胡琴', oct: 2, g: 0.44, h: [1, 0.55, 0.36, 0.24, 0.16, 0.11, 0.07, 0.05, 0.03], env: [0.12, 0.42, 0.35], breath: 0.03, vib: [5.5, 0.009, 0.15] },
+  qing: { name: '石磬', oct: 2, g: 0.6, bell: [[1, 1, 1.4], [2.32, 0.45, 0.6], [3.86, 0.28, 0.4], [5.33, 0.14, 0.25]], click: 0.35 },
+  zhong: { name: '编钟', oct: 2, g: 0.5, bell: [[0.5, 0.3, 2.6], [1, 1, 2], [1.19, 0.5, 1.3], [1.5, 0.2, 0.9], [2, 0.38, 0.8], [2.74, 0.14, 0.4]], click: 0.25 },
+  qin: { name: '古琴', oct: 1, g: 0.46, bell: [[1, 1, 3.2], [2, 0.5, 2.2], [3, 0.28, 1.6], [4, 0.14, 1.1], [5, 0.08, 0.8]], click: 0.08, vib: [5, 0.006, 0.5] },
+};
+const waveCache = {};
+let noiseBuf = null;
+function noise(ac) {
+  if (noiseBuf) return noiseBuf;
+  const n = ac.sampleRate, b = ac.createBuffer(1, n, ac.sampleRate), d = b.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+  return (noiseBuf = b);
+}
+// Slow vibrato that fades in after 'delay' (a qin's 吟, a flute's breath).
+function vibrato(ac, param, f, vib, when, end, srcs) {
+  if (!vib) return;
+  const lfo = ac.createOscillator(), dg = ac.createGain();
+  lfo.frequency.value = vib[0];
+  dg.gain.setValueAtTime(0, when); dg.gain.linearRampToValueAtTime(f * vib[1], when + vib[2] + 0.3);
+  lfo.connect(dg); dg.connect(param); lfo.start(when); lfo.stop(end); srcs.push(lfo);
+}
+function burst(ac, out, amp, freq, when, len, srcs, envFn) {
+  const n = ac.createBufferSource(); n.buffer = noise(ac); n.loop = true;
+  const bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = Math.min(9000, freq); bp.Q.value = 1.2;
+  const g = ac.createGain();
+  envFn ? envFn(g.gain) : (g.gain.setValueAtTime(amp, when), g.gain.exponentialRampToValueAtTime(0.0001, when + len));
+  n.connect(bp); bp.connect(g); g.connect(out);
+  n.start(when, Math.random() * 0.5); n.stop(when + len + 0.05); srcs.push(n);
+}
+// One note at pentatonic degree 'deg' on voice 'vk'; 'when' is an AudioContext time (0 = now).
+// Returns the sources it started, so a performance can be cut short.
+function stringSound(deg, vel, pan, when, vk) {
   const ac = audioCtx();
-  if (!ac || !master) return null;
+  if (!ac || !master) return [];
+  const V = VOICES[vk] || VOICES.ks, srcs = [];
   try {
-    const src = ac.createBufferSource();
-    src.buffer = ksBuffer(ac, degFreq(deg));
-    const g = ac.createGain(); g.gain.value = 0.34 * Math.max(0.3, Math.min(1.3, vel));
-    src.connect(g);
-    if (ac.createStereoPanner) { const pn = ac.createStereoPanner(); pn.pan.value = Math.max(-0.8, Math.min(0.8, pan || 0)); g.connect(pn); pn.connect(master); }
-    else g.connect(master);
-    src.start(when || 0);
-    return src;
-  } catch (e) { return null; }
+    const t = Math.max(when || 0, ac.currentTime), f = degFreq(deg) * V.oct;
+    const out = ac.createGain(); out.gain.value = 0.34 * V.g * Math.max(0.3, Math.min(1.3, vel));
+    if (ac.createStereoPanner) { const pn = ac.createStereoPanner(); pn.pan.value = Math.max(-0.8, Math.min(0.8, pan || 0)); out.connect(pn); pn.connect(master); }
+    else out.connect(master);
+    if (V.pluck) {
+      const src = ac.createBufferSource();
+      src.buffer = ksBuffer(ac, f, V.pluck[0], V.pluck[1]);
+      src.connect(out); src.start(t); srcs.push(src);
+    } else if (V.bell) {
+      // Struck: each partial rings and dies on its own.
+      V.bell.forEach(([r, a, dec]) => {
+        const fr = f * r; if (fr > 9000) return;
+        const o = ac.createOscillator(), g = ac.createGain();
+        o.frequency.value = fr;
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(a, t + 0.004); g.gain.setTargetAtTime(0, t + 0.004, dec / 4);
+        o.connect(g); g.connect(out); o.start(t); o.stop(t + dec * 1.4 + 0.1); srcs.push(o);
+        vibrato(ac, o.frequency, fr, V.vib, t, t + dec * 1.4 + 0.1, srcs);
+      });
+    } else {
+      // Blown or bowed: a shaped tone with breath around it.
+      const [a, hold, rel] = V.env, end = t + a + hold + rel * 2.2;
+      const key = vk;
+      if (!waveCache[key]) { const im = new Float32Array([0].concat(V.h)), re = new Float32Array(im.length); waveCache[key] = ac.createPeriodicWave(re, im); }
+      const o = ac.createOscillator(), g = ac.createGain();
+      o.setPeriodicWave(waveCache[key]); o.frequency.value = f;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(1, t + a); g.gain.setValueAtTime(1, t + a + hold * 0.4);
+      g.gain.linearRampToValueAtTime(0.82, t + a + hold); g.gain.setTargetAtTime(0, t + a + hold, rel / 3);
+      o.connect(g); g.connect(out); o.start(t); o.stop(end); srcs.push(o);
+      vibrato(ac, o.frequency, f, V.vib, t, end, srcs);
+      if (V.breath) burst(ac, out, V.breath, f * 2, t, a + hold + rel, srcs, (gp) => {
+        gp.setValueAtTime(0, t); gp.linearRampToValueAtTime(V.breath, t + a * 0.6); gp.setTargetAtTime(V.breath * 0.35, t + a, 0.08); gp.setTargetAtTime(0, t + a + hold, rel / 3);
+      });
+    }
+    if (V.click) burst(ac, out, V.click, f * 6, t, 0.035, srcs);
+  } catch (e) {}
+  return srcs;
 }
 
 // tint = colour, kk = intensity. Light halls: colour × intensity, added. Ink hall: a
@@ -516,7 +598,7 @@ function init(container, data, cb) {
     st.last = now; st.t = now; st.amp = 0.11 * Math.max(0.35, Math.min(1.4, strength)); st.dirty = true;
     st.stopLi = opts.li != null ? opts.li : -1;
     st.stop = st.stopLi >= 0 ? Math.max(0.06, (st.y0 - yOf(st.stopLi)) / st.len) : 1;
-    if (soundOn && !opts.scheduled) stringSound(st.note, strength, (sx / Math.max(1, canvas.clientWidth)) * 2 - 1, 0);
+    if (soundOn && !opts.scheduled) stringSound(state.focus >= 0 ? noteAt(st, state.focus) : st.note, strength, (sx / Math.max(1, canvas.clientWidth)) * 2 - 1, 0, voiceOf(state.focus));
     if (!opts.scheduled) {
       if (strength > 0.7 && navigator.vibrate) { try { navigator.vibrate(6); } catch (e) {} }
       hoverIdx = st.m; tagHoldUntil = now + 1500;
@@ -532,31 +614,48 @@ function init(container, data, cb) {
   // stopped at that era; 今 closes with every string open. One era (reading view): a short
   // phrase on that era's notes. Sound is scheduled on the audio clock; each frame plucks the
   // strings whose notes have started on that same clock, so what you see is what you hear.
-  let play = null, playLayer = -1;
+  let play = null, playLayer = -1, playRest = false;
   function stringsAt(li) { return strings.filter((st) => museums[st.m].links.indexOf(li) >= 0); }
-  function panOf(st) { const m = museums[st.m], p = screenOf(m.x, st.y0, m.z); return (p.x / Math.max(1, canvas.clientWidth)) * 2 - 1; }
+  function voiceOf(li) { return li >= 0 && li < N ? VOICE_OF[layers[li].id] || 'ks' : 'ks'; }
+  // An empty era's own note: a gentle rise through history, so the rests still make a line.
+  function homeOf(li) { return 3 + Math.round(li * 4 / Math.max(1, N - 1)); }
+  function panOf(st) { if (!st) return 0; const m = museums[st.m], p = screenOf(m.x, st.y0, m.z); return (p.x / Math.max(1, canvas.clientWidth)) * 2 - 1; }
   function compose(F) {
     const ev = [], lay = [];
     let t = 0;
     if (F < 0) {
       for (let li = 0; li < N; li++) {
+        const vk = voiceOf(li);
         const here = stringsAt(li).map((st) => ({ st, deg: noteAt(st, li) })).sort((a, b) => a.deg - b.deg || museums[a.st.m].x - museums[b.st.m].x).slice(0, 6);
-        if (!here.length) continue;
+        if (!here.length) {
+          // 留白: one soft note in the era's instrument, and the layer stays dim.
+          lay.push({ t, li, rest: true });
+          ev.push({ t, st: null, li, deg: homeOf(li), vel: VOICES[vk].pluck ? 0.62 : 0.42, voice: vk });
+          t += 0.62;
+          continue;
+        }
         lay.push({ t, li });
         here.forEach((x, k) => {
-          ev.push({ t, st: x.st, li, deg: x.deg, vel: k === 0 ? 1.05 : 0.8 });
-          t += k === here.length - 1 ? 0.34 : 0.19;
+          ev.push({ t, st: x.st, li, deg: x.deg, vel: k === 0 ? 1.05 : 0.8, voice: vk });
+          t += k === here.length - 1 ? 0.4 : 0.21;
         });
         t += 0.08;
       }
-      // 今: every string open, a slow strum.
+      // 今: every string open, a slow strum on your own strings.
       lay.push({ t, li: N });
-      strings.slice().sort((a, b) => a.note - b.note).forEach((st, k) => { ev.push({ t: t + k * 0.06, st, li: -1, deg: st.note, vel: 0.9 }); });
-      return { ev, lay, dur: t + strings.length * 0.06 + 2.4 };
+      strings.slice().sort((a, b) => a.note - b.note).forEach((st, k) => { ev.push({ t: t + k * 0.06, st, li: -1, deg: st.note, vel: 0.9, voice: 'ks' }); });
+      return { ev, lay, dur: t + (strings.length ? strings.length * 0.06 + 2.6 : 1.6) };
     }
+    const vk = voiceOf(F);
     const here = stringsAt(F).map((st) => ({ st, deg: noteAt(st, F) })).sort((a, b) => a.deg - b.deg);
-    if (!here.length) return { ev, lay, dur: 0 };
-    // The era's notes and their octave, played to a fixed rhythm (beats of 0.24 s).
+    if (!here.length) {
+      // No string here yet: the era's instrument plays a short motif alone.
+      const h = homeOf(F), motif = [0, 1, 2, 1, 3, 2, 0], beats = [1, 1, 2, 1, 1, 1, 3];
+      lay.push({ t: 0, li: F, rest: true });
+      motif.forEach((d, k) => { ev.push({ t, st: null, li: F, deg: h + d, vel: 0.55, voice: vk }); t += beats[k] * 0.3; });
+      return { ev, lay, dur: t + 2 };
+    }
+    // The era's notes and their octave, played to a fixed rhythm (beats of 0.26 s).
     const ladder = here.concat(here.map((x) => ({ st: x.st, deg: Math.min(MAX_DEG, x.deg + 5) })));
     const L = ladder.length;
     const shape = [0, 1, 2, 3, 2, 1, 0, 2, 1, 3, 4, 3, 2, 1, 0];
@@ -564,20 +663,19 @@ function init(container, data, cb) {
     lay.push({ t: 0, li: F });
     shape.forEach((idx, k) => {
       const x = ladder[Math.min(L - 1, Math.round(idx * (L - 1) / 4))];
-      ev.push({ t, st: x.st, li: F, deg: x.deg, vel: beats[k] > 1 ? 1.05 : 0.8 });
-      t += beats[k] * 0.24;
+      ev.push({ t, st: x.st, li: F, deg: x.deg, vel: beats[k] > 1 ? 1.05 : 0.8, voice: vk });
+      t += beats[k] * 0.26;
     });
     // Close on the era's chord.
-    here.forEach((x, k) => { ev.push({ t: t + k * 0.05, st: x.st, li: F, deg: x.deg, vel: 0.85 }); });
-    return { ev, lay, dur: t + 2.2 };
+    here.forEach((x, k) => { ev.push({ t: t + k * 0.05, st: x.st, li: F, deg: x.deg, vel: 0.85, voice: vk }); });
+    return { ev, lay, dur: t + 2.4 };
   }
-  function markPlayLayer(li) {
-    playLayer = li;
-    layerLabels.forEach((l) => { l.el.classList.toggle('is-playing', l.layer === li); });
+  function markPlayLayer(li, rest) {
+    playLayer = li; playRest = !!rest;
+    layerLabels.forEach((l) => { const on = l.layer === li; l.el.classList.toggle('is-playing', on); l.el.classList.toggle('is-rest', on && !!rest); });
     todayLabel.classList.toggle('is-playing', li === N);
   }
   function startPlay() {
-    if (!strings.length) return;
     const F = state.focus;
     const c = compose(F);
     if (!c.ev.length) return;
@@ -586,7 +684,7 @@ function init(container, data, cb) {
     const ac = audioCtx(), audio = !!(ac && master);
     const t0 = (audio ? ac.currentTime : performance.now() / 1000) + 0.15;
     const srcs = [];
-    c.ev.forEach((e) => { e.at = t0 + e.t; if (audio) { const s0 = stringSound(e.deg, e.vel, panOf(e.st), e.at); if (s0) srcs.push(s0); } });
+    c.ev.forEach((e) => { e.at = t0 + e.t; if (audio) srcs.push(...stringSound(e.deg, e.vel, panOf(e.st), e.at, e.voice)); });
     c.lay.forEach((l) => { l.at = t0 + l.t; });
     play = { audio, ev: c.ev, lay: c.lay, i: 0, j: 0, end: t0 + c.dur, srcs, focus: F };
     hint.classList.add('is-gone');
@@ -602,10 +700,10 @@ function init(container, data, cb) {
   function tickPlay() {
     if (!play) return;
     const c = play.audio ? actx.currentTime : performance.now() / 1000;
-    while (play.j < play.lay.length && play.lay[play.j].at <= c + 0.01) markPlayLayer(play.lay[play.j++].li);
+    while (play.j < play.lay.length && play.lay[play.j].at <= c + 0.01) { const l = play.lay[play.j++]; markPlayLayer(l.li, l.rest); }
     while (play.i < play.ev.length && play.ev[play.i].at <= c + 0.01) {
       const e = play.ev[play.i++];
-      pluck(e.st, e.vel, 0, { li: e.li, scheduled: true });
+      if (e.st) pluck(e.st, e.vel, 0, { li: e.li, scheduled: true });
     }
     if (c > play.end) stopPlay();
   }
@@ -656,6 +754,7 @@ function init(container, data, cb) {
     b.appendChild(el('span', 'sl-period', L.period));
     // How many of your seals sit on this stratum (empty when you have none here).
     const count = el('span', 'sl-count'); b.appendChild(count);
+    b.appendChild(el('span', 'sl-inst', (VOICES[VOICE_OF[L.id]] || VOICES.ks).name));
     b.addEventListener('click', (e) => { e.stopPropagation(); cb.onDynasty && cb.onDynasty(L.id); });
     overlay.appendChild(b);
     return { el: b, count, v: new THREE.Vector3(anchorX, L.y, anchorZ), layer: L.i };
@@ -664,6 +763,7 @@ function init(container, data, cb) {
   todayLabel.type = 'button';
   todayLabel.appendChild(el('span', 'sl-name', '今'));
   todayLabel.appendChild(el('span', 'sl-period', museums.length + ' 座博物馆'));
+  todayLabel.appendChild(el('span', 'sl-inst', VOICES.ks.name));
   todayLabel.addEventListener('click', (e) => { e.stopPropagation(); cb.onDynasty && cb.onDynasty(null); });
   overlay.appendChild(todayLabel);
   const todayAnchor = new THREE.Vector3(anchorX, yTop, anchorZ);
@@ -720,14 +820,17 @@ function init(container, data, cb) {
   playBtn.type = 'button';
   function paintPlay() {
     const F = state.focus, n = F >= 0 ? stringsAt(F).length : strings.length;
-    overlay.classList.toggle('can-play', n > 0);
+    overlay.classList.add('can-play');
     playBtn.classList.toggle('is-playing', !!play);
     const icon = play
       ? '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>'
       : '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>';
-    const label = play ? '停' : F >= 0 ? '奏 · ' + layers[F].name : '奏一曲';
+    const verb = n > 0 ? '奏' : '听';
+    const label = play ? '停' : F >= 0 ? verb + ' · ' + layers[F].name : verb + '一曲';
     playBtn.innerHTML = icon + '<span>' + label + '</span>';
-    playBtn.setAttribute('aria-label', play ? '停止演奏' : F >= 0 ? '用这一层的琴弦奏一段' : '用你的琴弦，从远古奏到今天');
+    playBtn.setAttribute('aria-label', play ? '停止演奏'
+      : F >= 0 ? (n > 0 ? '用这一层的琴弦奏一段' : '听这一层的乐器；在这里集章，你的琴弦会加入')
+      : (n > 0 ? '用你的琴弦，从远古奏到今天' : '听二十个朝代的乐器；集章之后，你的琴弦会加入'));
   }
   playBtn.addEventListener('click', (e) => { e.stopPropagation(); if (play) stopPlay(); else startPlay(); });
   overlay.appendChild(playBtn);
@@ -1292,7 +1395,7 @@ function init(container, data, cb) {
     layers.forEach((L) => {
       const appear = Math.max(0, Math.min(1, intro * 1.6 - (L.i / N) * 0.75));
       // The era being played lights up.
-      const pf = play && playLayer === L.i ? 2.6 : 1;
+      const pf = play && playLayer === L.i ? (playRest ? 1.5 : 2.6) : 1;
       lerpMat(L.outline.material, Math.min(1, L.to.outline * appear * pf), ka); lerpMat(L.fill.material, Math.min(1, L.to.fill * appear * pf), ka); lerpMat(L.river.material, L.to.river * appear, ka);
       if (L.tLine) { lerpMat(L.tLine.material, Math.min(1, L.to.tLine * appear * pf), ka); lerpMat(L.tFill.material, Math.min(1, L.to.tFill * appear * pf), ka); }
     });
