@@ -37,6 +37,7 @@ export function AchievementSheet(): string {
       <h3>展签 · <span x-text="a.labelTitle"></span></h3>
       <p class="ach-label" :class="achLevel(a.id) ? '' : 'locked'" x-text="achLabel(a.id)"></p>
       <p class="ach-locked-note" x-show="!achLevel(a.id)">达成后读全文</p>
+      <button class="btn btn-text" x-show="achLevel(a.id)" @click="jiOpen('seal', { achId: a.id }); closeAch()">寄此印</button>
     </div>
   </template>
 </section>`
@@ -53,6 +54,7 @@ export function AchievementCeremony(): string {
       <p x-text="a.hook"></p>
       <div class="ach-ceremony-actions">
         <button class="btn btn-primary" @click="openAch(a.id); achDismiss()">读展签</button>
+        <button class="btn btn-ghost" @click="jiOpen('seal', { achId: a.id }); achDismiss()">寄此印</button>
         <button class="btn btn-text" @click="achDismiss()">好</button>
       </div>
     </div>

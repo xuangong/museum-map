@@ -18,7 +18,7 @@ export function Drawer(): string {
         </button>
       </div>
       <div>
-        <button class="round-btn icon-only" @click.stop="shareCurrent()" title="分享链接" aria-label="分享">${icon("share", 16)}</button>
+        <button class="round-btn icon-only" @click.stop="shareCurrent()" title="寄给友人" aria-label="寄给友人">${icon("share", 16)}</button>
         <button class="round-btn icon-only" @click.stop="closeDrawer()" aria-label="关闭">${icon("close", 16)}</button>
       </div>
     </div>

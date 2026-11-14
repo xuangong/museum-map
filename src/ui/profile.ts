@@ -253,7 +253,7 @@ export function ProfilePage(opts: {
 
       <div class="page-actions">
         <a class="btn btn-primary" href="${mapBase}">${icon("layers", 16)}在时空里看${isOwn ? "我" : " TA "}的足迹</a>
-        <a class="btn btn-ghost" href="/u/${encodeURIComponent(handle)}/share">${icon("share", 16)}分享海报</a>
+        ${isOwn ? `<a class="btn btn-ghost" href="/">${icon("share", 16)}回到地图，寄一卷</a>` : ""}
         ${isOwn ? `<a class="btn btn-text" href="/">${icon("arrowLeft", 15)}回到我的地图</a>` : `<a class="btn btn-text" href="/">${icon("arrowUpRight", 15)}我也来集章</a>`}
       </div>
       <div class="page-foot">WHERE TIME MEETS PLACE</div>

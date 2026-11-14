@@ -2206,7 +2206,20 @@ path.route-corridor { stroke: var(--gilt); }
 .ach-ceremony-card .ach-seal.line-era { width: 62px; height: 96px; }
 .ach-seal.stamp { animation: ach-stamp 0.7s cubic-bezier(.2,1.6,.4,1) both; }
 @keyframes ach-stamp { 0% { transform: scale(2.4) rotate(-14deg); opacity: 0; } 55% { transform: scale(0.92) rotate(3deg); opacity: 1; } 100% { transform: scale(1) rotate(-4deg); } }
-.ach-ceremony-actions { display: flex; gap: 10px; justify-content: center; }
+.ach-ceremony-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.ji-sheet { position: fixed; inset: 0; z-index: 2300; display: grid; place-items: center; background: rgba(0,0,0,0.42); padding: 24px; box-sizing: border-box; }
+.ji-card { box-sizing: border-box; width: min(420px, 100%); max-height: 100%; overflow-y: auto; padding: 28px; background: var(--bg); color: var(--text); border-radius: 22px; border: 1px solid var(--line-strong); overflow-wrap: anywhere; }
+.ji-kicker { font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.18em; color: var(--seal-ink-strong); }
+.ji-card h3 { font-family: var(--serif); font-size: 24px; margin: 10px 0 18px; font-weight: 600; }
+.ji-card label { display: block; font-size: 12px; color: var(--text-3); margin-bottom: 14px; letter-spacing: 0.04em; }
+.ji-card input { display: block; box-sizing: border-box; width: 100%; margin-top: 4px; padding: 8px 0; font-size: 16px; font-family: var(--serif); color: var(--text); background: transparent; border: 0; border-bottom: 1px solid var(--line-strong); border-radius: 0; outline: none; }
+.ji-card input:focus { border-bottom-color: var(--seal-ink-strong); }
+.ji-note { font-size: 12px; color: var(--text-3); margin: 4px 0 18px; line-height: 1.7; }
+.ji-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+@media (max-width: 640px) {
+  .ji-sheet { place-items: end center; padding: 0; }
+  .ji-card { width: 100%; border-radius: 22px 22px 0 0; padding: 24px 22px calc(24px + env(safe-area-inset-bottom)); max-height: 92dvh; }
+}
 @media (max-width: 640px) {
   .ach-sheet { padding: 16px 16px calc(20px + env(safe-area-inset-bottom)); max-height: 88dvh; }
   .ach-ceremony { padding: 16px; }

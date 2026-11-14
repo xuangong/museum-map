@@ -381,6 +381,37 @@ window.museumApp = function() {
     },
 
     // ─── 时空 (3D strata) ───
+    ji: { open: false, kind: '', extra: null, name: '', line: '', busy: false, url: '' },
+    jiOpen(kind, extra) {
+      this.ji.kind = kind; this.ji.extra = extra || null; this.ji.url = ''; this.ji.busy = false;
+      if (!this.ji.name) this.ji.name = (this.me && (this.me.displayName || this.me.handle)) || '';
+      try { if (!this.ji.name) this.ji.name = localStorage.getItem('mmJiName') || ''; } catch (_) {}
+      this.ji.open = true;
+    },
+    jiClose() { this.ji.open = false; },
+    jiTitle() { return { tune: '寄此曲', voyage: '寄此行', seal: '寄此印', scroll: '寄一卷' }[this.ji.kind] || '寄'; },
+    async jiSeal() {
+      if (this.ji.busy) return;
+      this.ji.busy = true;
+      try {
+        var body = Object.assign({ kind: this.ji.kind, name: this.ji.name, line: this.ji.line, visitedIds: this.visits.ids.slice() }, this.ji.extra || {});
+        var r = await fetch('/api/scrolls', { method: 'POST', credentials: 'include', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+        var j = await r.json();
+        if (!r.ok) { this.flashToast(j.error || '封卷未成，稍后再试'); return; }
+        try { localStorage.setItem('mmJiName', this.ji.name || ''); } catch (_) {}
+        this.ji.url = location.origin + j.url;
+        await this.jiSend();
+      } catch (_) { this.flashToast('封卷未成，稍后再试'); }
+      finally { this.ji.busy = false; }
+    },
+    async jiSend() {
+      var url = this.ji.url; if (!url) return;
+      var inApp = /MicroMessenger|HarmonyOS|HuaweiBrowser/i.test(navigator.userAgent);
+      if (!inApp && navigator.share) { try { await navigator.share({ title: this.jiTitle(), url: url }); this.ji.open = false; return; } catch (_) {} }
+      try { await navigator.clipboard.writeText(url); this.flashToast('卷已封好，寄去吧'); }
+      catch (_) { prompt('卷已封好，复制下面的地址寄去：', url); }
+    },
+
     initStrataWhenReady() {
       var self = this;
       if (window.MuseumStrata) { this.initStrata(); return; }
@@ -398,6 +429,7 @@ window.museumApp = function() {
         onMuseum: function(id){ self.openMuseum(id); },
         onDynasty: function(id){ if (id) self.selectDynasty(id); else self.clearDynastyFilter(); },
         onEraMap: function(id){ self.showEraOnMap(id); },
+        onSend: function(o){ self.jiOpen(o.kind, o.kind === 'tune' ? { seed: o.seed, era: o.era } : null); },
       });
       this._strataOk = !!ok;
       if (!ok) { this.view = 'map'; return; }
@@ -2393,9 +2425,9 @@ window.museumApp = function() {
       } catch(_) {}
       try {
         await navigator.clipboard.writeText(url);
-        this.flashToast('链接已复制');
+        this.flashToast('已备好，寄给友人吧');
       } catch(_) {
-        prompt('复制下面的链接分享：', url);
+        prompt('复制下面的地址寄给友人：', url);
       }
     },
 
@@ -2559,8 +2591,8 @@ window.museumApp = function() {
         return;
       }
       var next = window.prompt(
-        '自定义你的分享链接（/u/...）\\n\\n' +
-        '⚠️ 警告：只能修改一次。修改后旧链接立即失效，已分享出去的链接将打不开。\\n\\n' +
+        '自定义你的主页链接（/u/...）\\n\\n' +
+        '⚠️ 警告：只能修改一次。修改后旧链接立即失效，已寄出的链接将打不开。\\n\\n' +
         '允许：中文、英文、数字、连字符；2–24 字符。',
         this.me.handle
       );

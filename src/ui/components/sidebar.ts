@@ -42,13 +42,13 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
         <button class="icon-btn" @click="startEditName()" title="编辑昵称">${icon("edit", 16)}</button>
       </div>
       <div class="acct-actions" x-show="!nameForm.editing">
-        <button class="pill" x-show="me && me.handle" @click="copyShareLink()" title="复制公开主页链接">${icon("link", 14)}分享主页</button>
+        <button class="pill" x-show="me && me.handle" @click="copyShareLink()" title="复制公开主页链接">${icon("link", 14)}主页链接</button>
         <button class="pill" x-show="me && me.handle" :class="(me && me.showOnPlaza) ? 'on' : ''" @click="togglePlazaVisibility()"
           :title="me && me.showOnPlaza ? '当前公开在广场，点击隐藏' : '当前不在广场，点击公开'">
           <span x-show="me && me.showOnPlaza">${icon("eye", 14)}</span><span x-show="!(me && me.showOnPlaza)">${icon("eyeOff", 14)}</span>
           <span x-text="(me && me.showOnPlaza) ? '广场可见' : '广场隐藏'"></span>
         </button>
-        <button class="pill" x-show="me && me.handle && !me.handleChangedAt" @click="editHandle()" title="自定义分享链接（仅可改一次，旧链接将失效）">${icon("edit", 14)}改链接</button>
+        <button class="pill" x-show="me && me.handle && !me.handleChangedAt" @click="editHandle()" title="自定义主页链接（仅可改一次，旧链接将失效）">${icon("edit", 14)}改链接</button>
         <button class="pill" x-show="me && me.isAdmin" @click="createInvite()" title="生成邀请链接">${icon("ticket", 14)}邀请</button>
         <button class="pill" @click="doLogout()">${icon("logout", 14)}退出</button>
       </div>
@@ -120,6 +120,9 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
     </template>
   </div>
   <p class="hero-note" x-show="!visits.ids.length">集章册还是空的。打开任意一座博物馆，点「盖章打卡」——每座馆都有自己的一枚印。</p>
+  <div class="hero-actions" x-show="!isReadOnly && visits.ids.length">
+    <button class="btn btn-ghost" @click="jiOpen('scroll')">${icon("share", 16)}寄一卷</button>
+  </div>
 
   <div class="review-block" x-show="visits.ids.length">
     <div class="block-head">${icon("sparkle", 15)}<span>讲解员的读后感</span></div>
