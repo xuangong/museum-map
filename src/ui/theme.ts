@@ -668,6 +668,7 @@ body.toc-resizing, body.toc-resizing * { cursor: col-resize !important; user-sel
   background: var(--seal);
   box-shadow: 0 0 0 1px rgba(255,180,160,0.5), 0 0 16px rgba(var(--seal-rgb),0.85);
 }
+.museum-marker.candidate { background: rgba(var(--bg-rgb),0.6); border: 2px dashed var(--gilt-hi); box-shadow: 0 0 12px rgba(var(--gilt-rgb),0.55); }
 .museum-marker:hover { transform: scale(1.35); }
 .museum-marker.selected { transform: scale(1.35); background: var(--gilt-hi); }
 .museum-marker.selected::after {
@@ -700,6 +701,7 @@ body.toc-resizing, body.toc-resizing * { cursor: col-resize !important; user-sel
 .map-legend .dot.r { background: var(--seal); box-shadow: 0 0 8px rgba(var(--seal-rgb),0.85); }
 .map-legend .dot.k { background: var(--text); box-shadow: 0 0 6px rgba(var(--fg-rgb),0.5); }
 .map-legend .dot.g { background: var(--gilt); box-shadow: 0 0 8px rgba(var(--gilt-rgb),0.75); }
+.map-legend .dot.c { background: transparent; border: 1.5px dashed var(--gilt-hi); }
 .map-legend .dot.e { width: 8px; height: 8px; border-radius: 1px; transform: rotate(45deg); border: 1.5px solid var(--gilt); background: transparent; }
 
 .map-caption {
@@ -1320,10 +1322,15 @@ body.chat-locked .chat-body { touch-action: pan-y; }
 .strata-label.is-active { color: var(--gilt-hi); background: rgba(var(--gilt-rgb),0.13); box-shadow: inset 0 0 0 1px rgba(var(--gilt-rgb),0.5); font-size: 14px; }
 .strata-label.is-active .sl-period { color: var(--gilt); font-size: 10.5px; }
 .strata-label.is-dim { opacity: 0.4; }
-.strata-label.has-visit::before {
-  content: ''; width: 5px; height: 5px; border-radius: 50%; align-self: center;
-  background: var(--seal); box-shadow: 0 0 6px rgba(var(--seal-rgb),0.9);
+.strata-label.is-hl { color: var(--seal-ink-strong); background: rgba(var(--seal-rgb),0.1); }
+/* How many of your seals sit on this stratum. */
+.strata-label .sl-count {
+  align-self: center; display: inline-grid; place-items: center; min-width: 16px; height: 16px; padding: 0 4px;
+  border-radius: 999px; background: var(--seal); color: #FFF2E8;
+  font-family: var(--mono); font-size: 9.5px; font-weight: 600; box-shadow: 0 0 8px rgba(var(--seal-rgb),0.6);
 }
+.strata-label .sl-count:empty { display: none; }
+.strata-label.is-empty { opacity: 0.45; }
 .strata-label.is-today { color: var(--text); font-size: 13px; }
 .strata-label.is-today .sl-period { color: var(--text-3); }
 /* Regime names on a divided era's stratum (曹魏 / 蜀汉 / 孙吴 …) — map lettering, not chips */
@@ -1372,6 +1379,15 @@ body.chat-locked .chat-body { touch-action: pan-y; }
   font-family: var(--serif); font-size: 12px; font-weight: 600; color: var(--gilt-hi);
   background: rgba(var(--bg-rgb),0.78); border: 1px solid rgba(var(--gilt-rgb),0.38);
 }
+/* Reading a stratum: your seals (cinnabar) and nearby candidates (dashed gilt), tap to open. */
+.strata-mtag {
+  position: absolute; left: 0; top: 0; visibility: hidden; pointer-events: auto; cursor: pointer;
+  padding: 2px 7px; border: none; border-radius: 5px; white-space: nowrap;
+  font-family: var(--serif); font-size: 12px; font-weight: 800; letter-spacing: 0.04em;
+}
+.strata-mtag.is-mine { background: var(--seal); color: #FFF2E8; box-shadow: 0 0 14px -2px rgba(var(--seal-rgb),0.8); }
+.strata-mtag.is-mine.is-onsite { box-shadow: 0 0 0 1.5px rgba(var(--bg-rgb),0.95), 0 0 0 2.5px var(--seal), 0 0 16px -2px rgba(var(--seal-rgb),0.9); }
+.strata-mtag.is-cand { background: rgba(var(--bg-rgb),0.85); color: var(--gilt-hi); border: 1px dashed rgba(var(--gilt-rgb),0.8); font-size: 11.5px; font-weight: 700; }
 .strata-site.is-culture { color: var(--patina); border-color: rgba(var(--patina-rgb),0.38); }
 .strata-tag {
   position: absolute; left: 0; top: 0; visibility: hidden; white-space: nowrap;
@@ -1419,6 +1435,7 @@ body.chat-locked .chat-body { touch-action: pan-y; }
   font-size: 12.5px; box-shadow: 0 12px 30px -12px var(--sh-90);
 }
 .locate-btn:hover, .locate-btn.on { color: #A9CCFF; border-color: rgba(127,181,255,0.45); }
+path.range-ring { fill: var(--gilt); fill-opacity: 0.05; stroke: var(--gilt); stroke-opacity: 0.8; }
 path.territory { fill: var(--gilt); fill-opacity: 0.1; stroke: var(--gilt); stroke-opacity: 0.75; stroke-dasharray: 5 4; }
 path.route-glow { stroke: var(--gilt); }
 path.route-line { stroke: var(--gilt-hi); }
@@ -1459,23 +1476,63 @@ path.route-line { stroke: var(--gilt-hi); }
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
 .seal-cell-date { font-family: var(--mono); font-size: 9.5px; color: var(--text-4); }
-.review-block, .strata-progress { position: relative; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+.review-block { position: relative; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
 .block-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; font-family: var(--serif); font-weight: 700; font-size: 15px; color: var(--text); }
 .block-head .ic { color: var(--gilt); }
+.block-head .block-en { margin-left: auto; font-family: var(--mono); font-weight: 400; font-size: 10px; letter-spacing: 0.2em; color: var(--text-4); }
 .review-block .guide-card { margin-top: 12px; }
-.strata-progress .block-head { margin-bottom: 10px; }
-.sp-row {
-  display: grid; grid-template-columns: 62px minmax(0, 1fr) 44px; gap: 10px; align-items: center;
-  width: 100%; padding: 6px 4px; border: none; border-radius: 8px; background: none;
-  color: var(--text-3); font-size: 12.5px; text-align: left;
+
+/* 地层账本 — your seals per stratum (今 → 远古), and what's nearby to fill the gaps */
+.ledger { position: relative; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+.ledger-lede { margin: 2px 0 10px; font-size: 12px; line-height: 1.65; color: var(--text-3); }
+.ledger-tabs { display: flex; gap: 3px; padding: 3px; margin: 10px 0 12px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.ledger-near { margin-bottom: 14px; }
+.ledger-anchor { display: flex; flex-wrap: wrap; gap: 6px; }
+.ledger-anchor .chip { position: relative; display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; font-size: 12px; }
+.ledger-anchor .chip.on { border-color: rgba(var(--gilt-rgb),0.7); color: var(--gilt-hi); background: rgba(var(--gilt-rgb),0.1); }
+/* The real select sits invisibly on top at 16px (no iOS zoom); the chip shows the choice. */
+.chip-select select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; font-size: 16px; cursor: pointer; }
+.ledger-radius { display: flex; gap: 3px; padding: 3px; margin-top: 8px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.ledger-radius .seg-btn { height: 26px; font-family: var(--mono); font-size: 11.5px; }
+.ledger-summary { margin: 10px 0 0; font-size: 12.5px; line-height: 1.7; color: var(--text-2); overflow-wrap: anywhere; }
+.ledger-summary b { color: var(--text); font-weight: 600; }
+.ledger-summary b.seal-ink { color: var(--seal-ink-strong); }
+.ledger-recs { display: grid; gap: 6px; margin-top: 12px; }
+.ledger-recs-head { font-size: 11px; font-weight: 600; letter-spacing: 0.14em; color: var(--gilt); }
+.lg-rec { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 12px; border: 1px dashed rgba(var(--gilt-rgb),0.45); background: rgba(var(--gilt-rgb),0.05); }
+.lg-rec-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 0; border: none; background: none; color: inherit; text-align: left; cursor: pointer; }
+.lg-rec-seal { flex: none; display: grid; place-items: center; width: 34px; }
+.lg-rec-text { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.lg-rec-text b { font-family: var(--serif); font-size: 14px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lg-rec-text small { font-size: 11.5px; color: var(--text-3); overflow-wrap: anywhere; }
+.lg-rec-trip { flex: none; height: 28px; padding: 0 10px; border-radius: 999px; border: 1px solid rgba(var(--gilt-rgb),0.55); background: transparent; color: var(--gilt-hi); font-size: 12px; white-space: nowrap; cursor: pointer; }
+.lg-rec-trip.is-in { border-color: var(--line); color: var(--text-3); }
+.ledger-rows { display: flex; flex-direction: column; }
+.lg-row { display: grid; grid-template-columns: 76px minmax(0, 1fr) 20px; gap: 8px; align-items: center; min-height: 42px; padding: 5px 0; border-bottom: 1px solid rgba(var(--fg-rgb),0.05); }
+.lg-era { display: flex; flex-direction: column; align-items: flex-start; gap: 1px; margin-left: -6px; padding: 4px 6px; border: none; border-radius: 8px; background: none; color: var(--text); text-align: left; cursor: pointer; }
+.lg-era:hover { background: rgba(var(--fg-rgb),0.05); }
+.lg-era b { font-family: var(--serif); font-size: 13px; font-weight: 700; white-space: nowrap; }
+.lg-era small { font-family: var(--mono); font-size: 9px; color: var(--text-4); white-space: nowrap; }
+.lg-row.is-empty .lg-era b { color: var(--text-4); font-weight: 600; }
+.lg-seals { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; min-width: 0; }
+.lg-seal, .lg-cand { display: inline-flex; align-items: center; gap: 4px; padding: 2px; border: none; border-radius: 6px; background: none; cursor: pointer; }
+.lg-seal .seal, .lg-cand .seal { transition: transform 0.2s var(--ease); }
+.lg-seal:hover .seal, .lg-cand:hover .seal { transform: rotate(0deg) scale(1.12); }
+.lg-km { font-family: var(--mono); font-size: 10px; color: var(--gilt); white-space: nowrap; }
+.lg-bridge { font-size: 11px; color: var(--gilt); }
+.lg-count { font-family: var(--mono); font-size: 11px; text-align: right; color: var(--seal-ink-strong); }
+.seal-xs { font-size: 8px; }
+/* In the ledger the carving gives way to the meaning: solid = on-site (原址), outline = related. */
+.lg-seal.is-onsite .seal {
+  background-color: var(--seal); color: #FFF2E8; text-shadow: none;
+  box-shadow: inset 0 0 0 0.12em var(--seal), inset 0 0 0 0.19em rgba(255,242,232,0.55), 0 0 1em -0.3em rgba(var(--seal-rgb),0.85);
 }
-.sp-row:hover { background: rgba(var(--fg-rgb),0.04); }
-.sp-row.hit { color: var(--text); }
-.sp-name { font-family: var(--serif); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.sp-bar { height: 4px; border-radius: 2px; background: rgba(var(--fg-rgb),0.08); overflow: hidden; }
-.sp-bar i { display: block; height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--seal-deep), var(--seal)); box-shadow: 0 0 10px rgba(var(--seal-rgb),0.6); }
-.sp-num { font-family: var(--mono); font-size: 11px; text-align: right; color: var(--text-4); }
-.sp-row.hit .sp-num { color: var(--seal-ink); }
+.lg-seal.is-related .seal {
+  color: var(--seal-ink-strong); background: rgba(var(--seal-rgb),0.06); background-image: none; text-shadow: none;
+  box-shadow: inset 0 0 0 0.14em var(--seal-ink-strong);
+}
+/* A seal still to collect nearby: dashed gilt. */
+.seal.seal-cand { box-sizing: border-box; color: var(--gilt-hi); box-shadow: none; border: 0.1em dashed rgba(var(--gilt-rgb),0.85); }
 
 .trip-sort { position: relative; display: flex; gap: 3px; padding: 3px; margin-top: 16px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
 .trip-sort .seg-btn { gap: 6px; }

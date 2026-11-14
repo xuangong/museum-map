@@ -19,6 +19,7 @@ window.MuseumMap = {
       crossOrigin: 'anonymous'
     }).addTo(this.map);
     this.territoryLayer = L.layerGroup().addTo(this.map);
+    this.rangeLayer = L.layerGroup().addTo(this.map);
     this.routeLayer = L.layerGroup().addTo(this.map);
     this.markersLayer = L.layerGroup().addTo(this.map);
     this.eventMarkersLayer = L.layerGroup().addTo(this.map);
@@ -30,6 +31,7 @@ window.MuseumMap = {
     var self = this;
     var baseRecommended = !!(opts && opts.recommended);
     var isVisited = (opts && typeof opts.isVisited === 'function') ? opts.isVisited : null;
+    var isCandidate = (opts && typeof opts.isCandidate === 'function') ? opts.isCandidate : null;
     var weightById = (opts && opts.weightById) || null;
     museums.forEach(function(m){
       if (!m.lat || !m.lng) return;
@@ -38,6 +40,7 @@ window.MuseumMap = {
       var cls = 'museum-marker';
       if (baseRecommended) cls += ' recommended';
       if (visited) cls += ' visited';
+      else if (isCandidate && isCandidate(m.id)) cls += ' candidate';
       if (m.id === self._selectedId) cls += ' selected';
       var size = 14;
       if (weightById && weightById[m.id]) {
@@ -93,6 +96,39 @@ window.MuseumMap = {
     var c = window.toMapCoord(lat, lng);
     L.marker(c, { icon: L.divIcon({ className: '', html: '<div class="user-dot"></div>', iconSize: [16, 16] }), interactive: false, zIndexOffset: 900 }).addTo(this.userLayer);
     this.map.flyTo(c, 9, { duration: 0.8 });
+  },
+  /** 附近可补: the range around each anchor ({ lat, lng }), radius in km; styled by .range-ring. */
+  setRange: function(anchors, km) {
+    this.clearRange();
+    var self = this, pts = [];
+    (anchors || []).forEach(function(a){
+      var c = window.toMapCoord(a.lat, a.lng);
+      pts.push(c);
+      L.circle(c, { radius: km * 1000, className: 'range-ring', weight: 1.2, dashArray: '3 6', interactive: false }).addTo(self.rangeLayer);
+    });
+    // Fly only when the range itself changes, not on every marker refresh.
+    var key = km + ':' + pts.map(function(p){ return p[0].toFixed(3) + ',' + p[1].toFixed(3); }).join(';');
+    if (pts.length && key !== this._rangeKey) {
+      this._rangeKey = key;
+      try {
+        var b = L.latLngBounds(pts);
+        var pad = km / 111;
+        this.map.flyToBounds(L.latLngBounds([b.getSouth() - pad, b.getWest() - pad], [b.getNorth() + pad, b.getEast() + pad]), { duration: 0.8, maxZoom: 10 });
+      } catch(_) {}
+    }
+  },
+  clearRange: function() {
+    if (this.rangeLayer) this.rangeLayer.clearLayers();
+  },
+  /** Leaving 附近可补: the next range flies the map again. */
+  resetRange: function() {
+    this.clearRange();
+    this._rangeKey = null;
+  },
+  /** Your position, without moving the map. */
+  showUser: function(lat, lng) {
+    this.userLayer.clearLayers();
+    L.marker(window.toMapCoord(lat, lng), { icon: L.divIcon({ className: '', html: '<div class="user-dot"></div>', iconSize: [16, 16] }), interactive: false, zIndexOffset: 900 }).addTo(this.userLayer);
   },
   clearEvents: function(){
     if (this.eventMarkersLayer) this.eventMarkersLayer.clearLayers();

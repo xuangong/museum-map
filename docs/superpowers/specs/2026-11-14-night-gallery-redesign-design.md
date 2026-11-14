@@ -129,10 +129,63 @@ Picking a dynasty turns the stack into a map you can read. The user found the ob
 - **集章册 (passport):**
   - a seal wall;
   - collector titles (初入展厅 → 镇馆之宝级, `COLLECTOR_RANKS`, shared by app, profile and plaza);
-  - per-dynasty progress bars;
+  - the 地层账本 (below; it replaced the per-dynasty progress bars);
   - the AI guide's notes on your collection (读后感).
 - In the index, uncollected museums show their seal as a faint ghost and collected ones in cinnabar. Seals replaced the photo thumbnails.
 - **Plaza:** passport cards (title + latest 6 seals). **Public profile:** the full seal wall, notes and per-dynasty notes.
+
+### Your footprint leads, once you have one
+
+The user's feedback: the museums you have stamped should map onto their strata, but the capital trail was so loud that the point got lost. With 12 stamped museums clustered around 西安 / 洛阳 / 北京, their beams merged into one red bundle, and tinting every stratum you touched red (20/20) said nothing.
+
+- **No stamps yet:** the capital trail stays the protagonist, as before.
+- **With stamps (home):**
+  - The trail drops to a faint line and the travelling pulses stop.
+  - Other museums dim.
+  - Your beams are cinnabar, with a clear dot on every linked stratum; on-site (原址) dots also get a seal ring.
+  - The ruler shows a small count per stratum.
+- **集章 mode:**
+  - The trail is nearly gone.
+  - Strata are no longer tinted red; strata you have touched keep a visible outline, and the others fade.
+- **Reading view of a stratum:**
+  - Your museums on it are labelled as small cinnabar seal tags.
+  - Nearby candidates (below) are labelled as dashed gilt tags with their distance.
+  - Tapping a tag opens the museum.
+
+### 地层账本 (strata ledger)
+
+The ledger is the passport's per-dynasty section. Rows run 今 → 远古, the same order as the 3D stack.
+
+- **Row contents:** name and period, then your seals on that stratum.
+  - Solid seal = on-site (原址); outlined seal = related.
+  - Then a count.
+- **Empty rows:**
+  - Dimmed.
+  - An empty row next to a stamped one says what it would connect (「接得上：北魏 · 唐」).
+- **Interactions:**
+  - Tap a row: its reading view, with your seals labelled on the territory.
+  - Tap a seal: open the museum.
+  - Desktop hover on a seal: previews that museum's beam through its strata (`MuseumStrata.highlight`).
+
+### 附近可补 (nearby, for planning while travelling)
+
+The user's words: 「经常出门在外做规划……在朝代的延续思路下看到这周围地理位置上可能的选择」.
+
+- **Switch:** the ledger has 「我的足迹｜附近可补」. 附近可补 is hidden on read-only (someone else's) passports.
+- **Anchor:**
+  - 当前位置 (default; uses the existing locate, asks on first use);
+  - a city (centroid of that city's museums);
+  - 沿行程 (only when the trip has stops; distance is to the nearest stop).
+- **Radius:** 同城 (≤ 40 km) / 150 km / 300 km.
+- **Candidates:**
+  - Unstamped museums within range that relate to that dynasty.
+  - Up to 2 per row, as dashed gilt seals with km; on-site first, then nearer.
+- **Summary line:** what range, which empty strata it can fill, and which of those connect to strata you already have.
+- **推荐下一站:** 1–3 cards. The score favours filling empty strata, filling ones that connect to stamped strata, on-site, and distance. Each card has 加入行程.
+- **On the maps:**
+  - In 3D, candidates are gilt (yours stay cinnabar).
+  - The 2D map shows yours plus candidates (gilt dashed markers) and the range circle(s).
+- **Data:** everything is computed on the client from data the page already has (dynasty ↔ museum links, crossings, coordinates, city). No new API.
 
 ## Visual system
 

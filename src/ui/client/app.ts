@@ -21,6 +21,8 @@ var THEME_BAR = ${JSON.stringify(THEME_BAR)};
 var __vdCache = null, __vdCacheKey = '', __vdCacheIds = {}, __vdDepth = {};
 // Territory JSON (fetched once, shared by map syncs) — module scope, outside Alpine's proxy.
 var __territoryP = null;
+// 地层账本 (ledger) cache — same reason as __vdCache: computed from reactive state, stored outside it.
+var __ledger = null, __ledgerKey = '';
 window.museumApp = function() {
   return {
     museums: [],
@@ -60,6 +62,8 @@ window.museumApp = function() {
     trip: { ids: [], order: '' },
     geo: { lat: null, lng: null, locating: false },
     listSort: 'default',
+    // 地层账本: 我的足迹 | 附近可补 (anchor: here / city / trip; radius km, 40 = 同城).
+    ledgerOpt: { tab: 'mine', anchor: 'here', city: '', radius: 150 },
     dynastyGeo: {},
     crossings: {},
     territoryUrl: '',
@@ -89,6 +93,12 @@ window.museumApp = function() {
           var known = {};
           this.museums.forEach(function(m){ known[m.id] = true; });
           this.trip = { ids: savedTrip.ids.filter(function(id){ return known[id]; }), order: savedTrip.order || '' };
+        }
+        var savedLedger = JSON.parse(window.localStorage.getItem('mmLedger') || 'null');
+        if (savedLedger) {
+          if (['here', 'city', 'trip'].indexOf(savedLedger.anchor) >= 0) this.ledgerOpt.anchor = savedLedger.anchor;
+          if ([40, 150, 300].indexOf(savedLedger.radius) >= 0) this.ledgerOpt.radius = savedLedger.radius;
+          if (typeof savedLedger.city === 'string') this.ledgerOpt.city = savedLedger.city;
         }
       } catch(_) {}
       if (data.viewingProfile) {
@@ -379,6 +389,7 @@ window.museumApp = function() {
         dynastyId: this.currentDynastyId,
         visitedIds: this.visits.ids.slice(),
         selectedId: this.selectedMuseumId,
+        candidates: this.visits.footprintMode && !this.tripMode ? this.ledgerView().candidates : [],
       });
     },
 
@@ -498,23 +509,206 @@ window.museumApp = function() {
       return { title: cur.title, next: next ? ('再集 ' + (next.at - n) + ' 枚 → ' + next.title) : '已是最高称号' };
     },
 
-    dynastyProgress() {
-      var self = this;
-      return this.dynasties.map(function(d){
-        var seen = {}, total = 0, hit = 0;
-        (d.recommendedMuseums || []).concat(d.relatedMuseums || []).forEach(function(r){
-          if (!r.museumId || seen[r.museumId]) return;
-          seen[r.museumId] = true; total++;
-          if (self.visits.byId[r.museumId]) hit++;
-        });
-        return { id: d.id, name: self.dynastyShortName(d).replace(/[：:].*$/, ''), total: total, hit: hit, pct: total ? Math.round(hit / total * 100) : 0 };
+    // ─── 地层账本 · 附近可补 ───
+    /** Museums tied to a dynasty (curated + related), unique, in list order. */
+    dynastyMuseumIds(d) {
+      var seen = {}, out = [];
+      (d.recommendedMuseums || []).concat(d.relatedMuseums || []).forEach(function(r){
+        if (r.museumId && !seen[r.museumId]) { seen[r.museumId] = true; out.push(r.museumId); }
       });
+      return out;
+    },
+
+    isOnSite(museumId, dynastyId) {
+      return (this.crossings[museumId] || []).some(function(c){ return c.dynastyId === dynastyId && c.onSite; });
+    },
+
+    /** Cities by number of museums (city picker). */
+    ledgerCities() {
+      var n = {};
+      this.museums.forEach(function(m){ if (m.city) n[m.city] = (n[m.city] || 0) + 1; });
+      return Object.keys(n).sort(function(a, b){ return n[b] - n[a] || a.localeCompare(b, 'zh'); });
+    },
+
+    /** Points the range is measured from, or null when the anchor isn't resolved yet. */
+    ledgerAnchors() {
+      var o = this.ledgerOpt;
+      if (o.anchor === 'here') return this.geo.lat != null ? [{ lat: this.geo.lat, lng: this.geo.lng }] : null;
+      if (o.anchor === 'trip') {
+        var stops = this.tripMuseums().filter(function(m){ return m.lat && m.lng; });
+        return stops.length ? stops.map(function(m){ return { lat: m.lat, lng: m.lng }; }) : null;
+      }
+      var ms = this.museums.filter(function(m){ return m.city === o.city && m.lat && m.lng; });
+      if (!ms.length) return null;
+      var lat = 0, lng = 0;
+      ms.forEach(function(m){ lat += m.lat; lng += m.lng; });
+      return [{ lat: lat / ms.length, lng: lng / ms.length }];
+    },
+
+    ledgerAnchorLabel() {
+      var o = this.ledgerOpt;
+      if (o.anchor === 'trip') return '行程沿线';
+      if (o.anchor === 'city') return o.city || '选个城市';
+      return this.geo.lat != null ? '你附近' : '你的位置';
+    },
+
+    ledgerRadiusLabel(r) { return (r || this.ledgerOpt.radius) === 40 ? '同城' : (r || this.ledgerOpt.radius) + ' km'; },
+
+    /** The whole ledger: rows 今→远古, your seals per stratum, and (附近可补) candidates in range. */
+    ledgerView() {
+      var o = this.ledgerOpt, self = this;
+      var near = o.tab === 'near' && !this.isReadOnly;
+      var key = [this.visits.ids.join(','), this.museums.length, this.dynasties.length, near ? 1 : 0, o.anchor, o.city, o.radius,
+        this.geo.lat, this.geo.lng, this.trip.ids.join(',')].join('|');
+      if (__ledger && __ledgerKey === key) return __ledger;
+      var visited = {};
+      this.visits.ids.forEach(function(id){ visited[id] = true; });
+      var anchors = near ? this.ledgerAnchors() : null;
+      var R = o.radius;
+      var pool = {};
+      if (anchors) {
+        this.museums.forEach(function(m){
+          if (visited[m.id] || !m.lat || !m.lng) return;
+          var km = Infinity;
+          anchors.forEach(function(a){ km = Math.min(km, self.kmBetween(a, m)); });
+          if (km <= R) pool[m.id] = km;
+        });
+      }
+      var rows = this.dynasties.slice().reverse().map(function(d){
+        var ids = self.dynastyMuseumIds(d);
+        var mine = ids.filter(function(id){ return visited[id]; })
+          .map(function(id){ return { m: self.museumById(id), onSite: self.isOnSite(id, d.id) }; })
+          .filter(function(x){ return x.m; })
+          .sort(function(a, b){ return (b.onSite ? 1 : 0) - (a.onSite ? 1 : 0); });
+        var cands = ids.filter(function(id){ return pool[id] != null; })
+          .map(function(id){ return { m: self.museumById(id), km: pool[id], onSite: self.isOnSite(id, d.id) }; })
+          .filter(function(x){ return x.m; })
+          .sort(function(a, b){ return (b.onSite ? 1 : 0) - (a.onSite ? 1 : 0) || a.km - b.km; });
+        return { id: d.id, name: self.dynastyShortName(d).replace(/[：:].*$/, ''), period: self.dynastyShortPeriod(d),
+          mine: mine, cands: cands.slice(0, 2), candAll: cands, empty: !mine.length, bridge: [] };
+      });
+      // An empty stratum next to one you hold is where your line of history can continue.
+      rows.forEach(function(r, i){
+        if (!r.empty) return;
+        r.bridge = [rows[i + 1], rows[i - 1]].filter(function(x){ return x && !x.empty; }).map(function(x){ return x.name; });
+      });
+      var fillable = rows.filter(function(r){ return r.empty && r.candAll.length; });
+      var connect = fillable.filter(function(r){ return r.bridge.length; });
+      // 推荐下一站: filling empty strata beats deepening ones you hold; connecting, on-site and near score up.
+      var score = {};
+      rows.forEach(function(r){
+        r.candAll.forEach(function(c){
+          var x = score[c.m.id] || (score[c.m.id] = { m: c.m, km: c.km, s: -c.km / 150, fills: [], deep: 0 });
+          if (r.empty) { x.s += 3 + (r.bridge.length ? 2 : 0) + (c.onSite ? 2 : 0); x.fills.push(r.name); }
+          else { x.s += c.onSite ? 1 : 0.5; x.deep++; }
+        });
+      });
+      var recs = Object.keys(score).map(function(k){ return score[k]; })
+        .sort(function(a, b){ return b.s - a.s; }).slice(0, 3);
+      var candSeen = {}, candidates = [];
+      rows.forEach(function(r){ r.cands.forEach(function(c){ if (!candSeen[c.m.id]) { candSeen[c.m.id] = true; candidates.push({ id: c.m.id, km: c.km }); } }); });
+      recs.forEach(function(x){ if (!candSeen[x.m.id]) { candSeen[x.m.id] = true; candidates.push({ id: x.m.id, km: x.km }); } });
+      __ledger = { rows: rows, near: near, anchors: anchors, radius: R, fillable: fillable, connect: connect, recs: recs,
+        candidates: candidates, poolSize: Object.keys(pool).length };
+      __ledgerKey = key;
+      return __ledger;
+    },
+
+    /** 3D + 2D follow the ledger's tab, anchor and range. */
+    syncLedgerViews() {
+      try { window.localStorage.setItem('mmLedger', JSON.stringify({ anchor: this.ledgerOpt.anchor, radius: this.ledgerOpt.radius, city: this.ledgerOpt.city })); } catch(_) {}
+      this.syncStrata();
+      if (this.visits.footprintMode && !this.tripMode) this.refreshMarkers();
+    },
+
+    setLedgerTab(tab) {
+      this.ledgerOpt.tab = tab;
+      if (tab === 'near') this.ensureLedgerAnchor();
+      this.syncLedgerViews();
+    },
+
+    setLedgerAnchor(anchor) {
+      if (anchor === 'trip' && !this.trip.ids.length) { this.flashToast('行程里还没有馆'); return; }
+      this.ledgerOpt.anchor = anchor;
+      this.ensureLedgerAnchor();
+      this.syncLedgerViews();
+    },
+
+    setLedgerCity(city) {
+      this.ledgerOpt.city = city;
+      this.ledgerOpt.anchor = 'city';
+      this.syncLedgerViews();
+    },
+
+    setLedgerRadius(r) {
+      this.ledgerOpt.radius = r;
+      this.syncLedgerViews();
+    },
+
+    /** Resolve the anchor: locate for 当前位置; default the city to where your latest seal is. */
+    ensureLedgerAnchor() {
+      var o = this.ledgerOpt;
+      if (o.anchor === 'trip' && !this.trip.ids.length) o.anchor = 'here';
+      if (o.anchor === 'city' && !o.city) {
+        var latest = this.stampMuseums()[0];
+        o.city = (latest && latest.city) || this.ledgerCities()[0] || '';
+      }
+      if (o.anchor === 'here' && this.geo.lat == null) this.locateForLedger();
+    },
+
+    locateForLedger() {
+      if (!navigator.geolocation) { this.flashToast('当前浏览器不支持定位，可以改选城市'); return; }
+      if (this.geo.locating) return;
+      var self = this;
+      this.geo.locating = true;
+      navigator.geolocation.getCurrentPosition(function(pos){
+        self.geo.lat = pos.coords.latitude;
+        self.geo.lng = pos.coords.longitude;
+        self.geo.locating = false;
+        if (window.MuseumMap && window.MuseumMap.showUser) window.MuseumMap.showUser(self.geo.lat, self.geo.lng);
+        self.syncLedgerViews();
+      }, function(){
+        self.geo.locating = false;
+        self.flashToast('没能获取位置，可以改选城市');
+      }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 600000 });
+    },
+
+    /** Tap a ledger row: read that stratum, with your seals (and candidates) named on it. */
+    openLedgerRow(row) { this.selectDynasty(row.id); },
+
+    ledgerHover(id) {
+      if (window.MuseumStrata && window.MuseumStrata.highlight) window.MuseumStrata.highlight(id || null);
+    },
+
+    kmLabel(km) { return km < 10 ? km.toFixed(1) + ' km' : Math.round(km) + ' km'; },
+
+    ledgerRecLine(r) {
+      var what = r.fills.length ? ('补上 ' + r.fills.join(' · ')) : ('再读深 ' + r.deep + ' 层');
+      return what + ' · ' + this.kmLabel(r.km);
+    },
+
+    /** One line under the range controls: where, how far, which empty strata it can fill. */
+    ledgerSummaryHtml() {
+      var lv = this.ledgerView(), o = this.ledgerOpt, esc = this.escape.bind(this);
+      if (!lv.near) return '';
+      if (!lv.anchors) {
+        if (o.anchor === 'here') return this.geo.locating ? '正在找你的位置…' : '允许定位后，就能看到你附近能补上哪几层；也可以直接选一个要去的城市。';
+        return '先选一个城市。';
+      }
+      var where = '<b>' + esc(this.ledgerAnchorLabel()) + '</b> · ' + esc(this.ledgerRadiusLabel());
+      if (!lv.poolSize) return where + '：范围里的馆你都集过了，放大范围看看。';
+      if (!lv.fillable.length) return where + '：你已集的朝代这里都有馆可以再读深，下面挑一座。';
+      var names = lv.fillable.map(function(r){ return esc(r.name); }).join(' · ');
+      var line = where + '：还能补 <b class="seal-ink">' + lv.fillable.length + '</b> 个空层 —— ' + names;
+      if (lv.connect.length) line += '<br>接得上你已集朝代的：<b>' + lv.connect.map(function(r){ return esc(r.name); }).join(' · ') + '</b>';
+      return line;
     },
 
     // ─── 行程 (route planning) ───
     saveTrip() {
       try { window.localStorage.setItem('mmTrip', JSON.stringify(this.trip)); } catch(_) {}
       if (this.tripMode) this.refreshMarkers();
+      else if (this.ledgerOpt.tab === 'near' && this.ledgerOpt.anchor === 'trip') this.syncLedgerViews();
     },
 
     inTrip(id) { return this.trip.ids.indexOf(id) >= 0; },
@@ -787,15 +981,26 @@ window.museumApp = function() {
       var self = this;
       var d = this.currentDynasty();
       if (window.MuseumMap.clearRoute) window.MuseumMap.clearRoute();
+      if (window.MuseumMap.resetRange && !this.visits.footprintMode) window.MuseumMap.resetRange();
       if (this.tripMode) {
         var stops = this.tripMuseums();
         window.MuseumMap.setMarkers(stops, function(id){ self.openMuseum(id); }, { recommended: true, isVisited: function(id){ return self.isVisited(id); } });
         window.MuseumMap.clearEvents();
         if (window.MuseumMap.setRoute) window.MuseumMap.setRoute(stops);
       } else if (this.visits.footprintMode) {
-        var visited = this.visitedMuseums();
-        window.MuseumMap.setMarkers(visited, function(id){ self.openMuseum(id); }, { recommended: true, isVisited: function(){ return true; } });
+        var lv = this.ledgerView();
+        var candSet = {};
+        lv.candidates.forEach(function(c){ candSet[c.id] = true; });
+        var shown = this.visitedMuseums().concat(lv.candidates.map(function(c){ return self.museumById(c.id); }).filter(Boolean));
+        window.MuseumMap.setMarkers(shown, function(id){ self.openMuseum(id); }, {
+          recommended: true,
+          isVisited: function(id){ return self.isVisited(id); },
+          isCandidate: function(id){ return !!candSet[id]; },
+        });
         window.MuseumMap.clearEvents();
+        if (window.MuseumMap.setRange) {
+          if (lv.near && lv.anchors) window.MuseumMap.setRange(lv.anchors, lv.radius); else window.MuseumMap.resetRange();
+        }
       } else if (d) {
         // Filter mode: only recommended museums + event markers
         var museums = this.recommendedMuseums(d);

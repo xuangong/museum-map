@@ -54,6 +54,19 @@ function glowTexture() {
   return t;
 }
 
+// A seal ring around a dot — marks your museums that stand on the era's own ground (原址).
+function ringTexture() {
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const g = c.getContext('2d');
+  g.strokeStyle = 'rgba(255,255,255,0.22)'; g.lineWidth = 11;
+  g.beginPath(); g.arc(32, 32, 23, 0, Math.PI * 2); g.stroke();
+  g.strokeStyle = 'rgba(255,255,255,1)'; g.lineWidth = 4.5;
+  g.beginPath(); g.arc(32, 32, 23, 0, Math.PI * 2); g.stroke();
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
 // tint = colour, kk = intensity. Light halls: colour × intensity, added. Ink hall: a
 // crisper dot whose opacity is the intensity.
 function pointsMaterial(tex) {
@@ -275,7 +288,7 @@ function init(container, data, cb) {
     const onSite = {};
     (crossings[m.id] || []).forEach((c) => { if (c.onSite && layerIndexById[c.dynastyId] != null) onSite[layerIndexById[c.dynastyId]] = true; });
     const tiers = m.tiers || [];
-    return { id: m.id, name: m.name, x: px(m.lng), z: pz(m.lat), links: ls, onSite, major: tiers.indexOf('tier1') >= 0 || tiers.indexOf('heritage-site') >= 0 };
+    return { id: m.id, name: m.name, seal: (m.seal && m.seal.t) || String(m.name || '').slice(0, 3), x: px(m.lng), z: pz(m.lat), links: ls, onSite, major: tiers.indexOf('tier1') >= 0 || tiers.indexOf('heritage-site') >= 0 };
   });
   const museumIdx = {}; museums.forEach((m, i) => { museumIdx[m.id] = i; });
 
@@ -315,6 +328,14 @@ function init(container, data, cb) {
   dGeom.setAttribute('kk', new THREE.BufferAttribute(dK, 1));
   dGeom.setAttribute('size', new THREE.BufferAttribute(dSize, 1));
   const dPoints = new THREE.Points(dGeom, pointsMaterial(tex)); dPoints.renderOrder = 8; world.add(dPoints);
+  // Seal rings share the dots' positions; only your on-site (原址) dots light one.
+  const rTint = new Float32Array(dots.length * 3), rK = new Float32Array(dots.length), rSize = new Float32Array(dots.length);
+  const rGeom = new THREE.BufferGeometry();
+  rGeom.setAttribute('position', dGeom.getAttribute('position'));
+  rGeom.setAttribute('tint', new THREE.BufferAttribute(rTint, 3));
+  rGeom.setAttribute('kk', new THREE.BufferAttribute(rK, 1));
+  rGeom.setAttribute('size', new THREE.BufferAttribute(rSize, 1));
+  const rPoints = new THREE.Points(rGeom, pointsMaterial(ringTexture())); rPoints.renderOrder = 8; world.add(rPoints);
 
   // ── HTML labels ──
   const overlay = el('div', 'strata-overlay'); container.appendChild(overlay);
@@ -325,9 +346,11 @@ function init(container, data, cb) {
     b.type = 'button';
     b.appendChild(el('span', 'sl-name', L.name));
     b.appendChild(el('span', 'sl-period', L.period));
+    // How many of your seals sit on this stratum (empty when you have none here).
+    const count = el('span', 'sl-count'); b.appendChild(count);
     b.addEventListener('click', (e) => { e.stopPropagation(); cb.onDynasty && cb.onDynasty(L.id); });
     overlay.appendChild(b);
-    return { el: b, v: new THREE.Vector3(anchorX, L.y, anchorZ), layer: L.i };
+    return { el: b, count, v: new THREE.Vector3(anchorX, L.y, anchorZ), layer: L.i };
   });
   const todayLabel = el('button', 'strata-label is-today');
   todayLabel.type = 'button';
@@ -345,6 +368,19 @@ function init(container, data, cb) {
   });
   const hoverTag = el('div', 'strata-tag'); overlay.appendChild(hoverTag);
   const selTag = el('div', 'strata-tag is-selected'); overlay.appendChild(selTag);
+  // Reading a stratum: your seals (cinnabar) and nearby candidates (dashed gilt) are named
+  // where their beams land on it. Created on first use, one per museum.
+  const mTags = {};
+  function mTag(i) {
+    let t = mTags[i];
+    if (!t) {
+      const b = el('button', 'strata-mtag'); b.type = 'button';
+      b.addEventListener('click', (e) => { e.stopPropagation(); cb.onMuseum && cb.onMuseum(museums[i].id); });
+      overlay.appendChild(b);
+      t = mTags[i] = { el: b, w: 0, h: 0, slot: 0, key: '' };
+    }
+    return t;
+  }
   // Label boxes are measured once; re-measure after the web fonts swap in.
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(() => {
@@ -490,7 +526,7 @@ function init(container, data, cb) {
     viewOX = NaN; setOffset(cam.ox, cam.oy);
   }
 
-  const state = { mode: 'all', dynastyId: null, visited: {}, selectedId: null, focus: -1, sel: -1 };
+  const state = { mode: 'all', dynastyId: null, visited: {}, cand: {}, selectedId: null, focus: -1, sel: -1, hl: -1, mine: false };
   function applyFocus(instant) {
     const sel = state.sel >= 0 ? museums[state.sel] : null;
     const covered = insetBottom > 0 || insetRight > 0;
@@ -528,88 +564,115 @@ function init(container, data, cb) {
     else { bCol[o] = c.r * k; bCol[o + 1] = c.g * k; bCol[o + 2] = c.b * k; bCol[o + 3] = 1; }
   }
   function recolor() {
-    const F = state.focus, mode = state.mode, visited = state.visited, selId = state.selectedId;
+    const F = state.focus, mode = state.mode, visited = state.visited, selId = state.selectedId, cand = state.cand;
+    const fp = mode === 'footprint';
+    // Once you hold seals your footprint leads; the capital trail steps back to a faint line.
+    const nVisited = Object.keys(visited).length;
+    const mine = nVisited > 0 && mode !== 'dynasty';
+    state.mine = mine;
+    const H = F < 0 ? state.hl : -1;   // ledger hover: preview one museum's beam
     const linkedToFocus = (m) => F >= 0 && m.links.indexOf(F) >= 0;
     // In a dynasty's reading view the camera looks down onto its stratum, so museums are
     // shown where their beams land on it (dots) — points up on today's surface would
     // parallax away from the map underneath.
     museums.forEach((m, i) => {
-      const v = !!visited[m.id], sel = m.id === selId;
-      let c = COL.bone, k = m.major ? 0.85 : 0.6, size = m.major ? 15 : 11;
+      const v = !!visited[m.id], c = cand[m.id] != null, sel = m.id === selId;
+      let col = COL.bone, k = m.major ? 0.85 : 0.6, size = m.major ? 15 : 11;
       if (PAL.ink) k *= 0.7;
-      if (mode === 'footprint') { if (v) { c = COL.seal; k = 1.15; size = 17; } else { k = 0.1; } }
+      if (fp) { if (v) { col = COL.seal; k = 1.15; size = 17; } else if (c) { col = COL.gilt; k = 0.95; size = 13; } else { k = 0.08; } }
       else if (F >= 0) { k = sel && !linkedToFocus(m) ? 1.2 : 0; }
-      else if (v) { c = COL.seal; k = 1.1; size = m.major ? 17 : 14; }
-      if (sel && F < 0) { c = COL.giltHi; k = 1.5; size = 26; }
-      else if (sel) { c = COL.giltHi; size = 22; }
-      setTint(mTint, mK, i, c, k); mSize[i] = size;
+      else if (v) { col = COL.seal; k = 1.15; size = m.major ? 17 : 15; }
+      else if (mine) k *= 0.45;
+      if (H >= 0 && i !== H) k *= 0.3;
+      if (sel && F < 0) { col = COL.giltHi; k = 1.5; size = 26; }
+      else if (sel) { col = COL.giltHi; size = 22; }
+      setTint(mTint, mK, i, col, k); mSize[i] = size;
     });
     mGeom.attributes.tint.needsUpdate = true; mGeom.attributes.kk.needsUpdate = true; mGeom.attributes.size.needsUpdate = true;
 
     segs.forEach((s, i) => {
-      const m = museums[s.m], v = !!visited[m.id], sel = m.id === selId;
-      let c = COL.bone, k = 0.075;
-      if (mode === 'footprint') { if (v) { c = COL.seal; k = 0.6; } else k = 0; }
-      else if (F >= 0) { if (m.links.indexOf(F) >= 0 && s.lo >= F) { c = v ? COL.seal : COL.gilt; k = PAL.ink ? 0.07 : 0.16; } else k = 0; }
-      else if (v) { c = COL.seal; k = 0.42; }
-      if (sel && F < 0) { c = COL.giltHi; k = 0.95; }
-      setBeam(i * 2, c, k); setBeam(i * 2 + 1, c, k * 0.55);
+      const m = museums[s.m], v = !!visited[m.id], c = cand[m.id] != null, sel = m.id === selId;
+      let col = COL.bone, k = mine ? 0.04 : 0.075;
+      if (fp) { if (v) { col = COL.seal; k = 0.6; } else if (c) { col = COL.gilt; k = 0.45; } else k = 0; }
+      else if (F >= 0) { if (m.links.indexOf(F) >= 0 && s.lo >= F) { col = v ? COL.seal : COL.gilt; k = PAL.ink ? 0.07 : 0.16; } else k = 0; }
+      else if (v) { col = COL.seal; k = 0.5; }
+      if (H >= 0) { if (s.m === H) { k = Math.max(k, 0.9); if (!v && !c) col = COL.giltHi; } else k *= 0.2; }
+      if (sel && F < 0) { col = COL.giltHi; k = 0.95; }
+      setBeam(i * 2, col, k); setBeam(i * 2 + 1, col, k * 0.55);
     });
     bGeom.attributes.color.needsUpdate = true;
 
     dots.forEach((d, i) => {
-      const m = museums[d.m], v = !!visited[m.id], sel = m.id === selId;
-      let c = COL.bone, k = d.onSite ? 0.55 : 0.16, size = d.onSite ? 12 : 6;
-      if (d.onSite) c = COL.giltHi;
-      if (mode === 'footprint') { if (v) { c = COL.seal; k = 0.9; size = d.onSite ? 15 : 9; } else { k = 0; } }
-      else if (F >= 0) {
-        if (d.layer === F && m.links.indexOf(F) >= 0) { c = d.onSite ? COL.giltHi : (v ? COL.seal : COL.gilt); k = d.onSite ? 1.4 : 1.05; size = d.onSite ? 22 : 14; }
+      const m = museums[d.m], v = !!visited[m.id], c = cand[m.id] != null, sel = m.id === selId;
+      let col = COL.bone, k = d.onSite ? 0.55 : 0.16, size = d.onSite ? 12 : 6;
+      if (d.onSite) col = COL.giltHi;
+      if (mine && !v) k *= 0.5;
+      if (fp) {
+        if (v) { col = COL.seal; k = 1.1; size = d.onSite ? 15 : 11; }
+        else if (c) { col = COL.gilt; k = 1.0; size = d.onSite ? 13 : 10; }
         else k = 0;
-      } else if (v) { c = COL.seal; k = 0.7; }
-      if (sel && (F < 0 || d.layer === F)) { c = COL.giltHi; k = d.onSite ? 1.6 : 1.3; size = d.onSite ? 24 : 18; }
-      setTint(dTint, dK, i, c, k); dSize[i] = size;
+      } else if (F >= 0) {
+        if (d.layer === F && m.links.indexOf(F) >= 0) {
+          col = v ? COL.seal : (d.onSite ? COL.giltHi : COL.gilt);
+          k = v ? 1.3 : d.onSite ? 1.4 : 1.05; size = d.onSite ? (v ? 20 : 22) : (v ? 16 : 14);
+        } else k = 0;
+      } else if (v) { col = COL.seal; k = 1.0; size = d.onSite ? 13 : 10; }
+      // Your on-site dots wear a seal ring.
+      let rk = v && d.onSite && k > 0 ? Math.min(1.1, k) : 0;
+      if (H >= 0) {
+        if (d.m === H) { k = Math.max(k, 1.4); size = Math.max(size, d.onSite ? 20 : 17); if (!v && !c) col = COL.giltHi; }
+        else { k *= 0.2; rk *= 0.2; }
+      }
+      if (sel && (F < 0 || d.layer === F)) { col = COL.giltHi; k = d.onSite ? 1.6 : 1.3; size = d.onSite ? 24 : 18; rk = 0; }
+      setTint(dTint, dK, i, col, k); dSize[i] = size;
+      setTint(rTint, rK, i, COL.seal, rk); rSize[i] = size * 1.7;
     });
     dGeom.attributes.tint.needsUpdate = true; dGeom.attributes.kk.needsUpdate = true; dGeom.attributes.size.needsUpdate = true;
+    rGeom.attributes.tint.needsUpdate = true; rGeom.attributes.kk.needsUpdate = true; rGeom.attributes.size.needsUpdate = true;
 
     sites.forEach((s, i) => {
       let c = s.s.role === 'culture' ? COL.patina : COL.gilt;
       let k = s.trail || s.s.role === 'culture' ? 0.75 : 0.45, size = s.s.role === 'capital' ? 14 : 10;
       if (F >= 0) { if (s.layer === F) { c = s.s.role === 'culture' ? COL.patina : COL.giltHi; k = 1.35; size = 22; } else k *= 0.12; }
-      if (mode === 'footprint') k *= 0.5;
+      if (fp) k *= 0.3; else if (mine) k *= 0.6;
       setTint(siteTint, siteK, i, c, k); siteSize[i] = size;
     });
     siteGeom.attributes.tint.needsUpdate = true; siteGeom.attributes.kk.needsUpdate = true; siteGeom.attributes.size.needsUpdate = true;
 
-    // Layer opacities
+    // How many of your seals each stratum holds (ruler count; 集章 mode keeps those strata drawn).
     const depth = {};
-    if (mode === 'footprint') {
-      museums.forEach((m) => { if (visited[m.id]) m.links.forEach((li) => { depth[li] = (depth[li] || 0) + 1; }); });
-    }
+    museums.forEach((m) => { if (visited[m.id]) m.links.forEach((li) => { depth[li] = (depth[li] || 0) + 1; }); });
     // A stratum with its own territory draws that (o/f); today's outline (g = ghost) only
     // returns, faintly, under the stratum you are reading. Strata without one fall back to
     // today's outline.
     const lk = (x) => Math.min(1, x * PAL.lineK), fk = (x) => Math.min(1, x * PAL.fillK);
     layers.forEach((L) => {
-      const own = !!L.tLine;
+      const own = !!L.tLine, dep = depth[L.i] || 0;
       let o = own ? 0.2 : 0.11, f = own ? 0.035 : 0.022, r = 0.06, g = 0;
       if (F >= 0) {
         if (L.i === F) { o = own ? 0.85 : 0.62; f = own ? 0.13 : 0.11; r = 0.55; g = own ? 0.16 : 0; }
         else { o = 0.025; f = 0.004; r = 0; }
       }
-      if (mode === 'footprint') { const d = Math.min(1, (depth[L.i] || 0) / 4); o = 0.05 + d * 0.45; f = 0.008 + d * 0.08; r = 0.03 + d * 0.12; g = 0; }
+      // 集章: strata you have reached stay drawn, the rest recede (no red wash — 20/20 said nothing).
+      if (fp) { o = dep ? (own ? 0.34 : 0.22) : 0.05; f = dep ? (own ? 0.05 : 0.035) : 0.006; r = dep ? 0.1 : 0.02; g = 0; }
       if (own) L.to = { tLine: lk(o), tFill: fk(f), outline: lk(g), fill: 0, river: lk(r) };
       else L.to = { tLine: 0, tFill: 0, outline: lk(o), fill: fk(f), river: lk(r) };
-      const fc = mode === 'footprint' && depth[L.i] ? COL.seal : COL.fill;
-      (L.tFill || L.fill).material.color.copy(fc);
-      layerLabels[L.i].el.classList.toggle('is-active', L.i === F);
-      layerLabels[L.i].el.classList.toggle('is-dim', F >= 0 && L.i !== F);
-      layerLabels[L.i].el.classList.toggle('has-visit', !!depth[L.i]);
+      (L.tFill || L.fill).material.color.copy(COL.fill);
+      const lab = layerLabels[L.i];
+      lab.el.classList.toggle('is-active', L.i === F);
+      // Hovering a seal in the ledger lights the strata its beam passes through.
+      const hl = H >= 0 && museums[H].links.indexOf(L.i) >= 0;
+      lab.el.classList.toggle('is-dim', (F >= 0 && L.i !== F) || (H >= 0 && !hl));
+      lab.el.classList.toggle('is-hl', hl);
+      lab.el.classList.toggle('has-visit', dep > 0);
+      lab.el.classList.toggle('is-empty', fp && !dep);
+      lab.count.textContent = dep ? String(dep) : '';
     });
     top.to = { outline: lk(F >= 0 ? 0.05 : 0.5), fill: fk(F >= 0 ? 0.006 : 0.045), river: lk(F >= 0 ? 0.03 : 0.28), tLine: 0, tFill: 0 };
     // Seen from above, the other eras' trail would lie across the map being read.
-    tube.material.opacity = mode === 'footprint' ? 0.35 : F >= 0 ? (PAL.ink ? 0.035 : 0.07) : 0.95;
-    tubeGlow.material.opacity = mode === 'footprint' ? 0.05 : F >= 0 ? 0.015 : 0.13;
-    chains.material.opacity = F >= 0 ? 0.04 : 0.32;
+    tube.material.opacity = fp ? 0.1 : F >= 0 ? (PAL.ink ? 0.035 : 0.07) : mine ? (PAL.ink ? 0.24 : 0.3) : 0.95;
+    tubeGlow.material.opacity = fp ? 0 : F >= 0 ? 0.015 : mine ? 0.03 : 0.13;
+    chains.material.opacity = F >= 0 ? 0.04 : fp ? 0.05 : mine ? 0.12 : 0.32;
     focusMat.opacity = F >= 0 ? 0.95 : 0;
     focusDash.opacity = F >= 0 ? 0.7 : 0;
     S.needs = true;
@@ -620,6 +683,7 @@ function init(container, data, cb) {
     state.mode = next.mode || 'all';
     state.dynastyId = next.dynastyId || null;
     state.visited = {}; (next.visitedIds || []).forEach((id) => { state.visited[id] = true; });
+    state.cand = {}; (next.candidates || []).forEach((c) => { if (c && c.id != null) state.cand[c.id] = c.km || 0; });
     state.selectedId = next.selectedId || null;
     state.focus = state.mode === 'dynasty' && state.dynastyId != null && layerIndexById[state.dynastyId] != null ? layerIndexById[state.dynastyId] : -1;
     state.sel = state.selectedId != null && museumIdx[state.selectedId] != null ? museumIdx[state.selectedId] : -1;
@@ -743,9 +807,8 @@ function init(container, data, cb) {
       t.el.style.visibility = show ? 'visible' : 'hidden';
       if (show) { const p = screenOf(t.v.x, t.v.y, t.v.z); t.el.style.transform = 'translate3d(' + p.x.toFixed(1) + 'px,' + p.y.toFixed(1) + 'px,0) translate(-50%,-50%)'; }
     });
-    focusSites.forEach((s) => {
-      if (!s.w) { s.w = s.el.offsetWidth; s.h = s.el.offsetHeight; }
-      const p = screenOf(s.v.x, s.v.y, s.v.z);
+    // Each label tries spots around its point and takes the first clear of those placed.
+    function place(s, p) {
       const g = 7, w = s.w, hh = s.h;
       // Near spots first, then a ring further out so crowded capitals still get named.
       const slots = [[-w / 2, -hh - g], [-w / 2, g], [g + 2, -hh / 2], [-w - g - 2, -hh / 2],
@@ -760,11 +823,64 @@ function init(container, data, cb) {
           hit = r; s.slot = i; break;
         }
       }
-      if (!hit || p.z >= 1) { s.el.style.visibility = 'hidden'; return; }
-      placed.push({ x: hit.x, y: hit.y, w, h: hh });
+      if (!hit || p.z >= 1) { s.el.style.visibility = 'hidden'; return false; }
+      put(s, hit);
+      return true;
+    }
+    function clear(r, w, hh) { return !placed.some((q) => r.x < q.x + q.w + 3 && q.x < r.x + w + 3 && r.y < q.y + q.h + 2 && q.y < r.y + hh + 2); }
+    function put(s, r) {
+      placed.push({ x: r.x, y: r.y, w: s.w, h: s.h });
       s.el.style.visibility = 'visible';
-      s.el.style.transform = 'translate3d(' + hit.x.toFixed(1) + 'px,' + hit.y.toFixed(1) + 'px,0)';
-    });
+      s.el.style.transform = 'translate3d(' + r.x.toFixed(1) + 'px,' + r.y.toFixed(1) + 'px,0)';
+    }
+    // Seals on (nearly) the same spot — 汉魏洛阳 and 龙门 — stack into a column off the first one.
+    const stacks = [];   // { px, py, top, bottom, x }
+    function placeMine(t, p) {
+      const near = stacks.find((k) => Math.abs(k.px - p.x) < 34 && Math.abs(k.py - p.y) < 34);
+      if (near) {
+        const below = { x: near.x, y: near.bottom + 2 }, above = { x: near.x, y: near.top - t.h - 2 };
+        if (clear(below, t.w, t.h)) { put(t, below); near.bottom = below.y + t.h; return true; }
+        if (clear(above, t.w, t.h)) { put(t, above); near.top = above.y; return true; }
+      }
+      if (!place(t, p)) return false;
+      const q = placed[placed.length - 1];
+      stacks.push({ px: p.x, py: p.y, x: q.x, top: q.y, bottom: q.y + q.h });
+      return true;
+    }
+    const placeSite = (s) => {
+      if (!s.w) { s.w = s.el.offsetWidth; s.h = s.el.offsetHeight; }
+      place(s, screenOf(s.v.x, s.v.y, s.v.z));
+    };
+    // Room goes to capitals first, then your seals, then other sites, then nearby candidates.
+    focusSites.filter((s) => s.rank === 0).forEach(placeSite);
+    const shown = {};
+    const later = [];
+    if (state.focus >= 0) {
+      const F = state.focus, list = [];
+      museums.forEach((m, i) => {
+        if (i === state.sel || m.links.indexOf(F) < 0) return;
+        const v = !!state.visited[m.id], km = state.cand[m.id];
+        if (!v && km == null) return;
+        list.push({ i, v, on: !!m.onSite[F], km: km == null ? 0 : km });
+      });
+      list.sort((a, b) => (b.v - a.v) || (b.on - a.on) || (a.km - b.km));
+      list.forEach((x) => {
+        const t = mTag(x.i), m = museums[x.i];
+        const key = (x.v ? 'v' : 'c') + (x.on ? 'o' : '') + Math.round(x.km);
+        if (t.key !== key) {
+          t.key = key; t.w = 0;
+          t.el.className = 'strata-mtag ' + (x.v ? 'is-mine' : 'is-cand') + (x.on ? ' is-onsite' : '');
+          t.el.textContent = x.v ? m.seal : m.seal + ' · ' + (x.km < 10 ? x.km.toFixed(1) : Math.round(x.km)) + 'km';
+          t.el.title = m.name;
+        }
+        if (!t.w) { t.w = t.el.offsetWidth; t.h = t.el.offsetHeight; }
+        const go = () => { const p = screenOf(m.x, yOf(F), m.z); if (x.v ? placeMine(t, p) : place(t, p)) shown[x.i] = true; };
+        if (x.v) go(); else later.push(go);
+      });
+    }
+    focusSites.filter((s) => s.rank !== 0).forEach(placeSite);
+    later.forEach((go) => go());
+    Object.keys(mTags).forEach((k) => { if (!shown[k]) mTags[k].el.style.visibility = 'hidden'; });
     function tag(node, idx) {
       if (idx < 0) { node.style.visibility = 'hidden'; return; }
       const m = museums[idx], p = screenOf(m.x, museumY(idx), m.z);
@@ -816,7 +932,7 @@ function init(container, data, cb) {
     pulses.forEach((sp, i) => {
       const t = ((now / 1000) * 0.045 + i / pulses.length) % 1;
       if (t > grow) { sp.visible = false; return; }
-      sp.visible = state.mode !== 'footprint' && state.focus < 0;
+      sp.visible = state.mode !== 'footprint' && state.focus < 0 && !state.mine;
       sp.position.copy(curve.getPointAt(t));
       const s = 0.12 + 0.05 * Math.sin(now / 300 + i);
       sp.scale.set(s, s, s);
@@ -833,7 +949,7 @@ function init(container, data, cb) {
     // Dark halls add light to the colour only, leaving the canvas alpha alone. Plain additive
     // blending also adds alpha, so on this transparent canvas a switched-off (black) beam or
     // point would composite as an opaque black line over the hall's background (青绿 showed it).
-    [sitePoints, mPoints, dPoints, tube, tubeGlow, chains, beams].concat(pulses).forEach((o) => {
+    [sitePoints, mPoints, dPoints, rPoints, tube, tubeGlow, chains, beams].concat(pulses).forEach((o) => {
       const m = o.material;
       if (PAL.ink) { m.blending = THREE.NormalBlending; return; }
       m.blending = THREE.CustomBlending;
@@ -841,7 +957,7 @@ function init(container, data, cb) {
       m.blendSrc = THREE.SrcAlphaFactor; m.blendDst = THREE.OneFactor;
       m.blendSrcAlpha = THREE.ZeroFactor; m.blendDstAlpha = THREE.OneFactor;
     });
-    [sitePoints, mPoints, dPoints].forEach((p) => { p.material.uniforms.ink.value = PAL.ink ? 1 : 0; });
+    [sitePoints, mPoints, dPoints, rPoints].forEach((p) => { p.material.uniforms.ink.value = PAL.ink ? 1 : 0; });
     layers.concat([top]).forEach((L) => {
       L.outline.material.color.copy(COL.line); L.river.material.color.copy(COL.river);
       if (L.tLine) L.tLine.material.color.copy(COL.line);
@@ -865,6 +981,12 @@ function init(container, data, cb) {
     setActive(on) { active = !!on; if (on) { last = performance.now(); fit(true); } },
     resize: () => fit(true),
     setTheme: applyTheme,
+    // Preview one museum's beam through its strata (ledger hover); null clears.
+    highlight(id) {
+      const i = id != null && museumIdx[id] != null ? museumIdx[id] : -1;
+      if (i === state.hl) return;
+      state.hl = i; hoverIdx = i; recolor();
+    },
     setInset(bottom, right) {
       const b = Math.max(0, Math.round(bottom || 0)), r = Math.max(0, Math.round(right || 0));
       if (b === insetBottom && r === insetRight) return;
@@ -885,6 +1007,8 @@ window.MuseumStrata = {
   resize() { if (S.ready) S.resize(); },
   /** Pixels of the view covered by a sheet (bottom) or side drawer (right). */
   setInset(bottom, right) { if (S.ready) S.setInset(bottom, right); },
+  /** Preview one museum's beam (id) or clear (null). */
+  highlight(id) { if (S.ready) S.highlight(id); },
   /** 'night' | 'paper' | 'qinglu' */
   setTheme(name) { if (S.ready) S.setTheme(name); },
 };

@@ -126,15 +126,72 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
     </div>
   </div>
 
-  <div class="strata-progress" x-show="visits.ids.length">
-    <div class="block-head">${icon("layers", 15)}<span>朝代地层 · 你读到了哪里</span></div>
-    <template x-for="row in dynastyProgress()" :key="row.id">
-      <button class="sp-row" :class="row.hit ? 'hit' : ''" @click="selectDynasty(row.id)">
-        <span class="sp-name" x-text="row.name"></span>
-        <span class="sp-bar"><i :style="'width:' + row.pct + '%'"></i></span>
-        <span class="sp-num" x-text="row.hit + '/' + row.total"></span>
-      </button>
-    </template>
+  <div class="ledger" x-show="visits.ids.length || !isReadOnly">
+    <div class="block-head">${icon("layers", 15)}<span>地层账本</span><span class="mono block-en">LEDGER</span></div>
+    <p class="ledger-lede" x-show="ledgerOpt.tab !== 'near' || isReadOnly">每一层朝代里，你集到了哪几枚印。实心是原址，描边是相关馆；点朝代，翻到那一层看它们落在哪里。</p>
+    <div class="ledger-tabs" x-show="!isReadOnly">
+      <button class="seg-btn" :class="ledgerOpt.tab !== 'near' ? 'active' : ''" @click="setLedgerTab('mine')">${icon("seal", 14)}我的足迹</button>
+      <button class="seg-btn" :class="ledgerOpt.tab === 'near' ? 'active' : ''" @click="setLedgerTab('near')">${icon("locate", 14)}附近可补</button>
+    </div>
+
+    <div class="ledger-near" x-show="ledgerOpt.tab === 'near' && !isReadOnly" x-cloak>
+      <div class="ledger-anchor">
+        <button class="chip" :class="ledgerOpt.anchor === 'here' ? 'on' : ''" @click="setLedgerAnchor('here')">${icon("locate", 13)}<span x-text="geo.locating ? '定位中…' : '当前位置'"></span></button>
+        <label class="chip chip-select" :class="ledgerOpt.anchor === 'city' ? 'on' : ''">
+          ${icon("pin", 13)}<span x-text="ledgerOpt.city || '选城市'"></span>
+          <select aria-label="选城市" @change="setLedgerCity($event.target.value)">
+            <option value="" :selected="!ledgerOpt.city" disabled>选城市</option>
+            <template x-for="c in ledgerCities()" :key="c">
+              <option :value="c" :selected="c === ledgerOpt.city" x-text="c"></option>
+            </template>
+          </select>
+        </label>
+        <button class="chip" x-show="trip.ids.length" :class="ledgerOpt.anchor === 'trip' ? 'on' : ''" @click="setLedgerAnchor('trip')">${icon("route", 13)}沿行程</button>
+      </div>
+      <div class="ledger-radius">
+        <template x-for="r in [40, 150, 300]" :key="r">
+          <button class="seg-btn" :class="ledgerOpt.radius === r ? 'active' : ''" @click="setLedgerRadius(r)" x-text="ledgerRadiusLabel(r)"></button>
+        </template>
+      </div>
+      <p class="ledger-summary" x-html="ledgerSummaryHtml()"></p>
+      <div class="ledger-recs" x-show="ledgerView().near && ledgerView().recs.length">
+        <div class="ledger-recs-head">推荐下一站</div>
+        <template x-for="r in ledgerView().recs" :key="r.m.id">
+          <div class="lg-rec" @mouseenter="ledgerHover(r.m.id)" @mouseleave="ledgerHover(null)">
+            <button class="lg-rec-main" @click="openMuseum(r.m.id)">
+              <span class="lg-rec-seal" x-html="sealHtml(r.m, 'seal-sm seal-ghost seal-cand')"></span>
+              <span class="lg-rec-text"><b x-text="r.m.name"></b><small x-text="ledgerRecLine(r)"></small></span>
+            </button>
+            <button class="lg-rec-trip" :class="inTrip(r.m.id) ? 'is-in' : ''" @click="toggleTrip(r.m.id)" x-text="inTrip(r.m.id) ? '已在行程' : '加入行程'"></button>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <div class="ledger-rows">
+      <template x-for="row in ledgerView().rows" :key="row.id">
+        <div class="lg-row" :class="row.empty ? 'is-empty' : ''">
+          <button class="lg-era" @click="openLedgerRow(row)" :title="'翻到' + row.name + '这一层'">
+            <b x-text="row.name"></b><small x-text="row.period"></small>
+          </button>
+          <div class="lg-seals">
+            <template x-for="x in row.mine" :key="x.m.id">
+              <button class="lg-seal" :class="x.onSite ? 'is-onsite' : 'is-related'" @click="openMuseum(x.m.id)"
+                @mouseenter="ledgerHover(x.m.id)" @mouseleave="ledgerHover(null)"
+                :title="x.m.name + (x.onSite ? ' · 原址' : '')" x-html="sealHtml(x.m, 'seal-xs')"></button>
+            </template>
+            <template x-for="c in (ledgerView().near ? row.cands : [])" :key="'c' + c.m.id">
+              <button class="lg-cand" @click="openMuseum(c.m.id)" @mouseenter="ledgerHover(c.m.id)" @mouseleave="ledgerHover(null)"
+                :title="c.m.name + ' · ' + kmLabel(c.km) + (c.onSite ? ' · 原址' : '')">
+                <span x-html="sealHtml(c.m, 'seal-xs seal-ghost seal-cand')"></span><span class="lg-km" x-text="kmLabel(c.km)"></span>
+              </button>
+            </template>
+            <span class="lg-bridge" x-show="row.empty && row.bridge.length && !(ledgerView().near && row.cands.length)" x-text="'接得上 ' + row.bridge.join(' · ')"></span>
+          </div>
+          <span class="lg-count" x-text="row.mine.length || ''"></span>
+        </div>
+      </template>
+    </div>
   </div>
   <div class="hero-actions">
     <button class="btn btn-text" @click="toggleFootprint()">${icon("arrowLeft", 16)}合上集章册</button>

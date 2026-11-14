@@ -94,6 +94,9 @@ export function HomePage(data: HomeData): string {
         <template x-if="!tripMode && visits.footprintMode">
           <div class="row"><span class="dot r"></span><span>已集章</span></div>
         </template>
+        <template x-if="!tripMode && visits.footprintMode && ledgerOpt.tab === 'near' && !isReadOnly">
+          <div class="row"><span class="dot c"></span><span x-text="'附近可补 · ' + ledgerRadiusLabel()"></span></div>
+        </template>
         <template x-if="!tripMode && !visits.footprintMode && currentDynastyId">
           <div class="row"><span class="dot g"></span><span>本朝相关</span></div>
         </template>
