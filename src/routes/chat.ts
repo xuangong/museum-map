@@ -1,7 +1,7 @@
 import { Elysia } from "elysia"
 import type { Env } from "~/index"
 import { ChatGuardError, forwardChat, runRateLimits, sanitizeChatRequest, MODEL, MAX_TOKENS } from "~/services/chat"
-import { runToolLoop } from "~/services/agent-loop"
+import { runToolLoop, runToolLoopStream, type ToolCall } from "~/services/agent-loop"
 import { CHAT_TOOLS, CHAT_AGENT_SYSTEM, executeChatTool } from "~/services/chat-tools"
 import { getClientIp } from "~/lib/getClientIp"
 
@@ -10,6 +10,30 @@ interface RouteContext {
   request: Request
   body: any
   set: any
+}
+
+const SSE_HEADERS = {
+  "content-type": "text/event-stream; charset=utf-8",
+  "cache-control": "no-cache, no-transform",
+  "x-accel-buffering": "no",
+  "content-encoding": "identity",
+}
+
+/** What the guide is doing while it looks something up, in the reader's words. */
+async function toolLabel(db: D1Database, call: ToolCall): Promise<string> {
+  const inp = call.input || {}
+  if (call.name === "get_museum") {
+    try {
+      const row = await db.prepare("SELECT name FROM museums WHERE id = ?").bind(String(inp.id || "")).first<{ name: string }>()
+      if (row?.name) return `正在翻阅「${row.name}」的资料`
+    } catch {}
+    return "正在翻阅馆藏资料"
+  }
+  if (call.name === "search_museums") {
+    const what = [inp.location, inp.dynasty, inp.keyword].filter((x) => typeof x === "string" && x.trim()).join(" · ")
+    return what ? `正在查「${what}」相关的博物馆` : "正在查博物馆目录"
+  }
+  return "正在查资料"
 }
 
 export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
@@ -35,6 +59,60 @@ export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
   }
 
   // Tool-augmented path: AI can query our DB before answering.
+  if (body && body.useTools !== false && body.stream === true) {
+    let sanitized
+    try {
+      sanitized = sanitizeChatRequest({ ...body, stream: false })
+    } catch (e) {
+      if (e instanceof ChatGuardError) {
+        set.status = e.status
+        return { error: e.message }
+      }
+      set.status = 500
+      return { error: "internal_error" }
+    }
+    const messages: any[] = sanitized.messages.map((m) => ({ role: m.role, content: m.content }))
+    const system = CHAT_AGENT_SYSTEM + (sanitized.system ? "\n\n" + sanitized.system : "")
+    const enc = new TextEncoder()
+    // Anthropic-shaped events, so the existing client parser renders them; plus
+    // `tool_progress` while the guide looks something up.
+    const stream = new ReadableStream<Uint8Array>({
+      async start(controller) {
+        const send = (obj: any) => {
+          try {
+            controller.enqueue(enc.encode("data: " + JSON.stringify(obj) + "\n\n"))
+          } catch {}
+        }
+        const text = (t: string) => send({ type: "content_block_delta", index: 0, delta: { type: "text_delta", text: t } })
+        try {
+          const result = await runToolLoopStream({
+            gatewayUrl: env.COPILOT_GATEWAY_URL!,
+            gatewayKey: env.COPILOT_GATEWAY_KEY!,
+            model: MODEL,
+            maxTokens: MAX_TOKENS,
+            system,
+            tools: CHAT_TOOLS as any,
+            messages,
+            executeTool: (call) => executeChatTool(env.DB, call),
+            onDelta: text,
+            onTool: async (call) => send({ type: "tool_progress", label: await toolLabel(env.DB, call) }),
+            maxIters: 6,
+            wallMs: 45_000,
+          })
+          if (result.stopReason === "gateway_error" && !result.text) send({ type: "error", error: { message: "upstream_error" } })
+          else if (!result.text) text("（无回复）")
+          send({ type: "message_stop" })
+        } catch {
+          send({ type: "error", error: { message: "internal_error" } })
+        }
+        try {
+          controller.close()
+        } catch {}
+      },
+    })
+    return new Response(stream, { status: 200, headers: SSE_HEADERS })
+  }
+
   if (body && body.useTools !== false) {
     try {
       const sanitized = sanitizeChatRequest({ ...body, stream: false })

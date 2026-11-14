@@ -38,7 +38,7 @@ window.museumApp = function() {
     currentDynastyId: null,
     selectedMuseumId: null,
     drawer: { open: false, expanded: false, scrolled: false, loading: false, error: false, title: '', subtitle: '', sections: [], _loadFn: null },
-    chat: { open: false, messages: [], input: '', loading: false, fullscreen: false, palette: { open: false, query: '' } },
+    chat: { open: false, messages: [], input: '', loading: false, progress: '', fullscreen: false, palette: { open: false, query: '' } },
     tocOpen: false,
     shakeOpen: false,
     captionShown: false,
@@ -2963,14 +2963,23 @@ window.museumApp = function() {
         this.chat.messages.push({ role: 'assistant', content: '' });
         var self2 = this;
         try {
+          self2.chat.progress = '';
           await window.MuseumChat.sendStream(this.chat.messages.slice(0, streamIdx).slice(-10), function(delta){
+            self2.chat.progress = '';
             self2.chat.messages[streamIdx].content += delta;
             // keep scrolled to bottom while streaming
             var body = document.querySelector('.chat-body');
             if (body) body.scrollTop = body.scrollHeight;
+          }, function(label){
+            // The guide is looking something up — say what, on a fresh line.
+            self2.chat.progress = label;
+            var m = self2.chat.messages[streamIdx];
+            if (m.content && !/\\n\\n$/.test(m.content)) m.content += '\\n\\n';
           });
         } catch (e) {
           self2.chat.messages[streamIdx].content = (self2.chat.messages[streamIdx].content || '') + '\\n（出错：' + (e.message || 'unknown') + '）';
+        } finally {
+          self2.chat.progress = '';
         }
       } catch (e) {
         this.chat.messages.push({ role: 'assistant', content: '（出错：' + (e.message || 'unknown') + '）' });

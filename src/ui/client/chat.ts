@@ -17,7 +17,7 @@ window.MuseumChat = {
     return JSON.stringify(data);
   },
 
-  sendStream: async function(messages, onDelta) {
+  sendStream: async function(messages, onDelta, onProgress) {
     var res = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
@@ -79,6 +79,8 @@ window.MuseumChat = {
         if (t === 'content_block_delta' && ev.delta && typeof ev.delta.text === 'string') {
           full += ev.delta.text;
           onDelta(ev.delta.text);
+        } else if (t === 'tool_progress') {
+          if (onProgress) onProgress(ev.label || '');
         } else if (t === 'message_stop') {
           done = true; break;
         } else if (t === 'error') {

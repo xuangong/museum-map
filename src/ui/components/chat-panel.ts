@@ -32,13 +32,13 @@ export function ChatPanel(): string {
       <div>问我任何关于朝代、文物与博物馆的问题。<br>也可以让我帮你排一条时间之旅或路线之旅。</div>
     </div>
     <template x-for="(msg, i) in chat.messages" :key="i">
-      <div class="chat-msg" :class="msg.role">
+      <div class="chat-msg" :class="msg.role" x-show="msg.role === 'user' || msg.content">
         <div class="who" x-text="msg.role === 'user' ? '你' : '讲解员'"></div>
         <div class="text" x-show="msg.role === 'user'" x-text="msg.content"></div>
         <div class="text md-rich" x-show="msg.role !== 'user'" x-html="window.MuseumChat.renderMarkdown(msg.content)"></div>
       </div>
     </template>
-    <div x-show="chat.loading" class="chat-loading"><span class="dots"><i></i><i></i><i></i></span>讲解员正在思考</div>
+    <div x-show="chat.loading && (chat.progress || !(chat.messages.length && chat.messages[chat.messages.length - 1].content))" class="chat-loading"><span class="dots"><i></i><i></i><i></i></span><span x-text="chat.progress || '讲解员正在思考'"></span></div>
   </div>
   <div class="chat-chips">
     ${QUICK_QUESTIONS.map((q) => `<button class="chip" @click="chat.input='${q.replace(/'/g, "\\'")}'">${q}</button>`).join("")}
