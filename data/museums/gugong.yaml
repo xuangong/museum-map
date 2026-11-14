@@ -55,6 +55,15 @@ artifacts:
   - name: 张成造款雕漆云纹盘
     period: 元
     description: 漆器工艺巅峰
+  - name: 韩熙载夜宴图
+    period: 五代南唐（今存为南宋摹本）
+    description: 一场夜宴被画成长卷：李家明之妹弹琵琶，韩熙载亲自击羯鼓，拍板、筚篥、笛子轮番上场。原作出自南唐，故宫所藏一般认为是南宋摹本——一千年前的派对，声音好像能从画里溢出来。
+  - name: 听琴图
+    period: 北宋（传赵佶）
+    description: 传为宋徽宗赵佶所作：松下一人抚琴，两人静坐聆听。宋人把听琴当作一件郑重的事，这幅画让你看见一千年前的人怎样安静下来。
+  - name: 清宫中和韶乐编钟
+    period: 清
+    description: 中和韶乐是清宫最隆重的典礼音乐，编钟是乐队的核心。故宫依据乾隆时期的记载，把清宫旧藏的典制乐器复原成完整乐队展出——帝王典礼的声音，原来是这样的。
 sources:
   - source: "故宫博物院官网·藏品: https://www.dpm.org.cn/explore/collections.html（藏品180余万件/套）"
   - source: "故宫博物院官网·历史: https://www.dpm.org.cn/classify/architecture.html"

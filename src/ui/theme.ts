@@ -1429,6 +1429,34 @@ body.chat-locked .chat-body { touch-action: pan-y; }
 .strata-play:hover { border-color: var(--seal); }
 .strata-play.is-playing { background: var(--seal); border-color: var(--seal); color: #FFF2E8; }
 .canvas.has-drawer .strata-play { right: calc(var(--drawer-w) + 14px); }
+/* 此声取自: the object behind the era now sounding */
+.strata-now {
+  position: absolute; top: 108px; right: 14px; max-width: min(300px, 62vw);
+  display: none; flex-direction: column; align-items: flex-end; gap: 2px; text-align: right;
+  padding: 7px 12px; border-radius: 12px; pointer-events: none; cursor: default;
+  background: rgba(var(--bg-rgb),0.95); border: 1px solid var(--line); color: var(--text-2);
+  font: inherit; overflow-wrap: anywhere; box-shadow: 0 10px 26px -16px var(--sh-90);
+  z-index: 6; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.strata-now em { font-style: normal; }
+/* Phones: one compact line under the play button, so the sounding seals stay visible */
+@media (max-width: 640px) {
+  .strata-now { flex-direction: row; align-items: baseline; gap: 6px; max-width: 64vw; padding: 5px 22px 5px 10px; border-radius: 999px; }
+  .strata-now b { font-size: 13px; flex: none; }
+  .strata-now span { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 0; }
+  .strata-now .nc-from, .strata-now .nc-museum { display: none; }
+  .strata-now i { bottom: auto; top: 50%; transform: translateY(-50%); }
+}
+.strata-now.is-on { display: flex; animation: now-in 0.35s ease-out; }
+.strata-now.has-link { pointer-events: auto; cursor: pointer; }
+.strata-now.has-link:hover { border-color: rgba(var(--seal-rgb),0.5); }
+.strata-now b { font-family: var(--serif); font-size: 15px; font-weight: 600; color: var(--seal-ink-strong); letter-spacing: 0.06em; }
+.strata-now span { font-size: 11.5px; line-height: 1.45; color: var(--text-3); }
+.strata-now i { font-style: normal; font-size: 13px; color: var(--seal-ink-strong); position: absolute; right: 8px; bottom: 6px; }
+.strata-now.has-link span { padding-right: 12px; }
+.canvas.has-drawer .strata-now { right: calc(var(--drawer-w) + 14px); }
+@keyframes now-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .strata-now.is-on { animation: none; } }
 /* The era being played */
 .strata-label.is-playing { color: var(--seal-ink-strong); background: rgba(var(--seal-rgb),0.14); box-shadow: inset 0 0 0 1px rgba(var(--seal-rgb),0.45); transform-origin: left center; }
 /* The instrument of the era being played */

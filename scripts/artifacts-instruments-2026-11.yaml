@@ -1,0 +1,22 @@
+# Musical artifacts held by museums we already list, added so every era's instrument in
+# 奏一曲 points at a real object (src/data/era-voices.ts). Facts checked against
+# zh.wikipedia (二里头文化, 马王堆汉墓, 韩熙载夜宴图; 听琴图 via 故宫博物院/古琴 entries;
+# 中和韶乐 via 弘义阁). Apply: bun run scripts/add-artifacts.ts [--target=local] [--confirm]
+erlitou:
+  - name: 石磬
+    period: 夏（二里头文化）
+    description: 长55.5厘米、厚不到5厘米的一块石头，敲下去就是三千多年前的声音。它的样子已经很接近商周的礼磬——中国礼乐的源头，可能就从这一声开始。同一处遗址还出土过一件能吹出两个音的陶埙。
+hunan:
+  - name: 马王堆汉墓乐器（瑟、竽、竽律）
+    period: 西汉
+    description: 辛追夫人的墓里放着一具瑟、一具竽和一套竽律，三号墓还有瑟、竽和一张琴。两千多年前长沙国贵族家里的乐声，就这样被一起带进了地下，又在今天重见天日。
+gugong:
+  - name: 韩熙载夜宴图
+    period: 五代南唐（今存为南宋摹本）
+    description: 一场夜宴被画成长卷：李家明之妹弹琵琶，韩熙载亲自击羯鼓，拍板、筚篥、笛子轮番上场。原作出自南唐，故宫所藏一般认为是南宋摹本——一千年前的派对，声音好像能从画里溢出来。
+  - name: 听琴图
+    period: 北宋（传赵佶）
+    description: 传为宋徽宗赵佶所作：松下一人抚琴，两人静坐聆听。宋人把听琴当作一件郑重的事，这幅画让你看见一千年前的人怎样安静下来。
+  - name: 清宫中和韶乐编钟
+    period: 清
+    description: 中和韶乐是清宫最隆重的典礼音乐，编钟是乐队的核心。故宫依据乾隆时期的记载，把清宫旧藏的典制乐器复原成完整乐队展出——帝王典礼的声音，原来是这样的。

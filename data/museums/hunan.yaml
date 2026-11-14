@@ -57,6 +57,9 @@ artifacts:
     image_url: /img/4a8542d4b83c633c.jpg
     image_license: fair-use
     image_attribution: 来源：百度百科 · https://baike.baidu.com/view/728679.htm
+  - name: 马王堆汉墓乐器（瑟、竽、竽律）
+    period: 西汉
+    description: 辛追夫人的墓里放着一具瑟、一具竽和一套竽律，三号墓还有瑟、竽和一张琴。两千多年前长沙国贵族家里的乐声，就这样被一起带进了地下，又在今天重见天日。
 sources:
   - source: 马王堆汉墓考古发掘报告
   - source: "湖南博物院官网: https://www.hnmuseum.com/"

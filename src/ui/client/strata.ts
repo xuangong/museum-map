@@ -1,4 +1,5 @@
 import { CHINA_GEO_JSON } from "./geo-data"
+import { ERA_VOICES } from "../../data/era-voices"
 
 // 时空地层 — the 3D time-space view. Served as an ES module at /assets/strata.js.
 //
@@ -144,22 +145,28 @@ function ksBuffer(ac, freq, lpk, decay) {
 // ── Era voices: every stratum has its own instrument, whether or not you have strings there;
 // 今 is your own strings. All synthesized: plucks are Karplus–Strong buffers, struck stone,
 // bronze and the qin are decaying partials, winds and the huqin are shaped oscillators.
-const VOICE_OF = {
-  neolithic: 'xun', xia: 'qing', shang: 'qing', 'western-zhou': 'zhong', 'eastern-zhou': 'zhong',
-  qin: 'zhu', 'western-han': 'zhu', 'eastern-han': 'zhu', 'three-kingdoms': 'qin', jin: 'qin', nanbeichao: 'qin',
-  sui: 'pipa', tang: 'pipa', wudai: 'pipa', song: 'xiao', liao: 'huqin', 'jin-jurchen': 'huqin', yuan: 'huqin', ming: 'di', qing: 'di',
-};
+// Era → instrument and the museum object it is drawn from (src/data/era-voices.ts).
+const ERA = ${JSON.stringify(ERA_VOICES)};
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const VOICES = {
-  ks: { name: '你的琴弦', oct: 1, g: 1, pluck: [0.4, 2.4] },
-  pipa: { name: '琵琶', oct: 2, g: 1.25, pluck: [0.06, 0.9] },
-  zhu: { name: '筑', oct: 1, g: 1.45, pluck: [0.12, 0.7], click: 0.45 },
-  xun: { name: '陶埙', oct: 2, g: 0.4, h: [1, 0.04, 0.12], env: [0.1, 0.42, 0.5], breath: 0.22, vib: [4, 0.004, 0.35] },
-  xiao: { name: '洞箫', oct: 2, g: 0.46, h: [1, 0.12, 0.05, 0.02], env: [0.09, 0.4, 0.5], breath: 0.28, vib: [4.8, 0.005, 0.3] },
-  di: { name: '竹笛', oct: 2, g: 0.44, h: [1, 0.4, 0.18, 0.07, 0.04, 0.03, 0.025, 0.02], env: [0.035, 0.3, 0.3], breath: 0.14, vib: [5.8, 0.006, 0.22] },
-  huqin: { name: '胡琴', oct: 2, g: 0.44, h: [1, 0.55, 0.36, 0.24, 0.16, 0.11, 0.07, 0.05, 0.03], env: [0.12, 0.42, 0.35], breath: 0.03, vib: [5.5, 0.009, 0.15] },
-  qing: { name: '石磬', oct: 2, g: 0.6, bell: [[1, 1, 1.4], [2.32, 0.45, 0.6], [3.86, 0.28, 0.4], [5.33, 0.14, 0.25]], click: 0.35 },
-  zhong: { name: '编钟', oct: 2, g: 0.5, bell: [[0.5, 0.3, 2.6], [1, 1, 2], [1.19, 0.5, 1.3], [1.5, 0.2, 0.9], [2, 0.38, 0.8], [2.74, 0.14, 0.4]], click: 0.25 },
-  qin: { name: '古琴', oct: 1, g: 0.46, bell: [[1, 1, 3.2], [2, 0.5, 2.2], [3, 0.28, 1.6], [4, 0.14, 1.1], [5, 0.08, 0.8]], click: 0.08, vib: [5, 0.006, 0.5] },
+  ks: { name: '你的琴弦', oct: 1, g: 1.2, pluck: [0.4, 2.4] },
+  // Plucked strings
+  zhu: { oct: 1, g: 1.45, pluck: [0.12, 0.7], click: 0.45 },
+  se: { oct: 1, g: 1.2, pluck: [0.28, 2.0] },
+  pipa: { oct: 2, g: 1.25, pluck: [0.06, 0.9] },
+  // Struck stone, bronze, drum; the qin rings like a struck string with a slow 吟
+  qing: { oct: 2, g: 0.6, bell: [[1, 1, 1.4], [2.32, 0.45, 0.6], [3.86, 0.28, 0.4], [5.33, 0.14, 0.25]], click: 0.35 },
+  tongqing: { oct: 2, g: 0.55, bell: [[1, 1, 2.2], [2.4, 0.42, 1], [3.9, 0.25, 0.6], [5.4, 0.12, 0.35]], click: 0.22 },
+  nao: { oct: 2, g: 0.55, bell: [[1, 1, 0.9], [1.53, 0.6, 0.6], [2.3, 0.4, 0.4], [3.2, 0.25, 0.25], [4.4, 0.12, 0.15]], click: 0.4 },
+  zhong: { oct: 2, g: 0.5, bell: [[0.5, 0.3, 2.6], [1, 1, 2], [1.19, 0.5, 1.3], [1.5, 0.2, 0.9], [2, 0.38, 0.8], [2.74, 0.14, 0.4]], click: 0.25 },
+  tonggu: { oct: 1, g: 0.85, bell: [[1, 1, 0.6], [1.59, 0.5, 0.35], [2.14, 0.35, 0.25], [2.65, 0.2, 0.2]], click: 0.6 },
+  qin: { oct: 1, g: 0.46, bell: [[1, 1, 3.2], [2, 0.5, 2.2], [3, 0.28, 1.6], [4, 0.14, 1.1], [5, 0.08, 0.8]], click: 0.08, vib: [5, 0.006, 0.5] },
+  // Blown and bowed
+  gudi: { oct: 2, g: 0.42, h: [1, 0.08, 0.05], env: [0.05, 0.34, 0.35], breath: 0.3, vib: [5, 0.003, 0.3] },
+  paixiao: { oct: 2, g: 0.44, h: [1, 0.05, 0.1, 0.02], env: [0.06, 0.34, 0.4], breath: 0.34 },
+  di: { oct: 2, g: 0.44, h: [1, 0.4, 0.18, 0.07, 0.04, 0.03, 0.025, 0.02], env: [0.035, 0.3, 0.3], breath: 0.14, vib: [5.8, 0.006, 0.22] },
+  guan: { oct: 2, g: 0.28, h: [1, 0.8, 0.65, 0.5, 0.4, 0.3, 0.22, 0.15, 0.1, 0.07], env: [0.05, 0.38, 0.3], breath: 0.05, vib: [5.2, 0.01, 0.2] },
+  huqin: { oct: 2, g: 0.44, h: [1, 0.55, 0.36, 0.24, 0.16, 0.11, 0.07, 0.05, 0.03], env: [0.12, 0.42, 0.35], breath: 0.03, vib: [5.5, 0.009, 0.15] },
 };
 const waveCache = {};
 let noiseBuf = null;
@@ -616,7 +623,8 @@ function init(container, data, cb) {
   // strings whose notes have started on that same clock, so what you see is what you hear.
   let play = null, playLayer = -1, playRest = false;
   function stringsAt(li) { return strings.filter((st) => museums[st.m].links.indexOf(li) >= 0); }
-  function voiceOf(li) { return li >= 0 && li < N ? VOICE_OF[layers[li].id] || 'ks' : 'ks'; }
+  function eraOf(li) { return li >= 0 && li < N ? ERA[layers[li].id] || null : null; }
+  function voiceOf(li) { const e = eraOf(li); return e && VOICES[e.voice] ? e.voice : 'ks'; }
   // An empty era's own note: a gentle rise through history, so the rests still make a line.
   function homeOf(li) { return 3 + Math.round(li * 4 / Math.max(1, N - 1)); }
   function panOf(st) { if (!st) return 0; const m = museums[st.m], p = screenOf(m.x, st.y0, m.z); return (p.x / Math.max(1, canvas.clientWidth)) * 2 - 1; }
@@ -672,6 +680,7 @@ function init(container, data, cb) {
   }
   function markPlayLayer(li, rest) {
     playLayer = li; playRest = !!rest;
+    paintNow(li);
     layerLabels.forEach((l) => { const on = l.layer === li; l.el.classList.toggle('is-playing', on); l.el.classList.toggle('is-rest', on && !!rest); });
     todayLabel.classList.toggle('is-playing', li === N);
   }
@@ -754,7 +763,8 @@ function init(container, data, cb) {
     b.appendChild(el('span', 'sl-period', L.period));
     // How many of your seals sit on this stratum (empty when you have none here).
     const count = el('span', 'sl-count'); b.appendChild(count);
-    b.appendChild(el('span', 'sl-inst', (VOICES[VOICE_OF[L.id]] || VOICES.ks).name));
+    const era = ERA[L.id];
+    b.appendChild(el('span', 'sl-inst', era ? era.inst : VOICES.ks.name));
     b.addEventListener('click', (e) => { e.stopPropagation(); cb.onDynasty && cb.onDynasty(L.id); });
     overlay.appendChild(b);
     return { el: b, count, v: new THREE.Vector3(anchorX, L.y, anchorZ), layer: L.i };
@@ -834,6 +844,32 @@ function init(container, data, cb) {
   }
   playBtn.addEventListener('click', (e) => { e.stopPropagation(); if (play) stopPlay(); else startPlay(); });
   overlay.appendChild(playBtn);
+  // 此声取自: the object behind this era's sound, one tap from its museum.
+  const nowCap = el('button', 'strata-now');
+  nowCap.type = 'button';
+  let nowMuseum = null;
+  function paintNow(li) {
+    nowMuseum = null;
+    if (li < 0) { nowCap.classList.remove('is-on'); return; }
+    let html;
+    if (li === N) html = '<b>今</b><span>你的琴弦</span>';
+    else {
+      const e = eraOf(li), name = layers[li].name;
+      if (!e) html = '<b>' + esc(name) + '</b>';
+      else if (!e.src) html = '<b>' + esc(e.inst) + '</b><span>' + esc(name) + ' · 示意，馆藏里还没找到实物</span>';
+      else {
+        const m = museums.find((x) => x.id === e.src.museumId);
+        nowMuseum = m ? m.id : null;
+        html = '<b>' + esc(e.inst) + '</b><span><em class="nc-from">此声取自 · </em>' + esc(e.src.artifact) + (m ? '<em class="nc-museum"> · ' + esc(m.name) + '</em>' : '') + '</span>' + (m ? '<i aria-hidden="true">›</i>' : '');
+        nowCap.setAttribute('aria-label', e.inst + '，此声取自' + e.src.artifact + (m ? '，' + m.name + '，点按查看这座馆' : ''));
+      }
+    }
+    nowCap.innerHTML = html;
+    nowCap.classList.toggle('has-link', !!nowMuseum);
+    nowCap.classList.add('is-on');
+  }
+  nowCap.addEventListener('click', (e) => { e.stopPropagation(); if (nowMuseum && cb.onMuseum) cb.onMuseum(nowMuseum); });
+  overlay.appendChild(nowCap);
   // A real gesture anywhere unlocks audio for later strums (iOS needs touchend/click).
   const onGesture = () => { if (strings.length) { unlockAudio(); document.removeEventListener('touchend', onGesture); document.removeEventListener('click', onGesture); } };
   document.addEventListener('touchend', onGesture, { passive: true });
