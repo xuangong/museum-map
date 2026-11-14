@@ -2124,4 +2124,9 @@ path.route-corridor { stroke: var(--gilt); }
   .ach-ceremony-card { padding: 24px 18px 18px; }
 }
 @media (prefers-reduced-motion: reduce) { .ach-seal.stamp { animation: none; } }
+
+.lg-rec-why { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+.lg-rec-why .why { font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--text-2); overflow-wrap: anywhere; }
+.trip-why .why-ach-last, .why.why-ach-last { color: #FFF2E8; background: var(--seal); border-color: var(--seal); }
+.trip-why .why-ach, .why.why-ach { color: var(--seal-ink-strong); border-color: rgba(var(--seal-rgb), 0.45); border-style: dashed; }
 `

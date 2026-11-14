@@ -622,7 +622,11 @@ window.museumApp = function() {
           else { x.s += c.onSite ? 1 : 0.5; x.deep++; }
         });
       });
-      var recs = Object.keys(score).map(function(k){ return score[k]; })
+      var recs = Object.keys(score).map(function(k){
+        var x = score[k]; x.ach = self.achChips(x.m);
+        x.s += x.ach.reduce(function(t, c){ return t + c.w; }, 0);
+        return x;
+      })
         .sort(function(a, b){ return b.s - a.s; }).slice(0, 3);
       var candSeen = {}, candidates = [];
       rows.forEach(function(r){ r.cands.forEach(function(c){ if (!candSeen[c.m.id]) { candSeen[c.m.id] = true; candidates.push({ id: c.m.id, km: c.km }); } }); });
@@ -923,8 +927,10 @@ window.museumApp = function() {
       if (connects && this.visits.ids.length) chips.push({ k: 'link', t: '接得上' });
       if (onSite) chips.push({ k: 'site', t: '原址' });
       if (this.trip.mode === 'drive' && kmOff <= 5) chips.push({ k: 'near', t: '顺路' });
+      var ach = this.achChips(m);
+      ach.forEach(function(c){ chips.splice(c.k === 'ach-last' ? 0 : chips.length, 0, { k: c.k, t: c.t }); });
       var t = { must: must, fills: this.visits.ids.length ? fills.length : 0, connects: connects && this.visits.ids.length > 0, onSite: onSite, km: kmOff };
-      return { chips: chips, score: window.TripCore.score(t), eras: ds.map(function(d){ return self.layerNo(d.id); }) };
+      return { chips: chips, score: window.TripCore.score(t) + ach.reduce(function(s, c){ return s + c.w; }, 0), eras: ds.map(function(d){ return self.layerNo(d.id); }) };
     },
 
     /** Recommended museums grouped by city (transit) or by leg (drive), best first in each. */
@@ -1352,6 +1358,18 @@ window.museumApp = function() {
           : '「' + a.name + '」第 ' + (r.have + 1) + ' 处';
         return { k: n.kind === 'last' ? 'ach-last' : 'ach', t: t, w: n.kind === 'last' ? 3 : n.kind === 'first' ? 1.5 : 0.5 };
       });
+    },
+
+    /** One line for the guide: achievements one visit away, so it can suggest the missing piece. */
+    achLine() {
+      var self = this, near = this.achResults().filter(function(r){
+        var lv = self.achLevel(r.id), target = lv === 1 ? r.total : r.reach;
+        return lv < 2 && r.have > 0 && target - r.have === 1;
+      }).slice(0, 6).map(function(r){
+        var a = self.achById(r.id), miss = self.achMissing(r.id).slice(0, 2).map(function(x){ return x.name; }).join('或');
+        return '「' + a.name + '」差一处（' + miss + '）';
+      });
+      return near.length ? '用户快要完成的成就（推荐时可以顺带提，语气轻松）：' + near.join('；') : '';
     },
 
     /** One line for the guide: museums the reader has already been to. */
@@ -3492,7 +3510,7 @@ window.museumApp = function() {
             self2.chat.progress = label;
             var m = self2.chat.messages[streamIdx];
             if (m.content && !/\\n\\n$/.test(m.content)) m.content += '\\n\\n';
-          }, { model: self2.ai.model, effort: self2.ai.effort, system: self2.visitedLine() });
+          }, { model: self2.ai.model, effort: self2.ai.effort, system: [self2.visitedLine(), self2.achLine()].filter(Boolean).join('\\n') });
           // The reply is complete: draw the museums it named.
           var ids = self2.mentionedIds(self2.chat.messages[streamIdx].content);
           if (ids.length) {

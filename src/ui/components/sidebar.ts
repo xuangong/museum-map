@@ -178,7 +178,7 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
           <div class="lg-rec" @mouseenter="ledgerHover(r.m.id)" @mouseleave="ledgerHover(null)">
             <button class="lg-rec-main" @click="openMuseum(r.m.id)">
               <span class="lg-rec-seal" x-html="sealHtml(r.m, 'seal-sm seal-ghost seal-cand')"></span>
-              <span class="lg-rec-text"><b x-text="r.m.name"></b><small x-text="ledgerRecLine(r)"></small></span>
+              <span class="lg-rec-text"><b x-text="r.m.name"></b><small x-text="ledgerRecLine(r)"></small><span class="lg-rec-why" x-show="(r.ach || []).length"><template x-for="c in (r.ach || [])" :key="c.t"><span class="why" :class="'why-' + c.k" x-text="c.t"></span></template></span></span>
             </button>
             <button class="lg-rec-trip" :class="inTrip(r.m.id) ? 'is-in' : ''" @click="toggleTrip(r.m.id)" x-text="inTrip(r.m.id) ? '已在这一趟' : '加入这一趟'"></button>
           </div>
