@@ -1609,17 +1609,6 @@ path.route-line { stroke: var(--gilt-hi); }
 /* A seal still to collect nearby: dashed gilt. */
 .seal.seal-cand { box-sizing: border-box; color: var(--gilt-hi); box-shadow: none; border: 0.1em dashed rgba(var(--gilt-rgb),0.85); }
 
-.trip-sort { position: relative; display: flex; gap: 3px; padding: 3px; margin-top: 16px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
-.trip-sort .seg-btn { gap: 6px; }
-.trip-list { position: relative; list-style: none; margin: 14px 0 0; padding: 0; }
-.trip-leg {
-  display: flex; align-items: center; gap: 10px;
-  margin-left: 13px; padding: 5px 0 5px 22px;
-  border-left: 1px dashed rgba(var(--gilt-rgb),0.5);
-  font-family: var(--mono); font-size: 10.5px; color: var(--text-4);
-}
-.trip-leg-era { font-family: var(--serif); font-size: 11.5px; color: var(--gilt); }
-.trip-row { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 6px 0; }
 .trip-no {
   width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
   background: var(--gilt); color: var(--on-gilt); font-family: var(--mono); font-size: 12px; font-weight: 500;
@@ -1627,10 +1616,62 @@ path.route-line { stroke: var(--gilt-hi); }
 }
 .trip-main { min-width: 0; border: none; background: none; padding: 0; text-align: left; }
 .trip-name { display: block; font-family: var(--serif); font-weight: 700; font-size: 15px; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.trip-city { display: block; margin-top: 2px; font-size: 11.5px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .trip-ops { display: flex; }
 .trip-ops .icon-btn { width: 28px; height: 28px; }
 .trip-ops .icon-btn:disabled { opacity: 0.22; cursor: default; }
+/* 行程 · 沿途找馆 */
+.trip-title { font-size: clamp(22px, 2.4vw, 30px); line-height: 1.25; overflow-wrap: anywhere; }
+.trip-mode { margin: 4px 0 14px; }
+.trip-cities { list-style: none; margin: 0 0 10px; padding: 0; }
+.trip-city-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
+.trip-city-name { flex: 1; font-family: var(--serif); font-size: 17px; font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+.trip-days { display: inline-flex; align-items: center; gap: 4px; font-family: var(--mono); font-size: 12px; color: var(--text-2); }
+.trip-hop { margin: 0 0 2px 13px; padding: 4px 0 6px 18px; border-left: 1px dashed var(--line-strong); font-family: var(--mono); font-size: 11.5px; color: var(--text-3); }
+.trip-add { position: relative; margin-bottom: 12px; }
+.trip-search { width: 100%; font-size: 16px; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--line-strong); background: var(--bg-2); color: var(--text); }
+.trip-suggest { margin-top: 6px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg-2); }
+.trip-suggest button { display: flex; width: 100%; justify-content: space-between; gap: 10px; padding: 9px 14px; border: 0; background: none; color: var(--text); text-align: left; cursor: pointer; }
+.trip-suggest button + button { border-top: 1px solid var(--line); }
+.trip-suggest small { color: var(--text-3); }
+.trip-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.trip-chips .chip small { margin-left: 4px; color: var(--text-3); font-family: var(--mono); }
+.trip-radius { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-2); margin-bottom: 10px; }
+.trip-busy { font-family: var(--mono); font-size: 11.5px; color: var(--text-3); }
+.trip-theme { margin: 4px 0 14px; padding: 10px 12px; border-radius: 12px; background: rgba(var(--seal-rgb), 0.07); color: var(--text-2); font-size: 13.5px; overflow-wrap: anywhere; }
+.trip-theme b { color: var(--seal-ink-strong); font-weight: 600; }
+.trip-group { margin-bottom: 14px; }
+.trip-group-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--line); font-family: var(--serif); font-weight: 600; }
+.trip-group-head small { font-family: var(--mono); font-weight: 400; font-size: 11.5px; color: var(--text-3); }
+.trip-pick { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; border-bottom: 1px solid var(--line); }
+.trip-check { flex: none; width: 24px; height: 24px; border-radius: 7px; border: 1.5px solid var(--line-strong); background: none; color: transparent; display: grid; place-items: center; cursor: pointer; margin-top: 2px; }
+.trip-pick.on .trip-check { background: var(--seal); border-color: var(--seal); color: #FFF2E8; }
+.trip-pick .trip-main { flex: 1; min-width: 0; text-align: left; background: none; border: 0; padding: 0; color: inherit; cursor: pointer; }
+.trip-pick .trip-name { display: block; font-size: 15px; overflow: visible; text-overflow: clip; white-space: normal; overflow-wrap: anywhere; }
+.trip-why { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.trip-why .why { font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--text-2); }
+.trip-why .why-must { color: var(--seal-ink-strong); border-color: rgba(var(--seal-rgb), 0.45); }
+.trip-why .why-fill, .trip-why .why-link { color: var(--gilt-hi); border-color: rgba(var(--gilt-rgb), 0.5); }
+.trip-why .why-km { font-family: var(--mono); font-size: 11px; color: var(--text-3); padding: 1px 0; }
+.trip-plan { margin: 6px 0 14px; }
+.trip-day { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+.trip-day b { font-family: var(--mono); font-weight: 500; color: var(--text-2); }
+.trip-day .trip-day-stops { grid-column: 2; color: var(--text-2); overflow-wrap: anywhere; }
+.trip-day small { grid-column: 2; color: var(--seal-ink-strong); font-size: 11.5px; }
+.route-city { display: inline-flex; align-items: center; gap: 5px; transform: translate(-11px, -11px); white-space: nowrap; }
+.route-city b { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; background: var(--gilt); color: var(--bg); font: 600 12px/1 var(--mono); box-shadow: 0 0 0 3px rgba(var(--bg-rgb), 0.7); }
+.route-city span { font-family: var(--serif); font-weight: 600; font-size: 13px; color: var(--text); text-shadow: 0 0 4px var(--bg), 0 0 8px var(--bg); }
+path.route-corridor { stroke: var(--gilt); }
+.ask-city-pop .leaflet-popup-content-wrapper { border-radius: 999px; padding: 0; background: var(--bg-2); }
+.ask-city-pop .leaflet-popup-content { margin: 0; }
+.ask-city { border: 0; background: none; color: var(--seal-ink-strong); font: 600 13px var(--sans); padding: 8px 14px; cursor: pointer; white-space: nowrap; }
+/* Phones: in 行程 the panel is a bottom sheet, the map stays in view above it. */
+@media (max-width: 920px) {
+  .stage.is-trip .toc-wrap { top: auto; bottom: 0; left: 0; right: 0; width: auto; height: 62dvh; transform: translateY(104%); }
+  .stage.is-trip .toc-wrap.open { transform: translateY(0); }
+  .stage.is-trip .toc-wrap .toc { border-right: 0; border-top: 1px solid var(--line-strong); border-radius: 22px 22px 0 0; padding-top: 6px; box-shadow: 0 -24px 60px -30px var(--sh-95); }
+  .stage.is-trip .toc-overlay { display: none; }
+}
+.trip-chips .chip { font: inherit; font-size: 13px; padding: 5px 11px; }
 .tb-btn.active { color: var(--gilt-hi); border-color: rgba(var(--gilt-rgb),0.6); background: rgba(var(--gilt-rgb),0.12); }
 .tb-count { font-family: var(--mono); font-weight: 500; color: var(--gilt-hi); }
 

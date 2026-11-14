@@ -146,7 +146,7 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
             </template>
           </select>
         </label>
-        <button class="chip" x-show="trip.ids.length" :class="ledgerOpt.anchor === 'trip' ? 'on' : ''" @click="setLedgerAnchor('trip')">${icon("route", 13)}沿行程</button>
+        <button class="chip" x-show="trip.cities.length" :class="ledgerOpt.anchor === 'trip' ? 'on' : ''" @click="setLedgerAnchor('trip')">${icon("route", 13)}沿行程</button>
       </div>
       <div class="ledger-radius">
         <template x-for="r in [40, 150, 300]" :key="r">
@@ -162,7 +162,7 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
               <span class="lg-rec-seal" x-html="sealHtml(r.m, 'seal-sm seal-ghost seal-cand')"></span>
               <span class="lg-rec-text"><b x-text="r.m.name"></b><small x-text="ledgerRecLine(r)"></small></span>
             </button>
-            <button class="lg-rec-trip" :class="inTrip(r.m.id) ? 'is-in' : ''" @click="toggleTrip(r.m.id)" x-text="inTrip(r.m.id) ? '已在行程' : '加入行程'"></button>
+            <button class="lg-rec-trip" :class="inTrip(r.m.id) ? 'is-in' : ''" @click="toggleTrip(r.m.id)" x-text="inTrip(r.m.id) ? '已在这一趟' : '加入这一趟'"></button>
           </div>
         </template>
       </div>
@@ -198,43 +198,106 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
   </div>
 </section>`
 
-  // ── 行程: route planning ──
+  // ── 行程 · 沿途找馆 ──
   const trip = `<section class="toc-hero is-trip" x-show="tripMode" x-cloak>
-  <div class="hero-kicker">${icon("route", 15)}<span>我的行程</span><span class="mono">ROUTE</span></div>
-  <h1 class="hero-title"><span class="big-num" x-text="trip.ids.length"></span> 站</h1>
-  <p class="hero-lede" x-show="!trip.ids.length">在任意一座博物馆点「加入行程」，把想去的馆串成一条路。旅行有两种走法：按地理顺路，或者按朝代先后，把一段历史从头走一遍。</p>
-  <div class="hero-stats" x-show="trip.ids.length">
-    <div class="stat"><b x-text="trip.ids.length"></b><span>站博物馆</span></div>
-    <div class="stat"><b x-text="tripCities().length"></b><span>座城市</span></div>
-    <div class="stat"><b x-text="tripTotalKm()"></b><span>公里（直线）</span></div>
+  <div class="hero-kicker">${icon("route", 15)}<span>我的出行</span><span class="mono">TRIP</span></div>
+  <h1 class="hero-title trip-title" x-text="tripTitle()"></h1>
+  <div class="seg trip-mode" role="tablist">
+    <button class="seg-btn" :class="trip.mode === 'transit' ? 'active' : ''" @click="tripSetMode('transit')">坐车 / 坐飞机</button>
+    <button class="seg-btn" :class="trip.mode === 'drive' ? 'active' : ''" @click="tripSetMode('drive')">自驾</button>
   </div>
-  <div class="trip-sort" x-show="trip.ids.length > 1">
-    <button class="seg-btn" :class="trip.order === 'route' ? 'active' : ''" @click="sortTripByRoute()">${icon("route", 14)}按地理顺路</button>
-    <button class="seg-btn" :class="trip.order === 'time' ? 'active' : ''" @click="sortTripByTime()">${icon("clock", 14)}按朝代先后</button>
-  </div>
-  <ol class="trip-list" x-show="trip.ids.length">
-    <template x-for="(m, i) in tripMuseums()" :key="m.id">
-      <li class="trip-stop">
-        <div class="trip-leg" x-show="i > 0"><span x-text="tripLegKm(i) + ' km'"></span><span class="trip-leg-era" x-show="trip.order === 'time'" x-text="tripEraLabel(m)"></span></div>
-        <div class="trip-row">
+  <p class="hero-lede" x-show="!trip.cities.length">先说要去哪儿：坐车就把城市按先后排好，自驾就排出起点、途经和终点。我们沿着这一路，把值得看的馆找出来。</p>
+  <ol class="trip-cities" x-show="trip.cities.length">
+    <template x-for="(c, i) in trip.cities" :key="c.name + i">
+      <li>
+        <div class="trip-city-row">
           <span class="trip-no" x-text="i + 1"></span>
-          <button class="trip-main" @click="openMuseum(m.id)">
-            <span class="trip-name" x-text="m.name"></span>
-            <span class="trip-city" x-text="[m.city, m.corePeriod].filter(Boolean).join(' · ')"></span>
-          </button>
-          <div class="trip-ops">
-            <button class="icon-btn" @click="moveTrip(i, -1)" :disabled="i === 0" title="上移">${icon("arrowUp", 15)}</button>
-            <button class="icon-btn" @click="moveTrip(i, 1)" :disabled="i === trip.ids.length - 1" title="下移">${icon("arrowDown", 15)}</button>
-            <button class="icon-btn" @click="toggleTrip(m.id)" title="移出行程">${icon("close", 15)}</button>
-          </div>
+          <span class="trip-city-name" x-text="c.name"></span>
+          <span class="trip-days" x-show="trip.mode === 'transit'">
+            <button class="icon-btn" @click="tripSetDays(i, -1)" :disabled="(c.days || 1) <= 1" title="少一天">−</button>
+            <span x-text="(c.days || 1) + ' 天'"></span>
+            <button class="icon-btn" @click="tripSetDays(i, 1)" title="多一天">＋</button>
+          </span>
+          <span class="trip-ops">
+            <button class="icon-btn" @click="tripMoveCity(i, -1)" :disabled="i === 0" title="前移">${icon("arrowUp", 14)}</button>
+            <button class="icon-btn" @click="tripMoveCity(i, 1)" :disabled="i === trip.cities.length - 1" title="后移">${icon("arrowDown", 14)}</button>
+            <button class="icon-btn" @click="tripRemoveCity(i)" title="移除">${icon("close", 14)}</button>
+          </span>
         </div>
+        <div class="trip-hop" x-show="i < trip.cities.length - 1" x-text="tripHopLabel(i)"></div>
       </li>
     </template>
   </ol>
+  <div class="trip-add">
+    <input class="trip-search" type="search" enterkeyhint="done" x-model="tripQ" @input.debounce.350ms="tripSearch()" @keydown.enter.prevent="tripAddFirst()"
+      :placeholder="trip.cities.length ? '再加一个城市（也可以直接点地图）' : '搜一个城市，或者直接点地图'">
+    <div class="trip-suggest" x-show="tripResults.length">
+      <template x-for="r in tripResults" :key="r.name + r.lat">
+        <button @click="tripAddCity(r)"><b x-text="r.name"></b><small x-text="r.note"></small></button>
+      </template>
+    </div>
+    <div class="trip-chips" x-show="!trip.cities.length && !tripResults.length">
+      <template x-for="c in tripKnownCities().slice(0, 10)" :key="c.name">
+        <button class="chip" @click="tripAddCity(c)"><span x-text="c.name"></span><small x-text="c.n"></small></button>
+      </template>
+    </div>
+  </div>
+  <template x-if="trip.cities.length">
+    <div class="trip-find">
+      <div class="trip-radius">
+        <span x-text="trip.mode === 'drive' ? '沿途两侧' : '城市周边'"></span>
+        <div class="seg">
+          <template x-for="r in tripRadii()" :key="r">
+            <button class="seg-btn" :class="trip.radius === r ? 'active' : ''" @click="tripSetRadius(r)" x-text="r + ' km'"></button>
+          </template>
+        </div>
+        <span class="trip-busy" x-show="tripBusy">规划路线…</span>
+      </div>
+      <p class="trip-theme" x-show="tripTheme()" x-html="tripTheme()"></p>
+      <template x-for="g in tripAlong().groups" :key="g.key">
+        <div class="trip-group">
+          <div class="trip-group-head"><span x-text="g.title"></span><small x-text="g.stops.length ? g.stops.length + ' 座' : '这一段没有收录的馆'"></small></div>
+          <template x-for="s in g.shown" :key="s.m.id">
+            <div class="trip-pick" :class="s.picked ? 'on' : ''">
+              <button class="trip-check" @click="toggleTrip(s.m.id)" :title="s.picked ? '移出这一趟' : '加入这一趟'">${icon("check", 14)}</button>
+              <button class="trip-main" @click="openMuseum(s.m.id)">
+                <span class="trip-name" x-text="s.m.name"></span>
+                <span class="trip-why">
+                  <template x-for="t in s.chips" :key="t.t"><span class="why" :class="'why-' + t.k" x-text="t.t"></span></template>
+                  <span class="why-km" x-text="trip.mode === 'drive' ? '绕路 ' + s.km + ' km' : s.km + ' km'"></span>
+                </span>
+              </button>
+            </div>
+          </template>
+        </div>
+      </template>
+      <template x-if="tripPicksOutside().length">
+        <div class="trip-group">
+          <div class="trip-group-head"><span>已选 · 不在这条线上</span></div>
+          <template x-for="m in tripPicksOutside()" :key="m.id">
+            <div class="trip-pick on">
+              <button class="trip-check" @click="toggleTrip(m.id)" title="移出这一趟">${icon("check", 14)}</button>
+              <button class="trip-main" @click="openMuseum(m.id)"><span class="trip-name" x-text="m.name"></span><span class="trip-why"><span class="why-km" x-text="m.city"></span></span></button>
+            </div>
+          </template>
+        </div>
+      </template>
+      <div class="trip-plan" x-show="trip.picks.length">
+        <div class="trip-group-head"><span>按天</span><small x-text="trip.picks.length + ' 座'"></small></div>
+        <template x-for="d in tripDays()" :key="d.day">
+          <div class="trip-day" :class="d.over ? 'over' : ''">
+            <b x-text="'第 ' + d.day + ' 天'"></b><span x-text="d.title"></span>
+            <span class="trip-day-stops" x-text="d.stops.length ? d.stops.join('、') : '自由安排'"></span>
+            <small x-show="d.over">这一天可能看不完</small>
+          </div>
+        </template>
+      </div>
+    </div>
+  </template>
   <div class="hero-actions">
-    <button class="btn btn-primary" x-show="trip.ids.length" @click="planTripWithAI()">${icon("sparkle", 16)}让讲解员排行程</button>
-    <button class="btn btn-text" x-show="trip.ids.length" @click="clearTrip()">清空</button>
-    <button class="btn btn-text" @click="toggleTripMode()">${icon("arrowLeft", 16)}收起行程</button>
+    <button class="btn btn-primary" x-show="trip.cities.length" @click="planTripWithAI()">${icon("sparkle", 16)}让讲解员排行程</button>
+    <button class="btn btn-text" x-show="trip.cities.length || trip.picks.length" @click="clearTrip()">清空</button>
+    <button class="btn btn-text" @click="toggleTripMode()">${icon("arrowLeft", 16)}收起</button>
   </div>
 </section>`
 
@@ -268,7 +331,7 @@ export function Sidebar(opts: { googleEnabled?: boolean } = {}): string {
   <p class="hero-lede">博物馆是今天的历史书。每一座，都站在时间与地点的交汇处——沿时间，看一个朝代的中心如何迁徙；按地理，把想去的馆串成一条路。</p>
   <div class="hero-actions">
     <button class="btn btn-seal" @click="toggleFootprint()">${icon("seal", 16)}集章册 · <span x-text="visits.ids.length"></span></button>
-    <button class="btn btn-ghost" @click="toggleTripMode()">${icon("route", 16)}行程 · <span x-text="trip.ids.length"></span></button>
+    <button class="btn btn-ghost" @click="toggleTripMode()">${icon("route", 16)}行程 · <span x-text="trip.picks.length"></span></button>
   </div>
 </section>`
 
