@@ -668,16 +668,27 @@ function init(container, data, cb) {
     [[[10, 2], [12, 1], [13, 1]], [[10, 1.5], [11, 0.5], [12, 2]]],
     [[[9, 1], [10, 1], [9, 1], [8, 1]], [[9, 1.5], [10, 0.5], [9, 1], [8, 1]]],
   ];
+  // 五声调式: steps the tune moves along the scale (kept in register), chance, and a touch of pace.
+  const MODES = [
+    { name: '宫调', shift: 0, upTo: 0.25, pace: 0 },
+    { name: '徵调', shift: -2, upTo: 0.5, pace: -0.015 },
+    { name: '羽调', shift: -1, upTo: 0.75, pace: 0.02 },
+    { name: '商调', shift: 1, upTo: 0.9, pace: 0 },
+    { name: '角调', shift: 2, upTo: 1, pace: 0.02 },
+  ];
   // Decide this performance: key (whole-tone moves only, so the scale stays the scale), tempo,
   // openings, which phrases lift an octave, the dynamics.
   function vary(seed) {
     rnd = seeded(seed);
     const semis = pick([-2, 0, 0, 2, 3, 5]);
-    BEAT = 0.33 + rnd() * 0.06;
-    perf = { semis, mul: Math.pow(2, semis / 12), heads: [], lift: [], dyn: [], qpick: {}, seed };
+    // 调式: the same pentatonic, a different home note — the written tune is moved along the scale
+    // so it rests on that mode's 主音 (its 鱼咬尾 links and closing step move with it).
+    const r = rnd(), mode = MODES.find((m) => r < m.upTo) || MODES[0];
+    BEAT = 0.33 + rnd() * 0.06 + mode.pace;
+    perf = { semis, mul: Math.pow(2, semis / 12), heads: [], lift: [], dyn: [], qpick: {}, seed, mode: mode.name, shift: mode.shift };
     for (let ph = 0; ph < 5; ph++) {
       perf.heads[ph] = Math.floor(rnd() * 3);
-      const top = Math.max(...MELODY.slice(ph * 4, ph * 4 + 4).flat().map((n) => n[0]), ...HEADS[ph].flat().map((n) => n[0]));
+      const top = mode.shift + Math.max(...MELODY.slice(ph * 4, ph * 4 + 4).flat().map((n) => n[0]), ...HEADS[ph].flat().map((n) => n[0]));
       perf.lift[ph] = ph < 4 && semis < 3 && top + 5 <= MAX_DEG && rnd() < 0.22;
     }
     perf.dyn = [0.88, 0.94, 1, 1.06, 0.98, 1.04].map((d) => d + (rnd() - 0.5) * 0.06);
@@ -685,8 +696,8 @@ function init(container, data, cb) {
   // Bar b as this performance plays it (its opening may be swapped).
   function barMel(b) {
     if (b >= 100) return QUOTE_BARS[b - 100];
-    const ph = Math.floor(b / 4);
-    return b % 4 === 0 && perf.heads[ph] ? HEADS[ph][perf.heads[ph] - 1] : MELODY[b];
+    const ph = Math.floor(b / 4), bar = b % 4 === 0 && perf.heads[ph] ? HEADS[ph][perf.heads[ph] - 1] : MELODY[b];
+    return perf.shift ? bar.map(([d, bt]) => [d + perf.shift, bt]) : bar;
   }
   // [degree, beats]; degree 5 = G3 (宫) … 13 = D5. Phrase ends → next phrase starts:
   // 9→9, 10→10, 10→10, 9→9 (鱼咬尾); the tune closes A → G (商 → 宫).
@@ -827,7 +838,11 @@ function init(container, data, cb) {
     let filled = false;
     parts.forEach((li) => {
       const vk = voiceOf(li), fam = famOf(li), L = lvl(li);
-      const put = (at, beats, deg, vel, pl) => ev.push({ t: t + at * BEAT, dur: beats * BEAT, deg: Math.max(0, Math.min(MAX_DEG, deg)), semi: semiAt(at, deg), vel, voice: vk, st: pl ? stringFor(li, k++) : null, li });
+      const put = (at, beats, deg, vel, pl) => {
+        while (deg < 0) deg += 5;
+        while (deg > MAX_DEG) deg -= 5;
+        ev.push({ t: t + at * BEAT, dur: beats * BEAT, deg, semi: semiAt(at, deg), vel, voice: vk, st: pl ? stringFor(li, k++) : null, li });
+      };
       if (fam === 'pluck') {
         // The bones an octave down — strong beats only at first, every note when richer — and,
         // while the lead holds a long note, a short step toward the next one (嵌挡).
@@ -956,17 +971,18 @@ function init(container, data, cb) {
         for (let b = ph * 4; b < ph * 4 + 4; b++) { k = ensembleBar(ev, b, t, L.lead, L.parts, k, L.lv); t += 4 * BEAT; }
         for (let j = from; j < ev.length; j++) ev[j].vel *= perf.dyn[p] || 1;
       });
-      // 今: everyone lands on 宫 together, in octaves; your strings answer with 宫 and 徵.
+      // 今: everyone lands on the mode's 主音 together, in octaves; your strings answer with it and
+      // the note three steps above.
       lay.push({ t, li: N, act: L.act });
-      const FINAL = { pluck: 5, bow: 5, qin: 5, wind: 10, bell: 10, drum: 5 };
+      const sh = perf.shift || 0, FINAL = { pluck: 5, bow: 5, qin: 5, wind: 10, bell: 10, drum: 5 };
       (L.lead >= 0 ? [L.lead] : []).concat(L.parts).forEach((li, n) => {
-        ev.push({ t: t + n * 0.02, dur: 2.6, deg: li === L.lead ? 10 : FINAL[famOf(li)], vel: famOf(li) === 'drum' ? 0.35 : 0.5, voice: voiceOf(li), st: null, li });
-        if (famOf(li) === 'qin') ev.push({ t: t + 0.4, dur: 2.2, deg: 15, vel: 0.16, voice: 'qin', st: null, li });
+        ev.push({ t: t + n * 0.02, dur: 2.6, deg: (li === L.lead ? 10 : FINAL[famOf(li)]) + sh, vel: famOf(li) === 'drum' ? 0.35 : 0.5, voice: voiceOf(li), st: null, li });
+        if (famOf(li) === 'qin') ev.push({ t: t + 0.4, dur: 2.2, deg: Math.min(MAX_DEG, 15 + sh), vel: 0.16, voice: 'qin', st: null, li });
       });
-      const order = strings.slice().sort((a, b) => a.note - b.note), close = [5, 8, 10, 13, 15];
+      const order = strings.slice().sort((a, b) => a.note - b.note), close = [5, 8, 10, 13, 15].map((d) => Math.min(MAX_DEG, d + sh));
       const n = Math.max(3, Math.min(close.length, order.length || 3));
       for (let j = 0; j < n; j++) ev.push({ t: t + 0.14 + j * 0.08, dur: 2.5, deg: close[j], vel: 0.7, voice: 'ks', st: order.length ? order[j % order.length] : null, li: -1 });
-      ev.push({ t, dur: 3, freq: G2 / 2, vel: 0.4, voice: 'bass', st: null, li: -1 });
+      ev.push({ t, dur: 3, freq: degFreq(5 + sh) / 4, vel: 0.4, voice: 'bass', st: null, li: -1 });
       ev.sort((a, b) => a.t - b.t);
       return { ev, lay, dur: t + 3.6, mul: perf.mul };
     }
@@ -995,7 +1011,7 @@ function init(container, data, cb) {
     const c = balance(compose(F == null ? state.focus : F, o)), sr = 44100;
     if (o.noBass) c.ev = c.ev.filter((e) => e.voice !== 'bass');
     // o.stats: just describe the score (notes, distinct instruments, seconds).
-    if (o.stats) return { notes: c.ev.filter((e) => e.voice !== 'bass').length, voices: new Set(c.ev.map((e) => e.voice)).size - 1, seconds: Math.round(c.dur), semis: perf.semis, beat: Math.round(BEAT * 1000) / 1000, heads: perf.heads.join(''), lift: perf.lift.map((x) => (x ? 1 : 0)).join('') };
+    if (o.stats) return { notes: c.ev.filter((e) => e.voice !== 'bass').length, voices: new Set(c.ev.map((e) => e.voice)).size - 1, seconds: Math.round(c.dur), semis: perf.semis, beat: Math.round(BEAT * 1000) / 1000, heads: perf.heads.join(''), lift: perf.lift.map((x) => (x ? 1 : 0)).join(''), mode: perf.mode };
     const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
     const oc = new OAC(2, Math.ceil((c.dur + 1) * sr), sr), dest = makeGraph(oc);
     c.ev.forEach((e) => stringSound(e.deg, e.vel, panOf(e.st), 0.1 + e.t, e.voice, { dur: e.dur, freq: e.freq, semi: e.semi, mul: c.mul, ac: oc, dest }));
@@ -1165,7 +1181,7 @@ function init(container, data, cb) {
       ? '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>'
       : '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>';
     const verb = n > 0 ? '奏' : '听';
-    const label = play ? '停' : F >= 0 ? verb + ' · ' + layers[F].name : verb + '一曲';
+    const label = play ? '停' + (perf.mode ? ' · ' + perf.mode : '') : F >= 0 ? verb + ' · ' + layers[F].name : verb + '一曲';
     playBtn.innerHTML = icon + '<span>' + label + '</span>';
     playBtn.setAttribute('aria-label', play ? '停止演奏'
       : F >= 0 ? (n > 0 ? '用这一层的琴弦奏一段' : '听这一层的乐器；在这里集章，你的琴弦会加入')
