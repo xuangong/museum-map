@@ -1478,6 +1478,14 @@ body.chat-locked .chat-body { touch-action: pan-y; }
 }
 .strata-overlay.can-play .strata-play, .strata-overlay.can-play .strata-voy-btn { display: inline-flex; }
 .strata-play:hover, .strata-voy-btn:hover { border-color: var(--seal); }
+.strata-ji {
+  display: none; align-items: center; height: 34px; padding: 0 13px; border-radius: 999px;
+  border: 1px solid rgba(var(--seal-rgb),0.45); background: transparent; color: var(--seal);
+  font-family: var(--serif); font-size: 13px; font-weight: 700; letter-spacing: 0.04em;
+  white-space: nowrap; cursor: pointer; pointer-events: auto; transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.strata-ji:hover { border-color: var(--seal); background: rgba(var(--seal-rgb),0.1); }
+.strata-overlay.is-voyage .strata-ji { display: none !important; }
 .strata-play.is-playing { background: var(--seal); border-color: var(--seal); color: #FFF2E8; }
 /* 溯洄 — sink from today to the Neolithic, a layer at a time */
 .strata-overlay.is-focus .strata-voy-btn { display: none; }

@@ -343,6 +343,7 @@ function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.
 const S = { ready: false };
 
 function init(container, data, cb) {
+  const guest = !!data.guest;
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -1000,6 +1001,7 @@ function init(container, data, cb) {
   // li: the era leading now (N = 今); act: every era playing with it.
   function markPlayLayer(li, rest, act, quote) {
     playLayer = li; playRest = !!rest; playAct = new Set(act || []);
+    if (li >= 0 && li < N) cb.onTuneEra && cb.onTuneEra(layers[li].id, quote ? quote.name : null);
     paintNow(li, quote);
     layerLabels.forEach((l) => {
       const on = l.layer === li;
@@ -1008,10 +1010,10 @@ function init(container, data, cb) {
     });
     todayLabel.classList.toggle('is-playing', li === N);
   }
-  function startPlay() {
+  function startPlay(o) {
     voyStop();
-    const F = state.focus;
-    const c = balance(compose(F));
+    const F = o && o.era != null && layerIndexById[o.era] != null ? layerIndexById[o.era] : state.focus;
+    const c = balance(compose(F, o && o.seed != null ? { seed: o.seed } : undefined));
     if (!c.ev.length) return;
     if (!soundOn) { soundOn = true; try { localStorage.setItem('mmStringSound', '1'); } catch (e) {} paintSound(); }
     unlockAudio();
@@ -1023,6 +1025,7 @@ function init(container, data, cb) {
     play = { audio, ev: c.ev, lay: c.lay, i: 0, j: 0, end: t0 + c.dur, srcs, focus: F };
     playTunes = {};
     hint.classList.add('is-gone');
+    jiBtn.style.display = 'none';
     paintPlay();
   }
   function stopPlay() {
@@ -1031,6 +1034,7 @@ function init(container, data, cb) {
     play = null;
     markPlayLayer(-1);
     paintPlay();
+    cb.onTuneEnd && cb.onTuneEnd();
   }
   function tickPlay() {
     if (!play) return;
@@ -1040,7 +1044,11 @@ function init(container, data, cb) {
       const e = play.ev[play.i++];
       if (e.st) pluck(e.st, e.vel, 0, { li: e.li, scheduled: true });
     }
-    if (c > play.end) stopPlay();
+    if (c > play.end) {
+      lastTune = { seed: perf.seed, era: play.focus >= 0 ? layers[play.focus].id : null };
+      stopPlay();
+      if (cb.onSend && !guest) jiBtn.style.display = 'inline-flex';
+    }
   }
   function segCross(p, q, a, b) {
     const d = (q.x - p.x) * (b.y - a.y) - (q.y - p.y) * (b.x - a.x);
@@ -1172,6 +1180,18 @@ function init(container, data, cb) {
   // 奏一曲 and 溯洄 sit side by side under the sound switch.
   const actions = el('div', 'strata-actions');
   actions.appendChild(playBtn); overlay.appendChild(actions);
+  if (guest) actions.style.display = 'none';
+  // 寄此曲: after a full performance, send that very seed.
+  let lastTune = null;
+  const jiBtn = el('button', 'strata-ji', '寄此曲'); jiBtn.type = 'button';
+  jiBtn.style.display = 'none';
+  jiBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!lastTune || !cb.onSend) return;
+    cb.onSend({ kind: 'tune', seed: lastTune.seed, era: lastTune.era });
+    jiBtn.style.display = 'none';
+  });
+  if (cb.onSend && !guest) actions.appendChild(jiBtn);
   // 此声取自: the object behind this era's sound, one tap from its museum.
   const nowCap = el('button', 'strata-now');
   nowCap.type = 'button';
@@ -1281,13 +1301,20 @@ function init(container, data, cb) {
       head.appendChild(el('span', 'vc-name', '新石器'));
       head.appendChild(el('small', null, layers[0].period));
       voyCap.appendChild(head);
-      voyCap.appendChild(el('div', 'vc-line is-quote', seen.size ? '百代过客，你走过其中 ' + seen.size + ' 层' : '每一层都还空着——去集第一枚印吧'));
+      voyCap.appendChild(el('div', 'vc-line is-quote', guest ? '百代过客，TA 走过其中 ' + seen.size + ' 层' : seen.size ? '百代过客，你走过其中 ' + seen.size + ' 层' : '每一层都还空着——去集第一枚印吧'));
+      if (guest) { voyCap.classList.add('is-on'); return; }
       const row = el('div', 'vc-actions');
       const again = el('button', 'vc-btn', '再溯一次'); again.type = 'button';
       again.addEventListener('click', (ev) => { ev.stopPropagation(); if (voy) { voy.paused = false; voyEnterIdx(0); } });
       const home = el('button', 'vc-btn is-main', '回到今天'); home.type = 'button';
       home.addEventListener('click', (ev) => { ev.stopPropagation(); voyStop(); });
-      row.appendChild(again); row.appendChild(home); voyCap.appendChild(row);
+      row.appendChild(again); row.appendChild(home);
+      if (cb.onSend) {
+        const send = el('button', 'vc-btn', '寄此行'); send.type = 'button';
+        send.addEventListener('click', (ev) => { ev.stopPropagation(); cb.onSend && cb.onSend({ kind: 'voyage' }); });
+        row.appendChild(send);
+      }
+      voyCap.appendChild(row);
     } else {
       const L = layers[e.layer];
       head.appendChild(el('span', 'vc-name', L.name));
@@ -1298,7 +1325,7 @@ function init(container, data, cb) {
       const mine = stampedAt(e.layer);
       if (mine.length) {
         const names = mine.slice(0, 2).map((m) => m.name).join('、');
-        voyCap.appendChild(el('div', 'vc-mine', '你在 ' + names + (mine.length > 2 ? ' 等 ' + mine.length + ' 座馆' : '') + ' 见过这一层'));
+        voyCap.appendChild(el('div', 'vc-mine', (guest ? 'TA 在 ' : '你在 ') + names + (mine.length > 2 ? ' 等 ' + mine.length + ' 座馆' : '') + ' 见过这一层'));
       }
     }
     voyCap.classList.add('is-on');
@@ -1414,7 +1441,9 @@ function init(container, data, cb) {
     todayLabel.classList.toggle('is-voy', e.kind === 'open');
     recolor();
     voyFlashSet(e);
+    jiBtn.style.display = 'none';
     voyCaption(e);
+    cb.onVoyage && cb.onVoyage(e.kind === 'layer' ? layers[e.layer].id : e.kind);
     voySound(e);
     voyCam();
     voyPaint();
@@ -2189,6 +2218,9 @@ function init(container, data, cb) {
     update,
     setActive(on) { active = !!on; if (on) { last = performance.now(); fit(true); } else { stopPlay(); voyStop(false); } },
     renderTune,
+    play: (o) => startPlay(o || {}),
+    stop: () => { stopPlay(); voyStop(); },
+    voyage: () => voyStart(),
     resize: () => fit(true),
     setTheme: applyTheme,
     // Preview one museum's beam through its strata (ledger hover); null clears.
@@ -2222,6 +2254,11 @@ window.MuseumStrata = {
   highlight(id) { if (S.ready) S.highlight(id); },
   /** WAV bytes of 奏一曲 (F: era index, -1 all strata, omitted: what the view would play). */
   renderTune(F, o) { return S.ready ? S.renderTune(F, o) : Promise.resolve(null); },
+  /** Replay 奏一曲 (o: { seed, era: dynasty id | null }). */
+  play(o) { if (S.ready) S.play(o); },
+  stop() { if (S.ready) S.stop(); },
+  /** Start 溯洄 from 今. */
+  voyage() { if (S.ready) S.voyage(); },
   /** 'night' | 'paper' | 'qinglu' */
   setTheme(name) { if (S.ready) S.setTheme(name); },
 };
