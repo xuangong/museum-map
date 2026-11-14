@@ -30,6 +30,15 @@ describe("achievement catalog", () => {
     }
   })
 
+  it("every achievement has a four-character 引首, all different", () => {
+    const seen = new Set<string>()
+    for (const a of ACHIEVEMENTS) {
+      expect([...(a.yinshou || "")].length).toBe(4)
+      expect(seen.has(a.yinshou)).toBe(false)
+      seen.add(a.yinshou)
+    }
+  })
+
   it("theme members exist (museum ids, or cities that have a museum)", () => {
     const cities = new Set(museums.map((m) => m.city))
     for (const a of themes) for (const mem of a.members!) {
