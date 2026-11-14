@@ -703,7 +703,18 @@ function init(container, data, cb) {
   // a melody. Only tunes whose notation we could verify; written in the same G pentatonic.
   //   茉莉花 — 19th-c. 鲜花调, from a public-domain transcription (Wikimedia Commons
   //   File:Maturika.mid, D major → G): 3 35 6 i6 | 5. 6 5 - (sung twice).
+  //   阳关三叠 — 琴歌 on 王维's poem, score 据《琴学入门》(1867) as engraved by 国琴网 (1=♭B, ♩=50):
+  //   「渭城朝雨浥轻尘，客舍」 6̣. 1 3 2 | 1 2 ↗2 – | 5 6 5; note values doubled to keep its slowness.
+  //   平沙落雁 — 管平湖演奏谱, 王迪记谱, 据《琴学丛书》 (国琴网, 1=F, ♩=34), section 三:
+  //   6 6 5 35 | 656 i | 6i i6 5 35 | 656 i; note values doubled.
   const QUOTES = {
+    tang: { name: '阳关三叠', note: '王维诗谱成的琴歌 · 谱据《琴学入门》', bars: [
+      [[9, 1.5], [10, 0.5], [12, 1], [11, 1]], [[10, 2], [11, 2]], [[11, 4]], [[13, 1], [14, 1], [13, 2]],
+    ] },
+    ming: { name: '平沙落雁', note: '琴曲 · 管平湖演奏谱（王迪记谱）', bars: [
+      [[9, 1], [9, 1], [8, 1], [7, 0.5], [8, 0.5]], [[9, 0.5], [8, 0.5], [9, 1], [10, 2]],
+      [[9, 0.5], [10, 0.5], [10, 0.5], [9, 0.5], [8, 1], [7, 0.5], [8, 0.5]], [[9, 0.5], [8, 0.5], [9, 1], [10, 2]],
+    ] },
     qing: { name: '茉莉花', note: '清代江南民歌（鲜花调）', bars: [
       [[7, 1], [7, 0.5], [8, 0.5], [9, 1], [10, 0.5], [9, 0.5]], [[8, 1.5], [9, 0.5], [8, 2]],
       [[7, 1], [7, 0.5], [8, 0.5], [9, 1], [10, 0.5], [9, 0.5]], [[8, 1.5], [9, 0.5], [8, 2]],
