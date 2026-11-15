@@ -181,6 +181,8 @@ window.museumApp = function() {
         self.refreshMarkers();
         if (!self.isReadOnly) self.loadCachedReview();
         self.applyHashRoute();
+        // Back from Google with a stamp waiting.
+        if (!self.isReadOnly) self.gateResume();
       });
 
       window.addEventListener('hashchange', function(){ self.applyHashRoute(); });
@@ -382,6 +384,7 @@ window.museumApp = function() {
 
     // ─── 时空 (3D strata) ───
     ji: { open: false, kind: '', extra: null, name: '', line: '', busy: false, url: '' },
+    gate: { open: false, museumId: '' },
     jiOpen(kind, extra) {
       this.ji.kind = kind; this.ji.extra = extra || null; this.ji.url = ''; this.ji.busy = false;
       if (!this.ji.name) this.ji.name = (this.me && (this.me.displayName || this.me.handle)) || '';
@@ -2484,6 +2487,9 @@ window.museumApp = function() {
         return;
       }
       var visited = this.isVisited(id);
+      // 集章 belongs to an account: signed out, the stamp waits behind a login.
+      // (Stamps left on this device from before can still be lifted.)
+      if (!visited && !(window.MuseumAuth && window.MuseumAuth.isAuthenticated())) { this.gateOpen(id); return; }
       try {
         if (window.MuseumAuth && window.MuseumAuth.isAuthenticated()) {
           if (visited) {
@@ -2521,6 +2527,28 @@ window.museumApp = function() {
       } catch(_) {}
     },
 
+    gateOpen(id) {
+      this.gate.museumId = id; this.gate.open = true; this.authForm.error = '';
+      // Survives the Google round-trip (a full page reload).
+      try { sessionStorage.setItem('mmPendingStamp', id); } catch(_) {}
+    },
+    gateClose() {
+      this.gate.open = false; this.gate.museumId = '';
+      try { sessionStorage.removeItem('mmPendingStamp'); } catch(_) {}
+    },
+    gateName() {
+      var m = this.gate.museumId && this.museums.find(function(x){ return x.id === this.gate.museumId; }, this);
+      return (m && m.name) || '这座馆';
+    },
+    /** After any login: land the stamp the visitor reached for. */
+    gateResume() {
+      var id = this.gate.museumId;
+      if (!id) { try { id = sessionStorage.getItem('mmPendingStamp') || ''; } catch(_) {} }
+      if (!id || !(window.MuseumAuth && window.MuseumAuth.isAuthenticated())) return;
+      this.gateClose();
+      if (!this.isVisited(id)) this.toggleVisit(id);
+    },
+
     async submitLogin() {
       if (this.authForm.loading) return;
       this.authForm.loading = true; this.authForm.error = '';
@@ -2531,6 +2559,7 @@ window.museumApp = function() {
         await this.loadVisits(); this.refreshMarkers();
         this.ach.ready = false; await this.loadAchievements();
         this.flashToast('已登录');
+        this.gateResume();
       } catch(e) {
         this.authForm.error = (e && e.message) || '登录失败';
       } finally { this.authForm.loading = false; }
@@ -2547,6 +2576,7 @@ window.museumApp = function() {
         await this.loadVisits(); this.refreshMarkers();
         this.ach.ready = false; await this.loadAchievements();
         this.flashToast('已注册并登录');
+        this.gateResume();
       } catch(e) {
         var msg = (e && e.message) || '注册失败';
         if (msg === 'email_taken') msg = '邮箱已注册';

@@ -2230,6 +2230,10 @@ path.route-corridor { stroke: var(--gilt); }
 .ji-card input:focus { border-bottom-color: var(--seal-ink-strong); }
 .ji-note { font-size: 12px; color: var(--text-3); margin: 4px 0 18px; line-height: 1.7; }
 .ji-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.gate-card h3 { text-wrap: balance; }
+.gate-card h3 .gate-name { color: var(--seal-ink-strong); }
+.gate-error { margin: -4px 0 14px; }
+.gate-foot { margin: 16px 0 0; }
 @media (max-width: 640px) {
   .ji-sheet { place-items: end center; padding: 0; }
   .ji-card { width: 100%; border-radius: 22px 22px 0 0; padding: 24px 22px calc(24px + env(safe-area-inset-bottom)); max-height: 92dvh; }

@@ -6,6 +6,7 @@ import { Drawer } from "./components/drawer"
 import { ChatPanel } from "./components/chat-panel"
 import { AchievementSheet, AchievementCeremony } from "./components/achievements"
 import { JiPanel } from "./components/ji"
+import { StampGate } from "./components/stamp-gate"
 import { icon } from "./icons"
 import { COORDS_SCRIPT } from "./client/coords"
 import { TRIP_CORE_SCRIPT } from "./client/trip-core"
@@ -139,7 +140,7 @@ export function HomePage(data: HomeData): string {
     </div>
     ${Drawer()}
     ${ChatPanel()}
-    ${AchievementSheet()}${AchievementCeremony()}${JiPanel()}
+    ${AchievementSheet()}${AchievementCeremony()}${JiPanel()}${StampGate({ googleEnabled: !!data.googleEnabled })}
   </div>
   <div class="toast" x-show="toast" x-text="toast" x-transition.opacity x-cloak></div>
 </div>
