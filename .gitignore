@@ -5,3 +5,7 @@ node_modules/
 *.log
 bun.lockb
 .DS_Store
+
+# Local tooling: Claude Code settings/worktrees, installed agent skills (restore from skills-lock.json)
+.claude/
+.agents/
