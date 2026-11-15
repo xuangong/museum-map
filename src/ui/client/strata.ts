@@ -1650,7 +1650,8 @@ function init(container, data, cb) {
       // in the band between the view switch and the title block (itself above dock / sheet).
       const L = layers[state.focus];
       const b = (L.terr && L.terr.box) || chinaBox;
-      const bandTop = 52, bandBottom = Math.max(insetBottom, ch - titleTop()) + 4;
+      // Phones stack the 听 button under the view switch; the map starts below both.
+      const bandTop = ys > 1 ? 104 : 52, bandBottom = Math.max(insetBottom, ch - titleTop()) + 4;
       const fV = Math.atan(halfTan * Math.max(90, ch - bandTop - bandBottom) / ch);
       to.oy = (bandBottom - bandTop) / 2;
       const halfW = Math.max(0.85, (b.x1 - b.x0) / 2), halfD = Math.max(0.65, (b.z1 - b.z0) / 2);

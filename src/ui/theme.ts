@@ -718,6 +718,8 @@ body.toc-resizing, body.toc-resizing * { cursor: col-resize !important; user-sel
   background: radial-gradient(closest-side, rgba(var(--bg-rgb),0.82), transparent);
 }
 .map-caption.show { opacity: 1; transform: translateY(0); }
+/* In 时空 the era's credit block (name · 疆域 · 在地图上看) already names it, in the same corner. */
+.canvas.is-strata .map-caption { display: none; }
 .cap-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 0.4em; color: var(--gilt); }
 .cap-name {
   font-family: var(--serif); font-weight: 900; font-size: 60px; line-height: 1.05;
