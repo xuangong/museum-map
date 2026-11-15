@@ -14,9 +14,11 @@ export interface AgentLoopOpts {
   gatewayUrl: string
   gatewayKey: string
   model: string
+  /** Claude reasoning effort; sent natively as adaptive thinking + output_config.effort. */
+  effort?: string
   maxTokens: number
   system: string
-  tools: any[]
+  tools: readonly any[]
   messages: any[]
   /** Execute one tool call. Return text content to feed back. May throw to abort. */
   executeTool: (call: ToolCall) => Promise<ToolResult>
@@ -37,6 +39,19 @@ export interface AgentLoopResult {
   stopReason: "end_turn" | "shouldStop" | "max_iters" | "wall" | "gateway_error" | "no_tool"
   lastError?: string
   text: string
+}
+
+/** An Anthropic Messages request. Empty tools / system are left out; an effort turns on
+ *  adaptive thinking at that effort. */
+export function messagesBody(opts: AgentLoopOpts, stream: boolean): any {
+  const body: any = { model: opts.model, max_tokens: opts.maxTokens, stream, messages: opts.messages }
+  if (opts.system) body.system = opts.system
+  if (opts.tools && opts.tools.length) body.tools = opts.tools
+  if (opts.effort) {
+    body.thinking = { type: "adaptive" }
+    body.output_config = { effort: opts.effort }
+  }
+  return body
 }
 
 export async function runToolLoop(opts: AgentLoopOpts): Promise<AgentLoopResult> {
@@ -61,14 +76,7 @@ export async function runToolLoop(opts: AgentLoopOpts): Promise<AgentLoopResult>
           "x-api-key": opts.gatewayKey,
           "anthropic-version": "2023-06-01",
         },
-        body: JSON.stringify({
-          model: opts.model,
-          max_tokens: opts.maxTokens,
-          stream: false,
-          system: opts.system,
-          tools: opts.tools,
-          messages: opts.messages,
-        }),
+        body: JSON.stringify(messagesBody(opts, false)),
       })
     } catch (e: any) {
       return { iterations: iter, stopReason: "gateway_error", lastError: e?.message || "fetch failed", text: collectedText }
@@ -188,14 +196,7 @@ export async function runToolLoopStream(opts: StreamLoopOpts): Promise<AgentLoop
           accept: "text/event-stream",
           "accept-encoding": "identity",
         },
-        body: JSON.stringify({
-          model: opts.model,
-          max_tokens: opts.maxTokens,
-          stream: true,
-          system: opts.system,
-          tools: opts.tools,
-          messages: opts.messages,
-        }),
+        body: JSON.stringify(messagesBody(opts, true)),
       })
     } catch (e: any) {
       return { iterations: iter, stopReason: "gateway_error", lastError: e?.message || "fetch failed", text: collectedText }

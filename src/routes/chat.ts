@@ -1,9 +1,9 @@
 import { Elysia } from "elysia"
 import type { Env } from "~/index"
 import { ChatGuardError, runRateLimits, sanitizeChatRequest } from "~/services/chat"
-import type { ToolCall } from "~/services/agent-loop"
+import { runToolLoop, runToolLoopStream, type ToolCall } from "~/services/agent-loop"
 import { runLlmLoop, runLlmLoopStream } from "~/services/llm"
-import { resolveAi } from "~/services/ai-models"
+import { nativeProtocol, resolveAi } from "~/services/ai-models"
 import { CHAT_TOOLS, CHAT_AGENT_SYSTEM, executeChatTool } from "~/services/chat-tools"
 import { getClientIp } from "~/lib/getClientIp"
 
@@ -92,6 +92,9 @@ export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
     wallMs: 45_000,
   }
 
+  // Claude on Anthropic Messages, everything else on OpenAI chat completions.
+  const native = nativeProtocol(ai.model) === "anthropic"
+
   if (body.stream === true) {
     const enc = new TextEncoder()
     // Anthropic-shaped events, so the existing client parser renders them; plus
@@ -106,7 +109,7 @@ export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
     // Not awaited: the Worker stays alive while the response body is still being written.
     void (async () => {
       try {
-        const result = await runLlmLoopStream({
+        const result = await (native ? runToolLoopStream : runLlmLoopStream)({
           ...base,
           onDelta: (t) => {
             text(t)
@@ -127,7 +130,7 @@ export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
   }
 
   try {
-    const result = await runLlmLoop(base)
+    const result = await (native ? runToolLoop : runLlmLoop)(base)
     if (result.stopReason === "gateway_error") {
       set.status = 502
       return { error: "upstream_error", detail: result.lastError }

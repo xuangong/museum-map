@@ -37,3 +37,8 @@ export function resolveAi(model: unknown, effort: unknown): { model: string; eff
         : m.efforts[0]!
   return { model: m.id, effort: e }
 }
+
+/** Each model on its native protocol: Claude speaks Anthropic Messages, the rest OpenAI chat completions. */
+export function nativeProtocol(modelId: string): "anthropic" | "openai" {
+  return AI_MODELS.find((x) => x.id === modelId)?.family === "Claude" || /^claude-/.test(modelId) ? "anthropic" : "openai"
+}
