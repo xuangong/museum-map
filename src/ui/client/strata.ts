@@ -1664,6 +1664,8 @@ function init(container, data, cb) {
       const lowest = sel.links.length ? yOf(sel.links[sel.links.length - 1]) : yTop;
       to.tx = sel.x * 0.6; to.tz = sel.z * 0.6; to.ty = (yTop + lowest) / 2 * ys;
       to.dist = baseDist * (covered ? 0.92 : 0.82); to.el = 0.46;
+      // Phones: centre in the band between the top controls (switch + 溯洄 row) and the sheet.
+      if (ys > 1) to.oy -= 52;
     } else {
       to.tx = 0; to.tz = 0; to.ty = H * (ys > 1 ? 0.46 : 0.5) * ys; to.dist = baseDist; to.el = ys > 1 ? 0.42 : 0.52;
       // Phones: the view switch and the 溯洄 / 奏一曲 row sit on top of the canvas, so today's

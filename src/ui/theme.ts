@@ -1142,7 +1142,15 @@ a.source-link:hover { border-color: rgba(var(--gilt-rgb),0.45); color: var(--tex
 body.chat-locked { overflow: hidden; position: relative; touch-action: none; }
 body.chat-locked .chat-panel, body.chat-locked .chat-panel * { touch-action: auto; }
 body.chat-locked .chat-body { touch-action: pan-y; }
-.chat-grabber { flex: none; width: 38px; height: 4px; border-radius: 2px; background: rgba(var(--fg-rgb),0.22); margin: 8px auto 0; }
+.chat-grabber { flex: none; position: relative; width: 88px; height: 20px; padding: 0; border: 0; background: transparent; margin: 0 auto -8px; cursor: pointer; }
+.chat-grabber::before { content: ''; position: absolute; left: 50%; top: 8px; transform: translateX(-50%); width: 38px; height: 4px; border-radius: 2px; background: rgba(var(--fg-rgb),0.28); }
+/* Tucked away: the header alone stays, the map is free to use. */
+.chat-panel.mini { --panel-h: calc(84px + env(safe-area-inset-bottom)); }
+.chat-panel.mini .chat-body, .chat-panel.mini .chat-chips, .chat-panel.mini .chat-input-row, .chat-panel.mini .chat-sub, .chat-panel.mini .ai-pick, .chat-panel.mini .chat-tools > .icon-btn:not(:last-child) { display: none; }
+.chat-panel.mini .chat-id { cursor: pointer; }
+.sheet-mini { display: none; }
+.sheet-mini-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--serif); font-size: 17px; font-weight: 600; color: var(--text); }
+.sheet-mini-up { flex: none; width: 8px; height: 8px; margin-top: 4px; border-left: 1.5px solid var(--text-3); border-top: 1.5px solid var(--text-3); transform: rotate(45deg); }
 .chat-panel.fullscreen .chat-grabber { visibility: hidden; }
 .chat-head { flex: none; display: flex; justify-content: space-between; align-items: center; padding: 10px 14px 12px 18px; border-bottom: 1px solid var(--line); }
 .chat-id { display: flex; align-items: center; gap: 12px; min-width: 0; }
@@ -1494,6 +1502,12 @@ body.chat-locked .chat-body { touch-action: pan-y; }
 /* 溯洄 — sink from today to the Neolithic, a layer at a time */
 .strata-overlay.is-focus .strata-voy-btn { display: none; }
 .strata-overlay.is-voyage .strata-play, .strata-overlay.is-voyage .strata-voy-btn { display: none; }
+/* Phones: with a museum's sheet open, 溯洄 / 听一曲 step aside for the museum's name on its beam
+   (an era's 听 stays; a tune already playing keeps its stop button). */
+@media (max-width: 640px) {
+  .canvas.has-drawer .strata-overlay:not(.is-focus) .strata-voy-btn,
+  .canvas.has-drawer .strata-overlay:not(.is-focus) .strata-play:not(.is-playing) { display: none; }
+}
 .strata-overlay.is-voyage .strata-sound { display: grid; }
 .strata-voy-ctl { display: none; gap: 6px; pointer-events: auto; }
 .strata-overlay.is-voyage .strata-voy-ctl { display: inline-flex; }
@@ -1816,7 +1830,19 @@ path.route-corridor { stroke: var(--gilt); }
   .stage.is-trip .toc-wrap .toc { border-right: 0; border-top: 1px solid var(--line-strong); border-radius: 22px 22px 0 0; padding-top: 6px; box-shadow: 0 -24px 60px -30px var(--sh-95); }
   .stage.is-trip .toc-overlay { display: none; }
   .stage.is-trip .toc-account, .stage.is-trip .hall-row { display: none; }
+  .stage.is-trip .toc-wrap.open.mini { transform: translateY(calc(100% - 68px - env(safe-area-inset-bottom))); }
+  .stage.is-trip .trip-grabber {
+    display: flex; align-items: center; position: absolute; z-index: 5; left: 0; right: 0; top: 0; height: 30px;
+    padding: 0 22px; border: 0; background: transparent; cursor: pointer;
+  }
+  .stage.is-trip .trip-grabber::before {
+    content: ''; position: absolute; left: 50%; top: 8px; transform: translateX(-50%);
+    width: 38px; height: 4px; border-radius: 2px; background: rgba(var(--fg-rgb),0.42);
+  }
+  .stage.is-trip .toc-wrap.mini .trip-grabber { height: 68px; padding-top: 6px; background: var(--surface); border-radius: 22px 22px 0 0; }
+  .stage.is-trip .toc-wrap.mini .toc { overflow: hidden; }
 }
+.trip-grabber { display: none; }
 .trip-chips .chip { font: inherit; font-size: 13px; padding: 5px 11px; }
 .tb-btn.active { color: var(--gilt-hi); border-color: rgba(var(--gilt-rgb),0.6); background: rgba(var(--gilt-rgb),0.12); }
 .tb-count { font-family: var(--mono); font-weight: 500; color: var(--gilt-hi); }
@@ -2099,6 +2125,16 @@ path.route-corridor { stroke: var(--gilt); }
   .drawer.open.peek { transform: translateY(34dvh); }
   /* An era's sheet peeks lower: its map is what the reader came for. */
   .drawer.open.peek.is-dynasty { transform: translateY(42dvh); }
+  /* Tucked away: only a title bar stays, the map / layers get the screen back. */
+  .drawer.open.mini, .drawer.open.mini.peek { transform: translateY(calc(100% - 60px - env(safe-area-inset-bottom))); overflow: hidden; }
+  .drawer.mini .sheet-mini {
+    display: flex; align-items: center; gap: 8px; position: absolute; z-index: 1; left: 0; right: 0; top: 0; height: 60px;
+    padding: 10px 104px 0 22px; box-sizing: border-box; border: 0; border-radius: 22px 22px 0 0;
+    background: var(--surface); color: var(--text); text-align: left; cursor: pointer;
+  }
+  .drawer.mini .drawer-bar-inner { z-index: 2; padding-top: 12px; }
+  .drawer.mini .drawer-grabber { display: none; }
+  .drawer.mini .drawer-bar-inner .round-btn.gilt, .drawer.mini .drawer-bar-inner [title='静音'], .drawer.mini .drawer-bar-inner [title='开启音效'] { display: none; }
   .drawer-grabber {
     display: block; position: absolute; left: 50%; top: 0; transform: translateX(-50%);
     width: 88px; height: 22px; padding: 0; border: none; background: transparent;

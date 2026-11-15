@@ -41,8 +41,8 @@ window.museumApp = function() {
     ],
     currentDynastyId: null,
     selectedMuseumId: null,
-    drawer: { open: false, expanded: false, scrolled: false, loading: false, error: false, title: '', subtitle: '', sections: [], _loadFn: null },
-    chat: { open: false, messages: [], input: '', loading: false, progress: '', fullscreen: false, palette: { open: false, query: '' } },
+    drawer: { open: false, expanded: false, mini: false, scrolled: false, loading: false, error: false, title: '', subtitle: '', sections: [], _loadFn: null },
+    chat: { open: false, mini: false, messages: [], input: '', loading: false, progress: '', fullscreen: false, palette: { open: false, query: '' } },
     ai: { model: '', effort: '', open: false },
     aiCatalog: { models: [], defaultModel: '', defaultEffort: '' },
     mentions: { ids: [] },
@@ -303,6 +303,7 @@ window.museumApp = function() {
       var syncInsets = function(){ self3.syncInsets(); };
       this.$watch && this.$watch('drawer.open', syncInsets);
       this.$watch && this.$watch('drawer.expanded', syncInsets);
+      this.$watch && this.$watch('drawer.mini', syncInsets);
       this.$watch && this.$watch('drawer.kind', syncInsets);
       window.addEventListener('resize', syncInsets);
       syncInsets();
@@ -321,7 +322,7 @@ window.museumApp = function() {
         if (mobile) {
           var vh = window.innerHeight, sheetH = vh - sheetTop;
           // Peek heights mirror .drawer.open.peek(.is-dynasty) in theme.ts.
-          b = Math.round(this.drawer.expanded ? sheetH : sheetH - vh * (this.drawer.kind === 'dynasty' ? 0.42 : 0.34));
+          b = this.drawer.mini ? 64 : Math.round(this.drawer.expanded ? sheetH : sheetH - vh * (this.drawer.kind === 'dynasty' ? 0.42 : 0.34));
         } else { var el = document.querySelector('.drawer'); r = el ? el.offsetWidth : 0; }
       }
       window.MuseumStrata.setInset(b, r);
@@ -367,6 +368,41 @@ window.museumApp = function() {
     },
 
     /** A newly opened museum / dynasty starts at its hero, not wherever the last one was. */
+    // ─── Phone sheets tuck away ───
+    // Drawer: full → half → a slim title bar; AI 讲解 and the trip sheet: open ↔ bar.
+    // Swipe the handle down / up to step; tap the bar (or the handle) to bring it back.
+    tripSheetMini: false,
+    sheetTouchStart(e) {
+      var t = e.touches && e.touches[0];
+      this._swY = t ? t.clientY : null;
+    },
+    sheetTouchEnd(e, kind) {
+      if (this._swY == null) return;
+      var t = e.changedTouches && e.changedTouches[0];
+      var dy = t ? t.clientY - this._swY : 0;
+      this._swY = null;
+      if (Math.abs(dy) < 32) return;   // a tap — the click handler decides
+      this._swAt = Date.now();
+      this.sheetStep(kind, dy > 0 ? 1 : -1);
+    },
+    sheetTap(kind) {
+      if (this._swAt && Date.now() - this._swAt < 450) return;   // the click after a swipe
+      if (kind === 'drawer') {
+        if (this.drawer.mini) this.sheetStep('drawer', -1);
+        else this.drawer.expanded = !this.drawer.expanded;
+      } else if (kind === 'chat') this.chat.mini = !this.chat.mini;
+      else if (kind === 'trip') this.tripSheetMini = !this.tripSheetMini;
+    },
+    sheetStep(kind, dir) {
+      if (kind === 'drawer') {
+        var cur = this.drawer.mini ? 2 : (this.drawer.expanded ? 0 : 1);
+        var n = Math.max(0, Math.min(2, cur + dir));
+        this.drawer.expanded = n === 0;
+        this.drawer.mini = n === 2;
+      } else if (kind === 'chat') this.chat.mini = dir > 0;
+      else if (kind === 'trip') this.tripSheetMini = dir > 0;
+    },
+
     resetDrawerScroll() {
       var el = document.querySelector('.drawer');
       if (el) el.scrollTop = 0;
@@ -814,6 +850,7 @@ window.museumApp = function() {
 
     toggleTripMode() {
       this.tripMode = !this.tripMode;
+      this.tripSheetMini = false;
       if (this.tripMode) {
         this.visits.footprintMode = false;
         this.tocOpen = true;
@@ -1085,7 +1122,7 @@ window.museumApp = function() {
     askGuide(text) {
       this.tocOpen = false;
       this.drawer.open = false;
-      this.chat.open = true;
+      this.chat.open = true; this.chat.mini = false;
       this.chat.input = text;
       var self = this;
       setTimeout(function(){ self.sendChat(); }, 80);
@@ -1947,6 +1984,7 @@ window.museumApp = function() {
         ? (name.replace(/[（(][^)）]*[)）]\s*$/, '').trim() || name)
         : name;
       this.drawer = {
+        mini: false,
         open: true, expanded: false, loading: false, error: false, kind: 'dynasty',
         title: title,
         subtitle: period,
@@ -2065,6 +2103,7 @@ window.museumApp = function() {
       // Hopping museum → museum from inside an expanded sheet keeps it expanded.
       var keepExpanded = !!(this.drawer.open && this.drawer.expanded);
       this.drawer = {
+        mini: false,
         open: true, expanded: keepExpanded, loading: true, error: false, kind: 'museum',
         title: head ? head.name : '', subtitle: head ? (head.corePeriod || '') : '',
         kicker: head ? this.museumKicker(head) : '', glyph: head && head.seal ? head.seal.t : '',
@@ -3094,7 +3133,7 @@ window.museumApp = function() {
       // Close other overlays so the chat panel isn't covered
       this.tocOpen = false;
       this.drawer.open = false;
-      this.chat.open = true;
+      this.chat.open = true; this.chat.mini = false;
       this.chat.input = '';
       var self = this;
       setTimeout(function(){

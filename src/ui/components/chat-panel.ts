@@ -8,11 +8,11 @@ export const QUICK_QUESTIONS = [
 ]
 
 export function ChatPanel(): string {
-  return `<div class="chat-overlay" :class="chat.open ? 'open' : ''" @click="chat.open = false"></div>
-<div class="chat-panel" :class="(chat.open ? 'open ' : '') + (chat.fullscreen ? 'fullscreen' : '')" role="dialog" aria-label="AI 讲解员">
-  <div class="chat-grabber" aria-hidden="true"></div>
+  return `<div class="chat-overlay" :class="chat.open && !chat.mini ? 'open' : ''" @click="chat.open = false"></div>
+<div class="chat-panel" :class="(chat.open ? 'open ' : '') + (chat.fullscreen ? 'fullscreen' : '') + (chat.mini && !chat.fullscreen ? ' mini' : '')" role="dialog" aria-label="AI 讲解员">
+  <button type="button" class="chat-grabber" @click="sheetTap('chat')" @touchstart.passive="sheetTouchStart($event)" @touchend="sheetTouchEnd($event, 'chat')" :aria-label="chat.mini ? '展开讲解员' : '收起讲解员'"></button>
   <header class="chat-head">
-    <div class="chat-id">
+    <div class="chat-id" @click="chat.mini && (chat.mini = false)">
       <span class="chat-avatar">${icon("sparkle", 20)}</span>
       <div>
         <div class="chat-title">AI 讲解员</div>
@@ -84,6 +84,6 @@ export function ChatPanel(): string {
   <button class="dock-btn dock-shake" @click="shakeForMuseum()" :disabled="visits.shaking" title="随机去一座博物馆（手机可直接摇一摇）">
     <span :class="visits.shaking ? 'spin-wrap spinning' : 'spin-wrap'">${icon("dice", 18)}</span><span>摇一摇</span>
   </button>
-  <button class="dock-btn dock-ai" @click="chat.open = true">${icon("sparkle", 18)}<span>AI 讲解</span></button>
+  <button class="dock-btn dock-ai" @click="chat.open = true; chat.mini = false">${icon("sparkle", 18)}<span>AI 讲解</span></button>
 </nav>`
 }

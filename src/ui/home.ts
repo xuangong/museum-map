@@ -84,7 +84,11 @@ export function HomePage(data: HomeData): string {
   ${DynastyTimeline(data.dynasties)}
   <div class="stage" :class="tripMode ? 'is-trip' : ''">
     <div class="toc-overlay" :class="tocOpen ? 'open' : ''" @click="tocOpen = false" x-cloak></div>
-    <div class="toc-wrap" :class="tocOpen ? 'open' : ''">
+    <div class="toc-wrap" :class="(tocOpen ? 'open' : '') + (tripMode && tripSheetMini ? ' mini' : '')">
+      <button type="button" class="trip-grabber" x-show="tripMode" x-cloak @click="sheetTap('trip')"
+        @touchstart.passive="sheetTouchStart($event)" @touchend="sheetTouchEnd($event, 'trip')" :aria-label="tripSheetMini ? '展开行程' : '收起行程'">
+        <span class="sheet-mini-title" x-show="tripSheetMini" x-text="tripTitle()"></span>
+      </button>
       ${Sidebar({ googleEnabled: !!data.googleEnabled })}
     </div>
     <div class="toc-resize" id="toc-resize" role="separator" aria-orientation="vertical" aria-label="拖动调整索引宽度" title="拖动调整索引宽度"></div>
