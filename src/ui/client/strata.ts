@@ -1665,6 +1665,9 @@ function init(container, data, cb) {
       to.dist = baseDist * (covered ? 0.92 : 0.82); to.el = 0.46;
     } else {
       to.tx = 0; to.tz = 0; to.ty = H * (ys > 1 ? 0.46 : 0.5) * ys; to.dist = baseDist; to.el = ys > 1 ? 0.42 : 0.52;
+      // Phones: the view switch and the 溯洄 / 奏一曲 row sit on top of the canvas, so today's
+      // surface drops below them — pull back a touch and push the stack down.
+      if (ys > 1 && !covered) { to.dist = baseDist * 1.25; to.oy -= 50; }
     }
     if (instant) Object.assign(cam, { dist: to.dist, tx: to.tx, ty: to.ty, tz: to.tz, el: to.el, ox: to.ox, oy: to.oy });
     S.needs = true;

@@ -1648,6 +1648,10 @@ path.era-chain { stroke: var(--gilt); stroke-opacity: 0.7; stroke-dasharray: 3 4
 .map-legend .era-chip { flex-wrap: nowrap; align-items: baseline; white-space: normal; max-width: 320px; }
 .map-legend .era-chip .era-chip-txt { white-space: normal; }
 .map-legend .era-chip .sep { color: var(--text-4); }
+.map-legend .era-chip .era-short { display: none; }
+/* Phones: tile labels (亚洲…) slide under the view switch; a paper band keeps the controls legible. */
+@media (max-width: 640px) { .canvas.is-map::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 66px; z-index: 550; pointer-events: none; background: linear-gradient(rgba(var(--bg-rgb),0.97) 62%, rgba(var(--bg-rgb),0)); } }
+@media (max-width: 640px) { .map-legend .era-chip .era-long { display: none; } .map-legend .era-chip .era-short { display: inline; white-space: nowrap; } }
 .map-legend .era-chip button { border: none; background: transparent; padding: 0; color: var(--gilt-hi); font-size: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
 .strata-credit .sc-map { pointer-events: auto; margin-top: 6px; padding: 5px 12px; border-radius: 999px; border: 1px solid rgba(var(--gilt-rgb),0.55); background: rgba(var(--bg2-rgb),0.7); color: var(--gilt-hi); font-family: var(--serif); font-size: 12.5px; letter-spacing: 0.04em; cursor: pointer; }
 .strata-credit .sc-map:hover { background: rgba(var(--gilt-rgb),0.18); }
@@ -2105,6 +2109,8 @@ path.route-corridor { stroke: var(--gilt); }
   .drawer-bar-inner { padding: 16px 12px 0; }
   .drawer-hero { padding: 72px var(--pad-d) 20px; min-height: 210px; }
   .drawer-hero.has-image { min-height: min(46vh, 400px); }
+  /* Without a picture the hero is just the title — don't spend the peek on blank paper. */
+  .drawer-hero:not(.has-image) { min-height: 0; padding-top: 58px; }
   .drawer-hero .hero-title { font-size: 30px; }
   .drawer-hero .hero-glyph { font-size: 180px; }
   .drawer-section { padding: 20px var(--pad-d); }

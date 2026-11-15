@@ -1661,7 +1661,8 @@ window.museumApp = function() {
           parts: parts, sites: g ? g.sites : [], trail: g ? g.trail : [], chains: g ? (g.chains || []) : [],
           culture: culture, year: t ? t.y : null, sketch: !!(t && t.sketch), label: label, key: dynastyId,
         });
-        self.eraCap = { name: label, text: text };
+        var short = culture ? '文化分布 · 示意' : (t && t.sketch) ? '核心区 · 示意' : (t && t.y != null) ? '约' + (t.y < 0 ? '前' + (-t.y) : t.y) + '年疆域' : '都城迁徙';
+        self.eraCap = { name: label, text: text, short: short };
         if (fit) self.$nextTick(function(){ window.MuseumMap.fitEra(self.eraPad(), fit === 'force'); });
       };
       if (!this.territoryUrl) { go(null); return; }
