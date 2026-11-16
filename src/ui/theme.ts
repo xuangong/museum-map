@@ -284,6 +284,7 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.3em;
   color: var(--text-3); margin-top: 3px; white-space: nowrap;
 }
+.brand-sub.brand-motto { font-family: var(--serif); font-size: 11px; letter-spacing: 0.16em; }
 .topbar-stats {
   margin-left: auto; display: flex; gap: 18px; align-items: baseline;
   font-size: 12px; color: var(--text-3); white-space: nowrap;
@@ -1464,6 +1465,25 @@ body.chat-locked .chat-body { touch-action: pan-y; }
   transition: opacity 0.8s ease;
 }
 .strata-hint.is-gone { opacity: 0; }
+/* 用脚步，给历史谱曲 — the first screen's line; leaves with the hint (it follows it in the DOM). */
+.strata-motto {
+  position: absolute; bottom: calc(132px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  pointer-events: none; text-align: center; white-space: nowrap;
+  text-shadow: 0 0 14px rgba(var(--bg-rgb),0.95), 0 0 4px rgba(var(--bg-rgb),0.9);
+  transition: opacity 0.8s ease;
+}
+.strata-motto small { font-size: 10.5px; letter-spacing: 0.32em; color: var(--text-3); }
+.strata-motto b { font-family: var(--serif); font-weight: 700; font-size: 22px; letter-spacing: 0.14em; color: var(--text); }
+.strata-hint.is-gone + .strata-motto,
+.strata-overlay.is-focus .strata-motto,
+.canvas.has-drawer .strata-motto { opacity: 0; }
+.canvas .strata-motto { left: calc((100% - var(--drawer-w)) / 2); }
+@media (max-width: 640px) {
+  .strata-motto { bottom: calc(92px + env(safe-area-inset-bottom)); left: 50% !important; }
+  .strata-motto small { font-size: 9.5px; letter-spacing: 0.24em; }
+  .strata-motto b { font-size: 17px; letter-spacing: 0.1em; }
+}
 /* Phones: the time ruler runs down the left edge to the dock — keep the hint up top, under 溯洄 / 奏一曲. */
 @media (max-width: 640px) { .strata-hint { bottom: auto; top: 106px; left: auto; right: 14px; transform: none; font-size: 11px; white-space: normal; max-width: min(220px, 56vw); text-align: right; text-wrap: balance; border-radius: 12px; line-height: 1.6; } }
 /* 琴弦 sound on/off — only once you have strings to pluck */
@@ -2060,6 +2080,7 @@ path.route-corridor { stroke: var(--gilt); }
   .brand-seal { width: 30px; height: 30px; font-size: 17px; border-radius: 6px; }
   .brand-name { font-size: 17px; letter-spacing: 0.06em; }
   .brand-sub { font-size: 8.5px; letter-spacing: 0.26em; }
+  .brand-sub.brand-motto { font-size: 10px; letter-spacing: 0.12em; }
   .topbar-stats { display: none; }
   .topbar-actions { margin-left: auto; gap: 6px; }
   .tb-btn { height: 32px; padding: 0 11px; font-size: 12.5px; }

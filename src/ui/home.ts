@@ -37,6 +37,10 @@ export interface HomeData {
   viewingProfile?: ViewingProfile | null
 }
 
+/** The site's line: museums you walk become strings, and the strata play them. */
+export const SLOGAN = "用脚步，给历史谱曲。"
+const PITCH = "每一座走过的博物馆，都会成为时空地层里的一根琴弦，和二十个朝代的乐器一起奏成你自己的曲子。"
+
 export function HomePage(data: HomeData): string {
   const bootstrap = JSON.stringify({
     ...data,
@@ -50,7 +54,10 @@ export function HomePage(data: HomeData): string {
     .replace(/</g, "\\u003c") // safe inline in <script>
     .replace(/-->/g, "--\\u003e")
   return Layout({
-    title: "中国博物馆地图 · 时间与地点的交汇",
+    title: "历史的音符 · 听得见的时空地图 | 中国博物馆地图",
+    head: `<meta name="description" content="${SLOGAN}${PITCH}" />
+  <meta property="og:title" content="历史的音符 · 听得见的时空地图" />
+  <meta property="og:description" content="${SLOGAN}${PITCH}" />`,
     children: `
 <div class="app-shell" x-data="museumApp()">
   <template x-if="isReadOnly && viewingProfile">
@@ -64,7 +71,7 @@ export function HomePage(data: HomeData): string {
       <span class="brand-seal">博</span>
       <span class="brand-text">
         <span class="brand-name">中国博物馆地图</span>
-        <span class="brand-sub">WHERE TIME MEETS PLACE</span>
+        <span class="brand-sub brand-motto">${SLOGAN}</span>
       </span>
     </a>
     <div class="topbar-stats">

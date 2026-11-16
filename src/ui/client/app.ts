@@ -469,6 +469,10 @@ window.museumApp = function() {
         onDynasty: function(id){ if (id) self.selectDynasty(id); else self.clearDynastyFilter(); },
         onEraMap: function(id){ self.showEraOnMap(id); },
         onSend: function(o){ self.jiOpen(o.kind, o.kind === 'tune' ? { seed: o.seed, era: o.era } : null); },
+        onTuneDone: function(o){
+          if (!o || !o.museums) return;
+          self.flashToast('这是你用脚步谱的曲 · ' + o.museums + ' 座馆 · ' + o.eras + ' 个朝代', 3600);
+        },
       });
       this._strataOk = !!ok;
       if (!ok) { this.view = 'map'; return; }
@@ -2474,11 +2478,11 @@ window.museumApp = function() {
       }
     },
 
-    flashToast(msg) {
+    flashToast(msg, ms) {
       this.toast = msg;
       if (this._toastTimer) clearTimeout(this._toastTimer);
       var self = this;
-      this._toastTimer = setTimeout(function(){ self.toast = ''; }, 1800);
+      this._toastTimer = setTimeout(function(){ self.toast = ''; }, ms || 1800);
     },
 
     async loadVisits() {
@@ -2557,6 +2561,7 @@ window.museumApp = function() {
           this._justStamped = id;
           if (navigator.vibrate) { try { navigator.vibrate([18, 40, 70]); } catch(_) {} }
           if (!this.visits.muted) this.playRevealSound();
+          this.flashToast(this.stampLine(id), 2600);
           this.syncAchievements(true);
         }
         if (this.drawer.open && this.drawer.kind === 'museum' && this.selectedMuseumId === id) {
@@ -2564,6 +2569,13 @@ window.museumApp = function() {
           else this.openMuseum(id);
         }
       } catch(_) {}
+    },
+
+    /** 集章 toast: which eras this museum just wrote into your tune. */
+    stampLine(id) {
+      var names = this.linkedDynasties(id).map(function(d){ return String(d.name || '').replace(/（.*$/, ''); }).filter(Boolean);
+      if (!names.length) return '已集章 · 你的曲谱又多了一个音';
+      return '已集章 · 你给' + names.slice(0, 2).join('、') + (names.length > 2 ? '等' : '') + '谱了一笔';
     },
 
     gateOpen(id) {

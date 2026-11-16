@@ -1046,8 +1046,11 @@ function init(container, data, cb) {
     }
     if (c > play.end) {
       lastTune = { seed: perf.seed, era: play.focus >= 0 ? layers[play.focus].id : null };
+      const done = play.focus < 0 && !guest ? strings.length : 0;
+      const eras = new Set(); strings.forEach((st) => museums[st.m].links.forEach((li) => eras.add(li)));
       stopPlay();
       if (cb.onSend && !guest) jiBtn.style.display = 'inline-flex';
+      if (done && cb.onTuneDone) cb.onTuneDone({ museums: done, eras: eras.size });
     }
   }
   function segCross(p, q, a, b) {
@@ -1145,10 +1148,18 @@ function init(container, data, cb) {
   const touchy = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
   function hintText() {
     const s0 = typeof strings !== 'undefined' && strings.length;
-    if (touchy) return s0 ? '按住红弦拨动 · 拖动旋转 · 双指缩放平移' : '拖动旋转 · 双指缩放平移 · 点地层看朝代';
-    return s0 ? '按住红色琴弦拨动 · 拖动旋转 · 右键或双指平移' : '拖动旋转 · 右键或双指平移 · 滚轮缩放 · 点地层看朝代 · 点光点看博物馆';
+    const empty = guest ? '' : '曲谱还空着 —— 去走第一座馆吧 · ';
+    if (touchy) return s0 ? '按住红弦拨动 · 拖动旋转 · 双指缩放平移' : empty + '拖动旋转 · 双指缩放平移';
+    return s0 ? '按住红色琴弦拨动 · 拖动旋转 · 右键或双指平移' : empty + '拖动旋转 · 滚轮缩放 · 点地层看朝代 · 点光点看博物馆';
   }
   const hint = el('div', 'strata-hint', hintText()); overlay.appendChild(hint);
+  // The site's line, over the strata until the visitor starts to play with them (fades with the hint).
+  if (!guest) {
+    const motto = el('div', 'strata-motto');
+    motto.appendChild(el('small', null, '历史的音符 · 听得见的时空地图'));
+    motto.appendChild(el('b', null, '用脚步，给历史谱曲。'));
+    overlay.appendChild(motto);
+  }
   if (touchy) setTimeout(() => hint.classList.add('is-gone'), 6000);
   const soundBtn = el('button', 'strata-sound');
   soundBtn.type = 'button';
