@@ -1,0 +1,8 @@
+node_modules
+.wrangler
+.git
+deploy/vm/state
+deploy/vm/import
+deploy/vm/.env.vm
+legacy
+.dev.vars
