@@ -2889,10 +2889,10 @@ window.museumApp = function() {
       if (unvisited.length === 0) {
         // All museums in scope are visited — celebrate!
         var msg = d
-          ? '🎉 你已经打卡「' + (d.name || '该朝代') + '」全部 ' + pool.length + ' 个推荐博物馆！'
-          : '🎉 你已经打卡了全部 ' + pool.length + ' 个博物馆！';
+          ? '🎉 ' + (String(d.name || '这个朝代').replace(/[（(].*$/, '')) + '的 ' + pool.length + ' 座馆，你全都走过了 · 这一段曲子谱完了'
+          : '🎉 全部 ' + pool.length + ' 座馆，你都走过了 · 这首曲子谱完了';
         this.triggerConfetti(msg);
-        if (!this.visits.muted) this.playRevealSound();
+        if (!this.visits.muted) this.playCheersSound();
         if (navigator.vibrate) { try { navigator.vibrate([60, 40, 60, 40, 120]); } catch(_) {} }
         return;
       }
@@ -3091,6 +3091,33 @@ window.museumApp = function() {
       // 磬: 徵 → 宫 (G5 → C6), the second a touch softer and longer
       this._sfxChime(ac, bus, t0 + 0.08, 783.99, 0.11);
       this._sfxChime(ac, bus, t0 + 0.24, 1046.5, 0.095);
+    },
+
+    /** Everything in scope is stamped — cheers: the whole 刮奏 runs up, lands on a 磬 chord
+        (宫 · 徵 · 高宫, struck together) and a few high bells scatter after it. */
+    _sfxCheers(ac, t0) {
+      var bus = this._sfxBus(ac);
+      for (var i = 0; i < 16; i++) {
+        var k = i / 15, at = t0 + 0.55 * (1 - Math.pow(1 - k, 1.25));
+        this._sfxPluck(ac, bus, at, this._sfxPenta(i, 261.63), 0.07 * (0.65 + 0.35 * k), -0.6 + 1.2 * k);
+      }
+      var tc = t0 + 0.6;
+      this._sfxClick(ac, bus, tc, 0.08, 1300);
+      this._sfxChime(ac, bus, tc + 0.02, 523.25, 0.085);
+      this._sfxChime(ac, bus, tc + 0.035, 783.99, 0.075);
+      this._sfxChime(ac, bus, tc + 0.05, 1046.5, 0.07);
+      var self = this;
+      [[0.42, 17], [0.58, 19], [0.7, 18], [0.86, 20]].forEach(function(b){
+        self._sfxChime(ac, bus, tc + b[0], self._sfxPenta(b[1], 261.63), 0.03);
+      });
+    },
+
+    playCheersSound() {
+      var self = this;
+      this._ensureAudio(function(){
+        var ac = self._ac; if (!ac) return;
+        self._sfxCheers(ac, ac.currentTime + 0.01);
+      });
     },
 
     playShakeSound(durationMs) {
