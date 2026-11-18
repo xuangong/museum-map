@@ -2978,25 +2978,105 @@ window.museumApp = function() {
       then();
     },
 
+    // ── 摇一摇 sounds: shaking a 签筒 — bamboo sticks clattering in waves with the hand — then
+    // one stick drops (a wooden 笃) and a 磬 rings 徵 → 宫, the pentatonic "settled". Shared by
+    // 集章 and the confetti. Built as (ctx, out, t0) helpers so they render offline too.
+    _sfxBus(ac) {
+      if (ac === this._ac && this._sfx) return this._sfx;
+      var master = ac.createGain(); master.gain.value = 2.4; master.connect(ac.destination);
+      var dry = ac.createGain(); dry.connect(master);
+      // A small warm room: stereo noise under an exponential tail, darkened as it decays.
+      var len = Math.floor(ac.sampleRate * 1.6), ir = ac.createBuffer(2, len, ac.sampleRate);
+      for (var c = 0; c < 2; c++) {
+        var d = ir.getChannelData(c), lp = 0;
+        for (var i = 0; i < len; i++) {
+          var k = i / len, a = 0.25 + 0.7 * k;            // darker towards the tail
+          lp = lp + a * ((Math.random() * 2 - 1) - lp);
+          d[i] = lp * Math.pow(1 - k, 3.2) * (i < 90 ? i / 90 : 1);
+        }
+      }
+      var conv = ac.createConvolver(); conv.buffer = ir;
+      var wet = ac.createGain(); wet.gain.value = 0.32;
+      conv.connect(wet); wet.connect(master);
+      var bus = { dry: dry, rev: conv };
+      if (ac === this._ac) this._sfx = bus;
+      return bus;
+    },
+    _sfxNoise(ac) {
+      if (ac === this._ac && this._sfxN) return this._sfxN;
+      var n = Math.floor(ac.sampleRate * 0.08), buf = ac.createBuffer(1, n, ac.sampleRate), d = buf.getChannelData(0);
+      for (var i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+      if (ac === this._ac) this._sfxN = buf;
+      return buf;
+    },
+    _sfxOut(ac, bus, pan, send) {
+      var g = ac.createGain(), node = g;
+      if (ac.createStereoPanner) { var p = ac.createStereoPanner(); p.pan.value = pan; g.connect(p); node = p; }
+      node.connect(bus.dry);
+      var s = ac.createGain(); s.gain.value = send; node.connect(s); s.connect(bus.rev);
+      return g;
+    },
+    /** One bamboo stick knocking another: a short resonant tick on a little hollow body. */
+    _sfxClick(ac, bus, t, amp) {
+      var out = this._sfxOut(ac, bus, (Math.random() * 2 - 1) * 0.45, 0.22);
+      var src = ac.createBufferSource(); src.buffer = this._sfxNoise(ac);
+      var bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 1900 + Math.random() * 1700; bp.Q.value = 6 + Math.random() * 6;
+      var e = ac.createGain(), dec = 0.018 + Math.random() * 0.03;
+      e.gain.setValueAtTime(0.0001, t); e.gain.exponentialRampToValueAtTime(amp, t + 0.0015);
+      e.gain.exponentialRampToValueAtTime(0.0001, t + dec);
+      src.connect(bp); bp.connect(e); e.connect(out);
+      src.start(t, Math.random() * 0.03); src.stop(t + dec + 0.01);
+      var o = ac.createOscillator(); o.type = 'triangle';
+      var f = 620 + Math.random() * 520; o.frequency.setValueAtTime(f * 1.06, t); o.frequency.exponentialRampToValueAtTime(f, t + 0.02);
+      var b = ac.createGain();
+      b.gain.setValueAtTime(0.0001, t); b.gain.exponentialRampToValueAtTime(amp * 0.45, t + 0.002);
+      b.gain.exponentialRampToValueAtTime(0.0001, t + 0.045);
+      o.connect(b); b.connect(out); o.start(t); o.stop(t + 0.06);
+    },
+    _sfxShake(ac, t0, durS) {
+      var bus = this._sfxBus(ac);
+      var waves = durS > 0.3 ? 3 : 1;
+      for (var w = 0; w < waves; w++) {
+        var tw = t0 + (waves > 1 ? w * (durS - 0.12) / (waves - 1) : 0) * 0.92;
+        var lift = waves > 1 ? 0.7 + 0.3 * (w / (waves - 1)) : 1;      // the hand gets surer
+        var n = 7 + Math.floor(Math.random() * 5);
+        for (var i = 0; i < n; i++) {
+          var k = i / n, at = tw + k * 0.13 + Math.random() * 0.012;
+          var amp = (0.05 + Math.random() * 0.09) * lift * Math.sin(Math.PI * (0.15 + 0.85 * k));
+          this._sfxClick(ac, bus, at, Math.max(0.006, amp));
+        }
+      }
+    },
+    /** A 磬 / small bell: inharmonic partials, each fading at its own pace. */
+    _sfxChime(ac, bus, t, f, amp) {
+      var out = this._sfxOut(ac, bus, 0, 0.55);
+      var lp = ac.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 5200; lp.connect(out);
+      [[1, 1, 1.9], [2.02, 0.32, 1.1], [2.93, 0.2, 0.7], [4.16, 0.09, 0.4], [5.43, 0.04, 0.25]].forEach(function(pt){
+        var o = ac.createOscillator(); o.type = 'sine'; o.frequency.value = f * pt[0];
+        var g = ac.createGain(), a = amp * pt[1];
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(a, t + 0.006);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + pt[2]);
+        o.connect(g); g.connect(lp); o.start(t); o.stop(t + pt[2] + 0.05);
+      });
+    },
+    _sfxReveal(ac, t0) {
+      var bus = this._sfxBus(ac);
+      // the stick drops: one rounder, lower 笃
+      this._sfxClick(ac, bus, t0, 0.16);
+      var out = this._sfxOut(ac, bus, 0, 0.3), o = ac.createOscillator(), g = ac.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(980, t0); o.frequency.exponentialRampToValueAtTime(760, t0 + 0.05);
+      g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.2, t0 + 0.003); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.11);
+      o.connect(g); g.connect(out); o.start(t0); o.stop(t0 + 0.13);
+      // 磬: 徵 → 宫 (G5 → C6), the second a touch softer and longer
+      this._sfxChime(ac, bus, t0 + 0.08, 783.99, 0.11);
+      this._sfxChime(ac, bus, t0 + 0.24, 1046.5, 0.095);
+    },
+
     playShakeSound(durationMs) {
       var self = this;
       this._ensureAudio(function(){
         var ac = self._ac; if (!ac) return;
-        var dur = Math.max(0.08, durationMs / 1000);
-        var bufSize = Math.floor(ac.sampleRate * dur);
-        var buf = ac.createBuffer(1, bufSize, ac.sampleRate);
-        var data = buf.getChannelData(0);
-        for (var i = 0; i < bufSize; i++) {
-          var t = i / bufSize;
-          var grain = (Math.sin(t * 60) > 0.4) ? (Math.random() * 2 - 1) : (Math.random() * 0.4 - 0.2);
-          data[i] = grain * (1 - t * 0.6);
-        }
-        var src = ac.createBufferSource(); src.buffer = buf;
-        var bp = ac.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 3200; bp.Q.value = 1.4;
-        var g = ac.createGain(); g.gain.value = 0.22;
-        src.connect(bp); bp.connect(g); g.connect(ac.destination);
-        src.start();
-        src.stop(ac.currentTime + dur);
+        self._sfxShake(ac, ac.currentTime + 0.01, Math.max(0.1, durationMs / 1000));
       });
     },
 
@@ -3004,20 +3084,7 @@ window.museumApp = function() {
       var self = this;
       this._ensureAudio(function(){
         var ac = self._ac; if (!ac) return;
-        var t0 = ac.currentTime;
-        [
-          { f: 1046.5, when: 0,    dur: 0.35 },
-          { f: 1567.98, when: 0.09, dur: 0.45 },
-        ].forEach(function(n){
-          var osc = ac.createOscillator(); osc.type = 'sine'; osc.frequency.value = n.f;
-          var g = ac.createGain();
-          g.gain.setValueAtTime(0.0001, t0 + n.when);
-          g.gain.exponentialRampToValueAtTime(0.28, t0 + n.when + 0.015);
-          g.gain.exponentialRampToValueAtTime(0.0001, t0 + n.when + n.dur);
-          osc.connect(g); g.connect(ac.destination);
-          osc.start(t0 + n.when);
-          osc.stop(t0 + n.when + n.dur + 0.02);
-        });
+        self._sfxReveal(ac, ac.currentTime + 0.01);
       });
     },
 
