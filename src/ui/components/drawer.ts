@@ -5,14 +5,14 @@ import { icon } from "../icons"
 // onDrawerClick via data-* attributes.
 export function Drawer(): string {
   return `<aside class="drawer" :class="(drawer.open ? 'open' : '') + (drawer.open && !drawer.expanded ? ' peek' : '') + (drawer.kind === 'dynasty' ? ' is-dynasty' : '') + (drawer.scrolled ? ' scrolled' : '') + (drawer.open && drawer.mini ? ' mini' : '')"
-  @click="onDrawerClick($event)" @scroll.passive="onDrawerScroll($event)" aria-label="详情">
+  @click="onDrawerClick($event)" @scroll.passive="onDrawerScroll($event)"
+  @touchstart.passive="drawerTouchStart($event)" @touchmove="drawerTouchMove($event)" @touchend="drawerTouchEnd()" @touchcancel="drawerTouchEnd()" aria-label="详情">
   <div class="drawer-bar">
-    <button type="button" class="sheet-mini" x-show="drawer.mini" x-cloak @click.stop="sheetTap('drawer')"
-      @touchstart.passive="sheetTouchStart($event)" @touchend="sheetTouchEnd($event, 'drawer')">
+    <button type="button" class="sheet-mini" x-show="drawer.mini" x-cloak @click.stop="sheetTap('drawer')">
       <span class="sheet-mini-title" x-text="drawer.title"></span><span class="sheet-mini-up" aria-hidden="true"></span>
     </button>
     <div class="drawer-bar-inner">
-      <button class="drawer-grabber" @click.stop="sheetTap('drawer')" @touchstart.passive="sheetTouchStart($event)" @touchend="sheetTouchEnd($event, 'drawer')" :aria-label="drawer.mini ? '展开' : (drawer.expanded ? '收起' : '展开')"></button>
+      <button class="drawer-grabber" @click.stop="sheetTap('drawer')" :aria-label="drawer.mini ? '展开' : (drawer.expanded ? '收起' : '展开')"></button>
       <div>
         <button class="round-btn gilt" x-show="drawer.fromShake" x-cloak @click.stop="shakeForMuseum()" :disabled="visits.shaking" title="再摇一个">
           <span :class="visits.shaking ? 'spin-wrap spinning' : 'spin-wrap'">${icon("dice", 16)}</span><span>再摇</span>

@@ -2140,6 +2140,9 @@ path.route-corridor { stroke: var(--gilt); }
     transform: translateY(104%);
     box-shadow: 0 -40px 100px -30px var(--sh-95);
     padding-bottom: env(safe-area-inset-bottom);
+    /* No rubber-band at the top: iOS would drag the whole sheet body (handle included) down
+       and open a blank gap. Past the top, the stroke moves the sheet instead (drawerTouch*). */
+    overscroll-behavior-y: none;
   }
   .drawer.open { transform: translateY(0); }
   /* Opens half-height so the 3D layer / map stays in view above it; reading on expands it. */

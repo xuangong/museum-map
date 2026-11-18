@@ -385,6 +385,96 @@ window.museumApp = function() {
       this._swAt = Date.now();
       this.sheetStep(kind, dy > 0 ? 1 : -1);
     },
+    // ── The museum / dynasty sheet on phones: one gesture moves the sheet or the content,
+    // whichever it should, the way a native bottom sheet does. Swiping up raises the sheet
+    // to full height and then, in the same stroke, scrolls the content; swiping down
+    // scrolls the content back to its top and then, still in the same stroke, pulls the
+    // sheet down. The sheet tracks the finger and on release settles on the nearest stop
+    // (full / half / title bar), a flick carrying it one stop further.
+    drawerSnaps(el) {
+      var H = el.offsetHeight, vh = window.innerHeight;
+      var pad = parseFloat(getComputedStyle(el).paddingBottom) || 0;
+      return [0, vh * (this.drawer.kind === 'dynasty' ? 0.42 : 0.34), Math.max(0, H - 60 - pad)];
+    },
+    drawerOffset(el) {
+      var m = getComputedStyle(el).transform;
+      if (!m || m === 'none') return 0;
+      var v = m.match(/matrix(3d)?\(([^)]+)\)/);
+      if (!v) return 0;
+      var n = v[2].split(',').map(parseFloat);
+      return v[1] ? n[13] : n[5];
+    },
+    drawerTouchStart(e) {
+      this._dg = null;
+      var el = e.currentTarget, t = e.touches && e.touches[0];
+      if (!t || e.touches.length > 1 || !this.drawer.open) return;
+      if (!(window.matchMedia && matchMedia('(max-width: 920px)').matches)) return;
+      var snaps = this.drawerSnaps(el), off = this.drawerOffset(el);
+      this._dg = {
+        el: el, snaps: snaps, y0: t.clientY, x0: t.clientX, lastY: t.clientY, lastT: Date.now(), v: 0,
+        base: off, off: off, scroll0: el.scrollTop, axis: null,
+        // Started below full height: this stroke is ours from the first move (sheet first, then content).
+        owned: off > 1, moved: false, manual: false, anchor: null,
+      };
+    },
+    drawerTouchMove(e) {
+      var g = this._dg; if (!g) return;
+      var t = e.touches && e.touches[0]; if (!t) return;
+      var el = g.el, now = Date.now(), y = t.clientY;
+      if (!g.axis) {
+        var ax = Math.abs(t.clientX - g.x0), ay = Math.abs(y - g.y0);
+        if (ax < 6 && ay < 6) return;
+        g.axis = ay >= ax ? 'y' : 'x';
+      }
+      if (g.axis !== 'y') { this._dg = null; return; }
+      var step = y - g.lastY;
+      if (now > g.lastT) g.v = 0.7 * (step / (now - g.lastT)) + 0.3 * g.v;
+      g.lastY = y; g.lastT = now;
+      if (g.owned) {
+        // Sheet first: finger travel moves the sheet; past full height the rest scrolls the content.
+        var want = g.base + (y - g.y0);
+        if (want < 0) { g.off = 0; g.manual = true; el.scrollTop = g.scroll0 - want; }
+        else { g.off = Math.min(want, g.snaps[2] + 40); if (el.scrollTop !== g.scroll0) el.scrollTop = g.scroll0; }
+        if (e.cancelable) e.preventDefault();
+      } else {
+        // Full height: content scrolls natively until it is at its top, then a downward
+        // stroke takes the sheet with it (the anchor is where the content ran out).
+        if (g.anchor == null) {
+          if (!(el.scrollTop <= 0 && step > 0)) return;
+          g.anchor = y;
+        }
+        var d = y - g.anchor;
+        if (d <= 0) { g.off = 0; g.manual = true; el.scrollTop = Math.max(0, -d); }
+        else { g.off = d; el.scrollTop = 0; }
+        if (e.cancelable) e.preventDefault();
+      }
+      g.moved = true;
+      el.style.transition = 'none';
+      el.style.transform = 'translateY(' + g.off + 'px)';
+    },
+    drawerTouchEnd() {
+      var g = this._dg; this._dg = null;
+      if (!g || !g.moved) return;
+      var el = g.el, self = this;
+      this._swAt = Date.now();   // swallow the click that follows a drag
+      if (g.off > 0.5 || g.base > 0.5) {
+        var proj = g.off + g.v * 160, best = 0;
+        g.snaps.forEach(function(sp, i){ if (Math.abs(proj - sp) < Math.abs(proj - g.snaps[best])) best = i; });
+        this.drawer.expanded = best === 0;
+        this.drawer.mini = best === 2;
+        this.$nextTick(function(){ el.style.transition = ''; el.style.transform = ''; });
+        if (best === 0 || !g.manual) return;
+      } else { el.style.transition = ''; el.style.transform = ''; }
+      // Content scrolled by hand (no native momentum in an owned stroke): glide it out.
+      if (g.manual && Math.abs(g.v) > 0.15) {
+        var v = -g.v * 16, last = 0;
+        (function glide(ts){
+          if (last && Math.abs(v) < 0.4) return;
+          el.scrollTop += v; v *= 0.95; last = ts;
+          requestAnimationFrame(glide);
+        })(0);
+      }
+    },
     sheetTap(kind) {
       if (this._swAt && Date.now() - this._swAt < 450) return;   // the click after a swipe
       if (kind === 'drawer') {
