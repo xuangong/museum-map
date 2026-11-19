@@ -62,30 +62,20 @@ function glowTexture() {
 const PENTA = [0, 2, 4, 7, 9];
 const MAX_DEG = 17;
 const degFreq = (d) => { d = Math.max(0, Math.min(MAX_DEG, d)); return 98 * Math.pow(2, (12 * Math.floor(d / 5) + PENTA[d % 5]) / 12); };
-let actx = null, master = null, audioUnlocked = false;
+let actx = null, master = null;
 const ksCache = {};
-// iOS: let page audio play with the ring/silent switch on (Safari 17+: Audio Session API;
-// older: a looping silent <audio> moves the session to playback), and start the context
-// inside a real gesture (touchend / click — touchstart does not count).
-function silentWavUrl() {
-  const n = 800, b = new Uint8Array(44 + n), v = new DataView(b.buffer);
-  const w = (o, str) => { for (let i = 0; i < str.length; i++) b[o + i] = str.charCodeAt(i); };
-  w(0, 'RIFF'); v.setUint32(4, 36 + n, true); w(8, 'WAVE'); w(12, 'fmt ');
-  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 8000, true);
-  v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true); w(36, 'data'); v.setUint32(40, n, true);
-  for (let i = 0; i < n; i++) b[44 + i] = 128;
-  let bin = ''; for (let i = 0; i < b.length; i++) bin += String.fromCharCode(b[i]);
-  return 'data:audio/wav;base64,' + btoa(bin);
+// Audio lives in the page-wide MMAudio (app.ts): silent switch, iOS interruptions and the
+// mute-after-background context are handled there. A new context gets its own room graph.
+function bindCtx(c) {
+  if (!c || c === actx) return;
+  actx = c; master = makeGraph(c);
+  Object.keys(ksCache).forEach((k) => { delete ksCache[k]; });
 }
+if (window.MMAudio) window.MMAudio.onNew(bindCtx);
+/** Inside a real gesture (touchend / click — touchstart does not count). */
 function unlockAudio() {
-  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
-  const ac = audioCtx();
-  if (!ac || audioUnlocked) return;
-  audioUnlocked = true;
-  try { const b = ac.createBuffer(1, 1, 22050), src = ac.createBufferSource(); src.buffer = b; src.connect(ac.destination); src.start(0); } catch (e) {}
-  if (!navigator.audioSession && /iP(hone|ad|od)/.test(navigator.userAgent)) {
-    try { const a = new Audio(silentWavUrl()); a.loop = true; a.setAttribute('playsinline', ''); a.play().catch(() => {}); } catch (e) {}
-  }
+  if (window.MMAudio) bindCtx(window.MMAudio.unlock());
+  else audioCtx();
 }
 // The room every note plays into: a soft top-end roll-off, a dark hall, a gentle limiter.
 // Built per context so a performance can also be rendered offline (renderTune).
@@ -108,12 +98,13 @@ function makeGraph(ac) {
   return m;
 }
 function audioCtx() {
+  if (window.MMAudio) { bindCtx(window.MMAudio.get()); return actx; }
   if (!actx) {
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return null;
-    try { actx = new AC(); master = makeGraph(actx); } catch (e) { actx = null; return null; }
+    try { bindCtx(new AC()); } catch (e) { return null; }
   }
-  if (actx.state === 'suspended') { try { actx.resume(); } catch (e) {} }
+  if (actx.state !== 'running') { try { actx.resume(); } catch (e) {} }
   return actx;
 }
 function ksBuffer(ac, freq, lpk, decay) {
@@ -1506,7 +1497,7 @@ function init(container, data, cb) {
   voyPaint();
 
   // A real gesture anywhere unlocks audio for later strums (iOS needs touchend/click).
-  const onGesture = () => { if (strings.length) { unlockAudio(); document.removeEventListener('touchend', onGesture); document.removeEventListener('click', onGesture); } };
+  const onGesture = () => { if (strings.length && soundOn) unlockAudio(); };
   document.addEventListener('touchend', onGesture, { passive: true });
   document.addEventListener('click', onGesture);
 

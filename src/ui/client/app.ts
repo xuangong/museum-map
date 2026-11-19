@@ -15,6 +15,71 @@ var ICONS = ${JSON.stringify(iconTable(16))};
 var RANKS = ${JSON.stringify(COLLECTOR_RANKS)};
 var THEMES = ${JSON.stringify(THEMES)};
 var THEME_BAR = ${JSON.stringify(THEME_BAR)};
+// ── One audio context for the whole page (摇一摇 sounds + the strata music), kept alive on iOS:
+// · plays with the ring/silent switch on (Audio Session API "playback"; older iOS: a looping
+//   silent <audio> moves the session to playback);
+// · any non-running state (suspended, or iOS "interrupted" after a call / lock / other app)
+//   is resumed on every use and on every tap;
+// · after the page has been in the background the next tap builds a fresh context — iOS can
+//   leave the old one "running" yet mute.
+// The global tap only acts once sound has been used here, so a visitor who never plays
+// anything doesn't have their own music interrupted.
+window.MMAudio = (function(){
+  var ctx = null, stale = false, silentEl = null, subs = [];
+  var iOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  function session() {
+    try { if (navigator.audioSession && navigator.audioSession.type !== 'playback') navigator.audioSession.type = 'playback'; } catch (e) {}
+  }
+  function silentWav() {
+    var n = 800, b = new Uint8Array(44 + n), v = new DataView(b.buffer);
+    var w = function(o, s){ for (var i = 0; i < s.length; i++) b[o + i] = s.charCodeAt(i); };
+    w(0, 'RIFF'); v.setUint32(4, 36 + n, true); w(8, 'WAVE'); w(12, 'fmt ');
+    v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 8000, true);
+    v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true); w(36, 'data'); v.setUint32(40, n, true);
+    for (var i = 0; i < n; i++) b[44 + i] = 128;
+    var bin = ''; for (var j = 0; j < b.length; j++) bin += String.fromCharCode(b[j]);
+    return 'data:audio/wav;base64,' + btoa(bin);
+  }
+  // gesture: true only inside a real tap — the one place a fresh context may be built after
+  // the background (outside a tap iOS would leave the new one suspended, so keep the old).
+  function get(gesture) {
+    session();
+    if (ctx && ((stale && gesture) || ctx.state === 'closed')) { try { ctx.close(); } catch (e) {} ctx = null; }
+    if (gesture) stale = false;
+    if (!ctx) {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return null;
+      try { ctx = new AC(); } catch (e) { return null; }
+      subs.forEach(function(fn){ try { fn(ctx); } catch (e) {} });
+    }
+    if (ctx.state !== 'running') { try { var p = ctx.resume(); if (p && p.catch) p.catch(function(){}); } catch (e) {} }
+    return ctx;
+  }
+  /** Call inside a real gesture (touchend / click): starts the context and keeps the session on playback. */
+  function unlock() {
+    var c = get(true); if (!c) return null;
+    try { var b = c.createBuffer(1, 1, 22050), src = c.createBufferSource(); src.buffer = b; src.connect(c.destination); src.start(0); } catch (e) {}
+    if (iOS && !navigator.audioSession) {
+      try {
+        if (!silentEl) { silentEl = new Audio(silentWav()); silentEl.loop = true; silentEl.setAttribute('playsinline', ''); }
+        if (silentEl.paused) { var q = silentEl.play(); if (q && q.catch) q.catch(function(){}); }
+      } catch (e) {}
+    }
+    return c;
+  }
+  function onGesture() { if (ctx && (stale || ctx.state !== 'running' || (silentEl && silentEl.paused))) unlock(); }
+  document.addEventListener('touchend', onGesture, { capture: true, passive: true });
+  document.addEventListener('click', onGesture, true);
+  document.addEventListener('keydown', onGesture, true);
+  document.addEventListener('visibilitychange', function(){ if (document.hidden && ctx) stale = true; });
+  window.addEventListener('pageshow', function(e){ if (e.persisted && ctx) stale = true; });
+  return {
+    get: get, unlock: unlock,
+    /** fn(ctx) runs for every new context (to rebuild graphs bound to the old one). */
+    onNew: function(fn){ subs.push(fn); },
+    current: function(){ return ctx; },
+  };
+})();
 // Module-scope cache for visitedDynasties — outside Alpine reactive proxy.
 // Putting these on \`this\` makes Alpine track every read inside x-for/:class,
 // and writing them inside the same effect blanks the timeline ("自循环失效").
@@ -399,7 +464,7 @@ window.museumApp = function() {
     drawerOffset(el) {
       var m = getComputedStyle(el).transform;
       if (!m || m === 'none') return 0;
-      var v = m.match(/matrix(3d)?\(([^)]+)\)/);
+      var v = m.match(/matrix(3d)?\\(([^)]+)\\)/);
       if (!v) return 0;
       var n = v[2].split(',').map(parseFloat);
       return v[1] ? n[13] : n[5];
@@ -2970,20 +3035,20 @@ window.museumApp = function() {
     },
 
     _audioCtx() {
-      if (this._ac) return this._ac;
-      var AC = window.AudioContext || window.webkitAudioContext;
-      if (!AC) return null;
-      try { this._ac = new AC(); } catch(_) { return null; }
-      return this._ac;
+      var c = window.MMAudio && window.MMAudio.get();
+      if (c && c !== this._ac) { this._ac = c; this._sfx = null; this._sfxN = null; }
+      return c || null;
     },
 
+    /** Get the shared context running (inside a gesture this also unlocks it), then play. */
     _ensureAudio(then) {
-      var ac = this._audioCtx(); if (!ac) return;
-      if (ac.state === 'suspended' && ac.resume) {
-        var p = ac.resume();
-        if (p && p.then) { p.then(then).catch(then); return; }
-      }
-      then();
+      var inTap = !!(window.event && /^(click|touchend|keydown|pointerup|mouseup)$/.test(window.event.type));
+      var ac = window.MMAudio ? (inTap ? window.MMAudio.unlock() : window.MMAudio.get()) : null;
+      if (!ac) return;
+      this._audioCtx();
+      if (ac.state === 'running') { then(); return; }
+      var p = ac.resume && ac.resume();
+      if (p && p.then) p.then(then, then); else then();
     },
 
     // ── 摇一摇 sounds: a 古筝-style 刮奏 sweeps the strings (the site's 琴弦), then a wooden 笃
