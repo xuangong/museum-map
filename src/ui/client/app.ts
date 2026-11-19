@@ -16,35 +16,28 @@ var RANKS = ${JSON.stringify(COLLECTOR_RANKS)};
 var THEMES = ${JSON.stringify(THEMES)};
 var THEME_BAR = ${JSON.stringify(THEME_BAR)};
 // ── One audio context for the whole page (摇一摇 sounds + the strata music), kept alive on iOS:
-// · plays with the ring/silent switch on (Audio Session API "playback"; older iOS: a looping
-//   silent <audio> moves the session to playback);
+// · follows the ring/silent switch, and mixes with whatever else is playing instead of
+//   stopping it (Audio Session API "ambient");
 // · any non-running state (suspended, or iOS "interrupted" after a call / lock / other app)
 //   is resumed on every use and on every tap;
 // · after the page has been in the background the next tap builds a fresh context — iOS can
 //   leave the old one "running" yet mute.
-// The global tap only acts once sound has been used here, so a visitor who never plays
-// anything doesn't have their own music interrupted.
 window.MMAudio = (function(){
-  var ctx = null, stale = false, silentEl = null, subs = [];
-  var iOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  var ctx = null, stale = false, subs = [], probe = null;
   function session() {
-    try { if (navigator.audioSession && navigator.audioSession.type !== 'playback') navigator.audioSession.type = 'playback'; } catch (e) {}
+    try { if (navigator.audioSession && navigator.audioSession.type !== 'ambient') navigator.audioSession.type = 'ambient'; } catch (e) {}
   }
-  function silentWav() {
-    var n = 800, b = new Uint8Array(44 + n), v = new DataView(b.buffer);
-    var w = function(o, s){ for (var i = 0; i < s.length; i++) b[o + i] = s.charCodeAt(i); };
-    w(0, 'RIFF'); v.setUint32(4, 36 + n, true); w(8, 'WAVE'); w(12, 'fmt ');
-    v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 8000, true);
-    v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true); w(36, 'data'); v.setUint32(40, n, true);
-    for (var i = 0; i < n; i++) b[44 + i] = 128;
-    var bin = ''; for (var j = 0; j < b.length; j++) bin += String.fromCharCode(b[j]);
-    return 'data:audio/wav;base64,' + btoa(bin);
+  // A context that says "running" while its clock stands still is mute (iOS after an audio
+  // route change — AirPods in/out — or a long background): catch it by its clock.
+  function frozen() {
+    if (!ctx || ctx.state !== 'running' || !probe || probe.state !== 'running') return false;
+    return (performance.now() - probe.wall) > 300 && (ctx.currentTime - probe.ct) < 0.02;
   }
-  // gesture: true only inside a real tap — the one place a fresh context may be built after
-  // the background (outside a tap iOS would leave the new one suspended, so keep the old).
+  // gesture: true only inside a real tap — the one place a fresh context may be built
+  // (outside a tap iOS would leave the new one suspended, so keep the old).
   function get(gesture) {
     session();
-    if (ctx && ((stale && gesture) || ctx.state === 'closed')) { try { ctx.close(); } catch (e) {} ctx = null; }
+    if (ctx && ((gesture && (stale || frozen())) || ctx.state === 'closed')) { try { ctx.close(); } catch (e) {} ctx = null; }
     if (gesture) stale = false;
     if (!ctx) {
       var AC = window.AudioContext || window.webkitAudioContext;
@@ -53,26 +46,23 @@ window.MMAudio = (function(){
       subs.forEach(function(fn){ try { fn(ctx); } catch (e) {} });
     }
     if (ctx.state !== 'running') { try { var p = ctx.resume(); if (p && p.catch) p.catch(function(){}); } catch (e) {} }
+    probe = { ct: ctx.currentTime, wall: performance.now(), state: ctx.state };
     return ctx;
   }
-  /** Call inside a real gesture (touchend / click): starts the context and keeps the session on playback. */
+  /** Call inside a real gesture (touchend / click): starts (or after the background, rebuilds) the context. */
   function unlock() {
     var c = get(true); if (!c) return null;
     try { var b = c.createBuffer(1, 1, 22050), src = c.createBufferSource(); src.buffer = b; src.connect(c.destination); src.start(0); } catch (e) {}
-    if (iOS && !navigator.audioSession) {
-      try {
-        if (!silentEl) { silentEl = new Audio(silentWav()); silentEl.loop = true; silentEl.setAttribute('playsinline', ''); }
-        if (silentEl.paused) { var q = silentEl.play(); if (q && q.catch) q.catch(function(){}); }
-      } catch (e) {}
-    }
     return c;
   }
-  function onGesture() { if (ctx && (stale || ctx.state !== 'running' || (silentEl && silentEl.paused))) unlock(); }
+  function onGesture() { if (ctx && (stale || ctx.state !== 'running' || frozen())) unlock(); }
   document.addEventListener('touchend', onGesture, { capture: true, passive: true });
   document.addEventListener('click', onGesture, true);
   document.addEventListener('keydown', onGesture, true);
   document.addEventListener('visibilitychange', function(){ if (document.hidden && ctx) stale = true; });
   window.addEventListener('pageshow', function(e){ if (e.persisted && ctx) stale = true; });
+  // Headphones plugged / unplugged, AirPods in or out: rebuild on the next tap.
+  try { if (navigator.mediaDevices && navigator.mediaDevices.addEventListener) navigator.mediaDevices.addEventListener('devicechange', function(){ if (ctx) stale = true; }); } catch (e) {}
   return {
     get: get, unlock: unlock,
     /** fn(ctx) runs for every new context (to rebuild graphs bound to the old one). */

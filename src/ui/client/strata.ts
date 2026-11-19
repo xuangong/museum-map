@@ -64,8 +64,8 @@ const MAX_DEG = 17;
 const degFreq = (d) => { d = Math.max(0, Math.min(MAX_DEG, d)); return 98 * Math.pow(2, (12 * Math.floor(d / 5) + PENTA[d % 5]) / 12); };
 let actx = null, master = null;
 const ksCache = {};
-// Audio lives in the page-wide MMAudio (app.ts): silent switch, iOS interruptions and the
-// mute-after-background context are handled there. A new context gets its own room graph.
+// Audio lives in the page-wide MMAudio (app.ts): it follows the silent switch; iOS
+// interruptions and the mute-after-background context are handled there. A new context gets its own room graph.
 function bindCtx(c) {
   if (!c || c === actx) return;
   actx = c; master = makeGraph(c);
