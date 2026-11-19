@@ -2896,10 +2896,18 @@ window.museumApp = function() {
         if (navigator.vibrate) { try { navigator.vibrate([60, 40, 60, 40, 120]); } catch(_) {} }
         return;
       }
-      this.visits.shaking = true;
-      // Re-shaking with a result open: don't land on the same museum again.
+      // Re-shaking with a result open: don't land on the same museum again. If that museum
+      // is the only one left, say so instead of "finding" it a second time.
       var openId = this.drawer.open && this.drawer.kind === 'museum' ? this.selectedMuseumId : null;
-      var candidates = unvisited.length > 1 ? unvisited.filter(function(m){ return m.id !== openId; }) : unvisited;
+      var candidates = unvisited.filter(function(m){ return m.id !== openId; });
+      if (!candidates.length) {
+        var era = d ? String(d.name || '').replace(/[（(].*$/, '') : '';
+        this.flashToast((era ? era + '还没去的' : '还没去的') + '，就剩眼前这一座了 · 去把它谱上吧', 3200);
+        if (!this.visits.muted) this.playLastOneSound();
+        if (navigator.vibrate) { try { navigator.vibrate(40); } catch(_) {} }
+        return;
+      }
+      this.visits.shaking = true;
       var pick = candidates[Math.floor(Math.random() * candidates.length)];
       var self = this;
       var fast = !!(opts && opts.fast);
@@ -3109,6 +3117,21 @@ window.museumApp = function() {
       var self = this;
       [[0.42, 17], [0.58, 19], [0.7, 18], [0.86, 20]].forEach(function(b){
         self._sfxChime(ac, bus, tc + b[0], self._sfxPenta(b[1], 261.63), 0.03);
+      });
+    },
+
+    /** Nothing else to shake out — only the one in view is left: a low pluck and a single soft 磬 on 宫. */
+    _sfxLastOne(ac, t0) {
+      var bus = this._sfxBus(ac);
+      this._sfxPluck(ac, bus, t0, 261.63, 0.13, 0);
+      this._sfxChime(ac, bus, t0 + 0.12, 523.25, 0.13);
+    },
+
+    playLastOneSound() {
+      var self = this;
+      this._ensureAudio(function(){
+        var ac = self._ac; if (!ac) return;
+        self._sfxLastOne(ac, ac.currentTime + 0.01);
       });
     },
 
