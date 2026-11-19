@@ -316,6 +316,9 @@ window.MuseumMap = {
     });
     this._eraPts = pts;
     this._eraKey = era.key || null;
+    // Where to look when the whole era won't fit at a readable zoom: its (first) capital.
+    var fs = (era.trail && era.trail.length && sites[era.trail[0]]) || sites.filter(function(s){ return s.role === 'capital'; })[0] || sites[0];
+    this._eraFocus = fs ? window.toMapCoord(fs.lat, fs.lng) : null;
     this._syncEraZoom();
     if (parts.length && !era.culture && !this._territoryCredit) {
       this._territoryCredit = '疆域示意：Cliopatria (Seshat) CC BY 4.0';
@@ -335,11 +338,20 @@ window.MuseumMap = {
     pad = pad || {};
     this.map.invalidateSize();
     var b = L.latLngBounds(this._eraPts);
-    this.map.flyToBounds(b, {
-      paddingTopLeft: [(pad.left || 0) + 24, (pad.top || 0) + 24],
-      paddingBottomRight: [(pad.right || 0) + 24, (pad.bottom || 0) + 24],
-      maxZoom: 7, duration: 0.9,
-    });
+    var tl = L.point((pad.left || 0) + 24, (pad.top || 0) + 24), br = L.point((pad.right || 0) + 24, (pad.bottom || 0) + 24);
+    // A vast empire under a half-open sheet would fit only at a world view (zoom ~2): never go
+    // below a readable zoom — frame the capital there instead, in the part the sheet leaves open.
+    var floor = window.innerWidth <= 640 ? 5 : 4;
+    var z = this.map.getBoundsZoom(b, false, tl.add(br));
+    if (z < floor && this._eraFocus) {
+      var size = this.map.getSize();
+      var cx = (tl.x + size.x - br.x) / 2, cy = (tl.y + size.y - br.y) / 2;           // centre of the open part
+      var off = L.point(size.x / 2 - cx, size.y / 2 - cy);
+      var at = this.map.unproject(this.map.project(this._eraFocus, floor).add(off), floor);
+      this.map.flyTo(at, floor, { duration: 0.9 });
+      return;
+    }
+    this.map.flyToBounds(b, { paddingTopLeft: tl, paddingBottomRight: br, maxZoom: 7, duration: 0.9 });
   },
   clearEra: function(){
     if (this.territoryLayer) this.territoryLayer.clearLayers();

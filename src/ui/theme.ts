@@ -772,7 +772,8 @@ body.toc-resizing, body.toc-resizing * { cursor: col-resize !important; user-sel
 .round-btn:hover { background: rgba(var(--surface2-rgb),0.92); border-color: rgba(var(--gilt-rgb),0.45); color: var(--gilt-hi); }
 .round-btn:disabled { opacity: 0.55; cursor: default; }
 .round-btn .ic.spinning { animation: shakeSpin 0.6s linear infinite; }
-.round-btn.gilt { background: rgba(var(--gilt-rgb),0.18); border-color: rgba(var(--gilt-rgb),0.5); color: var(--gilt-hi); }
+/* gilt tint over a solid surface, so drawer text scrolling under the bar never shows through */
+.round-btn.gilt { background: linear-gradient(rgba(var(--gilt-rgb),0.18), rgba(var(--gilt-rgb),0.18)), var(--surface); border-color: rgba(var(--gilt-rgb),0.5); color: var(--gilt-hi); }
 
 .drawer-loading { padding: 140px 24px; text-align: center; color: var(--text-3); font-size: 13px; letter-spacing: 0.12em; }
 .drawer-error { padding: 140px 24px; text-align: center; color: var(--text-3); font-size: 13px; }

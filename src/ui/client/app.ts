@@ -1869,7 +1869,15 @@ window.museumApp = function() {
         var dr = document.querySelector('.drawer');
         if (this.drawer && this.drawer.open && dr && cv) {
           var w = dr.offsetWidth, cw = cv.clientWidth;
-          if (w < cw * 0.7) pad.right = w; else pad.bottom = Math.round(dr.offsetHeight * 0.5);
+          if (w < cw * 0.7) pad.right = w;
+          else {
+            // Bottom sheet: where its top will rest (it may still be sliding in) — full, or the
+            // half-open peek (an era's sheet peeks at 42dvh, a museum's at 34dvh).
+            var vh = window.innerHeight, H = dr.offsetHeight;
+            var shift = this.drawer.mini ? H - 60 : this.drawer.expanded ? 0 : vh * (this.drawer.kind === 'dynasty' ? 0.42 : 0.34);
+            var top = vh - H + shift, cvb = cv.getBoundingClientRect().bottom;
+            pad.bottom = Math.max(0, Math.round(cvb - top));
+          }
         }
         if (window.innerWidth <= 640) pad.top = 60;
       } catch(_) {}
@@ -2100,12 +2108,18 @@ window.museumApp = function() {
       this.tocOpen = false;
       var d = this.currentDynasty();
       if (!d) return;
-      this.refreshMarkers();
-      var g = this.dynastyGeo[d.id];
-      var focus = g && g.sites && g.sites.length ? g.sites[(g.trail && g.trail.length) ? g.trail[0] : 0] : null;
-      if (focus) window.MuseumMap.flyTo(focus.lat, focus.lng, 5);
-      else if (d.center && d.center.lat && d.center.lng) window.MuseumMap.flyTo(d.center.lat, d.center.lng, 5);
+      // On the map with the era drawn, every tap frames the era the same way (fitEra, after
+      // the sheet opens) — not a world view on the first tap and the capital on the second.
+      var framed = this.view === 'map' && this.eraOverlay && !this.tripMode && !this.visits.footprintMode;
+      if (framed && window.MuseumMap) window.MuseumMap._eraFitted = null;
       this.openDynastyDrawer(d);
+      this.refreshMarkers();
+      if (!framed) {
+        var g = this.dynastyGeo[d.id];
+        var focus = g && g.sites && g.sites.length ? g.sites[(g.trail && g.trail.length) ? g.trail[0] : 0] : null;
+        if (focus) window.MuseumMap.flyTo(focus.lat, focus.lng, 5);
+        else if (d.center && d.center.lat && d.center.lng) window.MuseumMap.flyTo(d.center.lat, d.center.lng, 5);
+      }
       this.flashCaption();
     },
 
