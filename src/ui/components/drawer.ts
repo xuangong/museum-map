@@ -14,10 +14,11 @@ export function Drawer(): string {
     <div class="drawer-bar-inner">
       <button class="drawer-grabber" @click.stop="sheetTap('drawer')" :aria-label="drawer.mini ? '展开' : (drawer.expanded ? '收起' : '展开')"></button>
       <div>
-        <button class="round-btn gilt" x-show="drawer.fromShake" x-cloak @click.stop="shakeForMuseum()" :disabled="visits.shaking" title="再摇一个">
-          <span :class="visits.shaking ? 'spin-wrap spinning' : 'spin-wrap'">${icon("dice", 16)}</span><span>再摇</span>
+        <button class="round-btn gilt" x-show="drawer.fromShake || drawer.kind === 'dynasty'" x-cloak @click.stop="shakeForMuseum()" :disabled="visits.shaking"
+          :title="drawer.kind === 'dynasty' ? '在这个朝代里摇一座没去过的馆' : '再摇一个'">
+          <span :class="visits.shaking ? 'spin-wrap spinning' : 'spin-wrap'">${icon("dice", 16)}</span><span x-text="drawer.kind === 'dynasty' ? '摇一摇' : '再摇'"></span>
         </button>
-        <button class="round-btn icon-only" x-show="drawer.fromShake" x-cloak @click.stop="toggleShakeMute()" :title="visits.muted ? '开启音效' : '静音'">
+        <button class="round-btn icon-only" x-show="drawer.fromShake || drawer.kind === 'dynasty'" x-cloak @click.stop="toggleShakeMute()" :title="visits.muted ? '开启音效' : '静音'">
           <span x-show="visits.muted">${icon("soundOff", 16)}</span><span x-show="!visits.muted">${icon("soundOn", 16)}</span>
         </button>
       </div>

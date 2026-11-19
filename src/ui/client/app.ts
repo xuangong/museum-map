@@ -3152,8 +3152,9 @@ window.museumApp = function() {
           if (dx + dy + dz > THRESHOLD) {
             var now = Date.now();
             // Keep shaking through results: a drawer opened by a previous shake can be
-            // replaced; any drawer the user opened themselves is protected from stray shakes.
-            var drawerBusy = self.drawer.open && !self.drawer.fromShake;
+            // replaced, and so can an era's sheet (a shake there picks within that era);
+            // a museum the user opened themselves is protected from stray shakes.
+            var drawerBusy = self.drawer.open && !self.drawer.fromShake && self.drawer.kind !== 'dynasty';
             if (now - lastShake > 1500 && !self.visits.shaking && !drawerBusy) {
               lastShake = now;
               self.shakeForMuseum({ fast: true });
