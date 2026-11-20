@@ -359,6 +359,10 @@ window.museumApp = function() {
       this.$watch && this.$watch('drawer.open', syncInsets);
       this.$watch && this.$watch('drawer.expanded', syncInsets);
       this.$watch && this.$watch('drawer.mini', syncInsets);
+      // …and the map keeps what you're looking at in the part the sheet leaves open.
+      var syncMapSheet = function(){ self3.syncMapToSheet(); };
+      this.$watch && this.$watch('drawer.mini', syncMapSheet);
+      this.$watch && this.$watch('drawer.expanded', syncMapSheet);
       this.$watch && this.$watch('drawer.kind', syncInsets);
       window.addEventListener('resize', syncInsets);
       syncInsets();
@@ -1861,6 +1865,31 @@ window.museumApp = function() {
       __territoryP.then(go);
     },
 
+    /** Put a museum in the part of the map the sheet leaves open (zoom null keeps the zoom).
+        Off the map view it just moves the map there, ready for when the map is shown. */
+    mapShowMuseum(id, zoom, opts) {
+      var m = this.museumById(id);
+      if (!m || !m.lat || !m.lng || !window.MuseumMap) return;
+      if (this.view !== 'map') { if (zoom != null && window.MuseumMap.flyTo) window.MuseumMap.flyTo(m.lat, m.lng, zoom); return; }
+      var self = this;
+      if (opts && opts.fly) this._mapFlyAt = Date.now();
+      this.$nextTick(function(){ window.MuseumMap.showAt(m.lat, m.lng, zoom, self.eraPad(), opts); });
+    },
+
+    /** The sheet moved (half ↔ bar, or back from full): keep the map in step with it — the
+        museum re-centred in what is now open, an era re-framed. Full height hides the map. */
+    syncMapToSheet() {
+      if (this.view !== 'map' || !this.drawer.open || !window.MuseumMap) return;
+      if (this.drawer.expanded && !this.drawer.mini) return;
+      if (window.innerWidth > 920) return;   // desktop: the side drawer doesn't change size
+      if (this._mapFlyAt && Date.now() - this._mapFlyAt < 1200) return;   // a shake's flight already framed it
+      if (this.drawer.kind === 'museum' && this.selectedMuseumId) this.mapShowMuseum(this.selectedMuseumId, null, {});
+      else if (this.drawer.kind === 'dynasty' && this.currentDynastyId && this.eraOverlay) {
+        var self = this;
+        this.$nextTick(function(){ window.MuseumMap.fitEra(self.eraPad(), true); });
+      }
+    },
+
     /** Pixels the open drawer covers, so the era is framed in what stays visible. */
     eraPad() {
       var pad = { left: 0, right: 0, top: 0, bottom: 0 };
@@ -2275,6 +2304,7 @@ window.museumApp = function() {
       };
       this.resetDrawerScroll();
       this.setHashRoute({ kind: 'museum', id: id });
+      this.mapShowMuseum(id, null, { onlyIfHidden: true });
       try {
         var res = await fetch('/api/museums/' + encodeURIComponent(id));
         if (!res.ok) throw new Error('http ' + res.status);
@@ -2985,11 +3015,9 @@ window.museumApp = function() {
       setTimeout(function(){
         self.visits.shaking = false;
         if (!self.visits.muted) self.playRevealSound();
-        if (window.MuseumMap && window.MuseumMap.flyTo) {
-          window.MuseumMap.flyTo(pick.lat, pick.lng, 7);
-        }
         self.openMuseum(pick.id);
         self.drawer.fromShake = true;
+        self.mapShowMuseum(pick.id, 7, { fly: true });
         var drawerEl = document.querySelector('.drawer');
         if (drawerEl) drawerEl.scrollTop = 0;
         if (navigator.vibrate) { try { navigator.vibrate([30, 40, 30]); } catch(_) {} }

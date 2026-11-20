@@ -344,14 +344,35 @@ window.MuseumMap = {
     var floor = window.innerWidth <= 640 ? 5 : 4;
     var z = this.map.getBoundsZoom(b, false, tl.add(br));
     if (z < floor && this._eraFocus) {
-      var size = this.map.getSize();
-      var cx = (tl.x + size.x - br.x) / 2, cy = (tl.y + size.y - br.y) / 2;           // centre of the open part
-      var off = L.point(size.x / 2 - cx, size.y / 2 - cy);
-      var at = this.map.unproject(this.map.project(this._eraFocus, floor).add(off), floor);
-      this.map.flyTo(at, floor, { duration: 0.9 });
+      this.map.flyTo(this._openCenter(this._eraFocus, floor, pad), floor, { duration: 0.9 });
       return;
     }
     this.map.flyToBounds(b, { paddingTopLeft: tl, paddingBottomRight: br, maxZoom: 7, duration: 0.9 });
+  },
+  /** The map centre that, at zoom z, puts ll in the middle of the part pad leaves open
+      (pad = { left, right, top, bottom } px covered by sheets / bars). */
+  _openCenter: function(ll, z, pad) {
+    pad = pad || {};
+    var size = this.map.getSize();
+    var cx = ((pad.left || 0) + 24 + size.x - (pad.right || 0) - 24) / 2;
+    var cy = ((pad.top || 0) + 24 + size.y - (pad.bottom || 0) - 24) / 2;
+    return this.map.unproject(this.map.project(ll, z).add(L.point(size.x / 2 - cx, size.y / 2 - cy)), z);
+  },
+  /** Bring a place into the open part of the map. zoom null keeps the zoom; opts.fly animates
+      a zoom change; opts.onlyIfHidden leaves the map alone when the place is already in view. */
+  showAt: function(lat, lng, zoom, pad, opts) {
+    if (!this.map) return;
+    opts = opts || {}; pad = pad || {};
+    this.map.invalidateSize();
+    var ll = window.toMapCoord(lat, lng), z = zoom == null ? this.map.getZoom() : zoom;
+    if (opts.onlyIfHidden && z === this.map.getZoom()) {
+      var p = this.map.latLngToContainerPoint(ll), size = this.map.getSize();
+      if (p.x >= (pad.left || 0) + 16 && p.x <= size.x - (pad.right || 0) - 16 &&
+          p.y >= (pad.top || 0) + 16 && p.y <= size.y - (pad.bottom || 0) - 16) return;
+    }
+    var at = this._openCenter(ll, z, pad);
+    if (z !== this.map.getZoom() || opts.fly) this.map.flyTo(at, z, { duration: 0.8 });
+    else this.map.panTo(at, { animate: true, duration: 0.45 });
   },
   clearEra: function(){
     if (this.territoryLayer) this.territoryLayer.clearLayers();
