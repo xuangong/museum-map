@@ -591,6 +591,45 @@ window.museumApp = function() {
       }, 300);
     },
 
+    // ── The trip sheet on phones follows the finger by its handle: open ↔ bar (both are just
+    // positions of the same panel, so it tracks the finger directly and settles on release).
+    tripDragStart(e) {
+      this._tg = null;
+      if (!this.tripMode || window.innerWidth > 920) return;
+      var t = e.touches && e.touches[0], el = document.querySelector('.toc-wrap');
+      if (!t || e.touches.length > 1 || !el) return;
+      var barOff = el.offsetHeight - 68 - (parseFloat(getComputedStyle(el.querySelector('.toc') || el).paddingBottom) || 0);
+      this._tg = { el: el, y0: t.clientY, x0: t.clientX, lastY: t.clientY, lastT: Date.now(), v: 0, on: false,
+        span: Math.max(1, barOff), base: this.tripSheetMini ? Math.max(1, barOff) : 0, off: 0 };
+    },
+    tripDragMove(e) {
+      var g = this._tg; if (!g) return;
+      var t = e.touches && e.touches[0]; if (!t) return;
+      var dy = t.clientY - g.y0, dx = t.clientX - g.x0;
+      if (!g.on) {
+        if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy)) { this._tg = null; return; }
+        if (Math.abs(dy) < 6) return;
+        g.on = true; g.el.style.transition = 'none';
+      }
+      var now = Date.now(), step = t.clientY - g.lastY;
+      if (now > g.lastT) g.v = 0.7 * (step / (now - g.lastT)) + 0.3 * g.v;
+      g.lastY = t.clientY; g.lastT = now;
+      g.off = Math.max(0, Math.min(g.span + 30, g.base + dy));
+      g.el.style.transform = 'translateY(' + g.off + 'px)';
+      if (e.cancelable) e.preventDefault();
+    },
+    tripDragEnd() {
+      var g = this._tg; this._tg = null;
+      if (!g || !g.on) return;
+      this._swAt = Date.now();
+      var el = g.el;
+      var open = g.v > 0.45 ? false : g.v < -0.45 ? true : (g.off + g.v * 160) < g.span / 2;
+      this.tripSheetMini = !open;
+      // Hand the position back to the stylesheet from where the finger left it, animated.
+      el.style.transition = '';
+      this.$nextTick(function(){ el.style.transform = ''; });
+    },
+
     sheetTap(kind) {
       if (this._swAt && Date.now() - this._swAt < 450) return;   // the click after a swipe
       if (kind === 'drawer') {

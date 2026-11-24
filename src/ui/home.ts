@@ -93,7 +93,7 @@ export function HomePage(data: HomeData): string {
     <div class="toc-overlay" :class="tocOpen ? 'open' : ''" @click="tocOpen = false" x-cloak></div>
     <div class="toc-wrap" :class="(tocOpen ? 'open' : '') + (tripMode && tripSheetMini ? ' mini' : '')">
       <button type="button" class="trip-grabber" x-show="tripMode" x-cloak @click="sheetTap('trip')"
-        @touchstart.passive="sheetTouchStart($event)" @touchend="sheetTouchEnd($event, 'trip')" :aria-label="tripSheetMini ? '展开行程' : '收起行程'">
+        @touchstart.passive="tripDragStart($event)" @touchmove="tripDragMove($event)" @touchend="tripDragEnd()" @touchcancel="tripDragEnd()" :aria-label="tripSheetMini ? '展开行程' : '收起行程'">
         <span class="sheet-mini-title" x-show="tripSheetMini" x-text="tripTitle()"></span>
       </button>
       ${Sidebar({ googleEnabled: !!data.googleEnabled })}
