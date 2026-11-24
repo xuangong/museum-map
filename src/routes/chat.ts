@@ -1,7 +1,7 @@
 import { Elysia } from "elysia"
 import type { Env } from "~/index"
 import { ChatGuardError, runRateLimits, sanitizeChatRequest } from "~/services/chat"
-import { runToolLoop, runToolLoopStream, type ToolCall } from "~/services/agent-loop"
+import { runToolLoop, runToolLoopStream, sourcesMarkdown, type ToolCall } from "~/services/agent-loop"
 import { runLlmLoop, runLlmLoopStream } from "~/services/llm"
 import { nativeProtocol, resolveAi } from "~/services/ai-models"
 import { CHAT_TOOLS, CHAT_AGENT_SYSTEM, executeChatTool } from "~/services/chat-tools"
@@ -86,6 +86,7 @@ export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
     maxTokens: LLM_MAX_TOKENS,
     system,
     tools: useTools ? CHAT_TOOLS : [],
+    webSearch: useTools,
     messages,
     executeTool: (call: ToolCall) => executeChatTool(env.DB, call),
     maxIters: 6,
@@ -114,12 +115,16 @@ export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
           onDelta: (t) => {
             text(t)
           },
+          onSearch: async () => {
+            await send({ type: "tool_progress", label: "正在联网搜索…" })
+          },
           onTool: async (call) => {
             await send({ type: "tool_progress", label: await toolLabel(env.DB, call) })
           },
         })
         if (result.stopReason === "gateway_error" && !result.text) await send({ type: "error", error: { message: "upstream_error" } })
         else if (!result.text) await text("（无回复）")
+        else if (result.sources?.length) await text(sourcesMarkdown(result.sources))
         await send({ type: "message_stop" })
       } catch {
         await send({ type: "error", error: { message: "internal_error" } })
@@ -136,8 +141,9 @@ export const chatRoute = new Elysia().post("/api/chat", async (ctx) => {
       return { error: "upstream_error", detail: result.lastError }
     }
     // Anthropic-style envelope so the existing client renders the text.
+    const src = result.text && result.sources ? sourcesMarkdown(result.sources) : ""
     return {
-      content: [{ type: "text", text: result.text || "（无回复）" }],
+      content: [{ type: "text", text: (result.text || "（无回复）") + src }],
       stop_reason: result.stopReason,
       iterations: result.iterations,
     }

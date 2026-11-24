@@ -10,6 +10,40 @@ export interface ToolResult {
   is_error?: boolean
 }
 
+/** Anthropic native server tool: the gateway runs the search itself. */
+export const WEB_SEARCH_TOOL = { type: "web_search_20250305", name: "web_search", max_uses: 3 } as const
+
+export interface WebSource {
+  title: string
+  url: string
+}
+
+/** Pull http(s) sources out of web_search_tool_result blocks and text citations. Never throws. */
+export function collectSources(content: any[], into: WebSource[]): void {
+  const add = (url: any, title: any) => {
+    if (typeof url !== "string" || !/^https?:\/\//i.test(url)) return
+    if (into.some((x) => x.url === url)) return
+    into.push({ url, title: typeof title === "string" && title ? title : url })
+  }
+  for (const b of Array.isArray(content) ? content : []) {
+    if (b?.type === "web_search_tool_result" && Array.isArray(b.content)) {
+      for (const r of b.content) if (r?.type === "web_search_result") add(r.url, r.title)
+    } else if (b?.type === "text" && Array.isArray(b.citations)) {
+      for (const c of b.citations) if (c?.type === "web_search_result_location") add(c.url, c.title)
+    }
+  }
+}
+
+/** Compact markdown list of sources (empty when none). Titles are stripped of markup chars. */
+export function sourcesMarkdown(sources: WebSource[], max = 5): string {
+  const items = sources.slice(0, max).map((s) => {
+    const title = s.title.replace(/[\[\]()<>`*_\n\r]/g, " ").replace(/\s+/g, " ").trim().slice(0, 60) || "来源"
+    const url = s.url.replace(/[()\s<>"`]/g, (c) => "%" + c.charCodeAt(0).toString(16).toUpperCase().padStart(2, "0"))
+    return `- [${title}](${url})`
+  })
+  return items.length ? "\n\n来源：\n" + items.join("\n") : ""
+}
+
 export interface AgentLoopOpts {
   gatewayUrl: string
   gatewayKey: string
@@ -19,6 +53,8 @@ export interface AgentLoopOpts {
   maxTokens: number
   system: string
   tools: readonly any[]
+  /** Also offer the gateway's native web search (server tool). */
+  webSearch?: boolean
   messages: any[]
   /** Execute one tool call. Return text content to feed back. May throw to abort. */
   executeTool: (call: ToolCall) => Promise<ToolResult>
@@ -26,6 +62,8 @@ export interface AgentLoopOpts {
   onText?: (text: string) => void | Promise<void>
   /** Called before executing a tool call. */
   onTool?: (call: ToolCall) => void | Promise<void>
+  /** Called when the gateway starts a server-side web search. */
+  onSearch?: (query: string) => void | Promise<void>
   /** Called when the loop should stop early (e.g. final tool fired). */
   shouldStop?: () => boolean
   maxIters?: number
@@ -39,6 +77,8 @@ export interface AgentLoopResult {
   stopReason: "end_turn" | "shouldStop" | "max_iters" | "wall" | "gateway_error" | "no_tool"
   lastError?: string
   text: string
+  /** Web sources the gateway's search returned (deduplicated). */
+  sources?: WebSource[]
 }
 
 /** An Anthropic Messages request. Empty tools / system are left out; an effort turns on
@@ -46,7 +86,8 @@ export interface AgentLoopResult {
 export function messagesBody(opts: AgentLoopOpts, stream: boolean): any {
   const body: any = { model: opts.model, max_tokens: opts.maxTokens, stream, messages: opts.messages }
   if (opts.system) body.system = opts.system
-  if (opts.tools && opts.tools.length) body.tools = opts.tools
+  const tools = [...(opts.tools || []), ...(opts.webSearch ? [WEB_SEARCH_TOOL] : [])]
+  if (tools.length) body.tools = tools
   if (opts.effort) {
     body.thinking = { type: "adaptive" }
     body.output_config = { effort: opts.effort }
@@ -55,6 +96,12 @@ export function messagesBody(opts: AgentLoopOpts, stream: boolean): any {
 }
 
 export async function runToolLoop(opts: AgentLoopOpts): Promise<AgentLoopResult> {
+  const sources: WebSource[] = []
+  const r = await runToolLoopInner(opts, sources)
+  return sources.length ? { ...r, sources } : r
+}
+
+async function runToolLoopInner(opts: AgentLoopOpts, sources: WebSource[]): Promise<AgentLoopResult> {
   const fetcher = opts.fetcher ?? fetch
   const now = opts.now ?? Date.now
   const maxIters = opts.maxIters ?? 8
@@ -95,6 +142,10 @@ export async function runToolLoop(opts: AgentLoopOpts): Promise<AgentLoopResult>
     const reply: any = await upstream.json()
     const content: any[] = Array.isArray(reply?.content) ? reply.content : []
     opts.messages.push({ role: "assistant", content })
+    collectSources(content, sources)
+    for (const b of content) {
+      if (b?.type === "server_tool_use" && opts.onSearch) await opts.onSearch(String(b.input?.query || ""))
+    }
 
     const textBlocks = content.filter((b) => b?.type === "text").map((b) => b.text).filter(Boolean)
     if (textBlocks.length) {
@@ -105,6 +156,8 @@ export async function runToolLoop(opts: AgentLoopOpts): Promise<AgentLoopResult>
 
     const toolUses = content.filter((b) => b?.type === "tool_use") as ToolCall[]
     if (!toolUses.length) {
+      // pause_turn: the gateway's search turn is unfinished; send the history back as is.
+      if (reply.stop_reason === "pause_turn") continue
       return { iterations: iter + 1, stopReason: reply.stop_reason === "end_turn" ? "end_turn" : "no_tool", text: collectedText }
     }
 
@@ -173,6 +226,12 @@ export async function* sseEvents(body: ReadableStream<Uint8Array>): AsyncGenerat
  * work as before (their input JSON is assembled from the stream).
  */
 export async function runToolLoopStream(opts: StreamLoopOpts): Promise<AgentLoopResult> {
+  const sources: WebSource[] = []
+  const r = await runToolLoopStreamInner(opts, sources)
+  return sources.length ? { ...r, sources } : r
+}
+
+async function runToolLoopStreamInner(opts: StreamLoopOpts, sources: WebSource[]): Promise<AgentLoopResult> {
   const fetcher = opts.fetcher ?? fetch
   const now = opts.now ?? Date.now
   const maxIters = opts.maxIters ?? 8
@@ -243,8 +302,8 @@ export async function runToolLoopStream(opts: StreamLoopOpts): Promise<AgentLoop
           if (ev.type === "content_block_start") {
             const cb = ev.content_block || {}
             blocks[ev.index] =
-              cb.type === "tool_use"
-                ? { type: "tool_use", id: cb.id, name: cb.name, input: {}, json: "" }
+              cb.type === "tool_use" || cb.type === "server_tool_use"
+                ? { type: cb.type, id: cb.id, name: cb.name, input: {}, json: "" }
                 : cb.type === "thinking"
                   ? { type: "thinking", thinking: cb.thinking || "", signature: cb.signature || "" }
                   : cb.type === "text"
@@ -260,6 +319,8 @@ export async function runToolLoopStream(opts: StreamLoopOpts): Promise<AgentLoop
               await emit(d.text)
             } else if (d.type === "input_json_delta" && typeof d.partial_json === "string") {
               b.json += d.partial_json
+            } else if (d.type === "citations_delta" && d.citation) {
+              ;(b.citations ??= []).push(d.citation)
             } else if (d.type === "thinking_delta" && typeof d.thinking === "string") {
               b.thinking += d.thinking
             } else if (d.type === "signature_delta" && typeof d.signature === "string") {
@@ -267,12 +328,13 @@ export async function runToolLoopStream(opts: StreamLoopOpts): Promise<AgentLoop
             }
           } else if (ev.type === "content_block_stop") {
             const b = blocks[ev.index]
-            if (b && b.type === "tool_use") {
+            if (b && (b.type === "tool_use" || b.type === "server_tool_use")) {
               try {
                 b.input = b.json ? JSON.parse(b.json) : {}
               } catch {
                 b.input = {}
               }
+              if (b.type === "server_tool_use" && opts.onSearch) await opts.onSearch(String(b.input?.query || ""))
             }
           } else if (ev.type === "message_delta") {
             stopReason = ev.delta?.stop_reason || stopReason
@@ -296,17 +358,19 @@ export async function runToolLoopStream(opts: StreamLoopOpts): Promise<AgentLoop
     const content: any[] = blocks
       .filter(Boolean)
       .map((b) =>
-        b.type === "tool_use"
-          ? { type: "tool_use", id: b.id, name: b.name, input: b.input }
+        b.type === "tool_use" || b.type === "server_tool_use"
+          ? { type: b.type, id: b.id, name: b.name, input: b.input }
           : b.type === "text"
-            ? { type: "text", text: b.text }
+            ? { type: "text", text: b.text, ...(b.citations?.length ? { citations: b.citations } : {}) }
             : b,
       )
       .filter((b) => b.type !== "text" || b.text)
     opts.messages.push({ role: "assistant", content })
+    collectSources(content, sources)
 
     const toolUses = content.filter((b) => b.type === "tool_use") as ToolCall[]
     if (!toolUses.length) {
+      if (stopReason === "pause_turn") continue
       return { iterations: iter + 1, stopReason: stopReason === "end_turn" ? "end_turn" : "no_tool", text: collectedText }
     }
 

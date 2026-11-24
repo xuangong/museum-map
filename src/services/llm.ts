@@ -1,4 +1,4 @@
-import { sseEvents, type ToolCall, type ToolResult } from "~/services/agent-loop"
+import { sseEvents, type ToolCall, type ToolResult, type WebSource } from "~/services/agent-loop"
 
 /** The gateway in OpenAI chat-completions format — what the AI guide runs on. */
 
@@ -13,6 +13,8 @@ export interface LlmLoopOpts {
   system: string
   /** Anthropic-style tool schemas ({ name, description, input_schema }); converted here. */
   tools: readonly any[]
+  /** Ask the gateway for its own web search (web_search_options). */
+  webSearch?: boolean
   /** Plain { role, content } turns; the loop appends to this array. */
   messages: any[]
   executeTool: (call: ToolCall) => Promise<ToolResult>
@@ -30,6 +32,8 @@ export interface LlmLoopResult {
   stopReason: "end_turn" | "max_iters" | "wall" | "gateway_error" | "no_tool"
   lastError?: string
   text: string
+  /** url_citation sources the gateway's web search attached. */
+  sources?: WebSource[]
 }
 
 export function toOpenAiTools(tools: readonly any[]): any[] {
@@ -43,6 +47,7 @@ interface Turn {
   text: string
   calls: { id: string; name: string; args: string }[]
   finish: string
+  annotations?: any[]
 }
 
 class TurnError extends Error {
@@ -70,6 +75,8 @@ async function runLoop(opts: LlmLoopOpts, stream: boolean): Promise<LlmLoopResul
   const tools = toOpenAiTools(opts.tools)
   const history: any[] = [{ role: "system", content: opts.system }, ...opts.messages]
   let collected = ""
+  const sources: WebSource[] = []
+  const done = <T extends LlmLoopResult>(r: T): T => (sources.length ? { ...r, sources } : r)
 
   const attempt = async (): Promise<Turn> => {
     // A text turn after an earlier one starts on a new paragraph.
@@ -91,6 +98,7 @@ async function runLoop(opts: LlmLoopOpts, stream: boolean): Promise<LlmLoopResul
 
     const body: any = { model: opts.model, messages: history, max_completion_tokens: opts.maxTokens, stream }
     if (tools.length) body.tools = tools
+    if (opts.webSearch) body.web_search_options = {}
     if (opts.effort) body.reasoning_effort = opts.effort
     let res: Response
     try {
@@ -132,6 +140,7 @@ async function runLoop(opts: LlmLoopOpts, stream: boolean): Promise<LlmLoopResul
         turn.calls.push({ id: c.id, name: c.function?.name || "", args: c.function?.arguments || "" })
       }
       turn.finish = ch.finish_reason || ""
+      if (Array.isArray(msg.annotations)) turn.annotations = msg.annotations
       return turn
     }
 
@@ -152,6 +161,7 @@ async function runLoop(opts: LlmLoopOpts, stream: boolean): Promise<LlmLoopResul
           if (tc.function?.name) cur.name += tc.function.name
           if (typeof tc.function?.arguments === "string") cur.args += tc.function.arguments
         }
+        if (Array.isArray(d.annotations)) (turn.annotations ??= []).push(...d.annotations)
         if (ch.finish_reason) turn.finish = ch.finish_reason
       }
     } catch (e: any) {
@@ -178,6 +188,12 @@ async function runLoop(opts: LlmLoopOpts, stream: boolean): Promise<LlmLoopResul
       return { iterations: iter, stopReason: "gateway_error", lastError: e?.message || "gateway error", text: collected }
     }
 
+    for (const a of turn.annotations ?? []) {
+      const c = a?.url_citation
+      if (a?.type === "url_citation" && typeof c?.url === "string" && /^https?:\/\//i.test(c.url) && !sources.some((x) => x.url === c.url)) {
+        sources.push({ url: c.url, title: typeof c.title === "string" && c.title ? c.title : c.url })
+      }
+    }
     const calls = turn.calls.filter((c) => c.name)
     const assistant: any = { role: "assistant", content: turn.text || null }
     if (calls.length) {
@@ -190,7 +206,7 @@ async function runLoop(opts: LlmLoopOpts, stream: boolean): Promise<LlmLoopResul
     opts.messages.push(assistant)
 
     if (!calls.length) {
-      return { iterations: iter + 1, stopReason: turn.finish === "stop" ? "end_turn" : "no_tool", text: collected }
+      return done({ iterations: iter + 1, stopReason: turn.finish === "stop" ? "end_turn" : "no_tool", text: collected })
     }
     for (const c of calls) {
       const call: ToolCall = { id: c.id, name: c.name, input: parseArgs(c.args) }
@@ -201,7 +217,7 @@ async function runLoop(opts: LlmLoopOpts, stream: boolean): Promise<LlmLoopResul
       opts.messages.push(msg)
     }
   }
-  return { iterations: maxIters, stopReason: "max_iters", text: collected }
+  return done({ iterations: maxIters, stopReason: "max_iters", text: collected })
 }
 
 export function runLlmLoop(opts: LlmLoopOpts): Promise<LlmLoopResult> {
