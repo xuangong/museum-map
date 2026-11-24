@@ -534,6 +534,63 @@ window.museumApp = function() {
         })(0);
       }
     },
+    justDragged() { return !!(this._swAt && Date.now() - this._swAt < 450); },
+
+    // ── The AI guide's sheet on phones follows the finger by its handle / header: open ↔ bar.
+    // From the bar the full panel is laid out at once (shifted down so nothing jumps) and
+    // rises with the finger; on release it settles on the nearer stop, a flick going further.
+    chatDragStart(e) {
+      this._cg = null;
+      if (this.chat.fullscreen || !this.chat.open || window.innerWidth > 920) return;
+      var t = e.touches && e.touches[0], el = document.querySelector('.chat-panel');
+      if (!t || e.touches.length > 1 || !el) return;
+      this._cg = { el: el, y0: t.clientY, x0: t.clientX, lastY: t.clientY, lastT: Date.now(), v: 0, fromBar: !!this.chat.mini, on: false, off: 0 };
+    },
+    chatDragMove(e) {
+      var g = this._cg; if (!g) return;
+      var t = e.touches && e.touches[0]; if (!t) return;
+      var dy = t.clientY - g.y0, dx = t.clientX - g.x0, el = g.el;
+      if (!g.on) {
+        if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy)) { this._cg = null; return; }
+        if (Math.abs(dy) < 6) return;
+        g.on = true;
+        g.barH = 84 + (parseFloat(getComputedStyle(el).paddingBottom) || 0);
+        el.style.transition = 'none';
+        if (g.fromBar) {
+          // Lay the full panel out now, sitting exactly where the bar was.
+          el.classList.remove('mini');
+          g.fullH = el.offsetHeight;
+          el.style.transform = 'translateY(' + (g.fullH - g.barH) + 'px)';
+          this.chat.mini = false;
+        } else g.fullH = el.offsetHeight;
+        g.span = Math.max(1, g.fullH - g.barH);
+      }
+      var now = Date.now(), step = t.clientY - g.lastY;
+      if (now > g.lastT) g.v = 0.7 * (step / (now - g.lastT)) + 0.3 * g.v;
+      g.lastY = t.clientY; g.lastT = now;
+      var base = g.fromBar ? g.span : 0;
+      g.off = Math.max(0, Math.min(g.span + 30, base + dy));
+      el.style.transform = 'translateY(' + g.off + 'px)';
+      if (e.cancelable) e.preventDefault();
+    },
+    chatDragEnd() {
+      var g = this._cg; this._cg = null;
+      if (!g || !g.on) return;
+      this._swAt = Date.now();
+      var el = g.el, self = this;
+      // A flick goes where it was thrown; a slow drag settles on the nearer stop.
+      var open = g.v > 0.45 ? false : g.v < -0.45 ? true : (g.off + g.v * 160) < g.span / 2;
+      el.style.transition = 'transform 0.3s var(--ease)';
+      el.style.transform = 'translateY(' + (open ? 0 : g.span) + 'px)';
+      setTimeout(function(){
+        el.style.transition = 'none';
+        self.chat.mini = !open;
+        if (!open) el.classList.add('mini');          // same frame as dropping the shift: no jump
+        el.style.transform = '';
+        requestAnimationFrame(function(){ el.style.transition = ''; });
+      }, 300);
+    },
+
     sheetTap(kind) {
       if (this._swAt && Date.now() - this._swAt < 450) return;   // the click after a swipe
       if (kind === 'drawer') {

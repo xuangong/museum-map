@@ -10,9 +10,9 @@ export const QUICK_QUESTIONS = [
 export function ChatPanel(): string {
   return `<div class="chat-overlay" :class="chat.open && !chat.mini ? 'open' : ''" @click="chat.open = false"></div>
 <div class="chat-panel" :class="(chat.open ? 'open ' : '') + (chat.fullscreen ? 'fullscreen' : '') + (chat.mini && !chat.fullscreen ? ' mini' : '')" role="dialog" aria-label="AI 讲解员">
-  <button type="button" class="chat-grabber" @click="sheetTap('chat')" @touchstart.passive="sheetTouchStart($event)" @touchend="sheetTouchEnd($event, 'chat')" :aria-label="chat.mini ? '展开讲解员' : '收起讲解员'"></button>
-  <header class="chat-head">
-    <div class="chat-id" @click="chat.mini && (chat.mini = false)">
+  <button type="button" class="chat-grabber" @click="sheetTap('chat')" @touchstart.passive="chatDragStart($event)" @touchmove="chatDragMove($event)" @touchend="chatDragEnd()" @touchcancel="chatDragEnd()" :aria-label="chat.mini ? '展开讲解员' : '收起讲解员'"></button>
+  <header class="chat-head" @touchstart.passive="chatDragStart($event)" @touchmove="chatDragMove($event)" @touchend="chatDragEnd()" @touchcancel="chatDragEnd()">
+    <div class="chat-id" @click="chat.mini && !justDragged() && (chat.mini = false)">
       <span class="chat-avatar">${icon("sparkle", 20)}</span>
       <div>
         <div class="chat-title">AI 讲解员</div>
