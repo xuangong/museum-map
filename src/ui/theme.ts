@@ -1870,6 +1870,10 @@ path.route-corridor { stroke: var(--gilt); }
   .stage.is-trip .toc-wrap.mini .toc { overflow: hidden; }
 }
 .trip-grabber { display: none; }
+/* Sheet handles take every touch themselves: no double-tap-zoom guess or native pan on them,
+   so a drag right after a tap isn't taken over (and cancelled) by iOS. */
+.drawer-grabber, .drawer .sheet-mini, .chat-grabber, .chat-panel .chat-id, .trip-grabber { touch-action: none !important; }
+
 .trip-chips .chip { font: inherit; font-size: 13px; padding: 5px 11px; }
 .tb-btn.active { color: var(--gilt-hi); border-color: rgba(var(--gilt-rgb),0.6); background: rgba(var(--gilt-rgb),0.12); }
 .tb-count { font-family: var(--mono); font-weight: 500; color: var(--gilt-hi); }

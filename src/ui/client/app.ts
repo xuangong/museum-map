@@ -465,20 +465,20 @@ window.museumApp = function() {
     },
     drawerTouchStart(e) {
       this._dg = null;
-      var el = e.currentTarget, t = e.touches && e.touches[0];
-      if (!t || e.touches.length > 1 || !this.drawer.open) return;
+      var el = e.currentTarget, t = e.changedTouches && e.changedTouches[0];
+      if (!t || !this.drawer.open) return;
       if (!(window.matchMedia && matchMedia('(max-width: 920px)').matches)) return;
       var snaps = this.drawerSnaps(el), off = this.drawerOffset(el);
       this._dg = {
         el: el, snaps: snaps, y0: t.clientY, x0: t.clientX, lastY: t.clientY, lastT: Date.now(), v: 0,
-        base: off, off: off, scroll0: el.scrollTop, axis: null,
+        id: t.identifier, base: off, off: off, scroll0: el.scrollTop, axis: null,
         // Started below full height: this stroke is ours from the first move (sheet first, then content).
         owned: off > 1, moved: false, manual: false, anchor: null,
       };
     },
     drawerTouchMove(e) {
       var g = this._dg; if (!g) return;
-      var t = e.touches && e.touches[0]; if (!t) return;
+      var t = this._ownTouch(e, g.id); if (!t) return;
       var el = g.el, now = Date.now(), y = t.clientY;
       if (!g.axis) {
         var ax = Math.abs(t.clientX - g.x0), ay = Math.abs(y - g.y0);
@@ -534,6 +534,13 @@ window.museumApp = function() {
         })(0);
       }
     },
+    /** The touch a drag started with (iOS can leave a stale extra touch in e.touches). */
+    _ownTouch(e, id) {
+      var l = e.touches || [];
+      for (var i = 0; i < l.length; i++) if (l[i].identifier === id) return l[i];
+      return l[0] || null;
+    },
+
     justDragged() { return !!(this._swAt && Date.now() - this._swAt < 450); },
 
     // ── The AI guide's sheet on phones follows the finger by its handle / header: open ↔ bar.
@@ -542,13 +549,13 @@ window.museumApp = function() {
     chatDragStart(e) {
       this._cg = null;
       if (this.chat.fullscreen || !this.chat.open || window.innerWidth > 920) return;
-      var t = e.touches && e.touches[0], el = document.querySelector('.chat-panel');
-      if (!t || e.touches.length > 1 || !el) return;
-      this._cg = { el: el, y0: t.clientY, x0: t.clientX, lastY: t.clientY, lastT: Date.now(), v: 0, fromBar: !!this.chat.mini, on: false, off: 0 };
+      var t = e.changedTouches && e.changedTouches[0], el = document.querySelector('.chat-panel');
+      if (!t || !el) return;
+      this._cg = { id: t.identifier, el: el, y0: t.clientY, x0: t.clientX, lastY: t.clientY, lastT: Date.now(), v: 0, fromBar: !!this.chat.mini, on: false, off: 0 };
     },
     chatDragMove(e) {
       var g = this._cg; if (!g) return;
-      var t = e.touches && e.touches[0]; if (!t) return;
+      var t = this._ownTouch(e, g.id); if (!t) return;
       var dy = t.clientY - g.y0, dx = t.clientX - g.x0, el = g.el;
       if (!g.on) {
         if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy)) { this._cg = null; return; }
@@ -596,15 +603,15 @@ window.museumApp = function() {
     tripDragStart(e) {
       this._tg = null;
       if (!this.tripMode || window.innerWidth > 920) return;
-      var t = e.touches && e.touches[0], el = document.querySelector('.toc-wrap');
-      if (!t || e.touches.length > 1 || !el) return;
+      var t = e.changedTouches && e.changedTouches[0], el = document.querySelector('.toc-wrap');
+      if (!t || !el) return;
       var barOff = el.offsetHeight - 68 - (parseFloat(getComputedStyle(el.querySelector('.toc') || el).paddingBottom) || 0);
-      this._tg = { el: el, y0: t.clientY, x0: t.clientX, lastY: t.clientY, lastT: Date.now(), v: 0, on: false,
+      this._tg = { id: t.identifier, el: el, y0: t.clientY, x0: t.clientX, lastY: t.clientY, lastT: Date.now(), v: 0, on: false,
         span: Math.max(1, barOff), base: this.tripSheetMini ? Math.max(1, barOff) : 0, off: 0 };
     },
     tripDragMove(e) {
       var g = this._tg; if (!g) return;
-      var t = e.touches && e.touches[0]; if (!t) return;
+      var t = this._ownTouch(e, g.id); if (!t) return;
       var dy = t.clientY - g.y0, dx = t.clientX - g.x0;
       if (!g.on) {
         if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy)) { this._tg = null; return; }
@@ -631,6 +638,7 @@ window.museumApp = function() {
     },
 
     sheetTap(kind) {
+      try { var ae = document.activeElement; if (ae && ae.blur && /^(BUTTON)$/.test(ae.tagName)) ae.blur(); } catch(_) {}
       if (this._swAt && Date.now() - this._swAt < 450) return;   // the click after a swipe
       if (kind === 'drawer') {
         if (this.drawer.mini) this.sheetStep('drawer', -1);
