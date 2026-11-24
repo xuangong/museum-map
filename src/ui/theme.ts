@@ -1007,6 +1007,12 @@ body.toc-resizing, body.toc-resizing * { cursor: col-resize !important; user-sel
   background: rgba(var(--gilt-rgb),0.09); border: 1px solid rgba(var(--gilt-rgb),0.22);
 }
 .tie p { margin: 0; font-size: 14px; color: var(--text-2); line-height: 1.8; }
+.tie-text { font-size: 14px; color: var(--text-2); line-height: 1.8; min-width: 0; }
+.tie-text p { margin: 0; }
+.tie-text p + p, .tie-text p + ul, .tie-text ul + p { margin-top: 6px; }
+.tie-text ul { margin: 4px 0 0; padding-left: 1.2em; }
+.tie-text li { margin: 2px 0; }
+.tie-text strong { color: var(--text); font-weight: 700; }
 
 .sources { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .source-link {

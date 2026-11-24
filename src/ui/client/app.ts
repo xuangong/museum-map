@@ -3415,7 +3415,7 @@ window.museumApp = function() {
         var visit = self.visits.byId[m.id] || {};
         var when = visit.visitedAt ? new Date(visit.visitedAt).toLocaleDateString('zh-CN') : '';
         var connections = (m.dynastyConnections || []).slice(0, 3).map(function(c){
-          return '<span style="color:#B73E18;font-weight:600;margin-right:6px;">' + esc(c.dynasty) + '</span>';
+          return '<span style="color:#B73E18;font-weight:600;margin-right:6px;">' + esc(String(c.dynasty || '').replace(/\\*\\*/g, '')) + '</span>';
         }).join('');
         var treasures = (m.treasures || []).slice(0, 2);
         return '<div style="display:flex;gap:18px;padding:18px 0;border-bottom:0.5px solid #d8cfbb;">'
@@ -3854,12 +3854,17 @@ window.museumApp = function() {
       // ── 朝代: the strata this museum reaches ──
       var linked = this.linkedDynasties(m.id);
       var ties = (m.dynastyConnections || []);
+      // AI-written descriptions may carry markdown ("… - **政治**: …" on one line): restore the list breaks, then render with the chat's escaping renderer.
+      function tieMarkdown(text){
+        var t = String(text || '').replace(/\\s+-\\s+(?=\\*\\*)/g, '\\n- ');
+        try { return window.MuseumChat.renderMarkdown(t); } catch (e) { return '<p>' + esc(t) + '</p>'; }
+      }
       if (linked.length || ties.length) {
         var chips = linked.length ? '<div class="layer-chips">' + linked.map(function(d){
           return '<button class="layer-chip" data-dyn-go="' + esc(d.id) + '">' + ICONS.layers + esc(self.dynastyShortName(d).replace(/[：:].*$/, '')) + '</button>';
         }).join('') + '</div>' : '';
         var tieHtml = ties.length ? '<div class="ties">' + ties.map(function(c){
-          return '<div class="tie"><span class="tie-dyn">' + esc(c.dynasty) + '</span><p>' + esc(c.description || '') + '</p></div>';
+          return '<div class="tie"><span class="tie-dyn">' + esc(String(c.dynasty || '').replace(/\\*\\*/g, '')) + '</span><div class="tie-text">' + tieMarkdown(c.description) + '</div></div>';
         }).join('') + '</div>' : '';
         sections.push({ key: 'ties', title: '它连着的朝代', en: 'STRATA', html: chips + tieHtml });
       }
