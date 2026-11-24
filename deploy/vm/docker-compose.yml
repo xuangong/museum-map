@@ -6,6 +6,8 @@ services:
       context: ../..
       dockerfile: deploy/vm/Dockerfile
     restart: always
+    labels: ["autoheal=true"]   # willfarrell/autoheal restarts the container when the healthcheck goes unhealthy
+    mem_limit: 2g               # a leak gets the container OOM-killed and restarted (restart: always) instead of hanging
     ports:
       - "8082:8787"   # trojan's nginx reaches it as host.docker.internal:8082
     volumes:

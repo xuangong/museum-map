@@ -9,3 +9,4 @@ bun.lockb
 # Local tooling: Claude Code settings/worktrees, installed agent skills (restore from skills-lock.json)
 .claude/
 .agents/
+dist/
