@@ -651,6 +651,7 @@ body.toc-resizing, body.toc-resizing * { cursor: col-resize !important; user-sel
 .ev-rel-label { margin-top: 10px; font-size: 11px; color: var(--text-3); letter-spacing: 0.06em; }
 .popup-museum { display: flex; align-items: center; gap: 6px; margin-top: 6px; color: var(--gilt-hi); cursor: pointer; font-size: 12.5px; }
 .popup-museum .ic { width: 13px; height: 13px; }
+.popup-museum .pm-km { margin-left: auto; padding-left: 10px; font-family: var(--mono, 'JetBrains Mono', monospace); font-size: 10.5px; color: var(--text-3); }
 
 /* Markers — lit points */
 .museum-marker {

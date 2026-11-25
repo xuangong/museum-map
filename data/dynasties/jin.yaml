@@ -28,44 +28,80 @@ culture:
 events:
   - date: 265年
     event: 司马炎代魏建晋
-    lat: 32
-    lng: 118.8
+    lat: 34.62
+    lng: 112.45
   - date: 280年
     event: 西晋灭吴，统一天下
-    lat: 32
-    lng: 118.8
+    lat: 32.06
+    lng: 118.78
   - date: 291—306年
     event: 八王之乱
-    lat: 32
-    lng: 118.8
+    lat: 34.62
+    lng: 112.45
+  - date: 304年
+    event: 匈奴贵族刘渊在离石称汉王，十六国时代拉开序幕
+    lat: 37.5
+    lng: 111.1
   - date: 311年
     event: 永嘉之乱，匈奴破洛阳
     lat: 34.62
     lng: 112.45
+  - date: 313年
+    event: 祖逖率部渡江北上，中流击楫，誓清中原
+    lat: 32.2
+    lng: 119.45
   - date: 316年
-    event: 西晋灭亡
-    lat: 32
-    lng: 118.8
+    event: 西晋灭亡，愍帝在长安出降
+    lat: 34.26
+    lng: 108.94
   - date: 317年
     event: 司马睿在建康建东晋
     lat: 32.06
-    lng: 118.8
+    lng: 118.78
+  - date: 347年
+    event: 桓温西征，灭成汉，收复巴蜀
+    lat: 30.57
+    lng: 104.07
   - date: 353年
     event: 王羲之《兰亭集序》写成
-    lat: 32
-    lng: 118.8
+    lat: 29.93
+    lng: 120.49
+  - date: 366年
+    event: 乐僔在敦煌鸣沙山开凿第一窟，莫高窟千年营造由此开始
+    lat: 40.04
+    lng: 94.81
+  - date: 370年
+    event: 王猛率军攻克邺城，前燕灭亡，前秦渐成北方霸主
+    lat: 36.33
+    lng: 114.61
   - date: 383年
     event: 淝水之战，谢安击败前秦
-    lat: 32.63
-    lng: 116.98
+    lat: 32.58
+    lng: 116.78
+  - date: 386年
+    event: 拓跋珪在盛乐重建代国，改国号魏，北魏由此起步
+    lat: 40.38
+    lng: 111.82
   - date: 399—412年
-    event: 法显西行求法
-    lat: 32
-    lng: 118.8
+    event: 法显从长安出发西行求法，陆去海归历时十余年
+    lat: 34.26
+    lng: 108.94
+  - date: 401年
+    event: 鸠摩罗什被迎入长安，主持译出佛经三百余卷
+    lat: 34.27
+    lng: 108.94
+  - date: 405年
+    event: 陶渊明辞去彭泽令，「不为五斗米折腰」，归隐田园
+    lat: 29.9
+    lng: 116.55
+  - date: 417年
+    event: 刘裕北伐，攻克长安，后秦灭亡
+    lat: 34.26
+    lng: 108.94
   - date: 420年
     event: 刘裕代晋建宋，东晋结束
-    lat: 32
-    lng: 118.8
+    lat: 32.06
+    lng: 118.78
 recommended_museums:
   - museum_id: nanjing
     name: 南京博物院

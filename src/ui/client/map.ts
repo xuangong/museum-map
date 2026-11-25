@@ -397,9 +397,10 @@ window.MuseumMap = {
       var related = (relatedMuseumsByDate && relatedMuseumsByDate(evt)) || [];
       var relatedHtml = '';
       if (related.length > 0) {
-        relatedHtml = '<div class="ev-rel-label">相关博物馆</div>';
+        relatedHtml = '<div class="ev-rel-label">去附近看看</div>';
         related.forEach(function(r){
-          relatedHtml += '<div data-museum-id="' + escapeHtml(r.museumId) + '" class="popup-museum">' + (window.ICONS ? window.ICONS.pin : '') + escapeHtml(r.name) + '</div>';
+          var dist = r.km == null ? '' : '<span class="pm-km">' + (r.km < 1 ? '就在此地' : Math.round(r.km) + ' km') + '</span>';
+          relatedHtml += '<div data-museum-id="' + escapeHtml(r.museumId) + '" class="popup-museum">' + (window.ICONS ? window.ICONS.pin : '') + escapeHtml(r.name) + dist + '</div>';
         });
       }
       var popup = '<div class="ev-pop"><div class="ev-date">' + escapeHtml(evt.date || '') + '</div><div class="ev-text">' + escapeHtml(evt.event || '') + '</div>' + relatedHtml + '</div>';

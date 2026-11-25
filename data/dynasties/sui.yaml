@@ -23,45 +23,53 @@ culture:
     description: 天台宗创立（智顗），莫高窟隋代洞窟
 events:
   - date: 581年
-    event: 杨坚代北周建隋
-    lat: 34.6
-    lng: 112.5
+    event: 杨坚代北周建隋，定都大兴城
+    lat: 34.26
+    lng: 108.94
   - date: 587年
     event: 创立科举制（分科取士）
-    lat: 34.6
-    lng: 112.5
+    lat: 34.26
+    lng: 108.94
   - date: 589年
     event: 隋灭南朝陈，统一天下
-    lat: 34.6
-    lng: 112.5
+    lat: 32.06
+    lng: 118.78
   - date: 604年
     event: 隋炀帝即位
-    lat: 34.6
-    lng: 112.5
-  - date: 605—610年
-    event: 修建大运河（通济渠、邗沟、永济渠、江南河）
-    lat: 34.6
-    lng: 112.5
+    lat: 34.26
+    lng: 108.94
   - date: 605年
     event: 营建东都洛阳
     lat: 34.62
     lng: 112.45
+  - date: 605—610年
+    event: 修建大运河（通济渠、邗沟、永济渠、江南河）
+    lat: 34.79
+    lng: 114.35
+  - date: 609年
+    event: 炀帝西巡张掖，大会西域二十七国使者
+    lat: 38.93
+    lng: 100.45
   - date: 611—614年
     event: 三征高句丽，均未能成功
-    lat: 34.6
-    lng: 112.5
+    lat: 41.27
+    lng: 123.17
   - date: 613年起
-    event: 各地农民起义蜂起
-    lat: 34.6
-    lng: 112.5
+    event: 各地农民起义蜂起，杨玄感起兵黎阳
+    lat: 35.68
+    lng: 114.55
   - date: 617年
     event: 李渊太原起兵
-    lat: 34.6
-    lng: 112.5
+    lat: 37.87
+    lng: 112.53
+  - date: 617年
+    event: 瓦岗军攻占洛口仓，开仓放粮，义军声势大振
+    lat: 34.8
+    lng: 113.38
   - date: 618年
     event: 杨广被杀于江都，隋亡；李渊建唐
     lat: 32.39
-    lng: 119.44
+    lng: 119.42
 recommended_museums:
   - museum_id: luoyang
     name: 洛阳博物馆

@@ -22,40 +22,68 @@ culture:
 events:
   - date: 907年
     event: 朱温篡唐建梁，五代开始
-    lat: 34.8
-    lng: 114.3
+    lat: 34.79
+    lng: 114.35
+  - date: 923年
+    event: 李存勖于魏州称帝，国号唐，同年灭梁
+    lat: 36.28
+    lng: 115.15
   - date: 936年
     event: 石敬瑭割让幽云十六州给契丹
-    lat: 34.8
-    lng: 114.3
+    lat: 37.87
+    lng: 112.53
+  - date: 937年
+    event: 徐知诰称帝建南唐，定都金陵
+    lat: 32.06
+    lng: 118.78
   - date: 938年
     event: 契丹改国号辽
-    lat: 34.8
-    lng: 114.3
+    lat: 43.99
+    lng: 119.4
+  - date: 947年
+    event: 契丹铁骑入汴，后晋灭亡，中原陷于战火
+    lat: 34.79
+    lng: 114.35
   - date: 951年
     event: 郭威建后周
-    lat: 34.8
-    lng: 114.3
+    lat: 34.79
+    lng: 114.35
+  - date: 954年
+    event: 高平之战，柴荣亲冒矢石，大破北汉与契丹联军
+    lat: 35.8
+    lng: 112.93
   - date: 954—959年
     event: 柴荣改革，后周国力大增
-    lat: 34.8
-    lng: 114.3
+    lat: 34.79
+    lng: 114.35
+  - date: 959年
+    event: 柴荣北伐，三旬收复三关，病倒后不久去世
+    lat: 38.99
+    lng: 116.1
   - date: 960年
     event: 赵匡胤陈桥兵变，建宋
-    lat: 34.8
-    lng: 114.3
+    lat: 34.93
+    lng: 114.43
+  - date: 965年
+    event: 宋灭后蜀，成都纳入版图
+    lat: 30.66
+    lng: 104.06
+  - date: 971年
+    event: 宋灭南汉，岭南归宋
+    lat: 23.13
+    lng: 113.26
   - date: 975年
     event: 宋灭南唐，李煜被俘
-    lat: 34.8
-    lng: 114.3
+    lat: 32.06
+    lng: 118.78
   - date: 978年
     event: 吴越钱俶纳土归宋
-    lat: 34.8
-    lng: 114.3
+    lat: 30.25
+    lng: 120.15
   - date: 979年
     event: 宋灭北汉，基本统一
-    lat: 34.8
-    lng: 114.3
+    lat: 37.87
+    lng: 112.53
 recommended_museums:
   - museum_id: zhejiang
     name: 浙江省博物馆

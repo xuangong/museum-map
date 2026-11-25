@@ -34,52 +34,84 @@ events:
     lng: 108.94
   - date: 626年
     event: 玄武门之变，李世民杀兄弟即位
-    lat: 34.3
-    lng: 108.9
+    lat: 34.29
+    lng: 108.95
   - date: 627—649年
     event: 贞观之治，唐朝政治制度成熟
-    lat: 34.3
-    lng: 108.9
+    lat: 34.26
+    lng: 108.94
   - date: 629—645年
-    event: 玄奘西行取经
-    lat: 34.3
-    lng: 108.9
+    event: 玄奘西行取经，十七年后带回六百余部佛经
+    lat: 25.14
+    lng: 85.44
+  - date: 630年
+    event: 李靖雪夜奇袭，东突厥覆灭，诸族尊太宗为“天可汗”
+    lat: 40.9
+    lng: 111.7
+  - date: 641年
+    event: 文成公主远嫁吐蕃，入藏和亲
+    lat: 29.65
+    lng: 91.12
+  - date: 668年
+    event: 唐军攻陷平壤，高句丽灭亡
+    lat: 39.02
+    lng: 125.75
   - date: 690年
     event: 武则天称帝，改国号为周
-    lat: 34.3
-    lng: 108.9
+    lat: 34.62
+    lng: 112.45
   - date: 705年
     event: 神龙政变，武则天退位，唐朝复辟
-    lat: 34.3
-    lng: 108.9
+    lat: 34.62
+    lng: 112.45
   - date: 712年
     event: 唐玄宗即位，开元盛世开始
-    lat: 34.3
-    lng: 108.9
+    lat: 34.26
+    lng: 108.94
+  - date: 742—753年
+    event: 鉴真六次东渡，双目失明终抵日本传法
+    lat: 32.39
+    lng: 119.42
+  - date: 744年
+    event: 李白与杜甫在洛阳相遇，诗坛双星从此结交
+    lat: 34.62
+    lng: 112.45
   - date: 751年
     event: 怛罗斯之战，唐军败于阿拔斯王朝，造纸术西传
-    lat: 34.3
-    lng: 108.9
+    lat: 42.9
+    lng: 71.37
   - date: 755年
     event: 安史之乱爆发，唐朝由盛转衰
-    lat: 34.3
-    lng: 108.9
+    lat: 39.9
+    lng: 116.4
+  - date: 756年
+    event: 玄宗仓皇西逃，马嵬驿兵变，杨贵妃殒命
+    lat: 34.45
+    lng: 108.27
   - date: 763年
     event: 安史之乱结束，但藩镇割据从此开始
-    lat: 34.3
-    lng: 108.9
+    lat: 39.9
+    lng: 116.4
   - date: 835年
     event: 甘露之变，宦官势力巩固
-    lat: 34.3
-    lng: 108.9
+    lat: 34.26
+    lng: 108.94
+  - date: 848年
+    event: 张议潮在敦煌起兵，收复河西十一州
+    lat: 40.14
+    lng: 94.66
   - date: 875—884年
     event: 黄巢起义
-    lat: 34.3
-    lng: 108.9
+    lat: 35.23
+    lng: 115.48
+  - date: 880年
+    event: 黄巢攻入长安，称帝建齐
+    lat: 34.26
+    lng: 108.94
   - date: 907年
     event: 朱温篡唐，唐朝灭亡
-    lat: 34.3
-    lng: 108.9
+    lat: 34.79
+    lng: 114.35
 recommended_museums:
   - museum_id: shaanxi
     name: 陕西历史博物馆

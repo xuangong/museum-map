@@ -23,49 +23,85 @@ culture:
     description: 金代标志性文物，女真艺术风格
 events:
   - date: 1115年
-    event: 完颜阿骨打建金，定都会宁（今黑龙江阿城）
-    lat: 45.77
-    lng: 126.63
+    event: 完颜阿骨打在会宁称帝建金，定都会宁（今黑龙江阿城）
+    lat: 45.54
+    lng: 126.96
+  - date: 1115年
+    event: 金军克辽东北重镇黄龙府，辽军一败再败，女真由此崛起
+    lat: 44.43
+    lng: 125.18
   - date: 1120年
-    event: 宋金"海上之盟"，约定联合灭辽
-    lat: 45.7
-    lng: 126.6
+    event: 宋金“海上之盟”，约定联合灭辽
+    lat: 37.8
+    lng: 120.75
+  - date: 1120年
+    event: 金军攻克辽上京临潢府，辽朝腹地门户洞开
+    lat: 43.98
+    lng: 119.37
   - date: 1125年
-    event: 金灭辽
-    lat: 45.7
-    lng: 126.6
+    event: 金灭辽，辽天祚帝被俘
+    lat: 39.56
+    lng: 113.18
   - date: 1127年
     event: 靖康之变，金灭北宋，俘徽钦二帝
-    lat: 45.7
-    lng: 126.6
+    lat: 34.8
+    lng: 114.31
+  - date: 1138年
+    event: 金熙宗升会宁府为上京，仿汴京规制营建皇城
+    lat: 45.54
+    lng: 126.96
   - date: 1141年
     event: 绍兴和议，宋金以秦岭-淮河为界
-    lat: 45.7
-    lng: 126.6
+    lat: 33.2
+    lng: 116.5
+  - date: 1149年
+    event: 完颜亮弑熙宗自立，是为海陵王
+    lat: 45.54
+    lng: 126.96
   - date: 1153年
     event: 海陵王迁都燕京（改名中都）
     lat: 39.91
     lng: 116.4
   - date: 1161年
-    event: 海陵王南征失败，被弑
-    lat: 45.7
-    lng: 126.6
+    event: 海陵王南征失败，于瓜洲被部下所弑
+    lat: 32.27
+    lng: 119.4
+  - date: 1161年
+    event: 完颜雍在东京辽阳即位，是为金世宗，开启“小尧舜”的大定之治
+    lat: 41.27
+    lng: 123.17
   - date: 1189—1208年
     event: 金章宗时期，文化鼎盛
-    lat: 45.7
-    lng: 126.6
-  - date: 1211年起
-    event: 蒙古成吉思汗侵金
-    lat: 45.7
-    lng: 126.6
+    lat: 39.9
+    lng: 116.4
+  - date: 1192年
+    event: 卢沟桥建成，成为出入中都的西南门户
+    lat: 39.85
+    lng: 116.21
+  - date: 1211年
+    event: 蒙古成吉思汗侵金，野狐岭一战击溃金军主力
+    lat: 41.05
+    lng: 114.7
   - date: 1214年
     event: 金宣宗南迁开封
     lat: 34.79
     lng: 114.31
+  - date: 1215年
+    event: 蒙古军攻陷金中都
+    lat: 39.9
+    lng: 116.4
+  - date: 1232年
+    event: 三峰山之战，蒙古军大破金军最后的精锐
+    lat: 34.1
+    lng: 113.4
+  - date: 1233年
+    event: 汴京降蒙古，耶律楚材力谏，满城生灵得以保全
+    lat: 34.8
+    lng: 114.31
   - date: 1234年
-    event: 蒙古联宋灭金
-    lat: 45.7
-    lng: 126.6
+    event: 蒙古联宋灭金，金哀宗殉国于蔡州
+    lat: 33
+    lng: 114.35
 recommended_museums:
   - museum_id: heilongjiang
     name: 黑龙江省博物馆

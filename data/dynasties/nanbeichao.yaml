@@ -28,48 +28,84 @@ culture:
 events:
   - date: 420年
     event: 刘裕代晋建宋，南朝开始
-    lat: 34
-    lng: 112
+    lat: 32.06
+    lng: 118.78
   - date: 439年
-    event: 北魏统一北方
-    lat: 34
-    lng: 112
+    event: 姑臧城破，北凉降魏——一百多年的十六国纷争，至此收束于北魏
+    lat: 37.93
+    lng: 102.64
+  - date: 450年
+    event: 宋文帝北伐失利，北魏太武帝南下饮马长江
+    lat: 32.25
+    lng: 118.85
   - date: 460年
     event: 昙曜开凿云冈石窟
-    lat: 34
-    lng: 112
+    lat: 40.11
+    lng: 113.13
+  - date: 462年
+    event: 祖冲之创制《大明历》，并把圆周率推算到小数点后七位
+    lat: 32.05
+    lng: 118.8
+  - date: 485年
+    event: 北魏颁行均田制与三长制，为孝文帝改革铺路
+    lat: 40.09
+    lng: 113.3
   - date: 493—495年
     event: 北魏孝文帝迁都洛阳，推行汉化
     lat: 34.62
     lng: 112.45
   - date: 494年起
     event: 龙门石窟开始营造
-    lat: 34
-    lng: 112
+    lat: 34.47
+    lng: 112.47
+  - date: 507年
+    event: 钟离之战，梁军火攻水淹，大破北魏三十万大军
+    lat: 32.87
+    lng: 117.56
+  - date: 516年
+    event: 洛阳永宁寺塔落成，九层木塔高耸入云，是当时世上最高的建筑之一
+    lat: 34.62
+    lng: 112.45
   - date: 523—528年
     event: 北魏六镇起义，北魏走向分裂
-    lat: 34
-    lng: 112
+    lat: 40.95
+    lng: 109.5
+  - date: 529年
+    event: 陈庆之率七千白袍军北伐，一路打进洛阳
+    lat: 34.62
+    lng: 112.45
   - date: 534年
     event: 北魏分裂为东魏和西魏
-    lat: 34
-    lng: 112
+    lat: 36.33
+    lng: 114.61
   - date: 548—552年
     event: 侯景之乱，南朝梁遭受毁灭性打击
-    lat: 34
-    lng: 112
+    lat: 32.06
+    lng: 118.8
+  - date: 554年
+    event: 西魏攻陷江陵，梁元帝临死焚书十四万卷
+    lat: 30.33
+    lng: 112.24
+  - date: 564年
+    event: 兰陵王高长恭率五百骑突入周军重围，《兰陵王入阵曲》由此传唱
+    lat: 34.72
+    lng: 112.6
   - date: 577年
     event: 北周灭北齐，北方再次统一
-    lat: 34
-    lng: 112
+    lat: 36.33
+    lng: 114.61
   - date: 581年
     event: 杨坚代北周建隋
-    lat: 34
-    lng: 112
+    lat: 34.26
+    lng: 108.94
   - date: 589年
     event: 隋灭陈，统一天下，南北朝结束
-    lat: 34
-    lng: 112
+    lat: 32.06
+    lng: 118.78
+  - date: 589年
+    event: 岭南冼夫人率百越诸州归附隋朝
+    lat: 21.92
+    lng: 110.85
 recommended_museums:
   - museum_id: yungang
     name: 云冈石窟

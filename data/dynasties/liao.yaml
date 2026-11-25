@@ -24,36 +24,52 @@ culture:
 events:
   - date: 907年
     event: 耶律阿保机称可汗（916年称帝）
-    lat: 41
-    lng: 117
+    lat: 43.99
+    lng: 119.4
+  - date: 920年
+    event: 契丹大字创制，草原帝国有了自己的文字
+    lat: 43.99
+    lng: 119.4
   - date: 926年
     event: 辽灭渤海国
-    lat: 41
-    lng: 117
+    lat: 44.05
+    lng: 129.15
   - date: 936年
     event: 后晋石敬瑭割让幽云十六州予辽
-    lat: 41
-    lng: 117
+    lat: 39.9
+    lng: 116.4
   - date: 938年
-    event: 改国号为"辽"
-    lat: 41
-    lng: 117
+    event: 改国号为“辽”
+    lat: 43.99
+    lng: 119.4
   - date: 946年
     event: 辽太宗灭后晋，短暂入主中原
-    lat: 41
-    lng: 117
+    lat: 34.79
+    lng: 114.35
+  - date: 986年
+    event: 辽军大败宋军，名将杨业在朔州陈家谷被俘殉国
+    lat: 39.33
+    lng: 112.43
   - date: 1004年
     event: 澶渊之盟，辽宋百年和平
-    lat: 41
-    lng: 117
+    lat: 35.76
+    lng: 115.03
+  - date: 1007年
+    event: 中京大定府建成，成为辽朝东部的繁华都会
+    lat: 41.6
+    lng: 119.3
+  - date: 1056年
+    event: 应县佛宫寺释迦塔建成，千年屹立的木构高塔
+    lat: 39.56
+    lng: 113.18
   - date: 1125年
-    event: 金灭辽
-    lat: 41
-    lng: 117
+    event: 金灭辽，天祚帝被俘于应州
+    lat: 39.56
+    lng: 113.18
   - date: 1124—1218年
     event: 耶律大石建立西辽，延续于中亚
-    lat: 41
-    lng: 117
+    lat: 42.75
+    lng: 75.2
 recommended_museums:
   - museum_id: liaoning
     name: 辽宁省博物馆

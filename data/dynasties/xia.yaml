@@ -20,22 +20,30 @@ culture:
   - category: 历法
     description: 传说夏朝已有"夏历"（农历前身），"夏小正"记录了一年十二个月的物候
 events:
+  - date: 约前2100年
+    event: 相传大禹治水十三年，疏通龙门，三过家门而不入
+    lat: 35.6
+    lng: 110.6
   - date: 约前2070年
     event: 禹传位于子启，夏朝建立（传统纪年）
-    lat: 34.6
-    lng: 112.5
+    lat: 34.4
+    lng: 113.14
   - date: 太康失国
     event: 后羿、寒浞先后篡权，夏朝一度中断
-    lat: 34.6
-    lng: 112.5
+    lat: 34.69
+    lng: 112.68
   - date: 少康中兴
     event: 少康复国，夏朝重新稳固
-    lat: 34.6
-    lng: 112.5
+    lat: 34.69
+    lng: 112.68
+  - date: 约前1750年
+    event: 二里头出现宫殿区与青铜礼器作坊，被认为是最早的王都气象
+    lat: 34.69
+    lng: 112.68
   - date: 约前1600年
     event: 商汤灭夏（鸣条之战），夏朝终结
-    lat: 34.6
-    lng: 112.5
+    lat: 35.15
+    lng: 111.22
 recommended_museums:
   - museum_id: erlitou
     name: 二里头夏都遗址博物馆

@@ -22,48 +22,84 @@ culture:
 events:
   - date: 208年
     event: 赤壁之战，三分天下格局初定
-    lat: 29.72
-    lng: 113.88
+    lat: 29.85
+    lng: 113.94
+  - date: 215年
+    event: 逍遥津之战，张辽率八百人冲阵，吓退孙权十万大军
+    lat: 31.86
+    lng: 117.28
+  - date: 219年
+    event: 汉中之战，黄忠定军山斩夏侯渊，刘备夺取汉中
+    lat: 33.08
+    lng: 106.95
+  - date: 219年
+    event: 关羽水淹七军，威震华夏；吕蒙白衣渡江袭荆州，关羽败走麦城
+    lat: 32.01
+    lng: 112.14
   - date: 220年
     event: 曹丕代汉建魏
-    lat: 32
-    lng: 112
+    lat: 34.62
+    lng: 112.45
   - date: 221年
     event: 刘备称帝建蜀汉
-    lat: 32
-    lng: 112
+    lat: 30.67
+    lng: 104.06
   - date: 222年
     event: 孙权称王（229年称帝）；夷陵之战，刘备败于陆逊
-    lat: 30.77
-    lng: 111.28
+    lat: 30.69
+    lng: 111.29
   - date: 223年
     event: 刘备白帝城托孤于诸葛亮
-    lat: 32
-    lng: 112
+    lat: 31.04
+    lng: 109.57
+  - date: 225年
+    event: 诸葛亮南征，平定南中，「七擒孟获」的故事由此流传
+    lat: 25.04
+    lng: 102.71
+  - date: 227年
+    event: 诸葛亮屯兵汉中，上《出师表》，「鞠躬尽瘁」一生之志写在纸上
+    lat: 33.07
+    lng: 107.02
   - date: 228—234年
     event: 诸葛亮五次北伐
-    lat: 32
-    lng: 112
+    lat: 34.33
+    lng: 105.32
+  - date: 229年
+    event: 孙权在武昌称帝，不久迁都建业，三国鼎立定型
+    lat: 32.06
+    lng: 118.78
+  - date: 230年
+    event: 卫温、诸葛直率万人船队航海到达夷洲（今台湾）
+    lat: 23.8
+    lng: 121
   - date: 234年
     event: 诸葛亮病逝五丈原
-    lat: 34.17
-    lng: 107.68
+    lat: 34.34
+    lng: 107.63
+  - date: 238年
+    event: 司马懿远征辽东，攻克襄平，斩公孙渊
+    lat: 41.27
+    lng: 123.17
   - date: 249年
     event: 高平陵之变，司马懿夺权
-    lat: 32
-    lng: 112
+    lat: 34.62
+    lng: 112.45
+  - date: 260年
+    event: 甘露之变，魏帝曹髦讨伐司马昭兵败遇害，「司马昭之心，路人皆知」
+    lat: 34.62
+    lng: 112.45
   - date: 263年
-    event: 魏灭蜀
-    lat: 32
-    lng: 112
+    event: 邓艾裹毡滚下阴平山崖，奇兵直扑成都，刘禅开城出降，蜀汉亡
+    lat: 30.67
+    lng: 104.06
   - date: 265年
     event: 司马炎代魏建晋
-    lat: 32
-    lng: 112
+    lat: 34.62
+    lng: 112.45
   - date: 280年
     event: 西晋灭吴，三国结束
-    lat: 32
-    lng: 112
+    lat: 32.06
+    lng: 118.78
 recommended_museums:
   - museum_id: luoyang
     name: 洛阳博物馆

@@ -1355,6 +1355,21 @@ window.museumApp = function() {
       return window.TripCore.km(a, b);
     },
 
+    /** Museums to visit for a chronicle event: this era's museums near the site first, then any museum close by. */
+    museumsNearEvent(d, evt) {
+      if (!evt || evt.lat == null || evt.lng == null) return [];
+      var self = this, rec = {}, out = [], seen = {};
+      (d.recommendedMuseums || []).forEach(function(r){ if (r.museumId) rec[r.museumId] = true; });
+      var near = this.museums
+        .filter(function(m){ return m.lat != null && m.lng != null; })
+        .map(function(m){ return { m: m, km: self.kmBetween(evt, m) }; })
+        .sort(function(a, b){ return a.km - b.km; });
+      function take(ok){ near.forEach(function(x){ if (out.length < 3 && !seen[x.m.id] && ok(x)) { seen[x.m.id] = true; out.push({ museumId: x.m.id, name: x.m.name, km: x.km }); } }); }
+      take(function(x){ return rec[x.m.id] && x.km <= 300; });
+      take(function(x){ return x.km <= 120; });
+      return out.sort(function(a, b){ return a.km - b.km; });
+    },
+
     /** The earliest dynasty layer a museum holds — used to walk history in order. */
     eraIndex(m) {
       var ds = this.linkedDynasties(m.id);
@@ -1917,8 +1932,8 @@ window.museumApp = function() {
         var museums = this.recommendedMuseums(d);
         var weightById = this.dynastyMuseumWeights(d);
         window.MuseumMap.setMarkers(museums, function(id){ self.openMuseum(id); }, { recommended: true, weightById: weightById, isVisited: function(id){ return self.isVisited(id); } });
-        window.MuseumMap.setEventMarkers(d.events || [], function(id){ self.openMuseum(id); }, function(){
-          return (d.recommendedMuseums || []).filter(function(r){ return r.museumId; }).slice(0, 3);
+        window.MuseumMap.setEventMarkers(d.events || [], function(id){ self.openMuseum(id); }, function(evt){
+          return self.museumsNearEvent(d, evt);
         });
       } else {
         // All mode
