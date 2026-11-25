@@ -1680,13 +1680,13 @@ body.chat-locked .chat-body { touch-action: pan-y; }
 .view-switch {
   position: absolute; top: 14px; left: calc((100% - var(--drawer-w)) / 2); transform: translateX(-50%); z-index: 600;
   transition: left 0.45s var(--ease);
-  display: flex; gap: 2px; padding: 3px; border-radius: 999px;
+  display: flex; gap: 2px; padding: 3px; border-radius: 999px; width: max-content;   /* left:50% would otherwise cap it at half the canvas */
   background: rgba(var(--bg2-rgb),0.92); border: 1px solid var(--line-strong);
   box-shadow: 0 12px 30px -12px var(--sh-90);
 }
 .view-switch button {
   height: 32px; padding: 0 15px; border: none; border-radius: 999px;
-  display: inline-flex; align-items: center; gap: 6px;
+  display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; flex: none;
   background: transparent; color: var(--text-3); font-size: 13px; font-weight: 500;
   transition: background 0.2s, color 0.2s;
 }
@@ -2167,7 +2167,7 @@ path.route-corridor { stroke: var(--gilt); }
   .map-legend { top: 58px; bottom: auto; left: 10px; flex-direction: row; flex-wrap: wrap; gap: 10px; padding: 6px 10px; font-size: 11px; max-width: calc(100% - 20px); }
   .canvas.has-drawer { --drawer-w: 0px; }
   .view-switch { top: 10px; }
-  .view-switch button { height: 30px; padding: 0 13px; font-size: 12.5px; }
+  .view-switch button { height: 30px; padding: 0 11px; gap: 5px; font-size: 12.5px; }
   .strata-back { top: 10px; left: 10px; height: 36px; padding: 0 12px 0 10px; font-size: 12.5px; }
   .strata-credit { left: 12px; bottom: calc(84px + env(safe-area-inset-bottom)); }
   .strata-credit .sc-name { font-size: 21px; }
