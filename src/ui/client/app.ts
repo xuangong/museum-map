@@ -250,6 +250,10 @@ window.museumApp = function() {
       });
 
       window.addEventListener('hashchange', function(){ self.applyHashRoute(); });
+      // The guide coming up from its bar (title tap, sheet tap, drag) makes 脚下千年 step aside too.
+      var guideUp = function(){ if (self.chat.open && !self.chat.mini) self.tuckHere(); };
+      this.$watch('chat.open', guideUp);
+      this.$watch('chat.mini', guideUp);
 
       // Sidebar (TOC) resize handle — desktop only
       this.initTocResize();
@@ -1479,7 +1483,7 @@ window.museumApp = function() {
       opts = opts || {};
       if (!window.HereCore || lat == null || lng == null) return;
       if (this.chat && this.chat.open) this.chat.mini = true;
-      if (this.drawer.open) { this.drawer.open = false; this.selectedMuseumId = null; this._openToken = (this._openToken || 0) + 1; }
+      if (this.drawer.open) this.hideDrawer();   // the #/h/ route replaces it, so leave the URL alone
       this.here.result = null;
       this.here.open = true; this.here.mini = false; this.here.loading = true;
       this.here.point = { lat: lat, lng: lng }; this.here.openEra = null;
@@ -1491,12 +1495,12 @@ window.museumApp = function() {
       this.here.loading = false;
       if (!opts.fromHash) this.setHereHash(lat, lng);
     },
-    /** Put the panel away without touching the URL. */
     /** The guide is opening: the land-reading sheet steps aside (bar on phones, gone on desktop). */
     tuckHere() {
       if (!this.here.open) return;
-      if (window.innerWidth <= 920) this.here.mini = true; else this.dismissHere();
+      if (window.innerWidth <= 920) this.here.mini = true; else this.closeHere();
     },
+    /** Put the panel away without touching the URL. */
     dismissHere() {
       if (!this.here.open && !this.here.point) return;
       this.here.open = false; this.here.result = null; this.here.point = null; this.here.loading = false;
@@ -2639,10 +2643,14 @@ window.museumApp = function() {
       // Just clear drawer + hash. Avoid history.back() because it triggers
       // a cascade (hashchange → applyHashRoute → selectDynasty/clearDynastyFilter)
       // that can leave the timeline in a weird state on certain machines.
+      this.hideDrawer();
+      this.setHashRoute(null);
+    },
+    /** Hide the drawer without touching the URL (closeDrawer, or a route that replaces it). */
+    hideDrawer() {
       this.drawer.open = false;
       this.selectedMuseumId = null;
       this._openToken = (this._openToken || 0) + 1;
-      this.setHashRoute(null);
       // Defensive re-sync of timeline DOM after drawer close.
       var nav = document.querySelector('[data-timeline]');
       if (nav && this._syncTimeline) setTimeout(this._syncTimeline, 0);
