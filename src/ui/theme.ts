@@ -657,6 +657,7 @@ body.toc-resizing, body.toc-resizing * { cursor: col-resize !important; user-sel
 .thread-dot { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font: 600 10px/1 var(--mono); color: rgba(var(--fg-rgb), .55); background: rgba(var(--bg-rgb), .85); border: 1px solid rgba(var(--seal-rgb), .35); }
 .thread-dot.on { color: var(--seal-ink-hi); border-color: var(--seal); }
 .thread-line, .thread-walked { stroke: var(--seal); }
+.thread-seg, .thread-seg-dot { stroke: var(--gilt); }
 .thread-dot.cur { background: var(--seal); color: #fff; box-shadow: 0 0 0 6px rgba(var(--seal-rgb), .22); }
 .popup-museum .pm-km { margin-left: auto; padding-left: 10px; font-family: var(--mono, 'JetBrains Mono', monospace); font-size: 10.5px; color: var(--text-3); }
 
@@ -2409,6 +2410,34 @@ path.route-corridor { stroke: var(--gilt); }
 .canvas.is-xunji .strata-wrap { visibility: hidden; pointer-events: none; }
 .xunji-panel { position: fixed; z-index: 1100; right: 16px; top: 76px; bottom: 16px; width: min(380px, calc(100vw - 32px)); display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 16px; box-shadow: 0 18px 50px rgba(0,0,0,.45); overflow: hidden; }
 .xj-pick, .xj-tour { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.xj-tour { position: relative; }
+/* Off-screen copies of every stop + the end card, measured to fix the phone sheet's height */
+.xj-measure { position: absolute; left: 0; right: 0; top: 0; height: 0; overflow: hidden; visibility: hidden; pointer-events: none; }
+.xj-board { all: unset; cursor: pointer; display: inline-block; margin-top: 10px; font-size: 12.5px; color: var(--gilt); border-bottom: 1px solid rgba(var(--gilt-rgb), .4); }
+.xj-board:hover { color: var(--gilt-hi); }
+/* 停站表 — the route as a train timetable: tap 上车, then 下车 */
+.xj-timetable { margin: 4px 0 12px; }
+.xj-tt-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 11px; color: var(--text-3); margin-bottom: 6px; }
+.xj-tt-head span:first-child { font-family: var(--mono); letter-spacing: .16em; color: var(--gilt); }
+.xj-tt { list-style: none; margin: 0; padding: 0; position: relative; }
+.xj-tt li { position: relative; }
+.xj-tt li::before { content: ""; position: absolute; left: 6px; top: 0; bottom: 0; width: 2px; background: rgba(var(--fg-rgb), .14); }
+.xj-tt li:first-child::before { top: 50%; } .xj-tt li:last-child::before { bottom: 50%; }
+.xj-tt li.on::before { background: var(--gilt); }
+.xj-tt li.on.end:first-child::before, .xj-tt li.on:not(.on ~ li)::before { top: 50%; }
+.xj-tt button { all: unset; cursor: pointer; box-sizing: border-box; width: 100%; display: grid; grid-template-columns: 14px 1fr auto 52px 40px; align-items: center; gap: 8px; padding: 7px 0; font-size: 13.5px; }
+.tt-dot { width: 10px; height: 10px; border-radius: 50%; margin-left: 2px; background: var(--surface); border: 2px solid rgba(var(--fg-rgb), .3); position: relative; z-index: 1; }
+.xj-tt li.on .tt-dot { border-color: var(--gilt); }
+.xj-tt li.end .tt-dot { background: var(--gilt); border-color: var(--gilt); box-shadow: 0 0 0 4px rgba(var(--gilt-rgb), .2); }
+.tt-name { overflow-wrap: anywhere; }
+.xj-tt li:not(.on) .tt-name { color: var(--text-3); }
+.tt-tag { font-size: 10.5px; padding: 1px 6px; border-radius: 4px; color: var(--seal-ink-hi); background: rgba(var(--seal-rgb), .18); }
+.tt-tag:empty { display: none; }
+.tt-when { font-family: var(--mono); font-size: 10.5px; color: var(--text-3); text-align: right; }
+.tt-mus { font-family: var(--mono); font-size: 10.5px; color: var(--gilt); text-align: right; }
+.xj-cta small { display: block; margin-top: 3px; font-size: 11px; opacity: .8; }
+.xj-cta[disabled] { opacity: .55; cursor: default; }
+.xj-cta-note { font-size: 11.5px; color: var(--text-3); margin: -4px 0 10px; text-align: center; }
 .xj-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 .xunji-grabber { display: none; }
 .xj-head { position: relative; padding: 14px 16px 10px; border-bottom: 1px solid rgba(var(--fg-rgb), .08); }

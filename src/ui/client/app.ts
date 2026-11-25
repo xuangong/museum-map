@@ -138,7 +138,7 @@ window.museumApp = function() {
     territoryUrl: '',
     placeNamesUrl: '',
     threadsUrl: '',
-    xunji: { list: null, thread: null, i: 0, playing: false, ended: false, mini: false, listening: false },
+    xunji: { list: null, thread: null, i: 0, playing: false, ended: false, mini: false, listening: false, seg: { a: 0, b: 0, pick: false }, sheetH: 0 },
     _xjTimer: 0,
     eraOverlay: true,
     eraCap: null,
@@ -259,6 +259,7 @@ window.museumApp = function() {
       var guideUp = function(){ if (self.chat.open && !self.chat.mini) self.tuckHere(); };
       this.$watch('chat.open', guideUp);
       this.$watch('chat.mini', guideUp);
+      window.addEventListener('resize', function(){ if (self.xunji.thread) self.xunjiMeasure(); });
 
       // Sidebar (TOC) resize handle — desktop only
       this.initTocResize();
@@ -1604,12 +1605,16 @@ window.museumApp = function() {
       this.xunji.thread = t; this.xunji.ended = false; this.xunji.mini = false;
       this.xunji.i = Math.max(0, Math.min(t.stops.length - 1, stop || 0));
       this._xjNotes = window.ThreadCore.notes(t);
+      this._xjTrip = window.ThreadCore.toTrip(t);
+      this.xunjiSegReset();
+      this.xunjiMeasure();
       if (opts.play) this.xunjiPlay(); else { this.xunji.playing = false; this.xunjiShow(false); }
       if (!opts.fromHash) this.setHashRoute({ kind: 'thread', id: t.id + (this.xunji.i ? '/' + (this.xunji.i + 1) : '') });
     },
     /** Draw + fly to the current stop; sound = play its note. */
     xunjiShow(sound) {
       var t = this.xunji.thread; if (!t) return;
+      this.xunjiSegDraw();   // off the end card: no leg glow
       var s = t.stops[this.xunji.i];
       var M = window.MuseumMap, self = this;
       if (M) {
@@ -1651,15 +1656,16 @@ window.museumApp = function() {
     xunjiEnd() {
       this.xunji.playing = false; this.xunjiStopTimer();
       this.xunji.ended = true; this.xunji.mini = false;
+      this.xunjiSegReset();
       var t = this.xunji.thread;
       if (!t || !window.MuseumMap) return;
       window.MuseumMap.setThreadRoute(t.stops, t.stops.length - 1);
       var self = this;   // frame after the end card has laid out, so the padding measures it
-      this.$nextTick(function(){ if (self.xunji.thread === t && self.xunji.ended) window.MuseumMap.fitThread(t.stops, self.xunjiPad()); });
+      this.$nextTick(function(){ if (self.xunji.thread === t && self.xunji.ended) { window.MuseumMap.fitThread(t.stops, self.xunjiPad()); self.xunjiSegDraw(); } });
     },
     closeThread() {
       this.xunjiStopTimer(); this.xunjiStopListen();
-      this.xunji.thread = null; this.xunji.playing = false; this.xunji.ended = false;
+      this.xunji.thread = null; this.xunji.playing = false; this.xunji.ended = false; this.xunji.sheetH = 0; this._xjTrip = null;
       if (window.MuseumMap) window.MuseumMap.clearThread();
       if (/^#\\/x\\//.test(location.hash || '')) this.setHashRoute(null);
     },
@@ -1688,14 +1694,98 @@ window.museumApp = function() {
 
     threadToTrip() {
       var t = this.xunji.thread; if (!t || !window.ThreadCore) return;
-      var r = window.ThreadCore.toTrip(t);
+      var r = this.xunjiTrip(), g = this.xunji.seg;
       if (!r.cities.length) { this.flashToast('这条路都在境外，只能在故事里走'); return; }
+      if (g.pick) return;                                  // 下车站 not chosen yet
+      var leg = r.cities.slice(g.a, g.b + 1).map(function(c){ return { name: c.name, lat: c.lat, lng: c.lng, days: 1 }; });
       if (this.trip.cities.length && !confirm('替换当前行程？')) return;
-      this.trip.cities = r.cities; this.trip.mode = 'transit'; this.trip.picks = []; this.trip.route = null;
+      this.trip.cities = leg; this.trip.mode = 'transit'; this.trip.picks = []; this.trip.route = null;
       this.saveTrip();
       this.xunjiPause(); this.xunjiStopListen();
       if (!this.tripMode) this.toggleTripMode(); else { this.setView('map'); this.tocOpen = true; this.tripSheetMini = false; this.refreshMarkers(); }
-      this.flashToast('已把 ' + r.cities.length + ' 站放进行程，沿途的馆都标出来了' + (r.skipped ? '（境外的 ' + r.skipped + ' 站只在故事里）' : ''), 3200);
+      var whole = g.a === 0 && g.b === r.cities.length - 1;
+      this.flashToast('已把 ' + leg.length + ' 站放进行程，沿途的馆都标出来了' + (whole && r.skipped ? '（境外的 ' + r.skipped + ' 站只在故事里）' : ''), 3200);
+    },
+    // ── 停站表: pick a leg like buying a train ticket — tap 上车, then 下车; tap 上车 again for the whole line.
+    xunjiTrip() { return this._xjTrip || { cities: [], at: [], skipped: 0 }; },
+    xunjiSegReset() {
+      var n = this.xunjiTrip().cities.length;
+      this.xunji.seg = { a: 0, b: Math.max(0, n - 1), pick: false };
+      this.xunjiSegDraw();
+    },
+    xunjiSegWhole() { var g = this.xunji.seg; return !g.pick && g.a === 0 && g.b === this.xunjiTrip().cities.length - 1; },
+    xunjiSegTap(k) {
+      var g = this.xunji.seg;
+      if (g.pick) this.xunji.seg = { a: Math.min(g.a, k), b: Math.max(g.a, k), pick: false };
+      else if (!this.xunjiSegWhole() && k === g.a) { this.xunjiSegReset(); return; }
+      else this.xunji.seg = { a: k, b: k, pick: true };
+      this.xunjiSegDraw();
+    },
+    xunjiSegOn(k) { var g = this.xunji.seg; return k >= g.a && k <= g.b; },
+    /** 上车 / 下车 / 始发 / 终到 tag for station k (empty in between). */
+    xunjiSegTag(k) {
+      var g = this.xunji.seg, n = this.xunjiTrip().cities.length;
+      if (g.pick) return k === g.a ? '上车' : '';
+      if (k === g.a) return g.a === 0 && g.b === n - 1 ? '始发' : '上车';
+      if (k === g.b) return g.a === 0 && g.b === n - 1 ? '终到' : '下车';
+      return '';
+    },
+    /** Museums within the trip radius of a city — what the trip is for. */
+    xunjiMuseumsNear(c) {
+      var self = this, r = (this.trip && this.trip.radius) || 30, n = 0;
+      this.museums.forEach(function(m){ if (m.lat != null && self.kmBetween(c, m) <= r) n++; });
+      return n;
+    },
+    xunjiSegMuseums() {
+      var self = this, r = (this.trip && this.trip.radius) || 30, g = this.xunji.seg, cs = this.xunjiTrip().cities.slice(g.a, g.b + 1), seen = {}, n = 0;
+      this.museums.forEach(function(m){
+        if (m.lat == null || seen[m.id]) return;
+        if (cs.some(function(c){ return self.kmBetween(c, m) <= r; })) { seen[m.id] = true; n++; }
+      });
+      return n;
+    },
+    xunjiSegCta() {
+      var r = this.xunjiTrip(); if (!r.cities.length) return '';
+      if (this.xunji.seg.pick) return '再点一站，作为下车站';
+      var n = this.xunjiSegMuseums();
+      return n ? '变成行程，看沿途 ' + n + ' 座馆 →' : '变成行程 →';
+    },
+    xunjiSegSub() {
+      var r = this.xunjiTrip(), g = this.xunji.seg; if (!r.cities.length) return '';
+      if (g.pick) return r.cities[g.a].name + ' 上车';
+      var n = g.b - g.a + 1;
+      return (this.xunjiSegWhole() ? '全程 · ' : '') + r.cities[g.a].name + ' 上车 → ' + r.cities[g.b].name + ' 下车 · ' + n + ' 站';
+    },
+    xunjiSegDraw() {
+      var t = this.xunji.thread, r = this.xunjiTrip(), g = this.xunji.seg, M = window.MuseumMap;
+      if (!M || !M.setThreadSegment) return;
+      if (!t || !this.xunji.ended || this.xunjiSegWhole() || !r.at.length) { M.setThreadSegment(null); return; }
+      M.setThreadSegment(t.stops.slice(r.at[g.a], r.at[g.pick ? g.a : g.b] + 1));
+    },
+    /** From a paused stop: jump to the timetable with 上车 set at this stop's city. */
+    xunjiBoardHere() {
+      var r = this.xunjiTrip(), i = this.xunji.i, k = 0;
+      r.at.forEach(function(x, j){ if (x <= i) k = j; });
+      this.xunjiEnd();
+      this.xunji.seg = { a: k, b: k, pick: true };
+      this.xunjiSegDraw();
+    },
+    // ── The phone sheet keeps one height for the whole thread (the tallest stop / end card), so it
+    // doesn't jump between stops and the map framing (xunjiPad) stays put.
+    xunjiMeasure() {
+      var self = this;
+      if (window.innerWidth > 920 || !this.xunji.thread) { this.xunji.sheetH = 0; return; }
+      this.$nextTick(function(){ setTimeout(function(){
+        var p = document.querySelector('.xunji-panel'), m = p && p.querySelector('.xj-measure'), h = p && p.querySelector('.xj-tour > .xj-head'), gr = p && p.querySelector('.xunji-grabber');
+        if (!m || !h) return;
+        var max = 0;
+        Array.prototype.forEach.call(m.children, function(c){ max = Math.max(max, c.offsetHeight); });
+        var padB = parseFloat(getComputedStyle(p).paddingBottom) || 0;
+        self.xunji.sheetH = Math.ceil((gr ? gr.offsetHeight : 0) + h.offsetHeight + max + padB + 2);
+      }, 0); });
+    },
+    xunjiSheetStyle() {
+      return this.xunji.sheetH && !this.xunji.mini && window.innerWidth <= 920 ? 'height:' + this.xunji.sheetH + 'px' : '';
     },
     hereThreads(l) {
       var p = this.here.point; if (!p || !this.xunji.list || !window.ThreadCore) return [];

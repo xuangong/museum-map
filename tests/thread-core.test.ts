@@ -29,6 +29,7 @@ describe("ThreadCore.toTrip", () => {
     expect(r.cities.map((c: any) => c.name)).toEqual(["西安", "武威", "西安"])
     expect(r.cities[0]).toEqual({ name: "西安", lat: 34.26, lng: 108.94, days: 1 })
     expect(r.skipped).toBe(1)
+    expect(r.at).toEqual([0, 2, 4])   // the stop each city came from (咸阳 merged into 西安, 那烂陀 skipped)
   })
 })
 

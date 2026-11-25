@@ -20,16 +20,18 @@ export const THREAD_CORE_SCRIPT = `
     }
     return s;
   }
-  /** The trip a thread becomes: trip stops in order, consecutive stops < 30 km merged. */
+  /** The trip a thread becomes: trip stops in order, a stop < 30 km from the last kept city merged
+   *  into it. at[k] = index of the stop city k came from (for the timetable and the map). */
   function toTrip(t) {
-    var cities = [], skipped = 0;
-    (t.stops || []).forEach(function(s){
+    var cities = [], at = [], skipped = 0;
+    (t.stops || []).forEach(function(s, i){
       if (!s.trip) { skipped++; return; }
       var last = cities[cities.length - 1];
       if (last && km(last, s) < MERGE_KM) return;
       cities.push({ name: cityOf(s.modern), lat: s.lat, lng: s.lng, days: 1 });
+      at.push(i);
     });
-    return { cities: cities, skipped: skipped };
+    return { cities: cities, at: at, skipped: skipped };
   }
   /** For each thread, its stop nearest to p within maxKm; nearest first. */
   function near(threads, p, maxKm) {

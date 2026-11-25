@@ -271,7 +271,16 @@ window.MuseumMap = {
     var pts = (stops || []).map(function(s){ return window.toMapCoord(s.lat, s.lng); });
     if (pts.length) this.map.flyToBounds(L.latLngBounds(pts), { paddingTopLeft: [(pad.left || 0) + 48, (pad.top || 0) + 48], paddingBottomRight: [(pad.right || 0) + 48, (pad.bottom || 0) + 48], duration: 0.8, maxZoom: 8 });
   },
-  clearThread: function() { if (this.threadLayer) this.threadLayer.clearLayers(); },
+  clearThread: function() { if (this.threadLayer) this.threadLayer.clearLayers(); if (this.threadSegLayer) this.threadSegLayer.clearLayers(); },
+  /** The leg picked in the timetable (上车 → 下车), drawn as a wide glow over the route; null clears. */
+  setThreadSegment: function(stops) {
+    if (!this.threadSegLayer) this.threadSegLayer = L.layerGroup().addTo(this.map);
+    this.threadSegLayer.clearLayers();
+    if (!stops || !stops.length) return;
+    var pts = stops.map(function(s){ return window.toMapCoord(s.lat, s.lng); });
+    if (pts.length === 1) L.circleMarker(pts[0], { radius: 16, className: 'thread-seg-dot', weight: 3, fill: false, interactive: false }).addTo(this.threadSegLayer);
+    else L.polyline(pts, { className: 'thread-seg', weight: 8, opacity: 0.5, interactive: false }).addTo(this.threadSegLayer);
+  },
   setUser: function(lat, lng) {
     this.userLayer.clearLayers();
     var c = window.toMapCoord(lat, lng);
