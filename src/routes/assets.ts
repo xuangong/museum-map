@@ -1,6 +1,7 @@
 import { Elysia } from "elysia"
 import { STRATA_MODULE } from "~/ui/client/strata"
 import { DYNASTY_TERRITORY_JSON } from "~/data/dynasty-territory"
+import { PLACE_LINEAGES } from "~/data/place-names"
 
 function shortHash(s: string): string {
   let h = 2166136261
@@ -15,6 +16,9 @@ function shortHash(s: string): string {
 export const STRATA_SRC = `/assets/strata.js?v=${shortHash(STRATA_MODULE)}`
 /** Approximate dynasty territories — shared by the 3D strata and the 2D map. */
 export const TERRITORY_SRC = `/assets/territories.json?v=${shortHash(DYNASTY_TERRITORY_JSON)}`
+const PLACE_NAMES_JSON = JSON.stringify(PLACE_LINEAGES)
+/** City-level era names for 脚下千年, fetched the first time the panel opens. */
+export const PLACE_NAMES_SRC = `/assets/place-names.json?v=${shortHash(PLACE_NAMES_JSON)}`
 
 const IMMUTABLE = "public, max-age=31536000, immutable"
 
@@ -30,6 +34,13 @@ export const assetsRoute = new Elysia()
     "/assets/territories.json",
     () =>
       new Response(DYNASTY_TERRITORY_JSON, {
+        headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": IMMUTABLE },
+      }),
+  )
+  .get(
+    "/assets/place-names.json",
+    () =>
+      new Response(PLACE_NAMES_JSON, {
         headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": IMMUTABLE },
       }),
   )
