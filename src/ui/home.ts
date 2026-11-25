@@ -15,7 +15,9 @@ import { CHAT_SCRIPT } from "./client/chat"
 import { AUTH_SCRIPT } from "./client/auth"
 import { APP_SCRIPT } from "./client/app"
 import { ERA_SYNTH_SCRIPT } from "./client/era-synth"
-import { STRATA_SRC, TERRITORY_SRC } from "~/routes/assets"
+import { STRATA_SRC, TERRITORY_SRC, PLACE_NAMES_SRC } from "~/routes/assets"
+import { HERE_CORE_SCRIPT } from "./client/here-core"
+import { HerePanel } from "./components/here-panel"
 import { DYNASTY_GEO } from "~/data/dynasty-geo"
 import { computeCrossings } from "~/services/crossings"
 import { AI_MODELS, DEFAULT_AI_MODEL, DEFAULT_AI_EFFORT } from "~/services/ai-models"
@@ -48,6 +50,7 @@ export function HomePage(data: HomeData): string {
     dynastyGeo: DYNASTY_GEO,
     crossings: computeCrossings(data.museums, data.dynasties),
     territoryUrl: TERRITORY_SRC,
+    placeNamesUrl: PLACE_NAMES_SRC,
     ai: { models: AI_MODELS, defaultModel: DEFAULT_AI_MODEL, defaultEffort: DEFAULT_AI_EFFORT },
     aliases: MUSEUM_ALIASES,
     achievements: ACHIEVEMENTS.map((a) => ({ ...a, label: ACHIEVEMENT_LABELS[a.id] })),
@@ -111,6 +114,9 @@ export function HomePage(data: HomeData): string {
       <button class="locate-btn" x-show="view === 'map'" x-cloak @click="locateMe()" :disabled="geo.locating" :class="geo.lat != null ? 'on' : ''" title="看看我附近的博物馆">
         ${icon("locate", 16)}<span x-text="geo.locating ? '定位中…' : (geo.lat != null ? '已定位' : '附近')"></span>
       </button>
+      <button class="locate-btn here-btn" x-show="view === 'map'" x-cloak @click="hereAtMe()" :disabled="geo.locating" title="看看你脚下这片土地的千年">
+        ${icon("layers", 16)}<span>脚下千年</span>
+      </button>
       <div class="map-legend" x-show="view === 'map'" x-cloak>
         <template x-if="tripMode">
           <div style="display:contents">
@@ -152,6 +158,7 @@ export function HomePage(data: HomeData): string {
     </div>
     ${Drawer()}
     ${ChatPanel()}
+    ${HerePanel()}
     ${AchievementSheet()}${AchievementCeremony()}${JiPanel()}${StampGate({ googleEnabled: !!data.googleEnabled })}
   </div>
   <div class="toast" x-show="toast" x-text="toast" x-transition.opacity x-cloak></div>
@@ -165,6 +172,7 @@ export function HomePage(data: HomeData): string {
 <script src="/cdn/qrcode.js"></script>
 <script>${COORDS_SCRIPT}</script>
 <script>${TRIP_CORE_SCRIPT}</script>
+<script>${HERE_CORE_SCRIPT}</script>
 <script>${ACH_CORE_SCRIPT}</script>
 <script>${MAP_SCRIPT}</script>
 <script>${CHAT_SCRIPT}</script>

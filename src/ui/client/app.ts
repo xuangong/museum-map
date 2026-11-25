@@ -128,12 +128,15 @@ window.museumApp = function() {
     tripResults: [],
     tripBusy: false,
     geo: { lat: null, lng: null, locating: false },
+    here: { open: false, mini: false, loading: false, point: null, result: null, openEra: null },
+    _lineages: null,
     listSort: 'default',
     // 地层账本: 我的足迹 | 附近可补 (anchor: here / city / trip; radius km, 40 = 同城).
     ledgerOpt: { tab: 'mine', anchor: 'here', city: '', radius: 150 },
     dynastyGeo: {},
     crossings: {},
     territoryUrl: '',
+    placeNamesUrl: '',
     eraOverlay: true,
     eraCap: null,
     _strataOk: false,
@@ -157,6 +160,7 @@ window.museumApp = function() {
       this.museumAliases = data.aliases || {};
       this.initAi();
       this.territoryUrl = data.territoryUrl || '';
+      this.placeNamesUrl = data.placeNamesUrl || '';
       try { this.eraOverlay = window.localStorage.getItem('mmEraOverlay') !== '0'; } catch(_) {}
       this.initTheme();
       try {
@@ -204,6 +208,11 @@ window.museumApp = function() {
 
       window.MuseumMap.init(35.0, 105.0);
       var self = this;
+      if (window.MuseumMap.onLongPress) window.MuseumMap.onLongPress(function(ll){
+        if (self.tripMode) return;
+        var w = window.fromMapCoord(ll.lat, ll.lng);
+        self.openHere(w[0], w[1]);
+      });
       this.initStrataWhenReady();
 
       // Capture invite code from URL (?invite=xxx) and strip from address bar
@@ -637,6 +646,44 @@ window.museumApp = function() {
       this.$nextTick(function(){ el.style.transform = ''; });
     },
 
+    // ── 脚下千年's sheet on phones follows the finger by its handle / header: open ↔ bar.
+    hereDragStart(e) {
+      this._hg = null;
+      if (!this.here.open || window.innerWidth > 920) return;
+      var t = e.changedTouches && e.changedTouches[0], el = document.querySelector('.here-panel');
+      if (!t || !el) return;
+      var barOff = el.offsetHeight - 84 - (parseFloat(getComputedStyle(el).paddingBottom) || 0);
+      this._hg = { id: t.identifier, el: el, y0: t.clientY, x0: t.clientX, lastY: t.clientY, lastT: Date.now(), v: 0, on: false,
+        span: Math.max(1, barOff), base: this.here.mini ? Math.max(1, barOff) : 0, off: 0 };
+    },
+    hereDragMove(e) {
+      var g = this._hg; if (!g) return;
+      var t = this._ownTouch(e, g.id); if (!t) return;
+      var dy = t.clientY - g.y0, dx = t.clientX - g.x0;
+      if (!g.on) {
+        if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy)) { this._hg = null; return; }
+        if (Math.abs(dy) < 6) return;
+        g.on = true; g.el.style.transition = 'none';
+        if (this.here.mini) { this.here.mini = false; }
+      }
+      var now = Date.now(), step = t.clientY - g.lastY;
+      if (now > g.lastT) g.v = 0.7 * (step / (now - g.lastT)) + 0.3 * g.v;
+      g.lastY = t.clientY; g.lastT = now;
+      g.off = Math.max(0, Math.min(g.span + 30, g.base + dy));
+      g.el.style.transform = 'translateY(' + g.off + 'px)';
+      if (e.cancelable) e.preventDefault();
+    },
+    hereDragEnd() {
+      var g = this._hg; this._hg = null;
+      if (!g || !g.on) return;
+      this._swAt = Date.now();
+      var el = g.el;
+      var open = g.v > 0.45 ? false : g.v < -0.45 ? true : (g.off + g.v * 160) < g.span / 2;
+      this.here.mini = !open;
+      el.style.transition = '';
+      this.$nextTick(function(){ el.style.transform = ''; });
+    },
+
     sheetTap(kind) {
       try { var ae = document.activeElement; if (ae && ae.blur && /^(BUTTON)$/.test(ae.tagName)) ae.blur(); } catch(_) {}
       if (this._swAt && Date.now() - this._swAt < 450) return;   // the click after a swipe
@@ -645,6 +692,7 @@ window.museumApp = function() {
         else this.drawer.expanded = !this.drawer.expanded;
       } else if (kind === 'chat') this.chat.mini = !this.chat.mini;
       else if (kind === 'trip') this.tripSheetMini = !this.tripSheetMini;
+      else if (kind === 'here') this.here.mini = !this.here.mini;
     },
     sheetStep(kind, dir) {
       if (kind === 'drawer') {
@@ -654,6 +702,7 @@ window.museumApp = function() {
         this.drawer.mini = n === 2;
       } else if (kind === 'chat') this.chat.mini = dir > 0;
       else if (kind === 'trip') this.tripSheetMini = dir > 0;
+      else if (kind === 'here') this.here.mini = dir > 0;
     },
 
     resetDrawerScroll() {
@@ -1401,6 +1450,109 @@ window.museumApp = function() {
     },
 
     // ─── 附近 (geolocation) & list ordering ───
+    // ─── 脚下千年 ───
+    async loadLineages() {
+      if (this._lineages) return this._lineages;
+      try {
+        var r = await fetch(this.placeNamesUrl || '/assets/place-names.json');
+        this._lineages = r.ok ? await r.json() : [];
+      } catch (_) { this._lineages = []; }
+      return this._lineages;
+    },
+    /** Read the land at a WGS-84 point. opts.fromHash: don't touch the URL. */
+    async openHere(lat, lng, opts) {
+      opts = opts || {};
+      if (!window.HereCore || lat == null || lng == null) return;
+      if (this.chat && this.chat.open) this.chat.mini = true;
+      if (this.drawer.open) this.closeDrawer();
+      this.here.open = true; this.here.mini = false; this.here.loading = true;
+      this.here.point = { lat: lat, lng: lng }; this.here.openEra = null;
+      if (window.MuseumMap && window.MuseumMap.setHere) window.MuseumMap.setHere(lat, lng, window.HereCore.R_EVENT);
+      var lineages = await this.loadLineages();
+      var cur = this.here.point;
+      if (!this.here.open || !cur || cur.lat !== lat || cur.lng !== lng) return;   // a newer press won the race
+      this.here.result = window.HereCore.read({ lat: lat, lng: lng }, { dynasties: this.dynasties, museums: this.museums, lineages: lineages });
+      this.here.loading = false;
+      if (!opts.fromHash) this.setHereHash(lat, lng);
+    },
+    closeHere() {
+      this.here.open = false; this.here.result = null; this.here.point = null;
+      if (window.MuseumMap && window.MuseumMap.clearHere) window.MuseumMap.clearHere();
+      if (/^#\\/h\\//.test(location.hash || '')) this.setHashRoute(null);
+    },
+    setHereHash(lat, lng) {
+      var target = '#/h/' + lat.toFixed(4) + ',' + lng.toFixed(4);
+      if (location.hash === target) return;
+      this._suppressHashChange = true;
+      try { history.replaceState({ kind: 'mm-route' }, '', target); } catch (_) {}
+      var self = this; setTimeout(function(){ self._suppressHashChange = false; }, 0);
+    },
+    hereKicker() {
+      var p = this.here.point; if (!p) return '脚下千年';
+      return '脚下千年 · ' + Math.abs(p.lat).toFixed(2) + '°' + (p.lat >= 0 ? 'N' : 'S') + ' ' + Math.abs(p.lng).toFixed(2) + '°' + (p.lng >= 0 ? 'E' : 'W');
+    },
+    hereTitle() {
+      var r = this.here.result; if (!r) return '你脚下这片土地';
+      var h = window.HereCore.headline(r);
+      if (h) return '此地曾是 <span class="gilt">' + this.escapeAttr(h) + '</span>';
+      if (r.city) return '此地 · <span class="gilt">' + this.escapeAttr(r.city.name) + '</span>';
+      if (r.nearCity) return '此地 <small>距 ' + this.escapeAttr(r.nearCity.name) + ' ' + Math.round(r.nearCity.km) + ' km</small>';
+      return '你脚下这片土地';
+    },
+    hereSub() {
+      var r = this.here.result; if (!r || !r.layers.length) return '';
+      return '从今天往下，' + r.layers.length + ' 个朝代在这里留下了痕迹';
+    },
+    hereEraName(id) {
+      var d = this.dynastyById(id);
+      return d ? this.dynastyShortName(d).replace(/[：:].*$/, '').replace(/（.*$/, '') : id;
+    },
+    hereEraYears(id) {
+      var d = this.dynastyById(id);
+      return d && d.period ? d.period.replace(/^约?公元/, '').replace(/年/g, '') : '';
+    },
+    hereTint(id) {
+      var n = this.dynasties.length, i = this.layerNo(id);
+      return 'rgba(var(--gilt-rgb),' + (0.35 + 0.65 * (i / Math.max(1, n))).toFixed(2) + ')';
+    },
+    herePeek(l) {
+      return l.events.slice(0, 2).map(function(e){ return e.date.replace(/年$/, '') + ' ' + e.event; }).join(' · ') + (l.events.length > 2 ? ' …' : '');
+    },
+    hereToggle(id) {
+      this.here.openEra = this.here.openEra === id ? null : id;
+      if (this.here.openEra && window.EraSynth) window.EraSynth.note(id, 7);
+    },
+    hereFocusEvent(e) {
+      if (window.MuseumMap && window.MuseumMap.focusPoint) window.MuseumMap.focusPoint(e.lat, e.lng, 9);
+      if (window.innerWidth <= 920) this.here.mini = true;
+    },
+    hereGoNearest() {
+      var n = this.here.result && this.here.result.nearest; if (!n) return;
+      this.openHere(n.event.lat, n.event.lng);
+      if (window.MuseumMap && window.MuseumMap.focusPoint) window.MuseumMap.focusPoint(n.event.lat, n.event.lng, 8);
+    },
+    async shareHere() {
+      var p = this.here.point; if (!p) return;
+      var url = location.origin + location.pathname + '#/h/' + p.lat.toFixed(4) + ',' + p.lng.toFixed(4);
+      var title = '脚下千年 · ' + (window.HereCore.headline(this.here.result) || (this.here.result && this.here.result.city && this.here.result.city.name) || '这片土地');
+      try { if (navigator.share) { await navigator.share({ title: title, url: url }); return; } } catch (_) {}
+      try { await navigator.clipboard.writeText(url); this.flashToast('已备好，寄给友人吧'); } catch (_) { prompt('复制下面的地址寄给友人：', url); }
+    },
+    hereAtMe() {
+      var self = this;
+      if (this.geo.lat != null) { this.openHere(this.geo.lat, this.geo.lng); return; }
+      if (!navigator.geolocation) { this.flashToast('当前浏览器不支持定位，可以在地图上长按任意一点'); return; }
+      this.geo.locating = true;
+      navigator.geolocation.getCurrentPosition(function(pos){
+        self.geo.lat = pos.coords.latitude; self.geo.lng = pos.coords.longitude; self.geo.locating = false;
+        if (window.MuseumMap && window.MuseumMap.setUser) window.MuseumMap.setUser(self.geo.lat, self.geo.lng);
+        self.openHere(self.geo.lat, self.geo.lng);
+      }, function(){
+        self.geo.locating = false;
+        self.flashToast('没能获取位置，可以在地图上长按任意一点');
+      }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 600000 });
+    },
+
     locateMe() {
       if (!navigator.geolocation) { this.flashToast('当前浏览器不支持定位'); return; }
       var self = this;
@@ -2407,6 +2559,7 @@ window.museumApp = function() {
     },
 
     async openMuseum(id) {
+      if (this.here && this.here.open) { this.here.open = false; if (window.MuseumMap && window.MuseumMap.clearHere) window.MuseumMap.clearHere(); }
       this.selectedMuseumId = id;
       this.tocOpen = false;
       var head = this.museumById(id);
@@ -2736,6 +2889,9 @@ window.museumApp = function() {
     applyHashRoute() {
       if (this._suppressHashChange) return;
       var h = location.hash || '';
+      var hm = h.match(/^#\\/h\\/(-?[\\d.]+),(-?[\\d.]+)$/);
+      if (hm) { this.openHere(Number(hm[1]), Number(hm[2]), { fromHash: true }); return; }
+      if (this.here.open && !/^#\\/h\\//.test(h)) { this.here.open = false; if (window.MuseumMap && window.MuseumMap.clearHere) window.MuseumMap.clearHere(); }
       var m = h.match(/^#\\/(d|m)\\/(.+)$/);
       if (!m) {
         if (this.drawer.open) {
@@ -3878,6 +4034,8 @@ window.museumApp = function() {
       if (go) { this.selectDynasty(go.getAttribute('data-dyn-go')); return; }
       var ask = e.target.closest('[data-ask-dynasty]');
       if (ask) { this.planDynastyJourney(ask.getAttribute('data-ask-dynasty')); return; }
+      var hereBtn = e.target.closest('[data-here-lat]');
+      if (hereBtn) { this.openHere(Number(hereBtn.getAttribute('data-here-lat')), Number(hereBtn.getAttribute('data-here-lng'))); return; }
       var el = e.target.closest('.dynasty-rec');
       if (!el) return;
       var id = el.getAttribute('data-museum-id');
@@ -3940,6 +4098,9 @@ window.museumApp = function() {
           var tag = c.onSite ? '<span class="cross-tag on">原址' + (c.km >= 1 ? ' · ' + c.km + ' km' : '') + '</span>' : '<span class="cross-tag">同城 · ' + c.km + ' km</span>';
           return '<li><button class="cross-dyn" data-dyn-go="' + esc(c.dynastyId) + '">' + esc(dn) + '</button><span class="cross-place">' + esc(place) + '</span>' + tag + '</li>';
         }).join('') + '</ul>' });
+      }
+      if (m.lat != null && m.lng != null) {
+        sections.push({ key: 'here', title: '', cls: 'sec-here', html: '<button class="here-link" data-here-lat="' + m.lat + '" data-here-lng="' + m.lng + '">此馆所在 · 脚下千年 →</button>' });
       }
 
       if (m.treasures && m.treasures.length) {
