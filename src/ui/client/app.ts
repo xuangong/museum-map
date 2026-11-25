@@ -652,36 +652,50 @@ window.museumApp = function() {
       if (!this.here.open || window.innerWidth > 920) return;
       var t = e.changedTouches && e.changedTouches[0], el = document.querySelector('.here-panel');
       if (!t || !el) return;
-      var barOff = el.offsetHeight - 84 - (parseFloat(getComputedStyle(el).paddingBottom) || 0);
-      this._hg = { id: t.identifier, el: el, y0: t.clientY, x0: t.clientX, lastY: t.clientY, lastT: Date.now(), v: 0, on: false,
-        span: Math.max(1, barOff), base: this.here.mini ? Math.max(1, barOff) : 0, off: 0 };
+      this._hg = { id: t.identifier, el: el, y0: t.clientY, x0: t.clientX, lastY: t.clientY, lastT: Date.now(), v: 0, fromBar: !!this.here.mini, on: false, off: 0 };
     },
     hereDragMove(e) {
       var g = this._hg; if (!g) return;
       var t = this._ownTouch(e, g.id); if (!t) return;
-      var dy = t.clientY - g.y0, dx = t.clientX - g.x0;
+      var dy = t.clientY - g.y0, dx = t.clientX - g.x0, el = g.el;
       if (!g.on) {
         if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy)) { this._hg = null; return; }
         if (Math.abs(dy) < 6) return;
-        g.on = true; g.el.style.transition = 'none';
-        if (this.here.mini) { this.here.mini = false; }
+        g.on = true;
+        g.barH = 84 + (parseFloat(getComputedStyle(el).paddingBottom) || 0);
+        el.style.transition = 'none';
+        if (g.fromBar) {
+          // Lay the full panel out now, sitting exactly where the bar was.
+          el.classList.remove('mini');
+          g.fullH = el.offsetHeight;
+          el.style.transform = 'translateY(' + (g.fullH - g.barH) + 'px)';
+          this.here.mini = false;
+        } else g.fullH = el.offsetHeight;
+        g.span = Math.max(1, g.fullH - g.barH);
       }
       var now = Date.now(), step = t.clientY - g.lastY;
       if (now > g.lastT) g.v = 0.7 * (step / (now - g.lastT)) + 0.3 * g.v;
       g.lastY = t.clientY; g.lastT = now;
-      g.off = Math.max(0, Math.min(g.span + 30, g.base + dy));
-      g.el.style.transform = 'translateY(' + g.off + 'px)';
+      var base = g.fromBar ? g.span : 0;
+      g.off = Math.max(0, Math.min(g.span + 30, base + dy));
+      el.style.transform = 'translateY(' + g.off + 'px)';
       if (e.cancelable) e.preventDefault();
     },
     hereDragEnd() {
       var g = this._hg; this._hg = null;
       if (!g || !g.on) return;
       this._swAt = Date.now();
-      var el = g.el;
+      var el = g.el, self = this;
       var open = g.v > 0.45 ? false : g.v < -0.45 ? true : (g.off + g.v * 160) < g.span / 2;
-      this.here.mini = !open;
-      el.style.transition = '';
-      this.$nextTick(function(){ el.style.transform = ''; });
+      el.style.transition = 'transform 0.3s var(--ease)';
+      el.style.transform = 'translateY(' + (open ? 0 : g.span) + 'px)';
+      setTimeout(function(){
+        el.style.transition = 'none';
+        self.here.mini = !open;
+        if (!open) el.classList.add('mini');          // same frame as dropping the shift: no jump
+        el.style.transform = '';
+        requestAnimationFrame(function(){ el.style.transition = ''; });
+      }, 300);
     },
 
     sheetTap(kind) {
@@ -1444,6 +1458,7 @@ window.museumApp = function() {
       this.tocOpen = false;
       this.drawer.open = false;
       this.chat.open = true; this.chat.mini = false;
+      this.tuckHere();
       this.chat.input = text;
       var self = this;
       setTimeout(function(){ self.sendChat(); }, 80);
@@ -1464,7 +1479,8 @@ window.museumApp = function() {
       opts = opts || {};
       if (!window.HereCore || lat == null || lng == null) return;
       if (this.chat && this.chat.open) this.chat.mini = true;
-      if (this.drawer.open) this.closeDrawer();
+      if (this.drawer.open) { this.drawer.open = false; this.selectedMuseumId = null; this._openToken = (this._openToken || 0) + 1; }
+      this.here.result = null;
       this.here.open = true; this.here.mini = false; this.here.loading = true;
       this.here.point = { lat: lat, lng: lng }; this.here.openEra = null;
       if (window.MuseumMap && window.MuseumMap.setHere) window.MuseumMap.setHere(lat, lng, window.HereCore.R_EVENT);
@@ -1475,17 +1491,23 @@ window.museumApp = function() {
       this.here.loading = false;
       if (!opts.fromHash) this.setHereHash(lat, lng);
     },
-    closeHere() {
-      this.here.open = false; this.here.result = null; this.here.point = null;
+    /** Put the panel away without touching the URL. */
+    /** The guide is opening: the land-reading sheet steps aside (bar on phones, gone on desktop). */
+    tuckHere() {
+      if (!this.here.open) return;
+      if (window.innerWidth <= 920) this.here.mini = true; else this.dismissHere();
+    },
+    dismissHere() {
+      if (!this.here.open && !this.here.point) return;
+      this.here.open = false; this.here.result = null; this.here.point = null; this.here.loading = false;
       if (window.MuseumMap && window.MuseumMap.clearHere) window.MuseumMap.clearHere();
+    },
+    closeHere() {
+      this.dismissHere();
       if (/^#\\/h\\//.test(location.hash || '')) this.setHashRoute(null);
     },
     setHereHash(lat, lng) {
-      var target = '#/h/' + lat.toFixed(4) + ',' + lng.toFixed(4);
-      if (location.hash === target) return;
-      this._suppressHashChange = true;
-      try { history.replaceState({ kind: 'mm-route' }, '', target); } catch (_) {}
-      var self = this; setTimeout(function(){ self._suppressHashChange = false; }, 0);
+      this.setHashRoute({ kind: 'here', id: lat.toFixed(4) + ',' + lng.toFixed(4) });
     },
     hereKicker() {
       var p = this.here.point; if (!p) return '脚下千年';
@@ -2439,6 +2461,7 @@ window.museumApp = function() {
     },
 
     openDynastyDrawer(d) {
+      this.dismissHere();
       // If name contains the period in parens (e.g. "两晋（公元265年—420年）"),
       // strip the parens portion from the title so subtitle shows the period.
       var name = d.name || '';
@@ -2559,7 +2582,7 @@ window.museumApp = function() {
     },
 
     async openMuseum(id) {
-      if (this.here && this.here.open) { this.here.open = false; if (window.MuseumMap && window.MuseumMap.clearHere) window.MuseumMap.clearHere(); }
+      this.dismissHere();
       this.selectedMuseumId = id;
       this.tocOpen = false;
       var head = this.museumById(id);
@@ -2630,8 +2653,8 @@ window.museumApp = function() {
       // route: null | { kind: 'museum'|'dynasty', id: string }
       var target = '';
       if (route && route.id) {
-        var prefix = route.kind === 'dynasty' ? 'd' : 'm';
-        target = '#/' + prefix + '/' + encodeURIComponent(route.id);
+        var prefix = route.kind === 'dynasty' ? 'd' : route.kind === 'here' ? 'h' : 'm';
+        target = '#/' + prefix + '/' + (route.kind === 'here' ? route.id : encodeURIComponent(route.id));
       }
       if (location.hash === target) return; // no-op, also avoids feedback loops from applyHashRoute
       // Snapshot current drawer scroll BEFORE navigating away so we can restore on back.
@@ -2743,7 +2766,7 @@ window.museumApp = function() {
         self.openLightbox(t.getAttribute('src'), t.getAttribute('alt') || '', wrap);
       });
       document.addEventListener('keydown', function(e){
-        if (e.key === 'Escape') self.closeLightbox();
+        if (e.key === 'Escape') { if (self.here && self.here.open) self.closeHere(); self.closeLightbox(); }
       });
     },
 
@@ -2891,7 +2914,7 @@ window.museumApp = function() {
       var h = location.hash || '';
       var hm = h.match(/^#\\/h\\/(-?[\\d.]+),(-?[\\d.]+)$/);
       if (hm) { this.openHere(Number(hm[1]), Number(hm[2]), { fromHash: true }); return; }
-      if (this.here.open && !/^#\\/h\\//.test(h)) { this.here.open = false; if (window.MuseumMap && window.MuseumMap.clearHere) window.MuseumMap.clearHere(); }
+      if (this.here.open && !/^#\\/h\\//.test(h)) this.dismissHere();
       var m = h.match(/^#\\/(d|m)\\/(.+)$/);
       if (!m) {
         if (this.drawer.open) {
@@ -3747,6 +3770,7 @@ window.museumApp = function() {
       this.tocOpen = false;
       this.drawer.open = false;
       this.chat.open = true; this.chat.mini = false;
+      this.tuckHere();
       this.chat.input = '';
       var self = this;
       setTimeout(function(){

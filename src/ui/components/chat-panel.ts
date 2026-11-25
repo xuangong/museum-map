@@ -84,6 +84,6 @@ export function ChatPanel(): string {
   <button class="dock-btn dock-shake" @click="shakeForMuseum()" :disabled="visits.shaking" title="随机去一座博物馆（手机可直接摇一摇）">
     <span :class="visits.shaking ? 'spin-wrap spinning' : 'spin-wrap'">${icon("dice", 18)}</span><span>摇一摇</span>
   </button>
-  <button class="dock-btn dock-ai" @click="chat.open = true; chat.mini = false">${icon("sparkle", 18)}<span>AI 讲解</span></button>
+  <button class="dock-btn dock-ai" @click="chat.open = true; chat.mini = false; tuckHere()">${icon("sparkle", 18)}<span>AI 讲解</span></button>
 </nav>`
 }

@@ -211,6 +211,7 @@ window.MuseumMap = {
     el.addEventListener('touchstart', function(e){
       cancel();
       if (e.touches.length !== 1) return;
+      if (e.target && e.target.closest && e.target.closest('.leaflet-marker-icon, .leaflet-popup')) return;
       var t = e.touches[0];
       start = { x: t.clientX, y: t.clientY };
       timer = setTimeout(function(){
