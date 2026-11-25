@@ -269,7 +269,11 @@ window.MuseumMap = {
   fitThread: function(stops, pad) {
     pad = pad || {};
     var pts = (stops || []).map(function(s){ return window.toMapCoord(s.lat, s.lng); });
-    if (pts.length) this.map.flyToBounds(L.latLngBounds(pts), { paddingTopLeft: [(pad.left || 0) + 48, (pad.top || 0) + 48], paddingBottomRight: [(pad.right || 0) + 48, (pad.bottom || 0) + 48], duration: 0.8, maxZoom: 8 });
+    if (!pts.length) return;
+    var m = pad.m != null ? pad.m : 48, b = L.latLngBounds(pts), sz = this.map.getSize();
+    var usableW = sz.x - (pad.left || 0) - (pad.right || 0) - 2 * m, usableH = sz.y - (pad.top || 0) - (pad.bottom || 0) - 2 * m;
+    if (usableW < 60 || usableH < 60) { this.map.flyTo(b.getCenter(), Math.min(this.map.getZoom(), 6), { duration: 0.8 }); return; }
+    this.map.flyToBounds(b, { paddingTopLeft: [(pad.left || 0) + m, (pad.top || 0) + m], paddingBottomRight: [(pad.right || 0) + m, (pad.bottom || 0) + m], duration: 0.8, maxZoom: 8 });
   },
   clearThread: function() { if (this.threadLayer) this.threadLayer.clearLayers(); if (this.threadSegLayer) this.threadSegLayer.clearLayers(); },
   /** The leg picked in the timetable (上车 → 下车), drawn as a wide glow over the route; null clears. */

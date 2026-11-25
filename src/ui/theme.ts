@@ -2480,6 +2480,10 @@ path.route-corridor { stroke: var(--gilt); }
 .xunji-panel.is-reading { left: 16px; right: auto; width: min(560px, 45vw); }
 .xj-mag { position: relative; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; background: var(--surface); --era: var(--gilt); }
 .mag-cover { position: relative; min-height: 72dvh; display: flex; align-items: flex-end; background: #000; overflow: hidden; }
+.mag-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,.25) 55%, transparent 75%); }
+.mag-cover-text, .mag-credit { z-index: 1; }
+.mag-credit a { color: inherit; text-decoration: none; }
+.mag-fig figcaption a { color: inherit; text-decoration: none; }
 .mag-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .78; }
 .mag-cover-text { position: relative; padding: 0 22px 46px; }
 .mag-kick { font-family: var(--mono); font-size: 10px; letter-spacing: .3em; color: var(--era); }
@@ -2499,14 +2503,15 @@ path.route-corridor { stroke: var(--gilt); }
 @supports (color: color-mix(in srgb, red, blue)) { .mag-quote { border-color: color-mix(in srgb, var(--era) 55%, transparent); } }
 .mag-quote span { display: block; font-family: var(--serif); font-size: 21px; line-height: 1.6; color: var(--gilt-hi); letter-spacing: .06em; }
 .mag-quote cite { display: block; margin-top: 6px; font-style: normal; font-size: 11px; color: var(--text-3); }
-.mag-fig { margin: 22px -22px 0; }
-.mag-fig img { width: 100%; display: block; }
+.mag-fig { margin: 22px -22px 0; background: rgba(var(--fg-rgb), .04); }
+.mag-fig img { display: block; width: auto; max-width: 100%; height: auto; max-height: min(72dvh, 640px); margin: 0 auto; }
 .mag-fig figcaption { padding: 6px 22px 0; font-family: var(--mono); font-size: 9.5px; color: var(--text-3); line-height: 1.5; }
 .mag-end { padding: 30px 22px calc(30px + env(safe-area-inset-bottom)); background: var(--surface); }
 .mag-end .xj-end { padding: 0; }
 .xj-shelf-item { display: contents; }
-.xj-cover-card { all: unset; cursor: pointer; box-sizing: border-box; position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; width: calc(100% - 26px); height: 180px; padding: 14px 16px; margin: 0 0 10px; border-radius: 12px; overflow: hidden; background: #000; border: 1px solid rgba(var(--gilt-rgb), .22); }
+.xj-cover-card { all: unset; cursor: pointer; box-sizing: border-box; position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; width: 100%; height: 180px; padding: 14px 16px; margin: 0 0 10px; border-radius: 12px; overflow: hidden; background: #000; border: 1px solid rgba(var(--gilt-rgb), .22); }
 .xj-cover-card:hover { border-color: var(--era); }
+.xj-cover-card:focus-visible { outline: 2px solid var(--era); outline-offset: 2px; }
 .xj-cover-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .8; }
 .xj-cover-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,0) 70%); }
 .xj-cover-card > span { position: relative; z-index: 1; }
@@ -2515,7 +2520,7 @@ path.route-corridor { stroke: var(--gilt); }
 .cc-deck { font-size: 12.5px; line-height: 1.55; color: rgba(255,255,255,.85); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 @media (max-width: 920px) {
   .xunji-panel.is-reading { width: auto; left: 0; right: 0; }
-  .xunji-panel.is-reading.has-thread:not(.mini) { top: 0; height: 100dvh; max-height: none; border-radius: 0; background: transparent; border: 0; box-shadow: none; padding-bottom: 0; }
+  .xunji-panel.is-reading.has-thread:not(.mini) { top: var(--xj-top, 0px); height: calc(100dvh - var(--xj-top, 0px)); max-height: none; border-radius: 0; background: transparent; border: 0; box-shadow: none; padding-bottom: 0; }
   .xunji-panel.is-reading .xj-strip { display: block; flex: none; height: 140px; background: transparent; cursor: pointer; touch-action: none; }
   .xunji-panel.is-reading.mini .xj-strip, .xunji-panel.is-reading.mini .xj-mag { display: none; }
   .xunji-panel.is-reading.mini .xj-readhead { display: block; }

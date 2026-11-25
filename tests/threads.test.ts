@@ -91,6 +91,8 @@ describe("magazine features", () => {
       for (const im of imgs) {
         expect(im.src).toMatch(/^\/img\/xj-[a-z0-9-]+-[0-9a-f]{16}\.jpg$/)
         for (const k of ["work", "by", "where", "license"]) expect(String(im[k]).length).toBeGreaterThan(0)
+        expect(im.w).toBeGreaterThan(0)
+        expect(im.h).toBeGreaterThan(0)
       }
     }
   })

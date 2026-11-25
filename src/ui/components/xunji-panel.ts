@@ -75,7 +75,7 @@ export function XunjiPanel(): string {
             <div class="xj-shelf-item">
               <template x-if="t.cover">
                 <button type="button" class="xj-cover-card" @click="openThread(t.id, 0, { play: true })" :style="'--era:' + ((_eraAccents && _eraAccents[t.era]) || 'var(--gilt)')">
-                  <img :src="t.cover.src" alt="" loading="lazy" decoding="async" :style="t.cover.focus ? 'object-position:' + t.cover.focus : ''">
+                  <img :src="t.cover.src" alt="" :width="t.cover.w" :height="t.cover.h" loading="lazy" decoding="async" :style="t.cover.focus ? 'object-position:' + t.cover.focus : ''">
                   <span class="cc-mag" x-text="t.mag || t.title"></span>
                   <span class="cc-meta" x-text="t.who + ' · ' + t.span"></span>
                   <span class="cc-deck" x-text="t.deck"></span>
@@ -99,11 +99,11 @@ export function XunjiPanel(): string {
     <div class="xj-read">
       <div class="xj-strip" @click="sheetTap('xunji')" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()" aria-hidden="true"></div>
       <header class="xj-head xj-readhead" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()" @click="sheetTap('xunji')">
-        <div class="xj-kick" x-text="'循迹 · ' + xunji.thread.span"></div>
+        <div class="xj-kick" x-text="xunjiKick()"></div>
         <div class="xj-title" x-text="xunji.thread.mag || xunji.thread.title"></div>
       </header>
       <div class="xj-tools xj-rtools">
-        <button class="icon-btn" @click="shareThread()" title="分享这条路">${icon("share", 17)}</button>
+        <button class="icon-btn" @click="shareThread()" title="分享这条路" aria-label="分享这条路">${icon("share", 17)}</button>
         <button class="icon-btn" @click="closeThread()" aria-label="回到线索列表">${icon("close", 18)}</button>
       </div>
       ${XunjiReader(endCard(true))}
@@ -116,7 +116,8 @@ export function XunjiPanel(): string {
         <div class="xj-title" x-text="xunji.thread.title"></div>
         <div class="xj-tools" @touchstart.stop.passive>
           <button class="icon-btn" @click="xunji.playing ? xunjiPause() : xunjiPlay()" :aria-label="xunji.playing ? '暂停' : '继续'"><span x-text="xunji.playing ? '❚❚' : '▶'"></span></button>
-          <button class="icon-btn" @click="shareThread()" title="分享这条路">${icon("share", 17)}</button>
+          <button class="icon-btn" x-show="xunji.thread.acts" @click="xunjiRead()" title="回到专题" aria-label="回到专题"><span>☰</span></button>
+          <button class="icon-btn" @click="shareThread()" title="分享这条路" aria-label="分享这条路">${icon("share", 17)}</button>
           <button class="icon-btn" @click="closeThread()" aria-label="回到线索列表">${icon("close", 18)}</button>
         </div>
       </header>

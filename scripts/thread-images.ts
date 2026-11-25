@@ -23,7 +23,9 @@ for (const f of readdirSync(dir).filter((x) => /^[a-z0-9-]+\.(jpe?g|png|webp)$/i
   const key = `xj-${base}-${sha}.jpg`
   execSync(`mv ${JSON.stringify(tmp)} ${JSON.stringify(join(out, key))}`)
   execSync(`bunx wrangler r2 object put museum-images/${key} --file ${JSON.stringify(join(out, key))} --content-type image/jpeg --local`, { stdio: "ignore" })
-  console.log(`${f} → /img/${key}  (${Math.round(statSync(join(out, key)).size / 1024)} KB)`)
+  const px = execSync(`sips -g pixelWidth -g pixelHeight ${JSON.stringify(join(out, key))}`).toString()
+  const w = px.match(/pixelWidth: (\d+)/)?.[1], h = px.match(/pixelHeight: (\d+)/)?.[1]
+  console.log(`${f} → /img/${key}  w: ${w}, h: ${h}  (${Math.round(statSync(join(out, key)).size / 1024)} KB)`)
   vm.push(`docker cp /tmp/xj/${key} museum-map-web-1:/tmp/${key} && docker compose -f deploy/vm/docker-compose.yml exec -T web bunx wrangler r2 object put museum-images/${key} --file /tmp/${key} --content-type image/jpeg --local --persist-to /data/state`)
 }
 console.log("\n# VM (after scp -r " + out + "/* xian@VM:/tmp/xj/):\n" + vm.join("\n"))
