@@ -18,3 +18,14 @@ describe("EraSynth", () => {
     expect(() => S.note("tang", 7)).not.toThrow()
   })
 })
+
+describe("strata uses the shared EraSynth", () => {
+  it("has no synth of its own and reads EraSynth", async () => {
+    const { STRATA_MODULE } = await import("~/ui/client/strata")
+    expect(STRATA_MODULE).toContain("window.EraSynth")
+    expect(STRATA_MODULE).not.toContain("function stringSound")
+  })
+  it("the inline era data can't close the script tag", () => {
+    expect(ERA_SYNTH_SCRIPT).not.toContain("</")
+  })
+})

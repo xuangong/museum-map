@@ -176,7 +176,7 @@ function stringSound(deg, vel, pan, when, vk, o) {
   } catch (e) {}
   return srcs;
 }
-  const ERA = ${JSON.stringify(ERA_VOICES)};
+  const ERA = ${JSON.stringify(ERA_VOICES).replace(/</g, "\\u003c")};
   function voiceOf(eraId) { const e = ERA[eraId]; return e && VOICES[e.voice] ? e.voice : 'ks'; }
   /** One note of an era's instrument, inside a user gesture. Silent if audio is unavailable. */
   function note(eraId, deg, vel) {
