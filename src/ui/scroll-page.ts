@@ -4,6 +4,7 @@
 import type { BuiltScroll } from "~/services/scroll-narration"
 import type { MuseumListItem, DynastyFull } from "~/repo/types"
 import { Layout, THEME_BAR } from "./layout"
+import { ERA_SYNTH_SCRIPT } from "./client/era-synth"
 import { STRATA_SRC, TERRITORY_SRC } from "~/routes/assets"
 import { DYNASTY_GEO } from "~/data/dynasty-geo"
 import { computeCrossings } from "~/services/crossings"
@@ -276,7 +277,7 @@ export function ScrollPage(d: ScrollPageData): string {
   <div class="juan-rod" aria-hidden="true"></div>
 </main>
 <script id="juan-boot" type="application/json">${boot}</script>
-${hasStrata ? `<script type="module" src="${STRATA_SRC}"></script>` : ""}
+${hasStrata ? `<script>${ERA_SYNTH_SCRIPT}</script><script type="module" src="${STRATA_SRC}"></script>` : ""}
 <script>${script}</script>`,
   })
 }

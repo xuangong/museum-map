@@ -14,6 +14,7 @@ import { MAP_SCRIPT } from "./client/map"
 import { CHAT_SCRIPT } from "./client/chat"
 import { AUTH_SCRIPT } from "./client/auth"
 import { APP_SCRIPT } from "./client/app"
+import { ERA_SYNTH_SCRIPT } from "./client/era-synth"
 import { STRATA_SRC, TERRITORY_SRC } from "~/routes/assets"
 import { DYNASTY_GEO } from "~/data/dynasty-geo"
 import { computeCrossings } from "~/services/crossings"
@@ -169,6 +170,7 @@ export function HomePage(data: HomeData): string {
 <script>${CHAT_SCRIPT}</script>
 <script>${AUTH_SCRIPT}</script>
 <script>${APP_SCRIPT}</script>
+<script>${ERA_SYNTH_SCRIPT}</script>
 <script type="module" src="${STRATA_SRC}"></script>
 `,
   })
