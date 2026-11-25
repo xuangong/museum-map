@@ -137,7 +137,7 @@ export const PLACE_LINEAGES: PlaceLineage[] = [
   ] },
   { id: "guanghan", name: "广汉", lat: 30.98, lng: 104.28, names: [
     { era: "shang", name: "三星堆", note: "古蜀文明遗址" },
-    { era: "western-han", name: "雒县", note: "广汉郡治所" },
+    { era: "western-han", name: "雒县" },
     { era: "eastern-han", name: "雒县" },
     { era: "tang", name: "汉州" },
     { era: "song", name: "汉州" },
@@ -215,7 +215,7 @@ export const PLACE_LINEAGES: PlaceLineage[] = [
     { era: "qing", name: "庐州府" },
   ] },
   { id: "hohhot", name: "呼和浩特", lat: 40.82, lng: 111.67, names: [
-    { era: "liao", name: "丰州", note: "万部华严经塔（白塔）所在" },
+    { era: "liao", name: "丰州", note: "丰州城在今市东郊白塔村" },
     { era: "jin-jurchen", name: "丰州" },
     { era: "ming", name: "归化", note: "1572年前后建城" },
     { era: "qing", name: "归化城", note: "乾隆年间另建绥远城" },
@@ -293,7 +293,7 @@ export const PLACE_LINEAGES: PlaceLineage[] = [
     { era: "qing", name: "云南府" },
   ] },
   { id: "lanzhou", name: "兰州", lat: 36.06, lng: 103.83, names: [
-    { era: "western-han", name: "金城", note: "金城郡治所" },
+    { era: "western-han", name: "金城", note: "金城县，属金城郡" },
     { era: "eastern-han", name: "金城" },
     { era: "jin", name: "金城" },
     { era: "sui", name: "兰州", note: "581年置州" },
@@ -551,8 +551,8 @@ export const PLACE_LINEAGES: PlaceLineage[] = [
   { id: "xian", name: "西安", lat: 34.26, lng: 108.94, names: [
     { era: "neolithic", name: "半坡", note: "仰韶文化聚落" },
     { era: "western-zhou", name: "丰镐", note: "丰京、镐京夹沣水而立" },
-    { era: "eastern-zhou", name: "咸阳", note: "秦孝公迁都于渭北" },
-    { era: "qin", name: "咸阳", note: "秦都在渭北，今城西北" },
+    { era: "eastern-zhou", name: "咸阳", note: "秦都咸阳，宫苑跨渭水南北" },
+    { era: "qin", name: "咸阳", note: "阿房宫在今西安西郊" },
     { era: "western-han", name: "长安" },
     { era: "eastern-han", name: "长安", note: "西京" },
     { era: "three-kingdoms", name: "长安" },
@@ -590,8 +590,7 @@ export const PLACE_LINEAGES: PlaceLineage[] = [
   ] },
   { id: "xining", name: "西宁", lat: 36.62, lng: 101.78, names: [
     { era: "western-han", name: "西平亭" },
-    { era: "sui", name: "西平郡" },
-    { era: "tang", name: "鄯州" },
+    { era: "tang", name: "鄯城", note: "鄯州属县" },
     { era: "song", name: "青唐城", note: "宋时称青唐城，崇宁年间置西宁州" },
     { era: "yuan", name: "西宁州" },
     { era: "ming", name: "西宁卫" },
