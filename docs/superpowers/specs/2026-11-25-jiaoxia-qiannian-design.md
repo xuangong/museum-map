@@ -40,7 +40,7 @@ export const PLACE_LINEAGES: PlaceLineage[]
 - `tests/place-names.test.ts`: every `era` is a real dynasty id; names ordered by dynasty
   `order_index`; coords inside 15–55°N / 70–140°E; ≥ 3 names per city; no duplicate ids.
 
-Served as `/assets/place-names.js` (sets `window.PLACE_LINEAGES`), fetched the first time the
+Served as `/assets/place-names.json` (content-hashed URL in bootstrap as `placeNamesUrl`), fetched the first time the
 panel opens, long-cached like the other assets.
 
 ## 2. Logic — `src/ui/client/here-core.ts` (`window.HereCore`)
