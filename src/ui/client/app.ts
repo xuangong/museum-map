@@ -1635,7 +1635,7 @@ window.museumApp = function() {
         self.xunjiShow(true);
         self.setHashRoute({ kind: 'thread', id: self.xunji.thread.id + '/' + (self.xunji.i + 1) });
         self.xunjiSchedule();
-      }, 7000);
+      }, 2000);
     },
     xunjiStopTimer() { if (this._xjTimer) { clearTimeout(this._xjTimer); this._xjTimer = 0; } },
     xunjiPause() { this.xunji.playing = false; this.xunjiStopTimer(); this.xunji.mini = false; },

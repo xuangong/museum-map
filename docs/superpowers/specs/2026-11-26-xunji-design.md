@@ -21,7 +21,7 @@ Name: 循迹 (works for both 古人 and 诗). Tone: young adults, emotional valu
 | Entry | third top tab 「循迹」 (after 时空 · 地图), map as its stage |
 | Architecture | static data `src/data/threads.ts` + pure `ThreadCore` + Alpine UI, all client-side |
 | Sound | every stop is a note on its era's instrument (EraSynth); the route becomes a tune |
-| Pace | ~7 s per stop |
+| Pace | 2 s per stop (was 7 s; user: too slow) |
 | Back-links | museum drawer, dynasty drawer, 脚下千年 — all in v1 |
 
 ## 1. Data — `src/data/threads.ts`
@@ -80,7 +80,7 @@ and fetched the first time the 循迹 tab or a back-link opens, like place names
 
 State: `xunji = { list, thread, stop, playing, ended }`.
 
-- **Play (B)**: each stop dwells 7 s: map `flyTo` the stop (zoom ~7, 1.2 s), the route so far drawn
+- **Play (B)**: each stop dwells 2 s: map `flyTo` the stop (zoom ~7, 1.2 s), the route so far drawn
   as a vermilion polyline with numbered stop dots (future stops faint), `EraSynth.note(era, deg)`
   on arrival. Bottom caption: `when · name` + `line` (or the story's first sentence).
 - **Pause (A)**: touching/dragging the sheet, or ❚❚, pauses and expands the current stop's card
