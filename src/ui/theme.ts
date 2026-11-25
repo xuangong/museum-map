@@ -654,6 +654,9 @@ body.toc-resizing, body.toc-resizing * { cursor: col-resize !important; user-sel
 #map { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
 #map .leaflet-popup { -webkit-user-select: text; user-select: text; }
 .here-pin { width: 14px; height: 14px; border-radius: 50%; background: var(--seal); box-shadow: 0 0 0 6px rgba(var(--seal-rgb), .25), 0 0 0 14px rgba(var(--seal-rgb), .1); }
+.thread-dot { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font: 600 10px/1 var(--mono); color: rgba(var(--fg-rgb), .55); background: rgba(var(--bg-rgb), .85); border: 1px solid rgba(var(--seal-rgb), .35); }
+.thread-dot.on { color: var(--seal-ink-hi); border-color: var(--seal); }
+.thread-dot.cur { background: var(--seal); color: #fff; box-shadow: 0 0 0 6px rgba(var(--seal-rgb), .22); }
 .popup-museum .pm-km { margin-left: auto; padding-left: 10px; font-family: var(--mono, 'JetBrains Mono', monospace); font-size: 10.5px; color: var(--text-3); }
 
 /* Markers — lit points */
