@@ -10,7 +10,9 @@ export function XunjiPanel(): string {
         <div class="xj-kick">循迹</div>
         <div class="xj-title">跟着一个人、一首诗，走一段历史</div>
       </header>
+      <div class="xj-body">
       <p class="xj-empty" x-show="!xunji.list">正在铺开路线…</p>
+      <div class="xj-empty" x-show="xunji.list && !xunji.list.length">路线没能铺开，稍后再试 <button type="button" class="chip" @click="xunjiRetry()">重试</button></div>
       <template x-for="g in xunjiGroups()" :key="g.kind">
         <section class="xj-group">
           <h3 x-text="g.label"></h3>
@@ -23,6 +25,7 @@ export function XunjiPanel(): string {
           </template>
         </section>
       </template>
+      </div>
     </div>
   </template>
   <template x-if="xunji.thread">
@@ -36,11 +39,12 @@ export function XunjiPanel(): string {
           <button class="icon-btn" @click="closeThread()" aria-label="回到线索列表">${icon("close", 18)}</button>
         </div>
       </header>
+      <div class="xj-body">
       <template x-if="!xunji.ended">
         <div class="xj-stop">
           <div class="xj-when" x-text="xunjiStop().when + ' · ' + xunjiStop().name + '（今' + xunjiStop().modern + '）'"></div>
           <div class="xj-stop-title" x-text="xunjiStop().title"></div>
-          <blockquote class="xj-line" x-show="xunjiStop().line" x-text="xunjiStop().line"></blockquote>
+          <blockquote class="xj-line" x-show="xunjiCaption()" x-text="xunjiCaption()"></blockquote>
           <p class="xj-story" x-show="!xunji.playing" x-text="xunjiStop().story"></p>
           <div class="xj-nav" x-show="!xunji.playing">
             <button class="chip" @click="xunjiGo(xunji.i - 1)" :disabled="xunji.i === 0">‹ 上一站</button>
@@ -56,9 +60,10 @@ export function XunjiPanel(): string {
           <pre class="xj-poem" x-show="xunji.thread.poem" x-text="xunji.thread.poem ? xunji.thread.poem.title + '\\n' + xunji.thread.poem.text : ''"></pre>
           <button class="xj-cta" @click="threadToTrip()">把这条路变成我的行程 →</button>
           <button class="chip" x-show="xunji.thread.recording" @click="xunjiListen()" x-text="xunji.listening ? '■ 停下' : '听原曲 · 《' + xunjiRecordingName() + '》'"></button>
-          <button class="chip" @click="xunjiGo(0); xunjiPlay()">再走一遍</button>
+          <button class="chip" @click="xunjiPlay()">再走一遍</button>
         </div>
       </template>
+      </div>
     </div>
   </template>
 </div>`

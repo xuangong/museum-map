@@ -244,7 +244,9 @@ window.MuseumMap = {
   /** 循迹 view: museum / event / mention markers step back; only the thread is drawn. */
   setThreadMode: function(on) {
     var self = this;
-    ['markersLayer', 'eventMarkersLayer', 'mentionLayer', 'rangeLayer', 'routeLayer', 'eraLayer', 'territoryLayer'].forEach(function(k){
+    var order = ['markersLayer', 'eventMarkersLayer', 'mentionLayer', 'rangeLayer', 'routeLayer', 'eraLayer', 'territoryLayer'];
+    // hide in this order; bring back bottom-up so the stacking is what it was
+    (on ? order : ['territoryLayer', 'eraLayer', 'rangeLayer', 'routeLayer', 'markersLayer', 'eventMarkersLayer', 'mentionLayer']).forEach(function(k){
       var l = self[k]; if (!l) return;
       if (on && self.map.hasLayer(l)) self.map.removeLayer(l);
       if (!on && !self.map.hasLayer(l)) l.addTo(self.map);
@@ -264,9 +266,10 @@ window.MuseumMap = {
       L.marker(c, { icon: L.divIcon({ className: '', html: '<div class="' + cls + '">' + (k + 1) + '</div>', iconSize: [20, 20], iconAnchor: [10, 10] }), interactive: false, zIndexOffset: k === upto ? 900 : 800 }).addTo(self.threadLayer);
     });
   },
-  fitThread: function(stops) {
+  fitThread: function(stops, pad) {
+    pad = pad || {};
     var pts = (stops || []).map(function(s){ return window.toMapCoord(s.lat, s.lng); });
-    if (pts.length) this.map.flyToBounds(L.latLngBounds(pts), { padding: [48, 48], duration: 0.8, maxZoom: 8 });
+    if (pts.length) this.map.flyToBounds(L.latLngBounds(pts), { paddingTopLeft: [(pad.left || 0) + 48, (pad.top || 0) + 48], paddingBottomRight: [(pad.right || 0) + 48, (pad.bottom || 0) + 48], duration: 0.8, maxZoom: 8 });
   },
   clearThread: function() { if (this.threadLayer) this.threadLayer.clearLayers(); },
   setUser: function(lat, lng) {

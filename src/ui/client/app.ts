@@ -710,11 +710,12 @@ window.museumApp = function() {
     // ── 循迹's sheet on phones follows the finger by its handle / header: open ↔ bar.
     xunjiDragStart(e) {
       this._xg = null;
-      if (this.xunji.playing) this.xunjiPause();
-      if (this.view !== 'xunji' || window.innerWidth > 920) return;
+      if (this.view !== 'xunji' || window.innerWidth > 920) { if (this.xunji.playing) this.xunjiPause(); return; }
       var t = e.changedTouches && e.changedTouches[0], el = document.querySelector('.xunji-panel');
+      var wasMini = !!this.xunji.mini;
+      if (this.xunji.playing) { this.xunji.playing = false; this.xunjiStopTimer(); }   // pause, but leave the bar state alone
       if (!t || !el) return;
-      this._xg = { id: t.identifier, el: el, y0: t.clientY, x0: t.clientX, lastY: t.clientY, lastT: Date.now(), v: 0, fromBar: !!this.xunji.mini, on: false, off: 0 };
+      this._xg = { id: t.identifier, el: el, y0: t.clientY, x0: t.clientX, lastY: t.clientY, lastT: Date.now(), v: 0, fromBar: wasMini, on: false, off: 0 };
     },
     xunjiDragMove(e) {
       var g = this._xg; if (!g) return;
@@ -873,7 +874,11 @@ window.museumApp = function() {
 
     setView(v) {
       if (v === 'strata' && !this._strataOk) { this.flashToast('当前设备不支持 3D 视图'); v = 'map'; }
-      if (this.view === 'xunji' && v !== 'xunji') { this.xunjiPause(); this.xunjiStopListen(); if (window.MuseumMap) window.MuseumMap.setThreadMode(false); }
+      if (this.view === 'xunji' && v !== 'xunji') {
+        this.xunjiPause(); this.xunjiStopListen();
+        if (window.MuseumMap) { window.MuseumMap.setThreadMode(false); if (this.tripMode && window.MuseumMap.onMapClick) window.MuseumMap.onMapClick(this.tripMapClick.bind(this)); }
+        if (/^#\\/x\\//.test(location.hash || '')) this.setHashRoute(null);
+      }
       this.view = v;
       try { window.localStorage.setItem('mmView', v === 'xunji' ? 'map' : v); } catch(_) {}
       if (window.MuseumStrata) window.MuseumStrata.setActive(v === 'strata');
@@ -889,10 +894,11 @@ window.museumApp = function() {
         if (this.tocOpen) this.tocOpen = false;
         if (this.drawer.open) this.hideDrawer();
         this.dismissHere();
+        if (this.chat) this.chat.open = false;
         this.loadThreads();
         setTimeout(function(){
           if (me.view !== 'xunji') return;           // left again within 60 ms
-          if (window.MuseumMap && window.MuseumMap.map) { window.MuseumMap.map.invalidateSize(); window.MuseumMap.setThreadMode(true); }
+          if (window.MuseumMap && window.MuseumMap.map) { window.MuseumMap.map.invalidateSize(); window.MuseumMap.setThreadMode(true); if (window.MuseumMap.onMapClick) window.MuseumMap.onMapClick(null); }
           if (me.xunji.thread) me.xunjiShow(false);
         }, 60);
       }
@@ -1545,9 +1551,34 @@ window.museumApp = function() {
     // ─── 循迹 ───
     async loadThreads() {
       if (this.xunji.list) return this.xunji.list;
-      try { var r = await fetch(this.threadsUrl || '/assets/threads.json'); this.xunji.list = r.ok ? await r.json() : []; }
-      catch (_) { this.xunji.list = []; }
-      return this.xunji.list;
+      if (this._threadsP) return this._threadsP;
+      var self = this;
+      this._threadsP = (async function(){
+        try { var r = await fetch(self.threadsUrl || '/assets/threads.json'); self.xunji.list = r.ok ? await r.json() : []; }
+        catch (_) { self.xunji.list = []; }
+        self._threadsP = null;
+        return self.xunji.list;
+      })();
+      return this._threadsP;
+    },
+    xunjiRetry() { this.xunji.list = null; this._threadsP = null; this.loadThreads(); },
+    /** The stop's caption slot: its line, else the first sentence of its story. */
+    xunjiCaption() {
+      var s = this.xunjiStop();
+      if (s.line) return s.line;
+      if (!this.xunji.playing) return '';
+      var m = String(s.story || '').match(/^[^。]*。?/);
+      return m ? m[0] : '';
+    },
+    /** Margins the 循迹 panel takes off the map, for showAt / fitThread. */
+    xunjiPad() {
+      var pad = { top: 0, right: 0, bottom: 0, left: 0 };
+      var panel = document.querySelector('.xunji-panel'), canvas = document.querySelector('.canvas');
+      if (!panel || !canvas || this.view !== 'xunji') return pad;
+      var pr = panel.getBoundingClientRect(), cr = canvas.getBoundingClientRect();
+      if (window.innerWidth > 920) pad.right = Math.max(0, Math.round(cr.right - pr.left));
+      else { pad.bottom = Math.max(0, Math.round(cr.bottom - (window.innerHeight - panel.offsetHeight))); if (window.innerWidth <= 640) pad.top = 60; }
+      return pad;
     },
     xunjiGroups() {
       var l = this.xunji.list || [];
@@ -1566,18 +1597,25 @@ window.museumApp = function() {
       await this.loadThreads();
       var t = this.threadById(id); if (!t) { this.flashToast('没找到这条线索'); return; }
       if (this.view !== 'xunji') this.setView('xunji');
+      if (this.drawer.open) this.hideDrawer();
+      this.dismissHere();
+      this.tocOpen = false;
       this.xunjiStopTimer();
       this.xunji.thread = t; this.xunji.ended = false; this.xunji.mini = false;
       this.xunji.i = Math.max(0, Math.min(t.stops.length - 1, stop || 0));
       this._xjNotes = window.ThreadCore.notes(t);
-      if (opts.play) this.xunjiPlay(); else this.xunjiShow(false);
+      if (opts.play) this.xunjiPlay(); else { this.xunji.playing = false; this.xunjiShow(false); }
       if (!opts.fromHash) this.setHashRoute({ kind: 'thread', id: t.id + (this.xunji.i ? '/' + (this.xunji.i + 1) : '') });
     },
     /** Draw + fly to the current stop; sound = play its note. */
     xunjiShow(sound) {
       var t = this.xunji.thread; if (!t) return;
       var s = t.stops[this.xunji.i];
-      if (window.MuseumMap) { window.MuseumMap.setThreadRoute(t.stops, this.xunji.i); window.MuseumMap.focusPoint(s.lat, s.lng, 6); }
+      var M = window.MuseumMap, self = this;
+      if (M) {
+        M.setThreadRoute(t.stops, this.xunji.i);
+        this.$nextTick(function(){ if (self.view === 'xunji' && self.xunji.thread === t) M.showAt(s.lat, s.lng, Math.max(M.map ? M.map.getZoom() : 6, 6), self.xunjiPad(), { fly: true }); });
+      }
       if (sound && window.EraSynth) window.EraSynth.note(t.era, (this._xjNotes || [])[this.xunji.i]);
     },
     xunjiPlay() {
@@ -1595,6 +1633,7 @@ window.museumApp = function() {
         if (self.xunji.i >= self.xunji.thread.stops.length - 1) { self.xunjiEnd(); return; }
         self.xunji.i++;
         self.xunjiShow(true);
+        self.setHashRoute({ kind: 'thread', id: self.xunji.thread.id + '/' + (self.xunji.i + 1) });
         self.xunjiSchedule();
       }, 7000);
     },
@@ -1613,7 +1652,7 @@ window.museumApp = function() {
       this.xunji.playing = false; this.xunjiStopTimer();
       this.xunji.ended = true; this.xunji.mini = false;
       var t = this.xunji.thread;
-      if (t && window.MuseumMap) { window.MuseumMap.setThreadRoute(t.stops, t.stops.length - 1); window.MuseumMap.fitThread(t.stops); }
+      if (t && window.MuseumMap) { window.MuseumMap.setThreadRoute(t.stops, t.stops.length - 1); window.MuseumMap.fitThread(t.stops, this.xunjiPad()); }
     },
     closeThread() {
       this.xunjiStopTimer(); this.xunjiStopListen();
@@ -1652,7 +1691,7 @@ window.museumApp = function() {
       this.trip.cities = r.cities; this.trip.mode = 'transit'; this.trip.picks = []; this.trip.route = null;
       this.saveTrip();
       this.xunjiPause(); this.xunjiStopListen();
-      if (!this.tripMode) this.toggleTripMode(); else { this.setView('map'); this.refreshMarkers(); }
+      if (!this.tripMode) this.toggleTripMode(); else { this.setView('map'); this.tocOpen = true; this.tripSheetMini = false; this.refreshMarkers(); }
       this.flashToast('已把 ' + r.cities.length + ' 站放进行程，沿途的馆都标出来了' + (r.skipped ? '（境外的 ' + r.skipped + ' 站只在故事里）' : ''), 3200);
     },
     hereThreads(l) {
@@ -1673,6 +1712,7 @@ window.museumApp = function() {
     async openHere(lat, lng, opts) {
       opts = opts || {};
       if (!window.HereCore || lat == null || lng == null) return;
+      if (this.view === 'xunji') this.setView('map');
       if (this.chat && this.chat.open) this.chat.mini = true;
       if (this.drawer.open) this.hideDrawer();   // the #/h/ route replaces it, so leave the URL alone
       this.here.result = null;
@@ -2657,7 +2697,7 @@ window.museumApp = function() {
     },
 
     openDynastyDrawer(d) {
-      if (this.xunji.playing) this.xunjiPause();
+      if (this.view === 'xunji') this.setView('map');
       this.dismissHere();
       // If name contains the period in parens (e.g. "两晋（公元265年—420年）"),
       // strip the parens portion from the title so subtitle shows the period.
@@ -2753,7 +2793,7 @@ window.museumApp = function() {
         }).join('') + '</ol>' });
       }
       var xe = this.xunji.list ? window.ThreadCore.byEra(this.xunji.list, d.id) : null;
-      if (!xe) { var did = d.id; this.loadThreads().then(function(){ if (self.drawer.open && self.drawer.dynastyId === did) self.reloadDrawer(); }); }
+      if (!xe) { var did = d.id; this.loadThreads().then(function(){ if (self.drawer.open && self.drawer.dynastyId === did) self.drawer.sections = self.buildDynastySections(d); }); }
       else if (xe.length) {
         sections.push({ key: 'xunji', title: '循迹', en: 'THREADS', html: '<div class="xj-links">' + xe.map(function(t){
           return '<button class="xj-link" data-thread="' + esc(t.id) + '" data-stop="0"><b>' + esc(t.title) + '</b><span>' + esc(t.intro) + '</span></button>';
@@ -2786,7 +2826,7 @@ window.museumApp = function() {
     },
 
     async openMuseum(id) {
-      if (this.xunji.playing) this.xunjiPause();
+      if (this.view === 'xunji') this.setView('map');
       this.dismissHere();
       this.selectedMuseumId = id;
       this.tocOpen = false;
@@ -4341,7 +4381,7 @@ window.museumApp = function() {
         sections.push({ key: 'here', title: '', cls: 'sec-here', html: '<button class="here-link" data-here-lat="' + m.lat + '" data-here-lng="' + m.lng + '">此馆所在 · 脚下千年 →</button>' });
       }
       var xs = this.xunji.list ? window.ThreadCore.near(this.xunji.list, m, 30) : null;
-      if (!xs) { var mid = m.id; this.loadThreads().then(function(){ if (self.drawer.open && self.selectedMuseumId === mid) self.reloadDrawer(); }); }
+      if (!xs) { var mid = m.id; this.loadThreads().then(function(){ if (self.drawer.open && self.selectedMuseumId === mid && self._drawerMuseum && self._drawerMuseum.id === mid) self.drawer.sections = self.buildMuseumSections(self._drawerMuseum); }); }
       else if (xs.length) {
         sections.push({ key: 'xunji', title: '循迹', en: 'ON THE ROAD', html: '<div class="xj-links">' + xs.map(function(x){
           return '<button class="xj-link" data-thread="' + esc(x.thread.id) + '" data-stop="' + x.index + '">这座馆在 <b>' + esc(x.thread.who) + '</b> 的路上 · 第 ' + (x.index + 1) + ' 站 ' + esc(x.stop.name) + ' →</button>';

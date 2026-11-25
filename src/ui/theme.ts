@@ -2407,7 +2407,9 @@ path.route-corridor { stroke: var(--gilt); }
 
 /* ─── 循迹 (threads on the map) ─── */
 .canvas.is-xunji .strata-wrap { visibility: hidden; pointer-events: none; }
-.xunji-panel { position: fixed; z-index: 1100; right: 16px; top: 76px; bottom: 16px; width: min(380px, calc(100vw - 32px)); display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 16px; box-shadow: 0 18px 50px rgba(0,0,0,.45); overflow-y: auto; overscroll-behavior: contain; }
+.xunji-panel { position: fixed; z-index: 1100; right: 16px; top: 76px; bottom: 16px; width: min(380px, calc(100vw - 32px)); display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 16px; box-shadow: 0 18px 50px rgba(0,0,0,.45); overflow: hidden; }
+.xj-pick, .xj-tour { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.xj-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 .xunji-grabber { display: none; }
 .xj-head { position: relative; padding: 14px 16px 10px; border-bottom: 1px solid rgba(var(--fg-rgb), .08); }
 .xj-kick { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--gilt); }
