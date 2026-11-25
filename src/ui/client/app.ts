@@ -1644,6 +1644,22 @@ window.museumApp = function() {
     },
     recordingSrc(key) { var r = this._recordings && this._recordings[key]; return r ? r.src : null; },
 
+    threadToTrip() {
+      var t = this.xunji.thread; if (!t || !window.ThreadCore) return;
+      var r = window.ThreadCore.toTrip(t);
+      if (!r.cities.length) { this.flashToast('这条路都在境外，只能在故事里走'); return; }
+      if (this.trip.cities.length && !confirm('替换当前行程？')) return;
+      this.trip.cities = r.cities; this.trip.mode = 'transit'; this.trip.picks = []; this.trip.route = null;
+      this.saveTrip();
+      this.xunjiPause(); this.xunjiStopListen();
+      if (!this.tripMode) this.toggleTripMode(); else { this.setView('map'); this.refreshMarkers(); }
+      this.flashToast('已把 ' + r.cities.length + ' 站放进行程，沿途的馆都标出来了' + (r.skipped ? '（境外的 ' + r.skipped + ' 站只在故事里）' : ''), 3200);
+    },
+    hereThreads(l) {
+      var p = this.here.point; if (!p || !this.xunji.list || !window.ThreadCore) return [];
+      return window.ThreadCore.near(this.xunji.list, p, 50).filter(function(x){ return x.thread.era === l.dynastyId; });
+    },
+
     // ─── 脚下千年 ───
     async loadLineages() {
       if (this._lineages) return this._lineages;
@@ -1662,6 +1678,7 @@ window.museumApp = function() {
       this.here.result = null;
       this.here.open = true; this.here.mini = false; this.here.loading = true;
       this.here.point = { lat: lat, lng: lng }; this.here.openEra = null;
+      this.loadThreads();
       if (window.MuseumMap && window.MuseumMap.setHere) window.MuseumMap.setHere(lat, lng, window.HereCore.R_EVENT);
       var lineages = await this.loadLineages();
       var cur = this.here.point;
@@ -2734,6 +2751,13 @@ window.museumApp = function() {
         sections.push({ key: 'events', title: '大事记', en: 'CHRONICLE', html: '<ol class="chronicle">' + d.events.map(function(e){
           return '<li><div class="ch-date">' + esc(e.date || '') + '</div><div class="ch-text">' + md(e.event || '') + '</div></li>';
         }).join('') + '</ol>' });
+      }
+      var xe = this.xunji.list ? window.ThreadCore.byEra(this.xunji.list, d.id) : null;
+      if (!xe) { var did = d.id; this.loadThreads().then(function(){ if (self.drawer.open && self.drawer.dynastyId === did) self.reloadDrawer(); }); }
+      else if (xe.length) {
+        sections.push({ key: 'xunji', title: '循迹', en: 'THREADS', html: '<div class="xj-links">' + xe.map(function(t){
+          return '<button class="xj-link" data-thread="' + esc(t.id) + '" data-stop="0"><b>' + esc(t.title) + '</b><span>' + esc(t.intro) + '</span></button>';
+        }).join('') + '</div>' });
       }
       function recCard(r, i, cls) {
         var m = r.museumId ? self.museumById(r.museumId) : null;
@@ -4248,6 +4272,8 @@ window.museumApp = function() {
       if (ask) { this.planDynastyJourney(ask.getAttribute('data-ask-dynasty')); return; }
       var hereBtn = e.target.closest('[data-here-lat]');
       if (hereBtn) { this.openHere(Number(hereBtn.getAttribute('data-here-lat')), Number(hereBtn.getAttribute('data-here-lng'))); return; }
+      var xb = e.target.closest('[data-thread]');
+      if (xb) { this.openThread(xb.getAttribute('data-thread'), Number(xb.getAttribute('data-stop')) || 0, {}); return; }
       var el = e.target.closest('.dynasty-rec');
       if (!el) return;
       var id = el.getAttribute('data-museum-id');
@@ -4313,6 +4339,13 @@ window.museumApp = function() {
       }
       if (m.lat != null && m.lng != null) {
         sections.push({ key: 'here', title: '', cls: 'sec-here', html: '<button class="here-link" data-here-lat="' + m.lat + '" data-here-lng="' + m.lng + '">此馆所在 · 脚下千年 →</button>' });
+      }
+      var xs = this.xunji.list ? window.ThreadCore.near(this.xunji.list, m, 30) : null;
+      if (!xs) { var mid = m.id; this.loadThreads().then(function(){ if (self.drawer.open && self.selectedMuseumId === mid) self.reloadDrawer(); }); }
+      else if (xs.length) {
+        sections.push({ key: 'xunji', title: '循迹', en: 'ON THE ROAD', html: '<div class="xj-links">' + xs.map(function(x){
+          return '<button class="xj-link" data-thread="' + esc(x.thread.id) + '" data-stop="' + x.index + '">这座馆在 <b>' + esc(x.thread.who) + '</b> 的路上 · 第 ' + (x.index + 1) + ' 站 ' + esc(x.stop.name) + ' →</button>';
+        }).join('') + '</div>' });
       }
 
       if (m.treasures && m.treasures.length) {

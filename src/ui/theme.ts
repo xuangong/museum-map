@@ -2442,4 +2442,10 @@ path.route-corridor { stroke: var(--gilt); }
   .xunji-grabber::after { content: ""; position: absolute; left: 50%; top: 7px; width: 36px; height: 4px; margin-left: -18px; border-radius: 2px; background: rgba(var(--fg-rgb), .3); }
   .xj-head { touch-action: none; padding-top: 2px; }
 }
+.xj-links { display: grid; gap: 8px; }
+.xj-link { all: unset; cursor: pointer; display: grid; gap: 3px; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(var(--gilt-rgb), .3); font-size: 13px; overflow-wrap: anywhere; }
+.xj-link b { color: var(--gilt); font-weight: 500; }
+.xj-link span { font-size: 12px; color: var(--text-3); }
+.xj-link:hover { border-color: var(--gilt); }
+.hl-threads { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
 `
