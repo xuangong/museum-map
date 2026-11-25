@@ -9,7 +9,7 @@ const order: Record<string, number> = Object.fromEntries(dyn.map((d: any) => [d.
 const museums = readdirSync("data/museums").map((f) => parse(readFileSync(`data/museums/${f}`, "utf8")))
 
 describe("PLACE_LINEAGES", () => {
-  it("has ~70 cities with unique ids", () => {
+  it("has 60+ cities with unique ids", () => {
     expect(PLACE_LINEAGES.length).toBeGreaterThanOrEqual(60)
     expect(new Set(PLACE_LINEAGES.map((c) => c.id)).size).toBe(PLACE_LINEAGES.length)
   })

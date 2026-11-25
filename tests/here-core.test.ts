@@ -88,3 +88,33 @@ describe("HereCore.read on real data", () => {
     expect(tang.events.length).toBeGreaterThanOrEqual(3)
   })
 })
+
+describe("HereCore edge cases", () => {
+  const P = { lat: 34.6, lng: 112.45 }
+  const ms = [1, 2, 3].map((i) => ({ id: "m" + i, name: "馆" + i, lat: 34.6 + i * 0.01, lng: 112.45 }))
+  it("an undated event keeps the chronicle's order", () => {
+    const d = { id: "xia", events: [
+      { date: "约前2070年", event: "a", lat: 34.6, lng: 112.45 },
+      { date: "太康失国", event: "b", lat: 34.6, lng: 112.45 },
+      { date: "约前1600年", event: "c", lat: 34.6, lng: 112.45 },
+    ], recommendedMuseums: [], relatedMuseums: [] }
+    const r = H.read(P, { dynasties: [d], museums: [], lineages: [] })
+    expect(r.layers[0].events.map((e: any) => e.event)).toEqual(["a", "b", "c"])
+  })
+  it("de-duplicates museums across recommended/related and caps at 2", () => {
+    const d = { id: "tang", events: [], recommendedMuseums: [{ museumId: "m3" }, { museumId: "m1" }], relatedMuseums: [{ museumId: "m1" }, { museumId: "m2" }] }
+    const r = H.read(P, { dynasties: [d], museums: ms, lineages: [] })
+    expect(r.layers[0].museums.map((m: any) => m.id)).toEqual(["m1", "m2"])
+  })
+  it("skips events and museums without coordinates", () => {
+    const d = { id: "tang", events: [{ date: "700年", event: "x", lat: null, lng: null }], recommendedMuseums: [{ museumId: "nolng" }], relatedMuseums: [] }
+    const r = H.read(P, { dynasties: [d], museums: [{ id: "nolng", name: "无经度", lat: 34.6, lng: null }], lineages: [] })
+    expect(r.layers).toEqual([])
+  })
+  it("headline: a tie goes to the newer name; no city → null", () => {
+    const city = { id: "c", name: "今", lat: 34.6, lng: 112.45, names: [{ era: "qin", name: "甲" }, { era: "tang", name: "乙" }] }
+    const ds = ["qin", "tang"].map((id) => ({ id, events: [], recommendedMuseums: [], relatedMuseums: [] }))
+    expect(H.headline(H.read(P, { dynasties: ds, museums: [], lineages: [city] }))).toBe("乙")
+    expect(H.headline(H.read({ lat: 20, lng: 80 }, { dynasties: ds, museums: [], lineages: [city] }))).toBeNull()
+  })
+})

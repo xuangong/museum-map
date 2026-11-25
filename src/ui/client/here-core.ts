@@ -11,7 +11,7 @@ export const HERE_CORE_SCRIPT = `
     var h = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
     return 2 * R * Math.asin(Math.sqrt(h));
   }
-  /** First year in a date label: "前221年" → -221, "627—649年" → 627, "约前1300年" → -1300. */
+  /** First number in a date label read as a year: "前221年" → -221, "627—649年" → 627, "约前1300年" → -1300; no digits → 0. */
   function year(date) {
     var m = String(date || '').match(/(前)?(\\d+)/);
     return m ? (m[1] ? -1 : 1) * Number(m[2]) : 0;
@@ -36,13 +36,15 @@ export const HERE_CORE_SCRIPT = `
       var nm = null;
       if (city) for (var i = 0; i < city.names.length; i++) if (city.names[i].era === d.id) { nm = city.names[i]; break; }
       var events = (d.events || []).filter(function(e){ return e.lat != null && e.lng != null; })
-        .map(function(e){ return { date: e.date, event: e.event, lat: e.lat, lng: e.lng, km: km(p, e) }; })
+        .map(function(e, i){ return { date: e.date || '', event: e.event || '', lat: e.lat, lng: e.lng, km: km(p, e), _i: i, _y: /\\d/.test(e.date || '') ? year(e.date) : null }; })
         .filter(function(e){ return e.km <= R_EVENT; })
-        .sort(function(a, b){ return year(a.date) - year(b.date); });
+        // By year; an undated event (e.g. 太康失国) or a tie keeps the chronicle's own order.
+        .sort(function(a, b){ return (a._y == null || b._y == null || a._y === b._y) ? a._i - b._i : a._y - b._y; })
+        .map(function(e){ return { date: e.date, event: e.event, lat: e.lat, lng: e.lng, km: e.km }; });
       var seen = {}, ms = [];
       (d.recommendedMuseums || []).concat(d.relatedMuseums || []).forEach(function(r){
         var m = r && r.museumId && byId[r.museumId];
-        if (!m || seen[m.id] || m.lat == null) return;
+        if (!m || seen[m.id] || m.lat == null || m.lng == null) return;
         seen[m.id] = true;
         var k = km(p, m);
         if (k <= R_MUSEUM) ms.push({ id: m.id, name: m.name, km: k });
@@ -76,10 +78,11 @@ export const HERE_CORE_SCRIPT = `
   function headline(r) {
     if (!r || !r.city) return null;
     var count = {}, best = null;
-    r.layers.forEach(function(l){            // newest first, so the first to reach a count wins ties
+    r.layers.forEach(function(l){
       if (!l.name || l.name === r.city.name) return;
       count[l.name] = (count[l.name] || 0) + 1;
     });
+    // Layers run newest first and only a strictly higher count replaces: ties go to the newer name.
     r.layers.forEach(function(l){
       if (!l.name || !count[l.name]) return;
       if (!best || count[l.name] > count[best]) best = l.name;
