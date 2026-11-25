@@ -46,3 +46,13 @@ describe("THREADS", () => {
     }
   })
 })
+
+describe("THREADS modern names", () => {
+  it("trip stops use the short 省+市 form ThreadCore.cityOf expects", () => {
+    for (const t of THREADS) for (const s of t.stops) {
+      if (!s.trip) continue
+      expect(s.modern).not.toMatch(/省|自治区|维吾尔|壮族|回族/)
+      expect(s.modern.length).toBeGreaterThanOrEqual(2)
+    }
+  })
+})
