@@ -1619,8 +1619,34 @@ body.chat-locked .chat-body { touch-action: pan-y; }
 .strata-now i { font-style: normal; font-size: 13px; color: var(--seal-ink-strong); position: absolute; right: 8px; bottom: 6px; }
 .strata-now.has-link span { padding-right: 12px; }
 .canvas.has-drawer .strata-now { right: calc(var(--drawer-w) + 14px); }
+.canvas.has-drawer .strata-listen { right: calc(var(--drawer-w) + 14px); }
 @keyframes now-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .strata-now.is-on { animation: none; } }
+/* 听原曲: a real guqin performance of the era's piece, credited while it plays */
+.strata-now.has-listen { pointer-events: auto; }
+.strata-now .nc-listen { margin-top: 4px; color: var(--gilt); font-size: 12px; cursor: pointer; border-bottom: 1px solid rgba(var(--gilt-rgb),0.4); }
+.strata-now .nc-listen:hover { color: var(--gilt-hi); }
+.strata-listen {
+  position: absolute; top: 108px; right: 14px; max-width: min(320px, 70vw); z-index: 6;
+  display: none; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 4px 8px; text-align: right;
+  padding: 8px 12px; border-radius: 12px; overflow-wrap: anywhere;
+  background: rgba(var(--bg-rgb),0.95); border: 1px solid rgba(var(--gilt-rgb),0.35); color: var(--text-2);
+  box-shadow: 0 10px 26px -16px var(--sh-90); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+}
+.strata-listen.is-on { display: flex; animation: now-in 0.35s ease-out; }
+.strata-listen b { color: var(--gilt); font-weight: 500; }
+.strata-listen .sl-about { font-size: 12px; flex: 1 1 100%; }
+.strata-listen .sl-credit { font-family: var(--mono); font-size: 10.5px; color: var(--text-3); }
+.strata-listen .sl-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.strata-listen .sl-stop { all: unset; cursor: pointer; width: 26px; height: 26px; border-radius: 50%; display: inline-grid; place-items: center; font-size: 10px; color: var(--seal-ink-strong); border: 1px solid rgba(var(--seal-rgb),0.45); }
+.strata-listen .sl-lead { font-size: 11.5px; color: var(--text-3); flex: 1 1 100%; }
+.strata-listen .sl-chip { all: unset; cursor: pointer; font-size: 12px; padding: 4px 10px; border-radius: 999px; color: var(--gilt); border: 1px solid rgba(var(--gilt-rgb),0.4); }
+.strata-listen .sl-chip:hover, .strata-listen .sl-stop:hover { border-color: var(--gilt-hi); color: var(--gilt-hi); }
+@media (max-width: 640px) {
+  .strata-now .nc-listen { flex: none; margin-top: 0; font-size: 11.5px; white-space: nowrap; }
+  .strata-listen { max-width: calc(100vw - 28px); }
+}
+@media (prefers-reduced-motion: reduce) { .strata-listen.is-on { animation: none; } }
 /* The era being played */
 .strata-label.is-playing { color: var(--seal-ink-strong); background: rgba(var(--seal-rgb),0.14); box-shadow: inset 0 0 0 1px rgba(var(--seal-rgb),0.45); transform-origin: left center; }
 /* Eras playing along with the lead */

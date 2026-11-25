@@ -1,6 +1,7 @@
 import { CHINA_GEO_JSON } from "./geo-data"
 import { ERA_VOICES } from "../../data/era-voices"
 import { ERA_TUNES } from "../../data/era-tunes"
+import { GUQIN_RECORDINGS } from "../../data/guqin-recordings"
 
 // 时空地层 — the 3D time-space view. Served as an ES module at /assets/strata.js.
 //
@@ -65,6 +66,8 @@ const unlockAudio = () => SYN.unlock();
 const ERA = ${JSON.stringify(ERA_VOICES)};
 // Era → the famous pieces it is remembered by (src/data/era-tunes.ts), named while it plays.
 const TUNES = ${JSON.stringify(ERA_TUNES)};
+// Era → a real guqin performance (src/data/guqin-recordings.ts): 听原曲 after / during 奏一曲.
+const RECORDINGS = ${JSON.stringify(GUQIN_RECORDINGS).replace(/</g, "\\u003c")};
 const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 // 16-bit PCM WAV of a rendered buffer (for listening to a performance outside the page).
 function wavBytes(buf) {
@@ -828,6 +831,7 @@ function init(container, data, cb) {
   // li: the era leading now (N = 今); act: every era playing with it.
   function markPlayLayer(li, rest, act, quote) {
     playLayer = li; playRest = !!rest; playAct = new Set(act || []);
+    if (li >= 0 && li < N && RECORDINGS[layers[li].id] && heard.indexOf(layers[li].id) < 0) heard.push(layers[li].id);
     if (li >= 0 && li < N) cb.onTuneEra && cb.onTuneEra(layers[li].id, quote ? quote.name : null);
     paintNow(li, quote);
     layerLabels.forEach((l) => {
@@ -851,6 +855,7 @@ function init(container, data, cb) {
     c.lay.forEach((l) => { l.at = t0 + l.t; });
     play = { audio, ev: c.ev, lay: c.lay, i: 0, j: 0, end: t0 + c.dur, srcs, focus: F };
     playTunes = {};
+    heard = []; stopListen();
     hint.classList.add('is-gone');
     jiBtn.style.display = 'none';
     paintPlay();
@@ -876,6 +881,7 @@ function init(container, data, cb) {
       const done = play.focus < 0 && !guest ? strings.length : 0;
       const eras = new Set(); strings.forEach((st) => museums[st.m].links.forEach((li) => eras.add(li)));
       stopPlay();
+      paintListen(null);
       if (cb.onSend && !guest) jiBtn.style.display = 'inline-flex';
       if (done && cb.onTuneDone) cb.onTuneDone({ museums: done, eras: eras.size });
     }
@@ -1067,13 +1073,91 @@ function init(container, data, cb) {
       tune = tunes[playTunes[li]];
       html += '<span class="nc-tune">♪ 《' + esc(tune.name) + '》 ' + esc(tune.story) + '</span>';
     }
+    const rec = li >= 0 && li < N ? RECORDINGS[layers[li].id] : null;
+    if (rec) html += '<span class="nc-listen" data-listen="' + esc(layers[li].id) + '">' + (rec.kind === 'original' ? '听原曲' : '听同代琴曲') + ' · 《' + esc(rec.piece) + '》 ›</span>';
     nowCap.innerHTML = html;
+    nowCap.classList.toggle('has-listen', !!rec);
     nowCap.classList.toggle('has-tune', !!tune);
     nowCap.classList.toggle('has-link', !!nowMuseum);
     nowCap.classList.add('is-on');
   }
-  nowCap.addEventListener('click', (e) => { e.stopPropagation(); if (nowMuseum && cb.onMuseum) cb.onMuseum(nowMuseum); });
+  nowCap.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const l = e.target.closest && e.target.closest('[data-listen]');
+    if (l) { listen(l.getAttribute('data-listen')); return; }
+    if (nowMuseum && cb.onMuseum) cb.onMuseum(nowMuseum);
+  });
   overlay.appendChild(nowCap);
+  // ── 听原曲: a real guqin performance of the era's piece (CC-licensed, credited while it plays).
+  // Decoded into the shared context and played straight to the output — it already has its room —
+  // so it follows the silent switch like every other sound on the page.
+  const listenEl = el('div', 'strata-listen');
+  overlay.appendChild(listenEl);
+  let heard = [], listening = null;
+  const recBuf = {};
+  function loadRec(ac, r) {
+    if (recBuf[r.src]) return recBuf[r.src];
+    recBuf[r.src] = fetch(r.src).then((res) => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.arrayBuffer(); })
+      .then((ab) => new Promise((ok, bad) => { const p = ac.decodeAudioData(ab, ok, bad); if (p && p.then) p.then(ok, bad); }));
+    recBuf[r.src].catch(() => { delete recBuf[r.src]; });
+    return recBuf[r.src];
+  }
+  function listen(id) {
+    const r = RECORDINGS[id]; if (!r) return;
+    unlockAudio();                       // inside the tap
+    stopPlay(); stopListen();
+    const ac = audioCtx(); if (!ac) return;
+    const me = listening = { id, src: null, g: null };
+    paintListen('loading', id);
+    loadRec(ac, r).then((buf) => {
+      if (listening !== me) return;
+      const ctx = audioCtx(); if (!ctx) { stopListen(); return; }
+      const src = ctx.createBufferSource(), g = ctx.createGain();
+      src.buffer = buf; g.gain.value = 0.9; src.connect(g); g.connect(ctx.destination);
+      src.onended = () => { if (listening === me) { listening = null; paintListen(null); } };
+      src.start(); me.src = src; me.g = g;
+      paintListen('playing', id);
+    }).catch(() => { if (listening === me) { listening = null; paintListen('error', id); } });
+  }
+  function stopListen() {
+    const l = listening; listening = null;
+    if (l && l.src) {
+      try { const t = l.src.context.currentTime; l.g.gain.setTargetAtTime(0, t, 0.12); l.src.stop(t + 0.5); }
+      catch (e) { try { l.src.stop(); } catch (e2) {} }
+    }
+    paintListen(null);
+  }
+  let listenTimer = 0;
+  function paintListen(mode, id) {
+    clearTimeout(listenTimer);
+    const r = id ? RECORDINGS[id] : null;
+    let html = '';
+    if ((mode === 'loading' || mode === 'playing') && r) {
+      html = '<b>♪ 《' + esc(r.piece) + '》</b>'
+        + '<span class="sl-about">' + (mode === 'loading' ? '正在取来这段琴声…' : (r.kind === 'original' ? '原曲 · ' : '同代琴曲 · ') + esc(r.about)) + '</span>'
+        + '<span class="sl-credit">演奏 <a href="' + esc(r.commons) + '" target="_blank" rel="noopener">' + esc(r.performer) + '</a> · ' + esc(r.license) + '</span>'
+        + '<button type="button" class="sl-stop" aria-label="停下">■</button>';
+    } else if (mode === 'error' && r) {
+      html = '<span class="sl-about">《' + esc(r.piece) + '》这段录音没能取来，稍后再试</span>';
+      listenTimer = setTimeout(() => paintListen(null), 2600);
+    } else if (!play && heard.length) {
+      html = '<span class="sl-lead">这一曲里有</span>' + heard.map((h) => {
+        const x = RECORDINGS[h];
+        return '<button type="button" class="sl-chip" data-listen="' + esc(h) + '">' + (x.kind === 'original' ? '听原曲' : '听同代琴曲') + ' · 《' + esc(x.piece) + '》</button>';
+      }).join('');
+    }
+    listenEl.innerHTML = html;
+    listenEl.classList.toggle('is-on', !!html);
+    listenEl.classList.toggle('is-chips', !!html && !mode);
+  }
+  listenEl.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (!e.target.closest) return;
+    if (e.target.closest('.sl-stop')) { stopListen(); return; }
+    const l = e.target.closest('[data-listen]');
+    if (l) listen(l.getAttribute('data-listen'));
+  });
+  ['pointerdown', 'touchstart', 'wheel'].forEach((t) => listenEl.addEventListener(t, (e) => e.stopPropagation(), { passive: true }));
   // ── 溯洄: from 今 sink through the strata, one layer at a time, down to 新石器 ──
   // A timeline of [{ kind, layer, dwell }]: an opening at 今, one entry per layer (清 → 新石器),
   // and an ending. Each layer lights up and the one above lingers as a ghost; the camera sinks to
@@ -2068,7 +2152,7 @@ function init(container, data, cb) {
   Object.assign(S, {
     ready: true,
     update,
-    setActive(on) { active = !!on; if (on) { last = performance.now(); fit(true); } else { stopPlay(); voyStop(false); } },
+    setActive(on) { active = !!on; if (on) { last = performance.now(); fit(true); } else { stopPlay(); stopListen(); heard = []; paintListen(null); voyStop(false); } },
     renderTune,
     play: (o) => startPlay(o || {}),
     stop: () => { stopPlay(); voyStop(); },
