@@ -749,6 +749,8 @@ and add these methods next to `locateMe()`:
       this.here.point = { lat: lat, lng: lng }; this.here.openEra = null;
       if (window.MuseumMap && window.MuseumMap.setHere) window.MuseumMap.setHere(lat, lng, window.HereCore.R_EVENT);
       var lineages = await this.loadLineages();
+      var cur = this.here.point;
+      if (!this.here.open || !cur || cur.lat !== lat || cur.lng !== lng) return;   // a newer press won the race
       this.here.result = window.HereCore.read({ lat: lat, lng: lng }, { dynasties: this.dynasties, museums: this.museums, lineages: lineages });
       this.here.loading = false;
       if (!opts.fromHash) this.setHereHash(lat, lng);
