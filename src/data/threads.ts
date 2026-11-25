@@ -5,6 +5,18 @@
  * (GPL) was used only as a reference for which routes exist — no text copied. `source` records
  * where each stop's facts come from, for fact-checking (not shown). tests/threads.test.ts.
  */
+export interface ThreadImage {
+  src: string; work: string; by: string; where: string; license: string
+  commons?: string; focus?: string
+}
+export interface ThreadAct {
+  title: string; place: string; span: string
+  stops: [number, number]
+  body: string[]
+  quote?: { text: string; source: string }
+  image?: ThreadImage
+  source: string
+}
 export interface ThreadStop {
   name: string; modern: string; lat: number; lng: number
   year: number; when: string; title: string; story: string
@@ -16,6 +28,7 @@ export interface Thread {
   poem?: { title: string; text: string }
   stops: ThreadStop[]
   recording?: string
+  mag?: string; deck?: string; opening?: string; cover?: ThreadImage; acts?: ThreadAct[]
 }
 
 export const THREADS: Thread[] = [
