@@ -10,3 +10,4 @@ bun.lockb
 .claude/
 .agents/
 dist/
+.superpowers/
