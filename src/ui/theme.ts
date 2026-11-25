@@ -651,6 +651,8 @@ body.toc-resizing, body.toc-resizing * { cursor: col-resize !important; user-sel
 .ev-rel-label { margin-top: 10px; font-size: 11px; color: var(--text-3); letter-spacing: 0.06em; }
 .popup-museum { display: flex; align-items: center; gap: 6px; margin-top: 6px; color: var(--gilt-hi); cursor: pointer; font-size: 12.5px; }
 .popup-museum .ic { width: 13px; height: 13px; }
+#map { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+.here-pin { width: 14px; height: 14px; border-radius: 50%; background: var(--seal); box-shadow: 0 0 0 6px rgba(var(--seal-rgb), .25), 0 0 0 14px rgba(var(--seal-rgb), .1); }
 .popup-museum .pm-km { margin-left: auto; padding-left: 10px; font-family: var(--mono, 'JetBrains Mono', monospace); font-size: 10.5px; color: var(--text-3); }
 
 /* Markers — lit points */

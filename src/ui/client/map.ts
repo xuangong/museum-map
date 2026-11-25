@@ -27,6 +27,7 @@ window.MuseumMap = {
     this.eventMarkersLayer = L.layerGroup().addTo(this.map);
     this.mentionLayer = L.layerGroup().addTo(this.map);
     this.userLayer = L.layerGroup().addTo(this.map);
+    this.hereLayer = L.layerGroup().addTo(this.map);
   },
   setMarkers: function(museums, onClick, opts) {
     this.markersLayer.clearLayers();
@@ -182,8 +183,61 @@ window.MuseumMap = {
     if (!this._mapClickBound && this.map) {
       this._mapClickBound = true;
       var self = this;
-      this.map.on('click', function(e){ if (self._mapClick) self._mapClick(e.latlng); });
+      this.map.on('click', function(e){
+        if (self._suppressClickUntil && Date.now() < self._suppressClickUntil) return;   // the click that ends a long-press
+        if (self._mapClick) self._mapClick(e.latlng);
+      });
     }
+  },
+  /** Long-press / right-click on the map (GCJ latlng); null to stop. Leaflet turns a desktop
+   *  right-click and an Android / iOS Safari long-press into contextmenu; the timer covers
+   *  webviews where it doesn't (WeChat on iOS). Both paths fire once. */
+  onLongPress: function(cb) {
+    this._longPress = cb;
+    if (this._lpBound || !this.map) return;
+    this._lpBound = true;
+    var self = this, map = this.map, el = map.getContainer(), timer = null, start = null, firedAt = 0;
+    function fire(ll) {
+      if (!self._longPress || Date.now() - firedAt < 800) return;
+      firedAt = Date.now();
+      self._suppressClickUntil = firedAt + 600;
+      self._longPress(ll);
+    }
+    map.on('contextmenu', function(e){
+      if (e.originalEvent && e.originalEvent.preventDefault) e.originalEvent.preventDefault();
+      fire(e.latlng);
+    });
+    function cancel(){ if (timer) { clearTimeout(timer); timer = null; } }
+    el.addEventListener('touchstart', function(e){
+      cancel();
+      if (e.touches.length !== 1) return;
+      var t = e.touches[0];
+      start = { x: t.clientX, y: t.clientY };
+      timer = setTimeout(function(){
+        timer = null;
+        var r = el.getBoundingClientRect();
+        fire(map.containerPointToLatLng(L.point(start.x - r.left, start.y - r.top)));
+      }, 550);
+    }, { passive: true });
+    el.addEventListener('touchmove', function(e){
+      if (!timer || !start) return;
+      var t = e.touches[0];
+      if (e.touches.length !== 1 || Math.abs(t.clientX - start.x) > 8 || Math.abs(t.clientY - start.y) > 8) cancel();
+    }, { passive: true });
+    el.addEventListener('touchend', cancel, { passive: true });
+    el.addEventListener('touchcancel', cancel, { passive: true });
+  },
+  /** 脚下千年: the point being read and its event ring (WGS-84 in). */
+  setHere: function(lat, lng, km) {
+    this.hereLayer.clearLayers();
+    var c = window.toMapCoord(lat, lng);
+    L.circle(c, { radius: (km || 50) * 1000, color: '#D4B072', weight: 1, opacity: 0.6, dashArray: '4 6', fill: false, interactive: false }).addTo(this.hereLayer);
+    L.marker(c, { icon: L.divIcon({ className: '', html: '<div class="here-pin"></div>', iconSize: [14, 14], iconAnchor: [7, 7] }), interactive: false, zIndexOffset: 950 }).addTo(this.hereLayer);
+  },
+  clearHere: function() { if (this.hereLayer) this.hereLayer.clearLayers(); },
+  /** Fly to a point of the reading (WGS-84), never zooming out. */
+  focusPoint: function(lat, lng, zoom) {
+    this.map.flyTo(window.toMapCoord(lat, lng), Math.max(this.map.getZoom(), zoom || 8), { duration: 0.6 });
   },
   setUser: function(lat, lng) {
     this.userLayer.clearLayers();
