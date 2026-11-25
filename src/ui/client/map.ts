@@ -244,20 +244,20 @@ window.MuseumMap = {
   /** 循迹 view: museum / event / mention markers step back; only the thread is drawn. */
   setThreadMode: function(on) {
     var self = this;
-    ['markersLayer', 'eventMarkersLayer', 'mentionLayer', 'rangeLayer', 'routeLayer'].forEach(function(k){
+    ['markersLayer', 'eventMarkersLayer', 'mentionLayer', 'rangeLayer', 'routeLayer', 'eraLayer', 'territoryLayer'].forEach(function(k){
       var l = self[k]; if (!l) return;
       if (on && self.map.hasLayer(l)) self.map.removeLayer(l);
       if (!on && !self.map.hasLayer(l)) l.addTo(self.map);
     });
-    if (!on) this.clearThread();
+    if (!on) { this.clearThread(); if (this._selectedId && this.setSelected) this.setSelected(this._selectedId); }
   },
   /** Draw a thread: the whole route faint, the walked part (0..upto) in vermilion, numbered stops. */
   setThreadRoute: function(stops, upto) {
     this.threadLayer.clearLayers();
     var pts = (stops || []).map(function(s){ return window.toMapCoord(s.lat, s.lng); });
     if (!pts.length) return;
-    L.polyline(pts, { color: '#E0492F', weight: 1.5, opacity: 0.35, dashArray: '3 6', interactive: false }).addTo(this.threadLayer);
-    if (upto > 0) L.polyline(pts.slice(0, upto + 1), { color: '#E0492F', weight: 2.5, opacity: 0.9, interactive: false }).addTo(this.threadLayer);
+    L.polyline(pts, { className: 'thread-line', weight: 1.5, opacity: 0.35, dashArray: '3 6', interactive: false }).addTo(this.threadLayer);
+    if (upto > 0) L.polyline(pts.slice(0, upto + 1), { className: 'thread-walked', weight: 2.5, opacity: 0.9, interactive: false }).addTo(this.threadLayer);
     var self = this;
     pts.forEach(function(c, k){
       var cls = 'thread-dot' + (k <= upto ? ' on' : '') + (k === upto ? ' cur' : '');

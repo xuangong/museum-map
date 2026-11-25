@@ -1100,13 +1100,13 @@ function init(container, data, cb) {
     const me = listening = { id };
     paintListen('loading', id);
     SYN.playRecording(r.src, () => { if (listening === me) { listening = null; paintListen(null); } }).then((ok) => {
-      if (listening !== me) return;
+      if (listening !== me || ok === null) return;
       if (ok) paintListen('playing', id); else { listening = null; paintListen('error', id); }
     });
   }
   function stopListen() {
+    if (listening) SYN.stopRecording();   // only strata's own clip — 循迹 shares the player
     listening = null;
-    SYN.stopRecording();
     paintListen(null);
   }
   let listenTimer = 0;

@@ -199,7 +199,7 @@ function stringSound(deg, vel, pan, when, vk, o) {
     return recBuf[src];
   }
   /** Play one recording (stopping any other). Call inside a tap. Resolves true once sounding,
-   *  false if audio is unavailable, it failed, or another call superseded it. */
+   *  false if audio is unavailable or it failed, null if it was stopped / superseded first. */
   function playRecording(src, onEnd) {
     stopRecording();
     try { unlockAudio(); } catch (e) {}
@@ -207,13 +207,14 @@ function stringSound(deg, vel, pan, when, vk, o) {
     if (!ac) return Promise.resolve(false);
     const me = rec = { src: null, g: null };
     return loadRecording(ac, src).then((buf) => {
-      if (rec !== me) return false;
-      const s = ac.createBufferSource(), g = ac.createGain();
-      s.buffer = buf; g.gain.value = 0.9; s.connect(g); g.connect(ac.destination);
+      if (rec !== me) return null;
+      const ctx = audioCtx() || ac;          // MMAudio may have rebuilt the context while it loaded
+      const s = ctx.createBufferSource(), g = ctx.createGain();
+      s.buffer = buf; g.gain.value = 0.9; s.connect(g); g.connect(ctx.destination);
       s.onended = () => { if (rec === me) { rec = null; if (onEnd) onEnd(); } };
       s.start(); me.src = s; me.g = g;
       return true;
-    }).catch(() => { if (rec === me) rec = null; return false; });
+    }).catch(() => { if (rec !== me) return null; rec = null; return false; });
   }
   function stopRecording() {
     const l = rec; rec = null;
