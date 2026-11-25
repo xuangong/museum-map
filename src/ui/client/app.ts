@@ -261,7 +261,7 @@ window.museumApp = function() {
       var guideUp = function(){ if (self.chat.open && !self.chat.mini) self.tuckHere(); };
       this.$watch('chat.open', guideUp);
       this.$watch('chat.mini', guideUp);
-      window.addEventListener('resize', function(){ if (self.xunji.thread) { self.xunjiTopMeasure(); self.xunjiMeasure(); if (self.xunji.reading) setTimeout(function(){ self.xunjiDrawAct(); }, 80); } });
+      window.addEventListener('resize', function(){ if (self.xunji.thread) { self.xunjiTopMeasure(); self.xunjiMeasure(); if (self.xunji.reading) { clearTimeout(self._xjResize); self._xjResize = setTimeout(function(){ self.xunjiTopMeasure(); self.xunjiDrawAct(); }, 120); } } });
 
       // Sidebar (TOC) resize handle — desktop only
       this.initTocResize();
@@ -587,7 +587,6 @@ window.museumApp = function() {
         if (g.fromBar) {
           // Lay the full panel out now, sitting exactly where the bar was.
           el.classList.remove('mini');
-          if (this.xunji.reading) this.xunjiRestoreScroll();
           g.fullH = el.offsetHeight;
           el.style.transform = 'translateY(' + (g.fullH - g.barH) + 'px)';
           this.chat.mini = false;
@@ -734,6 +733,7 @@ window.museumApp = function() {
         if (g.fromBar) {
           // Lay the full panel out now, sitting exactly where the bar was.
           el.classList.remove('mini');
+          if (this.xunji.reading) this.xunjiRestoreScroll();   // back where you were reading, not the cover
           g.fullH = el.offsetHeight;
           el.style.transform = 'translateY(' + (g.fullH - g.barH) + 'px)';
           this.xunji.mini = false;

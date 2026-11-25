@@ -2443,6 +2443,7 @@ path.route-corridor { stroke: var(--gilt); }
 .xj-head { position: relative; padding: 14px 16px 10px; border-bottom: 1px solid rgba(var(--fg-rgb), .08); }
 .xj-kick { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--gilt); }
 .xj-title { font-size: 19px; margin-top: 4px; overflow-wrap: anywhere; padding-right: 96px; }
+.xunji-panel.has-thread .xj-tour .xj-title { padding-right: 150px; }   /* up to four header buttons */
 .xj-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 2px; }
 .xj-empty { padding: 16px; color: var(--text-3); font-size: 13px; }
 .xj-group { padding: 6px 12px 10px; }

@@ -82,6 +82,7 @@ describe("magazine features", () => {
         expect(len(a.title)).toBeGreaterThanOrEqual(2); expect(len(a.title)).toBeLessThanOrEqual(6)
         expect(a.source.length).toBeGreaterThan(0)
         if (a.quote) { expect(a.quote.text.length).toBeGreaterThan(0); expect(a.quote.source.length).toBeGreaterThan(0) }
+        if (a.quote && a.quote.at != null) { expect(a.quote.at).toBeGreaterThanOrEqual(0); expect(a.quote.at).toBeLessThan(a.body.length) }
       }
     }
   })
