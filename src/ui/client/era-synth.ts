@@ -187,11 +187,47 @@ function stringSound(deg, vel, pan, when, vk, o) {
       return stringSound(deg == null ? 7 : deg, vel == null ? 0.9 : vel, 0, ac.currentTime + 0.01, voiceOf(eraId));
     } catch (e) { return []; }
   }
+  // ── Recordings (听原曲): decoded into the shared context and played straight to the output —
+  // they already carry their room — so they follow the silent switch like every other sound.
+  const recBuf = {};
+  let rec = null;
+  function loadRecording(ac, src) {
+    if (recBuf[src]) return recBuf[src];
+    recBuf[src] = fetch(src).then((res) => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.arrayBuffer(); })
+      .then((ab) => new Promise((ok, bad) => { const p = ac.decodeAudioData(ab, ok, bad); if (p && p.then) p.then(ok, bad); }));
+    recBuf[src].catch(() => { delete recBuf[src]; });
+    return recBuf[src];
+  }
+  /** Play one recording (stopping any other). Call inside a tap. Resolves true once sounding,
+   *  false if audio is unavailable, it failed, or another call superseded it. */
+  function playRecording(src, onEnd) {
+    stopRecording();
+    try { unlockAudio(); } catch (e) {}
+    const ac = audioCtx();
+    if (!ac) return Promise.resolve(false);
+    const me = rec = { src: null, g: null };
+    return loadRecording(ac, src).then((buf) => {
+      if (rec !== me) return false;
+      const s = ac.createBufferSource(), g = ac.createGain();
+      s.buffer = buf; g.gain.value = 0.9; s.connect(g); g.connect(ac.destination);
+      s.onended = () => { if (rec === me) { rec = null; if (onEnd) onEnd(); } };
+      s.start(); me.src = s; me.g = g;
+      return true;
+    }).catch(() => { if (rec === me) rec = null; return false; });
+  }
+  function stopRecording() {
+    const l = rec; rec = null;
+    if (l && l.src) {
+      try { const t = l.src.context.currentTime; l.g.gain.setTargetAtTime(0, t, 0.12); l.src.stop(t + 0.5); }
+      catch (e) { try { l.src.stop(); } catch (e2) {} }
+    }
+  }
   global.EraSynth = {
     PENTA: PENTA, MAX_DEG: MAX_DEG, degFreq: degFreq, VOICES: VOICES, ERA: ERA,
     makeGraph: makeGraph, ksBuffer: ksBuffer, stringSound: stringSound,
     audioCtx: audioCtx, unlock: unlockAudio, ctx: function(){ return actx; }, master: function(){ return master; },
     voiceOf: voiceOf, note: note,
+    playRecording: playRecording, stopRecording: stopRecording,
   };
 })(window);
 `

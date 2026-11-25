@@ -1094,37 +1094,19 @@ function init(container, data, cb) {
   const listenEl = el('div', 'strata-listen');
   overlay.appendChild(listenEl);
   let heard = [], listening = null;
-  const recBuf = {};
-  function loadRec(ac, r) {
-    if (recBuf[r.src]) return recBuf[r.src];
-    recBuf[r.src] = fetch(r.src).then((res) => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.arrayBuffer(); })
-      .then((ab) => new Promise((ok, bad) => { const p = ac.decodeAudioData(ab, ok, bad); if (p && p.then) p.then(ok, bad); }));
-    recBuf[r.src].catch(() => { delete recBuf[r.src]; });
-    return recBuf[r.src];
-  }
   function listen(id) {
     const r = RECORDINGS[id]; if (!r) return;
-    unlockAudio();                       // inside the tap
     stopPlay(); stopListen();
-    const ac = audioCtx(); if (!ac) return;
-    const me = listening = { id, src: null, g: null };
+    const me = listening = { id };
     paintListen('loading', id);
-    loadRec(ac, r).then((buf) => {
+    SYN.playRecording(r.src, () => { if (listening === me) { listening = null; paintListen(null); } }).then((ok) => {
       if (listening !== me) return;
-      const ctx = audioCtx(); if (!ctx) { stopListen(); return; }
-      const src = ctx.createBufferSource(), g = ctx.createGain();
-      src.buffer = buf; g.gain.value = 0.9; src.connect(g); g.connect(ctx.destination);
-      src.onended = () => { if (listening === me) { listening = null; paintListen(null); } };
-      src.start(); me.src = src; me.g = g;
-      paintListen('playing', id);
-    }).catch(() => { if (listening === me) { listening = null; paintListen('error', id); } });
+      if (ok) paintListen('playing', id); else { listening = null; paintListen('error', id); }
+    });
   }
   function stopListen() {
-    const l = listening; listening = null;
-    if (l && l.src) {
-      try { const t = l.src.context.currentTime; l.g.gain.setTargetAtTime(0, t, 0.12); l.src.stop(t + 0.5); }
-      catch (e) { try { l.src.stop(); } catch (e2) {} }
-    }
+    listening = null;
+    SYN.stopRecording();
     paintListen(null);
   }
   let listenTimer = 0;
