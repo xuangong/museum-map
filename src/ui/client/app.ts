@@ -1652,7 +1652,10 @@ window.museumApp = function() {
       this.xunji.playing = false; this.xunjiStopTimer();
       this.xunji.ended = true; this.xunji.mini = false;
       var t = this.xunji.thread;
-      if (t && window.MuseumMap) { window.MuseumMap.setThreadRoute(t.stops, t.stops.length - 1); window.MuseumMap.fitThread(t.stops, this.xunjiPad()); }
+      if (!t || !window.MuseumMap) return;
+      window.MuseumMap.setThreadRoute(t.stops, t.stops.length - 1);
+      var self = this;   // frame after the end card has laid out, so the padding measures it
+      this.$nextTick(function(){ if (self.xunji.thread === t && self.xunji.ended) window.MuseumMap.fitThread(t.stops, self.xunjiPad()); });
     },
     closeThread() {
       this.xunjiStopTimer(); this.xunjiStopListen();
@@ -4381,7 +4384,7 @@ window.museumApp = function() {
         sections.push({ key: 'here', title: '', cls: 'sec-here', html: '<button class="here-link" data-here-lat="' + m.lat + '" data-here-lng="' + m.lng + '">此馆所在 · 脚下千年 →</button>' });
       }
       var xs = this.xunji.list ? window.ThreadCore.near(this.xunji.list, m, 30) : null;
-      if (!xs) { var mid = m.id; this.loadThreads().then(function(){ if (self.drawer.open && self.selectedMuseumId === mid && self._drawerMuseum && self._drawerMuseum.id === mid) self.drawer.sections = self.buildMuseumSections(self._drawerMuseum); }); }
+      if (!xs) { var mid = m.id; this.loadThreads().then(function(){ if (self.drawer.open && self.drawer.kind === 'museum' && self.selectedMuseumId === mid && self._drawerMuseum && self._drawerMuseum.id === mid) self.drawer.sections = self.buildMuseumSections(self._drawerMuseum); }); }
       else if (xs.length) {
         sections.push({ key: 'xunji', title: '循迹', en: 'ON THE ROAD', html: '<div class="xj-links">' + xs.map(function(x){
           return '<button class="xj-link" data-thread="' + esc(x.thread.id) + '" data-stop="' + x.index + '">这座馆在 <b>' + esc(x.thread.who) + '</b> 的路上 · 第 ' + (x.index + 1) + ' 站 ' + esc(x.stop.name) + ' →</button>';
