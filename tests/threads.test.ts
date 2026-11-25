@@ -94,6 +94,9 @@ describe("magazine features", () => {
       }
     }
   })
+  it("pilot threads carry a magazine", () => {
+    expect(mags.map((t) => t.id)).toEqual(expect.arrayContaining(["sushi", "zhangqian"]))
+  })
   it("every era has an accent", () => {
     for (const t of THREADS) expect(ERA_ACCENTS[t.era]).toMatch(/^#[0-9A-F]{6}$/i)
   })
