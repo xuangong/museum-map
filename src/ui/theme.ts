@@ -654,6 +654,10 @@ body.toc-resizing, body.toc-resizing * { cursor: col-resize !important; user-sel
 #map { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
 #map .leaflet-popup { -webkit-user-select: text; user-select: text; }
 .here-pin { width: 14px; height: 14px; border-radius: 50%; background: var(--seal); box-shadow: 0 0 0 6px rgba(var(--seal-rgb), .25), 0 0 0 14px rgba(var(--seal-rgb), .1); }
+.thread-dot { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font: 600 10px/1 var(--mono); color: rgba(var(--fg-rgb), .55); background: rgba(var(--bg-rgb), .85); border: 1px solid rgba(var(--seal-rgb), .35); }
+.thread-dot.on { color: var(--seal-ink-hi); border-color: var(--seal); }
+.thread-line, .thread-walked { stroke: var(--seal); }
+.thread-dot.cur { background: var(--seal); color: #fff; box-shadow: 0 0 0 6px rgba(var(--seal-rgb), .22); }
 .popup-museum .pm-km { margin-left: auto; padding-left: 10px; font-family: var(--mono, 'JetBrains Mono', monospace); font-size: 10.5px; color: var(--text-3); }
 
 /* Markers — lit points */
@@ -2400,4 +2404,50 @@ path.route-corridor { stroke: var(--gilt); }
 .canvas.has-drawer .here-btn { right: calc(var(--drawer-w) + 14px); }
 .here-btn:hover { color: var(--gilt-hi); border-color: rgba(var(--gilt-rgb), .45); }
 @media (max-width: 920px) { .here-btn { top: 54px; right: 10px; } }
+
+/* ─── 循迹 (threads on the map) ─── */
+.canvas.is-xunji .strata-wrap { visibility: hidden; pointer-events: none; }
+.xunji-panel { position: fixed; z-index: 1100; right: 16px; top: 76px; bottom: 16px; width: min(380px, calc(100vw - 32px)); display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line-strong); border-radius: 16px; box-shadow: 0 18px 50px rgba(0,0,0,.45); overflow: hidden; }
+.xj-pick, .xj-tour { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.xj-body { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.xunji-grabber { display: none; }
+.xj-head { position: relative; padding: 14px 16px 10px; border-bottom: 1px solid rgba(var(--fg-rgb), .08); }
+.xj-kick { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--gilt); }
+.xj-title { font-size: 19px; margin-top: 4px; overflow-wrap: anywhere; padding-right: 96px; }
+.xj-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 2px; }
+.xj-empty { padding: 16px; color: var(--text-3); font-size: 13px; }
+.xj-group { padding: 6px 12px 10px; }
+.xj-group h3 { font-size: 12px; letter-spacing: .12em; color: var(--text-3); margin: 8px 4px; font-weight: 400; }
+.xj-card { all: unset; cursor: pointer; display: grid; gap: 4px; width: calc(100% - 26px); padding: 12px; margin: 0 0 8px; border-radius: 12px; border: 1px solid rgba(var(--gilt-rgb), .22); background: rgba(var(--bg-rgb), .4); }
+.xj-card:hover { border-color: var(--gilt); }
+.xj-card-title { font-size: 15px; color: var(--gilt); }
+.xj-card-meta { font-family: var(--mono); font-size: 10.5px; color: var(--text-3); }
+.xj-card-intro { font-size: 12.5px; line-height: 1.55; color: var(--text-2); overflow-wrap: anywhere; }
+.xj-stop, .xj-end { padding: 12px 16px 18px; overflow-wrap: anywhere; }
+.xj-when { font-family: var(--mono); font-size: 11px; color: var(--text-3); }
+.xj-stop-title { font-size: 18px; margin-top: 4px; }
+.xj-line { margin: 10px 0 0; padding-left: 10px; border-left: 2px solid rgba(var(--gilt-rgb), .5); color: var(--gilt); font-size: 15px; line-height: 1.6; }
+.xj-story { font-size: 13.5px; line-height: 1.7; color: var(--text-2); margin: 10px 0 0; }
+.xj-nav { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+.xj-count { margin-left: auto; margin-right: auto; font-family: var(--mono); font-size: 11px; color: var(--text-3); }
+.xj-prog { display: flex; gap: 3px; margin-top: 12px; }
+.xj-prog i { flex: 1; height: 3px; border-radius: 2px; background: rgba(var(--fg-rgb), .15); }
+.xj-prog i.on { background: var(--gilt); }
+.xj-intro { font-size: 14px; line-height: 1.7; color: var(--text-2); margin: 0 0 10px; }
+.xj-poem { white-space: pre-wrap; font: inherit; font-size: 14px; line-height: 1.8; color: var(--gilt); margin: 0 0 14px; }
+.xj-cta { all: unset; cursor: pointer; display: block; text-align: center; padding: 10px 14px; margin-bottom: 10px; border-radius: 999px; color: var(--seal-ink-hi); border: 1px solid rgba(var(--seal-rgb), .55); background: rgba(var(--seal-rgb), .12); }
+@media (max-width: 920px) {
+  .xunji-panel { left: 0; right: 0; bottom: 0; top: auto; width: auto; height: min(62dvh, 560px); border-radius: 18px 18px 0 0; padding-bottom: env(safe-area-inset-bottom); transition: transform .3s var(--ease), height .3s var(--ease); }
+  .xunji-panel.has-thread { height: auto; max-height: min(62dvh, 560px); }
+  .xunji-panel.mini { height: calc(84px + env(safe-area-inset-bottom)); overflow: hidden; }
+  .xunji-grabber { display: block; touch-action: none; width: 100%; height: 18px; flex: none; background: none; border: 0; position: relative; }
+  .xunji-grabber::after { content: ""; position: absolute; left: 50%; top: 7px; width: 36px; height: 4px; margin-left: -18px; border-radius: 2px; background: rgba(var(--fg-rgb), .3); }
+  .xj-head { touch-action: none; padding-top: 2px; }
+}
+.xj-links { display: grid; gap: 8px; }
+.xj-link { all: unset; cursor: pointer; display: grid; gap: 3px; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(var(--gilt-rgb), .3); font-size: 13px; overflow-wrap: anywhere; }
+.xj-link b { color: var(--gilt); font-weight: 500; }
+.xj-link span { font-size: 12px; color: var(--text-3); }
+.xj-link:hover { border-color: var(--gilt); }
+.hl-threads { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
 `

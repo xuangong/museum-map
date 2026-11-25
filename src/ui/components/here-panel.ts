@@ -43,6 +43,11 @@ export function HerePanel(): string {
               <button type="button" class="chip" @click="openMuseum(m.id)"><span x-text="m.name"></span> <small x-text="Math.round(m.km) < 1 ? '就在此地' : Math.round(m.km) + ' km'"></small></button>
             </template>
           </div>
+          <div class="hl-threads" x-show="hereThreads(l).length">
+            <template x-for="x in hereThreads(l)" :key="x.thread.id">
+              <button type="button" class="chip" @click="openThread(x.thread.id, x.index, {})" x-text="'循迹 · ' + x.thread.who + ' 第 ' + (x.index + 1) + ' 站 ›'"></button>
+            </template>
+          </div>
         </li>
       </template>
     </ol>

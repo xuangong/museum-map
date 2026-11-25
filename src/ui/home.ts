@@ -15,9 +15,12 @@ import { CHAT_SCRIPT } from "./client/chat"
 import { AUTH_SCRIPT } from "./client/auth"
 import { APP_SCRIPT } from "./client/app"
 import { ERA_SYNTH_SCRIPT } from "./client/era-synth"
-import { STRATA_SRC, TERRITORY_SRC, PLACE_NAMES_SRC } from "~/routes/assets"
+import { STRATA_SRC, TERRITORY_SRC, PLACE_NAMES_SRC, THREADS_SRC } from "~/routes/assets"
 import { HERE_CORE_SCRIPT } from "./client/here-core"
 import { HerePanel } from "./components/here-panel"
+import { THREAD_CORE_SCRIPT } from "./client/thread-core"
+import { XunjiPanel } from "./components/xunji-panel"
+import { GUQIN_RECORDINGS } from "~/data/guqin-recordings"
 import { DYNASTY_GEO } from "~/data/dynasty-geo"
 import { computeCrossings } from "~/services/crossings"
 import { AI_MODELS, DEFAULT_AI_MODEL, DEFAULT_AI_EFFORT } from "~/services/ai-models"
@@ -51,6 +54,8 @@ export function HomePage(data: HomeData): string {
     crossings: computeCrossings(data.museums, data.dynasties),
     territoryUrl: TERRITORY_SRC,
     placeNamesUrl: PLACE_NAMES_SRC,
+    threadsUrl: THREADS_SRC,
+    recordings: GUQIN_RECORDINGS,
     ai: { models: AI_MODELS, defaultModel: DEFAULT_AI_MODEL, defaultEffort: DEFAULT_AI_EFFORT },
     aliases: MUSEUM_ALIASES,
     achievements: ACHIEVEMENTS.map((a) => ({ ...a, label: ACHIEVEMENT_LABELS[a.id] })),
@@ -110,6 +115,7 @@ export function HomePage(data: HomeData): string {
       <div class="view-switch" role="tablist" aria-label="视图">
         <button role="tab" :class="view === 'strata' ? 'active' : ''" :aria-selected="view === 'strata'" @click="setView('strata')">${icon("layers", 15)}<span>时空</span></button>
         <button role="tab" :class="view === 'map' ? 'active' : ''" :aria-selected="view === 'map'" @click="setView('map')">${icon("pin", 15)}<span>地图</span></button>
+        <button role="tab" :class="view === 'xunji' ? 'active' : ''" :aria-selected="view === 'xunji'" @click="setView('xunji')">${icon("route", 15)}<span>循迹</span></button>
       </div>
       <button class="locate-btn" x-show="view === 'map'" x-cloak @click="locateMe()" :disabled="geo.locating" :class="geo.lat != null ? 'on' : ''" title="看看我附近的博物馆">
         ${icon("locate", 16)}<span x-text="geo.locating ? '定位中…' : (geo.lat != null ? '已定位' : '附近')"></span>
@@ -159,6 +165,7 @@ export function HomePage(data: HomeData): string {
     ${Drawer()}
     ${ChatPanel()}
     ${HerePanel()}
+    ${XunjiPanel()}
     ${AchievementSheet()}${AchievementCeremony()}${JiPanel()}${StampGate({ googleEnabled: !!data.googleEnabled })}
   </div>
   <div class="toast" x-show="toast" x-text="toast" x-transition.opacity x-cloak></div>
@@ -173,6 +180,7 @@ export function HomePage(data: HomeData): string {
 <script>${COORDS_SCRIPT}</script>
 <script>${TRIP_CORE_SCRIPT}</script>
 <script>${HERE_CORE_SCRIPT}</script>
+<script>${THREAD_CORE_SCRIPT}</script>
 <script>${ACH_CORE_SCRIPT}</script>
 <script>${MAP_SCRIPT}</script>
 <script>${CHAT_SCRIPT}</script>

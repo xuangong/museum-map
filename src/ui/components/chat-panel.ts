@@ -79,7 +79,7 @@ export function ChatPanel(): string {
     <button class="chat-send" @click="sendChat()" :disabled="chat.loading" aria-label="发送">${icon("arrowUp", 20)}</button>
   </div>
 </div>
-<nav class="dock" x-show="!drawer.open" aria-label="快捷操作">
+<nav class="dock" x-show="!drawer.open && view !== 'xunji'" aria-label="快捷操作">
   <button class="dock-btn dock-index" @click="tocOpen = true">${icon("index", 18)}<span>索引</span></button>
   <button class="dock-btn dock-shake" @click="shakeForMuseum()" :disabled="visits.shaking" title="随机去一座博物馆（手机可直接摇一摇）">
     <span :class="visits.shaking ? 'spin-wrap spinning' : 'spin-wrap'">${icon("dice", 18)}</span><span>摇一摇</span>

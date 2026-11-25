@@ -28,6 +28,7 @@ window.MuseumMap = {
     this.mentionLayer = L.layerGroup().addTo(this.map);
     this.userLayer = L.layerGroup().addTo(this.map);
     this.hereLayer = L.layerGroup().addTo(this.map);
+    this.threadLayer = L.layerGroup().addTo(this.map);
   },
   setMarkers: function(museums, onClick, opts) {
     this.markersLayer.clearLayers();
@@ -240,6 +241,37 @@ window.MuseumMap = {
   focusPoint: function(lat, lng, zoom) {
     this.map.flyTo(window.toMapCoord(lat, lng), Math.max(this.map.getZoom(), zoom || 8), { duration: 0.6 });
   },
+  /** 循迹 view: museum / event / mention markers step back; only the thread is drawn. */
+  setThreadMode: function(on) {
+    var self = this;
+    var order = ['markersLayer', 'eventMarkersLayer', 'mentionLayer', 'rangeLayer', 'routeLayer', 'eraLayer', 'territoryLayer'];
+    // hide in this order; bring back bottom-up so the stacking is what it was
+    (on ? order : ['territoryLayer', 'eraLayer', 'rangeLayer', 'routeLayer', 'markersLayer', 'eventMarkersLayer', 'mentionLayer']).forEach(function(k){
+      var l = self[k]; if (!l) return;
+      if (on && self.map.hasLayer(l)) self.map.removeLayer(l);
+      if (!on && !self.map.hasLayer(l)) l.addTo(self.map);
+    });
+    if (!on) { this.clearThread(); if (this._selectedId && this.setSelected) this.setSelected(this._selectedId); }
+  },
+  /** Draw a thread: the whole route faint, the walked part (0..upto) in vermilion, numbered stops. */
+  setThreadRoute: function(stops, upto) {
+    this.threadLayer.clearLayers();
+    var pts = (stops || []).map(function(s){ return window.toMapCoord(s.lat, s.lng); });
+    if (!pts.length) return;
+    L.polyline(pts, { className: 'thread-line', weight: 1.5, opacity: 0.35, dashArray: '3 6', interactive: false }).addTo(this.threadLayer);
+    if (upto > 0) L.polyline(pts.slice(0, upto + 1), { className: 'thread-walked', weight: 2.5, opacity: 0.9, interactive: false }).addTo(this.threadLayer);
+    var self = this;
+    pts.forEach(function(c, k){
+      var cls = 'thread-dot' + (k <= upto ? ' on' : '') + (k === upto ? ' cur' : '');
+      L.marker(c, { icon: L.divIcon({ className: '', html: '<div class="' + cls + '">' + (k + 1) + '</div>', iconSize: [20, 20], iconAnchor: [10, 10] }), interactive: false, zIndexOffset: k === upto ? 900 : 800 }).addTo(self.threadLayer);
+    });
+  },
+  fitThread: function(stops, pad) {
+    pad = pad || {};
+    var pts = (stops || []).map(function(s){ return window.toMapCoord(s.lat, s.lng); });
+    if (pts.length) this.map.flyToBounds(L.latLngBounds(pts), { paddingTopLeft: [(pad.left || 0) + 48, (pad.top || 0) + 48], paddingBottomRight: [(pad.right || 0) + 48, (pad.bottom || 0) + 48], duration: 0.8, maxZoom: 8 });
+  },
+  clearThread: function() { if (this.threadLayer) this.threadLayer.clearLayers(); },
   setUser: function(lat, lng) {
     this.userLayer.clearLayers();
     var c = window.toMapCoord(lat, lng);

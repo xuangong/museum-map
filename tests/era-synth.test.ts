@@ -29,3 +29,19 @@ describe("strata uses the shared EraSynth", () => {
     expect(ERA_SYNTH_SCRIPT).not.toContain("</")
   })
 })
+
+describe("EraSynth recordings", () => {
+  const w: any = {}
+  new Function("window", ERA_SYNTH_SCRIPT)(w)
+  it("exposes playRecording / stopRecording and is safe without audio", async () => {
+    expect(typeof w.EraSynth.playRecording).toBe("function")
+    expect(typeof w.EraSynth.stopRecording).toBe("function")
+    expect(await w.EraSynth.playRecording("/img/x.mp3")).toBe(false)
+    expect(() => w.EraSynth.stopRecording()).not.toThrow()
+  })
+  it("strata plays recordings through EraSynth", async () => {
+    const { STRATA_MODULE } = await import("~/ui/client/strata")
+    expect(STRATA_MODULE).toContain("SYN.playRecording(")
+    expect(STRATA_MODULE).not.toContain("decodeAudioData")
+  })
+})
