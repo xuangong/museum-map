@@ -58,7 +58,7 @@ function endCard(live: boolean): string {
 
 /** 循迹 — threads of 古人 and 诗 told on the map: a picker, then the tour (caption ↔ stop card). */
 export function XunjiPanel(): string {
-  return `<div class="xunji-panel" x-show="view === 'xunji' && !xunjiSubOn()" x-cloak :class="(xunji.mini ? 'mini ' : '') + (xunji.thread ? 'has-thread ' : '') + (xunji.reading ? 'is-reading ' : '') + (xunji.reading && xunji.paged ? 'is-paged ' : '') + (xunji.reading && xunji.paged && xunji.deskOn ? 'is-desk ' : '') + (xunjiOnMap() ? 'on-map' : '')" :style="xunjiSheetStyle()" role="region" aria-label="循迹">
+  return `<div class="xunji-panel" x-cloak :class="(view === 'xunji' && !xunjiSubOn() ? '' : 'xj-off ') + (xunji.mini ? 'mini ' : '') + (xunji.thread ? 'has-thread ' : '') + (xunji.reading ? 'is-reading ' : '') + (xunji.reading && xunji.paged ? 'is-paged ' : '') + (xunji.reading && xunji.paged && xunji.deskOn ? 'is-desk ' : '') + (xunjiOnMap() ? 'on-map' : '')" :style="xunjiSheetStyle()" role="region" aria-label="循迹">
   <button type="button" class="xunji-grabber" x-show="!(xunji.reading && !xunji.mini)" @click="sheetTap('xunji')" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()" :aria-label="xunji.mini ? '展开' : '收起'"></button>
   <template x-if="!xunji.thread">
     <div class="xj-pick">
@@ -140,7 +140,7 @@ export function XunjiPanel(): string {
     </div>
   </template>
 </div>
-<div class="xj-sub" x-show="view === 'xunji' && xunjiSubOn()" x-cloak :style="'--era:' + xunjiAccent()">
+<div class="xj-sub" x-cloak :class="view === 'xunji' && xunjiSubOn() ? 'on' : ''" :style="'--era:' + xunjiAccent()">
   <div class="xs-tools" x-show="xunjiSubOn()">
     <button type="button" class="xs-btn" @click="xunji.playing ? xunjiPause() : xunjiPlay()" :aria-label="xunji.playing ? '暂停' : '继续'" x-text="xunji.playing ? '❚❚' : '▶'"></button>
     <button type="button" class="xs-btn wide" x-show="xunji.thread && (xunji.thread.acts || xunji.thread.chapters)" @click="xunjiRead()">读这本书</button>

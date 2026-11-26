@@ -2795,4 +2795,9 @@ path.route-corridor { stroke: var(--gilt); }
 .xj-cover-card .cc-act.ghost { color: var(--text); background: transparent; border-color: rgba(var(--gilt-rgb), .45); backdrop-filter: none; -webkit-backdrop-filter: none; }
 /* 看书就是看书 — a hard rule, independent of any script state: while the book (or any reader) is open, the subtitle layer is hidden */
 .xunji-panel.is-reading ~ .xj-sub, .xunji-panel.is-paged ~ .xj-sub { display: none !important; }
+/* Visibility of the 循迹 panel and the subtitle layer is by class, not x-show: both also bind a string :style, and Alpine's
+   string style binding rewrites the whole style attribute — wiping x-show's display:none (an empty subtitle card reappeared). */
+.xunji-panel.xj-off { display: none !important; }
+.xj-sub { display: none; }
+.xj-sub.on { display: block; }
 `
