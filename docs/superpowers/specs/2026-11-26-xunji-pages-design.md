@@ -63,3 +63,19 @@ before use, uploaded with `scripts/thread-images.ts`.
 Data tests above; typecheck; served-script `node --check`; phone checklist: swipe feel and snap,
 each page type's layout on a small phone, map pages show the route, 目录 jumps, deep links,
 end page → 行程.
+
+## Desktop: the open magazine (added 2026-11-26, user feedback "电脑上局促、滑不动")
+
+Phones keep the single-page pager. On desktop (> 920 px) a paged thread opens as an **open
+magazine**: a centred two-page spread (each page paper-proportioned, ~3:4, sized to fit the
+viewport with margins), the map dimmed behind as the desk.
+- Turning: large ‹ › buttons beside the spread; click the left page = back, right page = forward;
+  mouse wheel / trackpad (vertical or horizontal, debounced to one turn per gesture) and ←/→ keys.
+  A turn moves one spread (two pages).
+- Pairing: cover is a single right-hand page; then pages flow in pairs. An `image` page whose
+  image is landscape (w/h > 1.3) may span both pages of a spread (alone in it). `opener` pages
+  start on the left when possible.
+- Map pages: that half of the spread is transparent onto the live (undimmed) map with the
+  chapter's route lit; the facing page carries the text.
+- Footer: folio + a clickable progress bar of chapters for jumping.
+- Close / share / 目录 stay available; Esc closes the magazine.
