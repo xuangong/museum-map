@@ -122,8 +122,38 @@ export function XunjiPages(endHtml: string): string {
       ${end}
       </section>
     </template>
-    <div class="xj-blank l" x-show="xunjiBlank('l')"></div>
-    <div class="xj-blank r" x-show="xunjiBlank('r')"></div>
+    <div class="xj-blank l" x-show="xunjiBlank('l')"><template x-if="xunjiBlankInfo()">
+        <div class="xb-sheet" :class="'xb-' + xunjiBlankInfo().kind">
+          <template x-if="xunjiBlankInfo().kind === 'title'">
+            <div class="xb-inner"><div class="xb-vert" x-text="xunjiBlankInfo().mag"></div><span class="xb-seal" x-text="xunjiBlankInfo().who"></span><div class="xb-meta" x-text="'循迹 · ' + xunjiBlankInfo().span"></div></div>
+          </template>
+          <template x-if="xunjiBlankInfo().kind === 'next'">
+            <div class="xb-inner"><div class="xb-ghost" x-text="xunjiBlankInfo().num"></div><div class="xb-kick">下一章</div><div class="xb-vert" x-text="xunjiBlankInfo().title"></div><span class="xb-seal" x-text="xunjiBlankInfo().place"></span><div class="xb-meta" x-text="xunjiBlankInfo().span"></div></div>
+          </template>
+          <template x-if="xunjiBlankInfo().kind === 'plate'">
+            <div class="xb-inner"><div class="xb-kick">图版</div><div class="xb-vert sm" x-text="xunjiBlankInfo().work"></div><div class="xb-meta" x-text="xunjiBlankInfo().by"></div><div class="xb-turn">翻开 →</div></div>
+          </template>
+          <template x-if="xunjiBlankInfo().kind === 'colophon' || xunjiBlankInfo().kind === 'rest'">
+            <div class="xb-inner"><span class="xb-seal big" x-text="xunjiBlankInfo().kind === 'colophon' ? '终' : '·'"></span><div class="xb-meta" x-text="xunjiBlankInfo().kind === 'colophon' ? (xunjiBlankInfo().mag + ' · 完') : ''"></div></div>
+          </template>
+        </div>
+      </template></div>
+    <div class="xj-blank r" x-show="xunjiBlank('r')"><template x-if="xunjiBlankInfo()">
+        <div class="xb-sheet" :class="'xb-' + xunjiBlankInfo().kind">
+          <template x-if="xunjiBlankInfo().kind === 'title'">
+            <div class="xb-inner"><div class="xb-vert" x-text="xunjiBlankInfo().mag"></div><span class="xb-seal" x-text="xunjiBlankInfo().who"></span><div class="xb-meta" x-text="'循迹 · ' + xunjiBlankInfo().span"></div></div>
+          </template>
+          <template x-if="xunjiBlankInfo().kind === 'next'">
+            <div class="xb-inner"><div class="xb-ghost" x-text="xunjiBlankInfo().num"></div><div class="xb-kick">下一章</div><div class="xb-vert" x-text="xunjiBlankInfo().title"></div><span class="xb-seal" x-text="xunjiBlankInfo().place"></span><div class="xb-meta" x-text="xunjiBlankInfo().span"></div></div>
+          </template>
+          <template x-if="xunjiBlankInfo().kind === 'plate'">
+            <div class="xb-inner"><div class="xb-kick">图版</div><div class="xb-vert sm" x-text="xunjiBlankInfo().work"></div><div class="xb-meta" x-text="xunjiBlankInfo().by"></div><div class="xb-turn">翻开 →</div></div>
+          </template>
+          <template x-if="xunjiBlankInfo().kind === 'colophon' || xunjiBlankInfo().kind === 'rest'">
+            <div class="xb-inner"><span class="xb-seal big" x-text="xunjiBlankInfo().kind === 'colophon' ? '终' : '·'"></span><div class="xb-meta" x-text="xunjiBlankInfo().kind === 'colophon' ? (xunjiBlankInfo().mag + ' · 完') : ''"></div></div>
+          </template>
+        </div>
+      </template></div>
   </div>
   <button type="button" class="xj-turn l" @click="xunjiPageStep(-1)" :disabled="xunjiSpreadAt(-1)" aria-label="上一页">‹</button>
   <button type="button" class="xj-turn r" @click="xunjiPageStep(1)" :disabled="xunjiSpreadAt(1)" aria-label="下一页">›</button>

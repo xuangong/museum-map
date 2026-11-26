@@ -1652,13 +1652,18 @@ window.museumApp = function() {
         chs.push({ num: op ? op.num : '', title: c.title, place: c.place, span: c.span, at: at });
       });
       list.push({ kind: 'end', ch: -1 });
-      // Desktop spreads: two pages side by side, straight through — cover | 目录, then every page in order.
-      // No page is left alone: an empty half reads as a missing page (user: 这种缺页的情况很奇怪).
-      var n = list.length, sp = [], so = [];
-      for (var i = 0; i < n; i += 2) {
-        var b = i + 1 < n ? i + 1 : -1;
-        sp.push({ a: i, b: b, f: -1 });
-        so[i] = sp.length - 1; if (b >= 0) so[b] = sp.length - 1;
+      // Desktop spreads: the cover alone on the right; then pairs; a landscape picture that starts a spread takes both pages.
+      // A page left alone faces a designed sheet (xunjiBlankInfo), never an empty half.
+      var n = list.length, sp = [{ a: -1, b: 0, f: -1 }], i = 1, so = [0];
+      function wide(e){ var im = e.kind === 'image' && e.d && e.d.image; return !!(im && im.h && im.w / im.h > 1.3); }
+      while (i < n) {
+        if (wide(list[i])) { sp.push({ a: -1, b: -1, f: i }); so[i] = sp.length - 1; i++; continue; }
+        // A chapter opener or a spread-wide picture starts the next spread (on the left): this page goes alone (the 目录 may sit beside the first opener).
+        var nx = list[i + 1], alone = !!nx && ((nx.kind === 'opener' && list[i].kind !== 'toc') || wide(nx));
+        if (alone || i + 1 >= n) { sp.push({ a: i, b: -1, f: -1 }); so[i] = sp.length - 1; i++; continue; }
+        sp.push({ a: i, b: i + 1, f: -1 });
+        so[i] = sp.length - 1; so[i + 1] = sp.length - 1;
+        i += 2;
       }
       return { list: list, chs: chs, spreads: sp, spreadOf: so };
     },
@@ -1696,6 +1701,16 @@ window.museumApp = function() {
       if (!this.xunji.deskOn) return n === this.xunji.page ? ' cur' : '';
       var s = this.xunjiSpread(); if (!s) return '';
       return s.f === n ? ' cur sp-f' : s.a === n ? ' cur sp-l' : s.b === n ? ' cur sp-r' : '';
+    },
+    /** The designed sheet facing a lone page: 扉页 beside the cover, 下一章 before an opener, 图版 before a spread-wide picture, 版权页 after the end. */
+    xunjiBlankInfo() {
+      var g = this._xjPg, s = this.xunjiSpread(), t = this.xunji.thread; if (!g || !s || !t || s.f >= 0) return null;
+      if (s.a < 0) return { kind: 'title', mag: t.mag || '', who: t.who || '', span: t.span || '' };
+      var nx = g.list[s.a + 1];
+      if (!nx) return { kind: 'colophon', who: t.who || '', mag: t.mag || '' };
+      if (nx.kind === 'opener') { var c = t.chapters[nx.ch] || {}; return { kind: 'next', num: nx.d.num, title: c.title || '', place: c.place || '', span: c.span || '' }; }
+      if (nx.kind === 'image') { var im = nx.d.image || {}; return { kind: 'plate', work: im.work || '', by: im.by || '' }; }
+      return { kind: 'rest' };
     },
     xunjiBlank(side) { var s = this.xunjiSpread(); return !!s && s.f < 0 && (side === 'l' ? s.a < 0 : s.b < 0); },
     xunjiPageKind() { var e = this.xunjiDrawEntry(); return e ? e.kind : ''; },
@@ -1932,7 +1947,10 @@ window.museumApp = function() {
       if (sp && me) side = sp.a >= 0 && this.xunjiPages()[sp.a] === me ? 'l' : 'r';
       var key = (e.kind === 'end' ? 'end' : e.ch) + '|' + (me ? 1 : 0) + side + '|' + (this.xunji.mini ? 1 : 0) + '|' + (sp ? sp.a + ',' + sp.b : '');
       if (!force && key === this._xjDrawKey && e.kind !== 'end') return;
-      this._xjDrawKey = key;
+      // Turning ordinary pages must not move the map behind them (it showed through, jumping).
+      var still = !me && e.kind !== 'end' && !this.xunji.mini && this._xjDrawnFor === t.id;
+      if (still && !force) return;
+      this._xjDrawKey = key; this._xjDrawnFor = t.id;
       var pad = this.xunjiPad();
       if (e.ch < 0) {
         M.setThreadRoute(t.stops, -1); M.setThreadSegment(null); M.fitThread(t.stops, pad);

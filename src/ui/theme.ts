@@ -2630,7 +2630,21 @@ path.route-corridor { stroke: var(--gilt); }
   .xj-pages.desk .xj-page.sp-r { grid-column: 2; box-shadow: inset 22px 0 24px -22px rgba(0,0,0,.45); }
   .xj-pages.desk .xj-page.sp-f { grid-column: 1 / span 2; }
   .xj-pages.desk .xj-page.pg-map { pointer-events: none; box-shadow: none; }
-  .xj-pages.desk .xj-blank { display: block; grid-row: 1; background: rgba(8,7,6,.6); pointer-events: auto; }
+  /* A lone page faces a designed sheet — a page of paper, not a hole onto the desk */
+  .xj-pages.desk .xj-blank { display: flex; grid-row: 1; pointer-events: auto; background: var(--surface); position: relative; overflow: hidden; --era-c: var(--era, var(--gilt)); }
+  .xj-pages.desk .xj-blank.l { box-shadow: inset -18px 0 28px -22px rgba(0,0,0,.6); }
+  .xj-pages.desk .xj-blank.r { box-shadow: inset 18px 0 28px -22px rgba(0,0,0,.6); }
+  .xb-sheet { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; }
+  .xb-sheet::before { content: ""; position: absolute; inset: 22px; border: 1px solid rgba(var(--gilt-rgb), .28); border-radius: 4px; pointer-events: none; }
+  .xb-inner { position: relative; display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+  .xb-ghost { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -58%); font-family: var(--serif); font-size: clamp(160px, 26vh, 280px); line-height: 1; color: var(--era-c); opacity: .09; pointer-events: none; }
+  .xb-kick { font-family: var(--mono); font-size: 10.5px; letter-spacing: .32em; color: var(--era-c); }
+  .xb-vert { writing-mode: vertical-rl; font-family: var(--serif); font-size: clamp(30px, 5vh, 46px); letter-spacing: .32em; line-height: 1.2; color: var(--text); max-height: 46vh; }
+  .xb-vert.sm { font-size: clamp(20px, 3.2vh, 28px); letter-spacing: .24em; color: var(--gilt-hi); }
+  .xb-seal { display: inline-block; padding: 4px 7px; border: 1.5px solid var(--seal); color: var(--seal-ink-strong); border-radius: 3px; font-size: 13px; letter-spacing: .16em; }
+  .xb-seal.big { font-family: var(--serif); font-size: 30px; padding: 8px 12px; background: rgba(var(--seal-rgb), .9); color: #fff; border-color: transparent; }
+  .xb-meta { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; color: var(--text-3); }
+  .xb-turn { margin-top: 10px; font-size: 12.5px; letter-spacing: .2em; color: var(--gilt); }
   .xj-pages.desk .xj-blank.l { grid-column: 1; }
   .xj-pages.desk .xj-blank.r { grid-column: 2; }
   .xj-pages.desk .xj-page.sp-l, .xj-pages.desk .xj-page.sp-r { cursor: default; }
@@ -2678,8 +2692,8 @@ path.route-corridor { stroke: var(--gilt); }
   .xj-pager.turn-f > .xj-page, .xj-pager.turn-f > .xj-blank { animation: xjTurnF .22s ease-out; }
   .xj-pager.turn-b > .xj-page, .xj-pager.turn-b > .xj-blank { animation: xjTurnB .22s ease-out; }
 }
-@keyframes xjTurnF { from { opacity: 0; transform: translateX(22px); } to { opacity: 1; transform: none; } }
-@keyframes xjTurnB { from { opacity: 0; transform: translateX(-22px); } to { opacity: 1; transform: none; } }
+@keyframes xjTurnF { from { opacity: .35; transform: translateX(14px); } to { opacity: 1; transform: none; } }   /* never fully transparent: the desk must not show through mid-turn */
+@keyframes xjTurnB { from { opacity: .35; transform: translateX(-14px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .xj-pager.turn-f > *, .xj-pager.turn-b > * { animation: none !important; } }
 .xj-shelf-item { display: contents; }
 .xj-cover-card { all: unset; cursor: pointer; box-sizing: border-box; position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; width: 100%; height: 180px; padding: 14px 16px; margin: 0 0 10px; border-radius: 12px; overflow: hidden; background: #000; border: 1px solid rgba(var(--gilt-rgb), .22); }
