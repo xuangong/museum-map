@@ -2742,7 +2742,11 @@ path.route-corridor { stroke: var(--gilt); }
 .xs-nav:disabled { opacity: .25; cursor: default; }
 .xs-text { flex: 1; text-align: center; animation: xsIn .45s ease-out; }
 .xs-when { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; color: var(--era, var(--gilt)); text-shadow: 0 1px 3px rgba(0,0,0,.8); }
-.xs-line { margin-top: 6px; font-family: var(--serif); font-size: clamp(18px, 2.6vw, 26px); line-height: 1.55; color: #fff; letter-spacing: .04em; text-shadow: 0 2px 8px rgba(0,0,0,.85); overflow-wrap: anywhere; }
+.xs-title { margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 16px; font-family: var(--serif); font-size: clamp(24px, 3.4vw, 36px); line-height: 1.25; letter-spacing: .26em; color: #fff; white-space: nowrap; text-shadow: 0 2px 10px rgba(0,0,0,.85); }
+.xs-title span { padding-left: .26em; }   /* letter-spacing trails the last 字; balance it */
+.xs-rule { flex: none; width: clamp(24px, 5vw, 56px); height: 1px; background: linear-gradient(to right, transparent, var(--era, var(--gilt))); }
+.xs-rule:last-child { background: linear-gradient(to left, transparent, var(--era, var(--gilt))); }
+.xs-line { margin-top: 10px; font-family: var(--serif); font-size: clamp(16px, 2vw, 21px); line-height: 1.65; color: var(--gilt-hi); letter-spacing: .12em; text-shadow: 0 2px 8px rgba(0,0,0,.85); overflow-wrap: anywhere; }
 .xs-prog { max-width: 860px; margin: 6px auto 0; height: 2px; background: rgba(255,255,255,.15); border-radius: 2px; overflow: hidden; }
 .xs-prog i { display: block; height: 100%; background: var(--era, var(--gilt)); transition: width .4s ease; }
 @keyframes xsIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }

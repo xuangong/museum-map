@@ -2194,7 +2194,7 @@ window.museumApp = function() {
     xunjiSubLine() { var s = this.xunjiStop(); if (s.line) return s.line; var m = String(s.story || '').match(/^[^。！？]*[。！？]?/); return m ? m[0] : ''; },
     xunjiSubWhen() { var s = this.xunjiStop(); return [s.when, (s.name || '') + (s.modern ? '（今' + s.modern + '）' : '')].filter(Boolean).join(' · '); },
     /** Time on a stop: at least 2 s (user: 7 s dragged), longer lines get time to be read, at most 4 s. */
-    xunjiDwell() { var n = Array.from(this.xunjiSubLine()).length; return Math.max(2000, Math.min(4000, 2000 + Math.max(0, n - 10) * 120)); },
+    xunjiDwell() { var s = this.xunjiStop(), n = Array.from((s.title || '') + (s.line || '')).length; return Math.max(2000, Math.min(4000, 2000 + Math.max(0, n - 10) * 120)); },
     // ── 这一章的路 → 行程: a chapter's own stretch of road becomes a trip, with the museums along it.
     xunjiChapterTrip(ci) {
       var t = this.xunji.thread, c = t && t.chapters && t.chapters[ci];
