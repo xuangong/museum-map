@@ -92,6 +92,7 @@ export function XunjiPages(endHtml: string): string {
       </template>`
   const map = `<template x-if="p.kind === 'map'">
         <div class="pgi pgi-map">
+          <div class="xj-maphead"><span x-text="xunjiChapterNum(p.ch)"></span>这一章的路</div>
           <div class="xj-mapcap">
             <div class="mc-place" x-text="xunjiChapter(p.ch).place + ' · ' + xunjiChapter(p.ch).span"></div>
             <p x-text="p.d.text"></p>

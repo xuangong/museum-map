@@ -1647,6 +1647,8 @@ window.museumApp = function() {
     xunjiPages() { return this._xjPg ? this._xjPg.list : []; },
     xunjiChapters() { return this._xjPg ? this._xjPg.chs : []; },
     xunjiChapter(ci) { var t = this.xunji.thread; return (t && t.chapters && t.chapters[ci]) || { title: '', place: '', span: '' }; },
+    /** The chapter's numeral from its opener (壹贰叁…), for the map page title. */
+    xunjiChapterNum(ci) { var c = this.xunjiChapter(ci), o = c.pages && c.pages[0]; return (o && o.kind === 'opener' && o.num) || ''; },
     xunjiPageOfStop(i) {
       var t = this.xunji.thread, k = 0; if (!t || !t.chapters || !this._xjPg) return 0;
       t.chapters.forEach(function(c, ci){ if (i >= c.stops[0] && i <= c.stops[1]) k = ci; });
@@ -1786,8 +1788,10 @@ window.museumApp = function() {
           // A map page: the live map is the page. Only the caption box (and its folio line) is in the way.
           var cap = document.querySelector('.xj-page.cur .xj-mapcap');
           pad.bottom = cap ? Math.max(0, Math.round(cr.bottom - cap.getBoundingClientRect().top + 10)) : 0;
-          var tl = document.querySelector('.xj-rtools');
-          pad.top = tl ? Math.max(0, Math.round(tl.getBoundingClientRect().bottom - cr.top + 6)) : 0; pad.m = 24;
+          // ...and at the top, whichever sits lower: the toolbar or the page title.
+          var top = 0;
+          ['.xj-rtools', '.xj-page.cur .xj-maphead'].forEach(function(q){ var el = document.querySelector(q); if (el) top = Math.max(top, el.getBoundingClientRect().bottom); });
+          pad.top = top ? Math.max(0, Math.round(top - cr.top + 6)) : 0; pad.m = 24;
           return pad;
         }
         if (window.innerWidth > 920 && mag) pad.left = Math.max(0, Math.round(mag.getBoundingClientRect().right - cr.left));

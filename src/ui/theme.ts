@@ -2607,6 +2607,9 @@ path.route-corridor { stroke: var(--gilt); }
 .pgi-map { position: relative; height: 100%; padding: 0; justify-content: flex-end; pointer-events: none; }
 .xj-mapcap { pointer-events: auto; margin: 0 14px calc(40px + env(safe-area-inset-bottom)); padding: 12px 16px 6px; border-radius: 12px; background: rgba(var(--bg-rgb), .9); border: 1px solid rgba(var(--gilt-rgb), .28); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
 .mc-place { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; color: var(--era); }
+.pgi-map::before { content: ""; position: absolute; inset: 8px 8px calc(30px + env(safe-area-inset-bottom)); border: 1px solid rgba(var(--gilt-rgb), .55); border-radius: 14px; box-shadow: inset 0 0 60px 10px rgba(var(--bg-rgb), .55); pointer-events: none; }
+.xj-maphead { position: absolute; top: 18px; left: 50%; transform: translateX(-50%); padding: 5px 14px; border-radius: 999px; background: rgba(var(--bg-rgb), .9); border: 1px solid rgba(var(--gilt-rgb), .4); font-size: 12.5px; letter-spacing: .12em; color: var(--text); white-space: nowrap; }
+.xj-maphead span { color: var(--era); margin-right: 8px; font-family: var(--serif); }
 .xj-mapcap p { margin: 6px 0 8px; font-size: 14px; line-height: 1.85; color: var(--text); }
 /* end */
 .pgi-end .xj-end { padding: 0; }
@@ -2626,7 +2629,7 @@ path.route-corridor { stroke: var(--gilt); }
 .cc-deck { font-size: 12.5px; line-height: 1.55; color: rgba(255,255,255,.85); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 @media (max-width: 920px) {
   .xunji-panel.is-reading { width: auto; left: 0; right: 0; }
-  .xunji-panel.is-reading.has-thread:not(.mini) { top: var(--xj-top, 0px); height: calc(100dvh - var(--xj-top, 0px)); max-height: none; border-radius: 0; background: transparent; border: 0; box-shadow: none; padding-bottom: 0; }
+  .xunji-panel.is-reading.has-thread:not(.mini) { top: calc(var(--xj-top, 0px) + 50px); height: calc(100dvh - var(--xj-top, 0px) - 50px);   /* below the 时空 · 地图 · 循迹 switch */ max-height: none; border-radius: 0; background: transparent; border: 0; box-shadow: none; padding-bottom: 0; }
   .xunji-panel.is-reading .xj-strip { display: block; flex: none; height: 140px; background: transparent; cursor: pointer; touch-action: none; }
   .xunji-panel.is-reading.mini .xj-strip, .xunji-panel.is-reading.mini .xj-mag, .xunji-panel.is-reading.mini .xj-pages { display: none; }
   .xunji-panel.is-reading.mini .xj-readhead { display: block; }
