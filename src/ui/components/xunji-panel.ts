@@ -102,7 +102,7 @@ export function XunjiPanel(): string {
   </template>
   <template x-if="xunji.thread && xunji.reading">
     <div class="xj-read">
-      <div class="xj-strip" @click="sheetTap('xunji')" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()" aria-hidden="true"></div>
+      <div class="xj-strip" :data-title="xunji.thread.mag || xunji.thread.title" @click="sheetTap('xunji')" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()" aria-hidden="true"></div>
       <header class="xj-head xj-readhead" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()" @click="sheetTap('xunji')">
         <div class="xj-kick" x-text="xunjiKick()"></div>
         <div class="xj-title" x-text="xunji.thread.mag || xunji.thread.title"></div>

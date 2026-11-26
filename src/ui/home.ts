@@ -70,7 +70,7 @@ export function HomePage(data: HomeData): string {
   <meta property="og:title" content="历史的音符 · 听得见的时空地图" />
   <meta property="og:description" content="${SLOGAN}${PITCH}" />`,
     children: `
-<div class="app-shell" x-data="museumApp()">
+<div class="app-shell" x-data="museumApp()" :class="xunjiImmersive() ? 'xj-imm' : ''" x-effect="xunjiImmSync(xunjiImmersive())">
   <template x-if="isReadOnly && viewingProfile">
     <div class="readonly-bar">
       <span>正在翻阅 <strong x-text="(viewingProfile.user.displayName || ('@' + viewingProfile.user.handle))"></strong> 的集章册 · 只读</span>

@@ -2800,4 +2800,42 @@ path.route-corridor { stroke: var(--gilt); }
 .xunji-panel.xj-off { display: none !important; }
 .xj-sub { display: none; }
 .xj-sub.on { display: block; }
+/* ─── Phone: the book and the played road take the whole screen ───
+   .app-shell.xj-imm (xunjiImmersive): the header, era timeline and view switch step aside; the reader's tools sit in
+   its own top row beside the grab handle, never over a page; the subtitle card is compact. */
+@media (max-width: 920px) {
+  .app-shell.xj-imm > .topbar, .app-shell.xj-imm > .timeline-wrap, .app-shell.xj-imm > .readonly-bar, .app-shell.xj-imm .view-switch { display: none !important; }
+  .app-shell.xj-imm .canvas.is-map::before, .app-shell.xj-imm .canvas.is-xunji::before { content: none; }
+  .xunji-panel.is-reading.has-thread:not(.mini) { top: 0; height: 100dvh; }
+  .xunji-panel.is-paged:not(.mini) .xj-strip { height: calc(48px + env(safe-area-inset-top)); border-radius: 0; }
+  .xunji-panel.is-paged:not(.mini) .xj-strip::after { top: auto; bottom: 8px; width: 32px; margin-left: -16px; }
+  .xunji-panel.is-paged:not(.mini) .xj-rtools { top: calc(env(safe-area-inset-top) + 5px); right: 8px; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .xunji-panel.is-paged:not(.mini) .xj-rtools .icon-btn { width: 36px; height: 36px; }
+  .xunji-panel.is-paged.on-map:not(.mini) .xj-rtools { background: rgba(var(--bg-rgb), .78); }
+  .xunji-panel.is-paged:not(.mini) .xj-strip::before { content: attr(data-title); position: absolute; left: 18px; top: calc(env(safe-area-inset-top) + 14px); font-family: var(--serif); font-size: 15px; letter-spacing: .2em; color: var(--text-2); }
+  .xunji-panel.is-paged.on-map:not(.mini) .xj-strip::before { content: none; }
+  .xunji-panel.is-paged .xj-pages .pgi { padding-top: 18px; }
+  .xunji-panel.is-paged .xj-pages .pgi-cover, .xunji-panel.is-paged .xj-pages .pgi-image, .xunji-panel.is-paged .xj-pages .pgi-map { padding-top: 0; }
+  .xunji-panel.is-paged .pgi-toc .pg-lede { font-size: 13.5px; line-height: 1.8; margin: 8px 0 12px; }
+  .xunji-panel.is-paged .pgi-image figcaption { padding-top: 10px; }
+  .xunji-panel.is-paged .pgi-text { align-content: center; padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+  .xunji-panel.is-paged .tx-main p { font-size: 16.5px; line-height: 2.05; margin-bottom: 14px; }
+  .xunji-panel.is-paged .tx-main p.drop::first-letter { font-size: 56px; }
+  .xunji-panel.is-paged .tx-note { margin-top: 10px; font-size: 13px; line-height: 1.75; }
+  .xunji-panel.is-paged .tx-note b { font-size: 13.5px; }
+}
+@media (max-width: 640px) {
+  .xj-sub { padding: 0 8px calc(8px + env(safe-area-inset-bottom)); }
+  .xs-tools { right: 14px; gap: 5px; }
+  .xs-btn { height: 32px; min-width: 32px; font-size: 12px; }
+  .xs-band { gap: 2px; padding: 12px 4px 10px; border-radius: 14px; }
+  .xs-nav { width: 26px; height: 30px; font-size: 19px; }
+  .xs-when { font-size: 10px; letter-spacing: .12em; }
+  .xs-title { margin-top: 4px; gap: 10px; font-size: 22px; letter-spacing: .2em; }
+  .xs-title span { padding-left: .2em; }
+  .xs-rule { width: 18px; }
+  .xs-narr { margin-top: 6px; font-size: 13.5px; line-height: 1.75; }
+  .xs-line { margin-top: 6px; font-size: 15px; letter-spacing: .08em; }
+  .xs-prog { margin-top: 6px; }
+}
 `

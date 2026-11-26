@@ -2196,6 +2196,25 @@ window.museumApp = function() {
 
     // ── 回放 as subtitles: the map is the screen, one line of narration per stop at the bottom.
     /** Subtitles only while a replay is under way (playing, or paused mid-replay) — never an empty card otherwise. */
+    /** Phone: while the book is open (not tucked) or the road is playing, the page is the whole screen —
+     *  the site header, era timeline and view switch step aside (CSS, .app-shell.xj-imm at ≤ 920 px). */
+    xunjiImmersive() {
+      var x = this.xunji;
+      return this.view === 'xunji' && !!x.thread && ((x.reading && !x.mini) || this.xunjiSubOn());
+    },
+    /** The canvas changes height when the chrome steps aside: tell Leaflet, re-measure, re-fit the road. */
+    xunjiImmSync(on) {
+      if (window._xjImm === on) return;
+      window._xjImm = on;
+      if (window.innerWidth > 920) return;
+      var self = this;
+      this.$nextTick(function(){ requestAnimationFrame(function(){
+        var M = window.MuseumMap; if (M && M.map) M.map.invalidateSize(false);
+        self.xunjiTopMeasure();
+        if (self.xunji.reading && self.xunji.paged && !self.xunji.mini) self.xunjiDrawPage(true);
+        else if (self.xunjiSubOn()) self.xunjiShow(false);
+      }); });
+    },
     xunjiSubOn() {
       var x = this.xunji, t = x.thread;
       if (!t || x.reading || x.ended || !t.stops || !t.stops[x.i]) return false;   // reading the book: never subtitles
