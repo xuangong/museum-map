@@ -1712,6 +1712,14 @@ window.museumApp = function() {
       if (nx.kind === 'image') { var im = nx.d.image || {}; return { kind: 'plate', work: im.work || '', by: im.by || '' }; }
       return { kind: 'rest' };
     },
+    /** Which half of the current desktop spread is a map page ('map-l' / 'map-r'), so the spread's paper backing leaves that half clear. */
+    xunjiMapSide() {
+      if (!this.xunji.deskOn) return '';
+      var s = this.xunjiSpread(), L = this.xunjiPages(); if (!s) return '';
+      if (s.a >= 0 && L[s.a] && L[s.a].kind === 'map') return 'map-l';
+      if (s.b >= 0 && L[s.b] && L[s.b].kind === 'map') return 'map-r';
+      return '';
+    },
     xunjiBlank(side) { var s = this.xunjiSpread(); return !!s && s.f < 0 && (side === 'l' ? s.a < 0 : s.b < 0); },
     xunjiPageKind() { var e = this.xunjiDrawEntry(); return e ? e.kind : ''; },
     xunjiOnMap() {

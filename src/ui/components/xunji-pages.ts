@@ -107,7 +107,7 @@ export function XunjiPages(endHtml: string): string {
       </template>`
   return `<div class="xj-pages" :class="xunjiWrapClass()" :style="'--era:' + xunjiAccent()">
   <div class="xj-catch" x-show="xunji.deskOn && !xunjiOnMap()" @click="xunjiCatchClick($event)" @wheel="xunjiDeskWheel($event)"></div>
-  <div class="xj-pager" @scroll.capture.passive="xunjiOnPagerScroll($event)" @click="xunjiDeskClick($event)" @wheel="xunjiDeskWheel($event)">
+  <div class="xj-pager" :class="xunjiMapSide()" @scroll.capture.passive="xunjiOnPagerScroll($event)" @click="xunjiDeskClick($event)" @wheel="xunjiDeskWheel($event)">
     <template x-for="(p, n) in xunjiPages()" :key="n">
       <section class="xj-page" :class="'pg-' + p.kind + xunjiPgClass(n)" :data-pg="n">
       ${cover}

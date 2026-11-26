@@ -2621,7 +2621,12 @@ path.route-corridor { stroke: var(--gilt); }
 .xj-turn, .xj-deskfoot, .xj-blank { display: none; }
 @media (min-width: 921px) {
   .xunji-panel.is-desk { background: transparent; border: 0; box-shadow: none; border-radius: 0; pointer-events: none; overflow: hidden; }
-  .xunji-panel.is-desk .xj-rtools { pointer-events: auto; top: calc(var(--sp-top) + 10px); right: calc(50% - var(--sp-w) / 2 + 10px); }
+  /* The tools sit outside the spread, top right, stacked — never over a page */
+  .xunji-panel.is-desk .xj-rtools { pointer-events: auto; top: var(--sp-top); right: calc(50% - var(--sp-w) / 2 - 52px); flex-direction: column; border-radius: 22px; }
+  /* Paper behind the spread, so a turning page never shows the desk; a map half stays clear */
+  .xj-pages.desk .xj-pager { background: var(--surface); }
+  .xj-pages.desk .xj-pager.map-l { background: linear-gradient(to right, transparent 50%, var(--surface) 50%); }
+  .xj-pages.desk .xj-pager.map-r { background: linear-gradient(to right, var(--surface) 50%, transparent 50%); }
   .xj-pages.desk { position: relative; flex: 1; }
   .xj-pages.desk .xj-pager { left: calc(50% - var(--sp-w) / 2); top: var(--sp-top); right: auto; bottom: auto; width: var(--sp-w); height: var(--sp-h); display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 100%; overflow: hidden; scroll-snap-type: none; border-radius: 3px; box-shadow: 0 0 0 100vmax rgba(8,7,6,.6), 0 24px 70px rgba(0,0,0,.6); pointer-events: none; }
   .xj-pages.desk .xj-page { display: none; flex: none; width: auto; height: 100%; min-height: 0; scroll-snap-align: none; }
@@ -2692,8 +2697,8 @@ path.route-corridor { stroke: var(--gilt); }
   .xj-pager.turn-f > .xj-page, .xj-pager.turn-f > .xj-blank { animation: xjTurnF .22s ease-out; }
   .xj-pager.turn-b > .xj-page, .xj-pager.turn-b > .xj-blank { animation: xjTurnB .22s ease-out; }
 }
-@keyframes xjTurnF { from { opacity: .35; transform: translateX(14px); } to { opacity: 1; transform: none; } }   /* never fully transparent: the desk must not show through mid-turn */
-@keyframes xjTurnB { from { opacity: .35; transform: translateX(-14px); } to { opacity: 1; transform: none; } }
+@keyframes xjTurnF { from { transform: translateX(10px); } to { transform: none; } }   /* slide only — no fade, nothing behind ever shows through */
+@keyframes xjTurnB { from { transform: translateX(-10px); } to { transform: none; } }
 @media (prefers-reduced-motion: reduce) { .xj-pager.turn-f > *, .xj-pager.turn-b > * { animation: none !important; } }
 .xj-shelf-item { display: contents; }
 .xj-cover-card { all: unset; cursor: pointer; box-sizing: border-box; position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; width: 100%; height: 180px; padding: 14px 16px; margin: 0 0 10px; border-radius: 12px; overflow: hidden; background: #000; border: 1px solid rgba(var(--gilt-rgb), .22); }
