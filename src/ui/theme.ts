@@ -2768,4 +2768,29 @@ path.route-corridor { stroke: var(--gilt); }
 .cc-act { cursor: pointer; font-size: 12.5px; padding: 5px 12px; border-radius: 999px; color: #fff; background: rgba(var(--seal-rgb), .82); border: 1px solid rgba(255,255,255,.18); }
 .cc-act.ghost { background: rgba(0,0,0,.35); border-color: rgba(255,255,255,.35); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .cc-act:hover, .cc-act:focus-visible { filter: brightness(1.1); outline: none; box-shadow: 0 0 0 2px rgba(255,255,255,.5); }
+/* 看书就是看书: no text laid over pictures. The picture sits on the page; title, deck and captions are set on paper below it. */
+.pgi-cover { justify-content: flex-start; color: var(--text); background: var(--surface); }
+.pgi-cover img { position: static; flex: 1 1 0; min-height: 0; width: 100%; height: 0; object-fit: cover; opacity: 1; }
+.pgi-cover::after { content: none; display: none; }
+.pgi-cover .pg-cover-text { position: static; flex: none; padding: 18px 24px 6px; color: var(--text); }
+.pgi-cover .mag-title { color: var(--text); }
+.pgi-cover .mag-deck { color: var(--text-2); }
+.pgi-cover .pg-hint { color: var(--text-3); }
+.pgi-cover .mag-credit { position: static; flex: none; padding: 0 24px calc(14px + env(safe-area-inset-bottom)); color: var(--text-3); }
+.pgi-cover .mag-credit a { color: inherit; }
+.pgi-image, .pgi-image.fit-contain, .pgi-image.fit-cover { justify-content: flex-start; padding: 0; color: var(--text); background: var(--surface); }
+.pgi-image img, .pgi-image.fit-contain img, .pgi-image.fit-cover img { position: static; flex: 1 1 0; min-height: 0; width: 100%; height: 0; }
+.pgi-image.fit-cover img { object-fit: cover; }
+.pgi-image.fit-contain img { object-fit: contain; background: rgba(var(--fg-rgb), .04); }
+.pgi-image figcaption, .pgi-image.fit-contain figcaption { position: static; flex: none; padding: 12px 24px calc(40px + env(safe-area-inset-bottom)); background: none; border-top: 1px solid rgba(var(--gilt-rgb), .3); }
+.pgi-image figcaption p { color: var(--text-2); font-size: 13.5px; }
+.pgi-image figcaption a { color: var(--text-3); }
+.xj-cover-card { justify-content: flex-start; height: auto; padding: 0; background: var(--surface); }
+.xj-cover-card img { position: static; width: 100%; height: 132px; object-fit: cover; opacity: 1; border-radius: 11px 11px 0 0; }
+.xj-cover-card::after { content: none; display: none; }
+.xj-cover-card > span { padding: 0 14px; }
+.xj-cover-card .cc-mag { margin-top: 10px; color: var(--text); font-size: 28px; }
+.xj-cover-card .cc-deck { color: var(--text-2); }
+.xj-cover-card .cc-acts { padding: 4px 14px 14px; }
+.xj-cover-card .cc-act.ghost { color: var(--text); background: transparent; border-color: rgba(var(--gilt-rgb), .45); backdrop-filter: none; -webkit-backdrop-filter: none; }
 `
