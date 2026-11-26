@@ -111,7 +111,8 @@ describe("paged features", () => {
   it("chapters cover every stop once, in order", () => {
     for (const t of paged) {
       const cs = t.chapters!
-      expect(cs.length).toBeGreaterThanOrEqual(5); expect(cs.length).toBeLessThanOrEqual(7)
+      if (t.kind === "person") { expect(cs.length).toBeGreaterThanOrEqual(5); expect(cs.length).toBeLessThanOrEqual(7) }
+      else { expect(cs.length).toBeGreaterThanOrEqual(3); expect(cs.length).toBeLessThanOrEqual(6) }
       expect(cs[0]!.stops[0]).toBe(0)
       expect(cs[cs.length - 1]!.stops[1]).toBe(t.stops.length - 1)
       for (let k = 1; k < cs.length; k++) expect(cs[k]!.stops[0]).toBe(cs[k - 1]!.stops[1] + 1)
@@ -135,7 +136,16 @@ describe("paged features", () => {
           if (p.kind === "image") expect(p.caption.length).toBeGreaterThan(0)
         }
       }
-      expect(total).toBeGreaterThanOrEqual(5000); expect(total).toBeLessThanOrEqual(9000)
+      // A life runs 5000–9000 字; a poem's road is shorter, 2000–6000.
+      if (t.kind === "person") { expect(total).toBeGreaterThanOrEqual(5000); expect(total).toBeLessThanOrEqual(9000) }
+      else { expect(total).toBeGreaterThanOrEqual(2000); expect(total).toBeLessThanOrEqual(6000) }
     }
+  })
+})
+
+describe("every thread is a book", () => {
+  it("has mag, deck, opening and chapters", () => {
+    const missing = THREADS.filter((t) => !t.chapters || !t.mag || !t.deck || !t.opening).map((t) => t.id)
+    expect(missing).toEqual([])
   })
 })

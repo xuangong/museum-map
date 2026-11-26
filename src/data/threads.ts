@@ -1,3 +1,4 @@
+import { BOOKS } from "./thread-books"
 /**
  * 循迹 — threads told on the map: a person's journey (古人) or a poem whose lines trace a real
  * route (诗). Each turns into a trip (trip: true stops, in order) and links back from museums,
@@ -32,6 +33,12 @@ export interface ThreadChapter {
   stops: [number, number]
   pages: ThreadPage[]
   source: string
+}
+/** A thread's book, written in src/data/thread-books/<id>.ts and merged into THREADS by id. */
+export interface ThreadBook {
+  mag: string; deck: string; opening: string
+  cover?: ThreadImage
+  chapters: ThreadChapter[]
 }
 export interface ThreadStop {
   name: string; modern: string; lat: number; lng: number
@@ -509,3 +516,6 @@ export const THREADS: Thread[] = [
     ],
   },
 ]
+
+// Books written in their own files (src/data/thread-books/) join their threads here.
+for (const t of THREADS) { const b = BOOKS[t.id]; if (b) Object.assign(t, b) }
