@@ -50,7 +50,7 @@ export function XunjiPages(endHtml: string): string {
         </div>
       </template>`
   const image = `<template x-if="p.kind === 'image'">
-        <figure class="pgi pgi-image" :class="xunjiFit(p.d.image)">
+        <figure class="pgi pgi-image" :class="xunjiFit(p.d.image, n)">
           <img :src="p.d.image.src" :alt="p.d.image.work" :width="p.d.image.w" :height="p.d.image.h" :style="p.d.image.focus ? 'object-position:' + p.d.image.focus : ''" :loading="Math.abs(n - xunji.page) <= 2 ? 'eager' : 'lazy'" decoding="async">
           <figcaption>
             <p x-text="p.d.caption"></p>
@@ -106,9 +106,9 @@ export function XunjiPages(endHtml: string): string {
         </div>
       </template>`
   return `<div class="xj-pages" :class="xunjiWrapClass()" :style="'--era:' + xunjiAccent()">
-  <div class="xj-pager" @scroll.capture.passive="xunjiOnPagerScroll($event)">
+  <div class="xj-pager" @scroll.capture.passive="xunjiOnPagerScroll($event)" @click="xunjiDeskClick($event)" @wheel="xunjiDeskWheel($event)">
     <template x-for="(p, n) in xunjiPages()" :key="n">
-      <section class="xj-page" :class="'pg-' + p.kind + (n === xunji.page ? ' cur' : '')" :data-pg="n">
+      <section class="xj-page" :class="'pg-' + p.kind + xunjiPgClass(n)" :data-pg="n">
       ${cover}
       ${toc}
       ${opener}
@@ -121,6 +121,18 @@ export function XunjiPages(endHtml: string): string {
       ${end}
       </section>
     </template>
+    <div class="xj-blank l" x-show="xunjiBlank('l')"></div>
+    <div class="xj-blank r" x-show="xunjiBlank('r')"></div>
+  </div>
+  <button type="button" class="xj-turn l" @click="xunjiPageStep(-1)" :disabled="xunjiSpreadAt(-1)" aria-label="上一页">‹</button>
+  <button type="button" class="xj-turn r" @click="xunjiPageStep(1)" :disabled="xunjiSpreadAt(1)" aria-label="下一页">›</button>
+  <div class="xj-deskfoot">
+    <span class="dk-folio" x-text="xunjiDeskFolio()"></span>
+    <div class="dk-segs" role="group" aria-label="章节">
+      <template x-for="sg in xunjiChapterSegs()" :key="sg.k">
+        <button type="button" :class="'dk-seg' + (sg.k === xunjiCurChapter() ? ' on' : '') + (sg.k < xunjiCurChapter() ? ' past' : '')" :style="'flex:' + sg.count + ' 1 0'" :title="sg.num + ' · ' + sg.title" :aria-label="sg.num + ' ' + sg.title" @click="xunjiPageTo(sg.at, true)"></button>
+      </template>
+    </div>
   </div>
   <button type="button" class="xj-edge l" x-show="xunji.page > 0" @click="xunjiPageStep(-1)" aria-label="上一页" tabindex="-1"></button>
   <button type="button" class="xj-edge r" x-show="xunji.page < xunjiPages().length - 1" @click="xunjiPageStep(1)" aria-label="下一页" tabindex="-1"></button>
