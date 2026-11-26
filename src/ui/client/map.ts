@@ -277,7 +277,8 @@ window.MuseumMap = {
     pts.forEach(function(c, k){
       if (!ahead && k > upto) return;
       var cls = 'thread-dot' + (k <= upto ? ' on' : '') + (k === upto ? ' cur' : '');
-      L.marker(c, { icon: L.divIcon({ className: '', html: '<div class="' + cls + '">' + (k + 1) + '</div>', iconSize: [20, 20], iconAnchor: [10, 10] }), interactive: false, zIndexOffset: k === upto ? 900 : 800 }).addTo(self.threadLayer);
+      var num = k + 1 + ((opts && opts.base) || 0);   // a slice keeps the book's own stop numbers
+      L.marker(c, { icon: L.divIcon({ className: '', html: '<div class="' + cls + '">' + num + '</div>', iconSize: [20, 20], iconAnchor: [10, 10] }), interactive: false, zIndexOffset: k === upto ? 900 : 800 }).addTo(self.threadLayer);
     });
   },
   fitThread: function(stops, pad) {

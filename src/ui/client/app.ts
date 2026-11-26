@@ -1977,6 +1977,14 @@ window.museumApp = function() {
       }
       var c = t.chapters[e.ch], seg = t.stops.slice(c.stops[0], c.stops[1] + 1);
       if (!seg.length) return;
+      if (me) {
+        // 这一章的路: only this chapter's road — from where the last chapter ended, through this chapter's stops — nothing else.
+        var from = Math.max(0, c.stops[0] - 1), road = t.stops.slice(from, c.stops[1] + 1);
+        M.setThreadSegment(null);
+        M.setThreadRoute(road, road.length - 1, { ahead: false, base: from });
+        M.fitThread(road.length > 1 ? road : t.stops.slice(Math.max(0, c.stops[0] - 1), c.stops[1] + 2), pad);
+        return;
+      }
       M.setThreadRoute(t.stops, c.stops[1]);
       M.setThreadSegment(seg);
       M.fitThread(t.stops.slice(Math.max(0, c.stops[0] - 1), c.stops[1] + 2), pad);
