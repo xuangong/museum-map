@@ -2816,7 +2816,17 @@ path.route-corridor { stroke: var(--gilt); }
   .xunji-panel.is-paged.on-map:not(.mini) .xj-strip::before { content: none; }
   .xunji-panel.is-paged .xj-pages .pgi { padding-top: 18px; }
   .xunji-panel.is-paged .xj-pages .pgi-cover, .xunji-panel.is-paged .xj-pages .pgi-image, .xunji-panel.is-paged .xj-pages .pgi-map { padding-top: 0; }
-  .xunji-panel.is-paged .pgi-toc .pg-lede { font-size: 13.5px; line-height: 1.8; margin: 8px 0 12px; }
+  /* 目录 on a phone: the 导语 folds to five lines so all chapters fit one screen; tap to read it all */
+  .xunji-panel.is-paged .pgi-toc .pg-lede { font-size: 14px; line-height: 1.85; margin: 8px 0 4px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
+  .xunji-panel.is-paged .pgi-toc .pg-lede.open { display: block; -webkit-line-clamp: unset; }
+  .xunji-panel.is-paged .pg-lede-more { display: block; }
+  .xunji-panel.is-paged .pg-toc button { padding: 7px 2px; }
+  .xunji-panel.is-paged .pgi-toc { padding-bottom: calc(18px + env(safe-area-inset-bottom)); }
+  .xunji-panel.is-paged .tc-num { font-size: 20px; }
+  /* 尾页: the 变成行程 button stays in reach while the timetable scrolls */
+  .xunji-panel.is-paged .pgi-end .xj-end > .xj-cta { position: sticky; bottom: calc(8px + env(safe-area-inset-bottom)); z-index: 2; box-sizing: border-box; width: 100%; align-self: stretch; background: var(--surface); box-shadow: inset 0 0 0 999px rgba(var(--seal-rgb), .12), 0 8px 24px -10px var(--sh-60, rgba(0,0,0,.3)); }
+  .xunji-panel.is-paged .pgi-end { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+  .xj-pages.pk-end .xj-more { display: none; }
   .xunji-panel.is-paged .pgi-image figcaption { padding-top: 10px; }
   .xunji-panel.is-paged .pgi-text { align-content: center; padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
   .xunji-panel.is-paged .tx-main p { font-size: 16.5px; line-height: 2.05; margin-bottom: 14px; }
@@ -2838,4 +2848,5 @@ path.route-corridor { stroke: var(--gilt); }
   .xs-line { margin-top: 6px; font-size: 15px; letter-spacing: .08em; }
   .xs-prog { margin-top: 6px; }
 }
+.pg-lede-more { all: unset; cursor: pointer; display: none; margin: 0 0 12px; font-size: 12.5px; color: var(--era); letter-spacing: .06em; }
 `

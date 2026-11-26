@@ -19,7 +19,8 @@ export function XunjiPages(endHtml: string): string {
   const toc = `<template x-if="p.kind === 'toc'">
         <div class="pgi pgi-toc">
           <div class="mag-kick">目录</div>
-          <p class="pg-lede" x-show="xunji.thread.opening" x-text="xunji.thread.opening"></p>
+          <p class="pg-lede" :class="xunji.ledeOpen ? 'open' : ''" x-show="xunji.thread.opening" x-text="xunji.thread.opening" @click="xunji.ledeOpen = !xunji.ledeOpen"></p>
+          <button type="button" class="pg-lede-more" x-show="xunji.thread.opening" @click="xunji.ledeOpen = !xunji.ledeOpen" x-text="xunji.ledeOpen ? '收起导语 ↑' : '读完导语 ↓'"></button>
           <ol class="pg-toc">
             <template x-for="(c, k) in xunjiChapters()" :key="k">
               <li><button type="button" @click="xunjiPageTo(c.at, true)">

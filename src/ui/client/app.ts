@@ -138,7 +138,7 @@ window.museumApp = function() {
     territoryUrl: '',
     placeNamesUrl: '',
     threadsUrl: '',
-    xunji: { list: null, thread: null, i: 0, playing: false, replaying: false, ended: false, mini: false, listening: false, seg: { a: 0, b: 0, pick: false }, sheetH: 0, reading: false, act: -1, top: 0, paged: false, page: 0, more: false, ratio: 0.6, deskOn: false, noteBelow: false, dw: 0, dh: 0, rect: { t: 0, l: 0, r: 0, b: 0 } },
+    xunji: { list: null, thread: null, i: 0, playing: false, replaying: false, ended: false, mini: false, listening: false, seg: { a: 0, b: 0, pick: false }, sheetH: 0, reading: false, act: -1, top: 0, paged: false, page: 0, more: false, ratio: 0.6, deskOn: false, noteBelow: false, ledeOpen: false, dw: 0, dh: 0, rect: { t: 0, l: 0, r: 0, b: 0 } },
     _eraAccents: {},
     _xjTimer: 0,
     eraOverlay: true,
@@ -2073,7 +2073,7 @@ window.museumApp = function() {
     },
     /** Open a thread at a stop. opts.play: start the tour (needs a tap); opts.fromHash: leave the URL alone. */
     async openThread(id, stop, opts) {
-      this.xunji.replaying = false;
+      this.xunji.replaying = false; this.xunji.ledeOpen = false;
       opts = opts || {};
       await this.loadThreads();
       var t = this.threadById(id); if (!t) { this.flashToast('没找到这条线索'); return; }
@@ -2214,6 +2214,14 @@ window.museumApp = function() {
         if (self.xunji.reading && self.xunji.paged && !self.xunji.mini) self.xunjiDrawPage(true);
         else if (self.xunjiSubOn()) self.xunjiShow(false);
       }); });
+    },
+    /** Phone: swipe the subtitle card left / right for the next / previous stop. */
+    xunjiSubTouch(ev) { var t = ev.touches && ev.touches[0]; this._xsX = t ? t.clientX : null; this._xsY = t ? t.clientY : 0; },
+    xunjiSubSwipe(ev) {
+      var t = ev.changedTouches && ev.changedTouches[0]; if (!t || this._xsX == null) return;
+      var dx = t.clientX - this._xsX, dy = t.clientY - this._xsY; this._xsX = null;
+      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      if (dx < 0) this.xunjiGo(this.xunji.i + 1); else if (this.xunji.i > 0) this.xunjiGo(this.xunji.i - 1);
     },
     xunjiSubOn() {
       var x = this.xunji, t = x.thread;

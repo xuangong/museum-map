@@ -146,7 +146,7 @@ export function XunjiPanel(): string {
     <button type="button" class="xs-btn wide" x-show="xunji.thread && (xunji.thread.acts || xunji.thread.chapters)" @click="xunjiRead()">读这本书</button>
     <button type="button" class="xs-btn" @click="closeThread()" aria-label="退出回放">✕</button>
   </div>
-  <div class="xs-band">
+  <div class="xs-band" @touchstart.passive="xunjiSubTouch($event)" @touchend="xunjiSubSwipe($event)">
     <button type="button" class="xs-nav" @click="xunjiGo(xunji.i - 1)" :disabled="xunji.i === 0" aria-label="上一站">‹</button>
     <template x-for="k in [xunji.i]" :key="k">
       <div class="xs-text">
