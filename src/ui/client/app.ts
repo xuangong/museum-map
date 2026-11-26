@@ -138,7 +138,7 @@ window.museumApp = function() {
     territoryUrl: '',
     placeNamesUrl: '',
     threadsUrl: '',
-    xunji: { list: null, thread: null, i: 0, playing: false, ended: false, mini: false, listening: false, seg: { a: 0, b: 0, pick: false }, sheetH: 0, reading: false, act: -1, top: 0 },
+    xunji: { list: null, thread: null, i: 0, playing: false, ended: false, mini: false, listening: false, seg: { a: 0, b: 0, pick: false }, sheetH: 0, reading: false, act: -1, top: 0, paged: false, page: 0 },
     _eraAccents: {},
     _xjTimer: 0,
     eraOverlay: true,
@@ -261,7 +261,13 @@ window.museumApp = function() {
       var guideUp = function(){ if (self.chat.open && !self.chat.mini) self.tuckHere(); };
       this.$watch('chat.open', guideUp);
       this.$watch('chat.mini', guideUp);
-      window.addEventListener('resize', function(){ if (self.xunji.thread) { self.xunjiTopMeasure(); self.xunjiMeasure(); if (self.xunji.reading) { clearTimeout(self._xjResize); self._xjResize = setTimeout(function(){ self.xunjiTopMeasure(); self.xunjiDrawAct(); }, 120); } } });
+      document.addEventListener('keydown', function(e){
+        var x = self.xunji; if (!x.thread || !x.paged || !x.reading || x.mini || self.view !== 'xunji' || e.altKey || e.ctrlKey || e.metaKey) return;
+        var tg = e.target, tn = tg && tg.tagName; if (tn === 'INPUT' || tn === 'TEXTAREA' || tn === 'SELECT' || (tg && tg.isContentEditable)) return;
+        if (e.key === 'ArrowRight') { e.preventDefault(); self.xunjiPageStep(1); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); self.xunjiPageStep(-1); }
+      });
+      window.addEventListener('resize', function(){ if (self.xunji.thread) { self.xunjiTopMeasure(); self.xunjiMeasure(); if (self.xunji.reading && self.xunji.paged) { clearTimeout(self._xjResize); self._xjResize = setTimeout(function(){ self.xunjiTopMeasure(); self.xunjiPageTo(self.xunji.page, false, 0, true); self.xunjiDrawPage(true); }, 120); } else if (self.xunji.reading) { clearTimeout(self._xjResize); self._xjResize = setTimeout(function(){ self.xunjiTopMeasure(); self.xunjiDrawAct(); }, 120); } } });
 
       // Sidebar (TOC) resize handle — desktop only
       this.initTocResize();
@@ -1588,9 +1594,9 @@ window.museumApp = function() {
     xunjiKick() { var t = this.xunji.thread; return t ? ['循迹', this.xunjiEraName(), t.span].filter(Boolean).join(' · ') : ''; },
     xunjiEraName() { var t = this.xunji.thread, d = t && this.dynastyById(t.era); return d ? this.dynastyShortName(d).replace(/[：:].*$/, '').replace(/（.*$/, '') : ''; },
     xunjiCredit(im) { return im ? [im.work, im.by, im.where, im.license].filter(Boolean).join(' · ') + (/BY/.test(im.license || '') ? '（已缩放）' : '') : ''; },
-    xunjiSaveScroll() { var el = document.querySelector('.xj-mag'); if (el && el.offsetHeight) this._xjScroll = el.scrollTop; },
-    xunjiRestoreScroll() { var s = this._xjScroll || 0; var el = document.querySelector('.xj-mag'); if (el) el.scrollTop = s; },
-    xunjiAtEnd() { var t = this.xunji.thread; return !!(this.xunji.reading && t && t.acts && this.xunji.act === t.acts.length); },
+    xunjiSaveScroll() { if (this.xunji.paged) return; var el = document.querySelector('.xj-mag'); if (el && el.offsetHeight) this._xjScroll = el.scrollTop; },
+    xunjiRestoreScroll() { if (this.xunji.paged) { this.xunjiPageTo(this.xunji.page, false, 0, true); return; } var s = this._xjScroll || 0; var el = document.querySelector('.xj-mag'); if (el) el.scrollTop = s; },
+    xunjiAtEnd() { var t = this.xunji.thread; if (this.xunji.paged && this._xjPg) return !!(this.xunji.reading && t && this.xunji.page === this._xjPg.list.length - 1); return !!(this.xunji.reading && t && t.acts && this.xunji.act === t.acts.length); },
     /** The act in view lights its stops on the map (rAF-throttled). */
     xunjiOnScroll(e) {
       var self = this, el = e.currentTarget || e.target;
@@ -1607,6 +1613,7 @@ window.museumApp = function() {
       });
     },
     xunjiDrawAct() {
+      if (this.xunji.paged) { this.xunjiDrawPage(true); return; }
       var t = this.xunji.thread, M = window.MuseumMap; if (!t || !t.acts || !M || this.view !== 'xunji') return;
       var k = this.xunji.act;
       if (k < 0 || k >= t.acts.length) {
@@ -1621,6 +1628,100 @@ window.museumApp = function() {
       var a0 = a.stops[0], a1 = a.stops[1];
       M.fitThread(seg.length > 1 ? seg : t.stops.slice(Math.max(0, a0 - 1), a1 + 2), this.xunjiPad());
     },
+    // ── 翻页的「刊」: cover, 目录, every chapter's pages, 尾页 — one flat list, one screen each.
+    xunjiBuildPages(t) {
+      var list = [{ kind: 'cover', ch: -1 }, { kind: 'toc', ch: -1 }], chs = [];
+      (t.chapters || []).forEach(function(c, ci){
+        var seenText = false, at = list.length;
+        c.pages.forEach(function(d, pi){
+          var e = { kind: d.kind, ch: ci, d: d, drop: false };
+          if (d.kind === 'text' && !seenText) { seenText = true; e.drop = true; }
+          list.push(e);
+        });
+        var op = c.pages.find(function(d){ return d.kind === 'opener'; });
+        chs.push({ num: op ? op.num : '', title: c.title, place: c.place, span: c.span, at: at });
+      });
+      list.push({ kind: 'end', ch: -1 });
+      return { list: list, chs: chs };
+    },
+    xunjiPages() { return this._xjPg ? this._xjPg.list : []; },
+    xunjiChapters() { return this._xjPg ? this._xjPg.chs : []; },
+    xunjiChapter(ci) { var t = this.xunji.thread; return (t && t.chapters && t.chapters[ci]) || { title: '', place: '', span: '' }; },
+    xunjiPageOfStop(i) {
+      var t = this.xunji.thread, k = 0; if (!t || !t.chapters || !this._xjPg) return 0;
+      t.chapters.forEach(function(c, ci){ if (i >= c.stops[0] && i <= c.stops[1]) k = ci; });
+      var ch = this._xjPg.chs[k]; return ch ? ch.at : 0;
+    },
+    xunjiPageKind() { var L = this.xunjiPages(), e = L[this.xunji.page]; return e ? e.kind : ''; },
+    xunjiOnMap() { return !!(this.xunji.paged && this.xunji.reading && !this.xunji.mini && this.xunjiPageKind() === 'map'); },
+    xunjiFolioOn() { var k = this.xunjiPageKind(); return !!k && k !== 'cover' && k !== 'toc' && k !== 'end'; },
+    xunjiFolioL() { var e = this.xunjiPages()[this.xunji.page], t = this.xunji.thread, c = e && e.ch >= 0 && this._xjPg.chs[e.ch]; return c && t ? (t.mag || t.title) + ' · ' + c.num : ''; },
+    xunjiFolioR() { return (this.xunji.page + 1) + ' / ' + this.xunjiPages().length; },
+    xunjiEdgeClass() { var k = this.xunjiPageKind(); return k === 'toc' || k === 'end' ? 'no-edge' : ''; },
+    /** Tall/narrow or very wide pictures are shown whole on a dark ground; the rest fill the page. */
+    xunjiFit(im) { var r = im && im.h ? im.w / im.h : 1; return r < 0.6 || r > 1.8 ? 'fit-contain' : 'fit-cover'; },
+    xunjiPageStep(d) { this.xunjiPageTo(this.xunji.page + d, true); },
+    /** Go to page k (state, map, hash, scroll). quiet: only scroll — the state is already right. */
+    xunjiPageTo(k, smooth, tries, quiet) {
+      var L = this.xunjiPages(), self = this; if (!L.length || !this.xunji.paged) return;
+      k = Math.max(0, Math.min(L.length - 1, k));
+      var el = document.querySelector('.xj-pager');
+      if (!quiet && k !== this.xunji.page) {
+        this.xunji.page = k;
+        this.xunjiPageChanged();
+      }
+      if (!el || !el.clientWidth || el.querySelectorAll('.xj-page').length <= k) {
+        if (el && !el.clientWidth && this.xunji.mini) return;   // hidden: xunjiRestoreScroll lays it out on the way back up
+        if ((tries || 0) < 10) setTimeout(function(){ self.xunjiPageTo(k, smooth, (tries || 0) + 1, true); }, 80);
+        return;
+      }
+      var left = k * el.clientWidth;
+      if (Math.abs(el.scrollLeft - left) < 2) return;
+      var ms = smooth && Math.abs(el.scrollLeft - left) < el.clientWidth * 1.5 ? 600 : 160;
+      this._xjLock = Date.now() + ms;
+      clearTimeout(this._xjLockT); this._xjLockT = setTimeout(function(){ self.xunjiPagerSync(); }, ms + 40);
+      if (ms === 600 && el.scrollTo) el.scrollTo({ left: left, behavior: 'smooth' }); else el.scrollLeft = left;
+    },
+    xunjiOnPagerScroll() {
+      var self = this;
+      if (this._xjRaf2) return;
+      this._xjRaf2 = requestAnimationFrame(function(){ self._xjRaf2 = 0; self.xunjiPagerSync(); });
+    },
+    /** The page in view (from scrollLeft) is the current page. */
+    xunjiPagerSync() {
+      var el = document.querySelector('.xj-pager'), L = this.xunjiPages();
+      if (!el || !L.length || !this.xunji.paged || !this.xunji.reading || this.xunji.mini) return;
+      var w = el.clientWidth; if (!w || (this._xjLock && Date.now() < this._xjLock)) return;
+      var k = Math.max(0, Math.min(L.length - 1, Math.round(el.scrollLeft / w)));
+      if (k === this.xunji.page) return;
+      this.xunji.page = k;
+      this.xunjiPageChanged();
+    },
+    xunjiPageChanged() {
+      var t = this.xunji.thread, k = this.xunji.page; if (!t) return;
+      this.setHashRoute({ kind: 'thread', id: t.id + (k ? '/p' + (k + 1) : '') });
+      var pg = document.querySelector('.xj-page[data-pg="' + k + '"]'); if (pg) pg.scrollTop = 0;
+      var self = this; this.$nextTick(function(){ self.xunjiDrawPage(false); });
+    },
+    /** The chapter in view lights its stops on the map; cover / 目录 show the whole route, 尾页 adds the timetable leg. */
+    xunjiDrawPage(force) {
+      var t = this.xunji.thread, M = window.MuseumMap, e = this.xunjiPages()[this.xunji.page];
+      if (!t || !M || !e || this.view !== 'xunji') return;
+      var key = e.ch + '|' + e.kind + '|' + (this.xunji.mini ? 1 : 0);
+      if (!force && key === this._xjDrawKey && e.kind !== 'end') return;
+      this._xjDrawKey = key;
+      var pad = this.xunjiPad();
+      if (e.ch < 0) {
+        M.setThreadRoute(t.stops, -1); M.setThreadSegment(null); M.fitThread(t.stops, pad);
+        if (e.kind === 'end') this.xunjiSegDraw();
+        return;
+      }
+      var c = t.chapters[e.ch], seg = t.stops.slice(c.stops[0], c.stops[1] + 1);
+      if (!seg.length) return;
+      M.setThreadRoute(t.stops, c.stops[1]);
+      M.setThreadSegment(seg);
+      M.fitThread(t.stops.slice(Math.max(0, c.stops[0] - 1), c.stops[1] + 2), pad);
+    },
     /** 快速回放: leave the article for the existing tour. */
     xunjiReplay() { this.xunji.reading = false; this.xunji.ended = false; this.xunji.mini = false; this.xunji.i = 0; this.xunjiSegReset(); this.xunjiMeasure(); this.xunjiPlay(); },
     /** Back from the tour to the article. */
@@ -1629,6 +1730,12 @@ window.museumApp = function() {
       this.xunji.reading = true; this.xunji.ended = false; this.xunji.act = -1; this.xunji.sheetH = 0; this.xunji.mini = false;
       this.xunjiSegReset();
       this.xunjiTopMeasure();
+      if (this.xunji.paged) {
+        var pk = this.xunji.page;
+        this.setHashRoute({ kind: 'thread', id: this.xunji.thread.id + (pk ? '/p' + (pk + 1) : '') });
+        this.$nextTick(function(){ setTimeout(function(){ self.xunjiPageTo(pk, false, 0, true); self.xunjiDrawPage(true); }, 0); });
+        return;
+      }
       this.setHashRoute({ kind: 'thread', id: this.xunji.thread.id });
       this.$nextTick(function(){ setTimeout(function(){ self.xunjiDrawAct(); var el = document.querySelector('.xj-mag'); if (el) el.scrollTop = 0; }, 0); });
     },
@@ -1648,7 +1755,14 @@ window.museumApp = function() {
       if (!panel || !canvas || this.view !== 'xunji') return pad;
       var pr = panel.getBoundingClientRect(), cr = canvas.getBoundingClientRect();
       if (this.xunji.reading && !this.xunji.mini) {
-        var mag = document.querySelector('.xj-mag'), strip = document.querySelector('.xj-strip');
+        var mag = document.querySelector(this.xunji.paged ? '.xj-pages' : '.xj-mag'), strip = document.querySelector('.xj-strip');
+        if (this.xunjiOnMap()) {
+          // A map page: the live map is the page. Only the caption box (and its folio line) is in the way.
+          var cap = document.querySelector('.xj-page.cur .xj-mapcap');
+          pad.bottom = cap ? Math.max(0, Math.round(cr.bottom - cap.getBoundingClientRect().top + 10)) : 0;
+          pad.top = window.innerWidth > 920 ? 0 : 8; pad.m = 24;
+          return pad;
+        }
         if (window.innerWidth > 920 && mag) pad.left = Math.max(0, Math.round(mag.getBoundingClientRect().right - cr.left));
         else if (strip) { var sr = strip.getBoundingClientRect(); pad.top = Math.max(0, Math.round(sr.top - cr.top)); pad.bottom = Math.max(0, Math.round(cr.bottom - sr.bottom)); pad.m = 12; }
         return pad;
@@ -1679,20 +1793,31 @@ window.museumApp = function() {
       this.tocOpen = false;
       this.xunjiStopTimer();
       this.xunji.thread = t; this.xunji.ended = false; this.xunji.mini = false;
-      this.xunji.reading = !!(t.acts && t.acts.length); this.xunji.act = -1; this._xjScroll = 0;
+      var paged = !!(t.chapters && t.chapters.length);
+      this._xjPg = paged ? this.xunjiBuildPages(t) : null;
+      this.xunji.paged = paged; this.xunji.page = 0; this._xjDrawKey = ''; this._xjLock = 0;
+      this.xunji.reading = paged || !!(t.acts && t.acts.length); this.xunji.act = -1; this._xjScroll = 0;
       if (this.xunji.reading) this.xunjiTopMeasure();
       this.xunji.i = Math.max(0, Math.min(t.stops.length - 1, stop || 0));
       this._xjNotes = window.ThreadCore.notes(t);
       this._xjTrip = window.ThreadCore.toTrip(t);
       this.xunjiSegReset();
       this.xunjiMeasure();
-      if (this.xunji.reading) {
+      if (paged) {
+        var pme = this, pk0 = 0, L = this._xjPg.list;
+        if (opts.page != null && isFinite(opts.page)) pk0 = Math.max(0, Math.min(L.length - 1, opts.page));
+        else if (stop > 0) pk0 = this.xunjiPageOfStop(this.xunji.i);
+        this.xunji.playing = false;
+        this.xunji.page = pk0;
+        if (opts.play && window.EraSynth) window.EraSynth.note(t.era, (this._xjNotes || [])[0]);
+        this.$nextTick(function(){ setTimeout(function(){ pme.xunjiPageTo(pk0, false, 0, true); pme.xunjiDrawPage(true); }, 0); });
+      } else if (this.xunji.reading) {
         var me = this, i0 = this.xunji.i;
         this.xunji.playing = false;
         if (opts.play && window.EraSynth) window.EraSynth.note(t.era, (this._xjNotes || [])[0]);
         this.$nextTick(function(){ setTimeout(function(){ var mg = document.querySelector('.xj-mag'); if (mg) mg.scrollTop = 0; me.xunji.act = -1; me.xunjiDrawAct(); me.xunjiScrollToStop(i0); }, 0); });
       } else if (opts.play) this.xunjiPlay(); else { this.xunji.playing = false; this.xunjiShow(false); }
-      if (!opts.fromHash) this.setHashRoute({ kind: 'thread', id: t.id + (this.xunji.i ? '/' + (this.xunji.i + 1) : '') });
+      if (!opts.fromHash) this.setHashRoute({ kind: 'thread', id: t.id + (paged ? (this.xunji.page ? '/p' + (this.xunji.page + 1) : '') : (this.xunji.i ? '/' + (this.xunji.i + 1) : '')) });
     },
     /** Draw + fly to the current stop; sound = play its note. */
     xunjiShow(sound) {
@@ -1749,7 +1874,7 @@ window.museumApp = function() {
     },
     closeThread() {
       this.xunjiStopTimer(); this.xunjiStopListen();
-      this.xunji.thread = null; this.xunji.playing = false; this.xunji.ended = false; this.xunji.reading = false; this.xunji.act = -1; this.xunji.sheetH = 0; this._xjTrip = null;
+      this.xunji.thread = null; this.xunji.playing = false; this.xunji.ended = false; this.xunji.reading = false; this.xunji.paged = false; this.xunji.page = 0; this._xjPg = null; this.xunji.act = -1; this.xunji.sheetH = 0; this._xjTrip = null;
       if (window.MuseumMap) window.MuseumMap.clearThread();
       if (/^#\\/x\\//.test(location.hash || '')) this.setHashRoute(null);
     },
@@ -3348,8 +3473,8 @@ window.museumApp = function() {
       var hm = h.match(/^#\\/h\\/(-?[\\d.]+),(-?[\\d.]+)$/);
       if (hm) { this.openHere(Number(hm[1]), Number(hm[2]), { fromHash: true }); return; }
       if (this.here.open && !/^#\\/h\\//.test(h)) this.dismissHere();
-      var xm = h.match(/^#\\/x\\/([a-z0-9-]+)(?:\\/(\\d+))?$/);
-      if (xm) { this.openThread(xm[1], xm[2] ? Number(xm[2]) - 1 : 0, { fromHash: true }); return; }
+      var xm = h.match(/^#\\/x\\/([a-z0-9-]+)(?:\\/(p?)(\\d+))?$/);
+      if (xm) { this.openThread(xm[1], xm[3] && !xm[2] ? Number(xm[3]) - 1 : 0, { fromHash: true, page: xm[3] && xm[2] ? Number(xm[3]) - 1 : null }); return; }
       if (this.xunji.thread && !/^#\\/x\\//.test(h)) { this.xunjiPause(); }
       var m = h.match(/^#\\/(d|m)\\/(.+)$/);
       if (!m) {
