@@ -131,7 +131,7 @@ describe("paged features", () => {
           if (p.kind === "quote") { expect(p.text.length).toBeGreaterThan(0); expect(p.source.length).toBeGreaterThan(0) }
           if (p.kind === "people") { expect(p.people.length).toBeGreaterThanOrEqual(2); expect(p.people.length).toBeLessThanOrEqual(4); for (const x of p.people) expect(x.name && x.role && x.line).toBeTruthy() }
           const im = p.kind === "image" ? p.image : p.kind === "object" ? p.image : undefined
-          if (im) { expect(im.src).toMatch(/^\/img\/xj-[a-z0-9-]+-[0-9a-f]{16}\.jpg$/); for (const k of ["work", "by", "where", "license"] as const) expect(String(im[k]).length).toBeGreaterThan(0); expect((im as any).w).toBeGreaterThan(0); expect((im as any).h).toBeGreaterThan(0) }
+          if (im) { expect(im.src).toMatch(/^\/img\/xj-[a-z0-9-]+-[0-9a-f]{16}\.jpg$/); if (im.commons) expect(im.commons).toMatch(/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/); for (const k of ["work", "by", "where", "license"] as const) expect(String(im[k]).length).toBeGreaterThan(0); expect((im as any).w).toBeGreaterThan(0); expect((im as any).h).toBeGreaterThan(0) }
           if (p.kind === "image") expect(p.caption.length).toBeGreaterThan(0)
         }
       }
