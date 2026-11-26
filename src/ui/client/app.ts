@@ -2106,7 +2106,7 @@ window.museumApp = function() {
       var s = t.stops[this.xunji.i];
       var M = window.MuseumMap, self = this;
       if (M) {
-        M.setThreadRoute(t.stops, this.xunji.i, { ahead: false });   // playback reveals the road as it goes; the whole route shows at the end
+        M.setThreadRoute(t.stops, this.xunji.i, { leg: true });   // playback: only this leg; the whole route shows when it ends
         this.$nextTick(function(){ if (self.view === 'xunji' && self.xunji.thread === t) M.showAt(s.lat, s.lng, Math.max(M.map ? M.map.getZoom() : 6, 6), self.xunjiPad(), { fly: true }); });
       }
       if (sound && window.EraSynth) window.EraSynth.note(t.era, (this._xjNotes || [])[this.xunji.i]);

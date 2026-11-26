@@ -2732,22 +2732,23 @@ path.route-corridor { stroke: var(--gilt); }
 .xj-link:hover { border-color: var(--gilt); }
 .hl-threads { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
 /* 回放 as subtitles: the map is the screen; one line of narration per stop */
-.xj-sub { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1100; pointer-events: none; padding: 0 16px calc(18px + env(safe-area-inset-bottom)); background: linear-gradient(to top, rgba(8,7,6,.82), rgba(8,7,6,.55) 55%, transparent); }
-.xs-tools { position: fixed; top: calc(var(--xj-top, 120px) + 58px); right: 14px; display: flex; gap: 6px; pointer-events: auto; }
+.xj-sub { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1100; pointer-events: none; padding: 0 14px calc(14px + env(safe-area-inset-bottom)); }
+.xs-tools { position: absolute; right: 22px; bottom: calc(100% - 8px); display: flex; gap: 6px; pointer-events: auto; }
 .xs-btn { all: unset; cursor: pointer; min-width: 34px; height: 34px; padding: 0 10px; box-sizing: border-box; display: grid; place-items: center; border-radius: 999px; font-size: 12.5px; color: var(--text); background: rgba(var(--bg-rgb), .78); border: 1px solid rgba(var(--gilt-rgb), .3); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
 .xs-btn:hover { border-color: var(--gilt); }
-.xs-band { pointer-events: auto; max-width: 860px; margin: 0 auto; display: flex; align-items: center; gap: 10px; padding: 42px 0 10px; }
+/* A solid, frosted dark card: legible over any map, light or dark */
+.xs-band { pointer-events: auto; max-width: 860px; margin: 0 auto; display: flex; align-items: center; gap: 10px; padding: 16px 10px 14px; border-radius: 16px; background: rgba(14,12,10,.86); border: 1px solid rgba(var(--gilt-rgb), .25); box-shadow: 0 14px 40px rgba(0,0,0,.45); backdrop-filter: blur(10px) saturate(1.1); -webkit-backdrop-filter: blur(10px) saturate(1.1); }
 .xs-nav { all: unset; cursor: pointer; flex: none; width: 34px; height: 34px; display: grid; place-items: center; font-size: 22px; color: rgba(255,255,255,.7); border-radius: 50%; }
 .xs-nav:hover { color: #fff; background: rgba(255,255,255,.08); }
 .xs-nav:disabled { opacity: .25; cursor: default; }
 .xs-text { flex: 1; text-align: center; animation: xsIn .45s ease-out; }
-.xs-when { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; color: var(--era, var(--gilt)); text-shadow: 0 1px 3px rgba(0,0,0,.8); }
+.xs-when { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; color: #E9DBB8; opacity: .85; }
 .xs-title { margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 16px; font-family: var(--serif); font-size: clamp(24px, 3.4vw, 36px); line-height: 1.25; letter-spacing: .26em; color: #fff; white-space: nowrap; text-shadow: 0 2px 10px rgba(0,0,0,.85); }
 .xs-title span { padding-left: .26em; }   /* letter-spacing trails the last 字; balance it */
 .xs-rule { flex: none; width: clamp(24px, 5vw, 56px); height: 1px; background: linear-gradient(to right, transparent, var(--era, var(--gilt))); }
 .xs-rule:last-child { background: linear-gradient(to left, transparent, var(--era, var(--gilt))); }
-.xs-line { margin-top: 10px; font-family: var(--serif); font-size: clamp(16px, 2vw, 21px); line-height: 1.65; color: var(--gilt-hi); letter-spacing: .12em; text-shadow: 0 2px 8px rgba(0,0,0,.85); overflow-wrap: anywhere; }
-.xs-prog { max-width: 860px; margin: 6px auto 0; height: 2px; background: rgba(255,255,255,.15); border-radius: 2px; overflow: hidden; }
+.xs-line { margin-top: 10px; font-family: var(--serif); font-size: clamp(16px, 2vw, 21px); line-height: 1.65; color: #F4D99A; letter-spacing: .12em; overflow-wrap: anywhere; }
+.xs-prog { max-width: 820px; margin: 8px auto 0; height: 2px; background: rgba(255,255,255,.15); border-radius: 2px; overflow: hidden; }
 .xs-prog i { display: block; height: 100%; background: var(--era, var(--gilt)); transition: width .4s ease; }
 @keyframes xsIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .xs-text { animation: none; } }
@@ -2757,4 +2758,8 @@ path.route-corridor { stroke: var(--gilt); }
 /* Short lines that wrap: balanced rows (or broken at a mark, see xunjiBreak) — never a long row over two orphaned 字 */
 .xs-line { white-space: pre-line; }
 .xs-line, .xs-when, .mag-deck, .mag-title, .ob-title, .op-line, .op-title, .pp-title, .xb-meta, .xj-mapcap p, .cc-deck, .xj-card-intro, .xj-card-title, .xj-intro, .xj-line, .xj-stop-title, .xj-title, .pgi figcaption, .pgi figcaption p, .mag-quote span, .pgi-quote blockquote { text-wrap: balance; }
+/* 循迹 masthead: a deliberate two-line headline, broken at the comma */
+.xj-masthead { font-family: var(--serif); font-size: 22px; line-height: 1.45; letter-spacing: .06em; padding-right: 8px; }
+.xj-pick .xj-head { padding-bottom: 14px; border-bottom: 1px solid rgba(var(--gilt-rgb), .22); }
+.xj-pick .xj-kick { letter-spacing: .4em; }
 `

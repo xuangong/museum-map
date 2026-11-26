@@ -64,7 +64,7 @@ export function XunjiPanel(): string {
     <div class="xj-pick">
       <header class="xj-head" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()">
         <div class="xj-kick">循迹</div>
-        <div class="xj-title">跟着一个人、一首诗，走一段历史</div>
+        <div class="xj-title xj-masthead">跟着一个人、一首诗，<br>走一段历史</div>
       </header>
       <div class="xj-body">
       <p class="xj-empty" x-show="!xunji.list">正在铺开路线…</p>
@@ -137,7 +137,7 @@ export function XunjiPanel(): string {
   </template>
 </div>
 <div class="xj-sub" x-show="view === 'xunji' && xunjiSubOn()" x-cloak :style="'--era:' + xunjiAccent()">
-  <div class="xs-tools">
+  <div class="xs-tools" x-show="xunjiSubOn()">
     <button type="button" class="xs-btn" @click="xunji.playing ? xunjiPause() : xunjiPlay()" :aria-label="xunji.playing ? '暂停' : '继续'" x-text="xunji.playing ? '❚❚' : '▶'"></button>
     <button type="button" class="xs-btn wide" x-show="xunji.thread && (xunji.thread.acts || xunji.thread.chapters)" @click="xunjiRead()">回到专题</button>
     <button type="button" class="xs-btn" @click="closeThread()" aria-label="退出回放">✕</button>

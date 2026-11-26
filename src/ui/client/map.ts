@@ -257,9 +257,20 @@ window.MuseumMap = {
   /** opts.ahead === false (playback): only the road walked so far — no faint route ahead, no stops not yet reached. */
   setThreadRoute: function(stops, upto, opts) {
     this.threadLayer.clearLayers();
-    var ahead = !(opts && opts.ahead === false);
+    var ahead = !(opts && opts.ahead === false), leg = !!(opts && opts.leg);
     var pts = (stops || []).map(function(s){ return window.toMapCoord(s.lat, s.lng); });
     if (!pts.length) return;
+    if (leg) {
+      // Playback: just this leg — previous stop → this stop — so the eye goes to the move being told.
+      var self0 = this, from = Math.max(0, upto - 1);
+      if (upto > 0) L.polyline(pts.slice(from, upto + 1), { className: 'thread-walked', weight: 3, opacity: 0.95, interactive: false }).addTo(this.threadLayer);
+      [from, upto].forEach(function(k, j){
+        if (j === 1 && k === from && upto > 0) return;
+        var cls = 'thread-dot on' + (k === upto ? ' cur' : '');
+        L.marker(pts[k], { icon: L.divIcon({ className: '', html: '<div class="' + cls + '">' + (k + 1) + '</div>', iconSize: [20, 20], iconAnchor: [10, 10] }), interactive: false, zIndexOffset: k === upto ? 900 : 800 }).addTo(self0.threadLayer);
+      });
+      return;
+    }
     if (ahead) L.polyline(pts, { className: 'thread-line', weight: 1.5, opacity: 0.35, dashArray: '3 6', interactive: false }).addTo(this.threadLayer);
     if (upto > 0) L.polyline(pts.slice(0, upto + 1), { className: 'thread-walked', weight: 2.5, opacity: 0.9, interactive: false }).addTo(this.threadLayer);
     var self = this;
