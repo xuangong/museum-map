@@ -133,6 +133,7 @@ export const THREADS: Thread[] = [
             ],
             note: { term: "礼部试", text: "宋代科举的省试，由礼部主持，通过后再经殿试排定名次。" } },
           { kind: "quote", text: "老夫当避路，放他出一头地也", source: "欧阳修《与梅圣俞书》", vertical: true },
+          { kind: "image", image: { src: "/img/xj-sushi-bianjing-hongqiao-5d605302d8692f12.jpg", work: "《清明上河图》局部（虹桥一段）", by: "张择端", where: "故宫博物院（北京）", license: "公有领域", commons: "File:Along the River During the Qingming Festival (detail of original).jpg", w: 1200, h: 600 }, caption: "张择端笔下的北宋汴京虹桥。画成比苏轼初到时晚了几十年，但那份船挤人涌的热闹，大抵如此。" },
           { kind: "people", title: "同行的人",
             people: [
               { name: "苏洵", role: "父亲", line: "二十七岁才发愤读书，文章直接有力，被欧阳修推荐给朝中大臣。" },
@@ -175,12 +176,14 @@ export const THREADS: Thread[] = [
               "1076年中秋，他在超然台上和客人喝了一整夜，大醉。月亮升起来，他想起已经五年多没有见面的弟弟，提笔写下《水调歌头》，小序只有一行：「丙辰中秋，欢饮达旦，大醉，作此篇，兼怀子由。」这首词后来传遍天下。写词的人不会知道，三年之后，他笔下的另一些文字，会被人一首一首翻出来，当作罪证。",
             ] },
           { kind: "quote", text: "但愿人长久，千里共婵娟", source: "《水调歌头》", vertical: true },
+          { kind: "image", image: { src: "/img/xj-sushi-qiantang-tide-a12d2d0332d1024f.jpg", work: "《月夜看潮图》纨扇", by: "李嵩（款）", where: "台北故宫博物院", license: "公有领域", commons: "File:Watching the Tide on a Moonlit Night.jpg", w: 1112, h: 1200 }, caption: "画上题着「寄语重门休上钥，夜潮留向月中看」——苏轼在杭州看潮写下的句子，被南宋画家题进了月夜里。" },
           { kind: "map", text: "杭州到密州，直线约六百四十公里，从江南水乡走到北方旱地。他在这两处学会了和失意相处，可下一次，等着他的，是真正的牢狱。" },
         ],
         source: "《宋史·苏轼传》；《饮湖上初晴后雨》；《六月二十七日望湖楼醉书》；《超然台记》；《后杞菊赋》；《江城子·密州出猎》；《水调歌头》小序；孔凡礼《苏轼年谱》熙宁四年至九年" },
       { title: "乌台", place: "湖州 · 汴京", span: "1079", stops: [4, 4],
         pages: [
           { kind: "opener", num: "叁", place: "湖州 · 汴京", span: "1079", line: "一个笔太快的人，被自己的诗文押上了船。" },
+          { kind: "image", image: { src: "/img/xj-sushi-wentong-bamboo-938a1cbf6b7b2e1b.jpg", work: "《墨竹图》（倒垂竹，仅取画心）", by: "文同（与可）", where: "台北故宫博物院", license: "公有领域", commons: "File:Wen Tong Babmbuk.jpg", w: 762, h: 1200 }, caption: "文同画竹，「胸有成竹」说的就是他。1079年七月，苏轼在湖州晒书画，见到亡友这样的竹，废卷痛哭；不久，他就被捕了。" },
           { kind: "text",
             paras: [
               "离开密州后，他在徐州做了两年知州。1077年黄河决口，大水围城，他住在城头上，带着军民守城筑堤，据《宋史》，过家门而不入。洪水退去，他修筑了一座黄楼，纪念这场胜利。",
@@ -239,8 +242,8 @@ export const THREADS: Thread[] = [
               "1082年春天，他去沙湖看田，路上遇雨，同行的人狼狈不堪，他却不觉得，回来写了《定风波》。七月十六日，他和朋友夜游赤壁，客人里有位善吹洞箫的，一般认为就是蜀中道士杨世昌。月亮出来，江面起雾，箫声低回，客人叹「寄蜉蝣于天地，渺沧海之一粟」，他便回答：江上的清风、山间的明月，「取之无禁，用之不竭」。这一晚，成了《赤壁赋》。十月，他又去了一次，写下《后赤壁赋》。",
               "当地人叫它赤壁的这处山崖，其实未必是三国周瑜打仗的地方，一般认为真正的赤壁在今湖北赤壁市一带。所以他在词里写的是「人道是」，给自己留了一点余地。这一点余地，反倒成全了《念奴娇·赤壁怀古》（系年有争议）。",
             ] },
-          { kind: "image", image: { src: "/img/xj-sushi-dongpo-bb23f0d14147799e.jpg", w: 1200, h: 648, work: "《后赤壁赋图》卷 局部(月出、二客江岸)", by: "明 · 张瑞图", where: "大都会艺术博物馆 (Met)", license: "CC0", commons: "https://commons.wikimedia.org/wiki/File:明_張瑞圖_後赤壁賦圖_卷-Second_Ode_on_the_Red_Cliff_MET_DP205431.jpg", focus: "60% 50%" },
-            caption: "明代张瑞图画《后赤壁赋》：月出江岸，二客同行。十月再游赤壁，他梦见了一位道士。" },
+          { kind: "image", image: { src: "/img/xj-sushi-chibi-qiao-boat-b177b694f45d89a1.jpg", work: "《后赤壁赋图》局部（孤鹤掠舟）", by: "乔仲常（北宋末）", where: "美国纳尔逊-阿特金斯艺术博物馆", license: "公有领域", commons: "File:Qiao Zhongchang - Illustration to the Second Prose Poem on the Red Cliff - Google Art Project.jpg", w: 1200, h: 640 }, caption: "北宋乔仲常据《后赤壁赋》作画：「适有孤鹤，横江东来」，一只鹤掠过小舟。这是离苏轼年代最近的赤壁图之一。" },
+          { kind: "image", image: { src: "/img/xj-sushi-chibi-wuyuanzhi-ffc8944333c1a052.jpg", work: "《赤壁图》局部", by: "武元直（金）", where: "台北故宫博物院", license: "CC0", commons: "File:金武元直赤壁圖 卷.jpg", w: 1200, h: 843 }, caption: "金代武元直画的赤壁：峭壁压江，一叶小舟。画的正是苏轼的《赤壁赋》。" },
           { kind: "quote", text: "回首向来萧瑟处，归去，也无风雨也无晴", source: "苏轼《定风波》" },
           { kind: "people", title: "黄州的朋友",
             people: [
@@ -283,6 +286,7 @@ export const THREADS: Thread[] = [
               "黎族的乡亲对他很好：黎子云兄弟常拉他喝酒聊天，据他自己的诗，他喝醉了独自在田间走，一家家去串门，黎家的孩子吹着葱叶送他。他还教书，当地读书人带着文章来请教，他为他们改文章，讲经义，姜唐佐等人曾从他学习。后人把他看作海南文教的开端。没有书，他就在海岛上修订《易传》《书传》《论语说》，这是他自己最看重的三部著作。",
             ],
             note: { term: "桄榔庵", text: "桄榔是海南常见的棕榈科乔木，他的屋旁长着桄榔树，因此得名。" } },
+          { kind: "image", image: { src: "/img/xj-sushi-danzhou-hatclogs-633f5f53fec3c817.jpg", work: "《东坡笠屐图》", by: "日本画家（室町，15世纪中叶前，MET 标注）", where: "大都会艺术博物馆", license: "CC0", commons: "File:『東坡笠屐図』-Su Shi (Dongpo) in a Bamboo Hat and Clogs MET DP140607.jpg", w: 368, h: 1200 }, caption: "相传他在儋州遇雨，向黎家借来斗笠木屐，一路走回，引得路人发笑。这幅日本室町时代的《东坡笠屐图》，说明这个故事早已传到海外。" },
           { kind: "people", title: "身边的人",
             people: [
               { name: "朝云", role: "侍妾", line: "钱塘人，陪他走到惠州。宋人笔记里记着她笑他「一肚皮不合时宜」。" },

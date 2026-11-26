@@ -121,7 +121,7 @@ describe("paged features", () => {
     for (const t of paged) {
       let total = 0
       for (const c of t.chapters!) {
-        expect(c.pages.length).toBeGreaterThanOrEqual(6); expect(c.pages.length).toBeLessThanOrEqual(9)
+        expect(c.pages.length).toBeGreaterThanOrEqual(6); expect(c.pages.length).toBeLessThanOrEqual(11)
         expect(c.pages[0]!.kind).toBe("opener")
         expect(c.pages.some((p) => p.kind === "map")).toBe(true)
         expect(c.source.length).toBeGreaterThan(0)

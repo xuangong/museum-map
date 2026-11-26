@@ -26,7 +26,7 @@ export type ThreadPage =
 export interface ThreadChapter {
   title: string; place: string; span: string
   stops: [number, number]     // inclusive stop range, chapters cover all stops in order
-  pages: ThreadPage[]         // 6–9, first is an opener, at least one map page
+  pages: ThreadPage[]         // 6–11, first is an opener, at least one map page
   source: string
 }
 // Thread gains `chapters?: ThreadChapter[]` (and keeps mag/deck/cover). When `chapters` is present
