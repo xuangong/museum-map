@@ -2731,4 +2731,23 @@ path.route-corridor { stroke: var(--gilt); }
 .xj-link span { font-size: 12px; color: var(--text-3); }
 .xj-link:hover { border-color: var(--gilt); }
 .hl-threads { margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px; }
+/* 回放 as subtitles: the map is the screen; one line of narration per stop */
+.xj-sub { position: fixed; left: 0; right: 0; bottom: 0; z-index: 1100; pointer-events: none; padding: 0 16px calc(18px + env(safe-area-inset-bottom)); background: linear-gradient(to top, rgba(8,7,6,.82), rgba(8,7,6,.55) 55%, transparent); }
+.xs-tools { position: fixed; top: calc(var(--xj-top, 120px) + 58px); right: 14px; display: flex; gap: 6px; pointer-events: auto; }
+.xs-btn { all: unset; cursor: pointer; min-width: 34px; height: 34px; padding: 0 10px; box-sizing: border-box; display: grid; place-items: center; border-radius: 999px; font-size: 12.5px; color: var(--text); background: rgba(var(--bg-rgb), .78); border: 1px solid rgba(var(--gilt-rgb), .3); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.xs-btn:hover { border-color: var(--gilt); }
+.xs-band { pointer-events: auto; max-width: 860px; margin: 0 auto; display: flex; align-items: center; gap: 10px; padding: 42px 0 10px; }
+.xs-nav { all: unset; cursor: pointer; flex: none; width: 34px; height: 34px; display: grid; place-items: center; font-size: 22px; color: rgba(255,255,255,.7); border-radius: 50%; }
+.xs-nav:hover { color: #fff; background: rgba(255,255,255,.08); }
+.xs-nav:disabled { opacity: .25; cursor: default; }
+.xs-text { flex: 1; text-align: center; animation: xsIn .45s ease-out; }
+.xs-when { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; color: var(--era, var(--gilt)); text-shadow: 0 1px 3px rgba(0,0,0,.8); }
+.xs-line { margin-top: 6px; font-family: var(--serif); font-size: clamp(18px, 2.6vw, 26px); line-height: 1.55; color: #fff; letter-spacing: .04em; text-shadow: 0 2px 8px rgba(0,0,0,.85); overflow-wrap: anywhere; }
+.xs-prog { max-width: 860px; margin: 6px auto 0; height: 2px; background: rgba(255,255,255,.15); border-radius: 2px; overflow: hidden; }
+.xs-prog i { display: block; height: 100%; background: var(--era, var(--gilt)); transition: width .4s ease; }
+@keyframes xsIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .xs-text { animation: none; } }
+/* 这一章的路 → 行程 */
+.xj-maptrip { all: unset; cursor: pointer; display: block; box-sizing: border-box; width: 100%; text-align: center; margin: 2px 0 8px; padding: 8px 12px; border-radius: 999px; font-size: 13px; color: var(--seal-ink-hi); border: 1px solid rgba(var(--seal-rgb), .55); background: rgba(var(--seal-rgb), .12); }
+.xj-maptrip:hover { background: rgba(var(--seal-rgb), .2); }
 `

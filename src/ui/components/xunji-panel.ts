@@ -58,7 +58,7 @@ function endCard(live: boolean): string {
 
 /** 循迹 — threads of 古人 and 诗 told on the map: a picker, then the tour (caption ↔ stop card). */
 export function XunjiPanel(): string {
-  return `<div class="xunji-panel" x-show="view === 'xunji'" x-cloak :class="(xunji.mini ? 'mini ' : '') + (xunji.thread ? 'has-thread ' : '') + (xunji.reading ? 'is-reading ' : '') + (xunji.reading && xunji.paged ? 'is-paged ' : '') + (xunji.reading && xunji.paged && xunji.deskOn ? 'is-desk ' : '') + (xunjiOnMap() ? 'on-map' : '')" :style="xunjiSheetStyle()" role="region" aria-label="循迹">
+  return `<div class="xunji-panel" x-show="view === 'xunji' && !xunjiSubOn()" x-cloak :class="(xunji.mini ? 'mini ' : '') + (xunji.thread ? 'has-thread ' : '') + (xunji.reading ? 'is-reading ' : '') + (xunji.reading && xunji.paged ? 'is-paged ' : '') + (xunji.reading && xunji.paged && xunji.deskOn ? 'is-desk ' : '') + (xunjiOnMap() ? 'on-map' : '')" :style="xunjiSheetStyle()" role="region" aria-label="循迹">
   <button type="button" class="xunji-grabber" x-show="!(xunji.reading && !xunji.mini)" @click="sheetTap('xunji')" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()" :aria-label="xunji.mini ? '展开' : '收起'"></button>
   <template x-if="!xunji.thread">
     <div class="xj-pick">
@@ -135,5 +135,23 @@ export function XunjiPanel(): string {
       </div>
     </div>
   </template>
+</div>
+<div class="xj-sub" x-show="view === 'xunji' && xunjiSubOn()" x-cloak :style="'--era:' + xunjiAccent()">
+  <div class="xs-tools">
+    <button type="button" class="xs-btn" @click="xunji.playing ? xunjiPause() : xunjiPlay()" :aria-label="xunji.playing ? '暂停' : '继续'" x-text="xunji.playing ? '❚❚' : '▶'"></button>
+    <button type="button" class="xs-btn wide" x-show="xunji.thread && (xunji.thread.acts || xunji.thread.chapters)" @click="xunjiRead()">回到专题</button>
+    <button type="button" class="xs-btn" @click="closeThread()" aria-label="退出回放">✕</button>
+  </div>
+  <div class="xs-band">
+    <button type="button" class="xs-nav" @click="xunjiGo(xunji.i - 1)" :disabled="xunji.i === 0" aria-label="上一站">‹</button>
+    <template x-for="k in [xunji.i]" :key="k">
+      <div class="xs-text">
+        <div class="xs-when" x-text="xunjiSubWhen()"></div>
+        <div class="xs-line" x-text="xunjiSubLine()"></div>
+      </div>
+    </template>
+    <button type="button" class="xs-nav" @click="xunjiGo(xunji.i + 1)" aria-label="下一站">›</button>
+  </div>
+  <div class="xs-prog"><i :style="'width:' + (xunji.thread ? Math.round(100 * (xunji.i + 1) / xunji.thread.stops.length) : 0) + '%'"></i></div>
 </div>`
 }

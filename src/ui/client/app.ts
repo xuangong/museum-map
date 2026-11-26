@@ -262,7 +262,16 @@ window.museumApp = function() {
       this.$watch('chat.open', guideUp);
       this.$watch('chat.mini', guideUp);
       document.addEventListener('keydown', function(e){
-        var x = self.xunji; if (!x.thread || !x.paged || !x.reading || x.mini || self.view !== 'xunji' || e.altKey || e.ctrlKey || e.metaKey) return;
+        var x = self.xunji;
+        if (x.thread && self.view === 'xunji' && self.xunjiSubOn() && !e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'ArrowRight' || e.key === 'ArrowLeft' || e.key === ' ')) {
+          var tg0 = e.target, tn0 = tg0 && tg0.tagName;
+          if (tn0 === 'INPUT' || tn0 === 'TEXTAREA' || tn0 === 'SELECT' || (tg0 && tg0.isContentEditable) || (tg0 && tg0.closest && tg0.closest('.chat-panel, .drawer'))) return;
+          e.preventDefault(); e.stopPropagation();
+          if (e.key === ' ') { if (x.playing) self.xunjiPause(); else self.xunjiPlay(); }
+          else self.xunjiGo(x.i + (e.key === 'ArrowRight' ? 1 : -1));
+          return;
+        }
+        if (!x.thread || !x.paged || !x.reading || x.mini || self.view !== 'xunji' || e.altKey || e.ctrlKey || e.metaKey) return;
         var tg = e.target, tn = tg && tg.tagName;
         // The open magazine owns ←/→/Esc even with the map focused; phones' keyboards keep the old guards.
         var inMap = !!(tg && tg.closest && tg.closest('.leaflet-container'));
@@ -2002,6 +2011,11 @@ window.museumApp = function() {
       var pad = { top: 0, right: 0, bottom: 0, left: 0 };
       var panel = document.querySelector('.xunji-panel'), canvas = document.querySelector('.canvas');
       if (!panel || !canvas || this.view !== 'xunji') return pad;
+      if (this.xunjiSubOn()) {
+        var cr0 = canvas.getBoundingClientRect(), cap = document.querySelector('.xj-sub .xs-band');
+        pad.top = 64; pad.bottom = cap ? Math.max(0, Math.round(cr0.bottom - cap.getBoundingClientRect().top + 12)) : 140;
+        return pad;
+      }
       var pr = panel.getBoundingClientRect(), cr = canvas.getBoundingClientRect();
       if (this.xunji.paged && this.xunji.deskOn && this.xunji.reading) {
         // The open magazine: only a map page's half is the map; its route fits inside that rectangle.
@@ -2114,7 +2128,7 @@ window.museumApp = function() {
         self.xunjiShow(true);
         self.setHashRoute({ kind: 'thread', id: self.xunji.thread.id + '/' + (self.xunji.i + 1) });
         self.xunjiSchedule();
-      }, 2000);
+      }, this.xunjiDwell());
     },
     xunjiStopTimer() { if (this._xjTimer) { clearTimeout(this._xjTimer); this._xjTimer = 0; } },
     xunjiPause() { this.xunji.playing = false; this.xunjiStopTimer(); this.xunji.mini = false; },
@@ -2166,6 +2180,34 @@ window.museumApp = function() {
     },
     recordingSrc(key) { var r = this._recordings && this._recordings[key]; return r ? r.src : null; },
 
+    // ── 回放 as subtitles: the map is the screen, one line of narration per stop at the bottom.
+    xunjiSubOn() { var x = this.xunji, t = x.thread; return !!(t && !x.reading && !x.ended && (x.playing || t.acts || t.chapters)); },
+    xunjiSubLine() { var s = this.xunjiStop(); if (s.line) return s.line; var m = String(s.story || '').match(/^[^。！？]*[。！？]?/); return m ? m[0] : ''; },
+    xunjiSubWhen() { var s = this.xunjiStop(); return [s.when, (s.name || '') + (s.modern ? '（今' + s.modern + '）' : '')].filter(Boolean).join(' · '); },
+    /** Time on a stop: at least 2 s (user: 7 s dragged), longer lines get time to be read, at most 4 s. */
+    xunjiDwell() { var n = Array.from(this.xunjiSubLine()).length; return Math.max(2000, Math.min(4000, 2000 + Math.max(0, n - 10) * 120)); },
+    // ── 这一章的路 → 行程: a chapter's own stretch of road becomes a trip, with the museums along it.
+    xunjiChapterTrip(ci) {
+      var t = this.xunji.thread, c = t && t.chapters && t.chapters[ci];
+      if (!c || !window.ThreadCore) return { cities: [], at: [], skipped: 0 };
+      return window.ThreadCore.toTrip({ stops: t.stops.slice(c.stops[0], c.stops[1] + 1) });
+    },
+    xunjiChapterMuseums(ci) {
+      var self = this, r = (this.trip && this.trip.radius) || 30, cs = this.xunjiChapterTrip(ci).cities, n = 0;
+      this.museums.forEach(function(m){ if (m.lat != null && cs.some(function(c){ return self.kmBetween(c, m) <= r; })) n++; });
+      return n;
+    },
+    xunjiChapterTripLabel(ci) { var n = this.xunjiChapterMuseums(ci); return '把这一章的路变成行程' + (n ? '，看沿途 ' + n + ' 座馆' : '') + ' →'; },
+    xunjiChapterToTrip(ci) {
+      var r = this.xunjiChapterTrip(ci); if (!r.cities.length) { this.flashToast('这一章的路在境外，只能在故事里走'); return; }
+      var leg = r.cities.map(function(c){ return { name: c.name, lat: c.lat, lng: c.lng, days: 1 }; });
+      if (this.trip.cities.length && !confirm('替换当前行程？')) return;
+      this.trip.cities = leg; this.trip.mode = 'transit'; this.trip.picks = []; this.trip.route = null;
+      this.saveTrip();
+      this.xunjiPause(); this.xunjiStopListen();
+      if (!this.tripMode) this.toggleTripMode(); else { this.setView('map'); this.tocOpen = true; this.tripSheetMini = false; this.refreshMarkers(); }
+      this.flashToast('已把这一章的 ' + leg.length + ' 站放进行程，沿途的馆都标出来了' + (r.skipped ? '（境外的 ' + r.skipped + ' 站只在故事里）' : ''), 3200);
+    },
     threadToTrip() {
       var t = this.xunji.thread; if (!t || !window.ThreadCore) return;
       var r = this.xunjiTrip(), g = this.xunji.seg;

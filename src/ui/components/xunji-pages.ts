@@ -96,6 +96,7 @@ export function XunjiPages(endHtml: string): string {
           <div class="xj-mapcap">
             <div class="mc-place" x-text="xunjiChapter(p.ch).place + ' · ' + xunjiChapter(p.ch).span"></div>
             <p x-text="p.d.text"></p>
+            <button type="button" class="xj-maptrip" x-show="xunjiChapterTrip(p.ch).cities.length" @click.stop="xunjiChapterToTrip(p.ch)" x-text="xunjiChapterTripLabel(p.ch)"></button>
           </div>
         </div>
       </template>`
