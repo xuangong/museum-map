@@ -16,6 +16,14 @@ export function HerePanel(): string {
     </div>
   </header>
   <div class="here-body">
+    <div class="here-go">
+      <input class="here-q" type="search" x-model="here.q" placeholder="换个地方：城市、古地名或博物馆" enterkeyhint="go" aria-label="换个地方" @keydown.enter.prevent="hereGo(hereMatches()[0])">
+      <div class="here-picks" x-show="hereMatches().length">
+        <template x-for="c in hereMatches()" :key="c.key"><button type="button" class="chip" @click="hereGo(c)" x-text="c.label"></button></template>
+      </div>
+      <p class="here-tip" x-show="!here.q" x-text="hereTip()"></p>
+      <p class="here-tip" x-show="here.q && !hereMatches().length">没找到，试试今天的城市名，或长安、汴梁、金陵这样的古称</p>
+    </div>
     <template x-if="here.loading"><p class="here-empty">正在翻开这片土地…</p></template>
     <template x-if="!here.loading && here.result && !here.result.layers.length">
       <div class="here-empty">

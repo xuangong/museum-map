@@ -128,7 +128,7 @@ window.museumApp = function() {
     tripResults: [],
     tripBusy: false,
     geo: { lat: null, lng: null, locating: false },
-    here: { open: false, mini: false, loading: false, point: null, result: null, openEra: null },
+    here: { open: false, mini: false, loading: false, point: null, result: null, openEra: null, q: '' },
     _lineages: null,
     listSort: 'default',
     // 地层账本: 我的足迹 | 附近可补 (anchor: here / city / trip; radius km, 40 = 同城).
@@ -2414,6 +2414,7 @@ window.museumApp = function() {
       this.here.result = null;
       this.here.open = true; this.here.mini = false; this.here.loading = true;
       this.here.point = { lat: lat, lng: lng }; this.here.openEra = null;
+      this.hereClickBind(true);
       this.loadThreads();
       if (window.MuseumMap && window.MuseumMap.setHere) window.MuseumMap.setHere(lat, lng, window.HereCore.R_EVENT);
       var lineages = await this.loadLineages();
@@ -2431,8 +2432,9 @@ window.museumApp = function() {
     /** Put the panel away without touching the URL. */
     dismissHere() {
       if (!this.here.open && !this.here.point) return;
-      this.here.open = false; this.here.result = null; this.here.point = null; this.here.loading = false;
+      this.here.open = false; this.here.result = null; this.here.point = null; this.here.loading = false; this.here.q = '';
       if (window.MuseumMap && window.MuseumMap.clearHere) window.MuseumMap.clearHere();
+      if (this.view !== 'xunji') this.hereClickBind(false);
     },
     closeHere() {
       this.dismissHere();
@@ -2452,6 +2454,40 @@ window.museumApp = function() {
       if (r.city) return '此地 · <span class="gilt">' + this.escapeAttr(r.city.name) + '</span>';
       if (r.nearCity) return '此地 <small>距 ' + this.escapeAttr(r.nearCity.name) + ' ' + Math.round(r.nearCity.km) + ' km</small>';
       return '你脚下这片土地';
+    },
+    /** 换个地方: a city by today's name or an old one (长安 → 西安, 汴梁 → 开封), a museum's city, or a museum. */
+    hereMatches() {
+      var q = (this.here.q || '').trim(); if (!q) return [];
+      var out = [], seen = {};
+      function add(key, label, lat, lng) { if (seen[key] || out.length >= 8 || lat == null) return; seen[key] = 1; out.push({ key: key, label: label, lat: lat, lng: lng }); }
+      (this._lineages || []).forEach(function(c){
+        if (c.name.indexOf(q) >= 0) add('c:' + c.name, c.name, c.lat, c.lng);
+        else {
+          var old = (c.names || []).filter(function(n){ return n.name.indexOf(q) >= 0; })[0];
+          if (old) add('c:' + c.name, old.name + ' · 今' + c.name, c.lat, c.lng);
+        }
+      });
+      (this.museums || []).forEach(function(m){ if (m.city && m.city.indexOf(q) >= 0) add('c:' + m.city, m.city, m.lat, m.lng); });
+      (this.museums || []).forEach(function(m){ if (m.name.indexOf(q) >= 0) add('m:' + m.id, m.name, m.lat, m.lng); });
+      return out;
+    },
+    hereGo(c) {
+      if (!c) return;
+      this.here.q = '';
+      if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+      this.openHere(c.lat, c.lng);
+      if (window.MuseumMap && window.MuseumMap.focusPoint) window.MuseumMap.focusPoint(c.lat, c.lng, 7);
+    },
+    hereTip() {
+      var fine = false; try { fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches; } catch (_) {}
+      return fine ? '或者点地图上任意一处（右键也行）' : '或者点地图上任意一处（长按也行）';
+    },
+    /** While the land is being read, a plain map click reads another place. */
+    hereClickBind(on) {
+      var M = window.MuseumMap; if (!M || !M.onMapClick) return;
+      var self = this;
+      if (on && !this.tripMode) M.onMapClick(function(ll){ if (!self.here.open || self.tripMode) return; var w = window.fromMapCoord(ll.lat, ll.lng); self.openHere(w[0], w[1]); });
+      else if (!on) M.onMapClick(this.tripMode ? this.tripMapClick.bind(this) : null);
     },
     hereSub() {
       var r = this.here.result; if (!r || !r.layers.length) return '';
@@ -2495,7 +2531,7 @@ window.museumApp = function() {
     hereAtMe() {
       var self = this;
       if (this.geo.lat != null) { this.openHere(this.geo.lat, this.geo.lng); return; }
-      if (!navigator.geolocation) { this.flashToast('当前浏览器不支持定位，可以在地图上长按任意一点'); return; }
+      if (!navigator.geolocation) { this.flashToast('当前浏览器不支持定位，可以在地图上长按（电脑上右键）任意一点'); return; }
       this.geo.locating = true;
       navigator.geolocation.getCurrentPosition(function(pos){
         self.geo.lat = pos.coords.latitude; self.geo.lng = pos.coords.longitude; self.geo.locating = false;
@@ -2503,7 +2539,7 @@ window.museumApp = function() {
         self.openHere(self.geo.lat, self.geo.lng);
       }, function(){
         self.geo.locating = false;
-        self.flashToast('没能获取位置，可以在地图上长按任意一点');
+        self.flashToast('没能获取位置，可以在地图上长按（电脑上右键）任意一点');
       }, { enableHighAccuracy: false, timeout: 10000, maximumAge: 600000 });
     },
 

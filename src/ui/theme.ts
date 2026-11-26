@@ -2857,4 +2857,11 @@ path.route-corridor { stroke: var(--gilt); }
   .xj-pages.desk .pg-toc .tc-body { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 12px; row-gap: 0; }
   .xj-pages.desk .pg-toc .tc-num { font-size: 20px; }
 }
+/* 脚下千年 · 换个地方 */
+.here-go { padding: 4px 0 10px; margin-bottom: 6px; border-bottom: 1px solid var(--line); }
+.here-q { box-sizing: border-box; width: 100%; height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line-strong); background: var(--bg-2); color: var(--text); font: inherit; font-size: 13.5px; outline: none; }
+.here-q:focus { border-color: var(--gilt); }
+.here-picks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.here-tip { margin: 6px 4px 0; font-size: 11.5px; color: var(--text-3); }
+@media (max-width: 920px) { .here-q { font-size: 16px; height: 38px; } }   /* 16px: no iOS zoom on focus */
 `
