@@ -148,6 +148,7 @@ export function XunjiPanel(): string {
       <div class="xs-text">
         <div class="xs-when" x-text="xunjiSubWhen()"></div>
         <div class="xs-title"><i class="xs-rule"></i><span x-text="xunjiStop().title"></span><i class="xs-rule"></i></div>
+        <p class="xs-narr" x-show="xunjiSubNarr()" x-text="xunjiSubNarr()"></p>
         <div class="xs-line" x-show="xunjiStop().line" x-text="xunjiBreak(xunjiStop().line, 12)"></div>
       </div>
     </template>

@@ -2762,4 +2762,5 @@ path.route-corridor { stroke: var(--gilt); }
 .xj-masthead { font-family: var(--serif); font-size: 22px; line-height: 1.45; letter-spacing: .06em; padding-right: 8px; }
 .xj-pick .xj-head { padding-bottom: 14px; border-bottom: 1px solid rgba(var(--gilt-rgb), .22); }
 .xj-pick .xj-kick { letter-spacing: .4em; }
+.xs-narr { margin: 10px auto 0; max-width: 40em; font-size: clamp(14px, 1.6vw, 16.5px); line-height: 1.85; color: var(--text-2); text-wrap: balance; overflow-wrap: anywhere; }
 `
