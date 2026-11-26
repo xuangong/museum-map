@@ -52,7 +52,7 @@ function endCard(live: boolean): string {
           <p class="xj-cta-note">行程会把沿途的博物馆都标在地图上，方便你挑着去看。</p>
           <button class="chip" x-show="xunji.thread.recording" @click="xunjiListen()" x-text="xunji.listening ? '■ 停下' : '听原曲 · 《' + xunjiRecordingName() + '》'"></button>
           <button class="chip" x-show="!xunji.thread.acts" @click="xunjiPlay()">再走一遍</button>
-          <button class="chip" x-show="xunji.thread.acts && !xunji.reading" @click="xunjiRead()">回到专题</button>
+          <button class="chip" x-show="xunji.thread.acts && !xunji.reading" @click="xunjiRead()">读这本书</button>
         </div>`
 }
 
@@ -143,7 +143,7 @@ export function XunjiPanel(): string {
 <div class="xj-sub" x-show="view === 'xunji' && xunjiSubOn()" x-cloak :style="'--era:' + xunjiAccent()">
   <div class="xs-tools" x-show="xunjiSubOn()">
     <button type="button" class="xs-btn" @click="xunji.playing ? xunjiPause() : xunjiPlay()" :aria-label="xunji.playing ? '暂停' : '继续'" x-text="xunji.playing ? '❚❚' : '▶'"></button>
-    <button type="button" class="xs-btn wide" x-show="xunji.thread && (xunji.thread.acts || xunji.thread.chapters)" @click="xunjiRead()">回到专题</button>
+    <button type="button" class="xs-btn wide" x-show="xunji.thread && (xunji.thread.acts || xunji.thread.chapters)" @click="xunjiRead()">读这本书</button>
     <button type="button" class="xs-btn" @click="closeThread()" aria-label="退出回放">✕</button>
   </div>
   <div class="xs-band">

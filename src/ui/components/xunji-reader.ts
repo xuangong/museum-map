@@ -37,7 +37,7 @@ export function XunjiReader(endHtml: string): string {
     </section>
   </template>
   <footer class="mag-end">
-    <button type="button" class="xj-cta" @click="xunjiReplay()">▶ 快速回放这一路</button>
+    <button type="button" class="xj-cta" @click="xunjiReplay()">▶ 换成播放这一路</button>
     ${endHtml}
   </footer>
 </article>`

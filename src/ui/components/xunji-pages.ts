@@ -102,7 +102,7 @@ export function XunjiPages(endHtml: string): string {
       </template>`
   const end = `<template x-if="p.kind === 'end'">
         <div class="pgi pgi-end">
-          <button type="button" class="xj-cta" @click="xunjiReplay()">▶ 快速回放这一路</button>
+          <button type="button" class="xj-cta" @click="xunjiReplay()">▶ 换成播放这一路</button>
           ${endHtml}
         </div>
       </template>`

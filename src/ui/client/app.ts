@@ -1985,6 +1985,7 @@ window.museumApp = function() {
     xunjiReplay() { this.xunji.reading = false; this.xunji.ended = false; this.xunji.mini = false; this.xunji.i = 0; this.xunjiSegReset(); this.xunjiMeasure(); this.xunjiPlay(); },
     /** Back from the tour to the article. */
     xunjiRead() {
+      this.xunjiStopTimer(); this.xunji.playing = false;
       this.xunji.replaying = false;
       var self = this; this.xunjiPause(); this.xunjiStopListen();
       this.xunji.reading = true; this.xunji.ended = false; this.xunji.act = -1; this.xunji.sheetH = 0; this.xunji.mini = false;
@@ -2189,7 +2190,7 @@ window.museumApp = function() {
     /** Subtitles only while a replay is under way (playing, or paused mid-replay) — never an empty card otherwise. */
     xunjiSubOn() {
       var x = this.xunji, t = x.thread;
-      if (!t || x.reading || x.ended || !t.stops || !t.stops[x.i]) return false;
+      if (!t || x.reading || x.ended || !t.stops || !t.stops[x.i]) return false;   // reading the book: never subtitles
       return !!(x.playing || (x.replaying && (t.acts || t.chapters)));
     },
     /** From the 循迹 shelf: ▶ straight into the subtitle replay. */
