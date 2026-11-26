@@ -2660,7 +2660,7 @@ path.route-corridor { stroke: var(--gilt); }
   .xj-pages.desk .pg-cover-text { padding: 0 40px 64px; }
   .xj-pages.desk .tx-main p { font-size: var(--fs, clamp(14.5px, calc(var(--sp-h) * .0245), 17px)); line-height: var(--lh, 2); margin-bottom: .75em; }
   .xj-pages.desk .ob-p, .xj-pages.desk .pp-line { font-size: var(--fs, clamp(14px, calc(var(--sp-h) * .023), 16px)); line-height: var(--lh, 1.95); }
-  .xj-pages.desk .pg-lede { font-size: clamp(14px, calc(var(--sp-h) * .023), 16px); line-height: 1.95; }
+  .xj-pages.desk .pg-lede { font-size: var(--fs, clamp(14px, calc(var(--sp-h) * .023), 16px)); line-height: var(--lh, 1.95); }
   .xj-pages.desk .pgi-text.has-note { grid-template-columns: minmax(0, 1fr) 104px; column-gap: 22px; }
   .xj-pages.desk .sp-l .pgi-text.has-note { grid-template-columns: 104px minmax(0, 1fr); }
   .xj-pages.desk .sp-l .tx-note { order: -1; border-left: 0; padding-left: 0; border-right: 1.5px solid var(--era); padding-right: 11px; text-align: right; }
@@ -2819,7 +2819,7 @@ path.route-corridor { stroke: var(--gilt); }
   /* 目录 on a phone: the 导语 folds to five lines so all chapters fit one screen; tap to read it all */
   .xunji-panel.is-paged .pgi-toc .pg-lede { font-size: 14px; line-height: 1.85; margin: 8px 0 4px; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
   .xunji-panel.is-paged .pgi-toc .pg-lede.open { display: block; -webkit-line-clamp: unset; }
-  .xunji-panel.is-paged .pg-lede-more { display: block; }
+  .xunji-panel.is-paged .pgi-toc .pg-lede-more { display: block; }
   .xunji-panel.is-paged .pg-toc button { padding: 7px 2px; }
   .xunji-panel.is-paged .pgi-toc { padding-bottom: calc(18px + env(safe-area-inset-bottom)); }
   .xunji-panel.is-paged .tc-num { font-size: 20px; }
@@ -2848,5 +2848,13 @@ path.route-corridor { stroke: var(--gilt); }
   .xs-line { margin-top: 6px; font-size: 15px; letter-spacing: .08em; }
   .xs-prog { margin-top: 6px; }
 }
-.pg-lede-more { all: unset; cursor: pointer; display: none; margin: 0 0 12px; font-size: 12.5px; color: var(--era); letter-spacing: .06em; }
+.pgi-toc .pg-lede-more { all: unset; cursor: pointer; display: none; margin: 0 0 12px; font-size: 12.5px; color: var(--era); letter-spacing: .06em; }
+/* 目录 on the open magazine: one page holds the 导语 and every chapter — title and place·years share a line */
+@media (min-width: 921px) {
+  .xj-pages.desk .pgi-toc .pg-lede { margin: 10px 0 14px; }
+  .xj-pages.desk .pg-toc button { padding: max(3px, calc((var(--fs, 16px) - 11px) * 1.8)) 2px; align-items: center; }
+  .xj-pages.desk .pgi.pgi-toc { padding-top: 30px; padding-bottom: 22px; }
+  .xj-pages.desk .pg-toc .tc-body { display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 12px; row-gap: 0; }
+  .xj-pages.desk .pg-toc .tc-num { font-size: 20px; }
+}
 `

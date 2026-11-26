@@ -1783,18 +1783,8 @@ window.museumApp = function() {
     },
     xunjiPageStep(d) {
       var g = this._xjPg;
-      if (g && this.xunji.deskOn) { if (this.xunjiDeskScrollFirst(d)) return; var i = g.spreadOf[this.xunji.page] + d; if (i < 0 || i >= g.spreads.length) return; var s = g.spreads[i]; this.xunjiPageTo(s.f >= 0 ? s.f : s.a >= 0 ? s.a : s.b, true); return; }
+      if (g && this.xunji.deskOn) { var i = g.spreadOf[this.xunji.page] + d; if (i < 0 || i >= g.spreads.length) return; var s = g.spreads[i]; this.xunjiPageTo(s.f >= 0 ? s.f : s.a >= 0 ? s.a : s.b, true); return; }
       this.xunjiPageTo(this.xunji.page + d, true);
-    },
-    /** A long page in the spread scrolls before the spread turns (keys, ‹ ›, clicks, wheel alike). */
-    xunjiDeskScrollFirst(d) {
-      var moved = false;
-      Array.prototype.forEach.call(document.querySelectorAll('.xj-page.cur'), function(pg){
-        if (pg.classList.contains('pg-map')) return;
-        var room = d > 0 ? pg.scrollHeight - pg.clientHeight - pg.scrollTop : pg.scrollTop;
-        if (room > 4) { moved = true; var st = Math.max(80, pg.clientHeight * 0.85) * d; if (pg.scrollBy) pg.scrollBy({ top: st, behavior: 'smooth' }); else pg.scrollTop += st; }
-      });
-      return moved;
     },
     /** Desktop (a fine pointer, a canvas wide enough): the spread's size, paper-proportioned and fit to the canvas, and where the canvas sits. */
     xunjiDeskMeasure() {
@@ -1815,21 +1805,22 @@ window.museumApp = function() {
       var x = this.xunji; if (!x.deskOn || !x.dh) return;
       var cache = this._xjFit || (this._xjFit = {});
       Array.prototype.forEach.call(document.querySelectorAll('.xj-page.cur'), function(pg){
-        if (!/pg-(text|object|people)/.test(pg.className)) return;
+        if (!/pg-(text|object|people|toc)/.test(pg.className)) return;
+        var toc = /pg-toc/.test(pg.className);   // 目录: the 导语 shrinks so every chapter fits the page; it never grows
         var key = pg.getAttribute('data-pg') + '|' + x.dh + '|' + (x.noteBelow ? 1 : 0), c = cache[key];
         if (!c) {
           pg.style.removeProperty('--fs'); pg.style.removeProperty('--lh');
-          var probe = pg.querySelector('.tx-main p, .ob-p, .pp-line'), base = probe ? parseFloat(getComputedStyle(probe).fontSize) || 16 : 16;
+          var probe = pg.querySelector(toc ? '.pg-lede' : '.tx-main p, .ob-p, .pp-line'), base = probe ? parseFloat(getComputedStyle(probe).fontSize) || 16 : 16;
           var fs = base, lh = 2;
           if (pg.scrollHeight > pg.clientHeight + 1) {
-            for (fs = base - 0.5; fs >= 13; fs -= 0.5) {
+            for (fs = base - 0.5; fs >= (toc ? 12 : 13); fs -= 0.5) {
               lh = fs >= 15 ? 2 : fs >= 14 ? 1.9 : 1.8;
               pg.style.setProperty('--fs', fs + 'px'); pg.style.setProperty('--lh', String(lh));
               if (pg.scrollHeight <= pg.clientHeight + 1) break;
             }
-            if (fs < 13) fs = 13;
+            if (fs < 13) fs = toc ? Math.max(12, fs) : 13;
           }
-          else {
+          else if (!toc) {
             // Short pages grow until the next step would overflow (max 18 px).
             for (var up = base + 0.5; up <= 18; up += 0.5) {
               pg.style.setProperty('--fs', up + 'px'); pg.style.setProperty('--lh', '2');
