@@ -51,7 +51,7 @@ export function XunjiPages(endHtml: string): string {
       </template>`
   const image = `<template x-if="p.kind === 'image'">
         <figure class="pgi pgi-image" :class="xunjiFit(p.d.image, n)">
-          <img :src="p.d.image.src" :alt="p.d.image.work" :width="p.d.image.w" :height="p.d.image.h" :style="p.d.image.focus ? 'object-position:' + p.d.image.focus : ''" :loading="Math.abs(n - xunji.page) <= 2 ? 'eager' : 'lazy'" decoding="async">
+          <img :src="p.d.image.src" :alt="p.d.image.work" :width="p.d.image.w" :height="p.d.image.h" :style="p.d.image.focus ? 'object-position:' + p.d.image.focus : ''" :loading="xunjiEager(n) ? 'eager' : 'lazy'" decoding="async">
           <figcaption>
             <p x-text="p.d.caption"></p>
             <a :href="p.d.image.commons || null" target="_blank" rel="noopener" x-text="xunjiCredit(p.d.image)"></a>
@@ -71,7 +71,7 @@ export function XunjiPages(endHtml: string): string {
           <template x-for="(s, j) in p.d.paras" :key="j"><p class="ob-p" x-text="s"></p></template>
           <template x-if="p.d.image">
             <figure class="ob-fig">
-              <img :src="p.d.image.src" :alt="p.d.image.work" :width="p.d.image.w" :height="p.d.image.h" :loading="Math.abs(n - xunji.page) <= 2 ? 'eager' : 'lazy'" decoding="async">
+              <img :src="p.d.image.src" :alt="p.d.image.work" :width="p.d.image.w" :height="p.d.image.h" :loading="xunjiEager(n) ? 'eager' : 'lazy'" decoding="async">
               <figcaption><a :href="p.d.image.commons || null" target="_blank" rel="noopener" x-text="xunjiCredit(p.d.image)"></a></figcaption>
             </figure>
           </template>
@@ -106,6 +106,7 @@ export function XunjiPages(endHtml: string): string {
         </div>
       </template>`
   return `<div class="xj-pages" :class="xunjiWrapClass()" :style="'--era:' + xunjiAccent()">
+  <div class="xj-catch" x-show="xunji.deskOn && !xunjiOnMap()" @click="xunjiCatchClick($event)" @wheel="xunjiDeskWheel($event)"></div>
   <div class="xj-pager" @scroll.capture.passive="xunjiOnPagerScroll($event)" @click="xunjiDeskClick($event)" @wheel="xunjiDeskWheel($event)">
     <template x-for="(p, n) in xunjiPages()" :key="n">
       <section class="xj-page" :class="'pg-' + p.kind + xunjiPgClass(n)" :data-pg="n">
