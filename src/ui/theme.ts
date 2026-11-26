@@ -2750,4 +2750,7 @@ path.route-corridor { stroke: var(--gilt); }
 /* 这一章的路 → 行程 */
 .xj-maptrip { all: unset; cursor: pointer; display: block; box-sizing: border-box; width: 100%; text-align: center; margin: 2px 0 8px; padding: 8px 12px; border-radius: 999px; font-size: 13px; color: var(--seal-ink-hi); border: 1px solid rgba(var(--seal-rgb), .55); background: rgba(var(--seal-rgb), .12); }
 .xj-maptrip:hover { background: rgba(var(--seal-rgb), .2); }
+/* Short lines that wrap: balanced rows (or broken at a mark, see xunjiBreak) — never a long row over two orphaned 字 */
+.xs-line { white-space: pre-line; }
+.xs-line, .xs-when, .mag-deck, .mag-title, .ob-title, .op-line, .op-title, .pp-title, .xb-meta, .xj-mapcap p, .cc-deck, .xj-card-intro, .xj-card-title, .xj-intro, .xj-line, .xj-stop-title, .xj-title, .pgi figcaption, .pgi figcaption p, .mag-quote span, .pgi-quote blockquote { text-wrap: balance; }
 `

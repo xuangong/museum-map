@@ -147,7 +147,7 @@ export function XunjiPanel(): string {
     <template x-for="k in [xunji.i]" :key="k">
       <div class="xs-text">
         <div class="xs-when" x-text="xunjiSubWhen()"></div>
-        <div class="xs-line" x-text="xunjiSubLine()"></div>
+        <div class="xs-line" x-text="xunjiBreak(xunjiSubLine(), 12)"></div>
       </div>
     </template>
     <button type="button" class="xs-nav" @click="xunjiGo(xunji.i + 1)" aria-label="下一站">›</button>

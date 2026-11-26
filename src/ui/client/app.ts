@@ -2182,6 +2182,15 @@ window.museumApp = function() {
 
     // ── 回放 as subtitles: the map is the screen, one line of narration per stop at the bottom.
     xunjiSubOn() { var x = this.xunji, t = x.thread; return !!(t && !x.reading && !x.ended && (x.playing || t.acts || t.chapters)); },
+    /** A short line that needs two rows breaks at the punctuation nearest its middle (日啖荔枝三百颗，／不辞长作岭南人);
+     *  without a good mark it is left to text-wrap: balance. Longer than max 字 per row → break. */
+    xunjiBreak(str, max) {
+      str = String(str || ''); var cs = Array.from(str), n = cs.length;
+      if (str.indexOf('\\n') >= 0 || n <= (max || 16)) return str;
+      var best = -1, mid = n / 2;
+      cs.forEach(function(ch, i){ if ('，。；：！？、'.indexOf(ch) >= 0 && i < n - 1 && i >= n * 0.3 && i <= n * 0.7 && (best < 0 || Math.abs(i + 1 - mid) < Math.abs(best + 1 - mid))) best = i; });
+      return best < 0 ? str : cs.slice(0, best + 1).join('') + '\\n' + cs.slice(best + 1).join('');
+    },
     xunjiSubLine() { var s = this.xunjiStop(); if (s.line) return s.line; var m = String(s.story || '').match(/^[^。！？]*[。！？]?/); return m ? m[0] : ''; },
     xunjiSubWhen() { var s = this.xunjiStop(); return [s.when, (s.name || '') + (s.modern ? '（今' + s.modern + '）' : '')].filter(Boolean).join(' · '); },
     /** Time on a stop: at least 2 s (user: 7 s dragged), longer lines get time to be read, at most 4 s. */
