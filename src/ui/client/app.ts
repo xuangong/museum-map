@@ -1652,17 +1652,13 @@ window.museumApp = function() {
         chs.push({ num: op ? op.num : '', title: c.title, place: c.place, span: c.span, at: at });
       });
       list.push({ kind: 'end', ch: -1 });
-      // Desktop spreads: the cover alone on the right; then pairs; a landscape picture that starts a spread takes both pages.
-      var n = list.length, sp = [{ a: -1, b: 0, f: -1 }], i = 1, so = [0];
-      function wide(e){ var im = e.kind === 'image' && e.d && e.d.image; return !!(im && im.h && im.w / im.h > 1.3); }
-      while (i < n) {
-        if (wide(list[i])) { sp.push({ a: -1, b: -1, f: i }); so[i] = sp.length - 1; i++; continue; }
-        // A chapter opener or a spread-wide picture starts the next spread (on the left): this page goes alone (the 目录 may sit beside the first opener).
-        var nx = list[i + 1], alone = !!nx && ((nx.kind === 'opener' && list[i].kind !== 'toc') || wide(nx));
-        if (alone || i + 1 >= n) { sp.push({ a: i, b: -1, f: -1 }); so[i] = sp.length - 1; i++; continue; }
-        sp.push({ a: i, b: i + 1, f: -1 });
-        so[i] = sp.length - 1; so[i + 1] = sp.length - 1;
-        i += 2;
+      // Desktop spreads: two pages side by side, straight through — cover | 目录, then every page in order.
+      // No page is left alone: an empty half reads as a missing page (user: 这种缺页的情况很奇怪).
+      var n = list.length, sp = [], so = [];
+      for (var i = 0; i < n; i += 2) {
+        var b = i + 1 < n ? i + 1 : -1;
+        sp.push({ a: i, b: b, f: -1 });
+        so[i] = sp.length - 1; if (b >= 0) so[b] = sp.length - 1;
       }
       return { list: list, chs: chs, spreads: sp, spreadOf: so };
     },
@@ -1799,6 +1795,15 @@ window.museumApp = function() {
               if (pg.scrollHeight <= pg.clientHeight + 1) break;
             }
             if (fs < 13) fs = 13;
+          }
+          else {
+            // Short pages grow until the next step would overflow (max 18 px).
+            for (var up = base + 0.5; up <= 18; up += 0.5) {
+              pg.style.setProperty('--fs', up + 'px'); pg.style.setProperty('--lh', '2');
+              if (pg.scrollHeight > pg.clientHeight + 1) break;
+              fs = up; lh = 2;
+            }
+            pg.style.removeProperty('--fs'); pg.style.removeProperty('--lh');
           }
           c = cache[key] = fs === base ? { fs: 0, lh: 2 } : { fs: fs, lh: lh };
         }
