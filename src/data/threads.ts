@@ -18,6 +18,21 @@ export interface ThreadAct {
   image?: ThreadImage
   source: string
 }
+/** One page of a paged feature (循迹 翻页的「刊」). */
+export type ThreadPage =
+  | { kind: "opener"; num: string; place: string; span: string; line: string }
+  | { kind: "text"; paras: string[]; note?: { term: string; text: string } }
+  | { kind: "image"; image: ThreadImage; caption: string }
+  | { kind: "quote"; text: string; source: string; vertical?: boolean }
+  | { kind: "object"; kicker: string; title: string; paras: string[]; image?: ThreadImage }
+  | { kind: "people"; title: string; people: { name: string; role: string; line: string }[] }
+  | { kind: "map"; text: string }
+export interface ThreadChapter {
+  title: string; place: string; span: string
+  stops: [number, number]
+  pages: ThreadPage[]
+  source: string
+}
 export interface ThreadStop {
   name: string; modern: string; lat: number; lng: number
   year: number; when: string; title: string; story: string
@@ -30,6 +45,8 @@ export interface Thread {
   stops: ThreadStop[]
   recording?: string
   mag?: string; deck?: string; opening?: string; cover?: ThreadImage; acts?: ThreadAct[]
+  /** Paged magazine (翻页的「刊」); when present it replaces the scrolling reader. */
+  chapters?: ThreadChapter[]
 }
 
 export const THREADS: Thread[] = [

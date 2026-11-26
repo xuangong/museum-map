@@ -104,3 +104,38 @@ describe("magazine features", () => {
     for (const t of THREADS) expect(ERA_ACCENTS[t.era]).toMatch(/^#[0-9A-F]{6}$/i)
   })
 })
+
+describe("paged features", () => {
+  const paged = THREADS.filter((t) => t.chapters)
+  const L = (x: string[] | undefined) => (x || []).reduce((n, p) => n + len(p), 0)
+  it("chapters cover every stop once, in order", () => {
+    for (const t of paged) {
+      const cs = t.chapters!
+      expect(cs.length).toBeGreaterThanOrEqual(5); expect(cs.length).toBeLessThanOrEqual(7)
+      expect(cs[0]!.stops[0]).toBe(0)
+      expect(cs[cs.length - 1]!.stops[1]).toBe(t.stops.length - 1)
+      for (let k = 1; k < cs.length; k++) expect(cs[k]!.stops[0]).toBe(cs[k - 1]!.stops[1] + 1)
+    }
+  })
+  it("pages are well-formed", () => {
+    for (const t of paged) {
+      let total = 0
+      for (const c of t.chapters!) {
+        expect(c.pages.length).toBeGreaterThanOrEqual(6); expect(c.pages.length).toBeLessThanOrEqual(9)
+        expect(c.pages[0]!.kind).toBe("opener")
+        expect(c.pages.some((p) => p.kind === "map")).toBe(true)
+        expect(c.source.length).toBeGreaterThan(0)
+        for (const p of c.pages) {
+          if (p.kind === "text") { const n = L(p.paras); total += n; expect(n).toBeGreaterThanOrEqual(180); expect(n).toBeLessThanOrEqual(380) }
+          if (p.kind === "object") { const n = L(p.paras); total += n; expect(n).toBeLessThanOrEqual(300) }
+          if (p.kind === "quote") { expect(p.text.length).toBeGreaterThan(0); expect(p.source.length).toBeGreaterThan(0) }
+          if (p.kind === "people") { expect(p.people.length).toBeGreaterThanOrEqual(2); expect(p.people.length).toBeLessThanOrEqual(4); for (const x of p.people) expect(x.name && x.role && x.line).toBeTruthy() }
+          const im = p.kind === "image" ? p.image : p.kind === "object" ? p.image : undefined
+          if (im) { expect(im.src).toMatch(/^\/img\/xj-[a-z0-9-]+-[0-9a-f]{16}\.jpg$/); for (const k of ["work", "by", "where", "license"] as const) expect(String(im[k]).length).toBeGreaterThan(0); expect((im as any).w).toBeGreaterThan(0); expect((im as any).h).toBeGreaterThan(0) }
+          if (p.kind === "image") expect(p.caption.length).toBeGreaterThan(0)
+        }
+      }
+      expect(total).toBeGreaterThanOrEqual(5000); expect(total).toBeLessThanOrEqual(9000)
+    }
+  })
+})
