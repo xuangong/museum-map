@@ -254,14 +254,17 @@ window.MuseumMap = {
     if (!on) { this.clearThread(); if (this._selectedId && this.setSelected) this.setSelected(this._selectedId); }
   },
   /** Draw a thread: the whole route faint, the walked part (0..upto) in vermilion, numbered stops. */
-  setThreadRoute: function(stops, upto) {
+  /** opts.ahead === false (playback): only the road walked so far — no faint route ahead, no stops not yet reached. */
+  setThreadRoute: function(stops, upto, opts) {
     this.threadLayer.clearLayers();
+    var ahead = !(opts && opts.ahead === false);
     var pts = (stops || []).map(function(s){ return window.toMapCoord(s.lat, s.lng); });
     if (!pts.length) return;
-    L.polyline(pts, { className: 'thread-line', weight: 1.5, opacity: 0.35, dashArray: '3 6', interactive: false }).addTo(this.threadLayer);
+    if (ahead) L.polyline(pts, { className: 'thread-line', weight: 1.5, opacity: 0.35, dashArray: '3 6', interactive: false }).addTo(this.threadLayer);
     if (upto > 0) L.polyline(pts.slice(0, upto + 1), { className: 'thread-walked', weight: 2.5, opacity: 0.9, interactive: false }).addTo(this.threadLayer);
     var self = this;
     pts.forEach(function(c, k){
+      if (!ahead && k > upto) return;
       var cls = 'thread-dot' + (k <= upto ? ' on' : '') + (k === upto ? ' cur' : '');
       L.marker(c, { icon: L.divIcon({ className: '', html: '<div class="' + cls + '">' + (k + 1) + '</div>', iconSize: [20, 20], iconAnchor: [10, 10] }), interactive: false, zIndexOffset: k === upto ? 900 : 800 }).addTo(self.threadLayer);
     });
