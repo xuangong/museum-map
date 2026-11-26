@@ -295,6 +295,23 @@ window.MuseumMap = {
     }
     this.map.flyToBounds(b, { paddingTopLeft: [(pad.left || 0) + m, (pad.top || 0) + m], paddingBottomRight: [(pad.right || 0) + m, (pad.bottom || 0) + m], duration: 0.8, maxZoom: 8 });
   },
+  /** Playback camera for one leg: first frame start and end together (you see where the leg comes from),
+   *  then, after holdMs, ease in towards the end. A new leg cancels the pending push-in. */
+  flyLeg: function(from, to, pad, holdMs) {
+    if (!this.map) return;
+    pad = pad || {}; clearTimeout(this._legT);
+    this.map.invalidateSize();
+    var a = window.toMapCoord(from.lat, from.lng), b = window.toMapCoord(to.lat, to.lng), m = 36;
+    var tl = L.point((pad.left || 0) + m, (pad.top || 0) + m), br = L.point((pad.right || 0) + m, (pad.bottom || 0) + m);
+    var bounds = L.latLngBounds([a, b]), z = Math.max(3, Math.min(8, this.map.getBoundsZoom(bounds, false, tl.add(br))));
+    var self = this;
+    this.map.flyToBounds(bounds, { paddingTopLeft: tl, paddingBottomRight: br, maxZoom: z, duration: 0.9 });
+    if (holdMs > 0 && z < 8) this._legT = setTimeout(function(){
+      var z2 = Math.min(8, z + 1), at = self._openCenter(b, z2, pad);
+      self.map.flyTo(at, z2, { duration: 1.1 });
+    }, holdMs);
+  },
+  stopLeg: function() { clearTimeout(this._legT); },
   clearThread: function() { if (this.threadLayer) this.threadLayer.clearLayers(); if (this.threadSegLayer) this.threadSegLayer.clearLayers(); },
   /** The leg picked in the timetable (上车 → 下车), drawn as a wide glow over the route; null clears. */
   setThreadSegment: function(stops) {

@@ -2024,7 +2024,8 @@ window.museumApp = function() {
       if (!panel || !canvas || this.view !== 'xunji') return pad;
       if (this.xunjiSubOn()) {
         var cr0 = canvas.getBoundingClientRect(), cap = document.querySelector('.xj-sub .xs-band');
-        pad.top = 64; pad.bottom = cap ? Math.max(0, Math.round(cr0.bottom - cap.getBoundingClientRect().top + 12)) : 140;
+        pad.top = 64; pad.bottom = cap ? Math.max(0, Math.round(cr0.bottom - cap.getBoundingClientRect().top + 48)) : 176;   // + the ❚❚ / 读这本书 / ✕ row above the card
+        pad.top = window.innerWidth <= 920 ? 24 : 64;
         return pad;
       }
       var pr = panel.getBoundingClientRect(), cr = canvas.getBoundingClientRect();
@@ -2119,7 +2120,14 @@ window.museumApp = function() {
       var M = window.MuseumMap, self = this;
       if (M) {
         M.setThreadRoute(t.stops, this.xunji.i, { leg: true });   // playback: only this leg; the whole route shows when it ends
-        this.$nextTick(function(){ if (self.view === 'xunji' && self.xunji.thread === t) M.showAt(s.lat, s.lng, Math.max(M.map ? M.map.getZoom() : 6, 6), self.xunjiPad(), { fly: true }); });
+        var prev = this.xunji.i > 0 ? t.stops[this.xunji.i - 1] : null;
+        this.$nextTick(function(){
+          if (self.view !== 'xunji' || self.xunji.thread !== t) return;
+          // A leg: show where it starts and where it ends together, then move in on the end — on a phone
+          // centring only the end left the start off screen.
+          if (prev && M.flyLeg) M.flyLeg(prev, s, self.xunjiPad(), self.xunji.playing ? Math.max(1200, Math.min(2200, self.xunjiDwell() * 0.4)) : 1400);
+          else M.showAt(s.lat, s.lng, Math.max(M.map ? M.map.getZoom() : 6, 6), self.xunjiPad(), { fly: true });
+        });
       }
       if (sound && window.EraSynth) window.EraSynth.note(t.era, (this._xjNotes || [])[this.xunji.i]);
     },
@@ -2157,7 +2165,8 @@ window.museumApp = function() {
       this.xunji.replaying = false;
       this.xunji.playing = false; this.xunjiStopTimer();
       this.xunji.ended = true; this.xunji.mini = false;
-      this.xunjiSegReset();
+      this.xunjiSegReset(); this.xunjiMeasure();
+      if (window.MuseumMap && window.MuseumMap.stopLeg) window.MuseumMap.stopLeg();
       var t = this.xunji.thread;
       if (!t || !window.MuseumMap) return;
       window.MuseumMap.setThreadRoute(t.stops, t.stops.length - 1);
@@ -2166,6 +2175,7 @@ window.museumApp = function() {
     },
     closeThread() {
       this.xunji.replaying = false;
+      if (window.MuseumMap && window.MuseumMap.stopLeg) window.MuseumMap.stopLeg();
       this.xunjiStopTimer(); this.xunjiStopListen();
       this.xunji.thread = null; this.xunji.playing = false; this.xunji.ended = false; this.xunji.reading = false; this.xunji.paged = false; this.xunji.deskOn = false; this.xunji.page = 0; this._xjPg = null; this.xunji.act = -1; this.xunji.sheetH = 0; this._xjTrip = null;
       if (window.MuseumMap) window.MuseumMap.clearThread();
@@ -2367,6 +2377,9 @@ window.museumApp = function() {
       this.$nextTick(function(){ setTimeout(function(){
         var p = document.querySelector('.xunji-panel'), m = p && p.querySelector('.xj-measure'), h = p && p.querySelector('.xj-tour > .xj-head'), gr = p && p.querySelector('.xunji-grabber');
         if (!m || !h) return;
+        // Measured while hidden (the subtitle replay keeps the panel display:none) everything reads 0 — the sheet
+        // then collapsed to 2 px after the replay ended, with no way out. Never size from a hidden panel.
+        if (!h.offsetHeight) { self.xunji.sheetH = 0; return; }
         var max = 0;
         Array.prototype.forEach.call(m.children, function(c){ max = Math.max(max, c.offsetHeight); });
         var padB = parseFloat(getComputedStyle(p).paddingBottom) || 0;
@@ -2384,7 +2397,7 @@ window.museumApp = function() {
         if (x.paged && x.deskOn) st += ';top:' + x.rect.t + 'px;left:' + x.rect.l + 'px;right:' + x.rect.r + 'px;bottom:' + x.rect.b + 'px;width:auto;--sp-w:' + x.dw + 'px;--sp-h:' + x.dh + 'px;--sp-top:56px';
         return st;
       }
-      return this.xunji.sheetH && !this.xunji.reading && !this.xunji.mini && window.innerWidth <= 920 ? 'height:' + this.xunji.sheetH + 'px' : '';
+      return this.xunji.sheetH > 80 && !this.xunji.reading && !this.xunji.mini && window.innerWidth <= 920 ? 'height:' + this.xunji.sheetH + 'px' : '';
     },
     hereThreads(l) {
       var p = this.here.point; if (!p || !this.xunji.list || !window.ThreadCore) return [];
