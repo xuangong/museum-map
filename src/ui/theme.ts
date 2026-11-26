@@ -2443,6 +2443,7 @@ path.route-corridor { stroke: var(--gilt); }
 .xj-head { position: relative; padding: 14px 16px 10px; border-bottom: 1px solid rgba(var(--fg-rgb), .08); }
 .xj-kick { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--gilt); }
 .xj-title { font-size: 19px; margin-top: 4px; overflow-wrap: anywhere; padding-right: 96px; }
+.xunji-panel.has-thread .xj-tour .xj-title { padding-right: 150px; }   /* up to four header buttons */
 .xj-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 2px; }
 .xj-empty { padding: 16px; color: var(--text-3); font-size: 13px; }
 .xj-group { padding: 6px 12px 10px; }
@@ -2472,6 +2473,60 @@ path.route-corridor { stroke: var(--gilt); }
   .xunji-grabber { display: block; touch-action: none; width: 100%; height: 18px; flex: none; background: none; border: 0; position: relative; }
   .xunji-grabber::after { content: ""; position: absolute; left: 50%; top: 7px; width: 36px; height: 4px; margin-left: -18px; border-radius: 2px; background: rgba(var(--fg-rgb), .3); }
   .xj-head { touch-action: none; padding-top: 2px; }
+}
+/* 循迹 杂志 — the reader (cover, 导语, acts) and the shelf of covers */
+.xj-read { position: relative; display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.xj-strip, .xj-readhead { display: none; }
+.xj-rtools { z-index: 4; top: 12px; right: 12px; padding: 2px; border-radius: 999px; background: rgba(var(--bg-rgb), .62); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.xunji-panel.is-reading { left: 16px; right: auto; width: min(560px, 45vw); }
+.xj-mag { position: relative; flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; background: var(--surface); --era: var(--gilt); }
+.mag-cover { position: relative; min-height: 72dvh; display: flex; align-items: flex-end; background: #000; overflow: hidden; }
+.mag-cover::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,.25) 55%, transparent 75%); }
+.mag-cover-text, .mag-credit { z-index: 1; }
+.mag-credit a { color: inherit; text-decoration: none; }
+.mag-fig figcaption a { color: inherit; text-decoration: none; }
+.mag-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .78; }
+.mag-cover-text { position: relative; padding: 0 22px 46px; }
+.mag-kick { font-family: var(--mono); font-size: 10px; letter-spacing: .3em; color: var(--era); }
+.mag-title { font-family: var(--serif); font-size: clamp(56px, 16vw, 88px); line-height: 1; margin: 10px 0 8px; letter-spacing: .04em; font-weight: 500; color: #fff; }
+.mag-deck { font-size: 15px; line-height: 1.75; color: rgba(255,255,255,.9); margin: 0; max-width: 30em; }
+.mag-credit { position: absolute; left: 22px; right: 22px; bottom: 12px; font-family: var(--mono); font-size: 9.5px; color: rgba(255,255,255,.55); overflow-wrap: anywhere; }
+.mag-opening { padding: 28px 22px 8px; font-size: 16px; line-height: 2; color: var(--text); background: var(--surface); margin: 0; overflow-wrap: anywhere; }
+.mag-opening::first-letter { float: left; font-size: 52px; line-height: 1; margin: 6px 8px 0 0; color: var(--era); font-family: var(--serif); }
+.mag-act { padding: 34px 22px 10px; background: var(--surface); overflow-wrap: anywhere; }
+.mag-act-head { display: flex; align-items: center; gap: 12px; }
+.mag-num { font-family: var(--mono); font-size: 40px; line-height: 1; color: var(--era); }
+.mag-seal { font-size: 12px; padding: 3px 6px; border: 1.5px solid var(--seal); color: var(--seal-ink-strong); border-radius: 3px; letter-spacing: .1em; }
+.mag-act-title { font-family: var(--serif); font-size: 24px; margin: 10px 0 2px; font-weight: 500; }
+.mag-act-span { font-family: var(--mono); font-size: 10.5px; color: var(--text-3); letter-spacing: .12em; }
+.mag-p { font-size: 15px; line-height: 2; color: var(--text-2); margin: 14px 0 0; }
+.mag-quote { margin: 22px 0 6px; padding: 14px 0; border-top: 1px solid var(--era); border-bottom: 1px solid var(--era); text-align: center; }
+@supports (color: color-mix(in srgb, red, blue)) { .mag-quote { border-color: color-mix(in srgb, var(--era) 55%, transparent); } }
+.mag-quote span { display: block; font-family: var(--serif); font-size: 21px; line-height: 1.6; color: var(--gilt-hi); letter-spacing: .06em; }
+.mag-quote cite { display: block; margin-top: 6px; font-style: normal; font-size: 11px; color: var(--text-3); }
+.mag-fig { margin: 22px -22px 0; background: rgba(var(--fg-rgb), .04); }
+.mag-fig img { display: block; width: auto; max-width: 100%; height: auto; max-height: min(72dvh, 640px); margin: 0 auto; }
+.mag-fig figcaption { padding: 6px 22px 0; font-family: var(--mono); font-size: 9.5px; color: var(--text-3); line-height: 1.5; }
+.mag-end { padding: 30px 22px calc(30px + env(safe-area-inset-bottom)); background: var(--surface); }
+.mag-end .xj-end { padding: 0; }
+.xj-shelf-item { display: contents; }
+.xj-cover-card { all: unset; cursor: pointer; box-sizing: border-box; position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; width: 100%; height: 180px; padding: 14px 16px; margin: 0 0 10px; border-radius: 12px; overflow: hidden; background: #000; border: 1px solid rgba(var(--gilt-rgb), .22); }
+.xj-cover-card:hover { border-color: var(--era); }
+.xj-cover-card:focus-visible { outline: 2px solid var(--era); outline-offset: 2px; }
+.xj-cover-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .8; }
+.xj-cover-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.82), rgba(0,0,0,0) 70%); }
+.xj-cover-card > span { position: relative; z-index: 1; }
+.cc-mag { font-family: var(--serif); font-size: 34px; line-height: 1.1; color: #fff; letter-spacing: .04em; }
+.cc-meta { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: var(--era); }
+.cc-deck { font-size: 12.5px; line-height: 1.55; color: rgba(255,255,255,.85); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 920px) {
+  .xunji-panel.is-reading { width: auto; left: 0; right: 0; }
+  .xunji-panel.is-reading.has-thread:not(.mini) { top: var(--xj-top, 0px); height: calc(100dvh - var(--xj-top, 0px)); max-height: none; border-radius: 0; background: transparent; border: 0; box-shadow: none; padding-bottom: 0; }
+  .xunji-panel.is-reading .xj-strip { display: block; flex: none; height: 140px; background: transparent; cursor: pointer; touch-action: none; }
+  .xunji-panel.is-reading.mini .xj-strip, .xunji-panel.is-reading.mini .xj-mag { display: none; }
+  .xunji-panel.is-reading.mini .xj-readhead { display: block; }
+  .xunji-panel.is-reading.mini .xj-rtools { top: 22px; background: none; }
+  .xj-mag { border-radius: 18px 18px 0 0; }
 }
 .xj-links { display: grid; gap: 8px; }
 .xj-link { all: unset; cursor: pointer; display: grid; gap: 3px; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(var(--gilt-rgb), .3); font-size: 13px; overflow-wrap: anywhere; }

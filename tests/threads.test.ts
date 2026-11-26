@@ -3,6 +3,7 @@ import { describe, it, expect } from "bun:test"
 import { readdirSync } from "node:fs"
 import { THREADS } from "~/data/threads"
 import { GUQIN_RECORDINGS } from "~/data/guqin-recordings"
+import { ERA_ACCENTS } from "~/data/era-accents"
 
 const eras = new Set(readdirSync("data/dynasties").map((f) => f.replace(/\.yaml$/, "")))
 const len = (s: string) => Array.from(s).length
@@ -54,5 +55,52 @@ describe("THREADS modern names", () => {
       expect(s.modern).not.toMatch(/省|自治区|维吾尔|壮族|回族/)
       expect(s.modern.length).toBeGreaterThanOrEqual(2)
     }
+  })
+})
+
+
+describe("magazine features", () => {
+  const mags = THREADS.filter((t) => t.acts)
+  it("acts cover every stop once, in order", () => {
+    for (const t of mags) {
+      const acts = t.acts!
+      expect(acts.length).toBeGreaterThanOrEqual(4); expect(acts.length).toBeLessThanOrEqual(6)
+      expect(acts[0]!.stops[0]).toBe(0)
+      expect(acts[acts.length - 1]!.stops[1]).toBe(t.stops.length - 1)
+      for (let k = 1; k < acts.length; k++) expect(acts[k]!.stops[0]).toBe(acts[k - 1]!.stops[1] + 1)
+      for (const a of acts) expect(a.stops[1]).toBeGreaterThanOrEqual(a.stops[0])
+    }
+  })
+  it("lengths, quotes, sources", () => {
+    for (const t of mags) {
+      expect(len(t.mag!)).toBeGreaterThanOrEqual(2); expect(len(t.mag!)).toBeLessThanOrEqual(4)
+      expect(len(t.deck!)).toBeLessThanOrEqual(40)
+      expect(len(t.opening!)).toBeGreaterThanOrEqual(150); expect(len(t.opening!)).toBeLessThanOrEqual(240)
+      for (const a of t.acts!) {
+        const body = a.body.join("")
+        expect(len(body)).toBeGreaterThanOrEqual(280); expect(len(body)).toBeLessThanOrEqual(420)
+        expect(len(a.title)).toBeGreaterThanOrEqual(2); expect(len(a.title)).toBeLessThanOrEqual(6)
+        expect(a.source.length).toBeGreaterThan(0)
+        if (a.quote) { expect(a.quote.text.length).toBeGreaterThan(0); expect(a.quote.source.length).toBeGreaterThan(0) }
+        if (a.quote && a.quote.at != null) { expect(a.quote.at).toBeGreaterThanOrEqual(0); expect(a.quote.at).toBeLessThan(a.body.length) }
+      }
+    }
+  })
+  it("images are self-hosted and fully credited", () => {
+    for (const t of mags) {
+      const imgs = [t.cover!, ...t.acts!.map((a) => a.image).filter(Boolean)] as any[]
+      for (const im of imgs) {
+        expect(im.src).toMatch(/^\/img\/xj-[a-z0-9-]+-[0-9a-f]{16}\.jpg$/)
+        for (const k of ["work", "by", "where", "license"]) expect(String(im[k]).length).toBeGreaterThan(0)
+        expect(im.w).toBeGreaterThan(0)
+        expect(im.h).toBeGreaterThan(0)
+      }
+    }
+  })
+  it("pilot threads carry a magazine", () => {
+    expect(mags.map((t) => t.id)).toEqual(expect.arrayContaining(["sushi", "zhangqian"]))
+  })
+  it("every era has an accent", () => {
+    for (const t of THREADS) expect(ERA_ACCENTS[t.era]).toMatch(/^#[0-9A-F]{6}$/i)
   })
 })

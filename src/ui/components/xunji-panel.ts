@@ -1,4 +1,5 @@
 import { icon } from "../icons"
+import { XunjiReader } from "./xunji-reader"
 
 /** One stop. live: the card on screen (caption while playing, story + nav when paused);
  *  otherwise a copy in .xj-measure showing everything, so the sheet can be sized to the tallest. */
@@ -49,14 +50,15 @@ function endCard(live: boolean): string {
           </button>
           <p class="xj-cta-note">行程会把沿途的博物馆都标在地图上，方便你挑着去看。</p>
           <button class="chip" x-show="xunji.thread.recording" @click="xunjiListen()" x-text="xunji.listening ? '■ 停下' : '听原曲 · 《' + xunjiRecordingName() + '》'"></button>
-          <button class="chip" @click="xunjiPlay()">再走一遍</button>
+          <button class="chip" x-show="!xunji.thread.acts" @click="xunjiPlay()">再走一遍</button>
+          <button class="chip" x-show="xunji.thread.acts && !xunji.reading" @click="xunjiRead()">回到专题</button>
         </div>`
 }
 
 /** 循迹 — threads of 古人 and 诗 told on the map: a picker, then the tour (caption ↔ stop card). */
 export function XunjiPanel(): string {
-  return `<div class="xunji-panel" x-show="view === 'xunji'" x-cloak :class="(xunji.mini ? 'mini ' : '') + (xunji.thread ? 'has-thread' : '')" :style="xunjiSheetStyle()" role="region" aria-label="循迹">
-  <button type="button" class="xunji-grabber" @click="sheetTap('xunji')" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()" :aria-label="xunji.mini ? '展开' : '收起'"></button>
+  return `<div class="xunji-panel" x-show="view === 'xunji'" x-cloak :class="(xunji.mini ? 'mini ' : '') + (xunji.thread ? 'has-thread ' : '') + (xunji.reading ? 'is-reading' : '')" :style="xunjiSheetStyle()" role="region" aria-label="循迹">
+  <button type="button" class="xunji-grabber" x-show="!(xunji.reading && !xunji.mini)" @click="sheetTap('xunji')" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()" :aria-label="xunji.mini ? '展开' : '收起'"></button>
   <template x-if="!xunji.thread">
     <div class="xj-pick">
       <header class="xj-head" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()">
@@ -70,25 +72,52 @@ export function XunjiPanel(): string {
         <section class="xj-group">
           <h3 x-text="g.label"></h3>
           <template x-for="t in g.items" :key="t.id">
-            <button type="button" class="xj-card" @click="openThread(t.id, 0, { play: true })">
-              <span class="xj-card-title" x-text="t.title"></span>
-              <span class="xj-card-meta" x-text="t.who + ' · ' + t.span + ' · ' + t.stops.length + ' 站'"></span>
-              <span class="xj-card-intro" x-text="t.intro"></span>
-            </button>
+            <div class="xj-shelf-item">
+              <template x-if="t.cover">
+                <button type="button" class="xj-cover-card" @click="openThread(t.id, 0, { play: true })" :style="'--era:' + ((_eraAccents && _eraAccents[t.era]) || 'var(--gilt)')">
+                  <img :src="t.cover.src" alt="" :width="t.cover.w" :height="t.cover.h" loading="lazy" decoding="async" :style="t.cover.focus ? 'object-position:' + t.cover.focus : ''">
+                  <span class="cc-mag" x-text="t.mag || t.title"></span>
+                  <span class="cc-meta" x-text="t.who + ' · ' + t.span"></span>
+                  <span class="cc-deck" x-text="t.deck"></span>
+                </button>
+              </template>
+              <template x-if="!t.cover">
+                <button type="button" class="xj-card" @click="openThread(t.id, 0, { play: true })">
+                  <span class="xj-card-title" x-text="t.title"></span>
+                  <span class="xj-card-meta" x-text="t.who + ' · ' + t.span + ' · ' + t.stops.length + ' 站'"></span>
+                  <span class="xj-card-intro" x-text="t.intro"></span>
+                </button>
+              </template>
+            </div>
           </template>
         </section>
       </template>
       </div>
     </div>
   </template>
-  <template x-if="xunji.thread">
+  <template x-if="xunji.thread && xunji.reading">
+    <div class="xj-read">
+      <div class="xj-strip" @click="sheetTap('xunji')" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()" aria-hidden="true"></div>
+      <header class="xj-head xj-readhead" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()" @click="sheetTap('xunji')">
+        <div class="xj-kick" x-text="xunjiKick()"></div>
+        <div class="xj-title" x-text="xunji.thread.mag || xunji.thread.title"></div>
+      </header>
+      <div class="xj-tools xj-rtools">
+        <button class="icon-btn" @click="shareThread()" title="分享这条路" aria-label="分享这条路">${icon("share", 17)}</button>
+        <button class="icon-btn" @click="closeThread()" aria-label="回到线索列表">${icon("close", 18)}</button>
+      </div>
+      ${XunjiReader(endCard(true))}
+    </div>
+  </template>
+  <template x-if="xunji.thread && !xunji.reading">
     <div class="xj-tour" @touchstart.passive="xunji.playing && xunjiPause()">
       <header class="xj-head" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()">
         <div class="xj-kick" x-text="xunjiKicker()"></div>
         <div class="xj-title" x-text="xunji.thread.title"></div>
         <div class="xj-tools" @touchstart.stop.passive>
           <button class="icon-btn" @click="xunji.playing ? xunjiPause() : xunjiPlay()" :aria-label="xunji.playing ? '暂停' : '继续'"><span x-text="xunji.playing ? '❚❚' : '▶'"></span></button>
-          <button class="icon-btn" @click="shareThread()" title="分享这条路">${icon("share", 17)}</button>
+          <button class="icon-btn" x-show="xunji.thread.acts" @click="xunjiRead()" title="回到专题" aria-label="回到专题"><span>☰</span></button>
+          <button class="icon-btn" @click="shareThread()" title="分享这条路" aria-label="分享这条路">${icon("share", 17)}</button>
           <button class="icon-btn" @click="closeThread()" aria-label="回到线索列表">${icon("close", 18)}</button>
         </div>
       </header>

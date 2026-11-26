@@ -138,7 +138,8 @@ window.museumApp = function() {
     territoryUrl: '',
     placeNamesUrl: '',
     threadsUrl: '',
-    xunji: { list: null, thread: null, i: 0, playing: false, ended: false, mini: false, listening: false, seg: { a: 0, b: 0, pick: false }, sheetH: 0 },
+    xunji: { list: null, thread: null, i: 0, playing: false, ended: false, mini: false, listening: false, seg: { a: 0, b: 0, pick: false }, sheetH: 0, reading: false, act: -1, top: 0 },
+    _eraAccents: {},
     _xjTimer: 0,
     eraOverlay: true,
     eraCap: null,
@@ -166,6 +167,7 @@ window.museumApp = function() {
       this.placeNamesUrl = data.placeNamesUrl || '';
       this.threadsUrl = data.threadsUrl || '';
       this._recordings = data.recordings || {};
+      this._eraAccents = data.eraAccents || {};
       try { this.eraOverlay = window.localStorage.getItem('mmEraOverlay') !== '0'; } catch(_) {}
       this.initTheme();
       try {
@@ -259,7 +261,7 @@ window.museumApp = function() {
       var guideUp = function(){ if (self.chat.open && !self.chat.mini) self.tuckHere(); };
       this.$watch('chat.open', guideUp);
       this.$watch('chat.mini', guideUp);
-      window.addEventListener('resize', function(){ if (self.xunji.thread) self.xunjiMeasure(); });
+      window.addEventListener('resize', function(){ if (self.xunji.thread) { self.xunjiTopMeasure(); self.xunjiMeasure(); if (self.xunji.reading) { clearTimeout(self._xjResize); self._xjResize = setTimeout(function(){ self.xunjiTopMeasure(); self.xunjiDrawAct(); }, 120); } } });
 
       // Sidebar (TOC) resize handle — desktop only
       this.initTocResize();
@@ -731,6 +733,7 @@ window.museumApp = function() {
         if (g.fromBar) {
           // Lay the full panel out now, sitting exactly where the bar was.
           el.classList.remove('mini');
+          if (this.xunji.reading) this.xunjiRestoreScroll();   // back where you were reading, not the cover
           g.fullH = el.offsetHeight;
           el.style.transform = 'translateY(' + (g.fullH - g.barH) + 'px)';
           this.xunji.mini = false;
@@ -755,10 +758,12 @@ window.museumApp = function() {
       el.style.transform = 'translateY(' + (open ? 0 : g.span) + 'px)';
       setTimeout(function(){
         el.style.transition = 'none';
+        if (!open && self.xunji.reading) self.xunjiSaveScroll();
         self.xunji.mini = !open;
         if (!open) el.classList.add('mini');          // same frame as dropping the shift: no jump
         el.style.transform = '';
         requestAnimationFrame(function(){ el.style.transition = ''; });
+        if (self.xunji.reading) self.xunjiDrawAct();
       }, 300);
     },
 
@@ -771,7 +776,15 @@ window.museumApp = function() {
       } else if (kind === 'chat') this.chat.mini = !this.chat.mini;
       else if (kind === 'trip') this.tripSheetMini = !this.tripSheetMini;
       else if (kind === 'here') this.here.mini = !this.here.mini;
-      else if (kind === 'xunji') this.xunji.mini = !this.xunji.mini;
+      else if (kind === 'xunji') {
+        var me = this;
+        if (this.xunji.reading && !this.xunji.mini) this.xunjiSaveScroll();
+        this.xunji.mini = !this.xunji.mini;
+        if (this.xunji.reading) {
+          if (!this.xunji.mini) this.$nextTick(function(){ me.xunjiRestoreScroll(); });
+          setTimeout(function(){ me.xunjiDrawAct(); }, 340);
+        }
+      }
     },
     sheetStep(kind, dir) {
       if (kind === 'drawer') {
@@ -1571,12 +1584,75 @@ window.museumApp = function() {
       var m = String(s.story || '').match(/^[^。]*。?/);
       return m ? m[0] : '';
     },
+    xunjiAccent() { var t = this.xunji.thread; return (t && this._eraAccents && this._eraAccents[t.era]) || 'var(--gilt)'; },
+    xunjiKick() { var t = this.xunji.thread; return t ? ['循迹', this.xunjiEraName(), t.span].filter(Boolean).join(' · ') : ''; },
+    xunjiEraName() { var t = this.xunji.thread, d = t && this.dynastyById(t.era); return d ? this.dynastyShortName(d).replace(/[：:].*$/, '').replace(/（.*$/, '') : ''; },
+    xunjiCredit(im) { return im ? [im.work, im.by, im.where, im.license].filter(Boolean).join(' · ') + (/BY/.test(im.license || '') ? '（已缩放）' : '') : ''; },
+    xunjiSaveScroll() { var el = document.querySelector('.xj-mag'); if (el && el.offsetHeight) this._xjScroll = el.scrollTop; },
+    xunjiRestoreScroll() { var s = this._xjScroll || 0; var el = document.querySelector('.xj-mag'); if (el) el.scrollTop = s; },
+    xunjiAtEnd() { var t = this.xunji.thread; return !!(this.xunji.reading && t && t.acts && this.xunji.act === t.acts.length); },
+    /** The act in view lights its stops on the map (rAF-throttled). */
+    xunjiOnScroll(e) {
+      var self = this, el = e.currentTarget || e.target;
+      if (this._xjRaf) return;
+      this._xjRaf = requestAnimationFrame(function(){
+        self._xjRaf = 0;
+        var t = self.xunji.thread; if (!t || !t.acts || !self.xunji.reading) return;
+        var acts = el.querySelectorAll('.mag-act'), foot = el.querySelector('.mag-end'), mid = el.getBoundingClientRect().top + el.clientHeight * 0.35, k = -1;
+        Array.prototype.forEach.call(acts, function(s, i){ if (s.getBoundingClientRect().top <= mid) k = i; });
+        if ((foot && foot.getBoundingClientRect().top <= mid) || el.scrollTop + el.clientHeight >= el.scrollHeight - 8) k = t.acts.length;
+        if (k === self.xunji.act) return;
+        self.xunji.act = k;
+        self.xunjiDrawAct();
+      });
+    },
+    xunjiDrawAct() {
+      var t = this.xunji.thread, M = window.MuseumMap; if (!t || !t.acts || !M || this.view !== 'xunji') return;
+      var k = this.xunji.act;
+      if (k < 0 || k >= t.acts.length) {
+        M.setThreadRoute(t.stops, -1); M.setThreadSegment(null); M.fitThread(t.stops, this.xunjiPad());
+        if (k >= t.acts.length) this.xunjiSegDraw();
+        return;
+      }
+      var a = t.acts[k], seg = t.stops.slice(a.stops[0], a.stops[1] + 1);
+      if (!seg.length) return;
+      M.setThreadRoute(t.stops, a.stops[1]);
+      M.setThreadSegment(seg);
+      var a0 = a.stops[0], a1 = a.stops[1];
+      M.fitThread(seg.length > 1 ? seg : t.stops.slice(Math.max(0, a0 - 1), a1 + 2), this.xunjiPad());
+    },
+    /** 快速回放: leave the article for the existing tour. */
+    xunjiReplay() { this.xunji.reading = false; this.xunji.ended = false; this.xunji.mini = false; this.xunji.i = 0; this.xunjiSegReset(); this.xunjiMeasure(); this.xunjiPlay(); },
+    /** Back from the tour to the article. */
+    xunjiRead() {
+      var self = this; this.xunjiPause(); this.xunjiStopListen();
+      this.xunji.reading = true; this.xunji.ended = false; this.xunji.act = -1; this.xunji.sheetH = 0; this.xunji.mini = false;
+      this.xunjiSegReset();
+      this.xunjiTopMeasure();
+      this.setHashRoute({ kind: 'thread', id: this.xunji.thread.id });
+      this.$nextTick(function(){ setTimeout(function(){ self.xunjiDrawAct(); var el = document.querySelector('.xj-mag'); if (el) el.scrollTop = 0; }, 0); });
+    },
+    /** Deep link #/x/<id>/<n>: scroll to the act that holds stop n-1. */
+    xunjiScrollToStop(i, tries) {
+      var t = this.xunji.thread, self = this; if (!t || !t.acts || !i) return;
+      var k = -1; t.acts.forEach(function(a, n){ if (k < 0 && i >= a.stops[0] && i <= a.stops[1]) k = n; });
+      if (k < 0) return;
+      var el = document.querySelector('.xj-mag'), sec = el && el.querySelector('[data-act="' + k + '"]');
+      if (!sec) { if ((tries || 0) < 10) setTimeout(function(){ self.xunjiScrollToStop(i, (tries || 0) + 1); }, 80); return; }
+      el.scrollTop = sec.offsetTop;
+    },
     /** Margins the 循迹 panel takes off the map, for showAt / fitThread. */
     xunjiPad() {
       var pad = { top: 0, right: 0, bottom: 0, left: 0 };
       var panel = document.querySelector('.xunji-panel'), canvas = document.querySelector('.canvas');
       if (!panel || !canvas || this.view !== 'xunji') return pad;
       var pr = panel.getBoundingClientRect(), cr = canvas.getBoundingClientRect();
+      if (this.xunji.reading && !this.xunji.mini) {
+        var mag = document.querySelector('.xj-mag'), strip = document.querySelector('.xj-strip');
+        if (window.innerWidth > 920 && mag) pad.left = Math.max(0, Math.round(mag.getBoundingClientRect().right - cr.left));
+        else if (strip) { var sr = strip.getBoundingClientRect(); pad.top = Math.max(0, Math.round(sr.top - cr.top)); pad.bottom = Math.max(0, Math.round(cr.bottom - sr.bottom)); pad.m = 12; }
+        return pad;
+      }
       if (window.innerWidth > 920) pad.right = Math.max(0, Math.round(cr.right - pr.left));
       else { pad.bottom = Math.max(0, Math.round(cr.bottom - (window.innerHeight - panel.offsetHeight))); if (window.innerWidth <= 640) pad.top = 60; }
       return pad;
@@ -1603,17 +1679,25 @@ window.museumApp = function() {
       this.tocOpen = false;
       this.xunjiStopTimer();
       this.xunji.thread = t; this.xunji.ended = false; this.xunji.mini = false;
+      this.xunji.reading = !!(t.acts && t.acts.length); this.xunji.act = -1; this._xjScroll = 0;
+      if (this.xunji.reading) this.xunjiTopMeasure();
       this.xunji.i = Math.max(0, Math.min(t.stops.length - 1, stop || 0));
       this._xjNotes = window.ThreadCore.notes(t);
       this._xjTrip = window.ThreadCore.toTrip(t);
       this.xunjiSegReset();
       this.xunjiMeasure();
-      if (opts.play) this.xunjiPlay(); else { this.xunji.playing = false; this.xunjiShow(false); }
+      if (this.xunji.reading) {
+        var me = this, i0 = this.xunji.i;
+        this.xunji.playing = false;
+        if (opts.play && window.EraSynth) window.EraSynth.note(t.era, (this._xjNotes || [])[0]);
+        this.$nextTick(function(){ setTimeout(function(){ var mg = document.querySelector('.xj-mag'); if (mg) mg.scrollTop = 0; me.xunji.act = -1; me.xunjiDrawAct(); me.xunjiScrollToStop(i0); }, 0); });
+      } else if (opts.play) this.xunjiPlay(); else { this.xunji.playing = false; this.xunjiShow(false); }
       if (!opts.fromHash) this.setHashRoute({ kind: 'thread', id: t.id + (this.xunji.i ? '/' + (this.xunji.i + 1) : '') });
     },
     /** Draw + fly to the current stop; sound = play its note. */
     xunjiShow(sound) {
       var t = this.xunji.thread; if (!t) return;
+      if (this.xunji.reading) { this.xunjiDrawAct(); return; }
       this.xunjiSegDraw();   // off the end card: no leg glow
       var s = t.stops[this.xunji.i];
       var M = window.MuseumMap, self = this;
@@ -1665,7 +1749,7 @@ window.museumApp = function() {
     },
     closeThread() {
       this.xunjiStopTimer(); this.xunjiStopListen();
-      this.xunji.thread = null; this.xunji.playing = false; this.xunji.ended = false; this.xunji.sheetH = 0; this._xjTrip = null;
+      this.xunji.thread = null; this.xunji.playing = false; this.xunji.ended = false; this.xunji.reading = false; this.xunji.act = -1; this.xunji.sheetH = 0; this._xjTrip = null;
       if (window.MuseumMap) window.MuseumMap.clearThread();
       if (/^#\\/x\\//.test(location.hash || '')) this.setHashRoute(null);
     },
@@ -1716,6 +1800,7 @@ window.museumApp = function() {
     xunjiSegWhole() { var g = this.xunji.seg; return !g.pick && g.a === 0 && g.b === this.xunjiTrip().cities.length - 1; },
     xunjiSegTap(k) {
       var g = this.xunji.seg;
+      if (this.xunji.reading && this.xunji.thread.acts) this.xunji.act = this.xunji.thread.acts.length;
       if (g.pick) this.xunji.seg = { a: Math.min(g.a, k), b: Math.max(g.a, k), pick: false };
       else if (!this.xunjiSegWhole() && k === g.a) { this.xunjiSegReset(); return; }
       else this.xunji.seg = { a: k, b: k, pick: true };
@@ -1759,7 +1844,7 @@ window.museumApp = function() {
     xunjiSegDraw() {
       var t = this.xunji.thread, r = this.xunjiTrip(), g = this.xunji.seg, M = window.MuseumMap;
       if (!M || !M.setThreadSegment) return;
-      if (!t || !this.xunji.ended || this.xunjiSegWhole() || !r.at.length) { M.setThreadSegment(null); return; }
+      if (!t || !(this.xunji.ended || this.xunjiAtEnd()) || this.xunjiSegWhole() || !r.at.length) { M.setThreadSegment(null); return; }
       M.setThreadSegment(t.stops.slice(r.at[g.a], r.at[g.pick ? g.a : g.b] + 1));
     },
     /** From a paused stop: jump to the timetable with 上车 set at this stop's city. */
@@ -1774,7 +1859,7 @@ window.museumApp = function() {
     // doesn't jump between stops and the map framing (xunjiPad) stays put.
     xunjiMeasure() {
       var self = this;
-      if (window.innerWidth > 920 || !this.xunji.thread) { this.xunji.sheetH = 0; return; }
+      if (window.innerWidth > 920 || !this.xunji.thread || this.xunji.reading) { this.xunji.sheetH = 0; return; }
       this.$nextTick(function(){ setTimeout(function(){
         var p = document.querySelector('.xunji-panel'), m = p && p.querySelector('.xj-measure'), h = p && p.querySelector('.xj-tour > .xj-head'), gr = p && p.querySelector('.xunji-grabber');
         if (!m || !h) return;
@@ -1784,8 +1869,14 @@ window.museumApp = function() {
         self.xunji.sheetH = Math.ceil((gr ? gr.offsetHeight : 0) + h.offsetHeight + max + padB + 2);
       }, 0); });
     },
+    /** Where the canvas starts on screen: the reader sheet sits below the topbar/timeline, so the map strip is really the map. */
+    xunjiTopMeasure() {
+      var c = document.querySelector('.canvas');
+      this.xunji.top = c ? Math.max(0, Math.round(c.getBoundingClientRect().top)) : 0;
+    },
     xunjiSheetStyle() {
-      return this.xunji.sheetH && !this.xunji.mini && window.innerWidth <= 920 ? 'height:' + this.xunji.sheetH + 'px' : '';
+      if (this.xunji.reading) return '--xj-top:' + (this.xunji.top || 0) + 'px';
+      return this.xunji.sheetH && !this.xunji.reading && !this.xunji.mini && window.innerWidth <= 920 ? 'height:' + this.xunji.sheetH + 'px' : '';
     },
     hereThreads(l) {
       var p = this.here.point; if (!p || !this.xunji.list || !window.ThreadCore) return [];

@@ -22,6 +22,7 @@ import { THREAD_CORE_SCRIPT } from "./client/thread-core"
 import { XunjiPanel } from "./components/xunji-panel"
 import { GUQIN_RECORDINGS } from "~/data/guqin-recordings"
 import { DYNASTY_GEO } from "~/data/dynasty-geo"
+import { ERA_ACCENTS } from "~/data/era-accents"
 import { computeCrossings } from "~/services/crossings"
 import { AI_MODELS, DEFAULT_AI_MODEL, DEFAULT_AI_EFFORT } from "~/services/ai-models"
 import { MUSEUM_ALIASES } from "~/data/museum-aliases"
@@ -56,6 +57,7 @@ export function HomePage(data: HomeData): string {
     placeNamesUrl: PLACE_NAMES_SRC,
     threadsUrl: THREADS_SRC,
     recordings: GUQIN_RECORDINGS,
+    eraAccents: ERA_ACCENTS,
     ai: { models: AI_MODELS, defaultModel: DEFAULT_AI_MODEL, defaultEffort: DEFAULT_AI_EFFORT },
     aliases: MUSEUM_ALIASES,
     achievements: ACHIEVEMENTS.map((a) => ({ ...a, label: ACHIEVEMENT_LABELS[a.id] })),
