@@ -7,7 +7,7 @@
 
 User feedback on the live pilot: the vertical scroll doesn't feel like a magazine, and ~300 字 per
 act is "匆匆过客" — the history is rich and should unfold. A feature becomes a **paged magazine**:
-cover → 目录 → 6 chapters × 6–9 composed pages → 尾页. Each page is one screen with its own layout.
+cover → 目录 → 6 chapters × 6–14 composed pages → 尾页. Each page is one screen with its own layout.
 
 Trial: **苏轼「东坡」 only**, end to end. 张骞 keeps the scrolling reader until 苏轼 is approved;
 the other six threads keep the tour UI.
@@ -26,15 +26,15 @@ export type ThreadPage =
 export interface ThreadChapter {
   title: string; place: string; span: string
   stops: [number, number]     // inclusive stop range, chapters cover all stops in order
-  pages: ThreadPage[]         // 6–9, first is an opener, at least one map page
+  pages: ThreadPage[]         // 6–11, first is an opener, at least one map page
   source: string
 }
 // Thread gains `chapters?: ThreadChapter[]` (and keeps mag/deck/cover). When `chapters` is present
 // the paged reader is used; `opening` becomes the 目录 page's 导语.
 ```
 
-Rules (tests): chapters 5–7; cover all stops in order; 6–9 pages each, first `opener`, ≥1 `map`;
-text pages 180–380 字 total paras; object pages ≤ 300 字; quotes exact with source; people 2–4 with
+Rules (tests): chapters 5–7; cover all stops in order; 6–14 pages each, first `opener`, ≥1 `map`;
+text pages 120–220 字 total paras (one phone screen: ~10 lines × ~21 字); object pages ≤ 220 字; quotes exact with source; people 2–4 with
 name/role/line; images fully credited with w/h; total thread text 5000–9000 字.
 
 Writing: scene-led, concrete, our own words, standard sources, hedged disputes, exact 原文, young

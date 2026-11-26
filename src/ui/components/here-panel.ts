@@ -45,7 +45,7 @@ export function HerePanel(): string {
           </div>
           <div class="hl-threads" x-show="hereThreads(l).length">
             <template x-for="x in hereThreads(l)" :key="x.thread.id">
-              <button type="button" class="chip" @click="openThread(x.thread.id, x.index, {})" x-text="'循迹 · ' + x.thread.who + ' 第 ' + (x.index + 1) + ' 站 ›'"></button>
+              <button type="button" class="chip" @click="openThread(x.thread.id, x.index, { atStop: true })" x-text="'循迹 · ' + x.thread.who + ' 第 ' + (x.index + 1) + ' 站 ›'"></button>
             </template>
           </div>
         </li>

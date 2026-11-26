@@ -1,5 +1,6 @@
 import { icon } from "../icons"
 import { XunjiReader } from "./xunji-reader"
+import { XunjiPages } from "./xunji-pages"
 
 /** One stop. live: the card on screen (caption while playing, story + nav when paused);
  *  otherwise a copy in .xj-measure showing everything, so the sheet can be sized to the tallest. */
@@ -57,7 +58,7 @@ function endCard(live: boolean): string {
 
 /** 循迹 — threads of 古人 and 诗 told on the map: a picker, then the tour (caption ↔ stop card). */
 export function XunjiPanel(): string {
-  return `<div class="xunji-panel" x-show="view === 'xunji'" x-cloak :class="(xunji.mini ? 'mini ' : '') + (xunji.thread ? 'has-thread ' : '') + (xunji.reading ? 'is-reading' : '')" :style="xunjiSheetStyle()" role="region" aria-label="循迹">
+  return `<div class="xunji-panel" x-show="view === 'xunji'" x-cloak :class="(xunji.mini ? 'mini ' : '') + (xunji.thread ? 'has-thread ' : '') + (xunji.reading ? 'is-reading ' : '') + (xunji.reading && xunji.paged ? 'is-paged ' : '') + (xunjiOnMap() ? 'on-map' : '')" :style="xunjiSheetStyle()" role="region" aria-label="循迹">
   <button type="button" class="xunji-grabber" x-show="!(xunji.reading && !xunji.mini)" @click="sheetTap('xunji')" @touchstart.passive="xunjiDragStart($event)" @touchmove="xunjiDragMove($event)" @touchend="xunjiDragEnd()" @touchcancel="xunjiDragEnd()" :aria-label="xunji.mini ? '展开' : '收起'"></button>
   <template x-if="!xunji.thread">
     <div class="xj-pick">
@@ -103,10 +104,12 @@ export function XunjiPanel(): string {
         <div class="xj-title" x-text="xunji.thread.mag || xunji.thread.title"></div>
       </header>
       <div class="xj-tools xj-rtools">
+        <button class="icon-btn" x-show="xunji.paged" @click="xunjiOpenToc()" title="目录" aria-label="目录"><span>☰</span></button>
         <button class="icon-btn" @click="shareThread()" title="分享这条路" aria-label="分享这条路">${icon("share", 17)}</button>
         <button class="icon-btn" @click="closeThread()" aria-label="回到线索列表">${icon("close", 18)}</button>
       </div>
-      ${XunjiReader(endCard(true))}
+      <template x-if="!xunji.paged">${XunjiReader(endCard(true))}</template>
+      <template x-if="xunji.paged">${XunjiPages(endCard(true))}</template>
     </div>
   </template>
   <template x-if="xunji.thread && !xunji.reading">
@@ -116,7 +119,7 @@ export function XunjiPanel(): string {
         <div class="xj-title" x-text="xunji.thread.title"></div>
         <div class="xj-tools" @touchstart.stop.passive>
           <button class="icon-btn" @click="xunji.playing ? xunjiPause() : xunjiPlay()" :aria-label="xunji.playing ? '暂停' : '继续'"><span x-text="xunji.playing ? '❚❚' : '▶'"></span></button>
-          <button class="icon-btn" x-show="xunji.thread.acts" @click="xunjiRead()" title="回到专题" aria-label="回到专题"><span>☰</span></button>
+          <button class="icon-btn" x-show="xunji.thread.acts || xunji.thread.chapters" @click="xunjiRead()" title="回到专题" aria-label="回到专题"><span>☰</span></button>
           <button class="icon-btn" @click="shareThread()" title="分享这条路" aria-label="分享这条路">${icon("share", 17)}</button>
           <button class="icon-btn" @click="closeThread()" aria-label="回到线索列表">${icon("close", 18)}</button>
         </div>
