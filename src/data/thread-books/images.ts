@@ -52,4 +52,31 @@ export const BOOK_IMAGES: Record<string, BookImages> = {
       4: [{ image: { src: "/img/xj-libai-baidi-jingzhou-binyanglou-9d7cc8e12519c1e3.jpg", work: "《荆州古城宾阳楼》", by: "摄影 Fxqf", where: "湖北荆州", license: "CC BY-SA 4.0", commons: "https://commons.wikimedia.org/wiki/File:荆州古城宾阳楼.jpg", w: 1200, h: 675 }, caption: "荆州古城的宾阳楼（城楼为后世重建）。江陵，就是这里。" }],
     },
   },
+  "dufu-763": {
+    cover: { src: "/img/xj-dufu-763-wangshimin-cover-831ff01143871d0a.jpg", work: "《杜甫诗意图册（第五开）》", by: "清 · 王时敏", where: "故宫博物院", license: "公有领域", commons: "https://commons.wikimedia.org/wiki/File:王时敏杜甫诗意图册-5.png", w: 815, h: 1200 },
+    chapters: {
+      0: [{ image: { src: "/img/xj-dufu-763-zhao-portrait-zizhou-ed97a6dd22e98444.jpg", work: "《杜甫像轴（局部）》", by: "传元 · 赵孟頫", where: "故宫博物院", license: "公有领域", commons: "https://commons.wikimedia.org/wiki/File:赵孟頫画杜甫像轴.png", w: 766, h: 1200 }, caption: "传为元代赵孟頫画的杜甫像。杜甫真实的样貌已无从知道，这是后人心中的他。" }, { image: { src: "/img/xj-dufu-763-li-zhaodao-shu-4efafd5282c45bcc.jpg", work: "《明皇幸蜀图》", by: "传唐 · 李昭道", where: "台北故宫博物院", license: "公有领域", commons: "https://commons.wikimedia.org/wiki/File:Li_Zhaodao_Minhuan_travel.jpg", w: 881, h: 1200 }, caption: "传为唐人所作的《明皇幸蜀图》，画安史之乱中唐玄宗西逃入蜀。杜甫半生的流离，就从这场战乱开始。" }],
+      1: [{ image: { src: "/img/xj-dufu-763-wangshimin-baxia-972710584bb531a3.jpg", work: "《杜甫诗意图册（第七开）》", by: "清 · 王时敏", where: "故宫博物院", license: "公有领域", commons: "https://commons.wikimedia.org/wiki/File:王时敏杜甫诗意图册-7.png", w: 798, h: 1200 }, caption: "清初王时敏依杜诗画成的山水册页。三百多年后，画家还在替杜甫看那一路江山。" }],
+      2: [{ image: { src: "/img/xj-dufu-763-wangshimin-wuxia-db26d48d989b22f2.jpg", work: "《杜甫诗意图册（第十开）》", by: "清 · 王时敏", where: "故宫博物院", license: "公有领域", commons: "https://commons.wikimedia.org/wiki/File:王时敏杜甫诗意图册-10.png", w: 800, h: 1200 }, caption: "同一本《杜甫诗意图册》中的另一开：峡深水急，正是诗里要穿过的地方。" }],
+      3: [{ image: { src: "/img/xj-dufu-763-xiangyang-02a10935ddb7adfa.jpg", work: "《襄阳古城墙》", by: "摄影 Fxqf", where: "湖北襄阳", license: "CC BY-SA 4.0", commons: "https://commons.wikimedia.org/wiki/File:Xiangyang_City_Wall_03.jpg", w: 1200, h: 900 }, caption: "襄阳古城墙（明清重修）。杜甫的祖籍在这里，诗里要「便下襄阳」，也是回到祖辈的地方。" }],
+      4: [{ image: { src: "/img/xj-dufu-763-longmen-bc2ba5c37a8498d5.jpg", work: "《龙门石窟奉先寺》", by: "摄影 Zhangzhugang", where: "河南洛阳", license: "CC BY-SA 4.0", commons: "https://commons.wikimedia.org/wiki/File:Luoyang_Longmen_Shiku_2018.12.16_09-43-06.jpg", w: 1200, h: 799 }, caption: "洛阳龙门奉先寺的唐代大佛，造成于杜甫出生前三十多年。这是他终究没能再回去的洛阳。" }],
+    },
+  },
+  "wentianxiang": {
+    cover: { src: "/img/xj-wentianxiang-ming-portrait-cover-cda73d588e184bfd.jpg", work: "《文天祥像（局部）》", by: "明 · 佚名", where: "见 Commons 说明", license: "公有领域", commons: "https://commons.wikimedia.org/wiki/File:明人《文天祥像》.jpg", w: 1094, h: 1200 },
+    chapters: {
+      0: [{ image: { src: "/img/xj-wentianxiang-ganzhou-wall-fb40428c0b688604.jpg", work: "《赣州古城墙》", by: "摄影 Underbar dk", where: "江西赣州", license: "CC BY-SA 4.0", commons: "https://commons.wikimedia.org/wiki/File:Ganzhou_city_wall_near_Yugu_Pavilion.jpg", w: 1200, h: 900 }, caption: "赣州古城墙（宋代始筑，后世重修）。1275年，文天祥在这里起兵勤王。" }],
+      1: [{ image: { src: "/img/xj-wentianxiang-yeyanlan-portrait-17a27ef2f7006ef5.jpg", work: "《文天祥肖像》", by: "清 · 叶衍兰", where: "见 Commons 说明", license: "公有领域", commons: "https://commons.wikimedia.org/wiki/File:文天祥肖像.jpg", w: 753, h: 1200 }, caption: "清代叶衍兰画的文天祥像，收在他所绘的历代名人像中。" }],
+      2: [{ image: { src: "/img/xj-wentianxiang-lingdingyang-7b465f958d4ef3e8.jpg", work: "《伶仃洋》", by: "摄影 Huangdan2060", where: "广东珠海外伶仃岛", license: "CC0", commons: "https://commons.wikimedia.org/wiki/File:Seascape_of_Wai_Lingding_Island_in_Zhuhai,_Guangdong,_China5.jpg", w: 1200, h: 387 }, caption: "今天的伶仃洋。1279年正月，文天祥被押在元军船上，从这片海上经过。" }, { image: { src: "/img/xj-wentianxiang-yashan-stele-a8e7b3edcddc24c4.jpg", work: "《宋王台碑》", by: "摄影 N509FZ", where: "香港九龙", license: "CC BY-SA 4.0", commons: "https://commons.wikimedia.org/wiki/File:Sung_Wong_Toi_stele_(20181204114442).jpg", w: 1200, h: 849 }, caption: "香港九龙的宋王台碑，纪念南宋末年的小皇帝流亡到此。几个月后，宋室亡于崖山。" }],
+      3: [{ image: { src: "/img/xj-wentianxiang-dadu-statue-f8c7457747ce39fb.jpg", work: "《文丞相祠文天祥像（旧照）》", by: "黑龙会《亚细亚大观》", where: "北京文丞相祠", license: "公有领域", commons: "https://commons.wikimedia.org/wiki/File:亜細亜大観_02_058_\"文天祥像_（文相丞祠の本尊）\".jpg", w: 860, h: 1200 }, caption: "北京文丞相祠里的文天祥像（旧照）。这座祠堂相传就建在他被囚三年的地方。" }],
+    },
+  },
+  "wangwei-anxi": {
+    cover: { src: "/img/xj-wangwei-anxi-wangchuan-cover-c5515bd76f70ff9e.jpg", work: "《辋川图（局部）》", by: "传摹王维 · 佚名", where: "芝加哥艺术博物馆", license: "公有领域", commons: "https://commons.wikimedia.org/wiki/File:Anonymous_-_The_Wangchuan_Villa_-_1950.1369_-_Art_Institute_of_Chicago.jpg", w: 1200, h: 1036 },
+    chapters: {
+      0: [{ image: { src: "/img/xj-wangwei-anxi-snowy-river-0f0252867d0a923a.jpg", work: "《雪溪图（局部）》", by: "传唐 · 王维", where: "普林斯顿大学艺术博物馆", license: "公有领域", commons: "https://commons.wikimedia.org/wiki/File:Wang_Wei_王維_-_Snowy_River_-_y1947-126_-_Princeton_University_Art_Museum.jpg", w: 762, h: 1200 }, caption: "传为王维所作的《雪溪图》。王维不只写诗，后来还被奉为文人画的始祖。" }],
+      2: [{ image: { src: "/img/xj-wangwei-anxi-yangguan-beacon-b2ed1a08206396a1.jpg", work: "《阳关烽燧遗址》", by: "摄影 三猎", where: "甘肃敦煌", license: "CC BY-SA 4.0", commons: "https://commons.wikimedia.org/wiki/File:阳关烽燧遗址1.jpg", w: 1200, h: 798 }, caption: "阳关一带的烽燧遗址。「西出阳关无故人」，说的就是这片戈壁。" }],
+      3: [{ image: { src: "/img/xj-wangwei-anxi-kizil-54e170b4a87d1f27.jpg", work: "《克孜尔千佛洞》", by: "摄影 Hiroki Ogawa", where: "新疆拜城", license: "CC BY 3.0", commons: "https://commons.wikimedia.org/wiki/File:Kizil_Caves_Kuqa_Xinjiang_China_新疆_库车_克孜尔千佛洞_-_panoramio.jpg", w: 1200, h: 900 }, caption: "龟兹故地的克孜尔千佛洞。唐代安西都护府就设在龟兹，元二要去的，就是这片绿洲。" }],
+    },
+  },
 }
