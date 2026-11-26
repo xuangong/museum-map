@@ -231,6 +231,7 @@ export const THREADS: Thread[] = [
               "到黄第二年（1081），日子更紧。老朋友马正卿看不过去，替他向官府求来城东一块废弃的旧营地，几十亩。他在《东坡八首》的序里写：地荒了很久，满是荆棘和瓦砾，又遇大旱，开垦累得筋疲力尽，他放下农具叹气，便写诗给自己打气。他给这块坡地起名东坡，自号东坡居士，据说是仰慕白居易当年在忠州种花的东坡。第二年，他又在坡下盖了几间屋，赶在大雪天动工，把四壁画满雪景，叫它雪堂。",
             ],
             note: { term: "安置", text: "宋代对贬官的一种处罚：指定居住地，受官府看管，不得随意离开。" } },
+          { kind: "image", image: { src: "/img/xj-sushi-chibi-wuyuanzhi-ffc8944333c1a052.jpg", work: "《赤壁图》局部", by: "武元直（金）", where: "台北故宫博物院", license: "CC0", commons: "File:金武元直赤壁圖 卷.jpg", w: 1200, h: 843 }, caption: "金代武元直画的赤壁：峭壁压江，一叶小舟。画的正是苏轼的《赤壁赋》。" },
           { kind: "object", kicker: "一道菜", title: "黄州好猪肉",
             paras: [
               "黄州的猪肉便宜，富人不爱吃，穷人不会煮。苏轼自己琢磨，还写成一篇《猪肉颂》：",
@@ -243,7 +244,6 @@ export const THREADS: Thread[] = [
               "当地人叫它赤壁的这处山崖，其实未必是三国周瑜打仗的地方，一般认为真正的赤壁在今湖北赤壁市一带。所以他在词里写的是「人道是」，给自己留了一点余地。这一点余地，反倒成全了《念奴娇·赤壁怀古》（系年有争议）。",
             ] },
           { kind: "image", image: { src: "/img/xj-sushi-chibi-qiao-boat-b177b694f45d89a1.jpg", work: "《后赤壁赋图》局部（孤鹤掠舟）", by: "乔仲常（北宋末）", where: "美国纳尔逊-阿特金斯艺术博物馆", license: "公有领域", commons: "File:Qiao Zhongchang - Illustration to the Second Prose Poem on the Red Cliff - Google Art Project.jpg", w: 1200, h: 640 }, caption: "北宋乔仲常据《后赤壁赋》作画：「适有孤鹤，横江东来」，一只鹤掠过小舟。这是离苏轼年代最近的赤壁图之一。" },
-          { kind: "image", image: { src: "/img/xj-sushi-chibi-wuyuanzhi-ffc8944333c1a052.jpg", work: "《赤壁图》局部", by: "武元直（金）", where: "台北故宫博物院", license: "CC0", commons: "File:金武元直赤壁圖 卷.jpg", w: 1200, h: 843 }, caption: "金代武元直画的赤壁：峭壁压江，一叶小舟。画的正是苏轼的《赤壁赋》。" },
           { kind: "quote", text: "回首向来萧瑟处，归去，也无风雨也无晴", source: "苏轼《定风波》" },
           { kind: "people", title: "黄州的朋友",
             people: [
