@@ -2701,7 +2701,7 @@ path.route-corridor { stroke: var(--gilt); }
 @keyframes xjTurnB { from { transform: translateX(-10px); } to { transform: none; } }
 @media (prefers-reduced-motion: reduce) { .xj-pager.turn-f > *, .xj-pager.turn-b > * { animation: none !important; } }
 .xj-shelf-item { display: contents; }
-.xj-cover-card { all: unset; cursor: pointer; box-sizing: border-box; position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; width: 100%; height: 180px; padding: 14px 16px; margin: 0 0 10px; border-radius: 12px; overflow: hidden; background: #000; border: 1px solid rgba(var(--gilt-rgb), .22); }
+.xj-cover-card { all: unset; cursor: pointer; box-sizing: border-box; position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; width: 100%; height: 214px; padding: 14px 16px; margin: 0 0 10px; border-radius: 12px; overflow: hidden; background: #000; border: 1px solid rgba(var(--gilt-rgb), .22); }
 .xj-cover-card:hover { border-color: var(--era); }
 .xj-cover-card:focus-visible { outline: 2px solid var(--era); outline-offset: 2px; }
 .xj-cover-card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .8; }
@@ -2763,4 +2763,9 @@ path.route-corridor { stroke: var(--gilt); }
 .xj-pick .xj-head { padding-bottom: 14px; border-bottom: 1px solid rgba(var(--gilt-rgb), .22); }
 .xj-pick .xj-kick { letter-spacing: .4em; }
 .xs-narr { margin: 10px auto 0; max-width: 40em; font-size: clamp(14px, 1.6vw, 16.5px); line-height: 1.85; color: var(--text-2); text-wrap: balance; overflow-wrap: anywhere; }
+/* 循迹 shelf: play the road, or read the book */
+.cc-acts { display: flex; gap: 8px; margin-top: 8px; }
+.cc-act { cursor: pointer; font-size: 12.5px; padding: 5px 12px; border-radius: 999px; color: #fff; background: rgba(var(--seal-rgb), .82); border: 1px solid rgba(255,255,255,.18); }
+.cc-act.ghost { background: rgba(0,0,0,.35); border-color: rgba(255,255,255,.35); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.cc-act:hover, .cc-act:focus-visible { filter: brightness(1.1); outline: none; box-shadow: 0 0 0 2px rgba(255,255,255,.5); }
 `

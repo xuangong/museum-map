@@ -80,6 +80,10 @@ export function XunjiPanel(): string {
                   <span class="cc-mag" x-text="t.mag || t.title"></span>
                   <span class="cc-meta" x-text="t.who + ' · ' + t.span"></span>
                   <span class="cc-deck" x-text="t.deck"></span>
+                  <span class="cc-acts">
+                    <span class="cc-act" role="button" tabindex="0" @click.stop="xunjiPlayThread(t.id)" @keydown.enter.stop.prevent="xunjiPlayThread(t.id)">▶ 播放这一路</span>
+                    <span class="cc-act ghost" role="button" tabindex="0" @click.stop="openThread(t.id, 0, { play: true })" @keydown.enter.stop.prevent="openThread(t.id, 0, { play: true })">读这本书 →</span>
+                  </span>
                 </button>
               </template>
               <template x-if="!t.cover">

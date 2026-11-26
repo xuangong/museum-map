@@ -138,7 +138,7 @@ window.museumApp = function() {
     territoryUrl: '',
     placeNamesUrl: '',
     threadsUrl: '',
-    xunji: { list: null, thread: null, i: 0, playing: false, ended: false, mini: false, listening: false, seg: { a: 0, b: 0, pick: false }, sheetH: 0, reading: false, act: -1, top: 0, paged: false, page: 0, more: false, ratio: 0.6, deskOn: false, noteBelow: false, dw: 0, dh: 0, rect: { t: 0, l: 0, r: 0, b: 0 } },
+    xunji: { list: null, thread: null, i: 0, playing: false, replaying: false, ended: false, mini: false, listening: false, seg: { a: 0, b: 0, pick: false }, sheetH: 0, reading: false, act: -1, top: 0, paged: false, page: 0, more: false, ratio: 0.6, deskOn: false, noteBelow: false, dw: 0, dh: 0, rect: { t: 0, l: 0, r: 0, b: 0 } },
     _eraAccents: {},
     _xjTimer: 0,
     eraOverlay: true,
@@ -914,6 +914,7 @@ window.museumApp = function() {
     setView(v) {
       if (v === 'strata' && !this._strataOk) { this.flashToast('当前设备不支持 3D 视图'); v = 'map'; }
       if (this.view === 'xunji' && v !== 'xunji') {
+        this.xunji.replaying = false;
         this.xunjiPause(); this.xunjiStopListen();
         if (window.MuseumMap) { window.MuseumMap.setThreadMode(false); if (this.tripMode && window.MuseumMap.onMapClick) window.MuseumMap.onMapClick(this.tripMapClick.bind(this)); }
         if (/^#\\/x\\//.test(location.hash || '')) this.setHashRoute(null);
@@ -1984,6 +1985,7 @@ window.museumApp = function() {
     xunjiReplay() { this.xunji.reading = false; this.xunji.ended = false; this.xunji.mini = false; this.xunji.i = 0; this.xunjiSegReset(); this.xunjiMeasure(); this.xunjiPlay(); },
     /** Back from the tour to the article. */
     xunjiRead() {
+      this.xunji.replaying = false;
       var self = this; this.xunjiPause(); this.xunjiStopListen();
       this.xunji.reading = true; this.xunji.ended = false; this.xunji.act = -1; this.xunji.sheetH = 0; this.xunji.mini = false;
       this.xunjiSegReset();
@@ -2062,6 +2064,7 @@ window.museumApp = function() {
     },
     /** Open a thread at a stop. opts.play: start the tour (needs a tap); opts.fromHash: leave the URL alone. */
     async openThread(id, stop, opts) {
+      this.xunji.replaying = false;
       opts = opts || {};
       await this.loadThreads();
       var t = this.threadById(id); if (!t) { this.flashToast('没找到这条线索'); return; }
@@ -2114,7 +2117,7 @@ window.museumApp = function() {
     xunjiPlay() {
       var t = this.xunji.thread; if (!t) return;
       if (this.xunji.ended) { this.xunji.ended = false; this.xunji.i = 0; }
-      this.xunji.playing = true;
+      this.xunji.playing = true; this.xunji.replaying = true;
       this.xunjiShow(true);
       this.xunjiSchedule();
     },
@@ -2142,6 +2145,7 @@ window.museumApp = function() {
       this.setHashRoute({ kind: 'thread', id: t.id + (this.xunji.i ? '/' + (this.xunji.i + 1) : '') });
     },
     xunjiEnd() {
+      this.xunji.replaying = false;
       this.xunji.playing = false; this.xunjiStopTimer();
       this.xunji.ended = true; this.xunji.mini = false;
       this.xunjiSegReset();
@@ -2152,6 +2156,7 @@ window.museumApp = function() {
       this.$nextTick(function(){ if (self.xunji.thread === t && self.xunji.ended) { window.MuseumMap.fitThread(t.stops, self.xunjiPad()); self.xunjiSegDraw(); } });
     },
     closeThread() {
+      this.xunji.replaying = false;
       this.xunjiStopTimer(); this.xunjiStopListen();
       this.xunji.thread = null; this.xunji.playing = false; this.xunji.ended = false; this.xunji.reading = false; this.xunji.paged = false; this.xunji.deskOn = false; this.xunji.page = 0; this._xjPg = null; this.xunji.act = -1; this.xunji.sheetH = 0; this._xjTrip = null;
       if (window.MuseumMap) window.MuseumMap.clearThread();
@@ -2181,7 +2186,17 @@ window.museumApp = function() {
     recordingSrc(key) { var r = this._recordings && this._recordings[key]; return r ? r.src : null; },
 
     // ── 回放 as subtitles: the map is the screen, one line of narration per stop at the bottom.
-    xunjiSubOn() { var x = this.xunji, t = x.thread; return !!(t && !x.reading && !x.ended && (x.playing || t.acts || t.chapters)); },
+    /** Subtitles only while a replay is under way (playing, or paused mid-replay) — never an empty card otherwise. */
+    xunjiSubOn() {
+      var x = this.xunji, t = x.thread;
+      if (!t || x.reading || x.ended || !t.stops || !t.stops[x.i]) return false;
+      return !!(x.playing || (x.replaying && (t.acts || t.chapters)));
+    },
+    /** From the 循迹 shelf: ▶ straight into the subtitle replay. */
+    async xunjiPlayThread(id) {
+      await this.openThread(id, 0, {});
+      if (this.xunji.thread && this.xunji.thread.id === id) { if (this.xunji.reading) this.xunjiReplay(); else this.xunjiPlay(); }
+    },
     /** A short line that needs two rows breaks at the punctuation nearest its middle (日啖荔枝三百颗，／不辞长作岭南人);
      *  without a good mark it is left to text-wrap: balance. Longer than max 字 per row → break. */
     xunjiBreak(str, max) {
