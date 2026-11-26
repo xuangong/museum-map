@@ -121,13 +121,13 @@ describe("paged features", () => {
     for (const t of paged) {
       let total = 0
       for (const c of t.chapters!) {
-        expect(c.pages.length).toBeGreaterThanOrEqual(6); expect(c.pages.length).toBeLessThanOrEqual(11)
+        expect(c.pages.length).toBeGreaterThanOrEqual(6); expect(c.pages.length).toBeLessThanOrEqual(14)
         expect(c.pages[0]!.kind).toBe("opener")
         expect(c.pages.some((p) => p.kind === "map")).toBe(true)
         expect(c.source.length).toBeGreaterThan(0)
         for (const p of c.pages) {
-          if (p.kind === "text") { const n = L(p.paras); total += n; expect(n).toBeGreaterThanOrEqual(180); expect(n).toBeLessThanOrEqual(380) }
-          if (p.kind === "object") { const n = L(p.paras); total += n; expect(n).toBeLessThanOrEqual(300) }
+          if (p.kind === "text") { const n = L(p.paras); total += n; expect(n).toBeGreaterThanOrEqual(120); expect(n).toBeLessThanOrEqual(220) }
+          if (p.kind === "object") { const n = L(p.paras); total += n; expect(n).toBeLessThanOrEqual(220) }
           if (p.kind === "quote") { expect(p.text.length).toBeGreaterThan(0); expect(p.source.length).toBeGreaterThan(0) }
           if (p.kind === "people") { expect(p.people.length).toBeGreaterThanOrEqual(2); expect(p.people.length).toBeLessThanOrEqual(4); for (const x of p.people) expect(x.name && x.role && x.line).toBeTruthy() }
           const im = p.kind === "image" ? p.image : p.kind === "object" ? p.image : undefined
