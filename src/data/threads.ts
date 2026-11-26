@@ -1,3 +1,5 @@
+import { BOOKS } from "./thread-books"
+import { BOOK_IMAGES } from "./thread-books/images"
 /**
  * 循迹 — threads told on the map: a person's journey (古人) or a poem whose lines trace a real
  * route (诗). Each turns into a trip (trip: true stops, in order) and links back from museums,
@@ -32,6 +34,12 @@ export interface ThreadChapter {
   stops: [number, number]
   pages: ThreadPage[]
   source: string
+}
+/** A thread's book, written in src/data/thread-books/<id>.ts and merged into THREADS by id. */
+export interface ThreadBook {
+  mag: string; deck: string; opening: string
+  cover?: ThreadImage
+  chapters: ThreadChapter[]
 }
 export interface ThreadStop {
   name: string; modern: string; lat: number; lng: number
@@ -509,3 +517,19 @@ export const THREADS: Thread[] = [
     ],
   },
 ]
+
+// Books written in their own files (src/data/thread-books/) join their threads here.
+for (const t of THREADS) { const b = BOOKS[t.id]; if (b) Object.assign(t, b) }
+// Their art joins them: a cover, and full-page images placed before each chapter's map page (never beside another image).
+for (const t of THREADS) {
+  const im = BOOK_IMAGES[t.id]; if (!im) continue
+  if (im.cover && !t.cover) t.cover = im.cover
+  for (const [ci, list] of Object.entries(im.chapters || {})) {
+    const c = t.chapters && t.chapters[Number(ci)]; if (!c) continue
+    for (const { image, caption } of list) {
+      let at = c.pages.findIndex((p) => p.kind === "map"); if (at < 0) at = c.pages.length
+      while (at > 1 && (c.pages[at - 1]!.kind === "image" || c.pages[at]?.kind === "image")) at--
+      c.pages.splice(at, 0, { kind: "image", image, caption })
+    }
+  }
+}
