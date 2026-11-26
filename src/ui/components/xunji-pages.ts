@@ -51,7 +51,7 @@ export function XunjiPages(endHtml: string): string {
       </template>`
   const image = `<template x-if="p.kind === 'image'">
         <figure class="pgi pgi-image" :class="xunjiFit(p.d.image)">
-          <img :src="p.d.image.src" :alt="p.d.image.work" :width="p.d.image.w" :height="p.d.image.h" :style="p.d.image.focus ? 'object-position:' + p.d.image.focus : ''" loading="lazy" decoding="async">
+          <img :src="p.d.image.src" :alt="p.d.image.work" :width="p.d.image.w" :height="p.d.image.h" :style="p.d.image.focus ? 'object-position:' + p.d.image.focus : ''" :loading="Math.abs(n - xunji.page) <= 2 ? 'eager' : 'lazy'" decoding="async">
           <figcaption>
             <p x-text="p.d.caption"></p>
             <a :href="p.d.image.commons || null" target="_blank" rel="noopener" x-text="xunjiCredit(p.d.image)"></a>
@@ -71,7 +71,7 @@ export function XunjiPages(endHtml: string): string {
           <template x-for="(s, j) in p.d.paras" :key="j"><p class="ob-p" x-text="s"></p></template>
           <template x-if="p.d.image">
             <figure class="ob-fig">
-              <img :src="p.d.image.src" :alt="p.d.image.work" :width="p.d.image.w" :height="p.d.image.h" loading="lazy" decoding="async">
+              <img :src="p.d.image.src" :alt="p.d.image.work" :width="p.d.image.w" :height="p.d.image.h" :loading="Math.abs(n - xunji.page) <= 2 ? 'eager' : 'lazy'" decoding="async">
               <figcaption><a :href="p.d.image.commons || null" target="_blank" rel="noopener" x-text="xunjiCredit(p.d.image)"></a></figcaption>
             </figure>
           </template>
@@ -104,8 +104,8 @@ export function XunjiPages(endHtml: string): string {
           ${endHtml}
         </div>
       </template>`
-  return `<div class="xj-pages" :class="xunjiEdgeClass()" :style="'--era:' + xunjiAccent()">
-  <div class="xj-pager" @scroll.passive="xunjiOnPagerScroll()">
+  return `<div class="xj-pages" :class="xunjiWrapClass()" :style="'--era:' + xunjiAccent()">
+  <div class="xj-pager" @scroll.capture.passive="xunjiOnPagerScroll($event)">
     <template x-for="(p, n) in xunjiPages()" :key="n">
       <section class="xj-page" :class="'pg-' + p.kind + (n === xunji.page ? ' cur' : '')" :data-pg="n">
       ${cover}
@@ -123,6 +123,7 @@ export function XunjiPages(endHtml: string): string {
   </div>
   <button type="button" class="xj-edge l" x-show="xunji.page > 0" @click="xunjiPageStep(-1)" aria-label="上一页" tabindex="-1"></button>
   <button type="button" class="xj-edge r" x-show="xunji.page < xunjiPages().length - 1" @click="xunjiPageStep(1)" aria-label="下一页" tabindex="-1"></button>
+  <div class="xj-more" x-show="xunji.more" aria-hidden="true">↓</div>
   <div class="xj-folio" x-show="xunjiFolioOn()" aria-hidden="true"><span x-text="xunjiFolioL()"></span><span x-text="xunjiFolioR()"></span></div>
 </div>`
 }
