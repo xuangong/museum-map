@@ -2793,4 +2793,6 @@ path.route-corridor { stroke: var(--gilt); }
 .xj-cover-card .cc-deck { color: var(--text-2); }
 .xj-cover-card .cc-acts { padding: 4px 14px 14px; }
 .xj-cover-card .cc-act.ghost { color: var(--text); background: transparent; border-color: rgba(var(--gilt-rgb), .45); backdrop-filter: none; -webkit-backdrop-filter: none; }
+/* 看书就是看书 — a hard rule, independent of any script state: while the book (or any reader) is open, the subtitle layer is hidden */
+.xunji-panel.is-reading ~ .xj-sub, .xunji-panel.is-paged ~ .xj-sub { display: none !important; }
 `
